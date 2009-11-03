@@ -1,0 +1,37 @@
+application: patmattest [
+  documentation: "Test of pattern matching"
+  groups: "Test"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  sequence: sequence [
+    parameter: "Y"
+    type: "any"
+  ]
+
+  string: expression [
+    parameter: "Y"
+    default: ""
+    minlength: "2"
+    information: "Regular expression to search sequence for."
+    knowntype: "regular expression"
+  ]
+
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    default: "stdout"
+    knowntype: "patmattest output"
+  ]
+
+endsection: output

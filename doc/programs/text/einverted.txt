@@ -1,0 +1,473 @@
+
+                                 einverted 
+
+
+
+Function
+
+   Finds DNA inverted repeats
+
+Description
+
+   einverted looks for inverted repeats (stem loops) in a nucleotide
+   sequence.
+
+   It will find inverted repeats that include a proprtion of mismatches
+   and gaps (bulges in the stem loop).
+
+Algorithm
+
+   It works by finding alignments between the sequence and its reverse
+   complement that exceed a threshold score. Gaps and Mismatches are
+   assigned a penalty (negative) score. Matches are assigned a positive
+   score. The score is calculated by summing the values of each match,
+   the penalties of each mismatch and the large penalties of any gaps.
+   Any region whose score exceeds the threshold is reported.
+
+   einverted uses dynamic programming and thus is guaranteed to find the
+   optimal alignment, but is slower than, for example, a self-by-self
+   BLAST. It can find multiple inverted repeats in a sequence.
+
+   einverted does not report overlapping matches.
+
+   The original "inverted" program was written to annotate the nematode
+   genome. Excluding overlapping repeats saved problems with simple
+   repeat sequences in this genome.
+
+Usage
+
+   Here is a sample session with einverted
+
+
+% einverted tembl:d00596 
+Finds DNA inverted repeats
+Gap penalty [12]: 
+Minimum score threshold [50]: 
+Match score [3]: 
+Mismatch score [-4]: 
+Sanger Centre program inverted output file [d00596.inv]: 
+File for sequence of regions of inverted repeats. [d00596.fasta]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -gap                integer    [12] Gap penalty (Any integer value)
+   -threshold          integer    [50] Minimum score threshold (Any integer
+                                  value)
+   -match              integer    [3] Match score (Any integer value)
+   -mismatch           integer    [-4] Mismatch score (Any integer value)
+  [-outfile]           outfile    [*.einverted] Sanger Centre program inverted
+                                  output file
+  [-outseq]            seqout     [.] The sequence of the
+                                  inverted repeat regions without gap
+                                  characters.
+
+   Additional (Optional) qualifiers:
+   -maxrepeat          integer    [2000] Maximum separation between the start
+                                  of repeat and the end of the inverted repeat
+                                  (the default is 2000 bases). (Any integer
+                                  value)
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   "-outseq" associated qualifiers
+   -osformat3          string     Output seq format
+   -osextension3       string     File name extension
+   -osname3            string     Base file name
+   -osdirectory3       string     Output directory
+   -osdbname3          string     Database name to add
+   -ossingle3          boolean    Separate file for each entry
+   -oufo3              string     UFO features
+   -offormat3          string     Features format
+   -ofname3            string     Features file name
+   -ofdirectory3       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   The input for einverted is a nucleotide sequence
+
+  Input files for usage example
+
+   'tembl:d00596' is a sequence entry in the example nucleic acid
+   database 'tembl'
+
+  Database entry: tembl:d00596
+
+ID   D00596; SV 1; linear; genomic DNA; STD; HUM; 18596 BP.
+XX
+AC   D00596;
+XX
+DT   17-JUL-1991 (Rel. 28, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 3)
+XX
+DE   Homo sapiens gene for thymidylate synthase, exons 1, 2, 3, 4, 5, 6, 7,
+DE   complete cds.
+XX
+KW   thymidylate syntase.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-18596
+RX   PUBMED; 2243092.
+RA   Kaneda S., Nalbantoglu J., Takeishi K., Shimizu K., Gotoh O., Seno T.,
+RA   Ayusawa D.;
+RT   "Structural and functional analysis of the human thymidylate synthase
+RT   gene.";
+RL   J. Biol. Chem. 265(33):20277-20284(1990).
+XX
+DR   GDB; 163670.
+DR   GDB; 182340.
+XX
+CC   These data kindly submitted in computer readable form by:
+CC   Sumiko Kaneda
+CC   National Institute of Genetics
+CC   1111 Yata
+CC   Mishima 411
+CC   Japan
+CC   Phone:  +81-559-72-2732
+CC   Fax:    +81-559-71-3651
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..18596
+FT                   /organism="Homo sapiens"
+FT                   /chromosome="18"
+FT                   /map="18p11.32"
+FT                   /mol_type="genomic DNA"
+FT                   /clone="lambdaHTS-1 and lambdaHTS-3"
+FT                   /db_xref="taxon:9606"
+FT   repeat_unit     1..148
+FT                   /note="Alu sequence"
+FT   repeat_unit     202..477
+
+
+  [Part of this file has been deleted for brevity]
+
+     ttttgttttt agcttcagcg agaacccaga cctttcccaa agctcaggat tcttcgaaaa     1566
+0
+     gttgagaaaa ttgatgactt caaagctgaa gactttcaga ttgaagggta caatccgcat     1572
+0
+     ccaactatta aaatggaaat ggctgtttag ggtgctttca aaggagctcg aaggatattg     1578
+0
+     tcagtcttta ggggttgggc tggatgccga ggtaaaagtt ctttttgctc taaaagaaaa     1584
+0
+     aggaactagg tcaaaaatct gtccgtgacc tatcagttat taatttttaa ggatgttgcc     1590
+0
+     actggcaaat gtaactgtgc cagttctttc cataataaaa ggctttgagt taactcactg     1596
+0
+     agggtatctg acaatgctga ggttatgaac aaagtgagga gaatgaaatg tatgtgctct     1602
+0
+     tagcaaaaac atgtatgtgc atttcaatcc cacgtactta taaagaaggt tggtgaattt     1608
+0
+     cacaagctat ttttggaata tttttagaat attttaagaa tttcacaagc tattccctca     1614
+0
+     aatctgaggg agctgagtaa caccatcgat catgatgtag agtgtggtta tgaactttaa     1620
+0
+     agttatagtt gttttatatg ttgctataat aaagaagtgt tctgcattcg tccacgcttt     1626
+0
+     gttcattctg tactgccact tatctgctca gttccttcct aaaatagatt aaagaactct     1632
+0
+     ccttaagtaa acatgtgctg tattctggtt tggatgctac ttaaaagagt atattttaga     1638
+0
+     aataatagtg aatatatttt gccctatttt tctcatttta actgcatctt atcctcaaaa     1644
+0
+     tataatgacc atttaggata gagttttttt tttttttttt taaactttta taaccttaaa     1650
+0
+     gggttatttt aaaataatct atggactacc attttgccct cattagcttc agcatggtgt     1656
+0
+     gacttctcta ataatatgct tagattaagc aaggaaaaga tgcaaaacca cttcggggtt     1662
+0
+     aatcagtgaa atatttttcc cttcgttgca taccagatac ccccggtgtt gcacgactat     1668
+0
+     ttttattctg ctaatttatg acaagtgtta aacagaacaa ggaattattc caacaagtta     1674
+0
+     tgcaacatgt tgcttatttt caaattacag tttaatgtct aggtgccagc ccttgatata     1680
+0
+     gctatttttg taagaacatc ctcctggact ttgggttagt taaatctaaa cttatttaag     1686
+0
+     gattaagtag gataacgtgc attgatttgc taaaagaatc aagtaataat tacttagctg     1692
+0
+     attcctgagg gtggtatgac ttctagctga actcatcttg atcggtagga ttttttaaat     1698
+0
+     ccatttttgt aaaactattt ccaagaaatt ttaagccctt tcacttcaga aagaaaaaag     1704
+0
+     ttgttggggc tgagcactta attttcttga gcaggaagga gtttcttcca aacttcacca     1710
+0
+     tctggagact ggtgtttctt tacagattcc tccttcattt ctgttgagta gccgggatcc     1716
+0
+     tatcaaagac caaaaaaatg agtcctgtta acaaccacct ggaacaaaaa cagattttat     1722
+0
+     gcatttatgc tgctccaaga aatgctttta cgtctaagcc agaggcaatt aattaatttt     1728
+0
+     tttttttttg acatggagtc actgtccgtt gcccaggctg cagtgcagtg gcgcaatctt     1734
+0
+     ggctcactgc aacctccacc tcccaggttc aagtgattct cctgcctcag cctcccatgt     1740
+0
+     agctgggatc acaggcacct gccaccatgc ccggctaatt ttttgtattt tttgtagaga     1746
+0
+     cagggtttca ccatgttggc caggctggtc tcaaacacct gacctcaaat gatccacctg     1752
+0
+     cctcagcctc ccaaagtgtt gggattacag gcgtaagcca ccatgcccag ccctgaatta     1758
+0
+     atatttttaa aataagtttg gagactgttg gaaataatag ggcagaggaa catattttac     1764
+0
+     tggctacttg ccagagttag ttaactcatc aaactctttg ataatagttt gacctctgtt     1770
+0
+     ggtgaaaatg agccatgatc tcttgaacat gatcagaata aatgccccag ccacacaatt     1776
+0
+     gtagtccaaa ctttttaggt cactaacttg ctagatggtg ccaggttttt ttgcacaagg     1782
+0
+     agtgcaaatg ttaagatctc cactagtgag gaaaggctag tattacagaa gccttgtcag     1788
+0
+     aggcaattga acctccaagc cctggccctc aggcctgagg attttgatac agacaaactg     1794
+0
+     aagaaccgtt tgttagtgga tattgcaaac aaacaggagt caaagcttgg tgctccacag     1800
+0
+     tctagttcac gagacaggcg tggcagtggc tggcagcatc tcttctcaca ggggccctca     1806
+0
+     ggcacagctt accttgggag gcatgtagga agcccgctgg atcatcacgg gatacttgaa     1812
+0
+     atgctcatgc aggtggtcaa catactcaca caccctagga ggagggaatc agatcggggc     1818
+0
+     aatgatgcct gaagtcagat tattcacgtg gtgctaactt aaagcagaag gagcgagtac     1824
+0
+     cactcaattg acagtgttgg ccaaggctta gctgtgttac catgcgtttc taggcaagtc     1830
+0
+     cctaaacctc tgtgcctcag gtccttttct tctaaaatat agcaatgtga ggtggggact     1836
+0
+     ttgatgacat gaacacacga agtccctctg agaggttttg tggtgccctt taaaagggat     1842
+0
+     caattcagac tctgtaaata tccagaatta tttgggttcc tctggtcaaa agtcagatga     1848
+0
+     atagattaaa atcaccacat tttgtgatct atttttcaag aagcgtttgt attttttcat     1854
+0
+     atggctgcag cagctgccag gggcttgggg tttttttggc aggtagggtt gggagg         1859
+6
+//
+
+Output file format
+
+  Output files for usage example
+
+  File: d00596.fasta
+
+>D00596_13_142
+gctacgcgagaggctgaggcagcagaattacttgaacccaggaggcggaggttgcagtga
+gccgagatcgcgccactgcactccagcctgggtgagagagcgagactctgtctcaaaaaa
+aaaaaaaaaa
+>D00596_199_328
+ttttttttttttttttttgggacagtcttgctctgtcgcccaggctggagtacaatggtc
+ggatcttggctcactgcaacctctgcctcccaggttcaagcaattcttctgcctcagcct
+cccaagtagc
+>D00596_12128_12301
+agaggatttttttttttttttttttttttgagacagagttttgctctgttgcccaggctg
+gaatgcaacggcgtgatcttggctcactgtaacctctgcctcctgggttcgagtgattct
+cctgcctcagcctccaagtagctgggattacagcatgtgccaccatgcctggct
+>D00596_12573_12749
+agccaggtgtggtggctcacacctgtaattccaacaactccagaggccaaggcgagagga
+tcatttgaacccacggaatttgaggctgtagtgagtcatgatcacgccattgcactccat
+cctgggcaacagagtgagaccctgaatatttaaaaacaacaacaacaacaaaactct
+>D00596_12246_12296
+ctcctgcctcagcctccaagtagctgggattacagcatgtgccaccatgcc
+>D00596_13886_13938
+ggtatggtggctcatgcctgtaatcccagcactttggaagactgagacaggag
+>D00596_13884_13949
+tgggtatggtggctcatgcctgtaatcccagcactttggaagactgagacaggagcaatt
+gcttga
+>D00596_14628_14692
+tcaagcaattcttctgcctcagcctcccaggtagctgggattacaggcacatgccaccac
+accca
+
+  File: d00596.inv
+
+
+D00596: Score 236: 108/130 ( 83%) matches, 0 gaps
+      13 gctacgcgagaggctgaggcagcagaattacttgaacccaggaggcggaggttgcagtgagccgagatcg
+cgccactgcactccagcctgggtgagagagcgagactctgtctcaaaaaaaaaaaaaaaa 142
+         |||||  | ||||||||||||| |||||| ||||||||  |||||| |||||||||||||||| |||||
+  ||| || ||||||||||||| || ||||| ||||| |  |  ||||||||||||||||
+     328 cgatgaaccctccgactccgtcttcttaacgaacttggaccctccgtctccaacgtcactcggttctagg
+ctggtaacatgaggtcggacccgctgtctcgttctgacagggtttttttttttttttttt 199
+
+D00596: Score 164: 128/174 ( 73%) matches, 3 gaps
+   12128 agaggatttttttttttttttttttttttgagacagagttttgctctgttgcccaggctggaatgcaacg
+gcgtgatcttggctcactgtaacctctgcctcc-tgggttcgagtgattctcctgcctcagcctc-caagtagctggga
+ttaca-gcatgtgccaccatgcctggct 12301
+         ||||  || || || || || |||||    |  ||| || |  |||||||||||||| |||| ||||| |
+|||||||| || ||||||  | ||||    ||| ||||||| | |||| |||  ||||  |||||   ||| | ||| |
+||||| |  || |||||||  |||||||
+   12749 tctcaaaacaacaacaacaacaaaaatttataagtcccagagtgagacaacgggtcctacctcacgttac
+cgcactagtactgagtgatgtcggagtttaaggcacccaagtttactaggagagcggaaccggagacctcaacaacctt
+aatgtccacactcggtggtgtggaccga 12573
+
+D00596: Score 80: 44/51 ( 86%) matches, 2 gaps
+   12246 ctcctgcctcag-cctccaagtagctgggattaca-gcatgtgccaccatgcc 12296
+         |||||| ||||| | |||||   |||||||||||| ||||| |||||||| ||
+   13938 gaggacagagtcagaaggtttcacgaccctaatgtccgtactcggtggtatgg 13886
+
+D00596: Score 99: 53/65 ( 81%) matches, 1 gaps
+   13884 tgggtatggtggctcatgcctgtaatcccagcactttggaagactgagacaggagcaattgcttga 139
+49
+         ||||| |||||||   ||||||||||||||||    ||| || ||||| ||| || ||||||||||
+   14692 acccacaccaccgtacacggacattagggtcgatggaccctccgactccgtcttc-ttaacgaact 146
+28
+
+Data files
+
+   None.
+
+Notes
+
+   Sometimes you can find repeats using the program palindrome that you
+   can't find with einverted using the default parameters.
+
+   This is not due to a problem with either program. It is simply because
+   some of the shortest repeats that you find with palindrome's default
+   parameter values are below einverted's default cutoff score - you
+   should decrease the 'Minimum score threshold' to see them.
+
+   For example, when palindrome is run with 'em:hsfau1', it finds the
+   repeat:
+
+64    aaaactaaggc    74
+      |||||||||||
+98    ttttgattccg    88
+
+   einverted will not report this as its score is 33 (11 bases scoring 3
+   each, no mismatches or gaps) with is below the default score cutoff of
+   50.
+
+   If einverted is run as:
+
+   % einverted em:hsfau1 -threshold 33
+
+   then it will find it:
+
+Score 33: 11/11 (100%) matches, 0 gaps
+      64 aaaactaaggc 74
+         |||||||||||
+      98 ttttgattccg 88
+
+   Anything can be considered to be a repeat if you set the score
+   threshold low enough!
+
+   einverted does not report overlapping matches.
+
+   The original "inverted" program was written to annotate the nematode
+   genome. Excluding overlapping repeats saved problems with simple
+   repeat sequences in this genome.
+
+References
+
+   Some useful references on inverted repeats:
+
+    1. Pearson CE, Zorbas H, Price GB, Zannis-Hadjopoulos M Inverted
+       repeats, stem-loops, and cruciforms: significance for initiation
+       of DNA replication. J Cell Biochem 1996 Oct;63(1):1-22
+    2. Waldman AS, Tran H, Goldsmith EC, Resnick MA. q Long inverted
+       repeats are an at-risk motif for recombination in mammalian cells.
+       Genetics. 1999 Dec;153(4):1873-83. PMID: 10581292; UI: 20050682
+    3. Jacobsen SE Gene silencing: Maintaining methylation patterns. Curr
+       Biol 1999 Aug 26;9(16):R617-9
+    4. Lewis S, Akgun E, Jasin M. Palindromic DNA and genome stability.
+       Further studies. Ann N Y Acad Sci. 1999 May 18;870:45-57. PMID:
+       10415472; UI: 99343961
+    5. Dai X, Greizerstein MB, Nadas-Chinni K, Rothman-Denes LB
+       Supercoil-induced extrusion of a regulatory DNA hairpin. Proc Natl
+       Acad Sci U S A 1997 Mar 18;94(6):2174-9
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with a status of 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name                     Description
+   equicktandem Finds tandem repeats
+   etandem      Looks for tandem repeats in a nucleotide sequence
+   palindrome   Looks for inverted repeats in a nucleotide sequence
+
+   palindrome also looks for inverted repeats but is much faster and less
+   sensitive, as it looks for near-perfect repeats.
+
+Author(s)
+
+   This program was originally written by Richard Durbin
+   (rd © sanger.ac.uk)
+   Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
+   CB10 1SA, UK.
+
+   This application was modified for inclusion in EMBOSS by Peter Rice
+   (pmr © ebi.ac.uk)
+   Informatics Division, European Bioinformatics Institute, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+History
+
+   Written (1999) - Peter Rice
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

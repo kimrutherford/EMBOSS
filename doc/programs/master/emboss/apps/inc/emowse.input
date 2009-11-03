@@ -1,0 +1,19 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tsw:*' is a sequence entry in the example protein database 'tsw'
+<p>
+<p><h3>File: test.mowse</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+6082.8
+5423.0
+3086.3
+2930.3
+2424.7
+2030.2
+1399.6
+1086.2
+</pre>
+</td></tr></table><p>

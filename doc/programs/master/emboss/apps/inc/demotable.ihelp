@@ -1,0 +1,5 @@
+   Mandatory qualifiers:
+  [-gff]               infile     File containing normal tab delimted gff's
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)

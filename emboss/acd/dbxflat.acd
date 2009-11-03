@@ -1,0 +1,114 @@
+application: dbxflat [
+  groups: "Utils:Database indexing"
+  documentation: "Database b+tree indexing for flat file
+                  databases"
+  gui: "yes"
+  batch: "yes"
+  cpu: "medium"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  string: dbname [
+    parameter: "Y"
+    maxlength: "19"
+    minlength: "2"
+    information: "Basename for index files"
+    knowntype: "emboss database name"
+    pattern: "[A-z][A-z0-9_]+"
+  ]
+
+  string: dbresource [
+    parameter: "Y"
+    maxlength: "19"
+    minlength: "2"
+    information: "Resource name"
+    knowntype: "emboss resource name"
+    pattern: "[A-z][A-z0-9_]+"
+  ]
+
+  list: idformat [
+    standard: "y"
+    information: "Entry format"
+    values: "EMBL:EMBL; SWISS:Swiss-Prot, SpTrEMBL, TrEMBLnew;
+             GB:Genbank, DDBJ; REFSEQ:Refseq;"
+    maximum: "1"
+    minimum: "1"
+    default: "SWISS"
+  ]
+
+  string: filenames [
+    standard: "Y"
+    default: "*.dat"
+    information: "Wildcard database filename"
+    knowntype: "emboss database wildcard filename"
+  ]
+
+  directory: directory [
+    standard: "Y"
+    default: "."
+    information: "Database directory"
+    knowntype: "emboss database directory"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  list: fields [
+    standard: "Y"
+    information: "Index fields"
+    values: "id:ID;acc:Accession number;sv:Sequence Version and
+             GI;des:Description;key:Keywords;org:Taxonomy"
+    minimum: "1"
+    maximum: "6"
+    default: "id,acc"
+  ]
+
+endsection: required
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  string: release [
+    default: "0.0"
+    maxlength: "9"
+    information: "Release number"
+    knowntype: "emboss database release"
+  ]
+
+  string: date [
+    default: "00/00/00"
+    valid: "Date string dd/mm/yy"
+    information: "Index date"
+    pattern: "^([0-9]+.[0-9]+.[0-9]+)?$"
+    knowntype: "date"
+  ]
+
+  string: exclude [
+    information: "Wildcard filename(s) to exclude"
+    knowntype: "filename wildcard"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outdir: indexoutdir [
+    default: "."
+    information: "Index file output directory"
+    knowntype: "emboss database index"
+  ]
+
+endsection: output

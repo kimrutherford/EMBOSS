@@ -1,0 +1,49 @@
+application: pepstats [
+  documentation: "Protein statistics"
+  groups: "Protein:Composition"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "protein"
+  ]
+
+  datafile: aadata [
+    information: "Amino acids properties and molecular weight
+                  data file"
+    help: "Molecular weight data for amino acids"
+    default: "Eamino.dat"
+    knowntype: "amino acid properties"
+  ]
+
+endsection: input
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  boolean: termini [
+    default: "Y"
+    information: "Include charge at N and C terminus"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    knowntype: "pepstats output"
+    information: "Pepstats program output file"
+  ]
+
+endsection: output

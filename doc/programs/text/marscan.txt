@@ -1,0 +1,426 @@
+
+                                  marscan 
+
+
+
+Function
+
+   Finds MAR/SAR sites in nucleic sequences
+
+Description
+
+   Matrix/scaffold attachment regions (MARs/SARs) are genomic elements
+   thought to delineate the structural and functional organisation of the
+   eukaryotic genome. Originally, MARs and SARs were identified through
+   their ability to bind to the nuclear matrix or scaffold. Binding
+   cannot be assigned to a unique sequence element, but is dispersed over
+   a region of several hundred base pairs. These elements are found
+   flanking a gene or a small cluster of genes and are located often in
+   the vicinity of cis-regulatory sequences. This has led to the
+   suggestion that they contribute to higher order regulation of
+   transcription by defining boundaries of independently controlled
+   chromatin domains. There is indirect evidence to support this notion.
+   In transgenic experiments MARs/SARs dampen position effects by
+   shielding the transgene from the effects of the chromatin structure at
+   the site of integration. Furthermore, they may act as boundary
+   elements for enhancers, restricting their long range effect to only
+   the promoters that are located in the same chromatin domain.
+
+   marscan finds a bipartite sequence element that is unique for a large
+   group of eukaryotic MARs/SARs. This MAR/SAR recognition signature
+   (MRS) comprises two individual sequence elements that are <200 bp
+   apart and may be aligned on positioned nucleosomes in MARs. The MRS
+   can be used to correctly predict the position of MARs/SARs in plants
+   and animals, based on genomic DNA sequence information alone.
+   Experimental evidence from the analysis of >300 kb of sequence data
+   from several eukaryotic organisms show that wherever a MRS is observed
+   in the DNA sequence, the corresponding genomic fragment is a
+   biochemically identifiable SAR.
+
+   The MRS is a bipartite sequence element that consists of two
+   individual sequences of 8 (AATAAYAA) and 16 bp (AWWRTAANNWWGNNNC)
+   within a 200 bp distance from each other. One mismatch is allowed in
+   the 16 bp pattern. The patterns can occur on either strand of the DNA
+   with respect to each other. The 8 bp and the 16 bp sites can overlap.
+
+   Where there are many possible MRS sites caused by many 8 bp and/or 16
+   bp pattern sites located within 200 bp of each other, then only the 8
+   bp site and the 16 bp site that occur closest to each other are
+   reported.
+
+   Once a MRS has been reported, no more sites will be looked for within
+   200 bp of that site. This reduces (but maybe will not totally
+   eliminate) over-reporting of the clusters of MRS's that tend to occur
+   within a MAR/SAR.
+
+   Not all SARs contain a MRS. Analysis of >300 kb of genomic sequence
+   from a variety of eukaryotic organisms shows that the MRS faithfully
+   predicts 80% of MARs and SARs, suggesting that at least one other type
+   of MAR/SAR may exist which does not contain a MRS.
+
+   It it still not at all clear whether MAR/SARs are real biological
+   phenomena or just experimental artefacts.
+
+   The problem of how to define and find MARs is still being actively
+   invetsigated. For a recent evaluation of this method and others, see
+   reference 3.
+
+Usage
+
+   Here is a sample session with marscan
+
+
+% marscan 
+Finds MAR/SAR sites in nucleic sequences
+Input nucleotide sequence(s): tembl:u01317
+Output report [u01317.marscan]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-outfile]           report     [*.marscan] File for output of MAR/SAR
+                                  recognition signature (MRS) regions. This
+                                  contains details of the MRS in normal GFF
+                                  format. The MRS consists of two recognition
+                                  sites, one of 8 bp and one of 16 bp on
+                                  either sense strand of the genomic DNA,
+                                  within 200 bp of each other.
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   marscan reads a normal genomic DNA USA.
+
+  Input files for usage example
+
+   'tembl:u01317' is a sequence entry in the example nucleic acid
+   database 'tembl'
+
+  Database entry: tembl:u01317
+
+ID   U01317; SV 1; linear; genomic DNA; STD; HUM; 73308 BP.
+XX
+AC   U01317; J00093-J00094; J00096; J00158-J00175; J00177-J00179; K01239;
+AC   K01890; K02544; M18047; M19067; M24868; M24886;
+XX
+DT   19-MAR-1994 (Rel. 39, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 34)
+XX
+DE   Human beta globin region on chromosome 11.
+XX
+KW   allelic variation; alternate cap site; Alu repeat; beta-1 pseudogene;
+KW   beta-globin; delta-globin; epsilon-globin; gamma-globin; gene duplication;
+KW   globin; HPFH; KpnI repetitive sequence; polymorphism; promoter mutation;
+KW   pseudogene; repetitive sequence; RNA polymerase III; thalassemia.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   62409-62631, 63482-63610
+RX   PUBMED; 4135409.
+RA   Marotta C.A., Forget B.G., Weissman S.M., Verma I.M., McCaffrey R.P.,
+RA   Baltimore D.;
+RT   "Nucleotide sequences of human globin messenger RNA";
+RL   Proc. Natl. Acad. Sci. U.S.A. 71(6):2300-2304(1974).
+XX
+RN   [2]
+RP   63602-63646
+RX   PUBMED; 1059150.
+RA   Forget B.G., Marotta C.A., Weissman S.M., Cohen-Solal M.;
+RT   "Nucleotide sequences of the 3'-terminal untranslated region of messenger
+RT   RNA for human beta globin chain";
+RL   Proc. Natl. Acad. Sci. U.S.A. 72(9):3614-3618(1975).
+XX
+RN   [3]
+RP   63593-63626
+RX   PUBMED; 788834.
+RA   Proudfoot N.J., Brownlee G.G.;
+RT   "Nucleotide sequences of globin messenger RNA";
+RL   Br. Med. Bull. 32(3):251-256(1976).
+XX
+RN   [4]
+RP   63673-63743
+RX   DOI; 10.1016/0092-8674(76)90137-9.
+RX   PUBMED; 1035137.
+RA   Proudfoot N.J., Longley J.I.;
+RT   "The 3' terminal sequences of human alpha and beta globin messenger RNAs:
+RT   comparison with rabbit globin messenger RNA";
+
+
+  [Part of this file has been deleted for brevity]
+
+     aaaggggaga agaatcaaat agacgcaata aaaaatgaca cggggtatca ccactgatcc     7038
+0
+     cacagaaata caaactaccg tcagagaata ctataaacac ctctacgcaa ataaactaga     7044
+0
+     aaatctagaa gaaatggata aattcctcga cacatacact ctgccaagac taaaccagga     7050
+0
+     agaagttgta tctctgaata gaccaataac aggctctgaa attgaggcaa taattaatag     7056
+0
+     cttatcaacc aaaaaaagtc cgggaccagt aggattcata gccgaattct accagaggta     7062
+0
+     caaggaggag ctggtaccat tccttctgaa actattccaa tcaatagaaa aagagggaat     7068
+0
+     cctccctaac tcattttatg aggccagcat catcctgata ccaaagcctg acagagacac     7074
+0
+     aacaaaaaaa gagaatgtta caccaatatc cttgatgaac atcgatgcaa aaatcctcaa     7080
+0
+     taaaatactg gcaaactgaa tccagcagca catcaaaaag cttatcctcc atgatcaagt     7086
+0
+     gggcttcatc cctgccatgc aaggctggtt caacatacga aatcaataaa cataatccag     7092
+0
+     catataaaca gaaccaaaga cacaaaccat atgattatct caatagatgc agaaaaggcc     7098
+0
+     tttgacaaaa ttcaacaatg cttcatgcta aaaactctca ataaattagg tattgatggg     7104
+0
+     acatatctca aaataataag agctatctat gacaaaccca cagccaatat catactgagt     7110
+0
+     ggacaaaaac tggaagcatt ccctttgaaa actggcacaa ggcagggatg ccctctctca     7116
+0
+     ccactcctat tcaacatagt gttggaagtt ctggccaggg caatcaggca ggagaaggaa     7122
+0
+     ataaagggca ttcaattagg aaaagaggaa ggtgaaattg tccctgtttg cagatgacat     7128
+0
+     gattgtatat ctagaaaacc ccattgtctc agcccaaaat ctccttaagc tgataagcaa     7134
+0
+     cttcagcaaa gtctcaggat ataaaatcag tgtgcaaaaa tcacaagtat tcctatgcac     7140
+0
+     caataacaga caaacagaga gccaaatcat gagtgaactc ccattcacaa ttgcttcaaa     7146
+0
+     gagaataaaa tacctaggaa tccaacttac aagggatgtg aaggacctct tcaaggagaa     7152
+0
+     ctacaaacca ctgctcaatg aaataaaaga ggatacaaac aaatggaaga acattccatg     7158
+0
+     cttatgggta ggaagaatca tatcgtgaaa atggtcatac tgcccaaggt aatttataga     7164
+0
+     ttcaatgcca tccccatcaa gctaccaatg actttcttca cagaactgga aaaaactact     7170
+0
+     ttaaagttca tatggaatca aaaaagagcc cacatcacca aggcaatcct aagccaaaag     7176
+0
+     aacaaagctg gaggcatcac gctacctgac ttcaaactat actacaatgc tacggtaacc     7182
+0
+     aaaacagcat ggtactggta ccaaaacaga gatctagacc aatggaacag aacagagccc     7188
+0
+     tcagaaataa tgccgcatat ctacaactat ccgatctttg acaaacctga gagaaacaag     7194
+0
+     caatggggaa aggattccct atttaataaa tggtgctggg aaaactggct agccatatgt     7200
+0
+     agaaagctga aactggatcc ttccttacac cttatacaaa aattaattca agatggatta     7206
+0
+     aagacttaaa cattagacct aaaaccataa aaaccctaga aaaaaaccta ggcaatacca     7212
+0
+     ttcaggacat aggcatgggc aaggacttca tgtctaaaac accaaaacga atggcaacaa     7218
+0
+     aagacaaaat ggacaaacgg gatctaatta aactaaagag cttctgcaca gctaaagaaa     7224
+0
+     ctaccatcag agtgaacagg caacctacaa aatgggagaa aatttttgca atctactcat     7230
+0
+     ctgacaaagg gctaatatcc agaatctaca atgaactcaa acaaatttac aagaaaaaac     7236
+0
+     aaacaacccc atcaaaaagt gggcaaagga tatgaacaga cacttctcaa aagaagacat     7242
+0
+     ttatgtaatc aaaaaacaca tgaaaaaatg ctcatcatca ctagccatca gagaaatgca     7248
+0
+     aatcaaaacc acaatgagat accatctcac accagttaga atggcgatca ttaaaaagtc     7254
+0
+     aggaaacaac aggtgctgga gaggatgtgg agaaacagga acaactttta cactgttggt     7260
+0
+     gggactgtaa actagttcaa ccattgcgga agtcagtgtg gcaattcctc aggaatctag     7266
+0
+     aactagaaat accatttgac ccagccatcc cattactggg tagataccca aaggattata     7272
+0
+     aatcatgctg ctataaagac acatgcacac gtatgtttat tgcagcacta ttcacaatag     7278
+0
+     caaagacttg gaaccaaccc aaatgtccaa caacgataga ttggattaag aaaatgtggc     7284
+0
+     acatatacac catggaatac tatgcagcca taaaaaatga tgagttcatg tcctttgtag     7290
+0
+     ggacatggat gaagctggaa actatcattc tcagcaaact atcacaagga caataaacca     7296
+0
+     aacaccgcat gttctcactc ataggtggga attgaacaat gagaacacat ggacacatga     7302
+0
+     agaggaacat cacactctgg ggactgttat ggggtggggg gcaggggcag ggatagcact     7308
+0
+     aggagatata cctaatgcta aatgacgagt taatgggtgc agcacaccaa catggcacat     7314
+0
+     gtatacatat ataacaaacc tgccgttgtg cacatgtacc ctaaaacttg aagtataata     7320
+0
+     ataaaaaaaa gttatcctat taaaactgat ctcacacatc cgtagagcca ttatcaagtc     7326
+0
+     tttctctttg aaacagacag aaatttagtg ttttctcagt cagttaac                  7330
+8
+//
+
+Output file format
+
+   The output is a standard EMBOSS report file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -rformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: embl,
+   genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+   feattable, motif, regions, seqtable, simple, srs, table, tagseq
+
+   See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
+   information on report formats.
+
+   By default marscan writes a GFF (Gene Feature Format) report file.
+
+  Output files for usage example
+
+  File: u01317.marscan
+
+##gff-version 2.0
+##date 2006-07-15
+##Type DNA U01317
+U01317  marscan misc_signal     2242    2458    0.000   +       .       Sequenc
+e "U01317.1" ; note "*type MAR/SAR recognition site (MRS)" ; note "*start8bp 24
+51" ; note "*end8bp 2458" ; note "*start16bp 2242" ; note "*end16bp 2257"
+U01317  marscan misc_signal     17654   17730   0.000   +       .       Sequenc
+e "U01317.2" ; note "*type MAR/SAR recognition site (MRS)" ; note "*start8bp 17
+723" ; note "*end8bp 17730" ; note "*start16bp 17654" ; note "*end16bp 17669"
+U01317  marscan misc_signal     40956   41123   0.000   +       .       Sequenc
+e "U01317.3" ; note "*type MAR/SAR recognition site (MRS)" ; note "*start8bp 40
+956" ; note "*end8bp 40963" ; note "*start16bp 41108" ; note "*end16bp 41123"
+U01317  marscan misc_signal     42232   42248   0.000   +       .       Sequenc
+e "U01317.4" ; note "*type MAR/SAR recognition site (MRS)" ; note "*start8bp 42
+232" ; note "*end8bp 42239" ; note "*start16bp 42233" ; note "*end16bp 42248"
+U01317  marscan misc_signal     47834   47966   0.000   +       .       Sequenc
+e "U01317.5" ; note "*type MAR/SAR recognition site (MRS)" ; note "*start8bp 47
+959" ; note "*end8bp 47966" ; note "*start16bp 47834" ; note "*end16bp 47849"
+U01317  marscan misc_signal     65112   65146   0.000   +       .       Sequenc
+e "U01317.6" ; note "*type MAR/SAR recognition site (MRS)" ; note "*start8bp 65
+139" ; note "*end8bp 65146" ; note "*start16bp 65112" ; note "*end16bp 65127"
+U01317  marscan misc_signal     65947   65963   0.000   +       .       Sequenc
+e "U01317.7" ; note "*type MAR/SAR recognition site (MRS)" ; note "*start8bp 65
+947" ; note "*end8bp 65954" ; note "*start16bp 65948" ; note "*end16bp 65963"
+
+Data files
+
+   None.
+
+Notes
+
+   It does not check whether the DNA input sequence is genomic or not.
+
+References
+
+    1. The method for finding the MAR/SAR sites is described in:
+       van Drunen CM., Sewalt RGAB., Oosterling RW., Weisbeek PJ.,
+       Smeekens SCM. and van Driel R. "A bipartite sequence element
+       associated with matrix/scaffold attachment regions" Nucleic Acids
+       Research. 1999. Vol 27, No. 14, pp. 2924-2930
+    2. The original paper on MARs/SARs is:
+       Mirkovitch J., Mirault M-E. and Laemmli UK. Cell. 1984. Vol. 39
+       pp. 223-232.
+    3. A recent evaluation of methods to find MARs/SARs:
+       I. Liebich, J. Bode, I. Reuter and E. Wingender "Evaluation of
+       sequence motifs found in scaffold/matrix-attached regions
+       (S/MARs)" Nucleic Acids Research 2002, Vol. 30, No. 15 3433-3442
+
+Warnings
+
+   None
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name                        Description
+   dreg         Regular expression search of a nucleotide sequence
+   fuzznuc      Nucleic acid pattern search
+   fuzztran     Protein pattern search after translation
+   getorf       Finds and extracts open reading frames (ORFs)
+   plotorf      Plot potential open reading frames
+   showorf      Pretty output of DNA translations
+   sixpack      Display a DNA sequence with 6-frame translation and ORFs
+   syco         Synonymous codon usage Gribskov statistic plot
+   tcode        Fickett TESTCODE statistic to identify protein-coding DNA
+   wobble       Wobble base plot
+
+Author(s)
+
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+History
+
+   Written (Jan 2001) - Gary Williams.
+
+   Changed output file to standard EMBOSS report format (April 2002) -
+   Peter Rice
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

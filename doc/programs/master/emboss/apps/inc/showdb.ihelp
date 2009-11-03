@@ -1,0 +1,54 @@
+   Standard (Mandatory) qualifiers: (none)
+   Additional (Optional) qualifiers:
+   -database           string     Name of a single database to give
+                                  information on (Any string is accepted)
+   -html               boolean    [N] Format output as an HTML table
+   -[no]protein        boolean    [Y] Display protein databases
+   -[no]nucleic        boolean    [Y] Display nucleic acid databases
+   -full               boolean    [N] Display all columns
+   -methods            boolean    [$(full)] This displays the access methods
+                                  that can be used on this database, for all,
+                                  query or ID access
+   -fields             boolean    [$(full)] This displays the search fields
+                                  that can be used on this database, other
+                                  than the standard 'id' or 'acc' fields.
+   -defined            boolean    [$(full)] This displays a short name for the
+                                  file containing the database definition
+   -release            boolean    [$(full)] Display 'release' column
+   -outfile            outfile    [stdout] Output file name
+
+   Advanced (Unprompted) qualifiers:
+   -only               toggle     [N] This is a way of shortening the command
+                                  line if you only want a few standard columns
+                                  to be displayed. Instead of specifying:
+                                  '-nohead -notype -noid -noquery -noall'
+                                  to get only the comment output, you can
+                                  specify
+                                  '-only -comment'
+   -heading            boolean    [@(!$(only))] Display column headings
+   -type               boolean    [@(!$(only))] Display 'type' column
+   -id                 boolean    [@(!$(only))] Display 'id' column
+   -query              boolean    [@(!$(only))] Display 'qry' column
+   -all                boolean    [@(!$(only))] Display 'all' column
+   -comment            boolean    [@(!$(only))] Display 'comment' column
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+

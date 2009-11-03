@@ -1,0 +1,5 @@
+application: acdc [
+  documentation: "ACD compiler"
+  gui: "no"
+  groups: "Acd"
+]

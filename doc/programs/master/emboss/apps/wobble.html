@@ -1,0 +1,169 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: wobble
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+wobble
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/wobble.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+
+Wobble plots the third position variability as an indicator of a 
+potential coding region.
+<p>
+
+For each of the six possible translation frames, this plots a graph
+showing the percentage of 'G' and 'C' bases in the third position of
+codons in the frame within a window that is moved over the sequence. 
+<p>
+
+Bases other than 'G' and 'C' can be chosen with the <b>-bases</b> option.
+<p>
+
+The Mean of the third base percentage value is drawn as a horizontal
+line across the plots. 
+<p>
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/wobble.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/wobble.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/wobble.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>wobble</b> reads a normal nucleic acid sequence USA.
+
+<p>
+
+<!--#include file="inc/wobble.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+<b>wobble</b> plots a set of six graphs, one for each frame.
+
+<p>
+
+<!--#include file="inc/wobble.output" -->
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+"Sequence too short for window" - The sequence must be longer than 3
+times the window length. 
+
+<p>
+
+"Specifying ACG&T is meaningless" - When you use the option
+<b>-bases</b> to specify the bases to look for, it is pointless to
+specify looking for all the possible bases as these should add to 100%
+all the time. 
+
+<p>
+
+"No bases specified" - Similarly you have to specify some bases to look
+for otherwise you must plot a 0% line. 
+
+
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0, unless a fatal error is given.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+
+<!--#include file="inc/wobble.isee" -->
+<!--
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/ableasby.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/wobble.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/wobble.comment" -->
+
+</BODY>
+</HTML>
+

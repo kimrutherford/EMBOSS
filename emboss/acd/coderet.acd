@@ -1,0 +1,71 @@
+application: coderet [
+  documentation: "Extract CDS, mRNA and translations from
+                  feature tables"
+  groups: "Feature tables, Nucleic:Translation"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: seqall [
+    parameter: "Y"
+    type: "DNA"
+    entry: "Y"
+  ]
+
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    extension: "coderet"
+    knowntype: "coderet output"
+  ]
+
+  seqoutall: cdsoutseq [
+    parameter: "Y"
+    type: "nucleotide"
+    information: "Coding nucleotide output sequence(s)
+                  (optional)"
+    osextension: "cds"
+    nullok: "Y"
+    knowntype: "cds sequence"
+  ]
+
+  seqoutall: mrnaoutseq [
+    parameter: "Y"
+    type: "nucleotide"
+    information: "Messenger RNA nucleotide output sequence(s)
+                  (optional)"
+    osextension: "mrna"
+    nullok: "Y"
+    knowntype: "mrna sequence"
+  ]
+
+  seqoutall: translationoutseq [
+    parameter: "Y"
+    type: "protein"
+    information: "Translated coding protein output sequence(s)
+                  (optional)"
+    osextension: "prot"
+    nullok: "Y"
+    knowntype: "translated cds sequence"
+  ]
+
+  seqoutall: restoutseq [
+    parameter: "Y"
+    type: "nucleotide"
+    information: "Non-coding nucleotide output sequence(s)
+                  (optional)"
+    osextension: "noncoding"
+    nullok: "Y"
+    knowntype: "mrna sequence"
+  ]
+
+endsection: output

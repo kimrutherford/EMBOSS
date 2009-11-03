@@ -1,0 +1,108 @@
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-window</td>
+<td>The percentage CG content and the Observed frequency of CG is calculated within a window whose size is set by this parameter. The window is moved down the sequence and these statistics are calculated at each postition that the window is moved to.</td>
+<td>Integer 1 or more</td>
+<td>100</td>
+</tr>
+
+<tr>
+<td>-minlen</td>
+<td>This sets the minimum length that a CpG island has to be before it is reported.</td>
+<td>Integer 1 or more</td>
+<td>200</td>
+</tr>
+
+<tr>
+<td>-minoe</td>
+<td>This sets the minimum average observed to expected ratio of C plus G to CpG in a set of 10 windows that are required before a CpG island is reported.</td>
+<td>Number from 0.000 to 10.000</td>
+<td>0.6</td>
+</tr>
+
+<tr>
+<td>-minpc</td>
+<td>This sets the minimum average percentage of G plus C a set of 10 windows that are required before a CpG island is reported.</td>
+<td>Number from 0.000 to 100.000</td>
+<td>50.</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>This sets the name of the file holding the report of the input sequence name, CpG island parameters and the output details of any CpG islands that are found.</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.cpgplot</td>
+</tr>
+
+<tr>
+<td>-graph</td>
+<td>Graph type</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png, gif</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
+</tr>
+
+<tr>
+<td>[-outfeat]<br>(Parameter 3)</td>
+<td>File for output features</td>
+<td>Writeable feature table</td>
+<td><i>unknown.gff</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-[no]plot</td>
+<td>Plot CpG island score</td>
+<td>Toggle value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]obsexp</td>
+<td>If this is set to true then the graph of the observed to expected ratio of C plus G to CpG within a window is displayed.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]cg</td>
+<td>If this is set to true then the graph of the regions which have been determined to be CpG islands is displayed.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]pc</td>
+<td>If this is set to true then the graph of the percentage C plus G within a window is displayed.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+</table>

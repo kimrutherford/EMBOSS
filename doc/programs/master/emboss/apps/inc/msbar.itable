@@ -1,0 +1,90 @@
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-count</td>
+<td>Number of times to perform the mutation operations</td>
+<td>Integer 0 or more</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-point</td>
+<td>Types of point mutations to perform</td>
+<td><table><tr><td>0</td> <td><i>(None)</i></td></tr><tr><td>1</td> <td><i>(Any of the following)</i></td></tr><tr><td>2</td> <td><i>(Insertions)</i></td></tr><tr><td>3</td> <td><i>(Deletions)</i></td></tr><tr><td>4</td> <td><i>(Changes)</i></td></tr><tr><td>5</td> <td><i>(Duplications)</i></td></tr><tr><td>6</td> <td><i>(Moves)</i></td></tr></table></td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-block</td>
+<td>Types of block mutations to perform</td>
+<td><table><tr><td>0</td> <td><i>(None)</i></td></tr><tr><td>1</td> <td><i>(Any of the following)</i></td></tr><tr><td>2</td> <td><i>(Insertions)</i></td></tr><tr><td>3</td> <td><i>(Deletions)</i></td></tr><tr><td>4</td> <td><i>(Changes)</i></td></tr><tr><td>5</td> <td><i>(Duplications)</i></td></tr><tr><td>6</td> <td><i>(Moves)</i></td></tr></table></td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-codon</td>
+<td>Types of codon mutations to perform. These are only done if the sequence is nucleic.</td>
+<td><table><tr><td>0</td> <td><i>(None)</i></td></tr><tr><td>1</td> <td><i>(Any of the following)</i></td></tr><tr><td>2</td> <td><i>(Insertions)</i></td></tr><tr><td>3</td> <td><i>(Deletions)</i></td></tr><tr><td>4</td> <td><i>(Changes)</i></td></tr><tr><td>5</td> <td><i>(Duplications)</i></td></tr><tr><td>6</td> <td><i>(Moves)</i></td></tr></table></td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 2)</td>
+<td>Sequence set(s) filename and optional format (output USA)</td>
+<td>Writeable sequence(s)</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-inframe</td>
+<td>Do 'codon' and 'block' operations in frame</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-othersequence</td>
+<td>If you require that the resulting mutated sequence should not match a set of other sequences, then you can specify that set of sequences here. For example, if you require that the mutated sequence should not be the same as the input sequence, enter the input sequence here. If you want the result to be different to previous results of this program, specify the previous result sequences here. The program will check that the result does not match the sequences specified here before writing it out. If a match is found, then the mutation is started again with a fresh copy of the input sequence. If, after 10 such retries, there is still a match to the set of sequence given here, then the matching mutated sequence is written with a warning message.</td>
+<td>Readable sequence(s)</td>
+<td>asis:N</td>
+</tr>
+
+<tr>
+<td>-minimum</td>
+<td>Minimum size for a block mutation</td>
+<td>Integer 0 or more</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-maximum</td>
+<td>Maximum size for a block mutation</td>
+<td>Any integer value</td>
+<td>10</td>
+</tr>
+
+</table>

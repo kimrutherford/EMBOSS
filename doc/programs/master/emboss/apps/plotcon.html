@@ -1,0 +1,198 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: plotcon
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+plotcon
+<!--#include file="header2.inc" -->
+<H2>
+    Function
+</H2>
+<!--#include file="inc/plotcon.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+Displays a graphical representation of the similarity along a set of
+aligned sequences.
+<p>
+
+The similarity is calculated by moving a window of a specified length
+along the aligned sequences.  Within the window, the similarity of any
+one position is taken to be the average of all the possible pairwise
+scores of the bases or residues at that position.  The pairwise scores
+are taken from the specified similarity matrix.  The average of the
+position similarities within the window is plotted. 
+
+<p>
+
+The program is useful for determining where the quality of alignments
+is good or bad. 
+
+<p>
+
+
+The average similarity is calculated by:
+
+<p>
+
+<pre>
+Av. Sim. =       sum( Mij*wi + Mji*wj  )
+                      -------------------
+                  (Nseq*Wsize)*((Nseq-1)*Wsize)
+</pre>
+
+<p>
+
+
+sum - over column*window size
+<br>
+w - sequence weighting
+<br>
+M - matrix comparison table
+<br>
+i,j - with respect to residue i or j
+<br>
+Nseq - number of sequences in the alignment
+<br>
+Wsize - window size
+
+<p>
+
+This program is useful for gaining a qualitative insight into where
+there are regions of conservation in a group of aligned sequences. 
+
+<p>
+
+Note that you should only compare the results of two runs of
+<b>plotcon</b> if you use the same window size in each.  This is because
+the 'similarity score' units that are output are very sensitive to the
+size of the window.  A large window (e.g.  100) gives a nice, smooth
+curve, and very low 'similarity score' units, whereas a small window
+(e.g.  4) gives a very spikey, noisy plot with 'similarity score' units
+of a round 1.00
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/plotcon.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/plotcon.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/plotcon.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>plotcon</b> reads a set of gapped, aligned sequences.
+
+<p>
+
+<!--#include file="inc/plotcon.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+A graph of the quality of the alignment is dispalyed on the specifed
+graphics device. 
+
+<p>
+
+<!--#include file="inc/plotcon.output" -->
+
+<H2>
+    Data files
+</H2>
+
+It reads in the specified similarity matrix.
+<p>
+
+
+<!--#include file="inc/localfiles.ihtml" -->
+
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+If you give it a set of unaligned sequences, it will plot the (poor!)
+quality of these as if they were aligned.
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/plotcon.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/tcarver.address" -->
+
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/plotcon.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/plotcon.comment" -->
+
+</BODY>
+</HTML>
+

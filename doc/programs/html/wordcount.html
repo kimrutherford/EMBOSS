@@ -1,0 +1,472 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: wordcount
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+wordcount
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+    Function
+</H2>
+Counts words of a specified size in a DNA sequence
+
+<H2>
+    Description
+</H2>
+
+Displays all the words of the specified length with the number of
+times it occurs.
+
+<H2>
+    Usage
+</H2>
+
+
+<b>Here is a sample session with wordcount</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>wordcount tembl:u68037 -wordsize=3 </b>
+Counts words of a specified size in a DNA sequence
+Output file [u68037.wordcount]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -wordsize           integer    [4] Word size (Integer 2 or more)
+  [-outfile]           outfile    [*.wordcount] Output file name
+
+   Additional (Optional) qualifiers:
+   -mincount           integer    [1] Minimum word count to report (Integer 1
+                                  or more)
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-wordsize</td>
+<td>Word size</td>
+<td>Integer 2 or more</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.wordcount</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-mincount</td>
+<td>Minimum word count to report</td>
+<td>Integer 1 or more</td>
+<td>1</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<b>wordcount</b> reads any sequence USA.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:u68037' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:u68037</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   U68037; SV 1; linear; mRNA; STD; ROD; 1218 BP.
+XX
+AC   U68037;
+XX
+DT   23-SEP-1996 (Rel. 49, Created)
+DT   04-MAR-2000 (Rel. 63, Last updated, Version 2)
+XX
+DE   Rattus norvegicus EP1 prostanoid receptor mRNA, complete cds.
+XX
+KW   .
+XX
+OS   Rattus norvegicus (Norway rat)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea;
+OC   Muridae; Murinae; Rattus.
+XX
+RN   [1]
+RP   1-1218
+RA   Abramovitz M., Boie Y.;
+RT   "Cloning of the rat EP1 prostanoid receptor";
+RL   Unpublished.
+XX
+RN   [2]
+RP   1-1218
+RA   Abramovitz M., Boie Y.;
+RT   ;
+RL   Submitted (26-AUG-1996) to the EMBL/GenBank/DDBJ databases.
+RL   Biochemistry &amp; Molecular Biology, Merck Frosst Center for Therapeutic
+RL   Research, P. O. Box 1005, Pointe Claire - Dorval, Quebec H9R 4P8, Canada
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1218
+FT                   /organism="Rattus norvegicus"
+FT                   /strain="Sprague-Dawley"
+FT                   /mol_type="mRNA"
+FT                   /db_xref="taxon:10116"
+FT   CDS             1..1218
+FT                   /codon_start=1
+FT                   /product="EP1 prostanoid receptor"
+FT                   /note="family 1 G-protein coupled receptor"
+FT                   /db_xref="GOA:P70597"
+FT                   /db_xref="InterPro:IPR000276"
+FT                   /db_xref="InterPro:IPR000708"
+FT                   /db_xref="InterPro:IPR001244"
+FT                   /db_xref="InterPro:IPR008365"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P70597"
+FT                   /protein_id="AAB07735.1"
+FT                   /translation="MSPYGLNLSLVDEATTCVTPRVPNTSVVLPTGGNGTSPALPIFSM
+FT                   TLGAVSNVLALALLAQVAGRLRRRRSTATFLLFVASLLAIDLAGHVIPGALVLRLYTAG
+FT                   RAPAGGACHFLGGCMVFFGLCPLLLGCGMAVERCVGVTQPLIHAARVSVARARLALALL
+FT                   AAMALAVALLPLVHVGHYELQYPGTWCFISLGPPGGWRQALLAGLFAGLGLAALLAALV
+FT                   CNTLSGLALLRARWRRRRSRRFRENAGPDDRRRWGSRGLRLASASSASSITSTTAALRS
+FT                   SRGGGSARRVHAHDVEMVGQLVGIMVVSCICWSPLLVLVVLAIGGWNSNSLQRPLFLAV
+FT                   RLASWNQILDPWVYILLRQAMLRQLLRLLPLRVSAKGGPTELSLTKSAWEASSLRSSRH
+FT                   SGFSHL"
+XX
+SQ   Sequence 1218 BP; 162 A; 397 C; 387 G; 272 T; 0 other;
+     atgagcccct acgggcttaa cctgagccta gtggatgagg caacaacgtg tgtaacaccc        60
+     agggtcccca atacatctgt ggtgctgcca acaggcggta acggcacatc accagcgctg       120
+     cctatcttct ccatgacgct gggtgctgtg tccaacgtgc tggcgctggc gctgctggcc       180
+     caggttgcag gcagactgcg gcgccgccgc tcgactgcca ccttcctgtt gttcgtcgcc       240
+     agcctgcttg ccatcgacct agcaggccat gtgatcccgg gcgccttggt gcttcgcctg       300
+     tatactgcag gacgtgcgcc cgctggcggg gcctgtcatt tcctgggcgg ctgtatggtc       360
+     ttctttggcc tgtgcccact tttgcttggc tgtggcatgg ccgtggagcg ctgcgtgggt       420
+     gtcacgcagc cgctgatcca cgcggcgcgc gtgtccgtag cccgcgcacg cctggcacta       480
+     gccctgctgg ccgccatggc tttggcagtg gcgctgctgc cactagtgca cgtgggtcac       540
+     tacgagctac agtaccctgg cacttggtgt ttcattagcc ttgggcctcc tggaggttgg       600
+     cgccaggcgt tgcttgcggg cctcttcgcc ggccttggcc tggctgcgct ccttgccgca       660
+     ctagtgtgta atacgctcag cggcctggcg ctccttcgtg cccgctggag gcggcgtcgc       720
+     tctcgacgtt tccgagagaa cgcaggtccc gatgatcgcc ggcgctgggg gtcccgtgga       780
+     ctccgcttgg cctccgcctc gtctgcgtca tccatcactt caaccacagc tgccctccgc       840
+     agctctcggg gaggcggctc cgcgcgcagg gttcacgcac acgacgtgga aatggtgggc       900
+     cagctcgtgg gcatcatggt ggtgtcgtgc atctgctgga gccccctgct ggtattggtg       960
+     gtgttggcca tcgggggctg gaactctaac tccctgcagc ggccgctctt tctggctgta      1020
+     cgcctcgcgt cgtggaacca gatcctggac ccatgggtgt acatcctgct gcgccaggct      1080
+     atgctgcgcc aacttcttcg cctcctaccc ctgagggtta gtgccaaggg tggtccaacg      1140
+     gagctgagcc taaccaagag tgcctgggag gccagttcac tgcgtagctc ccggcacagt      1200
+     ggcttcagcc acttgtga                                                    1218
+//
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Output file format
+</H2>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: u68037.wordcount</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+ctg	54
+gcc	53
+tgg	53
+ggc	51
+gct	47
+cgc	47
+gtg	40
+tgc	39
+cct	38
+gcg	36
+cca	29
+ggg	26
+tcc	25
+ctt	25
+cag	25
+ccc	24
+ggt	24
+ctc	23
+tgt	23
+ccg	22
+gca	22
+cgt	22
+cac	22
+agc	21
+ttg	19
+acg	19
+cgg	19
+tcg	18
+ttc	17
+cat	17
+agg	17
+gag	16
+act	16
+gtc	16
+aac	15
+tct	14
+atc	14
+gga	14
+tca	13
+cta	13
+atg	12
+acc	11
+gta	11
+gtt	11
+aca	10
+tga	10
+caa	10
+tac	10
+gac	9
+tag	9
+agt	9
+ttt	8
+cga	7
+gat	6
+taa	6
+aga	5
+tat	5
+gaa	4
+aat	3
+tta	3
+ata	3
+att	3
+aag	2
+aaa	1
+</pre>
+</td></tr></table><p>
+
+<p>
+
+The file simply consists of two columns, separated by spaces or TAB characters.
+
+<p>
+
+The first column consists of all the possible words of size
+<b>wordsize</b>.  The second column consists of the count of those words
+in the input sequence. 
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+    0 if successful.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="banana.html">banana</a></td>
+<td>Bending and curvature plot in B-DNA</td>
+</tr>
+
+<tr>
+<td><a href="btwisted.html">btwisted</a></td>
+<td>Calculates the twisting in a B-DNA sequence</td>
+</tr>
+
+<tr>
+<td><a href="chaos.html">chaos</a></td>
+<td>Create a chaos game representation plot for a sequence</td>
+</tr>
+
+<tr>
+<td><a href="compseq.html">compseq</a></td>
+<td>Count composition of dimer/trimer/etc words in a sequence</td>
+</tr>
+
+<tr>
+<td><a href="dan.html">dan</a></td>
+<td>Calculates DNA RNA/DNA melting temperature</td>
+</tr>
+
+<tr>
+<td><a href="freak.html">freak</a></td>
+<td>Residue/base frequency table or plot</td>
+</tr>
+
+<tr>
+<td><a href="isochore.html">isochore</a></td>
+<td>Plots isochores in large DNA sequences</td>
+</tr>
+
+<tr>
+<td><a href="sirna.html">sirna</a></td>
+<td>Finds siRNA duplexes in mRNA</td>
+</tr>
+
+</table>
+
+<H2>
+    Author(s)
+</H2>
+Ian Longden (il&nbsp;&copy;&nbsp;sanger.ac.uk)
+<br>
+Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.                      
+
+
+<H2>
+    History
+</H2>
+
+Completed 27th November 1998.
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+None
+
+</BODY>
+</HTML>
+

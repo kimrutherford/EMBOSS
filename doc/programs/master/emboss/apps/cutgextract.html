@@ -1,0 +1,185 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: cutgextract
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+cutgextract
+<!--#include file="header2.inc" -->
+
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/cutgextract.ione" -->
+
+<H2>
+    Description
+</H2>
+
+
+Given the name of a directory containing the CUTG database
+(ftp://ftp.ebi.ac.uk/pub/databases/cutg) <b>cutgextract</b> will
+calculate codon usage tables for individual species (e.g. 
+EHomo_sapiens.cut) and place them in the CODONS subdirectory of the
+EMBOSS data directory.  This is an all-or-nothing extraction, will
+create many files and take several minutes.  The usage tables are from
+the sum of codons over all sequences for each organism. 
+             
+<p>
+
+
+The EMBOSS distribution comes loaded with a set of codon usage tables. 
+Thes codon usage tables provided with the distribution are calculated
+from the files in <a
+href="ftp://ftp.ebi.ac.uk/pub/databases/codonusage/README">
+ftp://ftp.ebi.ac.uk/pub/databases/codonusage/README</a>), with a few
+additions whose exact derivation cannot easily be determined.  Many
+people would prefer to create their own from the public CUTG data. 
+
+<p>
+
+
+You run <b>cutgextract</b> on the CUTG database from <a
+href="ftp://ftp.ebi.ac.uk/pub/databases/cutg">
+ftp://ftp.ebi.ac.uk/pub/databases/cutg</a>.  You should get all the
+required *.codon files from CUTG, and uncompress them if they are
+compressed before running <b>cutgextract</b> on them. 
+
+<p>
+
+The task of downloading the CUTG database and running <b>cutgextract</b>
+to create the codon usage table files from it would normally be done
+only once when the EMBOSS package is being installled or if a new
+version of the CUTG database is released. 
+
+
+
+<p>
+
+Note by the way that CUTG has a drawback:  it has a table for each organism
+without making the distinction between different gene populations.
+
+<p>
+
+
+<H2>
+    Algorithm
+</H2>
+
+<b>cutgextract</b> looks in the specified directory and opens all the
+files with the extension '.codon'.  These are all expected to be CUTG
+data files. 
+
+<p>
+
+It then parses out the codon usage data from these *.codon files and
+writes one file per species into the EMBOSS data/CODONS directory.  The
+names of the files are derived from the species names in the CUTG files. 
+These files names will be long (and therefore descriptive). 
+
+<H2>
+    Usage
+</H2>
+
+<!--#include file="inc/cutgextract.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/cutgextract.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/cutgextract.itable" -->
+
+<H2>
+    Input file format
+</H2>
+<!--#include file="inc/cutgextract.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+<b>cutgextract</b> outputs a set of EMBOSS codon usage data files to the EMBOSS
+data/CODONS data directory
+
+<p>
+<!--#include file="inc/cutgextract.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+None
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/cutgextract.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/ableasby.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/cutgextract.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/targetadmin.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/cutgextract.comment" -->
+
+
+</BODY>
+</HTML>

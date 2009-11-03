@@ -1,0 +1,194 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: supermatcher
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+supermatcher
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/supermatcher.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+This is a rough and ready local alignment program for large
+sequences. The reason it is rough and ready is that wordmatch is used
+to find all the word matches between the first sequence and another
+sequence. Then by calculating the highest score for a diagonal we can
+then use this as the centre point for a Smith-Waterman type
+calculation of a width given by the user.  So a narrow diagonal
+Smith-Waterman is calculated hence the results will be rough but due
+to the space saving much larger sequences can be aligned.
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/supermatcher.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/supermatcher.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/supermatcher.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>supermatcher</b> reads two sequence USAs of the same type.  They must
+both be protein or both be nucleic acid sequences. 
+
+<p>
+
+<!--#include file="inc/supermatcher.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/alignformats.ihtml" -->
+
+<p>
+
+The output alignment is in <b>simple</b> format by default.
+
+<p>
+
+<!--#include file="inc/supermatcher.output" -->
+
+<p>
+
+The file 'supermatcher.error' will contain any errors that occured
+during the program.  This may be that wordmatch could not find any
+matches hence no suitable start point is found for the smith-waterman
+calculation. 
+
+
+<H2>
+    Data files
+</H2>
+
+For protein sequences EBLOSUM62 is used for the substitution
+    matrix. For nucleotide sequence, EDNAMAT is used. Others can be specified.
+
+<p>
+<!--#include file="inc/localfiles.ihtml" -->
+
+<H2>
+    Notes
+</H2>
+
+The time this program takes to do an alignment depends very much on the
+word size.  For short sequences a short word size (e.g.  4) can make it
+take a very long time.  Large word sizes (e.g.  30) for sequences that
+are very similar give a very quick result.  The default of 16 should
+give reasonable fast alignments. 
+
+<p>
+
+Because it does a Smith & Waterman alignment (albeit in a narrow region
+around the diagonal shown to be the 'best' by a word match), this
+program can use huge amounts of memory if the sequences are large. 
+
+<p>
+
+Because the alignment is made within a narrow area each side of the
+'best' diagonal, if there are sufficient indels between the two
+sequences, then the path of the Smith & Waterman alignment can wander
+outside of this area.  Making the width larger can avoid this problem,
+but you then use more memory. 
+
+<p>
+
+The longer the sequences and the wider the specified alignment width,
+the more memory will be used. 
+
+<p>
+
+If the program terminates due to lack of memory you can try the
+following:
+
+<p>
+
+Run the UNIX command 'limit' to see if your stack or memory usage have
+been limited and if so, run 'unlimit', (e.g.: '% unlimit stacksize').
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/supermatcher.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/ilongden.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/supermatcher.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/supermatcher.comment" -->
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,659 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: showorf
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+showorf
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+    Function
+</H2>
+Pretty output of DNA translations
+
+<H2>
+    Description
+</H2>
+
+
+Showorf displays a nucleic acid sequence with its protein translation in
+a style suitable for publication.  The translation can be done in any
+frame or combination of frames. 
+
+<p>
+It uses codon frequency files to do the translation.  You can specify
+the codon frequency file that you use with the '-cfile' option.  The
+default table is 'Ehum.cut'. 
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with showorf</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showorf </b>
+Pretty output of DNA translations
+Input nucleotide sequence: <b>tembl:x13776</b>
+Select Frames To Translate
+         0 : None
+         1 : F1
+         2 : F2
+         3 : F3
+         4 : R1
+         5 : R2
+         6 : R3
+Select one or more values [1,2,3,4,5,6]: <b></b>
+Output file [x13776.showorf]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          sequence   Nucleotide sequence filename and optional
+                                  format, or reference (input USA)
+   -frames             menu       [1,2,3,4,5,6] Select one or more values
+                                  (Values: 0 (None); 1 (F1); 2 (F2); 3 (F3); 4
+                                  (R1); 5 (R2); 6 (R3))
+  [-outfile]           outfile    [*.showorf] Output file name
+
+   Additional (Optional) qualifiers:
+   -table              menu       [0] Genetic code to use (Values: 0
+                                  (Standard); 1 (Standard (with alternative
+                                  initiation codons)); 2 (Vertebrate
+                                  Mitochondrial); 3 (Yeast Mitochondrial); 4
+                                  (Mold, Protozoan, Coelenterate Mitochondrial
+                                  and Mycoplasma/Spiroplasma); 5
+                                  (Invertebrate Mitochondrial); 6 (Ciliate
+                                  Macronuclear and Dasycladacean); 9
+                                  (Echinoderm Mitochondrial); 10 (Euplotid
+                                  Nuclear); 11 (Bacterial); 12 (Alternative
+                                  Yeast Nuclear); 13 (Ascidian Mitochondrial);
+                                  14 (Flatworm Mitochondrial); 15
+                                  (Blepharisma Macronuclear); 16
+                                  (Chlorophycean Mitochondrial); 21 (Trematode
+                                  Mitochondrial); 22 (Scenedesmus obliquus);
+                                  23 (Thraustochytrium Mitochondrial))
+   -[no]ruler          boolean    [Y] Add a ruler
+   -[no]plabel         boolean    [Y] Number translations
+   -[no]nlabel         boolean    [Y] Number DNA sequence
+
+   Advanced (Unprompted) qualifiers:
+   -width              integer    [50] Width of screen (Integer 10 or more)
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Nucleotide sequence filename and optional format, or reference (input USA)</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-frames</td>
+<td>Select one or more values</td>
+<td><table><tr><td>0</td> <td><i>(None)</i></td></tr><tr><td>1</td> <td><i>(F1)</i></td></tr><tr><td>2</td> <td><i>(F2)</i></td></tr><tr><td>3</td> <td><i>(F3)</i></td></tr><tr><td>4</td> <td><i>(R1)</i></td></tr><tr><td>5</td> <td><i>(R2)</i></td></tr><tr><td>6</td> <td><i>(R3)</i></td></tr></table></td>
+<td>1,2,3,4,5,6</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.showorf</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-table</td>
+<td>Genetic code to use</td>
+<td><table><tr><td>0</td> <td><i>(Standard)</i></td></tr><tr><td>1</td> <td><i>(Standard (with alternative initiation codons))</i></td></tr><tr><td>2</td> <td><i>(Vertebrate Mitochondrial)</i></td></tr><tr><td>3</td> <td><i>(Yeast Mitochondrial)</i></td></tr><tr><td>4</td> <td><i>(Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma)</i></td></tr><tr><td>5</td> <td><i>(Invertebrate Mitochondrial)</i></td></tr><tr><td>6</td> <td><i>(Ciliate Macronuclear and Dasycladacean)</i></td></tr><tr><td>9</td> <td><i>(Echinoderm Mitochondrial)</i></td></tr><tr><td>10</td> <td><i>(Euplotid Nuclear)</i></td></tr><tr><td>11</td> <td><i>(Bacterial)</i></td></tr><tr><td>12</td> <td><i>(Alternative Yeast Nuclear)</i></td></tr><tr><td>13</td> <td><i>(Ascidian Mitochondrial)</i></td></tr><tr><td>14</td> <td><i>(Flatworm Mitochondrial)</i></td></tr><tr><td>15</td> <td><i>(Blepharisma Macronuclear)</i></td></tr><tr><td>16</td> <td><i>(Chlorophycean Mitochondrial)</i></td></tr><tr><td>21</td> <td><i>(Trematode Mitochondrial)</i></td></tr><tr><td>22</td> <td><i>(Scenedesmus obliquus)</i></td></tr><tr><td>23</td> <td><i>(Thraustochytrium Mitochondrial)</i></td></tr></table></td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-[no]ruler</td>
+<td>Add a ruler</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]plabel</td>
+<td>Number translations</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]nlabel</td>
+<td>Number DNA sequence</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-width</td>
+<td>Width of screen</td>
+<td>Integer 10 or more</td>
+<td>50</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<b>showorf</b> reads a normal nucleic acid sequence USA.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:x13776' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:x13776</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   X13776; SV 1; linear; genomic DNA; STD; PRO; 2167 BP.
+XX
+AC   X13776; M43175;
+XX
+DT   19-APR-1989 (Rel. 19, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 24)
+XX
+DE   Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+XX
+KW   aliphatic amidase regulator; amiC gene; amiR gene.
+XX
+OS   Pseudomonas aeruginosa
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
+OC   Pseudomonadaceae; Pseudomonas.
+XX
+RN   [1]
+RP   1167-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (16-DEC-1988) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
+XX
+RN   [2]
+RP   1167-2167
+RX   DOI; 10.1016/0014-5793(89)80249-2.
+RX   PUBMED; 2495988.
+RA   Lowe N., Rice P.M., Drew R.E.;
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene of Pseudomonas
+RT   aeruginosa";
+RL   FEBS Lett. 246(1-2):39-43(1989).
+XX
+RN   [3]
+RP   1-1292
+RX   PUBMED; 1907262.
+RA   Wilson S., Drew R.;
+RT   "Cloning and DNA seqence of amiC, a new gene regulating expression of the
+RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
+RT   product.";
+RL   J. Bacteriol. 173(16):4914-4921(1991).
+XX
+RN   [4]
+RP   1-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
+XX
+DR   GOA; Q51417.
+DR   UniProtKB/Swiss-Prot; Q51417; AMIS_PSEAE.
+XX
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT                   /replace=""
+FT                   /note="ClaI fragment deleted in pSW36,  constitutive
+FT                   phenotype"
+FT   misc_feature    1
+FT                   /note="last base of an XhoI site"
+FT   misc_feature    648..653
+FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 causes
+FT                   constitutive expression of amiE"
+FT   conflict        1281
+FT                   /replace="g"
+FT                   /citation=[3]
+XX
+SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
+     ggtaccgctg gccgagcatc tgctcgatca ccaccagccg ggcgacggga actgcacgat        60
+     ctacctggcg agcctggagc acgagcgggt tcgcttcgta cggcgctgag cgacagtcac       120
+     aggagaggaa acggatggga tcgcaccagg agcggccgct gatcggcctg ctgttctccg       180
+     aaaccggcgt caccgccgat atcgagcgct cgcacgcgta tggcgcattg ctcgcggtcg       240
+     agcaactgaa ccgcgagggc ggcgtcggcg gtcgcccgat cgaaacgctg tcccaggacc       300
+     ccggcggcga cccggaccgc tatcggctgt gcgccgagga cttcattcgc aaccgggggg       360
+     tacggttcct cgtgggctgc tacatgtcgc acacgcgcaa ggcggtgatg ccggtggtcg       420
+     agcgcgccga cgcgctgctc tgctacccga ccccctacga gggcttcgag tattcgccga       480
+     acatcgtcta cggcggtccg gcgccgaacc agaacagtgc gccgctggcg gcgtacctga       540
+     ttcgccacta cggcgagcgg gtggtgttca tcggctcgga ctacatctat ccgcgggaaa       600
+     gcaaccatgt gatgcgccac ctgtatcgcc agcacggcgg cacggtgctc gaggaaatct       660
+     acattccgct gtatccctcc gacgacgact tgcagcgcgc cgtcgagcgc atctaccagg       720
+     cgcgcgccga cgtggtcttc tccaccgtgg tgggcaccgg caccgccgag ctgtatcgcg       780
+     ccatcgcccg tcgctacggc gacggcaggc ggccgccgat cgccagcctg accaccagcg       840
+     aggcggaggt ggcgaagatg gagagtgacg tggcagaggg gcaggtggtg gtcgcgcctt       900
+     acttctccag catcgatacg cccgccagcc gggccttcgt ccaggcctgc catggtttct       960
+     tcccggagaa cgcgaccatc accgcctggg ccgaggcggc ctactggcag accttgttgc      1020
+     tcggccgcgc cgcgcaggcc gcaggcaact ggcgggtgga agacgtgcag cggcacctgt      1080
+     acgacatcga catcgacgcg ccacaggggc cggtccgggt ggagcgccag aacaaccaca      1140
+     gccgcctgtc ttcgcgcatc gcggaaatcg atgcgcgcgg cgtgttccag gtccgctggc      1200
+     agtcgcccga accgattcgc cccgaccctt atgtcgtcgt gcataacctc gacgactggt      1260
+     ccgccagcat gggcggggga ccgctcccat gagcgccaac tcgctgctcg gcagcctgcg      1320
+     cgagttgcag gtgctggtcc tcaacccgcc gggggaggtc agcgacgccc tggtcttgca      1380
+     gctgatccgc atcggttgtt cggtgcgcca gtgctggccg ccgccggaag ccttcgacgt      1440
+     gccggtggac gtggtcttca ccagcatttt ccagaatggc caccacgacg agatcgctgc      1500
+     gctgctcgcc gccgggactc cgcgcactac cctggtggcg ctggtggagt acgaaagccc      1560
+     cgcggtgctc tcgcagatca tcgagctgga gtgccacggc gtgatcaccc agccgctcga      1620
+     tgcccaccgg gtgctgcctg tgctggtatc ggcgcggcgc atcagcgagg aaatggcgaa      1680
+     gctgaagcag aagaccgagc agctccagga ccgcatcgcc ggccaggccc ggatcaacca      1740
+     ggccaaggtg ttgctgatgc agcgccatgg ctgggacgag cgcgaggcgc accagcacct      1800
+     gtcgcgggaa gcgatgaagc ggcgcgagcc gatcctgaag atcgctcagg agttgctggg      1860
+     aaacgagccg tccgcctgag cgatccgggc cgaccagaac aataacaaga ggggtatcgt      1920
+     catcatgctg ggactggttc tgctgtacgt tggcgcggtg ctgtttctca atgccgtctg      1980
+     gttgctgggc aagatcagcg gtcgggaggt ggcggtgatc aacttcctgg tcggcgtgct      2040
+     gagcgcctgc gtcgcgttct acctgatctt ttccgcagca gccgggcagg gctcgctgaa      2100
+     ggccggagcg ctgaccctgc tattcgcttt tacctatctg tgggtggccg ccaaccagtt      2160
+     cctcgag                                                                2167
+//
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Output file format
+</H2>
+
+
+As a sequence with high GC content (from Pseudmonas aeruginosa) PAAMIR
+has several overlapping open reading frames. 
+
+<p>
+
+The true ORFs are 1..109 (amiB partial) 135..1292 (amiC) 1289..1879 (amiR)
+1925..end (amiS partial)
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: x13776.showorf</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+SHOWORF of X13776 from 1 to 2167
+
+           ---------|---------|---------|---------|---------|
+         1 ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacggga 50
+F1       1 G  T  A  G  R  A  S  A  R  S  P  P  A  G  R  R  E  17
+F2       1  V  P  L  A  E  H  L  L  D  H  H  Q  P  G  D  G  N 17
+F3       1   Y  R  W  P  S  I  C  S  I  T  T  S  R  A  T  G   16
+R1       9   T  G  S  A  S  C  R  S  S  *  W  W  G  P  S  P   5
+R2     106    Y  R  Q  G  L  M  Q  E  I  V  V  L  R  A  V  P  91
+R3      38     V  A  P  R  A  D  A  R  D  G  G  A  P  R  R  S 23
+
+           ---------|---------|---------|---------|---------|
+        51 actgcacgatctacctggcgagcctggagcacgagcgggttcgcttcgta 100
+F1      18  L  H  D  L  P  G  E  P  G  A  R  A  G  S  L  R  T 34
+F2      18   C  T  I  Y  L  A  S  L  E  H  E  R  V  R  F  V   33
+F3      17 T  A  R  S  T  W  R  A  W  S  T  S  G  F  A  S  Y  33
+R1       4 F  Q  V  I  *  R  A  L  R  S  C  S  R  T  R  K  T  31
+R2      90  V  A  R  D  V  Q  R  A  Q  L  V  L  P  N  A  E  Y 74
+R3      22   S  C  S  R  G  P  S  G  P  A  R  A  P  E  S  R   7
+
+           ---------|---------|---------|---------|---------|
+       101 cggcgctgagcgacagtcacaggagaggaaacggatgggatcgcaccagg 150
+F1      35   A  L  S  D  S  H  R  R  G  N  G  W  D  R  T  R   50
+F2      34 R  R  *  A  T  V  T  G  E  E  T  D  G  I  A  P  G  14
+F3      34  G  A  E  R  Q  S  Q  E  R  K  R  M  G  S  H  Q  E 50
+R1      30  R  R  Q  A  V  T  V  P  S  S  V  S  P  I  A  G  P 14
+R2      73   P  A  S  R  C  D  C  S  L  F  R  I  P  D  C  W   58
+R3       6 V  A  S  L  S  L  *  L  L  P  F  P  H  S  R  V  L  398
+
+           ---------|---------|---------|---------|---------|
+       151 agcggccgctgatcggcctgctgttctccgaaaccggcgtcaccgccgat 200
+F1      51 S  G  R  *  S  A  C  C  S  P  K  P  A  S  P  P  I  13
+F2      15  A  A  A  D  R  P  A  V  L  R  N  R  R  H  R  R  Y 31
+F3      51   R  P  L  I  G  L  L  F  S  E  T  G  V  T  A  D   66
+R1      13   A  A  A  S  R  G  A  T  R  R  F  R  R  *  R  R   49
+R2      57 S  R  G  S  I  P  R  S  N  E  S  V  P  T  V  A  S  41
+R3     397  L  P  R  Q  D  A  Q  Q  E  G  F  G  A  D  G  G  I 381
+
+           ---------|---------|---------|---------|---------|
+       201 atcgagcgctcgcacgcgtatggcgcattgctcgcggtcgagcaactgaa 250
+F1      14  S  S  A  R  T  R  M  A  H  C  S  R  S  S  N  *  T 1
+F2      32   R  A  L  A  R  V  W  R  I  A  R  G  R  A  T  E   47
+F3      67 I  E  R  S  H  A  Y  G  A  L  L  A  V  E  Q  L  N  83
+R1      48 Y  R  A  S  A  R  T  H  R  M  A  R  P  R  A  V  S  32
+R2      40  I  S  R  E  C  A  Y  P  A  N  S  A  T  S  C  S  F 24
+R3     380   D  L  A  R  V  R  I  A  C  Q  E  R  D  L  L  Q   365
+
+           ---------|---------|---------|---------|---------|
+       251 ccgcgagggcggcgtcggcggtcgcccgatcgaaacgctgtcccaggacc 300
+F1       2   A  R  A  A  S  A  V  A  R  S  K  R  C  P  R  T   17
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+F2       8 N  N  K  R  G  I  V  I  M  L  G  L  V  L  L  Y  V  24
+F3      22  I  T  R  G  V  S  S  S  C  W  D  W  F  C  C  T  L 38
+R1      53  L  L  L  L  P  I  T  M  M  S  P  S  T  R  S  Y  T 37
+R2      73   I  V  L  P  T  D  D  D  H  Q  S  Q  N  Q  Q  V   58
+R3       7 C  Y  C  S  P  Y  R  *  *  A  P  V  P  E  A  T  R  7
+
+           ---------|---------|---------|---------|---------|
+      1951 tggcgcggtgctgtttctcaatgccgtctggttgctgggcaagatcagcg 2000
+F1      16 W  R  G  A  V  S  Q  C  R  L  V  A  G  Q  D  Q  R  32
+F2      25  G  A  V  L  F  L  N  A  V  W  L  L  G  K  I  S  G 41
+F3      39   A  R  C  C  F  S  M  P  S  G  C  W  A  R  S  A   54
+R1      36   P  A  T  S  N  R  L  A  T  Q  N  S  P  L  I  L   21
+R2      57 N  A  R  H  Q  K  E  I  G  D  P  Q  Q  A  L  D  A  41
+R3       6  Q  R  P  A  T  E  *  H  R  R  T  A  P  C  S  *  R 7
+
+           ---------|---------|---------|---------|---------|
+      2001 gtcgggaggtggcggtgatcaacttcctggtcggcgtgctgagcgcctgc 2050
+F1      33  S  G  G  G  G  D  Q  L  P  G  R  R  A  E  R  L  R 49
+F2      42   R  E  V  A  V  I  N  F  L  V  G  V  L  S  A  C   57
+F3      55 V  G  R  W  R  *  S  T  S  W  S  A  C  *  A  P  A  3
+R1      20 P  R  S  T  A  T  I  L  K  R  T  P  T  S  L  A  Q  4
+R2      40  T  P  L  H  R  H  D  V  E  Q  D  A  H  Q  A  G  A 24
+R3       6   D  P  P  P  P  S  *  S  G  P  R  R  A  S  R  R   28
+
+           ---------|---------|---------|---------|---------|
+      2051 gtcgcgttctacctgatcttttccgcagcagccgggcagggctcgctgaa 2100
+F1      50   R  V  L  P  D  L  F  R  S  S  R  A  G  L  A  E   65
+F2      58 V  A  F  Y  L  I  F  S  A  A  A  G  Q  G  S  L  K  74
+F3       4  S  R  S  T  *  S  F  P  Q  Q  P  G  R  A  R  *  R 1
+R1       3  T  A  N  *  R  I  K  E  A  A  A  P  C  P  E  S  F 12
+R2      23   D  R  E  V  Q  D  K  G  C  C  G  P  L  A  R  Q   8
+R3      27 R  R  T  R  G  S  R  K  R  L  L  R  A  P  S  A  S  11
+
+           ---------|---------|---------|---------|---------|
+      2101 ggccggagcgctgaccctgctattcgcttttacctatctgtgggtggccg 2150
+F1      66 G  R  S  A  D  P  A  I  R  F  Y  L  S  V  G  G  R  82
+F2      75  A  G  A  L  T  L  L  F  A  F  T  Y  L  W  V  A  A 91
+F3       2   P  E  R  *  P  C  Y  S  L  L  P  I  C  G  W  P   12
+R1      11   A  P  A  S  V  R  S  N  A  K  V  *  R  H  T  A   7
+R2       7 L  G  S  R  Q  G  Q  *  E  S  K  G  I  Q  P  H  G  7
+R3      10  P  R  L  A  S  G  A  I  R  K  *  R  D  T  P  P  R 6
+
+           ---------|-------
+      2151 ccaaccagttcctcgag 2167
+F1      83  Q  P  V  P  R    87
+F2      92   N  Q  F  L  E   96
+F3      13 P  T  S  S  S     17
+R1       6 A  L  W  N  R  S  1
+R2       6  G  V  L  E  E  L 1
+R3       5   W  G  T  G  R   1
+
+</pre>
+</td></tr></table><p>
+
+
+<H2>
+    Data files
+</H2>
+
+
+Showorf uses the codon frequency files to translate the sequence. 
+
+<p>
+The codon usage table is read by default from "Ehum.cut" in the 'data/CODONS'
+directory of the EMBOSS distribution.  If the name of a codon usage file
+is specified on the command line with the '-cfile' option, then this
+file will first be searched for in the current directory and then in the
+'data/CODONS' directory of the EMBOSS distribution. 
+
+<p>
+To see the available EMBOSS codon usage files, run:
+
+
+<pre>
+
+% embossdata -showall
+
+</pre>
+
+<p>
+To fetch one of the codon usage tables (for example 'Emus.cut') into your
+current directory for you to inspect or modify, run:
+
+
+<pre>
+
+% embossdata -fetch -file Emus.cut
+
+</pre>
+
+
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It exits with a status of 0.
+It always exits with status 0. 
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="backtranambig.html">backtranambig</a></td>
+<td>Back translate a protein sequence to ambiguous codons</td>
+</tr>
+
+<tr>
+<td><a href="backtranseq.html">backtranseq</a></td>
+<td>Back translate a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="coderet.html">coderet</a></td>
+<td>Extract CDS, mRNA and translations from feature tables</td>
+</tr>
+
+<tr>
+<td><a href="getorf.html">getorf</a></td>
+<td>Finds and extracts open reading frames (ORFs)</td>
+</tr>
+
+<tr>
+<td><a href="marscan.html">marscan</a></td>
+<td>Finds MAR/SAR sites in nucleic sequences</td>
+</tr>
+
+<tr>
+<td><a href="plotorf.html">plotorf</a></td>
+<td>Plot potential open reading frames</td>
+</tr>
+
+<tr>
+<td><a href="prettyseq.html">prettyseq</a></td>
+<td>Output sequence with translated ranges</td>
+</tr>
+
+<tr>
+<td><a href="remap.html">remap</a></td>
+<td>Display sequence with restriction sites, translation etc</td>
+</tr>
+
+<tr>
+<td><a href="showseq.html">showseq</a></td>
+<td>Display a sequence with features, translation etc</td>
+</tr>
+
+<tr>
+<td><a href="sixpack.html">sixpack</a></td>
+<td>Display a DNA sequence with 6-frame translation and ORFs</td>
+</tr>
+
+<tr>
+<td><a href="syco.html">syco</a></td>
+<td>Synonymous codon usage Gribskov statistic plot</td>
+</tr>
+
+<tr>
+<td><a href="tcode.html">tcode</a></td>
+<td>Fickett TESTCODE statistic to identify protein-coding DNA</td>
+</tr>
+
+<tr>
+<td><a href="transeq.html">transeq</a></td>
+<td>Translate nucleic acid sequences</td>
+</tr>
+
+<tr>
+<td><a href="wobble.html">wobble</a></td>
+<td>Wobble base plot</td>
+</tr>
+
+</table>
+
+<H2>
+    Author(s)
+</H2>
+Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
+
+<H2>
+    History
+</H2>
+
+1999 - written - Alan Bleasby
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+None
+
+
+</BODY>
+</HTML>
+

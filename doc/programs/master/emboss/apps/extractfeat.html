@@ -1,0 +1,192 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: extractfeat
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+extractfeat
+<!--#include file="header2.inc" -->
+<H2>
+    Function
+</H2>
+<!--#include file="inc/extractfeat.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<b>extractfeat</b> is a simple utility for extracting parts of a
+sequence that have been annotated as being a specific type of feature. 
+These sub-sequences are writen to the output sequence file.
+
+<p>
+
+If the feature is annotated as being in the reverse sense of a nucleic
+acid sequence, then that feature's sub-sequence is reverse-complemented
+before being written out. 
+
+<p>
+
+It is often useful to have some information on the context of the
+feature.  <b>extractfeat</b> allows you to specify a number of bases or
+residues before and/or after the feature to write out. 
+
+<p>
+
+If you are interested in extracting the sequence of the region around
+the start or end of the feature, then this can also be specified. 
+
+<p>
+
+'joined' features can either be extracted as individual sequences, or as
+a single concatenated sequence if the '-join' qualifier is used. 
+
+<p>
+
+Please remember that the output feature sequence is only as good as the
+annotation.  If you rely upon other people's, or other program's
+annotation of features, then some of these will be incorrect. 
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/extractfeat.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/extractfeat.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/extractfeat.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+<b>extractfeat</b> reads normal sequences with features.
+
+<p>
+
+Feature tables in Swissprot, EMBL, GFF, etc.  format can be added using
+'-ufo featurefile' on the command line. 
+<p>
+<!--#include file="inc/extractfeat.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/extractfeat.output" -->
+<p>
+
+The sequences of the specified features are written out.
+
+<p>
+
+The ID name of the sequence is formed from the original sequence name
+with the start and end positions of the feature appended to it.  So if
+the feature came from a sequence with an ID name of 'XYZ' from positions
+10 to 22, then the resulting ID name of the feature sequence will be
+'XYZ_10_22'
+
+<p>
+
+The name of the type of feature is added to the start of the description
+of the sequence in brackets, e.g.: '[exon]'. 
+
+<p>
+
+The sequence is written out as a normal sequence.
+
+<p>
+
+If the feature is in the reverse sense of a nucleic acid sequence, then
+it is reverse-complemented before being written.
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+If a feature is specified as being a part of a different sequence entry in a
+database, then this feature is ignored. 
+
+<p>
+
+If you are extracting 'joined' features and one of more of the component
+features is in a different sequence entry, then the whole joined feature is
+ignored. 
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+If the end position of the sequence to be written is less than the start
+position, then the warning message "Extraction region end less than
+start for feature type [start-end] in ID name" is written and no
+sequence is output. 
+
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/extractfeat.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/gwilliam.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/extractfeat.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/extractfeat.comment" -->
+
+</BODY>
+</HTML>
+

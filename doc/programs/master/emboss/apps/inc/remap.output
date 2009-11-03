@@ -1,0 +1,257 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: j01636.remap </h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+J01636
+E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
+
+                                                        BssKI
+                 TaqI                 AciI              Ksp632I
+                 \                    \                 \
+          gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgcccggaagagagt
+                   10        20        30        40        50        60        
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          ctgtggtagcttaccgcgttttggaaagcgccataccgtactatcgcgggccttctctca
+                   /                    /                  / /
+                   TaqI                 AciI               | BssKI 
+                                                           Ksp632I
+
+
+# Enzymes that cut  Frequency	Isoschizomers
+      AciI	    1	
+     BssKI	    1	
+   Ksp632I	    1	Bsu6I
+      TaqI	    1	
+
+
+
+# Enzymes which cut less frequently than the MINCUTS criterion
+# Enzymes &lt; MINCUTS Frequency	Isoschizomers
+
+
+
+# Enzymes which cut more frequently than the MAXCUTS criterion
+# Enzymes &gt; MAXCUTS Frequency	Isoschizomers
+
+
+
+# Enzymes that do not cut
+
+
+
+
+# No. of cutting enzymes which do not match the
+# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS citeria
+
+0
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: j01636.remap</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+J01636
+E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
+
+                                                      Hin6I
+                 TaqI                                 | HhaI
+                 |  BsiYI                             | BssKI
+                 |  |   Hin6I                         | Ksp632I
+                 |  |   | HhaI        AciI            | | HpaII 
+                 \  \   \ \           \               \ \ \
+          gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgcccggaagagagt
+                   10        20        30        40        50        60        
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          ctgtggtagcttaccgcgttttggaaagcgccataccgtactatcgcgggccttctctca
+                 / /    / /             /             / /  ///
+                 | TaqI | Hin6I         AciI          | |  ||BssKI 
+                 BsiYI  HhaI                          | |  |HpaII  
+                                                      | |  Ksp632I
+                                                      | Hin6I
+                                                      HhaI
+
+
+# Enzymes that cut  Frequency	Isoschizomers
+      AciI	    1	
+     BsiYI	    1	Bsc4I
+     BssKI	    1	
+      HhaI	    2	
+     Hin6I	    2	HinP1I,HspAI
+     HpaII	    1	BsiSI
+   Ksp632I	    1	Bsu6I
+      TaqI	    1	
+
+
+
+# Enzymes which cut less frequently than the MINCUTS criterion
+# Enzymes &lt; MINCUTS Frequency	Isoschizomers
+
+
+
+# Enzymes which cut more frequently than the MAXCUTS criterion
+# Enzymes &gt; MAXCUTS Frequency	Isoschizomers
+
+
+
+# Enzymes that do not cut
+
+AclI      BamHI     BceAI     BseYI     BsrI      ClaI      EcoRI     EcoRII    
+HaeIII    Hin4I     HindII    HindIII   KpnI      MaeII     NotI      
+
+
+# No. of cutting enzymes which do not match the
+# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS citeria
+
+0
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: j01636.remap</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+J01636
+E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
+
+                                                      HspAI
+                                                      Hin6I 
+                 TaqI                                 HinP1I
+                 |  BsiYI                             | HhaI 
+                 |  Bsc4I                             | Bsu6I
+                 |  |   HspAI                         | BssKI 
+                 |  |   Hin6I                         | Ksp632I
+                 |  |   HinP1I                        | | HpaII 
+                 |  |   | HhaI        AciI            | | BsiSI 
+                 \  \   \ \           \               \ \ \
+          gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgcccggaagagagt
+                   10        20        30        40        50        60        
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          ctgtggtagcttaccgcgttttggaaagcgccataccgtactatcgcgggccttctctca
+                 / /    / /             /             / /  ///
+                 | TaqI | HinP1I        AciI          | |  ||BssKI 
+                 Bsc4I  | Hin6I                       | |  |BsiSI  
+                 BsiYI  | HspAI                       | |  |HpaII  
+                        HhaI                          | |  Ksp632I
+                                                      | |  Bsu6I
+                                                      | HinP1I
+                                                      | Hin6I 
+                                                      | HspAI
+                                                      HhaI
+
+
+# Enzymes that cut  Frequency
+      AciI	    1	
+     Bsc4I	    1	
+     BsiSI	    1	
+     BsiYI	    1	
+     BssKI	    1	
+     Bsu6I	    1	
+      HhaI	    2	
+     Hin6I	    2	
+    HinP1I	    2	
+     HpaII	    1	
+     HspAI	    2	
+   Ksp632I	    1	
+      TaqI	    1	
+
+
+
+# Enzymes which cut less frequently than the MINCUTS criterion
+# Enzymes &lt; MINCUTS Frequency
+
+
+
+# Enzymes which cut more frequently than the MAXCUTS criterion
+# Enzymes &gt; MAXCUTS Frequency
+
+
+
+# Enzymes that do not cut
+
+AclI      BamHI     BceAI     Bse1I     BseYI     BshI      BsrI      ClaI      
+EcoRI     EcoRII    HaeIII    Hin4I     HindII    HindIII   HpyCH4IV  KpnI      
+MaeII     NotI      
+
+
+# No. of cutting enzymes which do not match the
+# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS citeria
+
+0
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.4"></a>
+<h3>Output files for usage example 4</h3>
+<p><h3>File: j01636.remap</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+J01636
+E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
+
+                                                                  Ksp632I
+                                                        &gt;.........====
+                                                          HpaII
+                                                          &gt;===
+                        HhaI                             BssKI
+                        ==&gt;=                            &gt;=====
+                 TaqI   Hin6I                         HhaI
+                 &gt;===   &gt;===                          ==&gt;=
+              BsiYI                      AciI         Hin6I
+              ======&gt;====             &gt;..====         &gt;===
+          gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgcccggaagagagt
+                   10        20        30        40        50        60        
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          ctgtggtagcttaccgcgttttggaaagcgccataccgtactatcgcgggccttctctca
+              ====&lt;======                &lt;===         ===&lt;
+              BsiYI                      AciI         Hin6I
+                 ===&lt;   ===&lt;                          =&lt;==  &lt;.....====
+                 TaqI   Hin6I                         HhaI        Ksp632I
+                        =&lt;==                             =====&lt;
+                        HhaI                             BssKI
+                                                          ===&lt;
+                                                          HpaII
+
+
+# Enzymes that cut  Frequency	Isoschizomers
+      AciI	    1	
+     BsiYI	    1	Bsc4I
+     BssKI	    1	
+      HhaI	    2	
+     Hin6I	    2	HinP1I,HspAI
+     HpaII	    1	BsiSI
+   Ksp632I	    1	Bsu6I
+      TaqI	    1	
+
+
+
+# Enzymes which cut less frequently than the MINCUTS criterion
+# Enzymes &lt; MINCUTS Frequency	Isoschizomers
+
+
+
+# Enzymes which cut more frequently than the MAXCUTS criterion
+# Enzymes &gt; MAXCUTS Frequency	Isoschizomers
+
+
+
+# Enzymes that do not cut
+
+AclI      BamHI     BceAI     BseYI     BsrI      ClaI      EcoRI     EcoRII    
+HaeIII    Hin4I     HindII    HindIII   KpnI      MaeII     NotI      
+
+
+# No. of cutting enzymes which do not match the
+# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS citeria
+
+0
+
+</pre>
+</td></tr></table><p>

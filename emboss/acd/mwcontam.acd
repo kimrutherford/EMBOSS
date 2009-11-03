@@ -1,0 +1,45 @@
+application: mwcontam [
+  documentation: "Shows molwts that match across a set of
+                  files"
+  groups: "Protein:Composition"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  filelist: files [
+    parameter: "Y"
+    information: "Molecular weights file list"
+    knowntype: "molwt"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  float: tolerance [
+    standard: "Y"
+    information: "Ppm tolerance"
+    default: "50.0"
+  ]
+
+endsection: required
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    extension: "mwcontam"
+    knowntype: "molwt"
+    information: "Molecular weights output file"
+  ]
+
+endsection: output

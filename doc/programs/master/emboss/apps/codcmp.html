@@ -1,0 +1,224 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: codcmp
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+codcmp
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/codcmp.ione" -->
+
+<H2>
+    Description
+</H2>
+
+This program reads in two codon usage table files.
+
+<p>
+
+It counts the number of the 64 possible codons which are unused (i.e. 
+has a usage fraction of 0) in either one or the other or both of the
+codon usage tables.  
+
+<p>
+
+The usage fraction of a codon is its proportion (0 to 1) of the total of
+the codons in the sequences used to construct the usage table. 
+
+<p>
+
+For each codon that is used in both tables, it takes the difference
+between the usage fraction.  The sum of the differences and the sum of
+the differences squared is reported in the output file, together with
+the number of unused codons. 
+
+
+<H3>
+   Statistical significance
+</H3>
+
+<b>Question:</b>
+
+<p>
+
+How do you interpret the statistical significance of any difference
+between the tables?
+
+<p>
+
+<b>Answer:</b>
+
+<p>
+
+This is a very interesting question.  I don't think that there is any
+way to say if it is statistically significant just from looking at it,
+as it is essentially a descriptive statistic about the difference
+between two 64-mer vectors.  If you have a whole lot of sequences and
+codcmp results for all the possible pairwise comparisons, then the
+resulting distance matrix can be used to build a phylogenetic tree based
+on codon usage. 
+
+<p>
+
+However, if you generate a series of random sequences, measure their codon 
+usage and then do codcmp between each of your test sequences and all the 
+random sequences, you could then use a z-test to see if the result between 
+the two test sequences was outside of the top or bottom 5%.
+
+<p>
+
+This would assume that the codcmp results were normally distributed, but
+you could test that too.  The simplest way is just to plot them and look 
+for a bell-curve.  For more rigour, find the mean and standard deviation of 
+your results from the random sequences, use the normal distribution 
+equation to generate a theoretical distribution for that mean and standard 
+deviation, and then perform a chi square between the random data and the 
+theoretically generated normal distribution.  If you generate two sets of 
+random data, each based on your two test sequences, an F-test should be 
+used to establish that they have equal variances.  Then you can safely go 
+ahead and perform the z-test.
+
+<p>
+
+You could use shuffle to base your random sequences on the test
+sequences - so that would ensure the randomised background had the same
+nucleotide content. 
+
+<p>
+
+F-tests, z-tests and chi-tests can all be done in Excel, as well as
+being standard in most statistical analysis packages. 
+
+<p>
+
+<i>Answered by Derek Gatherer &lt;d.gatherer&nbsp;&copy;&nbsp;vir.gla.ac.uk&gt; 21 Nov 2003</i>
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/codcmp.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/codcmp.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/codcmp.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+It reads in the Codon Usage Tables - these are available as EMBOSS data files.
+See below for details.
+
+<p>
+<!--#include file="inc/codcmp.input" -->
+
+
+
+<H2>
+    Output file format
+</H2>
+<!--#include file="inc/codcmp.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+The codon usage tables are read by default from "Ehum.cut" in the data/CODONS
+directory of the EMBOSS distribution.
+
+<p>
+If the name of a codon usage file is specified on the command line,
+then this file will first be searched for in the current directory and
+then in the 'data/CODONS' directory of the EMBOSS distribution.
+<p>
+
+<!--#include file="inc/localfiles.ihtml" -->
+
+<H2>
+    Notes
+</H2>
+
+
+None.
+
+<H2>
+    References
+</H2>
+
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+
+This program always exits with a status of 0.
+ 
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/codcmp.isee" -->
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/ableasby.address" -->
+<p>
+
+Some more statistics were added by 
+<!--#include file="inc/dmartin.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/codcmp.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/codcmp.comment" -->
+
+</BODY>
+</HTML>
+

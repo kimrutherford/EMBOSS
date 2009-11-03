@@ -1,0 +1,65 @@
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 2)</td>
+<td>Sequence filename and optional format (output USA)</td>
+<td>Writeable sequence</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-type</td>
+<td>By default any feature in the feature table with a type starting 'repeat' is masked. You can set this to be any feature type you wish to mask.
+See http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www.expasy.ch/txt/userman.txt for a list of the Swissprot feature types.
+The type may be wildcarded by using '*'.
+If you wish to mask more than one type, separate their names with spaces or commas, eg:
+*UTR repeat*</td>
+<td>Any string is accepted</td>
+<td>repeat*</td>
+</tr>
+
+<tr>
+<td>-tolower</td>
+<td>The region can be 'masked' by converting the sequence characters to lower-case, some non-EMBOSS programs e.g. fasta can interpret this as a masked region. The sequence is unchanged apart from the case change. You might like to ensure that the whole sequence is in upper-case before masking the specified regions to lower-case by using the '-supper' flag.</td>
+<td>Toggle value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-maskchar</td>
+<td>Character to use when masking.
+Default is 'X' for protein sequences, 'N' for nucleic sequences.
+If the mask character is set to be the SPACE character or a null character, then the sequence is 'masked' by changing it to lower-case, just as with the '-lowercase' flag.</td>
+<td>Any string up to 1 characters</td>
+<td>'X' for protein, 'N' for nucleic</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>

@@ -1,0 +1,66 @@
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-asequence]<br>(Parameter 1)</td>
+<td>Nucleotide sequence filename and optional format, or reference (input USA)</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-bsequence]<br>(Parameter 2)</td>
+<td>Nucleotide sequence filename and optional format, or reference (input USA)</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-wordsize</td>
+<td>Word size</td>
+<td>Integer 2 or more</td>
+<td>20</td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 3)</td>
+<td>Sequence filename and optional format (output USA)</td>
+<td>Writeable sequence</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 4)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.megamerger</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-prefer</td>
+<td>When a mismatch between the two sequence is discovered, one or other of the two sequences must be used to create the merged sequence over this mismatch region. The default action is to create the merged sequence using the sequence where the mismatch is closest to that sequence's centre. If this option is used, then the first sequence (seqa) will always be used in preference to the other sequence when there is a mismatch.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>

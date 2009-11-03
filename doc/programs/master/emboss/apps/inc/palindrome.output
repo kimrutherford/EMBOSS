@@ -1,0 +1,75 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: d00596.pal</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Palindromes of:  D00596 
+Sequence length is: 18596 
+Start at position: 1
+End at position: 18596
+Minimum length of Palindromes is: 15 
+Maximum length of Palindromes is: 100 
+Maximum gap between elements is: 100 
+Number of mismatches allowed in Palindrome: 0
+
+
+
+Palindromes:
+126      caaaaaaaaaaaaaaaa      142
+         |||||||||||||||||
+217      gtttttttttttttttt      201
+
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+215      tttttttttttttttt      200
+
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+214      tttttttttttttttt      199
+
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+213      tttttttttttttttt      198
+
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+212      tttttttttttttttt      197
+
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+211      tttttttttttttttt      196
+
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+210      tttttttttttttttt      195
+
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+209      tttttttttttttttt      194
+
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+208      tttttttttttttttt      193
+
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+207      tttttttttttttttt      192
+
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+206      tttttttttttttttt      191
+
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+205      tttttttttttttttt      190
+
+127      aaaaaaaaaaaaaaaagaccgccagggct      155
+         |||||||||||||||||||||||||||||
+204      ttttttttttttttttctggcggtcccga      176
+
+
+
+
+</pre>
+</td></tr></table><p>

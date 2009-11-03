@@ -1,0 +1,272 @@
+
+                                  nthseq 
+
+
+
+Function
+
+   Writes one sequence from a multiple set of sequences
+
+Description
+
+   In EMBOSS, when an application has to write out many sequences, the
+   normal style is to write them all into one file containing multiple
+   sequences.
+
+   This default behaviour can be changed by using the qualifier
+   '-ossingle' which writes many sequences into many files, each
+   containing one sequence.
+
+   The program seqretsplit will take a file containing many sequences and
+   will output many files, each containing one sequence. However you have
+   no choice over the naming of the files - they are named after the ID
+   name fo the sequence they contain.
+
+   If, however you have the situation where you have a file containing
+   multiple sequences and you wish to extract one of them, then this
+   application may be useful.
+
+   nthseq allows you to specify the name of the output file, so you may
+   find that it is useful to include this program in scripts where you
+   need to be able to specify the name of the resulting sequence files
+   you create.
+
+   This application extracts the indicated sequence from a multiple set
+   of sequences and writes it out.
+
+Usage
+
+   Here is a sample session with nthseq
+
+
+% nthseq 
+Writes one sequence from a multiple set of sequences
+Input (gapped) sequence(s): @eclac.list
+The number of the sequence to output [1]: 2
+output sequence [j01636.fasta]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     (Gapped) sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -number             integer    [1] The number of the sequence to output
+                                  (Integer 1 or more)
+  [-outseq]            seqout     [.] Sequence filename and
+                                  optional format (output USA)
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   nthseq reads a a normal sequence USA.
+
+  Input files for usage example
+
+  File: eclac.list
+
+#Formerly ECLAC
+tembl:J01636
+
+#Formerly ECLACA
+tembl:X51872
+
+#Formerly ECLACI
+tembl:V00294
+
+#Formerly ECLACY
+tembl:V00295
+
+#Formerly ECLACZ
+tembl:V00296
+
+Output file format
+
+   The output is the specified ordinal sequence from the input USA.
+
+   In the example, the second sequence from the input file will be
+   written out to the specified output file.
+
+  Output files for usage example
+
+  File: j01636.fasta
+
+>X51872 X51872.1 Escherichia coli lacA gene for thiogalactoside transacetylase
+gtgaatgaagtcgcttaagcaatcaatgtcggatgcggcgcgacgcttatccgaccaaca
+tatcataacggagtgatcgcattgaacatgccaatgaccgaaagaataagagcaggcaag
+ctatttaccgatatgtgcgaaggcttaccggaaaaaagacttcgtgggaaaacgttaatg
+tatgagtttaatcactcgcatccatcagaagttgaaaaaagagaaagcctgattaaagaa
+atgtttgccacggtaggggaaaacgcctgggtagaaccgcctgtctatttctcttacggt
+tccaacatccatataggccgcaatttttatgcaaatttcaatttaaccattgtcgatgac
+tacacggtaacaatcggtgataacgtactgattgcacccaacgttactctttccgttacg
+ggacaccctgtacaccatgaattgagaaaaaacggcgagatgtactcttttccgataacg
+attggcaataacgtctggatcggaagtcatgtggttattaatccaggcgtcaccatcggg
+gataattctgttattggcgcgggtagtatcgtcacaaaagacattccaccaaacgtcgtg
+gcggctggcgttccttgtcgggttattcgcgaaataaacgaccgggataagcactattat
+ttcaaagattataaagttgaatcgtcagtttaaattataaaaattgcctgatacgctgcg
+cttatcaggcctacaagttcagcgatctacattagccgcatccggcatgaacaaagcgca
+ggaacaagcgtcgcatcatgcctctttgacccacagctgcggaaaacgtactggtgcaaa
+acgcagggttatgatcatcagcccaacgacgcacagcgcatgaaatgcccagtccatcag
+gtaattgccgctgatactacgcagcacgccagaaaaccacggggcaagcccggcgatgat
+aaaaccgattccctgcataaacgccaccagcttgccagcaatagccggttgcacagagtg
+atcgagcgccagcagcaaacagagcggaaacgcgccgcccagacctaacccacacaccat
+cgcccacaataccggcaattgcatcggcagccagataaagccgcagaaccccaccagttg
+taacaccagcgccagcattaacagtttgcgccgatcctgatggcgagccatagcaggcat
+cagcaaagctcctgcggcttgcccaagcgtcatcaatgccagtaaggaaccgctgtactg
+cgcgctggcaccaatctcaatatagaaagcgggtaaccaggcaatcaggctggcgtaacc
+gccgttaatcagaccgaagtaaacacccagcgtccacgcgcggggagtgaataccacgcg
+aaccggagtggttgttgtcttgtgggaagaggcgacctcgcgggcgctttgccaccacca
+ggcaaagagcgcaacaacggcaggcagcgccaccaggcgagtgtttgataccaggtttcg
+ctatgttgaactaaccagggcgttatggcggcaccaagcccaccgccgcccatcagagcc
+gcggaccacagccccatcaccagtggcgtgcgctgctgaaaccgccgtttaatcaccgaa
+gcatcaccgcctgaatgatgccgatccccaccccaccaagcagtgcgctgctaagcagca
+gcgcactttgcgggtaaagctcacgcatcaatgcaccgacggcaatcagcaacagactga
+tggcgacactgcgacgttcgctgacatgctgatgaagccagcttccggccagcgccagcc
+cgcccatggtaaccaccggcagagcggtcgac
+
+Data files
+
+   None.
+
+Notes
+
+   It may be useful to use this application in a small script that
+   extracts all sequences from a multiple sequence file and explicitly
+   names the output files in the way that you require.
+
+   For example:
+
+#!/usr/local/bin/perl -w
+if ($#ARGV !=1) {
+  die "Usage: scriptname in out\n";
+}
+$count=1;
+@list = `infoseq $ARGV[0] -auto -only -name`;
+while ($count <= $#list+1) {
+  system("nthseq -auto $ARGV[0] -n $count $ARGV[1]-$count.seq");
+  $count++;
+}
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with a status of 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name                         Description
+   biosed       Replace or delete sequence sections
+   codcopy      Reads and writes a codon usage table
+   cutseq       Removes a specified section from a sequence
+   degapseq     Removes gap characters from sequences
+   descseq      Alter the name or description of a sequence
+   entret       Reads and writes (returns) flatfile entries
+   extractalign Extract regions from a sequence alignment
+   extractfeat  Extract features from a sequence
+   extractseq   Extract regions from a sequence
+   listor       Write a list file of the logical OR of two sets of sequences
+   makenucseq   Creates random nucleotide sequences
+   makeprotseq  Creates random protein sequences
+   maskfeat     Mask off features of a sequence
+   maskseq      Mask off regions of a sequence
+   newseq       Type in a short new sequence
+   noreturn     Removes carriage return from ASCII files
+   notseq       Exclude a set of sequences and write out the remaining ones
+   pasteseq     Insert one sequence into another
+   revseq       Reverse and complement a sequence
+   seqret       Reads and writes (returns) sequences
+   seqretsplit  Reads and writes (returns) sequences in individual files
+   skipseq      Reads and writes (returns) sequences, skipping first few
+   splitter     Split a sequence into (overlapping) smaller sequences
+   trimest      Trim poly-A tails off EST sequences
+   trimseq      Trim ambiguous bits off the ends of sequences
+   union        Reads sequence fragments and builds one sequence
+   vectorstrip  Strips out DNA between a pair of vector sequences
+   yank         Reads a sequence range, appends the full USA to a list file
+
+   The program seqretsplit will take a file containing many sequences and
+   will output many files, each containing one sequence. However you have
+   no choice over the naming of the files - they are named after the ID
+   name fo the sequence they contain.
+
+Author(s)
+
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+History
+
+   Written (2000) - Gary Williams
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

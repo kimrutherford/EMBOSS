@@ -1,0 +1,140 @@
+
+                               embossversion 
+
+
+
+Function
+
+   Writes the current EMBOSS version number
+
+Description
+
+   This small utility writes out the current version of the EMBOSS
+   package.
+
+   It is expected that this may have a use in scripts which automatically
+   write descriptions of the state of the EMBOSS package that is set up
+   locally.
+
+   It will also be a useful way for people to ascertain what version is
+   being run if they are giving user-support to people in another site.
+
+Usage
+
+   Here is a sample session with embossversion
+
+
+% embossversion 
+Writes the current EMBOSS version number
+
+4.1.0
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers: (none)
+   Additional (Optional) qualifiers:
+   -full               boolean    Show all EMBOSS version information fields
+   -outfile            outfile    [stdout] Output file name
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Standard (Mandatory) qualifiers                    Allowed values       Default
+(none)
+Additional (Optional) qualifiers                   Allowed values       Default
+-full    Show all EMBOSS version information fields Boolean value Yes/No
+   No
+-outfile Output file name                          Output file          stdout
+Advanced (Unprompted) qualifiers                   Allowed values       Default
+(none)
+
+Input file format
+
+   None.
+
+Output file format
+
+   embossversion writes just the version number followed by a newline
+   character to end the line.
+
+   The output is written to the screen by default, but can be written to
+   a named file by using the '-outfile' option.
+
+   The version number is in three parts, separated by '.'s.
+   The first number is the major version number - this only changes when
+   substantial changes have been made to the look-and-feel of EMBOSS.
+   The second number is the minor version number - this is incremented
+   whenever a version is released.
+   The third number is usually '0' but if a minor bug fix has been
+   released that does not warrant a minor version number, this will be
+   incremented.
+
+Data files
+
+   None.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name                     Description
+   embossdata   Finds or fetches data files read by EMBOSS programs
+
+Author(s)
+
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+History
+
+   Written (23 May 2001) - Gary Williams.
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

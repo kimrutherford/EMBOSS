@@ -1,0 +1,159 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: equicktandem
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+equicktandem
+<!--#include file="header2.inc" -->
+<H2>
+    Function
+</H2>
+<!--#include file="inc/equicktandem.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<b>equicktandem</b> scans a sequence for potential tandem repeats up to a
+specified size.  The results can be used to run <b>etandem</b> on the
+candidate repeat lengths to identify genuine tandem repeats.
+<p>
+
+<b>equicktandem</b> is a simple program that looks for segments in which
+each base tends to match the base 'repeatsize' back, i.e.  with an
+autocorrelation peak at 'repeatsize'.  This can allow drift in the
+repeating sequence, i.e.  it does not look for a consensus sequence for
+the whole repeat block (that is what <b>etandem</b> does).  But it is
+much quicker than etandem.  It does not account for gaps.
+
+<p>
+
+The score is +1 for a match to the corresponding base
+'repeatsize' back and -1 for a mismatch.
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/equicktandem.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/equicktandem.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/equicktandem.itable" -->
+<H2>
+    Input file format
+</H2>
+
+
+The input for equicktandem is a nucleotide sequence USA.
+
+<p>
+<!--#include file="inc/equicktandem.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/reportformats.ihtml" -->
+<p>
+
+By default <b>equicktandem</b> writes a 'table' report file.
+
+<p>
+<!--#include file="inc/equicktandem.output" -->
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/equicktandem.isee" -->
+<p>
+
+<b>equicktandem</b> identifies regions wich are likely to contain tanden
+repeats.  <b>tandem</b> should then be run on those regions to confirm
+them and to get an accurate specification of the repeats.  <b>tandem</b>
+runs slowly. 
+
+<H2>
+    Author(s)
+</H2>
+
+
+This program was originally written by 
+<!--#include file="inc/rdurbin.address" -->
+
+<p>
+
+This application was modified for inclusion in EMBOSS by 
+<!--#include file="inc/price.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/equicktandem.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/equicktandem.comment" -->
+
+
+</BODY>
+</HTML>
+

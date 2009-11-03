@@ -1,0 +1,24 @@
+#!/bin/csh -x
+
+#######################################
+cd ~emboss/CURRENT
+mkdir $1
+cd $1
+cp ~emboss/CURRENT/OSF/emboss/EMBOSS*.tar.gz .
+gunzip EMBOSS*.tar.gz
+tar xvf EMBOSS*
+rm -f EMBOSS*.tar
+cd EMBOSS-0.0.4
+
+# test the cc compiler.
+setenv CC cc
+
+./configure --disable-shared --enable-debug
+
+if ( ! { make } ) then
+  echo "Failed AJAX-build on `hostname` in `pwd`"
+ make |& \
+     rsh europa fold -w 77 "|"  Mail -s \"emboss make failed on `ostype`\" emboss-bug@sanger.ac.uk
+endif
+
+cp  emboss/acd/emboss.default emboss/

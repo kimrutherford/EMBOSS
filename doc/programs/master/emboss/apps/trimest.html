@@ -1,0 +1,185 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: trimest
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+trimest
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/trimest.ione" -->
+
+<H2>
+    Description
+</H2>
+
+EST and mRNA sequences often have poly-A tails at the end of them.  This
+utility removes those poly-A tails. 
+
+<p>
+
+EST sequences are often the reverse complement of the corresponding
+mRNA's forward sense and have poly-T tails at their 5' end.  By default,
+this program also detects and removes these and writes out the reverse
+complement of the sequence. 
+
+<p>
+
+<b>trimest</b> is not infallible.  There are often repeats of 'A' (or
+'T') in a sequence that just happen by chance to occur at the 3' (or 5')
+end of the EST sequence.  <b>trimest</b> has no way of determining if the
+A's it finds are part of a real poly-A tail or are a part of the
+transcribed genomic sequence.  It removes any apparent poly-A tails that
+match its criteria for a poly-A tail. 
+
+<p>
+
+<b>trimest</b> looks for a repeat of at least '-minlength' A's at the 3'
+end (and, by default, '-minlength' T's at the 5' end).  If there are an
+apparent 5' poly-T tail and a poly-A tail, then it removes whichever is
+the longer of the two. 
+
+<p>
+
+By default, it will allow '-mismatches' non-A (or non-T) bases in the
+tail.  If a mismatch is found, then there has to be at least
+'-minlength' A's (or T's) past the mismatch (working from the end) for
+the mismatch to be considered part of the tail.  If '-mismatches' is
+greater than 1 then that number of contiguous non-A (or non-T) bases
+will be allowed as part of the tail. 
+
+<p>
+
+If a 5' poly-T tail is found, then the sequence will be optionally
+reverse-complemented when it is written out. 
+
+<p>
+
+If a poly-A tail is reomved then '[poly-A tail removed]' is appended to
+the description of the sequence.  If poly-T is removed, then '[poly-T
+tail removed]' is appended and if the sequence is reversed, '[reverse
+complement]' is appended. 
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/trimest.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/trimest.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/trimest.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+<b>trimest</b> reads the USA of one or more normal nucleic acid sequences.
+
+<p>
+
+<!--#include file="inc/trimest.input" -->
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/trimest.output" -->
+
+<p>
+
+The output is a set of sequences with the poly-A (or poly-T) tails
+removed.  If a sequence had a 5' poly-T tail then the resulting sequence
+is reverse-complemented by default.  The description line has a comment
+appended about the changes made to the sequence. 
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+It will trim any run of more than -minlength A's or T's at the 3' or 5'
+end, whether or not they are a true poly-A tail. 
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+
+<!--#include file="inc/trimest.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/gwilliam.address" -->
+
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/trimest.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/trimest.comment" -->
+
+</BODY>
+</HTML>
+

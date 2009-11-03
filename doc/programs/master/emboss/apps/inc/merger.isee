@@ -1,0 +1,14 @@
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="cons.html">cons</a></td>
+<td>Creates a consensus from multiple alignments</td>
+</tr>
+
+<tr>
+<td><a href="megamerger.html">megamerger</a></td>
+<td>Merge two large overlapping nucleic acid sequences</td>
+</tr>
+
+</table>

@@ -1,0 +1,9 @@
+#
+# Application keywords
+#
+# Keywords are additional search terms to locate applications
+# Valid group and subgroup names are not allowed. Keyword searches are
+# expected to include the groups. Keywords defined here and in the
+# application keywords: attribute are a few terms to be used where the
+# short documentation string is not sufficient to identify an
+# application by function.

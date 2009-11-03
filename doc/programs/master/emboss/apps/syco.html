@@ -1,0 +1,155 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: syco
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+syco
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/syco.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+<b>syco</b> is a frame-specific gene finder that tries to recognize
+protein coding sequences by virtue of the similarity of their codon
+usage to a codon frequency table.
+<p>
+<b>syco</b> finds regions of each forward reading frame of a nucleic
+acid sequence that show strong codon preference. <b>syco</b> is useful
+for locating protein coding regions, determining their reading frames,
+estimating the level of expression of a gene, and locating nucleic
+acid sequencing errors.
+
+<p>
+
+It is essential to use the correct codon usage file for the species.
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/syco.usage" -->
+
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/syco.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/syco.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>syco</b> reads a nucleic acid sequence USA.
+
+<p>
+
+<!--#include file="inc/syco.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/syco.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+Codon usage table files are read in.
+<p>
+
+
+<p>
+
+<!--#include file="inc/localfiles.ihtml" -->
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+
+<H2>
+    Warnings
+</H2>
+
+
+The default codon usage table file is the human <b>Ehum.cut</b>
+- caution: this may well not be the correct species.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/syco.isee" -->
+<b>wobble</b> does the analysis of the third base.
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/ableasby.address" -->
+
+
+<H2>
+    History
+</H2>
+
+<!--#include file="inc/syco.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/syco.comment" -->
+
+</BODY>
+</HTML>
+

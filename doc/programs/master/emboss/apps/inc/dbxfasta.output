@@ -1,0 +1,45 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: emrod.ent</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+# Number of files: 1
+# Release: 0.0
+# Date:    00/00/00
+Single filename database
+emrod
+</pre>
+</td></tr></table><p>
+<p><h3>File: emrod.pxac</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Order     71
+Fill      47
+Pagesize  2048
+Level     0
+Cachesize 200
+Order2    82
+Fill2     99
+Count     5
+Kwlimit   15
+</pre>
+</td></tr></table><p>
+<p><h3>File: emrod.pxid</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Order     71
+Fill      47
+Pagesize  2048
+Level     0
+Cachesize 200
+Order2    82
+Fill2     99
+Count     5
+Kwlimit   15
+</pre>
+</td></tr></table><p>
+<p><h3>File: emrod.xac</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: emrod.xid</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.

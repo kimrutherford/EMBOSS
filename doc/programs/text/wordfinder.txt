@@ -1,0 +1,564 @@
+
+                                wordfinder 
+
+
+
+Function
+
+   Match large sequences against one or more other sequences
+
+Description
+
+   This is a rough and ready local alignment program for large sequences.
+   The reason it is rough and ready is that wordmatch is used to find all
+   the word matches between the first sequence and another sequence. Then
+   by calculating the highest score for a diagonal we can then use this
+   as the centre point for a Smith-Waterman type calculation of a width
+   given by the user. So a narrow diagonal Smith-Waterman is calculated
+   hence the results will be rough but due to the space saving much
+   larger sequences can be aligned.
+
+Usage
+
+   Here is a sample session with wordfinder
+
+
+% wordfinder tembl:j01636 @eclac.list -word 50  
+Match large sequences against one or more other sequences
+Gap opening penalty [30.0]: 
+Gap extension penalty [1.5]: 3.0
+Output alignment [j01636.wordfinder]: 
+Target 1 J01636 matches 1
+Target 2 X51872 matches 1
+Target 3 V00294 matches 1
+Target 4 V00295 matches 1
+Target 5 V00296 matches 1
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-asequence]         seqset     Sequence set filename and optional format,
+                                  or reference (input USA)
+  [-bsequence]         seqall     Sequence(s) filename and optional format, or
+                                  reference (input USA)
+   -gapopen            float      [10.0 for any sequence type] Gap opening
+                                  penalty (Number from 0.000 to 1000.000)
+   -gapextend          float      [0.5 for any sequence type] Gap extension
+                                  penalty (Number from 0.000 to 10.000)
+  [-outfile]           align      [*.wordfinder] Output alignment file name
+
+   Additional (Optional) qualifiers:
+   -datafile           matrixf    [EBLOSUM62 for protein, EDNAFULL for DNA]
+                                  This is the scoring matrix file used when
+                                  comparing sequences. By default it is the
+                                  file 'EBLOSUM62' (for proteins) or the file
+                                  'EDNAFULL' (for nucleic sequences). These
+                                  files are found in the 'data' directory of
+                                  the EMBOSS installation.
+   -width              integer    [16] Alignment width (Integer 1 or more)
+   -wordlen            integer    [6] Word length for initial matching
+                                  (Integer 3 or more)
+   -limitmatch         integer    [0] Limiting match score (zero for no limit)
+                                  (Integer 0 or more)
+   -limitalign         integer    [0] Limiting alignment length (zero for no
+                                  limit) (Integer 0 or more)
+   -lowmatch           integer    [0] Limiting match score (zero for no limit)
+                                  (Integer 0 or more)
+   -lowalign           integer    [0] Limiting alignment length (zero for no
+                                  limit) (Integer 0 or more)
+   -errorfile          outfile    [wordfinder.error] Error file to be written
+                                  to
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-asequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-bsequence" associated qualifiers
+   -sbegin2            integer    Start of each sequence to be used
+   -send2              integer    End of each sequence to be used
+   -sreverse2          boolean    Reverse (if DNA)
+   -sask2              boolean    Ask for begin/end/reverse
+   -snucleotide2       boolean    Sequence is nucleotide
+   -sprotein2          boolean    Sequence is protein
+   -slower2            boolean    Make lower case
+   -supper2            boolean    Make upper case
+   -sformat2           string     Input sequence format
+   -sdbname2           string     Database name
+   -sid2               string     Entryname
+   -ufo2               string     UFO features
+   -fformat2           string     Features format
+   -fopenfile2         string     Features file name
+
+   "-outfile" associated qualifiers
+   -aformat3           string     Alignment format
+   -aextension3        string     File name extension
+   -adirectory3        string     Output directory
+   -aname3             string     Base file name
+   -awidth3            integer    Alignment width
+   -aaccshow3          boolean    Show accession number in the header
+   -adesshow3          boolean    Show description in the header
+   -ausashow3          boolean    Show the full USA in the alignment
+   -aglobal3           boolean    Show the full sequence in alignment
+
+   "-errorfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   wordfinder reads two sequence USAs of the same type. They must both be
+   protein or both be nucleic acid sequences.
+
+  Input files for usage example
+
+   'tembl:j01636' is a sequence entry in the example nucleic acid
+   database 'tembl'
+
+  File: eclac.list
+
+#Formerly ECLAC
+tembl:J01636
+
+#Formerly ECLACA
+tembl:X51872
+
+#Formerly ECLACI
+tembl:V00294
+
+#Formerly ECLACY
+tembl:V00295
+
+#Formerly ECLACZ
+tembl:V00296
+
+  Database entry: tembl:j01636
+
+ID   J01636; SV 1; linear; genomic DNA; STD; PRO; 7477 BP.
+XX
+AC   J01636; J01637; K01483; K01793;
+XX
+DT   30-NOV-1990 (Rel. 26, Created)
+DT   09-SEP-2004 (Rel. 81, Last updated, Version 8)
+XX
+DE   E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
+XX
+KW   acetyltransferase; beta-D-galactosidase; galactosidase; lac operon;
+KW   lac repressor protein; lacA gene; lacI gene; lactose permease; lacY gene;
+KW   lacZ gene; mutagenesis; palindrome; promoter region;
+KW   thiogalactoside acetyltransferase.
+XX
+OS   Escherichia coli
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Escherichia.
+XX
+RN   [1]
+RP   1243-1266
+RX   PUBMED; 4587255.
+RA   Gilbert W., Maxam A.;
+RT   "The nucleotide sequence of the lac operator";
+RL   Proc. Natl. Acad. Sci. U.S.A. 70(12):3581-3584(1973).
+XX
+RN   [2]
+RP   1246-1308
+RX   PUBMED; 4587256.
+RA   Maizels N.M.;
+RT   "The nucleotide sequence of the lactose messenger ribonucleic acid
+RT   transcribed from the UV5 promoter mutant of Escherichia coli";
+RL   Proc. Natl. Acad. Sci. U.S.A. 70(12):3585-3589(1973).
+XX
+RN   [3]
+RX   PUBMED; 4598642.
+RA   Gilbert W., Maizels N., Maxam A.;
+RT   "Sequences of controlling regions of the lactose operon";
+RL   Cold Spring Harb. Symp. Quant. Biol. 38:845-855(1974).
+XX
+RN   [4]
+RA   Gilbert W., Gralla J., Majors A.J., Maxam A.;
+RT   "Lactose operator sequences and the action of lac repressor";
+RL   (in) Sund H., Blauer G. (Eds.);
+RL   PROTEIN-LIGAND INTERACTIONS:193-207;
+RL   Walter de Gruyter, New York (1975)
+XX
+RN   [5]
+RP   1146-1282
+RX   PUBMED; 1088926.
+RA   Dickson R.C., Abelson J.N., Barnes W.M., Reznikoff W.S.;
+
+
+  [Part of this file has been deleted for brevity]
+
+     cgatttggct acatgacatc aaccatatca gcaaaagtga tacgggtatt atttttgccg      456
+0
+     ctatttctct gttctcgcta ttattccaac cgctgtttgg tctgctttct gacaaactcg      462
+0
+     ggctgcgcaa atacctgctg tggattatta ccggcatgtt agtgatgttt gcgccgttct      468
+0
+     ttatttttat cttcgggcca ctgttacaat acaacatttt agtaggatcg attgttggtg      474
+0
+     gtatttatct aggcttttgt tttaacgccg gtgcgccagc agtagaggca tttattgaga      480
+0
+     aagtcagccg tcgcagtaat ttcgaatttg gtcgcgcgcg gatgtttggc tgtgttggct      486
+0
+     gggcgctgtg tgcctcgatt gtcggcatca tgttcaccat caataatcag tttgttttct      492
+0
+     ggctgggctc tggctgtgca ctcatcctcg ccgttttact ctttttcgcc aaaacggatg      498
+0
+     cgccctcttc tgccacggtt gccaatgcgg taggtgccaa ccattcggca tttagcctta      504
+0
+     agctggcact ggaactgttc agacagccaa aactgtggtt tttgtcactg tatgttattg      510
+0
+     gcgtttcctg cacctacgat gtttttgacc aacagtttgc taatttcttt acttcgttct      516
+0
+     ttgctaccgg tgaacagggt acgcgggtat ttggctacgt aacgacaatg ggcgaattac      522
+0
+     ttaacgcctc gattatgttc tttgcgccac tgatcattaa tcgcatcggt gggaaaaacg      528
+0
+     ccctgctgct ggctggcact attatgtctg tacgtattat tggctcatcg ttcgccacct      534
+0
+     cagcgctgga agtggttatt ctgaaaacgc tgcatatgtt tgaagtaccg ttcctgctgg      540
+0
+     tgggctgctt taaatatatt accagccagt ttgaagtgcg tttttcagcg acgatttatc      546
+0
+     tggtctgttt ctgcttcttt aagcaactgg cgatgatttt tatgtctgta ctggcgggca      552
+0
+     atatgtatga aagcatcggt ttccagggcg cttatctggt gctgggtctg gtggcgctgg      558
+0
+     gcttcacctt aatttccgtg ttcacgctta gcggccccgg cccgctttcc ctgctgcgtc      564
+0
+     gtcaggtgaa tgaagtcgct taagcaatca atgtcggatg cggcgcgacg cttatccgac      570
+0
+     caacatatca taacggagtg atcgcattga acatgccaat gaccgaaaga ataagagcag      576
+0
+     gcaagctatt taccgatatg tgcgaaggct taccggaaaa aagacttcgt gggaaaacgt      582
+0
+     taatgtatga gtttaatcac tcgcatccat cagaagttga aaaaagagaa agcctgatta      588
+0
+     aagaaatgtt tgccacggta ggggaaaacg cctgggtaga accgcctgtc tatttctctt      594
+0
+     acggttccaa catccatata ggccgcaatt tttatgcaaa tttcaattta accattgtcg      600
+0
+     atgactacac ggtaacaatc ggtgataacg tactgattgc acccaacgtt actctttccg      606
+0
+     ttacgggaca ccctgtacac catgaattga gaaaaaacgg cgagatgtac tcttttccga      612
+0
+     taacgattgg caataacgtc tggatcggaa gtcatgtggt tattaatcca ggcgtcacca      618
+0
+     tcggggataa ttctgttatt ggcgcgggta gtatcgtcac aaaagacatt ccaccaaacg      624
+0
+     tcgtggcggc tggcgttcct tgtcgggtta ttcgcgaaat aaacgaccgg gataagcact      630
+0
+     attatttcaa agattataaa gttgaatcgt cagtttaaat tataaaaatt gcctgatacg      636
+0
+     ctgcgcttat caggcctaca agttcagcga tctacattag ccgcatccgg catgaacaaa      642
+0
+     gcgcaggaac aagcgtcgca tcatgcctct ttgacccaca gctgcggaaa acgtactggt      648
+0
+     gcaaaacgca gggttatgat catcagccca acgacgcaca gcgcatgaaa tgcccagtcc      654
+0
+     atcaggtaat tgccgctgat actacgcagc acgccagaaa accacggggc aagcccggcg      660
+0
+     atgataaaac cgattccctg cataaacgcc accagcttgc cagcaatagc cggttgcaca      666
+0
+     gagtgatcga gcgccagcag caaacagagc ggaaacgcgc cgcccagacc taacccacac      672
+0
+     accatcgccc acaataccgg caattgcatc ggcagccaga taaagccgca gaaccccacc      678
+0
+     agttgtaaca ccagcgccag cattaacagt ttgcgccgat cctgatggcg agccatagca      684
+0
+     ggcatcagca aagctcctgc ggcttgccca agcgtcatca atgccagtaa ggaaccgctg      690
+0
+     tactgcgcgc tggcaccaat ctcaatatag aaagcgggta accaggcaat caggctggcg      696
+0
+     taaccgccgt taatcagacc gaagtaaaca cccagcgtcc acgcgcgggg agtgaatacc      702
+0
+     acgcgaaccg gagtggttgt tgtcttgtgg gaagaggcga cctcgcgggc gctttgccac      708
+0
+     caccaggcaa agagcgcaac aacggcaggc agcgccacca ggcgagtgtt tgataccagg      714
+0
+     tttcgctatg ttgaactaac cagggcgtta tggcggcacc aagcccaccg ccgcccatca      720
+0
+     gagccgcgga ccacagcccc atcaccagtg gcgtgcgctg ctgaaaccgc cgtttaatca      726
+0
+     ccgaagcatc accgcctgaa tgatgccgat ccccacccca ccaagcagtg cgctgctaag      732
+0
+     cagcagcgca ctttgcgggt aaagctcacg catcaatgca ccgacggcaa tcagcaacag      738
+0
+     actgatggcg acactgcgac gttcgctgac atgctgatga agccagcttc cggccagcgc      744
+0
+     cagcccgccc atggtaacca ccggcagagc ggtcgac                               747
+7
+//
+
+Output file format
+
+   The output is a standard EMBOSS alignment file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -aformat xxx, where 'xxx' is replaced by the
+   name of the required format. Some of the alignment formats can cope
+   with an unlimited number of sequences, while others are only for pairs
+   of sequences.
+
+   The available multiple alignment format names are: unknown, multiple,
+   simple, fasta, msf, trace, srs
+
+   The available pairwise alignment format names are: pair, markx0,
+   markx1, markx2, markx3, markx10, srspair, score
+
+   See: http://emboss.sf.net/docs/themes/AlignFormats.html for further
+   information on alignment formats.
+
+   The output alignment is in simple format by default.
+
+  Output files for usage example
+
+  File: wordfinder.error
+
+  File: j01636.wordfinder
+
+########################################
+# Program: wordfinder
+# Rundate: Sun 15 Jul 2007 12:00:00
+# Commandline: wordfinder
+#    [-asequence] tembl:j01636
+#    [-bsequence] @../../data/eclac.list
+#    -wordlen 50
+#    -gapextend 3.0
+# Align_format: simple
+# Report_file: j01636.wordfinder
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: J01636
+# 2: J01636
+# Matrix: EDNAFULL
+# Gap_penalty: 30.0
+# Extend_penalty: 3.0
+#
+# Length: 7477
+# Identity:    7477/7477 (100.0%)
+# Similarity:  7477/7477 (100.0%)
+# Gaps:           0/7477 ( 0.0%)
+# Score: 37385.0
+#
+# Wordscore:7477
+# Alignlength:7477
+#
+#=======================================
+
+J01636             1 gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgccc     50
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+J01636             1 gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgccc     50
+
+J01636            51 ggaagagagtcaattcagggtggtgaatgtgaaaccagtaacgttatacg    100
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+J01636            51 ggaagagagtcaattcagggtggtgaatgtgaaaccagtaacgttatacg    100
+
+J01636           101 atgtcgcagagtatgccggtgtctcttatcagaccgtttcccgcgtggtg    150
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+J01636           101 atgtcgcagagtatgccggtgtctcttatcagaccgtttcccgcgtggtg    150
+
+J01636           151 aaccaggccagccacgtttctgcgaaaacgcgggaaaaagtggaagcggc    200
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+J01636           151 aaccaggccagccacgtttctgcgaaaacgcgggaaaaagtggaagcggc    200
+
+J01636           201 gatggcggagctgaattacattcccaaccgcgtggcacaacaactggcgg    250
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+
+
+  [Part of this file has been deleted for brevity]
+
+J01636          3787 tgctgattacgaccgctcacgcgtggcagcatcaggggaaaaccttattt   3836
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+V00296          2501 tgctgattacgaccgctcacgcgtggcagcatcaggggaaaaccttattt   2550
+
+J01636          3837 atcagccggaaaacctaccggattgatggtagtggtcaaatggcgattac   3886
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+V00296          2551 atcagccggaaaacctaccggattgatggtagtggtcaaatggcgattac   2600
+
+J01636          3887 cgttgatgttgaagtggcgagcgatacaccgcatccggcgcggattggcc   3936
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+V00296          2601 cgttgatgttgaagtggcgagcgatacaccgcatccggcgcggattggcc   2650
+
+J01636          3937 tgaactgccagctggcgcaggtagcagagcgggtaaactggctcggatta   3986
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+V00296          2651 tgaactgccagctggcgcaggtagcagagcgggtaaactggctcggatta   2700
+
+J01636          3987 gggccgcaagaaaactatcccgaccgccttactgccgcctgttttgaccg   4036
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+V00296          2701 gggccgcaagaaaactatcccgaccgccttactgccgcctgttttgaccg   2750
+
+J01636          4037 ctgggatctgccattgtcagacatgtataccccgtacgtcttcccgagcg   4086
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+V00296          2751 ctgggatctgccattgtcagacatgtataccccgtacgtcttcccgagcg   2800
+
+J01636          4087 aaaacggtctgcgctgcgggacgcgcgaattgaattatggcccacaccag   4136
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+V00296          2801 aaaacggtctgcgctgcgggacgcgcgaattgaattatggcccacaccag   2850
+
+J01636          4137 tggcgcggcgacttccagttcaacatcagccgctacagtcaacagcaact   4186
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+V00296          2851 tggcgcggcgacttccagttcaacatcagccgctacagtcaacagcaact   2900
+
+J01636          4187 gatggaaaccagccatcgccatctgctgcacgcggaagaaggcacatggc   4236
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+V00296          2901 gatggaaaccagccatcgccatctgctgcacgcggaagaaggcacatggc   2950
+
+J01636          4237 tgaatatcgacggtttccatatggggattggtggcgacgactcctggagc   4286
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+V00296          2951 tgaatatcgacggtttccatatggggattggtggcgacgactcctggagc   3000
+
+J01636          4287 ccgtcagtatcggcggaattccagctgagcgccggtcgctaccattacca   4336
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+V00296          3001 ccgtcagtatcggcggaattccagctgagcgccggtcgctaccattacca   3050
+
+J01636          4337 gttggtctggtgtcaaaaataataataa   4364
+                     ||||||||||||||||||||||||||||
+V00296          3051 gttggtctggtgtcaaaaataataataa   3078
+
+
+#---------------------------------------
+#---------------------------------------
+
+   The file 'wordfinder.error' will contain any errors that occured
+   during the program. This may be that wordmatch could not find any
+   matches hence no suitable start point is found for the smith-waterman
+   calculation.
+
+Data files
+
+   For protein sequences EBLOSUM62 is used for the substitution matrix.
+   For nucleotide sequence, EDNAMAT is used. Others can be specified.
+
+   EMBOSS data files are distributed with the application and stored in
+   the standard EMBOSS data directory, which is defined by the EMBOSS
+   environment variable EMBOSS_DATA.
+
+   To see the available EMBOSS data files, run:
+
+% embossdata -showall
+
+   To fetch one of the data files (for example 'Exxx.dat') into your
+   current directory for you to inspect or modify, run:
+
+% embossdata -fetch -file Exxx.dat
+
+   Users can provide their own data files in their own directories.
+   Project specific files can be put in the current directory, or for
+   tidier directory listings in a subdirectory called ".embossdata".
+   Files for all EMBOSS runs can be put in the user's home directory, or
+   again in a subdirectory called ".embossdata".
+
+   The directories are searched in the following order:
+     * . (your current directory)
+     * .embossdata (under your current directory)
+     * ~/ (your home directory)
+     * ~/.embossdata
+
+Notes
+
+   The time this program takes to do an alignment depends very much on
+   the word size. For short sequences a short word size (e.g. 4) can make
+   it take a very long time. Large word sizes (e.g. 30) for sequences
+   that are very similar give a very quick result. The default of 16
+   should give reasonable fast alignments.
+
+   Because it does a Smith & Waterman alignment (albeit in a narrow
+   region around the diagonal shown to be the 'best' by a word match),
+   this program can use huge amounts of memory if the sequences are
+   large.
+
+   Because the alignment is made within a narrow area each side of the
+   'best' diagonal, if there are sufficient indels between the two
+   sequences, then the path of the Smith & Waterman alignment can wander
+   outside of this area. Making the width larger can avoid this problem,
+   but you then use more memory.
+
+   The longer the sequences and the wider the specified alignment width,
+   the more memory will be used.
+
+   If the program terminates due to lack of memory you can try the
+   following:
+
+   Run the UNIX command 'limit' to see if your stack or memory usage have
+   been limited and if so, run 'unlimit', (e.g.: '% unlimit stacksize').
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with a status of 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name                         Description
+   matcher      Finds the best local alignments between two sequences
+   seqmatchall  All-against-all comparison of a set of sequences
+   supermatcher Match large sequences against one or more other sequences
+   water        Smith-Waterman local alignment
+   wordmatch    Finds all exact matches of a given size between 2 sequences
+
+Author(s)
+
+   Ian Longden (il © sanger.ac.uk)
+   Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
+   CB10 1SA, UK.
+
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

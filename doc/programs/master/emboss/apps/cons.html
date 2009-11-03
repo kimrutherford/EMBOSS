@@ -1,0 +1,175 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: cons
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+
+<!--#include file="header1.inc" -->
+cons
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/cons.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<b>cons</b> calculates a consensus sequence from a multiple sequence
+alignment.  To obtain the consensus, the sequence weights and a scoring
+matrix are used to calculate a score at each position in the alignment. 
+<P>
+
+The residue (or nucleotide) <b>i</b> in an alignment column, is compared
+to all other residues (<b>j</b>) in the column.  The score for <b>i</b>
+is the sum over all residues <b>j</b> (not <b>i=j</b>) of the
+score(<b>ij</b>)*weight(<b>j</b>) .  Where score(<b>ij</b>) is taken
+from a nucleotide or protein scoring matrix (see <b>-datafile</b>
+qualifier) and the "weight(<b>j</b>)" is the weighting given to the
+sequence <b>j</b>, which is given in the alignment file.
+<P>
+
+The highest scoring type of residue is then found in the column.  If the
+number of positive matches for this residue is greater than the
+"plurality value" then this residue is the consensus.  The positive
+matches for a residue <b>i</b> are calculated as being the sum of
+weights of all the residues that increase the score of residue <b>i</b>
+(i.e.  positive). 
+<P>
+
+Where no consensus is found at a position <b>i</b>, an 'n' or an 'x'
+character is output; (depending on it being a DNA or protein sequence).
+<P>
+
+   The "plurality" qualifier allows the user to set a cut-off for the
+number of positive matches below which there is no consensus.
+<P>
+
+    The "identity" qualifier provides the facility of setting the required
+number of identities at a site for it to give a consensus at that
+position.  Therefore, if this is set to the number of sequences in the
+alignment only columns of identities contribute to the consensus. 
+<P>
+
+    The "setcase" qualifier sets the threshold for the positive matches
+above which the consensus is is upper-case and below which the consensus
+is in lower-case. 
+<P>
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/cons.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/cons.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/cons.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+The USA of a set of aligned sequences.
+
+<p>
+<!--#include file="inc/cons.input" -->
+
+<H2>
+    Output file format
+</H2>
+The output consists of a sequence file holding the consensus sequence. 
+
+<p>
+<!--#include file="inc/cons.output" -->
+
+
+
+<H2>
+    Data files
+</H2>
+
+It uses the standard set of scoring matrix data files.
+<P>
+<!--#include file="inc/localfiles.ihtml" -->
+
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+
+<!--#include file="inc/cons.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/tcarver.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/cons.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/cons.comment" -->
+
+
+</BODY>
+</HTML>
+

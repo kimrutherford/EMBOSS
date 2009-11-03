@@ -1,0 +1,143 @@
+application: showdb [
+  documentation: "Displays information on the currently
+                  available databases"
+  groups: "Display, Information"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  string: database [
+    default: ""
+    additional: "Y"
+    information: "Name of a single database to give information
+                  on"
+    knowntype: "emboss database name"
+  ]
+
+endsection: input
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  boolean: html [
+    additional: "Y"
+    default: "N"
+    information: "Format output as an HTML table"
+    outputmodifier: "Y"
+  ]
+
+  boolean: protein [
+    additional: "Y"
+    default: "Y"
+    information: "Display protein databases"
+  ]
+
+  boolean: nucleic [
+    additional: "Y"
+    default: "Y"
+    information: "Display nucleic acid databases"
+  ]
+
+  boolean: full [
+    additional: "Y"
+    default: "N"
+    information: "Display all columns"
+  ]
+
+  boolean: methods [
+    additional: "Y"
+    default: "$(full)"
+    information: "Display 'methods' column"
+    help: "This displays the access methods that can be used on this
+           database, for all, query or ID access"
+  ]
+
+  boolean: fields [
+    additional: "Y"
+    default: "$(full)"
+    information: "Display 'fields' column"
+    help: "This displays the search fields that can be used on this
+           database, other than the standard 'id' or 'acc' fields."
+  ]
+
+  boolean: defined [
+    additional: "Y"
+    default: "$(full)"
+    information: "Display 'defined' column"
+    help: "This displays a short name for the file containing the
+           database definition"
+  ]
+
+  boolean: release [
+    additional: "Y"
+    default: "$(full)"
+    information: "Display 'release' column"
+  ]
+
+endsection: additional
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  toggle: only [
+    default: "N"
+    information: "Display the specified columns"
+    help: "This is a way of shortening the command line if you only
+           want a few standard columns to be displayed. Instead of
+           specifying: \
+           '-nohead -notype -noid -noquery -noall' \
+           to get only the comment output, you can specify \
+           '-only -comment'"
+  ]
+
+  boolean: heading [
+    default: "@(!$(only))"
+    information: "Display column headings"
+  ]
+
+  boolean: type [
+    default: "@(!$(only))"
+    information: "Display 'type' column"
+  ]
+
+  boolean: id [
+    default: "@(!$(only))"
+    information: "Display 'id' column"
+  ]
+
+  boolean: query [
+    default: "@(!$(only))"
+    information: "Display 'qry' column"
+  ]
+
+  boolean: all [
+    default: "@(!$(only))"
+    information: "Display 'all' column"
+  ]
+
+  boolean: comment [
+    default: "@(!$(only))"
+    information: "Display 'comment' column"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    additional: "Y"
+    default: "stdout"
+    knowntype: "showdb output"
+  ]
+
+endsection: output

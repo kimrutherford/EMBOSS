@@ -1,0 +1,140 @@
+<?xml version="1.0"?>
+
+<!--
+
+  Ant build file for Jemboss-MS
+
+-->
+
+<project default="package" basedir=".">
+
+  <target name="init">
+    <tstamp />
+    <property name="name" value="Jemboss-MS" />
+    <property name="version" value="live" />
+    <property name="build.compiler" value="modern" />
+    <property name="classpath" value="" />
+    <property name="src.dir" value="" />
+    <property name="emboss.data" value="../data" />
+    <property name="docs.dir" value="docs" />
+
+    <property name="packages" value="org.*" />
+
+    <property name="build.dir" value="./classes" />
+    <property name="jar.dir" value="./jar" />
+    <!-- Subdirectories for main source and classes -->
+    <property name="build.src.main" value="${build.dir}/main" />
+    <property name="build.dest.main" value="${build.dir}/main" />
+
+
+    <!-- Subdirectory for libraries used during build -->
+    <property name="build.src.main.lib" value="${build.src.main}/lib" />
+
+  	
+    <!-- Compile classpath -->
+    <path id="compile.classpath">
+        <!-- Main classes from build -->
+        <pathelement path="${build.src.main}" />
+        <!-- Dependency classes -->
+        <fileset dir="${build.src.main}/lib">
+        	 <include name="**.jar" />
+        </fileset>
+        <fileset dir="${build.src.main}/lib">
+        	 <include name="**/*.jar" />
+        </fileset>
+    </path>
+  </target>
+
+  <!-- Prepares the build directory -->
+  <target name="prepare" depends="init">
+    <mkdir dir="${build.dir}" />
+  </target>
+
+  <!-- Prepares the source code -->
+  <target name="prepare-core" depends="init,prepare">
+
+    <!-- Creates directories -->
+    <mkdir dir="${build.src.main}" />
+    <mkdir dir="${build.dest.main}" />
+    <mkdir dir="${jar.dir}" />
+
+    <!-- Copies src files -->
+    <copy todir="${build.src.main}">
+      <fileset dir="${src.dir}">
+      	<exclude name="**/CVS/**" />
+      </fileset>
+    </copy>
+
+
+    <!-- Copies jars -->
+    <copy todir="${build.dir}">
+      <fileset dir=".">
+        <include name="*.jar" />
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="prepare-src" depends="init,prepare-core" />
+
+  <!-- Compiles the source directory -->
+  <target name="compile" depends="init,prepare-src">
+
+    <javac
+      srcdir="${build.src.main}"
+      destdir="${build.dest.main}"
+    	  excludes="resources/**,api/**,org/emboss/jemboss/editor/AlignApplet.java"
+      deprecation="false"
+      depend="no"
+      >
+    	  <classpath refid="compile.classpath"/>
+    </javac>
+  </target>
+
+
+  <!-- Creates the class package -->
+  <target name="package" depends="init,compile">
+
+    <!-- Copies jars -->
+    <copy todir="${jar.dir}">
+      <fileset dir=".">
+        <include name="lib/grout.jar"/>
+        <include name="lib/jakarta-regexp-1.2.jar"/>
+        <include name="lib/JembossPrintAlignment.jar"/>
+        <include name="lib/jalview.jar"/>
+        <include name="resources/**"/>
+      </fileset>
+    </copy>
+
+
+    <jar
+      jarfile="${jar.dir}/resources/resources.jar"
+      basedir="${emboss.data}"
+      includes="EPAM* EBLOSUM* ENUC*"
+    >
+    </jar>
+
+
+    <jar
+      jarfile="${jar.dir}/${name}.jar"
+      basedir="${build.dest.main}"
+      includes="**"
+      excludes="**/lib/** resources/** jar/** utils/**"
+    >
+      <manifest>
+          <attribute name="Built-By" value="EMBOSS TEAM"/>
+  	      <attribute name="Main-Class" value="org.emboss.jemboss.Jemboss"/>
+              <attribute name="Class-Path" 
+                         value="lib/grout.jar lib/jakarta-regexp-1.2.jar
+                                lib/JembossPrintAlignment.jar
+                                lib/jalview.jar ."/>
+      </manifest>
+  	</jar>
+  </target>
+  
+
+  <!-- Cleans everything -->
+  <target name="clean" depends="init">
+    <delete dir="${build.dir}" />
+    <delete dir="${jar.dir}" />
+  </target>
+</project>

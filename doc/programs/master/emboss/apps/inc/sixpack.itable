@@ -1,0 +1,169 @@
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Nucleotide sequence filename and optional format, or reference (input USA)</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.sixpack</td>
+</tr>
+
+<tr>
+<td>-outseq</td>
+<td>ORF sequence output</td>
+<td>Writeable sequence(s)</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-table</td>
+<td>Genetics code used for the translation</td>
+<td><table><tr><td>0</td> <td><i>(Standard)</i></td></tr><tr><td>1</td> <td><i>(Standard (with alternative initiation codons))</i></td></tr><tr><td>2</td> <td><i>(Vertebrate Mitochondrial)</i></td></tr><tr><td>3</td> <td><i>(Yeast Mitochondrial)</i></td></tr><tr><td>4</td> <td><i>(Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma)</i></td></tr><tr><td>5</td> <td><i>(Invertebrate Mitochondrial)</i></td></tr><tr><td>6</td> <td><i>(Ciliate Macronuclear and Dasycladacean)</i></td></tr><tr><td>9</td> <td><i>(Echinoderm Mitochondrial)</i></td></tr><tr><td>10</td> <td><i>(Euplotid Nuclear)</i></td></tr><tr><td>11</td> <td><i>(Bacterial)</i></td></tr><tr><td>12</td> <td><i>(Alternative Yeast Nuclear)</i></td></tr><tr><td>13</td> <td><i>(Ascidian Mitochondrial)</i></td></tr><tr><td>14</td> <td><i>(Flatworm Mitochondrial)</i></td></tr><tr><td>15</td> <td><i>(Blepharisma Macronuclear)</i></td></tr><tr><td>16</td> <td><i>(Chlorophycean Mitochondrial)</i></td></tr><tr><td>21</td> <td><i>(Trematode Mitochondrial)</i></td></tr><tr><td>22</td> <td><i>(Scenedesmus obliquus)</i></td></tr><tr><td>23</td> <td><i>(Thraustochytrium Mitochondrial)</i></td></tr></table></td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-[no]firstorf</td>
+<td>Count the beginning of a sequence as a possible ORF, even if it's inferior to the minimal ORF size.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]lastorf</td>
+<td>Count the end of a sequence as a possible ORF, even if it's not finishing with a STOP, or inferior to the minimal ORF size.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-mstart</td>
+<td>Displays only ORFs starting with an M.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-[no]reverse</td>
+<td>Display also the translation of the DNA sequence in the 3 reverse frames</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-orfminsize</td>
+<td>Minimum size of Open Reading Frames (ORFs) to display in the translations.</td>
+<td>Integer 1 or more</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-uppercase</td>
+<td>Regions to put in uppercase.
+If this is left blank, then the sequence case is left alone.
+A set of regions is specified by a set of pairs of positions.
+The positions are integers.
+They are separated by any non-digit, non-alpha character.
+Examples of region specifications are:
+24-45, 56-78
+1:45, 67=99;765..888
+1,5,8,10,23,45,57,99</td>
+<td>Sequence range</td>
+<td>If this is left blank, then the sequence case is left alone.</td>
+</tr>
+
+<tr>
+<td>-highlight</td>
+<td>Regions to colour if formatting for HTML.
+If this is left blank, then the sequence is left alone.
+A set of regions is specified by a set of pairs of positions.
+The positions are integers.
+They are followed by any valid HTML font colour.
+Examples of region specifications are:
+24-45 blue 56-78 orange
+1-100 green 120-156 red
+A file of ranges to colour (one range per line) can be specifed as '@filename'.</td>
+<td>Sequence range</td>
+<td><i>full sequence</i></td>
+</tr>
+
+<tr>
+<td>-[no]number</td>
+<td>Number the sequence at the beginning and the end of each line.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-width</td>
+<td>Number of nucleotides displayed on each line</td>
+<td>Integer 1 or more</td>
+<td>60</td>
+</tr>
+
+<tr>
+<td>-length</td>
+<td>Line length of page (0 for indefinite)</td>
+<td>Integer 0 or more</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-margin</td>
+<td>Margin around sequence for numbering.</td>
+<td>Integer 0 or more</td>
+<td>10</td>
+</tr>
+
+<tr>
+<td>-[no]name</td>
+<td>Set this to be false if you do not wish to display the ID name of the sequence.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]description</td>
+<td>Set this to be false if you do not wish to display the description of the sequence.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-offset</td>
+<td>Number from which you want the DNA sequence to be numbered.</td>
+<td>Any integer value</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-html</td>
+<td>Use HTML formatting</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>

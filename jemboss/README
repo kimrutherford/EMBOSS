@@ -1,0 +1,26 @@
+Jemboss - An Interface To EMBOSS
+
+Copyright (C) 2002 Tim Carver
+
+Jemboss is a Java interface to EMBOSS, developed at
+the HGMP-RC and in close collaboration with the EMBOSS
+development team. It is distributed as part of the EMBOSS
+software.
+
+Documentation on Jemboss can be found at:
+http://www.hgmp.mrc.ac.uk/Software/EMBOSS/Jemboss/
+
+It is possible to setup, using the code in the Jemboss 
+distribution, a Jemboss server for your own site. All
+documentation to do with setting up a client or a server
+can be found at: 
+http://www.hgmp.mrc.ac.uk/Software/EMBOSS/Jemboss/install/setup.html
+
+This is in on-going development and comments and suggestions
+are welcome.
+
+
+---------------------------------------------------
+Tim Carver   tcarver@hgmp.mrc.ac.uk
+HGMP-RC
+

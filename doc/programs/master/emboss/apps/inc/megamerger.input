@@ -1,0 +1,226 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:v00295' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:v00295</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   V00295; SV 1; linear; genomic DNA; STD; PRO; 1500 BP.
+XX
+AC   V00295;
+XX
+DT   09-JUN-1982 (Rel. 01, Created)
+DT   07-JUL-1995 (Rel. 44, Last updated, Version 4)
+XX
+DE   E. coli lacY gene (codes for lactose permease).
+XX
+KW   membrane protein.
+XX
+OS   Escherichia coli
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Escherichia.
+XX
+RN   [1]
+RP   1-1500
+RX   DOI; 10.1038/283541a0.
+RX   PUBMED; 6444453.
+RA   Buechel D.E., Gronenborn B., Mueller-Hill B.;
+RT   "Sequence of the lactose permease gene";
+RL   Nature 283(5747):541-545(1980).
+XX
+CC   lacZ is a beta-galactosidase and lacA is transacetylase.
+CC   KST ECO.LACY
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1500
+FT                   /organism="Escherichia coli"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:562"
+FT   CDS             &lt;1..54
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /note="reading frame (lacZ)"
+FT                   /db_xref="GOA:P00722"
+FT                   /db_xref="PDB:1BGL"
+FT                   /db_xref="PDB:1BGM"
+FT                   /db_xref="PDB:1DP0"
+FT                   /db_xref="PDB:1F49"
+FT                   /db_xref="PDB:1F4A"
+FT                   /db_xref="PDB:1F4H"
+FT                   /db_xref="PDB:1GHO"
+FT                   /db_xref="PDB:1HN1"
+FT                   /db_xref="PDB:1JYN"
+FT                   /db_xref="PDB:1JYV"
+FT                   /db_xref="PDB:1JYW"
+FT                   /db_xref="PDB:1JYX"
+FT                   /db_xref="PDB:1JYY"
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT                   /db_xref="PDB:2CFP"
+FT                   /db_xref="PDB:2CFQ"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P02920"
+FT                   /protein_id="CAA23571.1"
+FT                   /translation="MYYLKNTNFWMFGLFFFFYFFIMGAYFPFFPIWLHDINHISKSDT
+FT                   GIIFAAISLFSLLFQPLFGLLSDKLGLRKYLLWIITGMLVMFAPFFIFIFGPLLQYNIL
+FT                   VGSIVGGIYLGFCFNAGAPAVEAFIEKVSRRSNFEFGRARMFGCVGWALCASIVGIMFT
+FT                   INNQFVFWLGSGCALILAVLLFFAKTDAPSSATVANAVGANHSAFSLKLALELFRQPKL
+FT                   WFLSLYVIGVSCTYDVFDQQFANFFTSFFATGEQGTRVFGYVTTMGELLNASIMFFAPL
+FT                   IINRIGGKNALLLAGTIMSVRIIGSSFATSALEVVILKTLHMFEVPFLLVGCFKYITSQ
+FT                   FEVRFSATIYLVCFCFFKQLAMIFMSVLAGNMYESIGFQGAYLVLGLVALGFTLISVFT
+FT                   LSGPGPLSLLRRQVNEVA"
+FT   CDS             1423..&gt;1500
+FT                   /transl_table=11
+FT                   /note="reading frame (lacA)"
+FT                   /db_xref="GOA:P07464"
+FT                   /db_xref="PDB:1KQA"
+FT                   /db_xref="PDB:1KRR"
+FT                   /db_xref="PDB:1KRU"
+FT                   /db_xref="PDB:1KRV"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P07464"
+FT                   /protein_id="CAA23572.1"
+FT                   /translation="MNMPMTERIRAGKLFTDMCEGLPEKR"
+XX
+SQ   Sequence 1500 BP; 315 A; 342 C; 357 G; 486 T; 0 other;
+     ttccagctga gcgccggtcg ctaccattac cagttggtct ggtgtcaaaa ataataataa        60
+     ccgggcaggc catgtctgcc cgtatttcgc gtaaggaaat ccattatgta ctatttaaaa       120
+     aacacaaact tttggatgtt cggtttattc tttttctttt acttttttat catgggagcc       180
+     tacttcccgt ttttcccgat ttggctacat gacatcaacc atatcagcaa aagtgatacg       240
+     ggtattattt ttgccgctat ttctctgttc tcgctattat tccaaccgct gtttggtctg       300
+     ctttctgaca aactcgggct gcgcaaatac ctgctgtgga ttattaccgg catgttagtg       360
+     atgtttgcgc cgttctttat ttttatcttc gggccactgt tacaatacaa cattttagta       420
+     ggatcgattg ttggtggtat ttatctaggc ttttgtttta acgccggtgc gccagcagta       480
+     gaggcattta ttgagaaagt cagccgtcgc agtaatttcg aatttggtcg cgcgcggatg       540
+     tttggctgtg ttggctgggc gctgtgtgcc tcgattgtcg gcatcatgtt caccatcaat       600
+     aatcagtttg ttttctggct gggctctggc tgtgcactca tcctcgccgt tttactcttt       660
+     ttcgccaaaa cggatgcgcc ctcttctgcc acggttgcca atgcggtagg tgccaaccat       720
+     tcggcattta gccttaagct ggcactggaa ctgttcagac agccaaaact gtggtttttg       780
+     tcactgtatg ttattggcgt ttcctgcacc tacgatgttt ttgaccaaca gtttgctaat       840
+     ttctttactt cgttctttgc taccggtgaa cagggtacgc gggtatttgg ctacgtaacg       900
+     acaatgggcg aattacttaa cgcctcgatt atgttctttg cgccactgat cattaatcgc       960
+     atcggtggga aaaacgccct gctgctggct ggcactatta tgtctgtacg tattattggc      1020
+     tcatcgttcg ccacctcagc gctggaagtg gttattctga aaacgctgca tatgtttgaa      1080
+     gtaccgttcc tgctggtggg ctgctttaaa tatattacca gccagtttga agtgcgtttt      1140
+     tcagcgacga tttatctggt ctgtttctgc ttctttaagc aactggcgat gatttttatg      1200
+     tctgtactgg cgggcaatat gtatgaaagc atcggtttcc agggcgctta tctggtgctg      1260
+     ggtctggtgg cgctgggctt caccttaatt tccgtgttca cgcttagcgg ccccggcccg      1320
+     ctttccctgc tgcgtcgtca ggtgaatgaa gtcgcttaag caatcaatgt cggatgcggc      1380
+     gcgacgctta tccgaccaac atatcataac ggagtgatcg cattgaacat gccaatgacc      1440
+     gaaagaataa gagcaggcaa gctatttacc gatatgtgcg aaggcttacc ggaaaaaaga      1500
+//
+</pre>
+</td></tr></table><p>
+<p><h3>Database entry: tembl:v00296</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   V00296; SV 1; linear; genomic DNA; STD; PRO; 3078 BP.
+XX
+AC   V00296;
+XX
+DT   13-JUL-1983 (Rel. 03, Created)
+DT   18-APR-2005 (Rel. 83, Last updated, Version 5)
+XX
+DE   E. coli gene lacZ coding for beta-galactosidase (EC 3.2.1.23).
+XX
+KW   galactosidase.
+XX
+OS   Escherichia coli
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Escherichia.
+XX
+RN   [1]
+RP   1-3078
+RX   PUBMED; 6313347.
+RA   Kalnins A., Otto K., Ruether U., Mueller-Hill B.;
+RT   "Sequence of the lacZ gene of Escherichia coli";
+RL   EMBO J. 2(4):593-597(1983).
+XX
+RN   [2]
+RX   PUBMED; 3038536.
+RA   Zell R., Fritz H.J.;
+RT   "DNA mismatch-repair in Escherichia coli counteracting the hydrolytic
+RT   deamination of 5-methyl-cytosine residues";
+RL   EMBO J. 6(6):1809-1815(1987).
+XX
+CC   Data kindly reviewed (18-MAY-1983) by U. Ruether
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..3078
+FT                   /organism="Escherichia coli"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:562"
+FT   CDS             &lt;1..3072
+FT                   /transl_table=11
+FT                   /note="galactosidase"
+FT                   /db_xref="GOA:P00722"
+FT                   /db_xref="PDB:1BGL"
+FT                   /db_xref="PDB:1BGM"
+FT                   /db_xref="PDB:1DP0"
+FT                   /db_xref="PDB:1F49"
+FT                   /db_xref="PDB:1F4A"
+FT                   /db_xref="PDB:1F4H"
+FT                   /db_xref="PDB:1GHO"
+FT                   /db_xref="PDB:1HN1"
+FT                   /db_xref="PDB:1JYN"
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+     gaggcccgca ccgatcgccc ttcccaacag ttgcgcagcc tgaatggcga atggcgcttt       180
+     gcctggtttc cggcaccaga agcggtgccg gaaagctggc tggagtgcga tcttcctgag       240
+     gccgatactg tcgtcgtccc ctcaaactgg cagatgcacg gttacgatgc gcccatctac       300
+     accaacgtaa cctatcccat tacggtcaat ccgccgtttg ttcccacgga gaatccgacg       360
+     ggttgttact cgctcacatt taatgttgat gaaagctggc tacaggaagg ccagacgcga       420
+     attatttttg atggcgttaa ctcggcgttt catctgtggt gcaacgggcg ctgggtcggt       480
+     tacggccagg acagtcgttt gccgtctgaa tttgacctga gcgcattttt acgcgccgga       540
+     gaaaaccgcc tcgcggtgat ggtgctgcgt tggagtgacg gcagttatct ggaagatcag       600
+     gatatgtggc ggatgagcgg cattttccgt gacgtctcgt tgctgcataa accgactaca       660
+     caaatcagcg atttccatgt tgccactcgc tttaatgatg atttcagccg cgctgtactg       720
+     gaggctgaag ttcagatgtg cggcgagttg cgtgactacc tacgggtaac agtttcttta       780
+     tggcagggtg aaacgcaggt cgccagcggc accgcgcctt tcggcggtga aattatcgat       840
+     gagcgtggtg gttatgccga tcgcgtcaca ctacgtctga acgtcgaaaa cccgaaactg       900
+     tggagcgccg aaatcccgaa tctctatcgt gcggtggttg aactgcacac cgccgacggc       960
+     acgctgattg aagcagaagc ctgcgatgtc ggtttccgcg aggtgcggat tgaaaatggt      1020
+     ctgctgctgc tgaacggcaa gccgttgctg attcgaggcg ttaaccgtca cgagcatcat      1080
+     cctctgcatg gtcaggtcat ggatgagcag acgatggtgc aggatatcct gctgatgaag      1140
+     cagaacaact ttaacgccgt gcgctgttcg cattatccga accatccgct gtggtacacg      1200
+     ctgtgcgacc gctacggcct gtatgtggtg gatgaagcca atattgaaac ccacggcatg      1260
+     gtgccaatga atcgtctgac cgatgatccg cgctggctac cggcgatgag cgaacgcgta      1320
+     acgcgaatgg tgcagcgcga tcgtaatcac ccgagtgtga tcatctggtc gctggggaat      1380
+     gaatcaggcc acggcgctaa tcacgacgcg ctgtatcgct ggatcaaatc tgtcgatcct      1440
+     tcccgcccgg tgcagtatga aggcggcgga gccgacacca cggccaccga tattatttgc      1500
+     ccgatgtacg cgcgcgtgga tgaagaccag cccttcccgg ctgtgccgaa atggtccatc      1560
+     aaaaaatggc tttcgctacc tggagagacg cgcccgctga tcctttgcga atacgcccac      1620
+     gcgatgggta acagtcttgg cggtttcgct aaatactggc aggcgtttcg tcagtatccc      1680
+     cgtttacagg gcggcttcgt ctgggactgg gtggatcagt cgctgattaa atatgatgaa      1740
+     aacggcaacc cgtggtcggc ttacggcggt gattttggcg atacgccgaa cgatcgccag      1800
+     ttctgtatga acggtctggt ctttgccgac cgcacgccgc atccagcgct gacggaagca      1860
+     aaacaccagc agcagttttt ccagttccgt ttatccgggc aaaccatcga agtgaccagc      1920
+     gaatacctgt tccgtcatag cgataacgag ctcctgcact ggatggtggc gctggatggt      1980
+     aagccgctgg caagcggtga agtgcctctg gatgtcgctc cacaaggtaa acagttgatt      2040
+     gaactgcctg aactaccgca gccggagagc gccgggcaac tctggctcac agtacgcgta      2100
+     gtgcaaccga acgcgaccgc atggtcagaa gccgggcaca tcagcgcctg gcagcagtgg      2160
+     cgtctggcgg aaaacctcag tgtgacgctc cccgccgcgt cccacgccat cccgcatctg      2220
+     accaccagcg aaatggattt ttgcatcgag ctgggtaata agcgttggca atttaaccgc      2280
+     cagtcaggct ttctttcaca gatgtggatt ggcgataaaa aacaactgct gacgccgctg      2340
+     cgcgatcagt tcacccgtgc accgctggat aacgacattg gcgtaagtga agcgacccgc      2400
+     attgacccta acgcctgggt cgaacgctgg aaggcggcgg gccattacca ggccgaagca      2460
+     gcgttgttgc agtgcacggc agatacactt gctgatgcgg tgctgattac gaccgctcac      2520
+     gcgtggcagc atcaggggaa aaccttattt atcagccgga aaacctaccg gattgatggt      2580
+     agtggtcaaa tggcgattac cgttgatgtt gaagtggcga gcgatacacc gcatccggcg      2640
+     cggattggcc tgaactgcca gctggcgcag gtagcagagc gggtaaactg gctcggatta      2700
+     gggccgcaag aaaactatcc cgaccgcctt actgccgcct gttttgaccg ctgggatctg      2760
+     ccattgtcag acatgtatac cccgtacgtc ttcccgagcg aaaacggtct gcgctgcggg      2820
+     acgcgcgaat tgaattatgg cccacaccag tggcgcggcg acttccagtt caacatcagc      2880
+     cgctacagtc aacagcaact gatggaaacc agccatcgcc atctgctgca cgcggaagaa      2940
+     ggcacatggc tgaatatcga cggtttccat atggggattg gtggcgacga ctcctggagc      3000
+     ccgtcagtat cggcggaatt ccagctgagc gccggtcgct accattacca gttggtctgg      3060
+     tgtcaaaaat aataataa                                                    3078
+//
+</pre>
+</td></tr></table><p>

@@ -1,0 +1,201 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: notseq
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+notseq
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/notseq.ione" -->
+
+
+
+<H2>
+    Description
+</H2>
+
+When you have a set of sequences (a file of multiple sequences?) and you
+wish to remove one or more of them from the set, then use <b>notseq</b>. 
+
+<p>
+
+This program was written for the case where a file containing several
+sequences is being used as a small database, but some of the sequences
+are no longer required and must be deleted from the file. 
+
+<p>
+
+<b>notseq</b> splits the input sequences into those that you wish to
+keep and those you wish to exclude. 
+
+<p>
+
+<b>notseq</b> takes a set of sequences as input together with a list of
+sequence names or accession numbers.  It also takes the name of a new
+file to write the files that you want to keep into, and optionally the
+name of a file that will contain the files that you want excluded from
+the set. 
+
+<p>
+
+<b>notseq</b> then reads in the input sequences.  It outputs the ones
+that match one of the sequence names or acession numbers to the file of
+excluded sequences, and those that don't match are output to the file of
+sequences to be kept. 
+
+<p>
+
+Note that the names of the sequences to be excluded are not standard
+EMBOSS USAs.  Only the name or accession number shoudl be specified, not
+the database or file that these entries may occur in.  These excluded
+sequence names will be matched against the names of the input sequences
+to see if there is a match.  Wildcarded names may be specified by using
+'*'s.  Any specified names of sequences to be excluded that are not
+found are simply ignored. 
+
+
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/notseq.usage" -->
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/notseq.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/notseq.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+<b>notseq</b> reads normal sequence USAs.
+
+<p>
+
+<!--#include file="inc/notseq.input" -->
+
+<p>
+
+The names (or accession numbers) of the sequences to be excluded can be
+entered as a file of such names by specifying an '@' followed by the
+name of the file containing the sequence names.  For example:
+'@names.dat'. 
+
+<p>
+
+The names or accession numbers of the sequences to be
+excluded are not standard EMBOSS USAs.  Only the ID name or accession
+number can be specified, you cannot specify the sequences as
+'database:ID', 'file:accession', 'format::file', etc. 
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<b>notseq</b> writes normal a sequence file.
+
+<p>
+
+<!--#include file="inc/notseq.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+Note that the names or accession numbers of the sequences to be
+excluded are not standard EMBOSS USAs.  Only the ID name or accession
+number can be specified, you cannot specify the sequences as
+'database:ID', 'file:accession', 'format::file', etc. 
+
+<H2>
+    References
+</H2>
+
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+If no matches are found to any of the specified sequence names, the message
+"This is a warning: No matches found." is displayed.
+
+
+<H2>
+    Exit status
+</H2>
+
+It exits with a status of 0 unless no matches are found to any of the
+input sequences name, in which case it exits with a status of -1. 
+
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/notseq.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/gwilliam.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/notseq.history" -->
+
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/notseq.comment" -->
+
+</BODY>
+</HTML>
+

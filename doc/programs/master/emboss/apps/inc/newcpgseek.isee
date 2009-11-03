@@ -1,0 +1,24 @@
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="cpgplot.html">cpgplot</a></td>
+<td>Plot CpG rich areas</td>
+</tr>
+
+<tr>
+<td><a href="cpgreport.html">cpgreport</a></td>
+<td>Reports all CpG rich regions</td>
+</tr>
+
+<tr>
+<td><a href="geecee.html">geecee</a></td>
+<td>Calculates fractional GC content of nucleic acid sequences</td>
+</tr>
+
+<tr>
+<td><a href="newcpgreport.html">newcpgreport</a></td>
+<td>Report CpG rich areas</td>
+</tr>
+
+</table>

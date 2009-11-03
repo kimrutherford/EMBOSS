@@ -1,0 +1,202 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: digest
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+digest
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/digest.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<b>digest</b> finds the positions where a specified proteolytic enzyme
+or reagent might cut a peptide sequence. 
+
+<p>
+
+This programs allows you to input a protein sequence and to specify one
+proteolytic agent from a list.  It will then output a file containing
+the positions where the agent cuts, together with the peptides produced. 
+
+<p>
+
+Trypsin will not normally cut after a K if it is followed by (e.g.)
+another K or a P.  Specifying the qualifier <b>-unfavoured</b> shows
+those cuts.  as well as the favoured ones. 
+
+<p>
+
+If you wish to emulate a partial digestion, then using the
+<b>-overlap</b> qualifier will display the results from a digest in
+which all cut sites are used and in which one site at a time is not cut. 
+Thus the resulting peptide fragments from the cut sites numbered 1, 2,
+3, 4 etc.  are shown, plus the fragments produced by cutting at the
+sites 1..3, 2..4, etc. 
+
+<p>
+
+i.e. fragments containing one potential cut site are also shown.
+
+<p>
+
+If you wish to emulate a <b>very</b> partial digestion (!) then using
+the <b>-allpartials</b> qualifier will do what <b>-overlap</b> did, but
+also show all possible fragments from using all possible combinations of
+cut sites.  For example, fragments from the cut sites numbered 1, 2, 3,
+4, 5 and from the fragments produced by cutting between sites 1..3,
+1..4, 1..5, 2..4, 2..5, 3..5, etc. 
+
+<p>
+
+i.e. fragments containing one or more potential cut site are also shown.
+
+
+<p>
+
+If the boolean -ragging is specified then terminal break-up
+fragments are also shown; this can be useful for mass spectrometry.
+Ragging is further controlled by the -termini
+option which allows you to select removal of residues from
+the N and/or C termini.
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/digest.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/digest.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/digest.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+Any protein sequence.
+
+<p>
+<!--#include file="inc/digest.input" -->
+
+<H2>
+    Output file format
+</H2>
+<!--#include file="inc/reportformats.ihtml" -->
+
+By default <b>digest</b> writes a 'seqtable' report file.
+
+
+<p>
+<!--#include file="inc/digest.output" -->
+
+<p>
+
+The header information contains the program name, date of run, name of
+the reagent used to digest the protein and the number of fragments
+reported.  The header will report if complete or partial digestion was
+chosen.  
+
+<p>
+The rest of the file consists of columns holding the following data:
+
+<ul>
+<li> The start position of the fragment
+<li> The end position of the fragment
+<li> The molecular weight of the fragment
+<li> The residue before the cut site ('.' if start of sequence)
+<li> The residue after the second cut site ('.' if end of sequence)
+<li> The sequence of the fragment. 
+</ul>
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+
+<!--#include file="inc/digest.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/ableasby.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/digest.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/digest.comment" -->
+
+</BODY>
+</HTML>
+

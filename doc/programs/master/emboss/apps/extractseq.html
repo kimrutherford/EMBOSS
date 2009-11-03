@@ -1,0 +1,215 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: extractseq
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+extractseq
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/extractseq.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<b>extractseq</b> allows you to specify one or more regions of a sequence to
+extract sub-sequences from to build up a contiguous resulting sequence. 
+
+<p>
+
+This is modelled on the cell's process of splicing out exons from
+mRNA, but the program is generally applicable to any cutting and
+splicing or editing operation on a single sequence. 
+
+<p>
+
+<b>extractseq</b> reads in a sequence and a set of regions of that
+sequence as specified by pairs of start and end positions (either on the
+command-line or contained in a file) and writes out the specified
+regions of the input sequence in the order in which they have been
+specified.  Thus, if the sequence "AAAGGGTTT" has been input and the
+regions: "7-9, 3-4" have been specified, then the output sequence will
+be: "TTTAG". 
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/extractseq.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/extractseq.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/extractseq.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+<b>extractseq</b> reads a normal sequence USA.
+
+<p>
+<!--#include file="inc/extractseq.input" -->
+
+<p>
+
+You can specifiy a file of ranges to extract by giving the '-regions'
+qualifier the value '@' followed by the name of the file containing the
+ranges. (eg: '-regions @myfile').
+
+<p>
+The format of the range file is:
+
+<ul>
+<li>Comment lines start with '#' in the first column.
+<li>Comment lines and blank lines are ignored.
+<li>The line may start with white-space.
+<li>There are two positive (integer) numbers per line separated by one or
+        more space or TAB characters. 
+<li>The second number must be greater or equal to the first number.
+<li>There can be optional text after the two numbers to annotate the line. 
+<li>White-space before or after the text is removed.
+</ul>
+
+<p>
+
+An example range file is:
+
+<pre>
+
+# this is my set of ranges
+12   23
+ 4   5       this is like 12-23, but smaller
+67   10348   interesting region
+
+</pre>
+
+<H2>
+    Output file format
+</H2>
+
+
+The output is a normal sequence file.
+
+<p>
+<!--#include file="inc/extractseq.output" -->
+<p>
+
+If the option '-separate' is used then each specified region is written
+to the output file as a separate sequence.  The name of the sequence is
+created from the name of the original sequence with the start and end
+positions of the range appended with underscore characters between them,
+
+<p>
+
+For example: "XYZ region 2 to 34" is written as: "XYZ_2_34"
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+
+None.
+	
+<H2>
+    Notes
+</H2>
+
+
+None.
+	
+<H2>
+    References
+</H2>
+
+
+None.
+	
+<H2>
+    Warnings
+</H2>
+
+
+None.
+	
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+Several warning messages about malformed region specifications: 
+
+<ul>
+<li>       Non-digit found in region ... 
+
+<li>       Unpaired start of a region found in ... 
+
+<li>       Non-digit found in region ... 
+
+<li>       The start of a pair of region positions must be smaller than the
+	end in ... 
+
+</ul>
+	
+<H2>
+    Exit status
+</H2>
+
+
+It exits with status 0, unless a region is badly constructed. 
+
+<H2>
+    Known bugs
+</H2>
+
+
+None noted.
+
+<H2>
+    Comments
+</H2>
+
+<!--#include file="inc/extractseq.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/gwilliam.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/extractseq.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/extractseq.comment" -->
+
+
+</BODY>
+</HTML>
+

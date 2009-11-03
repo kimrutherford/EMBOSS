@@ -1,0 +1,224 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: whichdb
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+whichdb
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/whichdb.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<b>whichdb</b> searches all available EMBOSS databases for sequences
+with a specified ID name or accession number.
+
+<p>
+
+EMBOSS does not allow database entries to be specified by just the ID
+name or accession number.  You must specify both the name of the
+database and the entry, for example 'embl:hsfau', not just 'hsfau'. 
+
+<p>
+
+If you do not know which database(s) contain the entry you are
+interested in, <b>whichdb</b> will tell you.
+
+<p>
+
+<b>whichdb</b> can also, optionally, write out the sequences it finds to
+files. 
+
+<H3>IDs and Accessions</H3>
+
+An entry in a database must have some way of being uniquely identified
+in that database.  Most sequence databases have two such identifiers for
+each sequence - an ID name and an Accession number. 
+
+<p>
+
+Why are there two such identifiers? The ID name was originally intended
+to be a human-readable name that had some indication of the function of
+its sequence.  In EMBL and GenBank the first two (or three) letters
+indicated the species and the rest indicated the function, for example
+'hsfau' is the 'Homo Sapiens FAU pseudogene'.  This naming scheme
+started to be a problem when the number of entries added each day was so
+vast that people could not make up the ID names fast enough.  Instead,
+the Accession numbers were used as the ID name.  Therefore you will now
+find ID names like 'AF061303', the same as the Accession number for that
+sequence in EMBL. 
+
+<p>
+
+ID names are not guaranteed to remain the same between different
+versions of a database (although in practice they usually do). 
+
+<p>
+
+Accession numbers are unique alphanumeric identifiers that are
+guaranteed to remain with that sequence through the rest of the life of
+the database.  If two sequences are merged into one, then the new
+sequence will get a new Accession number and the Accession numbers of
+the merged sequences will be retained as 'secondary' Accession numbers. 
+
+<p>
+
+EMBL, GenBank and SwissProt share an Accession numbering scheme - an
+Accession number uniquely identifies a sequence within these three
+databases. 
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/whichdb.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/whichdb.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/whichdb.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+None.
+
+<p>
+
+<!--#include file="inc/whichdb.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/whichdb.output" -->
+
+<p>
+
+The reported database entries are written out to the specified output file.
+
+<p>
+
+Each database that is defined in the local implementation of EMBOSS
+which contains an entry called 'hsfau' is reported.
+
+<p>
+
+Note that where a database is defined under several names ('embl',
+'em'), each definition of that database containing the entry is
+reported. 
+
+<p>
+
+When the '-get' option is used to output the sequences, they are written
+to separate files.  The sequence format they are written in is always
+'Fasta' format.  The normal command-line qualifiers for changing the
+output formats etc.  will not work in this program. 
+
+<p>
+
+The names of the files that the sequences are written to is reported as
+they are written, for example:
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Writing hsfau.embl
+Writing hsfau.human
+Writing hsfau.tembl
+Writing hsfau.em
+Writing hsfau.genbank
+Writing hsfau.gb
+</td></tr></table><p>
+
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/whichdb.isee" -->
+
+
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/ableasby.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/whichdb.history" -->
+
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/whichdb.comment" -->
+
+</BODY>
+</HTML>
+

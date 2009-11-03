@@ -1,0 +1,113 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: opsd_human.patmatmotifs</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: patmatmotifs
+# Rundate: Sun 15 Jul 2007 12:00:00
+# Commandline: patmatmotifs
+#    -full
+#    -sequence tsw:opsd_human
+# Report_format: dbmotif
+# Report_file: opsd_human.patmatmotifs
+########################################
+
+#=======================================
+#
+# Sequence: OPSD_HUMAN     from: 1   to: 348
+# HitCount: 2
+#
+# Full: Yes
+# Prune: Yes
+# Data_file: ../prosextract-keep/PROSITE/prosite.lines
+#
+#=======================================
+
+Length = 17
+Start = position 123 of sequence
+End = position 139 of sequence
+
+Motif = G_PROTEIN_RECEP_F1_1
+
+TLGGEIALWSLVVLAIERYVVVCKPMS
+     |               |
+   123               139
+
+Length = 17
+Start = position 290 of sequence
+End = position 306 of sequence
+
+Motif = OPSIN
+
+PIFMTIPAFFAKSAAIYNPVIYIMMNK
+     |               |
+   290               306
+
+
+#---------------------------------------
+#
+# Motif: G_PROTEIN_RECEP_F1_1
+# Count: 1
+# 
+# *****************************************
+# * G-protein coupled receptors signature *
+# *****************************************
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+# Count: 1
+# 
+# *************************************************
+# * Visual pigments (opsins) retinal binding site *
+# *************************************************
+# 
+# Visual pigments [1,2] are the light-absorbing  molecules that  mediate vision.
+# They consist of  an apoprotein, opsin,  covalently  linked  to the chromophore
+# cis-retinal.  Vision is  effected through  the absorption of a  photon by cis-
+# retinal  which is isomerized to  trans-retinal.  This isomerization leads to a
+# change  of conformation  of the protein. Opsins are integral membrane proteins
+# with  seven transmembrane regions that belong to family 1 of G-protein coupled
+# receptors (see &lt;PDOC00210&gt;).
+# 
+# In vertebrates four different pigments are generally found.   Rod cells, which
+# mediate vision in dim light, contain the pigment rhodopsin.  Cone cells, which
+# function in bright light, are responsible  for  color vision and contain three
+# or more color pigments (for example, in mammals: red, blue and green).
+# 
+# In Drosophila, the  eye   is composed   of 800   facets  or   ommatidia.  Each
+# ommatidium contains eight photoreceptor cells (R1-R8):  the R1 to R6 cells are
+# outer cells,  R7  and R8 inner cells. Each of the three types of cells (R1-R6,
+# R7 and R8) expresses a specific opsin.
+# 
+# Proteins evolutionary related to opsins include squid retinochrome, also known
+# as retinal  photoisomerase, which converts various isomers of retinal into 11-
+# cis retinal and mammalian retinal pigment  epithelium (RPE) RGR [3], a protein
+# that may also act in retinal isomerization.
+# 
+# The attachment  site  for  retinal in the above proteins is a conserved lysine
+# residue in  the  middle  of  the  seventh  transmembrane helix. The pattern we
+# developed includes this residue.
+# 
+# -Consensus pattern: [LIVMWAC]-[PGAC]-x(3)-[SAC]-K-[STALIMR]-[GSACPNV]-[STACP]-
+#                     x(2)-[DENF]-[AP]-x(2)-[IY]
+#                     [K is the retinal binding site]
+# -Sequences known to belong to this class detected by the pattern: ALL.
+# -Other sequence(s) detected in SWISS-PROT: NONE.
+# -Last update: July 1998 / Pattern and text revised.
+# 
+# [ 1] Applebury M.L., Hargrave P.A.
+#      Vision Res. 26:1881-1895(1986).
+# [ 2] Fryxell K.J., Meyerowitz E.M.
+#      J. Mol. Evol. 33:367-378(1991).
+# [ 3] Shen D., Jiang M., Hao W., Tao L., Salazar M., Fong H.K.W.
+#      Biochemistry 33:13117-13125(1994).
+# 
+# ***************
+# 
+#
+#---------------------------------------
+</pre>
+</td></tr></table><p>

@@ -1,0 +1,223 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: btwisted
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+btwisted
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/btwisted.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<b>btwisted</b> takes a region of a pure DNA sequence and calculates
+by simple arithmetic the probable overall twist of the sequence and
+the stacking energy.
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/btwisted.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/btwisted.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/btwisted.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+Nucleic acid sequence USA.
+
+<p>
+<!--#include file="inc/btwisted.input" -->
+
+<H2>
+    Output file format
+</H2>
+<!--#include file="inc/btwisted.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+The program reads in two data files.
+<P>
+The first is prompted for by:
+<P>
+"File containing base pair twist angles"
+<P>
+<br>
+This is the data file 'Eangles.dat' by default.
+<P>
+This consists of the data:
+<P>
+<pre>
+aa      35.6    0.1
+ac      34.4    1.3
+ag      27.7    1.5
+at      31.5    1.1
+ca      34.5    0.9
+cc      33.7    0.1
+cg      29.8    1.1
+ct      27.7    1.5
+ga      36.9    0.9
+gc      40.0    1.2
+gg      33.7    0.1
+gt      34.4    1.3
+ta      36.0    1.0
+tc      36.9    0.9
+tg      34.5    0.9
+tt      35.6    0.1
+</pre>
+<p>
+
+
+
+
+The second is prompted for by:
+<P>
+"File containing base pair stacking energies"
+<br>
+This is the data file 'Eenergy.dat' by default.
+<P>
+This consists of the data:
+<P>
+<pre>
+#base pair stacking energy for B-DNA
+aa      -5.37
+ac      -10.51
+ag      -6.78
+at      -6.57
+ca      -6.57
+cc      -8.26
+cg      -9.69
+ct      -6.78
+ga      -9.81
+gc      -14.59
+gg      -8.26
+gt      -10.51
+ta      -3.82
+tc      -9.81
+tg      -6.57
+tt      -5.37
+</pre>
+<P>
+
+  No check is made that all dinucleotides have been read for the energy and 
+  twist. Attempting to run btwisted with an incomplete data file will result
+  a fatal error if the sequence contains a dinucleotide not in the data files. 
+ 
+
+<P>
+<!--#include file="inc/localfiles.ihtml" -->
+<p>
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+No check is made that all dinucleotides have been read for the energy
+and twist. Attempting to run btwisted with an incomplete data file
+will result a fatal error if the sequence contains a dinucleotide not
+in the data files.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+"Incomplete table" 
+
+<BR> 
+
+You have supplied data files for either the angles or energies that do
+not contain the fulll required set of possible dinucleotides. 
+
+
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+
+No check is made that all dinucleotides have been read for the energy
+and twist. Attempting to run btwisted with an incomplete data file
+will result a fatal error if the sequence contains a dinucleotide not
+in the data files.
+
+
+
+<!--#include file="inc/btwisted.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/dmartin.address" -->
+
+and
+
+<!--#include file="inc/ableasby.address" -->
+
+<p>
+This application was written during the first Scandinavian EMBOSS Workshop.
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/btwisted.history" -->
+
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/btwisted.comment" -->
+
+
+</BODY>
+</HTML>
+

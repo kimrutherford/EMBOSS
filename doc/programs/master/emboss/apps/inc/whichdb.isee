@@ -1,0 +1,39 @@
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="infoalign.html">infoalign</a></td>
+<td>Information on a multiple sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="infoseq.html">infoseq</a></td>
+<td>Displays some simple information about sequences</td>
+</tr>
+
+<tr>
+<td><a href="seealso.html">seealso</a></td>
+<td>Finds programs sharing group names</td>
+</tr>
+
+<tr>
+<td><a href="showdb.html">showdb</a></td>
+<td>Displays information on the currently available databases</td>
+</tr>
+
+<tr>
+<td><a href="textsearch.html">textsearch</a></td>
+<td>Search sequence documentation. Slow, use SRS and Entrez!</td>
+</tr>
+
+<tr>
+<td><a href="tfm.html">tfm</a></td>
+<td>Displays a program's help documentation manual</td>
+</tr>
+
+<tr>
+<td><a href="wossname.html">wossname</a></td>
+<td>Finds programs by keywords in their one-line documentation</td>
+</tr>
+
+</table>

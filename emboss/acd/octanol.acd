@@ -1,0 +1,71 @@
+application: octanol [
+  documentation: "Displays protein hydropathy"
+  groups: "Protein:Composition"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  sequence: sequence [
+    parameter: "Y"
+    type: "protein"
+  ]
+
+  datafile: datafile [
+    additional: "Y"
+    default: "Ewhite-wimley.dat"
+    information: "White-Wimley data file"
+    knowntype: "white wimley datafile"
+  ]
+
+endsection: input
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  integer: width [
+    additional: "Y"
+    information: "Window size"
+    default: "19"
+    minimum: "1"
+    maximum: "200"
+  ]
+
+endsection: additional
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  xygraph: graph [
+    parameter: "Y"
+    multiple: "3"
+    gxtitle: "$(sequence.name)"
+    gytitle: "Total Free Energy (Kcal/mol)"
+    gtitle: "White-Wimley Plot"
+  ]
+
+  boolean: octanolplot [
+    additional: "Y"
+    default: "N"
+    information: "Display the octanol plot"
+  ]
+
+  boolean: interfaceplot [
+    additional: "Y"
+    default: "N"
+    information: "Display the interface plot"
+  ]
+
+  boolean: differenceplot [
+    additional: "Y"
+    default: "Y"
+    information: "Display the difference plot"
+  ]
+
+endsection: output

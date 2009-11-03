@@ -1,0 +1,20 @@
+application: tfextract [
+  documentation: "Extract data from TRANSFAC"
+  groups: "Utils:Database creation"
+  gui: "yes"
+  batch: "yes"
+  cpu: "medium"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  infile: infile [
+    parameter: "Y"
+    information: "Transfac database sites file"
+    knowntype: "transfac site"
+  ]
+
+endsection: input

@@ -1,0 +1,116 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:ab000360' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:ab000360</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   AB000360; SV 1; linear; genomic DNA; STD; HUM; 2582 BP.
+XX
+AC   AB000360;
+XX
+DT   27-OCT-1997 (Rel. 53, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 3)
+XX
+DE   Homo sapiens PIGC gene, complete cds.
+XX
+KW   glycosylphosphatidylinositol-synthesis gene; PIGC.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-2582
+RA   Hong Y.;
+RT   ;
+RL   Submitted (08-JAN-1997) to the EMBL/GenBank/DDBJ databases.
+RL   Yeongjin Hong, Research Institute for Microbial Diseases, Immunoregulation;
+RL   3-1 Yamada-oka, Suita, Osaka 565, Japan
+RL   (E-mail:kohishi@biken.osaka-u.ac.jp, Tel:81-6-879-8329, Fax:81-6-875-5233)
+XX
+RN   [2]
+RX   DOI; 10.1006/geno.1997.4893.
+RX   PUBMED; 9325057.
+RA   Hong Y., Ohishi K., Inoue N., Endo Y., Fujita T., Takeda J., Kinoshita T.;
+RT   "Structures and chromosomal localizations of the
+RT   glycosylphosphatidylinositol synthesis gene PIGC and its pseudogene
+RT   PIGCP1";
+RL   Genomics 44(3):347-349(1997).
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..2582
+FT                   /organism="Homo sapiens"
+FT                   /chromosome="1"
+FT                   /map="1q23-q25"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:9606"
+FT   exon            808..2266
+FT   CDS             1101..1994
+FT                   /codon_start=1
+FT                   /transl_table=1
+FT                   /gene="PIGC"
+FT                   /standard_name="glycosylphosphatidylinositol-synthesis
+FT                   gene"
+FT                   /db_xref="GDB:6045444"
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT   variation       2259
+FT                   /replace="t"
+FT   repeat_region   2331..2356
+FT                   /rpt_unit_seq="gt"
+XX
+SQ   Sequence 2582 BP; 694 A; 494 C; 581 G; 813 T; 0 other;
+     ggatccctgc tgcagagggg gtaacggtgt ctggcttgcc aagcaatatt tgttgtggtc        60
+     tatcatggaa gaaataaagt cgggcaatat gaattttttt tttctcaaat ttgccggatg       120
+     gctgtggtgt ttctgactct tagttttctc attgtgaaaa aggaatgatt atcttcttcg       180
+     atcctctcaa gagtttcctt gttttgagta gattgatagc tctttaaagg atgctaagct       240
+     cagctaatgg aagaagagtc tagtttcttt gaggctttga ttttggttaa actatagagc       300
+     tcataccttt ctgtatggtg cagcttacta ttgtctttgg attggtaact taaaaaatac       360
+     aaataacatg cctttgagaa ccaataaaaa ctatggatat tatccctata aatttacaca       420
+     aatccagata taagcatgca atgtgatata cctaagggat atgtgaacca ctgagttaag       480
+     aactgcttta gagggagata caatgtgaga cacaggcttt gggataagac tttggtttga       540
+     atcctggctc tgctctgtta ccttagggca aagttactta agcatcttga atctcagctt       600
+     ttttaccaaa gcaggactaa tactaactta caaggtggtg aggattaagt gaaagaagat       660
+     acataaggca cttagcacat agtaggtact caataagcga tagctaacag atgtctatta       720
+     ttattcaagg aattataatt ttcaaatctg aaatgcagtt ttaatgtccc ataaggtgac       780
+     taccacatac atttttctca gacttttagt aaactgagtt gatttgactt tatctcagta       840
+     ctactcttga cctttcacaa ctttcgtagg ttcacagtct ctctttttct aggaacttgg       900
+     ctgtgttgtc ctgcctcaga gacaaattca tctattgtag gcctagcccc tgcctttgaa       960
+     aacaaggaaa ggttggtaga acatcaacac agcatggaat ttccagggag gtctcatttc      1020
+     aaaacttcat aaagaacaag aaccacctgg acttctgtga gggcgatgat taaactggcc      1080
+     tgagtttgaa tgaaaggata atgtatgctc aacctgtgac taacaccaag gaggtcaagt      1140
+     ggcagaaggt cttgtatgag cgacagccct ttcctgataa ctatgtggac cggcgattcc      1200
+     tggaagagct ccggaaaaac atccatgctc ggaaatacca atattgggct gtggtatttg      1260
+     agtccagtgt ggtgatccag cagctgtgca gtgtttgtgt ttttgtggtt atctggtggt      1320
+     atatggatga gggtcttctg gccccccatt ggcttttagg gactggcctg gcttcttcac      1380
+     tgattgggta tgttttgttt gatctcattg atggaggtga agggcggaag aagagtgggc      1440
+     agacccggtg ggctgacctg aagagtgccc tagtcttcat tactttcact tatgggtttt      1500
+     caccagtgct gaagaccctt acagagtctg tcagcactga caccatctat gccatgtcag      1560
+     tcttcatgct gttaggccat ctcatctttt ttgactatgg tgccaatgct gccattgtat      1620
+     ccagcacact atccttgaac atggccatct ttgcttctgt atgcttggca tcacgtcttc      1680
+     cccggtccct gcatgccttc atcatggtga catttgccat tcagattttt gccctgtggc      1740
+     ccatgttgca gaagaaacta aaggcatgta ctccccggag ctatgtgggg gtcacactgc      1800
+     tttttgcatt ttcagccgtg ggaggcctac tgtccattag tgctgtggga gccgtactct      1860
+     ttgcccttct gctgatgtct atctcatgtc tgtgttcatt ctacctcatt cgcttgcagc      1920
+     tttttaaaga aaacattcat gggccttggg atgaagctga aatcaaggaa gacttgtcca      1980
+     ggttcctcag ttaaattagg acatccatta cattattaaa gcaagctgat agattagcct      2040
+     cctaactagt atagaactta aagacagagt tccattctgg aagcagcatg tcattgtggt      2100
+     aagagaatag agatcaaaac caaaaaaaat gaaccaaagg cttgggtggt gagggtgctt      2160
+     atcctttctg ttattttgta gatgaaaaaa ctttctgggg acctcttgaa ttacatgctg      2220
+     taacatatga agtgatgtgg tttctattaa aaaaataaca catccatcaa gttgtctcat      2280
+     gatttttcca taaacaggag gcagacagag gggcatgaag agtgaagtaa gtgtgtgtgt      2340
+     gtgtgtgtgt gtgtgtaaag tcacttcttt ctaccctttt caatgtgcta atgctctttt      2400
+     atttatctag ggctcaaatc ttagaacaca gggtgctatg ctcagttttg ttgcccaaga      2460
+     tcacagaatt ggttacttaa ccttgactca gagtttctac cttgttctta gggaagcata      2520
+     tcacaactaa ttgcaaagca gagtgtgatg tgtcacaata agcagaatgc tagggggaat      2580
+     tc                                                                     2582
+//
+</pre>
+</td></tr></table><p>

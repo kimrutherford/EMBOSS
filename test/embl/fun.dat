@@ -1,0 +1,60 @@
+ID   AB009602; SV 1; linear; mRNA; STD; FUN; 561 BP.
+XX
+AC   AB009602;
+XX
+DT   15-DEC-1997 (Rel. 53, Created)
+DT   14-APR-2005 (Rel. 83, Last updated, Version 2)
+XX
+DE   Schizosaccharomyces pombe mRNA for MET1 homolog, partial cds.
+XX
+KW   MET1 homolog.
+XX
+OS   Schizosaccharomyces pombe (fission yeast)
+OC   Eukaryota; Fungi; Ascomycota; Schizosaccharomycetes;
+OC   Schizosaccharomycetales; Schizosaccharomycetaceae; Schizosaccharomyces.
+XX
+RN   [1]
+RP   1-561
+RA   Kawamukai M.;
+RT   ;
+RL   Submitted (07-DEC-1997) to the EMBL/GenBank/DDBJ databases.
+RL   Makoto Kawamukai, Shimane University, Life and Environmental Science; 1060
+RL   Nishikawatsu, Matsue, Shimane 690, Japan
+RL   (E-mail:kawamuka@life.shimane-u.ac.jp, Tel:0852-32-6587, Fax:0852-32-6499)
+XX
+RN   [2]
+RP   1-561
+RA   Kawamukai M.;
+RT   "S.pmbe MET1 homolog";
+RL   Unpublished.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..561
+FT                   /organism="Schizosaccharomyces pombe"
+FT                   /mol_type="mRNA"
+FT                   /clone_lib="pGAD GH"
+FT                   /db_xref="taxon:4896"
+FT   CDS             <1..275
+FT                   /codon_start=3
+FT                   /transl_table=1
+FT                   /product="MET1 homolog"
+FT                   /db_xref="GENEDB:SPCC1739.06c"
+FT                   /db_xref="GOA:O74468"
+FT                   /db_xref="UniProtKB/Swiss-Prot:O74468"
+FT                   /protein_id="BAA23999.1"
+FT                   /translation="SMPKIPSFVPTQTTVFLMALHRLEILVQALIESGWPRVLPVCIAE
+FT                   RVSCPDQRFIFSTLEDVVEEYNKYESLPPGLLITGYSCNTLRNTA"
+XX
+SQ   Sequence 561 BP; 135 A; 106 C; 98 G; 222 T; 0 other;
+     gttcgatgcc taaaatacct tcttttgtcc ctacacagac cacagttttc ctaatggctt        60
+     tacaccgact agaaattctt gtgcaagcac taattgaaag cggttggcct agagtgttac       120
+     cggtttgtat agctgagcgc gtctcttgcc ctgatcaaag gttcattttc tctactttgg       180
+     aagacgttgt ggaagaatac aacaagtacg agtctctccc ccctggtttg ctgattactg       240
+     gatacagttg taataccctt cgcaacaccg cgtaactatc tatatgaatt attttccctt       300
+     tattatatgt agtaggttcg tctttaatct tcctttagca agtcttttac tgttttcgac       360
+     ctcaatgttc atgttcttag gttgttttgg ataatatgcg gtcagtttaa tcttcgttgt       420
+     ttcttcttaa aatatttatt catggtttaa tttttggttt gtacttgttc aggggccagt       480
+     tcattattta ctctgtttgt atacagcagt tcttttattt ttagtatgat tttaatttaa       540
+     aacaattcta atggtcaaaa a                                                 561
+//

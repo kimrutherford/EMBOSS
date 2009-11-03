@@ -1,0 +1,624 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: codcopy
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+codcopy
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+    Function
+</H2>
+Reads and writes a codon usage table
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<!-- 
+	This is the main part of the document.
+        This is what the user looks at to find out if this program will do what he wants. 
+        Long description.
+        Why it is useful.
+        When it should/shouldn't be used.
+  -->
+
+Copies a codon usage table. This program supports all available codon
+usage input and output formats. Rather than a copy utility, it is
+intended as a format conversion utility so that codon usage data can
+be exported to other applications that support only a single format.
+
+
+<H2>
+    Algorithm
+</H2>
+
+<!-- 
+        Algorithms
+	  Pseudocode/Vague description/Handwaving/web links to useful pages
+  -->
+
+
+
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+<b>Here is a sample session with codcopy</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>codcopy </b>
+Reads and writes a codon usage table
+Codon usage file: <b>Eecoli.cut</b>
+Codon usage output file [eecoli.cut]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-infile]            codon      Codon usage table name
+  [-outfile]           outcodon   Codon usage table name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-infile" associated qualifiers
+   -format1            string     Data format
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+   -oformat2           string     Output format specific to this data type
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-infile]<br>(Parameter 1)</td>
+<td>Codon usage table name</td>
+<td>Codon usage file in EMBOSS data path</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Codon usage table name</td>
+<td>Codon usage file</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+<b>codcopy</b> reads any normal sequence USAs.
+
+<p>
+
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+
+<b>codcopy</b> 
+outputs a graph to the specified graphics device. 
+outputs a report format file. The default format is ...
+
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: eecoli.cut</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+#Species: Escherichia coli K12
+#Division: gbbct
+#Release: CUTG146
+#CdsCount: 5045
+
+#Coding GC 51.81%
+#1st letter GC 58.93%
+#2nd letter GC 40.69%
+#3rd letter GC 55.80%
+
+#Codon AA Fraction Frequency Number
+GCA    A     0.214    20.299  32456
+GCC    A     0.269    25.493  40761
+GCG    A     0.355    33.631  53773
+GCT    A     0.162    15.354  24549
+TGC    C     0.554     6.431  10283
+TGT    C     0.446     5.180   8282
+GAC    D     0.372    19.047  30454
+GAT    D     0.628    32.219  51514
+GAA    E     0.690    39.570  63268
+GAG    E     0.310    17.782  28431
+TTC    F     0.425    16.580  26510
+TTT    F     0.575    22.423  35852
+GGA    G     0.108     7.925  12671
+GGC    G     0.402    29.403  47013
+GGG    G     0.150    10.994  17578
+GGT    G     0.340    24.838  39714
+CAC    H     0.429     9.712  15529
+CAT    H     0.571    12.903  20630
+ATA    I     0.072     4.290   6860
+ATC    I     0.419    24.999  39971
+ATT    I     0.510    30.427  48649
+AAA    K     0.767    33.618  53752
+AAG    K     0.233    10.198  16305
+CTA    L     0.036     3.860   6172
+CTC    L     0.104    11.045  17660
+CTG    L     0.496    52.821  84455
+CTT    L     0.104    11.051  17670
+TTA    L     0.131    13.913  22246
+TTG    L     0.129    13.727  21948
+ATG    M     1.000    27.778  44414
+AAC    N     0.551    21.611  34554
+AAT    N     0.449    17.633  28193
+CCA    P     0.192     8.524  13629
+CCC    P     0.125     5.531   8843
+CCG    P     0.524    23.235  37150
+CCT    P     0.159     7.045  11265
+CAA    Q     0.349    15.474  24742
+CAG    Q     0.651    28.832  46100
+AGA    R     0.037     2.056   3287
+AGG    R     0.022     1.216   1944
+CGA    R     0.064     3.542   5663
+CGC    R     0.398    22.005  35184
+CGG    R     0.098     5.391   8619
+CGT    R     0.381    21.020  33609
+AGC    S     0.277    16.031  25632
+AGT    S     0.151     8.723  13947
+TCA    S     0.123     7.137  11411
+TCC    S     0.148     8.591  13736
+TCG    S     0.154     8.916  14256
+TCT    S     0.147     8.507  13601
+ACA    T     0.131     7.035  11248
+ACC    T     0.435    23.362  37354
+ACG    T     0.268    14.371  22977
+ACT    T     0.166     8.922  14265
+GTA    V     0.154    10.883  17400
+GTC    V     0.215    15.221  24336
+GTG    V     0.371    26.253  41976
+GTT    V     0.260    18.394  29410
+TGG    W     1.000    15.303  24468
+TAC    Y     0.429    12.243  19576
+TAT    Y     0.571    16.326  26103
+TAA    *     0.642     2.025   3237
+TAG    *     0.072     0.228    365
+TGA    *     0.286     0.902   1443
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+None
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+<ol>
+
+<li>
+
+</ol>
+
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="biosed.html">biosed</a></td>
+<td>Replace or delete sequence sections</td>
+</tr>
+
+<tr>
+<td><a href="cutseq.html">cutseq</a></td>
+<td>Removes a specified section from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="degapseq.html">degapseq</a></td>
+<td>Removes gap characters from sequences</td>
+</tr>
+
+<tr>
+<td><a href="descseq.html">descseq</a></td>
+<td>Alter the name or description of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="entret.html">entret</a></td>
+<td>Reads and writes (returns) flatfile entries</td>
+</tr>
+
+<tr>
+<td><a href="extractalign.html">extractalign</a></td>
+<td>Extract regions from a sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="extractfeat.html">extractfeat</a></td>
+<td>Extract features from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="extractseq.html">extractseq</a></td>
+<td>Extract regions from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="listor.html">listor</a></td>
+<td>Write a list file of the logical OR of two sets of sequences</td>
+</tr>
+
+<tr>
+<td><a href="makenucseq.html">makenucseq</a></td>
+<td>Creates random nucleotide sequences</td>
+</tr>
+
+<tr>
+<td><a href="makeprotseq.html">makeprotseq</a></td>
+<td>Creates random protein sequences</td>
+</tr>
+
+<tr>
+<td><a href="maskfeat.html">maskfeat</a></td>
+<td>Mask off features of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="maskseq.html">maskseq</a></td>
+<td>Mask off regions of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="newseq.html">newseq</a></td>
+<td>Type in a short new sequence</td>
+</tr>
+
+<tr>
+<td><a href="noreturn.html">noreturn</a></td>
+<td>Removes carriage return from ASCII files</td>
+</tr>
+
+<tr>
+<td><a href="notseq.html">notseq</a></td>
+<td>Exclude a set of sequences and write out the remaining ones</td>
+</tr>
+
+<tr>
+<td><a href="nthseq.html">nthseq</a></td>
+<td>Writes one sequence from a multiple set of sequences</td>
+</tr>
+
+<tr>
+<td><a href="pasteseq.html">pasteseq</a></td>
+<td>Insert one sequence into another</td>
+</tr>
+
+<tr>
+<td><a href="revseq.html">revseq</a></td>
+<td>Reverse and complement a sequence</td>
+</tr>
+
+<tr>
+<td><a href="seqret.html">seqret</a></td>
+<td>Reads and writes (returns) sequences</td>
+</tr>
+
+<tr>
+<td><a href="seqretsplit.html">seqretsplit</a></td>
+<td>Reads and writes (returns) sequences in individual files</td>
+</tr>
+
+<tr>
+<td><a href="skipseq.html">skipseq</a></td>
+<td>Reads and writes (returns) sequences, skipping first few</td>
+</tr>
+
+<tr>
+<td><a href="splitter.html">splitter</a></td>
+<td>Split a sequence into (overlapping) smaller sequences</td>
+</tr>
+
+<tr>
+<td><a href="trimest.html">trimest</a></td>
+<td>Trim poly-A tails off EST sequences</td>
+</tr>
+
+<tr>
+<td><a href="trimseq.html">trimseq</a></td>
+<td>Trim ambiguous bits off the ends of sequences</td>
+</tr>
+
+<tr>
+<td><a href="union.html">union</a></td>
+<td>Reads sequence fragments and builds one sequence</td>
+</tr>
+
+<tr>
+<td><a href="vectorstrip.html">vectorstrip</a></td>
+<td>Strips out DNA between a pair of vector sequences</td>
+</tr>
+
+<tr>
+<td><a href="yank.html">yank</a></td>
+<td>Reads a sequence range, appends the full USA to a list file</td>
+</tr>
+
+</table>
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
+
+
+
+<H2>
+    History
+</H2>
+<!--
+        Date written and what changes have been made go in this file.
+   -->
+
+
+
+
+<H2>
+    Target users
+</H2>
+<!--
+        For general users, use this text
+   -->
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+<!--
+        User/developer/other comments go in this file.
+   -->
+None
+
+
+</BODY>
+</HTML>
+

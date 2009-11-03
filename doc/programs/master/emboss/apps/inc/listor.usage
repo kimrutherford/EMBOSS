@@ -1,0 +1,63 @@
+<b>Here is a sample session with listor</b>
+<p>
+Write the logical OR of two lists: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>listor ../data/file2 </b>
+Write a list file of the logical OR of two sets of sequences
+List of USAs output file [file1.list]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+Write the logical AND of two lists: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>listor ../data/file2 -operator and </b>
+Write a list file of the logical OR of two sets of sequences
+List of USAs output file [file1.list]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+Write the logical XOR of two lists: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>listor ../data/file2 -operator xor </b>
+Write a list file of the logical OR of two sets of sequences
+List of USAs output file [file1.list]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.3">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 4</b>
+<p>
+Write the logical NOT of two lists: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>listor ../data/file2 -operator not </b>
+Write a list file of the logical OR of two sets of sequences
+List of USAs output file [file1.list]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.4">Go to the output files for this example</a><p><p>

@@ -1,0 +1,178 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: chips
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+chips
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/chips.ione" -->
+
+<H2>
+    Description
+</H2>
+
+
+<b>chips</b> calculates Frank Wright's Nc statistic for the effective
+number of codons used (ref 1). 
+
+<p>
+
+This is a simple measure that quantifies how far the codon usage of a
+gene departs from equal usage of synonymous codons.  This measure of
+synonymous codon usage bias, the 'effective number of codons used in a
+gene', Nc, can be easily calculated from codon usage data alone, and is
+independent of gene length and amino acid (aa) composition.  Nc can take
+values from 20, in the case of extreme bias where one codon is
+exclusively used for each aa, to 61 when the use of alternative
+synonymous codons is equally likely.  Nc thus provides an intuitively
+meaningful measure of the extent of codon preference in a gene. 
+
+<p>
+
+The Nc statistic has problems in very short sequences (20 amino acids
+or less) which are yet to be fully resolved. They are caused by the
+need to consider amino acids which are missing in the sequence.
+
+<p>
+This calculation was originally in the EGCG package as "codfish"
+(codon usage for fission yeast). As Frank Wright is a vegan, we looked
+for a meat-free name for the EMBOSS version, "chips". The official
+explanation is "Codon Heterozygosity (Inverse of) in a
+Protein-coding Sequence"
+
+<p>
+
+If the sequence extends beyond the coding region then the start and/or
+end positions of the CDS must be provided because chips analyses
+exclusively protein coding regions. 
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/chips.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/chips.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/chips.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+A nucleic acid sequence USA.
+
+<p>
+<!--#include file="inc/chips.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+If all codons are used, the Nc value will be 61. If only one codon is
+used for each amino acid the Nc value will be 20. Low values therefore
+indicate a strong codon bias, and high values indicate a low bias (and
+possibly a non-coding region).
+<p>
+<!--#include file="inc/chips.output" -->
+
+<H2>
+    Data files
+</H2>
+
+<b>chips</b> reads a codon usage file but only as a template and ignores the
+original data.
+
+<p>
+The codon usage table is by default the file "CODONS/Ehum.cut"
+in the EMBOSS distribution directory.
+
+<p>
+<!--#include file="inc/localfiles.ihtml" -->
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+<ol>
+
+<li>
+Wright, F. (1990) Gene 87:23-29
+"The 'effective number of codons' used in a gene."
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+
+<!--#include file="inc/chips.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/ableasby.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/chips.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/chips.comment" -->
+
+
+</BODY>
+</HTML>
+

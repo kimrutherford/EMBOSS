@@ -1,0 +1,48 @@
+<b>Here is a sample session with showfeat</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showfeat </b>
+Show features of a sequence.
+Input sequence(s): <b>tembl:x65921</b>
+Output file [x65921.showfeat]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+Display 'joined' features on one line with positions: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showfeat -sort join -pos </b>
+Show features of a sequence.
+Input sequence(s): <b>tembl:x65921</b>
+Output file [x65921.showfeat]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+Display just positions and names of CDS features - this can be used as a regions file in showseq: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showfeat -matchtype CDS -width 0 -noid -nodesc -noscale -pos  </b>
+Show features of a sequence.
+Input sequence(s): <b>tembl:x65921</b>
+Output file [x65921.showfeat]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.3">Go to the output files for this example</a><p><p>

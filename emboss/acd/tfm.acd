@@ -1,0 +1,55 @@
+application: tfm [
+  documentation: "Displays a program's help documentation
+                  manual"
+  groups: "Information"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  string: program [
+    parameter: "Y"
+    default: ""
+    information: "Program to search for"
+    help: "Enter the name of an EMBOSS program"
+    minlength: "1"
+    knowntype: "emboss program"
+  ]
+
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    additional: "Y"
+    default: "stdout"
+    knowntype: "text documentation"
+    information: "Program documentation text output file"
+  ]
+
+  boolean: html [
+    additional: "Y"
+    default: "N"
+    information: "Format the output for HTML"
+    help: "This will format the output for displaying as a WWW
+           document."
+    outputmodifier: "Y"
+  ]
+
+  boolean: more [
+    additional: "Y"
+    default: "@(!$(html))"
+    information: "Display a screenful at a time"
+    help: "This uses the standard UNIX utility 'more' to display the
+           text page-by-page, waiting for you to read one screen-full before
+           going on to the next page. When you have finished reading a page,
+           press the SPACE bar to proceed to the next page."
+    outputmodifier: "Y"
+  ]
+
+endsection: output

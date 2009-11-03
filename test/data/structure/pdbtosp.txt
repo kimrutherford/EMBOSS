@@ -1,0 +1,55 @@
+  ------------------------------------------------------------------------
+   ExPASy Home page   Site Map    Search ExPASy   Contact us    SWISS-PROT
+
+ Hosted by SIB       Mirror                                        USA[new]
+ Switzerland         sites:      AustraliaCanada China Korea Taiwan
+  ------------------------------------------------------------------------
+
+----------------------------------------------------------------------------
+        SWISS-PROT Protein Knowledgebase
+        Swiss Institute of Bioinformatics (SIB); Geneva, Switzerland
+        European Bioinformatics Institute (EBI); Hinxton, United Kingdom
+----------------------------------------------------------------------------
+
+Description: Index of Protein Data Bank (PDB) entries referenced in
+             SWISS-PROT
+Name:        PDBTOSP.TXT
+Release:     40.9 of 31-Jan-2002
+
+----------------------------------------------------------------------------
+
+The PDB database is available at the following URL:
+
+USA:  http://www.rcsb.org/pdb/
+EBI:  http://www2.ebi.ac.uk/pdb/
+
+ - Number of PDB entries referenced in SWISS-PROT: 9901
+ - Number of SWISS-PROT entries with one or more pointers to PDB: 3260
+
+PDB   Last revision
+code  date           SWISS-PROT entry name(s)
+____  ___________    __________________________________________
+101M  (08-APR-98)  : MYG_PHYCA   (P02185)
+102L  (31-OCT-93)  : LYCV_BPT4   (P00720)
+102M  (08-APR-98)  : MYG_PHYCA   (P02185)
+103L  (31-OCT-93)  : LYCV_BPT4   (P00720)
+103M  (08-APR-98)  : MYG_PHYCA   (P02185)
+9XIA  (15-JUL-92)  : XYLA_STRRU  (P24300)
+9XIM  (15-JUL-93)  : XYLA_ACTMI  (P12851)
+
+----------------------------------------------------------------------------
+SWISS-PROT is copyright.  It is produced through a collaboration between the
+Swiss Institute  of  Bioinformatics   and the EMBL Outstation - the European
+Bioinformatics Institute. There are no restrictions on its use by non-profit
+institutions as long as its  content is in no way modified. Usage by and for
+commercial entities requires a license agreement.  For information about the
+licensing  scheme  see: http://www.isb-sib.ch/announce/ or send  an email to
+license@isb-sib.ch.
+----------------------------------------------------------------------------
+
+  ------------------------------------------------------------------------
+   ExPASy Home page   Site Map    Search ExPASy   Contact us    SWISS-PROT
+
+ Hosted by SIB       Mirror                                        USA[new]
+ Switzerland         sites:      AustraliaCanada China Korea Taiwan
+  ------------------------------------------------------------------------

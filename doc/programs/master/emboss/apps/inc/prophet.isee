@@ -1,0 +1,14 @@
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="profit.html">profit</a></td>
+<td>Scan a sequence or database with a matrix or profile</td>
+</tr>
+
+<tr>
+<td><a href="prophecy.html">prophecy</a></td>
+<td>Creates matrices/profiles from multiple alignments</td>
+</tr>
+
+</table>

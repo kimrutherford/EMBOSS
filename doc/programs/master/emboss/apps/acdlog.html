@@ -1,0 +1,153 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: acdlog
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+acdlog
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/acdlog.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+Acdlog allows developers to see the detail of ACD file parsing and
+processing.
+
+<p>
+Acdlog does not have its own command line. Instead, it will run the
+command line of any EMBOSS program by reading its ACD file and
+processing the command line and user responses in exactly the same way
+as the true program.
+
+<p>
+Acdlog uses a very simple method. The first command line parameter is
+the name of the EMBOSS program to be compiled. All other command line
+parameters and qualifiers are processed by that program's ACD file.
+
+<p>
+Processing of the ACD file is reported to a file with the same name as
+the program, and the extension ".acdlog".
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/acdlog.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+The first parameter is the name of the program to compile.
+
+All other command line parameters and qualifiers are defined for that
+program - see the documentation for the program of choice.
+
+<P>
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<p>
+
+The output file of the program being logged is empty, but any format
+available to the specified program can be used.
+
+<p>
+The processing output is written to a file with the extension ".acdlog"
+<p>
+<!--#include file="inc/acdlog.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+
+Acdlog will use any data files specified in the ACD file of the
+specified program, but will ignore any data files that are only used
+directly by the program's code.
+
+<!--#include file="inc/localfiles.ihtml" -->
+
+<H2>
+    Notes
+</H2>
+
+
+<H2>
+    References
+</H2>
+
+
+<H2>
+    Warnings
+</H2>
+
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+
+<H2>
+    Exit status
+</H2>
+
+
+It exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+
+None.
+
+
+<!--#include file="inc/acdlog.isee" -->
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/price.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/acdlog.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/targetdev.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/acdlog.comment" -->
+
+
+
+</BODY>
+</HTML>
+

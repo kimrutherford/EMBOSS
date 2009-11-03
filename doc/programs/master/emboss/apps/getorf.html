@@ -1,0 +1,219 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: getorf
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+getorf
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/getorf.ione" -->
+
+<H2>
+    Description
+</H2>
+
+This program finds and outputs the sequences of open reading frames
+(ORFs).
+
+<p>
+The ORFs can be defined as regions of a specified minimum size between
+STOP codons or between START and STOP codons.  
+
+<p>
+The ORFs can be output as the nucleotide sequence or as the translation. 
+
+<p>
+The program can also output the region around the START or the initial
+STOP codon or the ending STOP codons of an ORF for those doing analysis
+of the properties of these regions. 
+
+<p>
+The START and STOP codons are defined in the Genetic Code tables.
+A suitable Genetic Code table can be selected for the organism you are
+investigating. 
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/getorf.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/getorf.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/getorf.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+
+<b>getorf</b> reads any nucleic acid sequence USA.
+
+<p>
+<!--#include file="inc/getorf.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+
+The output is a sequence file containing predicted open reading frames
+longer than the minimum size, which defaults to 30 bases (i.e. 10 amino acids).
+
+<p>
+<!--#include file="inc/getorf.output" -->
+
+<p> 
+
+The name of the ORF sequences is constructed from the name of the
+input sequence with an underscore character ('_') and a unique ordinal number
+of the ORF found appended.  The description of the output ORF sequence
+is constructed from the description of the input sequence with the start
+and end positions of the ORF prepended.  
+
+<p>
+
+The unique number appended to the name is simply used to create new
+unique sequence names, it does not imply any further information
+indicating any order, positioning or sense-strand of the ORFs. 
+
+<p>
+
+If the ORF has been found in the reverse sense, then the start position
+will be smaller than the end position.  The numbering uses the
+forward-sense positions, but read in the reverse sense.  For example,
+<b>&gt;ECLACI_3 [465 - 49]</b> in the output above is a reverse-sense
+ORF running from position 465 to 49.  The description will also contain
+'(REVERSE SENSE)'. 
+
+<p>
+
+If the sequence has been specified as a circular genome (using the
+command-line switch '-circular'), then ORFs can potentially continue
+past the 'end' of the input sequence (the breakpoint of the circular
+genome) and into the 'start' of the sequence again.  This is dealt with
+by appending the sequence to itself three times and reporting long ORFs
+that are found in this extended sequence.  Any ORF that is longer that
+three times the sequence length (i.e one that continues without hitting
+a STOP at any point in the genome) will be reported as being a maximum
+of three times the length of the input sequence.  Note that the end
+position of an ORF in circular genomes can be apparently longer than the
+input sequence if the ORF crosses the breakpoint.  If the ORF crosses
+the breakpoint, then the text '(ORF crosses the breakpoint)' will be
+added to the description of the output sequence. 
+
+<H2>
+    Data files
+</H2>
+
+The START and STOP codons used by <b>getorf</b> are defined in the
+Genetic Code data files. By default, Genetic Code file <b>EGC.0</b>
+is used.
+<p>
+
+The default file <b>EGC.0</b> is the 'Standard Code' with the rarely
+used alternate START codons omitted, it only has the normal 'AUG' START
+codon.  The 'Standard Code' with the rarely used alternate START codons
+included is Genetic Code file <b>EGC.1</b>. 
+
+<p>
+
+It is expected that user will sometimes wish to customise a Genetic Code
+file. To do this, use the program <b>embossdata</b>.
+
+<p>
+
+<!--#include file="inc/localfiles.ihtml" -->
+
+<p>
+<!--#include file="inc/gcfiles.ihtml" -->
+
+
+
+<H2>
+    Notes
+</H2>
+
+If you have selected one of the options to report a regions around a
+START or STOP codon, then note that any such region that crosses the
+beginning or end of the sequence will not be reported. 
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+
+It always exits with status 0. 
+
+<H2>
+    Known bugs
+</H2>
+
+'-sbegin' and -send' do not work with this program.
+
+<!--#include file="inc/getorf.isee" -->
+<P>
+<ul>
+
+<li><a href="checktrans.html">checktrans</a> - Reports STOP codons
+and ORF statistics of a protein sequence
+
+</ul>
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/gwilliam.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/getorf.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/getorf.comment" -->
+
+</BODY>
+</HTML>
+

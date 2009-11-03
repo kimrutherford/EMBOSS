@@ -1,0 +1,31 @@
+<h3>Fasta output format</h3>
+
+<h4>Question</h4>
+When i tried to convert the EMBL format file into fasta format using the
+program "<b>seqret</b>", I found that the Access.no appears twice... 
+
+<p>
+
+<pre>
+&gt;AF102796 AF102796 Homo sapiens alphaE-catenin (CTNNA1) gene, exon 11.
+</pre>
+<p>
+
+<h4>Answer</h4>
+
+"It is not a bug ... it is a feature"
+<p>
+
+
+There are many "FASTA formats". EMBOSS uses the format that ACEDB and the
+EBI genome projects use. The first field after the ID is the
+accession number, so that accession numbers can be kept when sequences are
+converted to FASTA format, without using the NCBI format (with '|'
+characters in the IDs).
+<p>
+
+Your EMBL format file has IDs that look like accession numbers, so
+EMBOSS fills in the accession number for each sequence, and reports it
+in the FASTA format. 
+
+

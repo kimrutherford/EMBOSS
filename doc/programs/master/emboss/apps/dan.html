@@ -1,0 +1,200 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: dan
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+dan
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/dan.ione" -->
+
+<H2>
+    Description
+</H2>
+
+Dan calculates the melting temperature (Tm) and the percent G+C of a
+nucleic acid sequence (optionally plotting them).  For the Melting
+temperature profile, free energy values calculated from nearest neighbor
+thermodynamics are used (Breslauer et al.  Proc.  Natl.  Acad.  Sci. 
+USA 83, 3746-3750 and Baldino et al.  Methods in Enzymol.  168,
+761-777). 
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/dan.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/dan.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/dan.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+Any DNA or RNA sequence USA. 
+
+<p>
+<!--#include file="inc/dan.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+If a plot is not being produced, dan reports the sequence of each
+oligomer window, its melting temperature under the specified conditions
+and its GC content. 
+
+<p>
+<!--#include file="inc/reportformats.ihtml" -->
+<p>
+
+By default <b>dan</b> writes a 'seqtable' report file.
+
+<p>
+<!--#include file="inc/dan.output" -->
+<p>
+
+The header information contains details of the program, date and sequence
+
+<p>
+Subsequent lines contain columns of data for each window into the
+sequence as it is moved along, giving:
+
+<p>
+<ul>
+<li> The start postion of the window
+<li> The end position of the window
+<li> The melting temperature of the window
+<li> The percentage C+G of the window
+<li> The sequence of the window
+</ul>
+
+
+<p>
+
+If the qualifier '-product' is used to make the program prompt for
+percent formamide percent of mismatches allowed and product length, then
+the output includes the melting temperature of the specified product.
+
+<p>
+
+If the qualifier '-thermo' is gived then the DeltaG, DeltaH and DeltaS
+of the sequence in the window is also output. 
+
+<H2>
+    Data files
+</H2>
+
+
+The EMBOSS data files "Edna.melt" and "Erna.melt" are used to read in the
+entropy/enthalpy/energy data for DNA and RNA respectively. 
+
+<!--#include file="inc/localfiles.ihtml" -->
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+
+<H2>
+    References
+</H2>
+
+<ol>
+
+<li>
+Breslauer, K.J., Frank, R., Blocker, H., and Marky, L.A.  (1986). 
+"Predicting DNA Duplex Stability from the Base Sequence." Proceedings of
+the National Academy of Sciences USA 83, 3746-3750. 
+
+<li>
+Baldino, M., Jr.  (1989).  "High Resolution In Situ Hybridization
+Histochemistry." In Methods in Enzymology, (P.M.  Conn, ed.), 168,
+761-777, Academic Press, San Diego, California, USA. 
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+
+RNA sequences must be submited to this application with the '-rna'
+qualifier on the command line, otherwise the sequence will be assumed to
+be DNA. 
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+
+0 if successful. 
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/dan.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+This program was originally included in EGCG under the names "MELT"
+and "MELTPLOT", written by 
+<!--#include file="inc/rlopez.address" -->
+
+
+<p>
+This application was written by 
+<!--#include file="inc/ableasby.address" -->
+
+
+<H2>
+    History
+</H2>
+
+<!--#include file="inc/dan.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/dan.comment" -->
+
+</BODY>
+</HTML>
+

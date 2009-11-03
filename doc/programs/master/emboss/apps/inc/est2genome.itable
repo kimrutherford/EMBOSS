@@ -1,0 +1,147 @@
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-estsequence]<br>(Parameter 1)</td>
+<td>Spliced EST nucleotide sequence(s)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-genomesequence]<br>(Parameter 2)</td>
+<td>Unspliced genomic nucleotide sequence</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 3)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.est2genome</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-match</td>
+<td>Score for matching two bases</td>
+<td>Any integer value</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-mismatch</td>
+<td>Cost for mismatching two bases</td>
+<td>Any integer value</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-gappenalty</td>
+<td>Cost for deleting a single base in either sequence, excluding introns</td>
+<td>Any integer value</td>
+<td>2</td>
+</tr>
+
+<tr>
+<td>-intronpenalty</td>
+<td>Cost for an intron, independent of length.</td>
+<td>Any integer value</td>
+<td>40</td>
+</tr>
+
+<tr>
+<td>-splicepenalty</td>
+<td>Cost for an intron, independent of length and starting/ending on donor-acceptor sites</td>
+<td>Any integer value</td>
+<td>20</td>
+</tr>
+
+<tr>
+<td>-minscore</td>
+<td>Exclude alignments with scores below this threshold score.</td>
+<td>Any integer value</td>
+<td>30</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-reverse</td>
+<td>Reverse the orientation of the EST sequence</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]splice</td>
+<td>Use donor and acceptor splice sites. If you want to ignore donor-acceptor sites then set this to be false.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-mode</td>
+<td>This determines the comparion mode. The default value is 'both', in which case both strands of the est are compared assuming a forward gene direction (ie GT/AG splice sites), and the best comparsion redone assuming a reversed (CT/AC) gene splicing direction. The other allowed modes are 'forward', when just the forward strand is searched, and 'reverse', ditto for the reverse strand.</td>
+<td><table><tr><td>both</td> <td><i>(Both strands)</i></td></tr><tr><td>forward</td> <td><i>(Forward strand only)</i></td></tr><tr><td>reverse</td> <td><i>(Reverse strand only)</i></td></tr></table></td>
+<td>both</td>
+</tr>
+
+<tr>
+<td>-[no]best</td>
+<td>You can print out all comparisons instead of just the best one by setting this to be false.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-space</td>
+<td>For linear-space recursion. If product of sequence lengths divided by 4 exceeds this then a divide-and-conquer strategy is used to control the memory requirements. In this way very long sequences can be aligned.
+If you have a machine with plenty of memory you can raise this parameter (but do not exceed the machine's physical RAM)</td>
+<td>Any numeric value</td>
+<td>10.0</td>
+</tr>
+
+<tr>
+<td>-shuffle</td>
+<td>Shuffle</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-seed</td>
+<td>Random number seed</td>
+<td>Any integer value</td>
+<td>20825</td>
+</tr>
+
+<tr>
+<td>-align</td>
+<td>Show the alignment. The alignment includes the first and last 5 bases of each intron, together with the intron width. The direction of splicing is indicated by angle brackets (forward or reverse) or ???? (unknown).</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-width</td>
+<td>Alignment width</td>
+<td>Any integer value</td>
+<td>50</td>
+</tr>
+
+</table>

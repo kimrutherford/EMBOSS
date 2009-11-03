@@ -1,0 +1,46 @@
+# Molecular weights of amino acids
+# Also classified as:
+#  Tiny, Small, Aliphatic, Aromatic, Non-polar, Polar, Charge, +ve, -ve
+#
+# Extinction coefficients are based on the values of Gill and von Hippel
+# (1989) _Anal_Biochem_ 182 319-326.
+# They are for proteins with full reduced cysteine residues.  If all
+# cysteines are oxidized to cystine, use
+# a value of 60 for C.
+#
+# Value for Selenocysteine calculated from Cysteine by replacing S
+# with Se.
+#
+# J is an ambiguity code for Isoleucine or Leucine for Mass Spec data
+# These have identical properties in this file.
+#
+# O is pyrrolysine in Archaea. Molecular weight from Expasy FindMod.
+# Properties assumed to be the same as lysine
+#
+A 	 71.0786	 1 1 1 0 1 0 0   0 0 0
+B 	114.5960	 0 1 0 0 0 0 -.5 0 1 0
+C 	103.1386	 1 1 0 0 1 0 0   0 0 0
+D 	115.0884	 0 1 0 0 0 1 -1  0 1 0
+E 	129.1152	 0 0 0 0 0 1 -1  0 1 0
+F 	147.1762	 0 0 0 1 1 0 0   0 0 0
+G 	 57.0518	 1 1 0 0 1 0 0   0 0 0
+H 	137.1408	 0 0 0 1 0 1 .5  1 0 0
+I 	113.1590	 0 0 1 0 1 0 0   0 0 0
+J	113.1590	 0 0 1 0 1 0 0   0 0 0
+K	128.1736	 0 0 0 0 0 1 1   1 0 0
+L 	113.1590	 0 0 1 0 1 0 0   0 0 0
+# If met gets oxidised to the sulphoxide replace by 147.1926
+M 	131.1926	 0 0 0 0 1 0 0   0 0 0
+N 	114.1036	 0 1 0 0 0 1 0   0 0 0
+O	109.0528	 0 0 0 0 0 1 1   1 0 0
+P 	 97.1164	 0 1 0 0 1 0 0   0 0 0
+Q	128.1304	 0 0 0 0 0 1 0   0 0 0
+R 	156.1870	 0 0 0 0 0 1 1   1 0 0
+S	 87.0780	 1 1 0 0 0 1 0   0 0 0
+T	101.1048	 1 1 0 0 0 1 0   0 0 0
+U 	150.0326	 1 1 0 0 1 0 0   0 0 0
+V	 99.1322	 0 1 1 0 1 0 0   0 0 0
+W	186.2128	 0 0 0 1 1 0 0   0 0 5690
+X	144.0000	 0 0 0 0 0 0 0   0 0 0
+Y	163.1756	 0 0 0 1 1 0 0   0 0 1280
+Z 	128.6228	 0 0 0 0 0 1 -.5 0 1 0

@@ -1,0 +1,142 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: actb1_fugru.antigenic</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: antigenic
+# Rundate: Sun 15 Jul 2007 12:00:00
+# Commandline: antigenic
+#    -sequence tsw:actb1_fugru
+# Report_format: motif
+# Report_file: actb1_fugru.antigenic
+########################################
+
+#=======================================
+#
+# Sequence: ACTB1_FUGRU     from: 1   to: 375
+# HitCount: 18
+#=======================================
+
+Max_score_pos at "*"
+
+(1) Score 1.207 length 9 at residues 214-&gt;222
+               *
+ Sequence: EKLCYVALD
+           |       |
+         214       222
+
+(2) Score 1.187 length 15 at residues 131-&gt;145
+                 *
+ Sequence: AMYVAIQAVLSLYAS
+           |             |
+         131             145
+
+(3) Score 1.166 length 8 at residues 5-&gt;12
+              *
+ Sequence: IAALVVDN
+           |      |
+           5      12
+
+(4) Score 1.164 length 12 at residues 27-&gt;38
+                *
+ Sequence: PRAVFPSIVGRP
+           |          |
+          27          38
+
+(5) Score 1.136 length 24 at residues 160-&gt;183
+                        *
+ Sequence: THTVPIYEGYALPHAILRLDLAGR
+           |                      |
+         160                      183
+
+(6) Score 1.135 length 6 at residues 367-&gt;372
+                *
+ Sequence: PSIVHR
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+(11) Score 1.102 length 15 at residues 62-&gt;76
+                 *
+ Sequence: RGILTLKYPIEHGIV
+           |             |
+          62             76
+
+(12) Score 1.086 length 19 at residues 232-&gt;250
+                        *
+ Sequence: SSSSLEKSYELPDGQVITI
+           |                 |
+         232                 250
+
+(13) Score 1.083 length 6 at residues 327-&gt;332
+              *
+ Sequence: IKIIAP
+           |    |
+         327    332
+
+(14) Score 1.074 length 7 at residues 317-&gt;323
+              *
+ Sequence: ITALAPS
+           |     |
+         317     323
+
+(15) Score 1.068 length 7 at residues 186-&gt;192
+                *
+ Sequence: TDYLMKI
+           |     |
+         186     192
+
+(16) Score 1.066 length 7 at residues 40-&gt;46
+              *
+ Sequence: HQGVMVG
+           |     |
+          40     46
+
+(17) Score 1.045 length 7 at residues 269-&gt;275
+           *
+ Sequence: MESCGIH
+           |     |
+         269     275
+
+(18) Score 1.034 length 7 at residues 51-&gt;57
+            *
+ Sequence: DSYVGDE
+           |     |
+          51     57
+
+
+#---------------------------------------
+#---------------------------------------
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: actb1_fugru.antigenic</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+##gff-version 2.0
+##date 2006-07-15
+##Type Protein ACTB1_FUGRU
+ACTB1_FUGRU	antigenic	region	214	222	1.207	+	.	Sequence "ACTB1_FUGRU.1" ; note "*pos 218"
+ACTB1_FUGRU	antigenic	region	131	145	1.187	+	.	Sequence "ACTB1_FUGRU.2" ; note "*pos 137"
+ACTB1_FUGRU	antigenic	region	5	12	1.166	+	.	Sequence "ACTB1_FUGRU.3" ; note "*pos 8"
+ACTB1_FUGRU	antigenic	region	27	38	1.164	+	.	Sequence "ACTB1_FUGRU.4" ; note "*pos 32"
+ACTB1_FUGRU	antigenic	region	160	183	1.136	+	.	Sequence "ACTB1_FUGRU.5" ; note "*pos 173"
+ACTB1_FUGRU	antigenic	region	367	372	1.135	+	.	Sequence "ACTB1_FUGRU.6" ; note "*pos 372"
+ACTB1_FUGRU	antigenic	region	93	108	1.116	+	.	Sequence "ACTB1_FUGRU.7" ; note "*pos 103"
+ACTB1_FUGRU	antigenic	region	295	301	1.113	+	.	Sequence "ACTB1_FUGRU.8" ; note "*pos 296"
+ACTB1_FUGRU	antigenic	region	256	266	1.110	+	.	Sequence "ACTB1_FUGRU.9" ; note "*pos 264"
+ACTB1_FUGRU	antigenic	region	336	352	1.107	+	.	Sequence "ACTB1_FUGRU.10" ; note "*pos 347"
+ACTB1_FUGRU	antigenic	region	62	76	1.102	+	.	Sequence "ACTB1_FUGRU.11" ; note "*pos 68"
+ACTB1_FUGRU	antigenic	region	232	250	1.086	+	.	Sequence "ACTB1_FUGRU.12" ; note "*pos 245"
+ACTB1_FUGRU	antigenic	region	327	332	1.083	+	.	Sequence "ACTB1_FUGRU.13" ; note "*pos 330"
+ACTB1_FUGRU	antigenic	region	317	323	1.074	+	.	Sequence "ACTB1_FUGRU.14" ; note "*pos 320"
+ACTB1_FUGRU	antigenic	region	186	192	1.068	+	.	Sequence "ACTB1_FUGRU.15" ; note "*pos 191"
+ACTB1_FUGRU	antigenic	region	40	46	1.066	+	.	Sequence "ACTB1_FUGRU.16" ; note "*pos 43"
+ACTB1_FUGRU	antigenic	region	269	275	1.045	+	.	Sequence "ACTB1_FUGRU.17" ; note "*pos 269"
+ACTB1_FUGRU	antigenic	region	51	57	1.034	+	.	Sequence "ACTB1_FUGRU.18" ; note "*pos 52"
+</pre>
+</td></tr></table><p>

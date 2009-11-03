@@ -1,0 +1,40 @@
+application: chips [
+  documentation: "Codon usage statistics"
+  groups: "Nucleic:Codon usage"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: seqall [
+    parameter: "Y"
+    type: "DNA"
+  ]
+
+endsection: input
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  boolean: sum [
+    default: "Y"
+    information: "Sum codons over all sequences"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    knowntype: "chips output"
+  ]
+
+endsection: output

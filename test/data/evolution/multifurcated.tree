@@ -1,0 +1,6 @@
+  5
+((Epsilon,Delta),(Gamma,Beta,Alpha));
+((Epsilon,Delta),(Gamma,Beta));
+(B,(A,D),C);
+(A,(B,C),D);
+((A,D),(C,B));

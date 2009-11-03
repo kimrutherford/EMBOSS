@@ -1,0 +1,205 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: restrict
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+<!--#include file="header1.inc" -->
+restrict
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/restrict.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+
+Restrict uses the REBASE database of restriction enzymes to predict
+cut sites in a DNA sequence. The program allows you to select a range
+of cuts, whether the DNA is circular, whether IUB ambiguity codes are
+used, whether blunt or sticky ends or both are reported. You may also
+force the reporting of single cleavage sites.
+
+<p>
+
+By default, only one of any group of isoschizomers (enzymes that have
+the same recognition site and cut positions) is reported (this
+behaviour can be turned off by setting the qualifier '-limit' to be
+false.) The reported enzyme from any one group of isoschizomers (the
+prototype) is specified in the REBASE database and the information is
+held in the data file 'embossre.equ'.  You may edit this file to set
+your own preferred prototype,if you wish.
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/restrict.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/restrict.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/restrict.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<b>restrict</b> reads one or more DNA sequence USAs.
+
+<p>
+
+<!--#include file="inc/restrict.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+
+<!--#include file="inc/reportformats.ihtml" -->
+
+<p>
+
+By default <b>restrict</b> writes a 'table' report file.
+
+<p>
+
+<!--#include file="inc/restrict.output" -->
+
+<p>
+
+The output from restrict is a simple text one. The base number,
+restriction enzyme name, recognition site and cut positions are
+shown. Note that cuts are always to the right of the residue
+shown and that 5' cuts are referred to by their associated 3'
+number sequence.
+
+<p>
+
+The program reports enzymes that cut at two or four sites. The
+program also reports isoschizomers and enzymes having the same
+recognition sequence but different cut sites.
+
+
+<p>
+
+When the "-fragments" or "-solofragments" qualifiers are given then the sizes of
+the fragments produced by either all of the specified enzymes cutting, or
+by each enzyme cutting individually, are given in the 'tail' section
+at the end of the report file.
+
+<H2>
+    Data files
+</H2>
+
+<!--#include file="inc/localfiles.ihtml" -->
+<p>
+<!--#include file="inc/refiles.ihtml" -->
+
+
+
+<H2>
+    Notes
+</H2>
+
+
+Output file size is related to the size of the recognition site and the
+maximum number of allowed cutting positions. Setting the site length
+to six and restricting the cuts to two is a common choice of parameters.
+The size of the output can sometimes be reduced by specifying
+the -noambiguity switch.
+<p>
+
+The data files must have been created before running this
+program. This is done by running the <b>rebaseextract</b> program with
+the "withrefm" and "prot" files from an REBASE release. You may have
+to ask your system manager to do this.
+
+<H2>
+    References
+</H2>
+
+
+<ol>
+
+<li>
+Nucleic Acids Research 27: 312-313 (1999).
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+
+The program will warn you if a protein sequence is given.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+
+It exits with status 0 unless an error is reported.
+
+<H2>
+    Known bugs
+</H2>
+
+
+None.
+
+<!--#include file="inc/restrict.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/ableasby.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/restrict.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/restrict.comment" -->
+
+
+
+
+</BODY>
+</HTML>
+

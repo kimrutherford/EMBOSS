@@ -1,0 +1,338 @@
+
+                                  trimseq 
+
+
+
+Function
+
+   Trim ambiguous bits off the ends of sequences
+
+Description
+
+   This program is used to tidy up the ends of sequences, removing all
+   the bits that you would really rather were not published.
+
+   Specifically, it:
+     * removes all gap characters from the ends.
+     * removes X's and N's (in nucleic sequences) from the ends.
+     * optionally removes *'s from the ends
+     * optionally removes IUPAC ambiguity codes from the ends (B and Z in
+       proteins, M,R,W,S,Y,K,V,H,D and B in nucleic sequences)
+
+   It then optionally trims off poor quality regions from the end, using
+   a threshold percentage of unwanted characters in a window which is
+   moved along the sequence from the ends. The unwanted characters which
+   are used are X's and N's (in nucleic sequences), optionally *'s, and
+   optionally IUPAC ambiguity codes.
+
+   The program stops trimming the ends when the percentage of unwanted
+   characters in the moving window drops below the threshold percentage.
+
+   Thus if the window size is set to 1 and the percentage threshold is
+   100, no further poor quality regions will be removed. If the window
+   size is set to 5 and the percentage threshold is 40 then the sequence
+   AAGCTNNNNATT will be trimmed to AAGCT, while AAGCTNATT or
+   AAGCTNNNNATTT will not be trimmed as less than 40% of the last 5
+   characters are N's.
+
+   After trimming these poor quality regions, it will again then trim off
+   any dangling gap characters from the ends .
+
+Usage
+
+   Here is a sample session with trimseq
+
+
+% trimseq untrimmed.seq trim1.seq -window 1 -percent 100 
+Trim ambiguous bits off the ends of sequences
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+   Example 2
+
+
+% trimseq untrimmed.seq trim2.seq -window 5 -percent 40 
+Trim ambiguous bits off the ends of sequences
+
+   Go to the output files for this example
+
+   Example 3
+
+
+% trimseq untrimmed.seq trim3.seq -window 5 -percent 50 
+Trim ambiguous bits off the ends of sequences
+
+   Go to the output files for this example
+
+   Example 4
+
+
+% trimseq untrimmed.seq trim4.seq -window 5 -percent 50 -strict 
+Trim ambiguous bits off the ends of sequences
+
+   Go to the output files for this example
+
+   Example 5
+
+
+% trimseq untrimmed.seq trim5.seq -window 5 -percent 50 -strict -noright 
+Trim ambiguous bits off the ends of sequences
+
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     (Gapped) sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-outseq]            seqoutall  [.] Sequence set(s)
+                                  filename and optional format (output USA)
+
+   Additional (Optional) qualifiers:
+   -window             integer    [1] This determines the size of the region
+                                  that is considered when deciding whether the
+                                  percentage of ambiguity is greater than the
+                                  threshold. A value of 5 means that a region
+                                  of 5 letters in the sequence is shifted
+                                  along the sequence from the ends and
+                                  trimming is done only if there is a greater
+                                  or equal percentage of ambiguity than the
+                                  threshold percentage. (Any integer value)
+   -percent            float      [100.0] This is the threshold of the
+                                  percentage ambiguity in the window required
+                                  in order to trim a sequence. (Any numeric
+                                  value)
+   -strict             boolean    [N] In nucleic sequences, trim off not only
+                                  N's and X's, but also the nucleotide IUPAC
+                                  ambiguity codes M, R, W, S, Y, K, V, H, D
+                                  and B. In protein sequences, trim off not
+                                  only X's but also B and Z.
+   -star               boolean    [N] In protein sequences, trim off not only
+                                  X's, but also the *'s
+
+   Advanced (Unprompted) qualifiers:
+   -[no]left           boolean    [Y] Trim at the start
+   -[no]right          boolean    [Y] Trim at the end
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   Normal sequence.
+
+  Input files for usage example
+
+  File: untrimmed.seq
+
+>myseq
+...ttyyyctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
+agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
+cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
+tcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccc
+tgactaccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggccc
+gtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaaga
+agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
+cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
+tctaataaaaaagccacttagttca.gnntcynnnnnn
+
+Output file format
+
+   Normal sequence file.
+
+  Output files for usage example
+
+  File: trim1.seq
+
+>myseq
+ttyyyctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
+agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
+cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
+tcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccc
+tgactaccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggccc
+gtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaaga
+agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
+cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
+tctaataaaaaagccacttagttca-gnntcy
+
+  Output files for usage example 2
+
+  File: trim2.seq
+
+>myseq
+ttyyyctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
+agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
+cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
+tcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccc
+tgactaccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggccc
+gtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaaga
+agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
+cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
+tctaataaaaaagccacttagttca-g
+
+  Output files for usage example 3
+
+  File: trim3.seq
+
+>myseq
+ttyyyctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
+agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
+cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
+tcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccc
+tgactaccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggccc
+gtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaaga
+agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
+cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
+tctaataaaaaagccacttagttca-gnntcy
+
+  Output files for usage example 4
+
+  File: trim4.seq
+
+>myseq
+ctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgcagctc
+tttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcgcccag
+atcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgctcctg
+gcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccctgact
+accctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggcccgtgct
+ggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaagaagaca
+ggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgcccaccttt
+ggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttctctaa
+taaaaaagccacttagttca-gnntc
+
+  Output files for usage example 5
+
+  File: trim5.seq
+
+>myseq
+ctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgcagctc
+tttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcgcccag
+atcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgctcctg
+gcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccctgact
+accctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggcccgtgct
+ggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaagaagaca
+ggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgcccaccttt
+ggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttctctaa
+taaaaaagccacttagttca-gnntcynnnnnn
+
+Data files
+
+   None.
+
+Notes
+
+   If you use the '-star' qualifier and set the window size to greater
+   than 1, you may trim bits of sequence with internal *'s. This may not
+   be what you expected.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None noted.
+
+See also
+
+   Program name                         Description
+   biosed       Replace or delete sequence sections
+   codcopy      Reads and writes a codon usage table
+   cutseq       Removes a specified section from a sequence
+   degapseq     Removes gap characters from sequences
+   descseq      Alter the name or description of a sequence
+   entret       Reads and writes (returns) flatfile entries
+   extractalign Extract regions from a sequence alignment
+   extractfeat  Extract features from a sequence
+   extractseq   Extract regions from a sequence
+   listor       Write a list file of the logical OR of two sets of sequences
+   makenucseq   Creates random nucleotide sequences
+   makeprotseq  Creates random protein sequences
+   maskfeat     Mask off features of a sequence
+   maskseq      Mask off regions of a sequence
+   newseq       Type in a short new sequence
+   noreturn     Removes carriage return from ASCII files
+   notseq       Exclude a set of sequences and write out the remaining ones
+   nthseq       Writes one sequence from a multiple set of sequences
+   pasteseq     Insert one sequence into another
+   revseq       Reverse and complement a sequence
+   seqret       Reads and writes (returns) sequences
+   seqretsplit  Reads and writes (returns) sequences in individual files
+   skipseq      Reads and writes (returns) sequences, skipping first few
+   splitter     Split a sequence into (overlapping) smaller sequences
+   trimest      Trim poly-A tails off EST sequences
+   union        Reads sequence fragments and builds one sequence
+   vectorstrip  Strips out DNA between a pair of vector sequences
+   yank         Reads a sequence range, appends the full USA to a list file
+
+Author(s)
+
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

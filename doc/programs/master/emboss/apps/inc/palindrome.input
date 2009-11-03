@@ -1,0 +1,116 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:d00596' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:d00596</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   D00596; SV 1; linear; genomic DNA; STD; HUM; 18596 BP.
+XX
+AC   D00596;
+XX
+DT   17-JUL-1991 (Rel. 28, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 3)
+XX
+DE   Homo sapiens gene for thymidylate synthase, exons 1, 2, 3, 4, 5, 6, 7,
+DE   complete cds.
+XX
+KW   thymidylate syntase.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-18596
+RX   PUBMED; 2243092.
+RA   Kaneda S., Nalbantoglu J., Takeishi K., Shimizu K., Gotoh O., Seno T.,
+RA   Ayusawa D.;
+RT   "Structural and functional analysis of the human thymidylate synthase
+RT   gene.";
+RL   J. Biol. Chem. 265(33):20277-20284(1990).
+XX
+DR   GDB; 163670.
+DR   GDB; 182340.
+XX
+CC   These data kindly submitted in computer readable form by:
+CC   Sumiko Kaneda
+CC   National Institute of Genetics
+CC   1111 Yata
+CC   Mishima 411
+CC   Japan
+CC   Phone:  +81-559-72-2732
+CC   Fax:    +81-559-71-3651
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..18596
+FT                   /organism="Homo sapiens"
+FT                   /chromosome="18"
+FT                   /map="18p11.32"
+FT                   /mol_type="genomic DNA"
+FT                   /clone="lambdaHTS-1 and lambdaHTS-3"
+FT                   /db_xref="taxon:9606"
+FT   repeat_unit     1..148
+FT                   /note="Alu sequence"
+FT   repeat_unit     202..477
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+     ttttgttttt agcttcagcg agaacccaga cctttcccaa agctcaggat tcttcgaaaa     15660
+     gttgagaaaa ttgatgactt caaagctgaa gactttcaga ttgaagggta caatccgcat     15720
+     ccaactatta aaatggaaat ggctgtttag ggtgctttca aaggagctcg aaggatattg     15780
+     tcagtcttta ggggttgggc tggatgccga ggtaaaagtt ctttttgctc taaaagaaaa     15840
+     aggaactagg tcaaaaatct gtccgtgacc tatcagttat taatttttaa ggatgttgcc     15900
+     actggcaaat gtaactgtgc cagttctttc cataataaaa ggctttgagt taactcactg     15960
+     agggtatctg acaatgctga ggttatgaac aaagtgagga gaatgaaatg tatgtgctct     16020
+     tagcaaaaac atgtatgtgc atttcaatcc cacgtactta taaagaaggt tggtgaattt     16080
+     cacaagctat ttttggaata tttttagaat attttaagaa tttcacaagc tattccctca     16140
+     aatctgaggg agctgagtaa caccatcgat catgatgtag agtgtggtta tgaactttaa     16200
+     agttatagtt gttttatatg ttgctataat aaagaagtgt tctgcattcg tccacgcttt     16260
+     gttcattctg tactgccact tatctgctca gttccttcct aaaatagatt aaagaactct     16320
+     ccttaagtaa acatgtgctg tattctggtt tggatgctac ttaaaagagt atattttaga     16380
+     aataatagtg aatatatttt gccctatttt tctcatttta actgcatctt atcctcaaaa     16440
+     tataatgacc atttaggata gagttttttt tttttttttt taaactttta taaccttaaa     16500
+     gggttatttt aaaataatct atggactacc attttgccct cattagcttc agcatggtgt     16560
+     gacttctcta ataatatgct tagattaagc aaggaaaaga tgcaaaacca cttcggggtt     16620
+     aatcagtgaa atatttttcc cttcgttgca taccagatac ccccggtgtt gcacgactat     16680
+     ttttattctg ctaatttatg acaagtgtta aacagaacaa ggaattattc caacaagtta     16740
+     tgcaacatgt tgcttatttt caaattacag tttaatgtct aggtgccagc ccttgatata     16800
+     gctatttttg taagaacatc ctcctggact ttgggttagt taaatctaaa cttatttaag     16860
+     gattaagtag gataacgtgc attgatttgc taaaagaatc aagtaataat tacttagctg     16920
+     attcctgagg gtggtatgac ttctagctga actcatcttg atcggtagga ttttttaaat     16980
+     ccatttttgt aaaactattt ccaagaaatt ttaagccctt tcacttcaga aagaaaaaag     17040
+     ttgttggggc tgagcactta attttcttga gcaggaagga gtttcttcca aacttcacca     17100
+     tctggagact ggtgtttctt tacagattcc tccttcattt ctgttgagta gccgggatcc     17160
+     tatcaaagac caaaaaaatg agtcctgtta acaaccacct ggaacaaaaa cagattttat     17220
+     gcatttatgc tgctccaaga aatgctttta cgtctaagcc agaggcaatt aattaatttt     17280
+     tttttttttg acatggagtc actgtccgtt gcccaggctg cagtgcagtg gcgcaatctt     17340
+     ggctcactgc aacctccacc tcccaggttc aagtgattct cctgcctcag cctcccatgt     17400
+     agctgggatc acaggcacct gccaccatgc ccggctaatt ttttgtattt tttgtagaga     17460
+     cagggtttca ccatgttggc caggctggtc tcaaacacct gacctcaaat gatccacctg     17520
+     cctcagcctc ccaaagtgtt gggattacag gcgtaagcca ccatgcccag ccctgaatta     17580
+     atatttttaa aataagtttg gagactgttg gaaataatag ggcagaggaa catattttac     17640
+     tggctacttg ccagagttag ttaactcatc aaactctttg ataatagttt gacctctgtt     17700
+     ggtgaaaatg agccatgatc tcttgaacat gatcagaata aatgccccag ccacacaatt     17760
+     gtagtccaaa ctttttaggt cactaacttg ctagatggtg ccaggttttt ttgcacaagg     17820
+     agtgcaaatg ttaagatctc cactagtgag gaaaggctag tattacagaa gccttgtcag     17880
+     aggcaattga acctccaagc cctggccctc aggcctgagg attttgatac agacaaactg     17940
+     aagaaccgtt tgttagtgga tattgcaaac aaacaggagt caaagcttgg tgctccacag     18000
+     tctagttcac gagacaggcg tggcagtggc tggcagcatc tcttctcaca ggggccctca     18060
+     ggcacagctt accttgggag gcatgtagga agcccgctgg atcatcacgg gatacttgaa     18120
+     atgctcatgc aggtggtcaa catactcaca caccctagga ggagggaatc agatcggggc     18180
+     aatgatgcct gaagtcagat tattcacgtg gtgctaactt aaagcagaag gagcgagtac     18240
+     cactcaattg acagtgttgg ccaaggctta gctgtgttac catgcgtttc taggcaagtc     18300
+     cctaaacctc tgtgcctcag gtccttttct tctaaaatat agcaatgtga ggtggggact     18360
+     ttgatgacat gaacacacga agtccctctg agaggttttg tggtgccctt taaaagggat     18420
+     caattcagac tctgtaaata tccagaatta tttgggttcc tctggtcaaa agtcagatga     18480
+     atagattaaa atcaccacat tttgtgatct atttttcaag aagcgtttgt attttttcat     18540
+     atggctgcag cagctgccag gggcttgggg tttttttggc aggtagggtt gggagg         18596
+//
+</pre>
+</td></tr></table><p>

@@ -1,0 +1,46 @@
+<b>Here is a sample session with textsearch</b>
+<p>
+Search for 'lactose': 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>textsearch tsw:* 'lactose' </b>
+Search sequence documentation. Slow, use SRS and Entrez!
+Output file [edd1_rat.textsearch]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+Search for 'lactose' or 'permease' in E.coli proteins: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>textsearch tsw:*_ecoli 'lactose | permease' </b>
+Search sequence documentation. Slow, use SRS and Entrez!
+Output file [laci_ecoli.textsearch]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+Output a search for 'lacz' formatted with HTML to a file: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>textsearch tembl:* 'lacz' -html -outfile embl.lacz.html </b>
+Search sequence documentation. Slow, use SRS and Entrez!
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.3">Go to the input files for this example</a><br><a href="#output.3">Go to the output files for this example</a><p><p>

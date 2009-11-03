@@ -1,0 +1,85 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tsw:actb1_fugru' is a sequence entry in the example protein database 'tsw'
+<p>
+<p><h3>Database entry: tsw:actb1_fugru</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   ACTB1_FUGRU             Reviewed;         375 AA.
+AC   P68142; P53484;
+DT   25-OCT-2004, integrated into UniProtKB/Swiss-Prot.
+DT   25-OCT-2004, sequence version 1.
+DT   20-MAR-2007, entry version 16.
+DE   Actin, cytoplasmic 1 (Beta-actin A).
+GN   Name=ACTB-A;
+OS   Fugu rubripes (Japanese pufferfish) (Takifugu rubripes).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Actinopterygii; Neopterygii; Teleostei; Euteleostei; Neoteleostei;
+OC   Acanthomorpha; Acanthopterygii; Percomorpha; Tetraodontiformes;
+OC   Tetradontoidea; Tetraodontidae; Takifugu.
+OX   NCBI_TaxID=31033;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA], AND TISSUE SPECIFICITY.
+RX   MEDLINE=96275651; PubMed=8683572; DOI=10.1006/jmbi.1996.0347;
+RA   Venkatesh B., Tay B.H., Elgar G., Brenner S.;
+RT   "Isolation, characterization and evolution of nine pufferfish (Fugu
+RT   rubripes) actin genes.";
+RL   J. Mol. Biol. 259:655-665(1996).
+CC   -!- FUNCTION: Actins are highly conserved proteins that are involved
+CC       in various types of cell motility and are ubiquitously expressed
+CC       in all eukaryotic cells.
+CC   -!- SUBUNIT: Polymerization of globular actin (G-actin) leads to a
+CC       structural filament (F-actin) in the form of a two-stranded helix.
+CC       Each actin can bind to 4 others.
+CC   -!- SUBCELLULAR LOCATION: Cytoplasm.
+CC   -!- TISSUE SPECIFICITY: Widely distributed. Not expressed in skeletal
+CC       muscle.
+CC   -!- MISCELLANEOUS: In vertebrates 3 main groups of actin isoforms,
+CC       alpha, beta and gamma have been identified. The alpha actins are
+CC       found in muscle tissues and are a major constituent of the
+CC       contractile apparatus. The beta and gamma actins coexist in most
+CC       cell types as components of the cytoskeleton and as mediators of
+CC       internal cell motility.
+CC   -!- MISCELLANEOUS: There are three different beta-cytoplasmic actins
+CC       in Fugu rubripes.
+CC   -!- SIMILARITY: Belongs to the actin family.
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; U37499; AAC59889.1; -; Genomic_DNA.
+DR   PIR; S71124; S71124.
+DR   HSSP; P02570; 1HLU.
+DR   SMR; P68142; 4-371.
+DR   Ensembl; NEWSINFRUG00000152503; Fugu rubripes.
+DR   InterPro; IPR004001; Actin.
+DR   InterPro; IPR004000; Actin_like.
+DR   PANTHER; PTHR11937; Actin_like; 1.
+DR   Pfam; PF00022; Actin; 1.
+DR   PRINTS; PR00190; ACTIN.
+DR   SMART; SM00268; ACTIN; 1.
+DR   PROSITE; PS00406; ACTINS_1; 1.
+DR   PROSITE; PS00432; ACTINS_2; 1.
+DR   PROSITE; PS01132; ACTINS_ACT_LIKE; 1.
+KW   Acetylation; ATP-binding; Cytoskeleton; Methylation;
+KW   Nucleotide-binding; Structural protein.
+FT   PROPEP        1      1       Removed in mature form (By similarity).
+FT                                /FTId=PRO_0000000808.
+FT   CHAIN         2    375       Actin, cytoplasmic 1.
+FT                                /FTId=PRO_0000000809.
+FT   MOD_RES       1      1       N-acetylmethionine (By similarity).
+FT   MOD_RES       2      2       N-acetylglutamate (By similarity).
+FT   MOD_RES      73     73       Tele-methylhistidine (By similarity).
+SQ   SEQUENCE   375 AA;  41767 MW;  9C505616D33E9495 CRC64;
+     MEDEIAALVV DNGSGMCKAG FAGDDAPRAV FPSIVGRPRH QGVMVGMGQK DSYVGDEAQS
+     KRGILTLKYP IEHGIVTNWD DMEKIWHHTF YNELRVAPEE HPVLLTEAPL NPKANREKMT
+     QIMFETFNTP AMYVAIQAVL SLYASGRTTG IVMDSGDGVT HTVPIYEGYA LPHAILRLDL
+     AGRDLTDYLM KILTERGYSF TTTAEREIVR DIKEKLCYVA LDFEQEMGTA ASSSSLEKSY
+     ELPDGQVITI GNERFRCPEA LFQPSFLGME SCGIHETTYN SIMKCDVDIR KDLYANTVLS
+     GGTTMYPGIA DRMQKEITAL APSTMKIKII APPERKYSVW IGGSILASLS TFQQMWISKQ
+     EYDESGPSIV HRKCF
+//
+</pre>
+</td></tr></table><p>

@@ -1,0 +1,466 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: edialign
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+edialign
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/edialign.ione" -->
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<b>edialign</b> is an EMBOSS version of the program DIALIGN2 by B.
+Morgenstern. It takes as input nucleic acid or protein sequences and
+produces as output a multiple sequence alignment. The sequences need
+not be similar over their complete length, since the program
+constructs alignments from gapfree pairs of similar segments of the
+sequences. Such segment pairs are referred to as "diagonals". If
+(possibly) coding nucleic acid sequences are to be aligned, <b>edialign</b>
+can optionally translate the compared "nucleic acid segments" to
+"peptide segments", or even perform comparisons at both nucleic acid
+and protein levels, so as to increase the sensitivity of the
+comparison.
+
+
+
+<H2>
+    Algorithm
+</H2>
+
+For a complete explanation of the algorithm, see the references. In short :
+
+<p>
+As described in our papers, the program DIALIGN constructs alignments
+from gapfree pairs of similar segments of the sequences. Such segment
+pairs are referred to as "diagonals".  Every possible diagonal is
+given a so-called weight reflecting the degree of similarity among the
+two segments involved. The overall score of an alignment is then
+defined as the sum of weights of the diagonals it consists of and the
+program tries to find an alignment with maximum score -- in other
+words : the program tries to find a consistent collection of diagonals
+with maximum sum of weights. This novel scoring scheme for alignments
+is the basic difference between DIALIGN and other global or local
+alignment methods. Note that DIALIGN does not employ any kind of gap
+penalty.
+
+<p>
+It is possible to use a threshold T for the quality of the
+diagonals. In this case, a diagonal is considered for alignment only
+if its "weight" exceeds this threshold. Regions of lower similarity
+are ignored.  In the first version of the program (DIALIGN 1), this
+threshold was in many situations absolutely necessary to obtain
+meaningful alignments. By contrast, DIALIGN 2 should produce
+reasonable alignments without a threshold, i.e. with T = 0. This is
+the most important difference between DIALIGN 2 and the first version
+of the program. Nevertheless, it is still possible to use a positive
+threshold T to filter out regions of lower significance and to include
+only high scoring diagonals into the alignment.
+
+<p>
+The use of overlap weights improves the sensitivity of the program if
+multiple sequences are aligned but it also increases the running time,
+especially if large numbers of sequences are aligned. By default,
+"overlap weights" are used if up to 35 sequences are aligned but
+switched off for larger data sets.
+
+<p>
+If (possibly) coding nucleic acid sequences are to be aligned, DIALIGN
+optionally translates the compared "nucleic acid segments" to "peptide
+segments" according to the genetic code -- without presupposing any of
+the three possible reading frames, so all combinations of reading
+frames get checked for significant similarity. If this option is used,
+the similarity among segments will be assessed on the "peptide level"
+rather than on the "nucleic acid level".
+
+<p>
+For the levels of sequence similarity, release 2.2 of DIALIGN has two
+additional options:
+
+<ul>
+<li>
+It can  measure the similarity among  segment pairs at  both levels of
+similarity (nucleotide-level and  peptide-level similarity). The score
+of  a fragment  is  based on  whatever  similarity is  stronger. As  a
+result, the program can now produce mixed alignments that contain both
+types  of  fragments.  Fragments   with  stronger  similarity  at  the
+"nucleotide level"  are referred  to as N-fragments  whereas fragments
+with stronger similarity a the peptide level are called P-fragments.
+
+<li>
+If the translation or mixed alignment option is used, it is possible
+to consider the reverse complements of segments, too. In this case,
+both the original segments and their reverse complements are
+translated and both pairs of implied "peptide segments" are
+compared. This option is useful if DNA sequences contain coding
+regions not only on the "Watson strand" but also on the "Crick
+strand".
+
+</ul>
+
+The score that DIALIGN assigns to a fragment is based on the
+probability to find a fragment of the same respective length and
+number of matches (or BLOSUM values, if the translation option is
+used) in random sequences of the same length as the input
+sequences. If long genomic sequences are aligned, an iterative
+procedure can be applied where the program first looks for fragments
+with strong similarity. In subsequent steps, regions between these
+fragments are realigned. Here, the score of a fragment is based on
+random occurrence in these regions between the previously aligned
+segment pairs.
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+<!--#include file="inc/edialign.usage" -->
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/edialign.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/edialign.itable" -->
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+<b>edialign</b> reads any normal sequence USAs.  You must give as
+input at least two sequences. You can use proteins as well as nucleic
+acids, but you can't mix them.
+
+<p>
+
+<!--#include file="inc/edialign.input" -->
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!-- 
+        This includes example output file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
+
+        If you wish to include the standard description of the avalable
+	report formats, use:
+        #include file="inc/reportformats.ihtml"
+   -->
+
+<b>edialign</b> produces two output files with a multiple sequence
+alignment. The first one is a file in DIALIGN format and the second
+one is a sequence file in any format you choose (by default
+fastA). Capital letters denote aligned residues, i.e. residues
+involved in at least one of the "diagonals" in the
+alignment. Lower-case letters denote residues not belonging to any of
+these selected "diagonals". They are not considered to be aligned by
+DIALIGN. Thus, if a lower-case letter is standing in the same column
+with other letters, this is pure chance ; these residues are not
+considered to be homologous.
+
+<p>
+Numbers below the alignment reflect the degree of local similarity
+among sequences. More precisely, they represent the sum of weights of
+fragments connecting residues at the respective position. These
+numbers are normalized such that regions of maximum similarity always
+get a score of 9 - no matter how strong this maximum simliarity is. In
+previous verions of the program, '*' characters were used instead of
+numbers ; with the -stars=n option, '*' characters can be used as
+previously.
+
+<p>
+At the bottom of the file you can find the "guide tree" used to make
+the alignment, written in "nested parentheses" format.
+
+
+<p>
+
+<!--#include file="inc/edialign.output" -->
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+
+The scoring schemes are hard coded in the program and cannot be
+changed. For proteins <b>edialign</b> always uses the BLOSUM62 table.
+
+
+<H2>
+    Notes
+</H2>
+
+We strongly recommend to use the "translation" option if nucleic acid
+sequences are expected to contain protein coding regions, as it will
+significantly increase the sensitivity of the alignment procedure in
+such cases.
+
+<p>
+If you want to compare long genomic sequences it is recommended to
+speed up the algorithm by:
+
+<p>
+<ul>
+<li>
+   setting "Nucleic acid sequence alignment mode" to "mixed alignment"
+   (-nucmode=ma)
+<li>
+   setting "Maximum fragment length" to 30 (-lmax=30)
+<li>
+   setting "Consider only N-fragment pairs that start with two matches" to yes
+   (-fragmat) and setting the similarity score threshold for considering
+   P-fragment pairs to 8 (-fragsim=8) (which actually implies that you consider
+   only fragments that start with a match).
+<li>
+   setting the "Threshold" T to 2.0 (-threshold=2.0)
+</ul>
+
+<p>
+It is also recommended to increase the chance of finding coding exons
+by setting "Nucleic acid sequence alignment mode" to "mixed alignment"
+(-nucmode=ma) and setting "Also consider the reverse complement"
+(-revcomp).
+
+
+<H2>
+    References
+</H2>
+
+<ol>
+
+<li>
+B. Morgenstern, A. Dress, T. Werner. Multiple DNA and protein sequence
+alignment based on segment-to-segment
+comparison. Proc. Natl. Acad. Sci.  USA 93, 12098 - 12103 (1996)
+
+<li>
+B. Morgenstern. DIALIGN 2: improvement of the segment-to-segment
+approach to multiple sequence alignment. Bioinformatics 15, 211 - 218
+(1999).
+
+<li>
+B. Morgenstern, O. Rinner, S. Abdeddaim, D. Haase, K. F. X. Mayer,
+A. W.  M. Dress H.-W. Mewes. Exon discovery by genomic sequence
+alignment.  Bioinformatics 18, 777 - 787 (2002)
+
+</ol>
+
+
+
+<H2>
+    Warnings
+</H2>
+
+Remember that lowercase characters represent parts of the sequence
+that are not aligned. You should not use the dialign output as such
+for sequence family or phylogeny studies, but take only part of the
+alignment and/or remove the lowercase characters using a multiple
+sequence editor. The current version of the program has no provision
+for doing this automatically.
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<!--#include file="inc/edialign.isee" -->
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+<!--
+        Who has worked on the program in the past.
+e.g. one of:
+<!--#include file="inc/ableasby.address" -->
+<!--#include file="inc/bjagla.address" -->
+<!--#include file="inc/dmartin.address" -->
+<!--#include file="inc/gmicklem.address" -->
+<!--#include file="inc/gwilliam.address" -->
+<!--#include file="inc/ilongden.address" -->
+<!--#include file="inc/mfaller.address" -->
+<!--#include file="inc/mgrabner.address" -->
+<!--#include file="inc/mschmitz.address" -->
+<!--#include file="inc/ntourasse.address" -->
+<!--#include file="inc/price.address" -->
+<!--#include file="inc/rdurbin.address" -->
+<!--#include file="inc/rbruskiewich.address" -->
+<!--#include file="inc/rlopez.address" -->
+<!--#include file="inc/soleary.address" -->
+<!--#include file="inc/tcarver.address" -->
+<!--#include file="inc/tlaurent.address" -->
+<!--#include file="inc/vcurwen.address" -->
+
+   -->
+
+The EMBOSS direct port was done by
+<!--#include file="inc/ableasby.address" -->
+based on ACD written by Guy Bottu (gbottu@ben.vub.ac.be) for a
+wrapper written at BEN, ULB, Brussels, Belgium
+
+<p>
+The program DIALIGN itself was written by Burkhard Morgenstern, Said
+Abdeddaim, Klaus Hahn, Thomas Werner, Kornelie Frech and Andreas
+Dress.  Universitaet Bielefeld (FSPM and International Graduate School
+in Bioinformatics and Genome Research) - GSF Research Center (ISG,
+IBB, MIPS/IBI) - North Carolina State University - Universite de Rouen
+- MPI fuer Biochemie (Martinsried) - University of Goettingen,
+Institute of Microbiology and Genetics - Rhone-Poulenc Rorer
+
+<p>
+For help on the original DIALIGN2, contact: dialign@gobics.de
+
+<H2>
+    History
+</H2>
+<!--
+        Date written and what changes have been made go in this file.
+   -->
+<!--#include file="inc/edialign.history" -->
+
+
+
+<H2>
+    Target users
+</H2>
+<!--
+        For general users, use this text
+   -->
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--
+        User/developer/other comments go in this file.
+   -->
+<!--#include file="inc/edialign.comment" -->
+
+
+</BODY>
+</HTML>
+

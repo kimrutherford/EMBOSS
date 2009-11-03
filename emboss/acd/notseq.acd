@@ -1,0 +1,62 @@
+application: notseq [
+  documentation: "Exclude a set of sequences and write out
+                  the remaining ones"
+  groups: "Edit"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "gapany"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  string: exclude [
+    parameter: "Y"
+    information: "Sequence names to exclude"
+    help: "Enter a list of sequence names or accession numbers to
+           exclude from the sequences read in. The excluded sequences will be
+           written to the file specified in the 'junkout' parameter. The
+           remainder will be written out to the file specified in the
+           'outseq' parameter. \
+           The list of sequence names can be separated by either spaces or
+           commas. \
+           The sequence names can be wildcarded. \
+           The sequence names are case independent. \
+           An example of a list of sequences to be excluded is: \
+           myseq, hs*, one two three \
+           a file containing a list of sequence names can be specified by
+           giving the file name preceeded by a '@', eg: '@names.dat'"
+    knowntype: "sequence id list"
+  ]
+
+endsection: required
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  seqoutall: outseq [
+    parameter: "Y"
+  ]
+
+  seqoutall: junkoutseq [
+    additional: "Y"
+    default: "/dev/null"
+    information: "File of excluded sequences"
+    help: "This file collects the sequences which you have excluded
+           from the main output file of sequences."
+  ]
+
+endsection: output

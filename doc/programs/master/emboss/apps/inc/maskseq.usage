@@ -1,0 +1,59 @@
+<b>Here is a sample session with maskseq</b>
+<p>
+Mask off bases 10 to 12 from a sequence 'prot.fasta' and write to the new sequence file 'prot2.seq': 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>maskseq prot.fasta prot2.seq -reg=10-12 </b>
+Mask off regions of a sequence.
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+Mask off bases 20 to 30 from a sequence 'prot.fasta' using the character 'x' and write to the new sequence file 'prot2.seq':  
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>maskseq prot.fasta prot2.seq -reg=20-30 -mask=x </b>
+Mask off regions of a sequence.
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+Mask off the regions 20 to 23, 34 to 45 and 88 to 90 in 'prot.fasta': 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>maskseq prot.fasta prot2.seq -reg=20-23,34-45,88-90 </b>
+Mask off regions of a sequence.
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.3">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 4</b>
+<p>
+Change to lower-case the regions 20 to 23, 34 to 45 and 88 to 90 in 'prot.fasta': 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>maskseq prot.fasta prot2.seq -reg=20-23,34-45,88-90 -tolower </b>
+Mask off regions of a sequence.
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.4">Go to the output files for this example</a><p><p>

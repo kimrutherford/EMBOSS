@@ -1,0 +1,799 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: iep
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+iep
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+
+<H2>
+    Function
+</H2>
+Calculates the isoelectric point of a protein
+
+<H2>
+    Description
+</H2>
+
+
+This calculates the isoelectric point of a protein from its amino acid
+composition assuming that no electrostatic interactions change the
+propensity for ionization. 
+
+<p>
+
+Adjusting the pH of an aqueous protein solution to the point where the
+numbers of positive and negative charges on the protein are equal brings
+the protein to its isoelectric point.  This is often the point of lowest
+solubility, presumably because it is the point at which there are fewest
+intermolecular repulsions, so that the molecules tend to form
+aggregates. 
+
+<p>
+
+The application can make a plot of the ionization curve with respect to
+pH and can write an output file of the data. 
+
+<H2>
+    Usage
+</H2>
+
+<b>Here is a sample session with iep</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>iep tsw:laci_ecoli </b>
+Calculates the isoelectric point of a protein
+Output file [laci_ecoli.iep]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>iep tsw:ifna2_human -disulphide 2 -lysinemodified 2  </b>
+Calculates the isoelectric point of a protein
+Output file [ifna2_human.iep]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.2">Go to the input files for this example</a><br><a href="#output.2">Go to the output files for this example</a><p><p>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-sequence]          seqall     Protein sequence(s) filename and optional
+                                  format, or reference (input USA)
+*  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png, gif)
+*  -outfile            outfile    [*.iep] Output file name
+
+   Additional (Optional) qualifiers:
+   -amino              integer    [1] Number of N-termini (Integer 0 or more)
+   -[no]termini        boolean    [Y] Include charge at N and C terminus
+   -lysinemodified     integer    [0] Number of modified lysines (Integer 0 or
+                                  more)
+   -disulphides        integer    [0] Number of disulphide bridges (Integer 0
+                                  or more)
+
+   Advanced (Unprompted) qualifiers:
+   -step               float      [.5] Step value for pH (Number from 0.010 to
+                                  1.000)
+   -plot               toggle     [N] Plot charge vs pH
+   -[no]report         toggle     [Y] Write results to a file
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-graph" associated qualifiers
+   -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Protein sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-graph</td>
+<td>Graph type</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png, gif</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
+</tr>
+
+<tr>
+<td>-outfile</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.iep</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-amino</td>
+<td>Number of N-termini</td>
+<td>Integer 0 or more</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-[no]termini</td>
+<td>Include charge at N and C terminus</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-lysinemodified</td>
+<td>Number of modified lysines</td>
+<td>Integer 0 or more</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-disulphides</td>
+<td>Number of disulphide bridges</td>
+<td>Integer 0 or more</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-step</td>
+<td>Step value for pH</td>
+<td>Number from 0.010 to 1.000</td>
+<td>.5</td>
+</tr>
+
+<tr>
+<td>-plot</td>
+<td>Plot charge vs pH</td>
+<td>Toggle value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]report</td>
+<td>Write results to a file</td>
+<td>Toggle value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+</table>
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<p>iep</p> reads in any protein sequence USA.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tsw:laci_ecoli' is a sequence entry in the example protein database 'tsw'
+<p>
+<p><h3>Database entry: tsw:laci_ecoli</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   LACI_ECOLI              Reviewed;         360 AA.
+AC   P03023; O09196; P71309; Q2MC79; Q47338;
+DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
+DT   19-JUL-2003, sequence version 3.
+DT   20-MAR-2007, entry version 87.
+DE   Lactose operon repressor.
+GN   Name=lacI; OrderedLocusNames=b0345, JW0336;
+OS   Escherichia coli.
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Escherichia.
+OX   NCBI_TaxID=562;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RX   MEDLINE=78246991; PubMed=355891; DOI=10.1038/274765a0;
+RA   Farabaugh P.J.;
+RT   "Sequence of the lacI gene.";
+RL   Nature 274:765-769(1978).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RA   Chen J., Matthews K.K.S.M.;
+RL   Submitted (MAY-1991) to the EMBL/GenBank/DDBJ databases.
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RA   Marsh S.;
+RL   Submitted (JAN-1997) to the EMBL/GenBank/DDBJ databases.
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RC   STRAIN=K12 / MG1655 / ATCC 47076;
+RA   Chung E., Allen E., Araujo R., Aparicio A.M., Davis K., Duncan M.,
+RA   Federspiel N., Hyman R., Kalman S., Komp C., Kurdi O., Lew H., Lin D.,
+RA   Namath A., Oefner P., Roberts D., Schramm S., Davis R.W.;
+RT   "Sequence of minutes 4-25 of Escherichia coli.";
+RL   Submitted (JAN-1997) to the EMBL/GenBank/DDBJ databases.
+RN   [5]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RC   STRAIN=K12 / MG1655 / ATCC 47076;
+RX   MEDLINE=97426617; PubMed=9278503; DOI=10.1126/science.277.5331.1453;
+RA   Blattner F.R., Plunkett G. III, Bloch C.A., Perna N.T., Burland V.,
+RA   Riley M., Collado-Vides J., Glasner J.D., Rode C.K., Mayhew G.F.,
+RA   Gregor J., Davis N.W., Kirkpatrick H.A., Goeden M.A., Rose D.J.,
+RA   Mau B., Shao Y.;
+RT   "The complete genome sequence of Escherichia coli K-12.";
+RL   Science 277:1453-1474(1997).
+RN   [6]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RC   STRAIN=K12 / W3110 / ATCC 27325 / DSM 5911;
+RX   PubMed=16738553; DOI=10.1038/msb4100049;
+RA   Hayashi K., Morooka N., Yamamoto Y., Fujita K., Isono K., Choi S.,
+RA   Ohtsubo E., Baba T., Wanner B.L., Mori H., Horiuchi T.;
+RT   "Highly accurate genome sequences of Escherichia coli K-12 strains
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+DR   Pfam; PF00532; Peripla_BP_1; 1.
+DR   PRINTS; PR00036; HTHLACI.
+DR   SMART; SM00354; HTH_LACI; 1.
+DR   PROSITE; PS00356; HTH_LACI_1; 1.
+DR   PROSITE; PS50932; HTH_LACI_2; 1.
+KW   3D-structure; Complete proteome; Direct protein sequencing;
+KW   DNA-binding; Repressor; Transcription; Transcription regulation.
+FT   CHAIN         1    360       Lactose operon repressor.
+FT                                /FTId=PRO_0000107963.
+FT   DOMAIN        1     58       HTH lacI-type.
+FT   DNA_BIND      6     25       H-T-H motif.
+FT   VARIANT     282    282       Y -&gt; D (in T41 mutant).
+FT   MUTAGEN      17     17       Y-&gt;H: Broadening of specificity.
+FT   MUTAGEN      22     22       R-&gt;N: Recognizes an operator variant.
+FT   CONFLICT    286    286       L -&gt; S (in Ref. 1, 4 and 7).
+FT   STRAND       63     69
+FT   HELIX        74     89
+FT   STRAND       93     98
+FT   STRAND      101    103
+FT   HELIX       104    115
+FT   TURN        116    118
+FT   STRAND      122    126
+FT   HELIX       130    139
+FT   TURN        140    142
+FT   STRAND      145    150
+FT   STRAND      154    156
+FT   STRAND      158    161
+FT   HELIX       163    177
+FT   STRAND      181    186
+FT   HELIX       192    207
+FT   STRAND      213    217
+FT   HELIX       222    234
+FT   STRAND      240    246
+FT   HELIX       247    259
+FT   TURN        265    267
+FT   STRAND      268    271
+FT   HELIX       277    281
+FT   STRAND      282    284
+FT   STRAND      287    290
+FT   HELIX       293    308
+FT   STRAND      314    319
+FT   STRAND      322    324
+FT   HELIX       354    356
+SQ   SEQUENCE   360 AA;  38590 MW;  347A8DEE92D736CB CRC64;
+     MKPVTLYDVA EYAGVSYQTV SRVVNQASHV SAKTREKVEA AMAELNYIPN RVAQQLAGKQ
+     SLLIGVATSS LALHAPSQIV AAIKSRADQL GASVVVSMVE RSGVEACKAA VHNLLAQRVS
+     GLIINYPLDD QDAIAVEAAC TNVPALFLDV SDQTPINSII FSHEDGTRLG VEHLVALGHQ
+     QIALLAGPLS SVSARLRLAG WHKYLTRNQI QPIAEREGDW SAMSGFQQTM QMLNEGIVPT
+     AMLVANDQMA LGAMRAITES GLRVGADISV VGYDDTEDSS CYIPPLTTIK QDFRLLGQTS
+     VDRLLQLSQG QAVKGNQLLP VSLVKRKTTL APNTQTASPR ALADSLMQLA RQVSRLESGQ
+//
+</pre>
+</td></tr></table><p>
+
+<a name="input.2"></a>
+<h3>Input files for usage example 2</h3>
+<p><h3>Database entry: tsw:ifna2_human</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   IFNA2_HUMAN             Reviewed;         188 AA.
+AC   P01563; P01564; Q14606; Q96KI6;
+DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
+DT   21-JUL-1986, sequence version 1.
+DT   20-FEB-2007, entry version 79.
+DE   Interferon alpha-2 precursor (Interferon alpha-A) (LeIF A).
+GN   Name=IFNA2;
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+OC   Catarrhini; Hominidae; Homo.
+OX   NCBI_TaxID=9606;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA / MRNA].
+RX   MEDLINE=81052322; PubMed=6159538; DOI=10.1038/287411a0;
+RA   Goeddel D.V., Yelverton E., Ullrich A., Heyneker H.L., Miozzari G.,
+RA   Holmes W., Seeburg P.H., Dull T.J., May L., Stebbing N., Crea R.,
+RA   Maeda S., McCandliss R., Sloma A., Tabor J.M., Gross M.,
+RA   Familletti P.C., Pestka S.;
+RT   "Human leukocyte interferon produced by E. coli is biologically
+RT   active.";
+RL   Nature 287:411-416(1980).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA / MRNA].
+RX   MEDLINE=81148795; PubMed=6163083; DOI=10.1038/290020a0;
+RA   Goeddel D.V., Leung D.W., Dull T.J., Gross M., Lawn R.M.,
+RA   McCandliss R., Seeburg P.H., Ullrich A., Yelverton E., Gray P.W.;
+RT   "The structure of eight distinct cloned human leukocyte interferon
+RT   cDNAs.";
+RL   Nature 290:20-26(1981).
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA / MRNA].
+RX   MEDLINE=82060261; PubMed=6170983;
+RA   Lawn R.M., Gross M., Houck C.M., Franke A.E., Gray P.V., Goeddel D.V.;
+RT   "DNA sequence of a major human leukocyte interferon gene.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 78:5435-5439(1981).
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE.
+RC   TISSUE=Bone marrow tumor;
+RX   MEDLINE=86069501; PubMed=3906813;
+RA   Oliver G., Balbas P., Valle F., Soberon X., Bolivar F.;
+RT   "Cloning of human leukocyte interferon cDNA and a strategy for its
+RT   production in E. coli.";
+RL   Rev. Latinoam. Microbiol. 27:141-150(1985).
+RN   [5]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RC   TISSUE=Placenta;
+RX   MEDLINE=98357449; PubMed=9694076;
+RA   Austruy E., Bagnis C., Carbuccia N., Maroc C., Birg F., Dubreuil P.,
+RA   Mannoni P., Chabannon C.;
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+DR   LinkHub; P01563; -.
+DR   ArrayExpress; P01563; -.
+DR   GermOnline; ENSG00000188379; Homo sapiens.
+DR   RZPD-ProtExp; A0813; -.
+DR   RZPD-ProtExp; IOH35221; -.
+DR   RZPD-ProtExp; RZPDo834E0933; -.
+DR   GO; GO:0005132; F:interferon-alpha/beta receptor binding; TAS:ProtInc.
+DR   GO; GO:0007166; P:cell surface receptor linked signal transdu...; TAS:ProtInc.
+DR   GO; GO:0007267; P:cell-cell signaling; TAS:ProtInc.
+DR   GO; GO:0006917; P:induction of apoptosis; TAS:ProtInc.
+DR   GO; GO:0006954; P:inflammatory response; TAS:ProtInc.
+DR   InterPro; IPR009079; 4_helix_cytokine.
+DR   InterPro; IPR000471; Interferon_abd.
+DR   Gene3D; G3DSA:1.20.120.210; Interferon_abd; 1.
+DR   PANTHER; PTHR11691; Interferon_abd; 1.
+DR   Pfam; PF00143; Interferon; 1.
+DR   PRINTS; PR00266; INTERFERONAB.
+DR   ProDom; PD000550; Interferon_abd; 1.
+DR   SMART; SM00076; IFabd; 1.
+DR   PROSITE; PS00252; INTERFERON_A_B_D; 1.
+KW   3D-structure; Antiviral defense; Cytokine; Direct protein sequencing;
+KW   Glycoprotein; Pharmaceutical; Polymorphism; Signal.
+FT   SIGNAL        1     23
+FT   CHAIN        24    188       Interferon alpha-2.
+FT                                /FTId=PRO_0000016360.
+FT   CARBOHYD    129    129       O-linked (GalNAc...).
+FT                                /FTId=CAR_000049.
+FT   DISULFID     24    121
+FT   DISULFID     52    161
+FT   VARIANT      46     46       K -&gt; R (in alpha-2B and alpha-2C).
+FT                                /FTId=VAR_004012.
+FT   VARIANT      57     57       H -&gt; R (in alpha-2C).
+FT                                /FTId=VAR_013001.
+FT   HELIX        33     44
+FT   TURN         49     54
+FT   HELIX        63     66
+FT   HELIX        76     91
+FT   HELIX        93     98
+FT   HELIX       101    123
+FT   TURN        126    127
+FT   TURN        133    133
+FT   HELIX       134    155
+FT   TURN        156    157
+FT   HELIX       160    178
+FT   TURN        179    182
+SQ   SEQUENCE   188 AA;  21550 MW;  101DD21D394CBF97 CRC64;
+     MALTFALLVA LLVLSCKSSC SVGCDLPQTH SLGSRRTLML LAQMRKISLF SCLKDRHDFG
+     FPQEEFGNQF QKAETIPVLH EMIQQIFNLF STKDSSAAWD ETLLDKFYTE LYQQLNDLEA
+     CVIQGVGVTE TPLMKEDSIL AVRKYFQRIT LYLKEKKYSP CAWEVVRAEI MRSFSLSTNL
+     QESLRSKE
+//
+</pre>
+</td></tr></table><p>
+
+
+
+<H2>
+    Output file format
+</H2>
+
+
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: laci_ecoli.iep</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+IEP of LACI_ECOLI from 1 to 360
+Isoelectric Point = 6.8820
+
+   pH     Bound    Charge
+  1.00    81.96    37.96
+  1.50    81.89    37.89
+  2.00    81.65    37.65
+  2.50    80.91    36.91
+  3.00    78.79    34.79
+  3.50    73.70    29.70
+  4.00    65.15    21.15
+  4.50    56.73    12.73
+  5.00    51.75     7.75
+  5.50    49.36     5.36
+  6.00    47.63     3.63
+  6.50    45.56     1.56
+  7.00    43.59    -0.41
+  7.50    42.27    -1.73
+  8.00    41.22    -2.78
+  8.50    39.87    -4.13
+  9.00    38.26    -5.74
+  9.50    36.24    -7.76
+ 10.00    33.03   -10.97
+ 10.50    28.46   -15.54
+ 11.00    23.58   -20.42
+ 11.50    19.41   -24.59
+ 12.00    15.19   -28.81
+ 12.50     9.75   -34.25
+ 13.00     4.64   -39.36
+ 13.50     1.75   -42.25
+ 14.00     0.59   -43.41
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: ifna2_human.iep</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+IEP of IFNA2_HUMAN from 1 to 188
+Isoelectric Point = 5.7322
+
+   pH     Bound    Charge
+  1.00    52.98    22.98
+  1.50    52.93    22.93
+  2.00    52.77    22.77
+  2.50    52.28    22.28
+  3.00    50.87    20.87
+  3.50    47.47    17.47
+  4.00    41.62    11.62
+  4.50    35.67     5.67
+  5.00    32.10     2.10
+  5.50    30.47     0.47
+  6.00    29.51    -0.49
+  6.50    28.55    -1.45
+  7.00    27.65    -2.35
+  7.50    27.01    -2.99
+  8.00    26.36    -3.64
+  8.50    25.41    -4.59
+  9.00    24.25    -5.75
+  9.50    22.81    -7.19
+ 10.00    20.49    -9.51
+ 10.50    17.03   -12.97
+ 11.00    13.16   -16.84
+ 11.50    10.04   -19.96
+ 12.00     7.49   -22.51
+ 12.50     4.72   -25.28
+ 13.00     2.23   -27.77
+ 13.50     0.84   -29.16
+ 14.00     0.28   -29.72
+</pre>
+</td></tr></table><p>
+<p>
+
+For each pH point it gives the number of bound electrons and the charge.
+
+
+<H2>
+    Data files
+</H2>
+
+<b>iep</b> reads in local data file <em>Epk.dat</em> which contains amino acid
+pK values used to calculate the isoelectric point of the whole protein
+
+<p>
+
+<p>
+EMBOSS data files are distributed with the application and stored
+in the standard EMBOSS data directory, which is defined
+by the EMBOSS environment variable EMBOSS_DATA.
+
+<p>
+
+To see the available EMBOSS data files, run:
+<p>
+<pre>
+% embossdata -showall
+</pre>
+<p>
+To fetch one of the data files (for example 'Exxx.dat') into your
+current directory for you to inspect or modify, run:
+
+<pre>
+
+% embossdata -fetch -file Exxx.dat
+
+</pre>
+<p>
+
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called
+".embossdata". Files for all EMBOSS runs can be put in the user's home
+directory, or again in a subdirectory called ".embossdata".
+
+<p>
+The directories are searched in the following order:
+
+<ul>
+   <li> . (your current directory)
+   <li> .embossdata (under your current directory)
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+<p>
+
+<p>
+Here is the default <em>Epk.dat</em> file:
+
+<pre>
+# pK values for amino acids
+# O=Ornithine J=Hydroxyproline
+#
+# Amino acid	pK
+Amino		8.6
+Carboxyl	3.6
+
+C		8.5
+D		3.9
+E		4.1
+H		6.5
+K		10.8
+R		12.5
+Y		10.1
+</pre>
+
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+0 if successful.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="backtranambig.html">backtranambig</a></td>
+<td>Back translate a protein sequence to ambiguous codons</td>
+</tr>
+
+<tr>
+<td><a href="backtranseq.html">backtranseq</a></td>
+<td>Back translate a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="charge.html">charge</a></td>
+<td>Protein charge plot</td>
+</tr>
+
+<tr>
+<td><a href="checktrans.html">checktrans</a></td>
+<td>Reports STOP codons and ORF statistics of a protein</td>
+</tr>
+
+<tr>
+<td><a href="compseq.html">compseq</a></td>
+<td>Count composition of dimer/trimer/etc words in a sequence</td>
+</tr>
+
+<tr>
+<td><a href="emowse.html">emowse</a></td>
+<td>Protein identification by mass spectrometry</td>
+</tr>
+
+<tr>
+<td><a href="freak.html">freak</a></td>
+<td>Residue/base frequency table or plot</td>
+</tr>
+
+<tr>
+<td><a href="mwcontam.html">mwcontam</a></td>
+<td>Shows molwts that match across a set of files</td>
+</tr>
+
+<tr>
+<td><a href="mwfilter.html">mwfilter</a></td>
+<td>Filter noisy molwts from mass spec output</td>
+</tr>
+
+<tr>
+<td><a href="octanol.html">octanol</a></td>
+<td>Displays protein hydropathy</td>
+</tr>
+
+<tr>
+<td><a href="pepinfo.html">pepinfo</a></td>
+<td>Plots simple amino acid properties in parallel</td>
+</tr>
+
+<tr>
+<td><a href="pepstats.html">pepstats</a></td>
+<td>Protein statistics</td>
+</tr>
+
+<tr>
+<td><a href="pepwindow.html">pepwindow</a></td>
+<td>Displays protein hydropathy</td>
+</tr>
+
+<tr>
+<td><a href="pepwindowall.html">pepwindowall</a></td>
+<td>Displays protein hydropathy of a set of sequences</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Author(s)
+</H2>
+Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
+<H2>
+    History
+</H2>
+
+
+
+Completed 1st August 1999.
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+None
+
+</BODY>
+</HTML>
+

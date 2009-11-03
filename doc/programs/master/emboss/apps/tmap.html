@@ -1,0 +1,202 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: tmap
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+tmap
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/tmap.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+This program predicts transmembrane segments in proteins,    
+utilising the algorithm described in:                        
+"Persson, B. & Argos, P. (1994) Prediction of transmembrane  
+segments in proteins utilising multiple sequence alignments   
+J. Mol. Biol. 237, 182-192."                                 
+<p>
+
+<b>tmap</b> reads in one or more aligned protein sequences.
+<p>
+
+Two sets of propensity values are then used for the calculations: one
+for the middle, hydrophobic portion and one for the terminal regions of
+the transmembrane sequence spans.  Average propensity values are
+calculated for each position along the alignment, with the contribution
+from each sequence weighted according to its dissimilarity relative to
+the other aligned sequences. 
+<p>
+
+Eight-residue segments are considered as potential cores of
+transmembrane segments and elongated if thier middle propensity values
+are above a threshold.  End propensity values are also considered as
+stop signals.  Only helices with a length of 15 to 29 residues are
+allowed and corrections for strictly conserved charged residues are
+made. 
+
+<p>
+
+The method is more successful than predictions based upon single
+sequences alone. 
+<p>
+
+The results are plotted on a graph and written to a text file.
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/tmap.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/tmap.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/tmap.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<b>tmap</b> reads a protein sequence USA for one or more aligned sequences.
+
+<p>
+
+<!--#include file="inc/tmap.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/tmap.output" -->
+
+<p>
+
+A plot of the propensities to form the middle (solid line) and the end
+(dashed line) of transmembrane regions is output.
+
+<p>
+
+Bars are displayed in the plot above the regions predicted as being most
+likely to form transmembrane regions. 
+
+<p>
+
+The text file (specified by the <b>-outfile</b> option) gives a summary
+of these regions. 
+
+<p>
+
+
+The transmembrane regions for the complete alignment are given first,
+followed by the predictions for each individual sequence in the
+alignment.
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+
+<H2>
+    References
+</H2>
+
+<ol>
+
+<li>
+ "Persson, B. & Argos, P. (1994) Prediction of transmembrane  
+ segments in proteins utilsing multiple sequence alignments   
+ J. Mol. Biol. 237, 182-192."                                 
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+0 if successful.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+
+<!--#include file="inc/tmap.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+
+Original program by Bengt Persson and Patrick Argos.
+<p>
+
+This application was modified for inclusion in EMBOSS by 
+
+<!--#include file="inc/ilongden.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/tmap.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/tmap.comment" -->
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,100 @@
+application: showorf [
+  documentation: "Pretty output of DNA translations"
+  groups: "Nucleic:Gene finding, Nucleic:Translation"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  sequence: sequence [
+    parameter: "Y"
+    type: "DNA"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  list: frames [
+    standard: "Y"
+    default: "1,2,3,4,5,6"
+    minimum: "0"
+    maximum: "6"
+    header: "Select Frames To Translate"
+    values: "0: None, 1: F1,2: F2,3: F3,4: R1,5: R2,6: R3"
+    delimiter: ","
+    codedelimiter: ":"
+    information: "Select one or more values"
+    button: "Y"
+  ]
+
+endsection: required
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  list: table [
+    additional: "Y"
+    default: "0"
+    minimum: "1"
+    maximum: "1"
+    header: "Genetic codes"
+    values: "0:Standard; 1:Standard (with alternative initiation
+             codons); 2:Vertebrate Mitochondrial; 3:Yeast Mitochondrial;
+             4:Mold, Protozoan, Coelenterate Mitochondrial and
+             Mycoplasma/Spiroplasma; 5:Invertebrate Mitochondrial; 6:Ciliate
+             Macronuclear and Dasycladacean; 9:Echinoderm Mitochondrial;
+             10:Euplotid Nuclear; 11:Bacterial; 12:Alternative Yeast Nuclear;
+             13:Ascidian Mitochondrial; 14:Flatworm Mitochondrial;
+             15:Blepharisma Macronuclear; 16:Chlorophycean Mitochondrial;
+             21:Trematode Mitochondrial; 22:Scenedesmus obliquus;
+             23:Thraustochytrium Mitochondrial"
+    delimiter: ";"
+    codedelimiter: ":"
+    information: "Genetic code to use"
+  ]
+
+endsection: additional
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    knowntype: "showorf output"
+  ]
+
+  boolean: ruler [
+    additional: "Y"
+    default: "Y"
+    information: "Add a ruler"
+  ]
+
+  boolean: plabel [
+    additional: "Y"
+    default: "Y"
+    information: "Number translations"
+  ]
+
+  boolean: nlabel [
+    additional: "Y"
+    default: "Y"
+    information: "Number DNA sequence"
+  ]
+
+  integer: width [
+    minimum: "10"
+    default: "50"
+    information: "Width of screen"
+  ]
+
+endsection: output

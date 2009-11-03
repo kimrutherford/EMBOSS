@@ -1,0 +1,628 @@
+
+                                megamerger 
+
+
+
+Function
+
+   Merge two large overlapping nucleic acid sequences
+
+Description
+
+   megamerger takes two overlapping sequences and merges them into one
+   sequence. It could thus be regarded as the opposite of what splitter
+   does.
+
+   The sequences can be very long. The program does a match of all
+   sequence words of size 20 (by default). It then reduces this to the
+   minimum set of overlapping matches by sorting the matches in order of
+   size (largest size first) and then for each such match it removes any
+   smaller matches that overlap. The result is a set of the longest
+   ungapped alignments between the two sequences that do not overlap with
+   each other. If the two sequences are identical in their region of
+   overlap then there will be one region of match and no mismatches.
+
+   It should be possible to merge sequences that are Mega bytes long.
+   Compare this with the program merger which does a more accurate
+   alignment of more divergent sequences using the Needle and Wunsch
+   algorithm but which uses much more memory.
+
+   The sequences should ideally be identical in their region of overlap.
+   If there are any mismatches between the two sequences then megamerger
+   will still attempt to create a merged sequence, but you should check
+   that this is what you required.
+
+   A report of the actions of megamerger is written out. Any actions that
+   require a choice between using regions of the two sequences where they
+   have a mismatch is marked with the word WARNING!. The sequence in
+   these regions is written out in uppercase. All other regions of the
+   output sequence are written in lowercase.
+
+   Where there is a mismatch then the sequence that is chosen to supply
+   the region of the mismatch in the final merged sequence is that
+   sequence whose mismatch region is furthest from the start of end of
+   the sequence.
+
+Usage
+
+   Here is a sample session with megamerger
+
+
+% megamerger tembl:v00295 tembl:v00296 
+Merge two large overlapping nucleic acid sequences
+Word size [20]: 
+output sequence [v00295.merged]: 
+Output file [v00295.megamerger]: report
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-asequence]         sequence   Nucleotide sequence filename and optional
+                                  format, or reference (input USA)
+  [-bsequence]         sequence   Nucleotide sequence filename and optional
+                                  format, or reference (input USA)
+   -wordsize           integer    [20] Word size (Integer 2 or more)
+  [-outseq]            seqout     [.] Sequence filename and
+                                  optional format (output USA)
+  [-outfile]           outfile    [*.megamerger] Output file name
+
+   Additional (Optional) qualifiers:
+   -prefer             boolean    [N] When a mismatch between the two sequence
+                                  is discovered, one or other of the two
+                                  sequences must be used to create the merged
+                                  sequence over this mismatch region. The
+                                  default action is to create the merged
+                                  sequence using the sequence where the
+                                  mismatch is closest to that sequence's
+                                  centre. If this option is used, then the
+                                  first sequence (seqa) will always be used in
+                                  preference to the other sequence when there
+                                  is a mismatch.
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-asequence" associated qualifiers
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-bsequence" associated qualifiers
+   -sbegin2            integer    Start of the sequence to be used
+   -send2              integer    End of the sequence to be used
+   -sreverse2          boolean    Reverse (if DNA)
+   -sask2              boolean    Ask for begin/end/reverse
+   -snucleotide2       boolean    Sequence is nucleotide
+   -sprotein2          boolean    Sequence is protein
+   -slower2            boolean    Make lower case
+   -supper2            boolean    Make upper case
+   -sformat2           string     Input sequence format
+   -sdbname2           string     Database name
+   -sid2               string     Entryname
+   -ufo2               string     UFO features
+   -fformat2           string     Features format
+   -fopenfile2         string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat3          string     Output seq format
+   -osextension3       string     File name extension
+   -osname3            string     Base file name
+   -osdirectory3       string     Output directory
+   -osdbname3          string     Database name to add
+   -ossingle3          boolean    Separate file for each entry
+   -oufo3              string     UFO features
+   -offormat3          string     Features format
+   -ofname3            string     Features file name
+   -ofdirectory3       string     Output directory
+
+   "-outfile" associated qualifiers
+   -odirectory4        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   megamerger reads any two Sequence USAs.
+
+  Input files for usage example
+
+   'tembl:v00295' is a sequence entry in the example nucleic acid
+   database 'tembl'
+
+  Database entry: tembl:v00295
+
+ID   V00295; SV 1; linear; genomic DNA; STD; PRO; 1500 BP.
+XX
+AC   V00295;
+XX
+DT   09-JUN-1982 (Rel. 01, Created)
+DT   07-JUL-1995 (Rel. 44, Last updated, Version 4)
+XX
+DE   E. coli lacY gene (codes for lactose permease).
+XX
+KW   membrane protein.
+XX
+OS   Escherichia coli
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Escherichia.
+XX
+RN   [1]
+RP   1-1500
+RX   DOI; 10.1038/283541a0.
+RX   PUBMED; 6444453.
+RA   Buechel D.E., Gronenborn B., Mueller-Hill B.;
+RT   "Sequence of the lactose permease gene";
+RL   Nature 283(5747):541-545(1980).
+XX
+CC   lacZ is a beta-galactosidase and lacA is transacetylase.
+CC   KST ECO.LACY
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1500
+FT                   /organism="Escherichia coli"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:562"
+FT   CDS             <1..54
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /note="reading frame (lacZ)"
+FT                   /db_xref="GOA:P00722"
+FT                   /db_xref="PDB:1BGL"
+FT                   /db_xref="PDB:1BGM"
+FT                   /db_xref="PDB:1DP0"
+FT                   /db_xref="PDB:1F49"
+FT                   /db_xref="PDB:1F4A"
+FT                   /db_xref="PDB:1F4H"
+FT                   /db_xref="PDB:1GHO"
+FT                   /db_xref="PDB:1HN1"
+FT                   /db_xref="PDB:1JYN"
+FT                   /db_xref="PDB:1JYV"
+FT                   /db_xref="PDB:1JYW"
+FT                   /db_xref="PDB:1JYX"
+FT                   /db_xref="PDB:1JYY"
+
+
+  [Part of this file has been deleted for brevity]
+
+FT                   /db_xref="PDB:2CFP"
+FT                   /db_xref="PDB:2CFQ"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P02920"
+FT                   /protein_id="CAA23571.1"
+FT                   /translation="MYYLKNTNFWMFGLFFFFYFFIMGAYFPFFPIWLHDINHISKSD
+T
+FT                   GIIFAAISLFSLLFQPLFGLLSDKLGLRKYLLWIITGMLVMFAPFFIFIFGPLLQYNI
+L
+FT                   VGSIVGGIYLGFCFNAGAPAVEAFIEKVSRRSNFEFGRARMFGCVGWALCASIVGIMF
+T
+FT                   INNQFVFWLGSGCALILAVLLFFAKTDAPSSATVANAVGANHSAFSLKLALELFRQPK
+L
+FT                   WFLSLYVIGVSCTYDVFDQQFANFFTSFFATGEQGTRVFGYVTTMGELLNASIMFFAP
+L
+FT                   IINRIGGKNALLLAGTIMSVRIIGSSFATSALEVVILKTLHMFEVPFLLVGCFKYITS
+Q
+FT                   FEVRFSATIYLVCFCFFKQLAMIFMSVLAGNMYESIGFQGAYLVLGLVALGFTLISVF
+T
+FT                   LSGPGPLSLLRRQVNEVA"
+FT   CDS             1423..>1500
+FT                   /transl_table=11
+FT                   /note="reading frame (lacA)"
+FT                   /db_xref="GOA:P07464"
+FT                   /db_xref="PDB:1KQA"
+FT                   /db_xref="PDB:1KRR"
+FT                   /db_xref="PDB:1KRU"
+FT                   /db_xref="PDB:1KRV"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P07464"
+FT                   /protein_id="CAA23572.1"
+FT                   /translation="MNMPMTERIRAGKLFTDMCEGLPEKR"
+XX
+SQ   Sequence 1500 BP; 315 A; 342 C; 357 G; 486 T; 0 other;
+     ttccagctga gcgccggtcg ctaccattac cagttggtct ggtgtcaaaa ataataataa        6
+0
+     ccgggcaggc catgtctgcc cgtatttcgc gtaaggaaat ccattatgta ctatttaaaa       12
+0
+     aacacaaact tttggatgtt cggtttattc tttttctttt acttttttat catgggagcc       18
+0
+     tacttcccgt ttttcccgat ttggctacat gacatcaacc atatcagcaa aagtgatacg       24
+0
+     ggtattattt ttgccgctat ttctctgttc tcgctattat tccaaccgct gtttggtctg       30
+0
+     ctttctgaca aactcgggct gcgcaaatac ctgctgtgga ttattaccgg catgttagtg       36
+0
+     atgtttgcgc cgttctttat ttttatcttc gggccactgt tacaatacaa cattttagta       42
+0
+     ggatcgattg ttggtggtat ttatctaggc ttttgtttta acgccggtgc gccagcagta       48
+0
+     gaggcattta ttgagaaagt cagccgtcgc agtaatttcg aatttggtcg cgcgcggatg       54
+0
+     tttggctgtg ttggctgggc gctgtgtgcc tcgattgtcg gcatcatgtt caccatcaat       60
+0
+     aatcagtttg ttttctggct gggctctggc tgtgcactca tcctcgccgt tttactcttt       66
+0
+     ttcgccaaaa cggatgcgcc ctcttctgcc acggttgcca atgcggtagg tgccaaccat       72
+0
+     tcggcattta gccttaagct ggcactggaa ctgttcagac agccaaaact gtggtttttg       78
+0
+     tcactgtatg ttattggcgt ttcctgcacc tacgatgttt ttgaccaaca gtttgctaat       84
+0
+     ttctttactt cgttctttgc taccggtgaa cagggtacgc gggtatttgg ctacgtaacg       90
+0
+     acaatgggcg aattacttaa cgcctcgatt atgttctttg cgccactgat cattaatcgc       96
+0
+     atcggtggga aaaacgccct gctgctggct ggcactatta tgtctgtacg tattattggc      102
+0
+     tcatcgttcg ccacctcagc gctggaagtg gttattctga aaacgctgca tatgtttgaa      108
+0
+     gtaccgttcc tgctggtggg ctgctttaaa tatattacca gccagtttga agtgcgtttt      114
+0
+     tcagcgacga tttatctggt ctgtttctgc ttctttaagc aactggcgat gatttttatg      120
+0
+     tctgtactgg cgggcaatat gtatgaaagc atcggtttcc agggcgctta tctggtgctg      126
+0
+     ggtctggtgg cgctgggctt caccttaatt tccgtgttca cgcttagcgg ccccggcccg      132
+0
+     ctttccctgc tgcgtcgtca ggtgaatgaa gtcgcttaag caatcaatgt cggatgcggc      138
+0
+     gcgacgctta tccgaccaac atatcataac ggagtgatcg cattgaacat gccaatgacc      144
+0
+     gaaagaataa gagcaggcaa gctatttacc gatatgtgcg aaggcttacc ggaaaaaaga      150
+0
+//
+
+  Database entry: tembl:v00296
+
+ID   V00296; SV 1; linear; genomic DNA; STD; PRO; 3078 BP.
+XX
+AC   V00296;
+XX
+DT   13-JUL-1983 (Rel. 03, Created)
+DT   18-APR-2005 (Rel. 83, Last updated, Version 5)
+XX
+DE   E. coli gene lacZ coding for beta-galactosidase (EC 3.2.1.23).
+XX
+KW   galactosidase.
+XX
+OS   Escherichia coli
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Escherichia.
+XX
+RN   [1]
+RP   1-3078
+RX   PUBMED; 6313347.
+RA   Kalnins A., Otto K., Ruether U., Mueller-Hill B.;
+RT   "Sequence of the lacZ gene of Escherichia coli";
+RL   EMBO J. 2(4):593-597(1983).
+XX
+RN   [2]
+RX   PUBMED; 3038536.
+RA   Zell R., Fritz H.J.;
+RT   "DNA mismatch-repair in Escherichia coli counteracting the hydrolytic
+RT   deamination of 5-methyl-cytosine residues";
+RL   EMBO J. 6(6):1809-1815(1987).
+XX
+CC   Data kindly reviewed (18-MAY-1983) by U. Ruether
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..3078
+FT                   /organism="Escherichia coli"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:562"
+FT   CDS             <1..3072
+FT                   /transl_table=11
+FT                   /note="galactosidase"
+FT                   /db_xref="GOA:P00722"
+FT                   /db_xref="PDB:1BGL"
+FT                   /db_xref="PDB:1BGM"
+FT                   /db_xref="PDB:1DP0"
+FT                   /db_xref="PDB:1F49"
+FT                   /db_xref="PDB:1F4A"
+FT                   /db_xref="PDB:1F4H"
+FT                   /db_xref="PDB:1GHO"
+FT                   /db_xref="PDB:1HN1"
+FT                   /db_xref="PDB:1JYN"
+
+
+  [Part of this file has been deleted for brevity]
+
+     gaggcccgca ccgatcgccc ttcccaacag ttgcgcagcc tgaatggcga atggcgcttt       18
+0
+     gcctggtttc cggcaccaga agcggtgccg gaaagctggc tggagtgcga tcttcctgag       24
+0
+     gccgatactg tcgtcgtccc ctcaaactgg cagatgcacg gttacgatgc gcccatctac       30
+0
+     accaacgtaa cctatcccat tacggtcaat ccgccgtttg ttcccacgga gaatccgacg       36
+0
+     ggttgttact cgctcacatt taatgttgat gaaagctggc tacaggaagg ccagacgcga       42
+0
+     attatttttg atggcgttaa ctcggcgttt catctgtggt gcaacgggcg ctgggtcggt       48
+0
+     tacggccagg acagtcgttt gccgtctgaa tttgacctga gcgcattttt acgcgccgga       54
+0
+     gaaaaccgcc tcgcggtgat ggtgctgcgt tggagtgacg gcagttatct ggaagatcag       60
+0
+     gatatgtggc ggatgagcgg cattttccgt gacgtctcgt tgctgcataa accgactaca       66
+0
+     caaatcagcg atttccatgt tgccactcgc tttaatgatg atttcagccg cgctgtactg       72
+0
+     gaggctgaag ttcagatgtg cggcgagttg cgtgactacc tacgggtaac agtttcttta       78
+0
+     tggcagggtg aaacgcaggt cgccagcggc accgcgcctt tcggcggtga aattatcgat       84
+0
+     gagcgtggtg gttatgccga tcgcgtcaca ctacgtctga acgtcgaaaa cccgaaactg       90
+0
+     tggagcgccg aaatcccgaa tctctatcgt gcggtggttg aactgcacac cgccgacggc       96
+0
+     acgctgattg aagcagaagc ctgcgatgtc ggtttccgcg aggtgcggat tgaaaatggt      102
+0
+     ctgctgctgc tgaacggcaa gccgttgctg attcgaggcg ttaaccgtca cgagcatcat      108
+0
+     cctctgcatg gtcaggtcat ggatgagcag acgatggtgc aggatatcct gctgatgaag      114
+0
+     cagaacaact ttaacgccgt gcgctgttcg cattatccga accatccgct gtggtacacg      120
+0
+     ctgtgcgacc gctacggcct gtatgtggtg gatgaagcca atattgaaac ccacggcatg      126
+0
+     gtgccaatga atcgtctgac cgatgatccg cgctggctac cggcgatgag cgaacgcgta      132
+0
+     acgcgaatgg tgcagcgcga tcgtaatcac ccgagtgtga tcatctggtc gctggggaat      138
+0
+     gaatcaggcc acggcgctaa tcacgacgcg ctgtatcgct ggatcaaatc tgtcgatcct      144
+0
+     tcccgcccgg tgcagtatga aggcggcgga gccgacacca cggccaccga tattatttgc      150
+0
+     ccgatgtacg cgcgcgtgga tgaagaccag cccttcccgg ctgtgccgaa atggtccatc      156
+0
+     aaaaaatggc tttcgctacc tggagagacg cgcccgctga tcctttgcga atacgcccac      162
+0
+     gcgatgggta acagtcttgg cggtttcgct aaatactggc aggcgtttcg tcagtatccc      168
+0
+     cgtttacagg gcggcttcgt ctgggactgg gtggatcagt cgctgattaa atatgatgaa      174
+0
+     aacggcaacc cgtggtcggc ttacggcggt gattttggcg atacgccgaa cgatcgccag      180
+0
+     ttctgtatga acggtctggt ctttgccgac cgcacgccgc atccagcgct gacggaagca      186
+0
+     aaacaccagc agcagttttt ccagttccgt ttatccgggc aaaccatcga agtgaccagc      192
+0
+     gaatacctgt tccgtcatag cgataacgag ctcctgcact ggatggtggc gctggatggt      198
+0
+     aagccgctgg caagcggtga agtgcctctg gatgtcgctc cacaaggtaa acagttgatt      204
+0
+     gaactgcctg aactaccgca gccggagagc gccgggcaac tctggctcac agtacgcgta      210
+0
+     gtgcaaccga acgcgaccgc atggtcagaa gccgggcaca tcagcgcctg gcagcagtgg      216
+0
+     cgtctggcgg aaaacctcag tgtgacgctc cccgccgcgt cccacgccat cccgcatctg      222
+0
+     accaccagcg aaatggattt ttgcatcgag ctgggtaata agcgttggca atttaaccgc      228
+0
+     cagtcaggct ttctttcaca gatgtggatt ggcgataaaa aacaactgct gacgccgctg      234
+0
+     cgcgatcagt tcacccgtgc accgctggat aacgacattg gcgtaagtga agcgacccgc      240
+0
+     attgacccta acgcctgggt cgaacgctgg aaggcggcgg gccattacca ggccgaagca      246
+0
+     gcgttgttgc agtgcacggc agatacactt gctgatgcgg tgctgattac gaccgctcac      252
+0
+     gcgtggcagc atcaggggaa aaccttattt atcagccgga aaacctaccg gattgatggt      258
+0
+     agtggtcaaa tggcgattac cgttgatgtt gaagtggcga gcgatacacc gcatccggcg      264
+0
+     cggattggcc tgaactgcca gctggcgcag gtagcagagc gggtaaactg gctcggatta      270
+0
+     gggccgcaag aaaactatcc cgaccgcctt actgccgcct gttttgaccg ctgggatctg      276
+0
+     ccattgtcag acatgtatac cccgtacgtc ttcccgagcg aaaacggtct gcgctgcggg      282
+0
+     acgcgcgaat tgaattatgg cccacaccag tggcgcggcg acttccagtt caacatcagc      288
+0
+     cgctacagtc aacagcaact gatggaaacc agccatcgcc atctgctgca cgcggaagaa      294
+0
+     ggcacatggc tgaatatcga cggtttccat atggggattg gtggcgacga ctcctggagc      300
+0
+     ccgtcagtat cggcggaatt ccagctgagc gccggtcgct accattacca gttggtctgg      306
+0
+     tgtcaaaaat aataataa                                                    307
+8
+//
+
+Output file format
+
+  Output files for usage example
+
+  File: report
+
+# Report of megamerger of: V00295 and V00296
+
+V00295 overlap starts at 1
+V00296 overlap starts at 3019
+
+Using V00296 1-3018 as the initial sequence
+
+Matching region V00295 1-60 : V00296 3019-3078
+Length of match: 60
+
+V00295 overlap ends at 60
+V00296 overlap ends at 3078
+
+Using V00295 61-1500 as the final sequence
+
+  File: v00295.merged
+
+>V00295 V00295.1 E. coli lacY gene (codes for lactose permease).
+accatgattacggattcactggccgtcgttttacaacgtcgtgactgggaaaaccctggc
+gttacccaacttaatcgccttgcagcacatccccctttcgccagctggcgtaatagcgaa
+gaggcccgcaccgatcgcccttcccaacagttgcgcagcctgaatggcgaatggcgcttt
+gcctggtttccggcaccagaagcggtgccggaaagctggctggagtgcgatcttcctgag
+gccgatactgtcgtcgtcccctcaaactggcagatgcacggttacgatgcgcccatctac
+accaacgtaacctatcccattacggtcaatccgccgtttgttcccacggagaatccgacg
+ggttgttactcgctcacatttaatgttgatgaaagctggctacaggaaggccagacgcga
+attatttttgatggcgttaactcggcgtttcatctgtggtgcaacgggcgctgggtcggt
+tacggccaggacagtcgtttgccgtctgaatttgacctgagcgcatttttacgcgccgga
+gaaaaccgcctcgcggtgatggtgctgcgttggagtgacggcagttatctggaagatcag
+gatatgtggcggatgagcggcattttccgtgacgtctcgttgctgcataaaccgactaca
+caaatcagcgatttccatgttgccactcgctttaatgatgatttcagccgcgctgtactg
+gaggctgaagttcagatgtgcggcgagttgcgtgactacctacgggtaacagtttcttta
+tggcagggtgaaacgcaggtcgccagcggcaccgcgcctttcggcggtgaaattatcgat
+gagcgtggtggttatgccgatcgcgtcacactacgtctgaacgtcgaaaacccgaaactg
+tggagcgccgaaatcccgaatctctatcgtgcggtggttgaactgcacaccgccgacggc
+acgctgattgaagcagaagcctgcgatgtcggtttccgcgaggtgcggattgaaaatggt
+ctgctgctgctgaacggcaagccgttgctgattcgaggcgttaaccgtcacgagcatcat
+cctctgcatggtcaggtcatggatgagcagacgatggtgcaggatatcctgctgatgaag
+cagaacaactttaacgccgtgcgctgttcgcattatccgaaccatccgctgtggtacacg
+ctgtgcgaccgctacggcctgtatgtggtggatgaagccaatattgaaacccacggcatg
+gtgccaatgaatcgtctgaccgatgatccgcgctggctaccggcgatgagcgaacgcgta
+acgcgaatggtgcagcgcgatcgtaatcacccgagtgtgatcatctggtcgctggggaat
+gaatcaggccacggcgctaatcacgacgcgctgtatcgctggatcaaatctgtcgatcct
+tcccgcccggtgcagtatgaaggcggcggagccgacaccacggccaccgatattatttgc
+ccgatgtacgcgcgcgtggatgaagaccagcccttcccggctgtgccgaaatggtccatc
+aaaaaatggctttcgctacctggagagacgcgcccgctgatcctttgcgaatacgcccac
+gcgatgggtaacagtcttggcggtttcgctaaatactggcaggcgtttcgtcagtatccc
+cgtttacagggcggcttcgtctgggactgggtggatcagtcgctgattaaatatgatgaa
+aacggcaacccgtggtcggcttacggcggtgattttggcgatacgccgaacgatcgccag
+ttctgtatgaacggtctggtctttgccgaccgcacgccgcatccagcgctgacggaagca
+aaacaccagcagcagtttttccagttccgtttatccgggcaaaccatcgaagtgaccagc
+gaatacctgttccgtcatagcgataacgagctcctgcactggatggtggcgctggatggt
+aagccgctggcaagcggtgaagtgcctctggatgtcgctccacaaggtaaacagttgatt
+gaactgcctgaactaccgcagccggagagcgccgggcaactctggctcacagtacgcgta
+gtgcaaccgaacgcgaccgcatggtcagaagccgggcacatcagcgcctggcagcagtgg
+cgtctggcggaaaacctcagtgtgacgctccccgccgcgtcccacgccatcccgcatctg
+accaccagcgaaatggatttttgcatcgagctgggtaataagcgttggcaatttaaccgc
+cagtcaggctttctttcacagatgtggattggcgataaaaaacaactgctgacgccgctg
+cgcgatcagttcacccgtgcaccgctggataacgacattggcgtaagtgaagcgacccgc
+attgaccctaacgcctgggtcgaacgctggaaggcggcgggccattaccaggccgaagca
+gcgttgttgcagtgcacggcagatacacttgctgatgcggtgctgattacgaccgctcac
+gcgtggcagcatcaggggaaaaccttatttatcagccggaaaacctaccggattgatggt
+agtggtcaaatggcgattaccgttgatgttgaagtggcgagcgatacaccgcatccggcg
+cggattggcctgaactgccagctggcgcaggtagcagagcgggtaaactggctcggatta
+gggccgcaagaaaactatcccgaccgccttactgccgcctgttttgaccgctgggatctg
+ccattgtcagacatgtataccccgtacgtcttcccgagcgaaaacggtctgcgctgcggg
+acgcgcgaattgaattatggcccacaccagtggcgcggcgacttccagttcaacatcagc
+cgctacagtcaacagcaactgatggaaaccagccatcgccatctgctgcacgcggaagaa
+ggcacatggctgaatatcgacggtttccatatggggattggtggcgacgactcctggagc
+ccgtcagtatcggcggaattccagctgagcgccggtcgctaccattaccagttggtctgg
+tgtcaaaaataataataaccgggcaggccatgtctgcccgtatttcgcgtaaggaaatcc
+attatgtactatttaaaaaacacaaacttttggatgttcggtttattctttttcttttac
+ttttttatcatgggagcctacttcccgtttttcccgatttggctacatgacatcaaccat
+atcagcaaaagtgatacgggtattatttttgccgctatttctctgttctcgctattattc
+caaccgctgtttggtctgctttctgacaaactcgggctgcgcaaatacctgctgtggatt
+attaccggcatgttagtgatgtttgcgccgttctttatttttatcttcgggccactgtta
+caatacaacattttagtaggatcgattgttggtggtatttatctaggcttttgttttaac
+gccggtgcgccagcagtagaggcatttattgagaaagtcagccgtcgcagtaatttcgaa
+tttggtcgcgcgcggatgtttggctgtgttggctgggcgctgtgtgcctcgattgtcggc
+atcatgttcaccatcaataatcagtttgttttctggctgggctctggctgtgcactcatc
+ctcgccgttttactctttttcgccaaaacggatgcgccctcttctgccacggttgccaat
+gcggtaggtgccaaccattcggcatttagccttaagctggcactggaactgttcagacag
+ccaaaactgtggtttttgtcactgtatgttattggcgtttcctgcacctacgatgttttt
+gaccaacagtttgctaatttctttacttcgttctttgctaccggtgaacagggtacgcgg
+gtatttggctacgtaacgacaatgggcgaattacttaacgcctcgattatgttctttgcg
+ccactgatcattaatcgcatcggtgggaaaaacgccctgctgctggctggcactattatg
+tctgtacgtattattggctcatcgttcgccacctcagcgctggaagtggttattctgaaa
+acgctgcatatgtttgaagtaccgttcctgctggtgggctgctttaaatatattaccagc
+cagtttgaagtgcgtttttcagcgacgatttatctggtctgtttctgcttctttaagcaa
+ctggcgatgatttttatgtctgtactggcgggcaatatgtatgaaagcatcggtttccag
+ggcgcttatctggtgctgggtctggtggcgctgggcttcaccttaatttccgtgttcacg
+cttagcggccccggcccgctttccctgctgcgtcgtcaggtgaatgaagtcgcttaagca
+atcaatgtcggatgcggcgcgacgcttatccgaccaacatatcataacggagtgatcgca
+ttgaacatgccaatgaccgaaagaataagagcaggcaagctatttaccgatatgtgcgaa
+ggcttaccggaaaaaaga
+
+   A merged sequence is written out.
+
+   Where there has been a mismatch between the two sequences, the merged
+   sequence is written out in uppercase and the sequence whose mismatch
+   region is furthest from the edges of the sequence is used in the
+   merged sequence.
+
+   The name and description of the first input sequence is used for the
+   name and description of the output sequence.
+
+   A report of the merger is written out.
+
+Data files
+
+   None.
+
+Notes
+
+   If you run out of memory, use a larger wordsize.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name                 Description
+   cons         Creates a consensus from multiple alignments
+   merger       Merge two overlapping sequences
+
+   Compare this with the program merger which does a more accurate
+   alignment of more divergent sequences using the Needle and Wunsch
+   algorithm but which uses much more memory.
+
+   A graphical dotplot of the matches used in this merge can be displayed
+   using the program dotpath.
+
+Author(s)
+
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+History
+
+   Written Aug 2000 by Gary Williams.
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

@@ -1,0 +1,241 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: acdtrace
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+acdtrace
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+    Function
+</H2>
+ACD compiler on-screen trace
+
+<H2>
+    Description
+</H2>
+
+Acdtrace reports the processing of lines in an ACD file, including the
+resolution of any variables or ACD functions.
+
+<p>
+Acdtrace does not have its own command line. Instead, it will run the
+command line of any EMBOSS program by reading its ACD file and
+processing the command line and user responses in exactly the same way
+as the true program.
+
+<p>
+Acdtrace uses a very simple method. The first command line parameter is
+the name of the EMBOSS program to be compiled. All other command line
+parameters and qualifiers are processed by that program's ACD file.
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with acdtrace</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>acdtrace antigenic </b>
+Finds antigenic sites in proteins
+Input protein sequence(s): <b>tsw:actb1_fugru</b>
+Minimum length of antigenic region [6]: <b></b>
+Output report [actb1_fugru.antigenic]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+The first parameter is the name of the program to compile.
+
+All other command line parameters and qualifiers are defined for that
+program - see the documentation for the program of choice.
+
+<P>
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<p>
+
+The output file is empty, but any format available to the specified
+program can be used.
+
+<p>
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: actb1_fugru.antigenic</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+</pre>
+</td></tr></table><p>
+
+
+<H2>
+    Data files
+</H2>
+
+
+Acdtrace will use any data files specified in the ACD file of the
+specified program, but will ignore any data files that are only used
+directly by the program's code.
+
+<p>
+EMBOSS data files are distributed with the application and stored
+in the standard EMBOSS data directory, which is defined
+by the EMBOSS environment variable EMBOSS_DATA.
+
+<p>
+
+To see the available EMBOSS data files, run:
+<p>
+<pre>
+% embossdata -showall
+</pre>
+<p>
+To fetch one of the data files (for example 'Exxx.dat') into your
+current directory for you to inspect or modify, run:
+
+<pre>
+
+% embossdata -fetch -file Exxx.dat
+
+</pre>
+<p>
+
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called
+".embossdata". Files for all EMBOSS runs can be put in the user's home
+directory, or again in a subdirectory called ".embossdata".
+
+<p>
+The directories are searched in the following order:
+
+<ul>
+   <li> . (your current directory)
+   <li> .embossdata (under your current directory)
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+<p>
+
+<H2>
+    Notes
+</H2>
+
+
+<H2>
+    References
+</H2>
+
+
+<H2>
+    Warnings
+</H2>
+
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+
+<H2>
+    Exit status
+</H2>
+
+
+It exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+
+None.
+
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="acdc.html">acdc</a></td>
+<td>ACD compiler</td>
+</tr>
+
+<tr>
+<td><a href="acdpretty.html">acdpretty</a></td>
+<td>ACD pretty printing utility</td>
+</tr>
+
+<tr>
+<td><a href="acdtable.html">acdtable</a></td>
+<td>Creates an HTML table from an ACD file</td>
+</tr>
+
+<tr>
+<td><a href="acdvalid.html">acdvalid</a></td>
+<td>ACD file validation</td>
+</tr>
+
+</table>
+<H2>
+    Author(s)
+</H2>
+
+Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
+<H2>
+    History
+</H2>
+
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by developers of applications and
+interfaces. 
+
+<H2>
+    Comments
+</H2>
+None
+
+
+
+</BODY>
+</HTML>
+

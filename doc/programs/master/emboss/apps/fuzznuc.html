@@ -1,0 +1,230 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: fuzznuc
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+fuzznuc
+<!--#include file="header2.inc" -->
+<H2>
+    Function
+</H2>
+<!--#include file="inc/fuzznuc.ione" -->
+
+<H2>
+    Description
+</H2>
+fuzznuc uses PROSITE style patterns to search nucleotide sequences. 
+
+<p>
+Patterns are specifications of a (typically short) length of sequence to
+be found.  They can specify a search for an exact sequence or they can
+allow various ambiguities, matches to variable lengths of sequence and
+repeated subsections of the sequence. 
+
+<p>
+fuzznuc intelligently selects the optimum searching algorithm to use,
+depending on the complexity of the search pattern specified. 
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/fuzznuc.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/fuzznuc.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/fuzznuc.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>fuzznuc</b> reads in normal nucleic acid sequence USAs.
+
+<p>
+<!--#include file="inc/fuzznuc.input" -->
+
+
+<h3>Pattern specification</h3>
+
+Patterns for fuzznuc are based on the format of pattern used in the
+PROSITE database, with the difference that the terminating dot '.' and
+the hyphens, '-', between the characters are optional. 
+
+<p>
+The PROSITE pattern definition from the PROSITE documentation (amended
+to refer to nucleic acid sequences, not proteins) follows. 
+
+<ul>
+
+<li>The standard IUPAC one-letter codes for the nucleotides are used. 
+
+<li>The symbol `n' is used for a position where any nucleotide is
+accepted. 
+
+<li>Ambiguities are indicated by listing the acceptable nucleotides for a
+given position, between square parentheses `[ ]'.  For example: [ACG]
+stands for A or C or G. 
+
+<li>Ambiguities are also indicated by listing between a pair of curly
+brackets `{ }' the nucleotides that are not accepted at a given
+position.  For example: {AG} stands for any nucleotides except A and G. 
+
+<li>Each element in a pattern is separated from its neighbor by a `-'. 
+(Optional in fuzznuc). 
+
+<li>Repetition of an element of the pattern can be indicated by following
+that element with a numerical value or a numerical range between
+parenthesis.  Examples: N(3) corresponds to N-N-N, N(2,4) corresponds to
+N-N or N-N-N or N-N-N-N. 
+
+<li>When a pattern is restricted to either the 5' or 3' end of a
+sequence, that pattern either starts with a `&lt;' symbol or respectively
+ends with a `&gt;' symbol. 
+
+<li>A period ends the pattern.  (Optional in fuzznuc). 
+
+<li>All other characters, including spaces are not allowed.
+
+</ul>
+
+<p>
+For example, in the EMBL entry ECLAC you can look for the pattern:
+
+<pre>
+
+[CG](5)TG{A}N(1,5)C
+
+</pre>
+
+<p>
+This searches for "C or G" 5 times, followed by T and G, then anything
+except A, then any base (1 to 5 times) before a C. 
+
+<p>
+You can use ambiguity codes for nucleic acid searches but not within []
+or {} as they expand to bracketed counterparts.  For example, "s" is
+expanded to "[GC]" therefore [S] would be expanded to [[GC]] which is
+illegal. 
+
+<p>
+Note the use of X is reserved for proteins.  You must use N for nucleic
+acids to refer to any base. 
+
+<p>
+The search is case-independent, so 'AAA' matches 'aaa'. 
+
+<H2>
+    Output file format
+</H2>
+
+
+<!--#include file="inc/reportformats.ihtml" -->
+<p>
+
+By default <b>fuzznuc</b> writes a 'seqtable' report file.
+
+<p>
+<!--#include file="inc/fuzznuc.output" -->
+    
+
+	
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/fuzznuc.isee" -->
+<p>
+Other EMBOSS programs allow you to search for regular expression
+patterns but may be less easy for the user who has never used regular
+expressions before:
+
+<p>
+
+<ul>
+
+<li><a href="dreg.html">dreg</a> - Regular expression search of a
+nucleotide sequence
+
+<li><a href="preg.html">preg</a> - Regular expression search of a protein
+sequence
+
+</ul>
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/ableasby.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/fuzznuc.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/fuzznuc.comment" -->
+
+</BODY>
+</HTML>
+

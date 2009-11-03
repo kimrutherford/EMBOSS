@@ -1,0 +1,232 @@
+abiview = abiview ../../data/abiview.abi -graph cps -auto
+acdc = acdc embossversion -auto
+antigenic = antigenic tsw:opsd_human -auto
+backtranseq = backtranseq tsw:opsd_human -auto
+banana = banana tembl:x65923 -graph ps -auto
+graphps = banana tembl:x65923 -graph ps -auto
+graphcps = banana tembl:x65923 -graph cps -auto
+graphpng = banana tembl:x65923 -graph png -auto
+cai = cai tembl:x65923 -auto
+chaos = chaos tembl:x65923 -graph ps -auto
+charge = charge tsw:opsd_human -auto
+checktrans = checktrans ../../data/paamir.pep -auto
+chips = chips tembl:x65923 -auto
+cirdna = cirdna -infile ../../data/data.cirp -graph ps -auto
+codcmp = codcmp -first Eecoli.cut -second Ehaein.cut -auto
+coderet = coderet tembl:x65923 -auto
+compseq = compseq tsw:opsd_human -auto
+cons = cons ../../data/globins.msf -auto
+cpgplot = cpgplot tembl:x65923 -graph ps -auto
+cpgreport = cpgreport tembl:x65923 -auto
+cusp = cusp tembl:x65923 -auto
+cutgextract = cutgextract ../../data -auto
+cutseq = cutseq tembl:x65923 -from 20 -to 500 -auto
+dan = dan tembl:x65923 -auto
+#
+dbblast-entry = seqret qapblast:CO9_FUGRU -out x.x -auto
+dbblast-acc = seqret qapblast-acc:Q90515 -out x.x -auto
+dbblast-query = seqret qapblast:n* -out x.x -auto
+dbblast-all = seqret qapblast:* -out x.x -auto
+dbfasta-entry = seqret qanfasta:m11903 -out x.x -auto
+dbfasta-acc = seqret qanfasta-acc:Z46957 -out x.x -auto
+dbfasta-query = seqret qanfasta:m* -out x.x -auto
+dbfasta-all = seqret qanfasta:* -out x.x -auto
+dbflat-entry = seqret qanflat:m11903 -out x.x -auto
+dbflat-acc = seqret qanflat-acc:Z46957 -out x.x -auto
+dbflat-acc2 = seqret tembl-acc:V00451 -out x.x -auto
+dbflat-query = seqret qanflat:m* -out x.x -auto
+dbflat-key = seqret tembl-key:a* -out x.x -auto
+dbflat-all = seqret qanflat:* -out x.x -auto
+dbgcg-entry = seqret qangcg:X65923 -out x.x -auto
+dbgcg-acc = seqret qangcg-acc:Z46957 -out x.x -auto
+dbgcgpir-des = seqret qapirall-des:cytochrome -out x.x -auto
+dbgcg-query = seqret qangcg:m* -out x.x -auto
+dbgcg-all = seqret qangcg:* -out x.x -auto
+dbgcgpir-des = seqret qapirall-des:cytochrome -out x.x -auto
+#
+#xdbblast-entry = seqret qapblast:CO9_FUGRU -out x.x -auto
+#xdbblast-acc = seqret qapblast-acc:Q90515 -out x.x -auto
+#xdbblast-query = seqret qapblast:n* -out x.x -auto
+#xdbblast-all = seqret qapblast:* -out x.x -auto
+xdbfasta-entry = seqret qanxfasta:m11903 -out x.x -auto
+xdbfasta-acc = seqret qanxfasta-acc:Z46957 -out x.x -auto
+xdbfasta-query = seqret qanxfasta:m* -out x.x -auto
+xdbfasta-all = seqret qanxfasta:* -out x.x -auto
+xdbflat-entry = seqret qanxflat:m11903 -out x.x -auto
+xdbflat-acc = seqret qanxflat-acc:Z46957 -out x.x -auto
+xdbflat-query = seqret qanxflat:m* -out x.x -auto
+xdbflat-key = seqret qanxflatall-key:a* -out x.x -auto
+xdbflat-all = seqret qanxflat:* -out x.x -auto
+xdbgcg-entry = seqret qanxgcg:X65923 -out x.x -auto
+xdbgcg-acc = seqret qanxgcg-acc:Z46957 -out x.x -auto
+xdbgcgpir-des = seqret qaxpirall-des:cytochrome -out x.x -auto
+xdbgcg-query = seqret qanxgcg:m* -out x.x -auto
+xdbgcg-all = seqret qanxgcg:* -out x.x -auto
+xdbgcgpir-des = seqret qaxpirall-des:cytochrome -out x.x -auto
+#
+dbiblast = dbiblast -dir ../../wormpep -file wormpep -index . -db worm -auto
+dbiblastmem = dbiblast -nosystemsort -dir ../../wormpep -file wormpep -index . -db worm -auto
+dbiblastswnew = dbiblast -dir ../../data -db swnew -auto
+dbiblastlist = dbiblast -dir ../../data -file 'swsplit.00.pin,swsplit.01.pin,swsplit.02.pin,swsplit.03.pin,swsplit.04.pin' -index . -db swsplit -auto
+dbiblastwild = dbiblast -dir ../../data -file swsplit.*.pin -index . -db swsplit -auto
+dbiblastwildstar = dbiblast -dir ../../data -file swsplit.*.* -index . -db swsplit -auto
+dbifasta = dbifasta -dir ../../wormpep -file wormpep -index . -id idacc -db worm -auto
+dbifastamem = dbifasta -dir ../../wormpep -file wormpep -index . -id idacc -db worm -nosystemsort -auto
+dbiflat = dbiflat -dir ../../swiss -file seq.dat -index . -id swiss -db swiss -auto
+dbiflatmem = dbiflat -dir ../../swiss -file seq.dat -index . -id swiss -db swiss -nosystemsort -auto
+dbigcg = dbigcg -dir ../../embl -file '*.seq' -index . -id embl -db embl -auto
+dbigcgmem = dbigcg -nosystemsort -dir ../../embl -file '*.seq' -index . -id embl -db embl -auto
+dbigcg2 = dbigcg -dir ../../pir -file '*.seq' -index . -id pir -db pir -auto
+dbigcgmem2 = dbigcg -nosystemsort -dir ../../pir -file '*.seq' -index . -id pir -db pir -auto
+#dbxblast =test= dbxblast -dir ../../wormpep -file wormpep -index .  -id idacc -dbres worm -db worm -auto
+#dbxblastlist =test= dbxblast -dir ../../data -file 'swsplit.00.pin,swsplit.01.pin,swsplit.02.pin,swsplit.03.pin,swsplit.04.pin' -index . -dbres swnew -dbname swsplit -auto
+#dbxblastwild =test= dbxblast -dir ../../data -file swsplit.*.pin -index . -dbres swnew -dbname swsplit -auto
+#dbxblastwildstar =test= dbxblast -dir ../../data -file swsplit.*.* -index . -dbres swnew -dbname swsplit -auto
+dbxfasta = dbxfasta -dir ../../wormpep -file wormpep -index . -id idacc -dbres swnew -dbname worm -auto
+dbxflat = dbxflat -dir ../../swiss -file seq.dat -index . -id swiss -dbres swnew -dbname swiss -auto
+dbxgcg = dbxgcg -dir ../../embl -file '*.seq' -index . -id embl -dbres embl -dbname embl -auto
+dbxgcg2 = dbxgcg -dir ../../pir -file '*.seq' -index . -id pir -dbres pir -dbname pir -auto
+dbxgcg3 = dbxgcg -dir ../../pir -file '*.seq' -index . -id pir -dbres pir -dbname pir -fields "id,acc,des,key,org" -auto
+#
+degapseq = degapseq ../../data/globins.msf -auto
+descseq = descseq -desc 'Test' tsw:opsd_human -auto
+diffseq = diffseq tembl:x65923 tembl:x65921 -auto
+digest = digest tsw:opsd_human -auto
+distmat = distmat ../../data/globins.msf -auto
+dotmatcher = dotmatcher tembl:x65923 tembl:x65921 -graph ps -auto
+dotpath = dotpath tembl:x65923 tembl:x65921 -graph ps -auto
+dottup = dottup tembl:x65923 tembl:x65921 -graph ps -auto
+dreg = dreg tembl:x65923 -pattern ggcaggcgcgc -auto
+einverted = einverted tembl:d00596 -auto
+einvertedwild = einverted 'tembl:m*' -auto
+embl1 = seqret -auto tembl:x65923
+emblmany = seqret -auto 'tembl:m*'
+embossdata = embossdata -fetch -file Eamino.dat -outfile ./Eamino.dat -auto
+embossversion = embossversion -auto
+emowse = emowse 'tsw:*fugru' ../../data/test.mowse -auto
+entrails =test= entrails -auto
+entret = entret tembl:x65923 -auto
+equicktandem = equicktandem tembl:x65923 -auto
+est2genome = est2genome tembl:x65923 tembl:x65921 -auto
+est2genome2 = est2genome tgenbank:x65923 tembl:x65921 -auto
+est2genome3 = est2genome tgenbank-acc:X65923 tembl-acc:X65921 -auto
+etandem = etandem tembl:x65923 -auto
+extractseq = extractseq tembl:x65923 -region '20-50' -auto
+feat1 =test= seqretallfeat -auto tembl:x65923
+featmany =test= seqretallfeat -auto 'tembl:m*'
+findkm = findkm ../../data/test.findkm -graph ps -auto
+freak = freak tembl:x65923 -auto
+fuzznuc = fuzznuc tembl:x65923 -patt ggcaggcgcgc -auto
+fuzzpro = fuzzpro tsw:opsd_human -patt MMNKQFR -auto
+fuzztran = fuzztran tembl:x65923 -patt kat -auto
+garnier = garnier tsw:opsd_human -auto
+geecee = geecee tembl:x65923 -auto
+getorf = getorf tembl:x65923 -auto
+hmoment = hmoment tsw:opsd_human -auto
+iep = iep tsw:opsd_human -auto
+infoalign = infoalign ../../data/globins.msf -auto
+infoseq = infoseq tsw:opsd_human
+intconv =test= intconv ../../data/data.linp -auto
+isochore = isochore tembl:x13776 -graph ps -graph ps -auto
+lindna = lindna -infile ../../data/data.linp -graph cps -auto
+marscan = marscan tembl:x65923 -auto
+maskfeat = maskfeat tembl:x65923 -auto
+maskseq = maskseq tembl:x65923 -regions '20-50' -auto
+matcher = matcher tembl:x65923 tembl:x65921 -auto
+megamerger = megamerger tembl:x65923 tembl:x65921 -auto
+merger = merger tembl:x65923 tembl:x65921 -auto
+msbar = msbar tembl:x65923 -auto
+needle = needle tembl:x65923 tembl:x65921 -auto
+newcpgreport = newcpgreport tembl:u23808 -auto
+newcpgseek = newcpgseek tembl:u23808 -auto
+newseq = newseq -name fred -desc test -type p -seq acdefg -auto
+noreturn = noreturn ../../data/oddcomp.comp -auto
+notseq = notseq 'tsw:*' -exclude='ops*' -auto
+nthseq = nthseq ../../swiss/seq.dat -num 5 -auto
+octanol = octanol tsw:opsd_human -graph ps -auto
+oddcomp = oddcomp 'tsw:*' -infile ../../data/oddcomp.comp -auto
+palindrome = palindrome tembl:x65921 -min 4 -auto
+pasteseq = pasteseq tembl:x65923 tembl:x65921 -pos 200 -auto
+patmatdb = patmatdb 'tsw:*' -motif kat -auto
+patmatmotifs = patmatmotifs tsw:opsd_human -auto
+#patmattest =test= patmattest tsw:opsd_human -expr kat -auto
+pepcoil = pepcoil tsw:opsd_human -auto
+pepnet = pepnet tsw:opsd_human -graph ps -auto
+pepstats = pepstats tsw:opsd_human -auto
+pepwheel = pepwheel tsw:opsd_human -graph ps -auto
+pepwindow = pepwindow tsw:opsd_human -graph ps -auto
+pepwindowall = pepwindowall tsw:opsd_human -graph ps -auto
+plotcon = plotcon ../../data/globins.msf -graph ps -auto
+plotorf = plotorf 'tembl:x65923' -graph ps -auto
+polydot = polydot 'tembl:m*' -graph ps -auto
+preg = preg 'tsw:*' -pattern kat -auto
+prettyplot = prettyplot ../../data/globins.msf -graph ps -auto
+prettyseq = prettyseq tembl:x65923 -auto
+prima =test= prima tembl:x65923 -auto
+primersearch = primersearch 'tembl:*' ../../data/primers -auto
+profit = profit ../../data/globins.prophecy tsw:edd1_rat -auto
+prophecy = prophecy ../../data/globins.msf -type g -auto
+prophet = prophet tsw:edd1_rat ../../data/prophecy.gribskov -auto
+recoder = recoder tembl:x65923 -sbeg 31 -send 50 -auto
+remap = remap -notran -sbeg 1 -send 60 tembl:j01636 -enzymes 'taqi,bsu6i,acii,bsski' -auto
+remaptran = remap -sbeg 1 -send 60 tembl:j01636 -enzymes 'taqi,bsu6i,acii,bsski' -auto
+restover = restover tembl:x65923 -seqcomp acgt -auto
+restrict = restrict tembl:x65923 -auto
+revseq = revseq tembl:x65923 -auto
+seealso = seealso fuzznuc -outfile fuzznuc.isee
+seqinfo =test= seqinfo tsw:opsd_human -auto
+seqmatchall = seqmatchall 'tembl:x65923*' -auto
+seqret = seqret tsw:opsd_human -auto
+seqretall =test= seqretall 'tembl:x65923*' -auto
+seqretallfeat =test= seqretallfeat 'tembl:x65923*' -auto
+seqretfeat = seqret -feat tembl:x65923 -auto
+seqretset =test= seqretset ../../data/globins.msf -auto
+seqretsplit = seqretsplit 'tembl:x65923*' -auto
+set1 =test= seqretset -auto tsw:opsd_human
+setmany =test= seqretset -auto 'tsw:opsd_*'
+showalign = showalign ../../data/globins.msf -auto
+showdb = showdb
+showfeat = showfeat tembl:x65923 -auto
+showorf = showorf tembl:x65923 -auto
+showseq = showseq tembl:x65923 -auto
+shuffleseq = shuffleseq tembl:x65923 -auto
+sigcleave = sigcleave tsw:opsd_human -auto
+silent = silent tembl:x65923 -sbeg 31 -send 50 -auto
+sixpack = sixpack -sbeg 1 -send 60 tembl:j01636  -auto
+splitter = splitter -size 500 tembl:x65923 -auto
+stretcher = stretcher tembl:x65923 tembl:x65921 -auto
+stretchercoffee = stretcher tsw:opsd_human tsw:opsd_xenla -aform tcoffee -auto
+supermatcher = supermatcher tembl:x65923 tembl:x65921 -auto
+syco = syco -plot tembl:x65923 -cfile Echicken.cut -graph ps -auto
+textsearch = textsearch 'tsw:*' opsin -auto
+tfm = tfm tfm -nomore
+tmap = tmap tsw:opsd_human -graph ps -auto
+transeq = transeq -frame r tembl:x65923 -auto
+trimseq = trimseq tembl:x65923 -window 20 -percent 10 -auto
+vectorstrip = vectorstrip tembl:x65923 -vectors ../../data/data.vectorstrip -vectorfile -auto
+water = water tsw:opsd_human tsw:opsd_xenla -auto
+whichdb = whichdb x65921 -auto
+whichdbnone = whichdb notfound -auto
+wobble = wobble tembl:x65923 -graph ps -auto
+wordcount = wordcount tembl:x65923 -auto
+wordmatch = wordmatch tembl:x65923 tembl:x65921 -word 10 -auto
+wossname = wossname -search codon -auto
+#
+# EMBASSY Packages
+# ================
+#
+# DOMAINATRIX
+# -----------
+#
+#contacts = contacts -cpdb ../../data -cpdbextn .pxyz -con ../../data -conextn .con -thresh 1.0 -vdwf Evdw.dat -conlogf contacts.log
+domainer = domainer -scop ../../qa/scopparse-keep/all.scop -ccfp ../../qa/pdbplus-keep/ -ccfoutdir .  -pdboutdir .  -cpdblogf domainer.log1 -pdblogf domainer.log2 -auto
+# requires a modified stamp package installed to run scopalign
+#scopalign = scopalign -scopf ../../data/structure/all.scop2 -path ../../data
+# broken. ACD changed. How to specify now? Wait for qatest example
+###siggen = siggen -algpath ../../data -algextn .align -conpath ../../data -conextn .con -sparsity 10 -randomize N -datafile EBLOSUM62 -scoreseq Y -scorencon Y -scoreccon Y -scoreboth N -postsim Y -auto
+#swissparse = swissparse -keyfile ../../data/test.terms -spfile ../../data/test.seq -auto
+#
+# TOPO
+# ----
+#
+topo = topo tsw:aqp1_human -signa -prol=UM -cys=cg -gly=sr -acid=dr -basic=db -ohaa=da -araa=dg -graph ps -sections="18 35 49 67 94 115 136 156 165 184 211 232" -nomembrane -sigrange="74 82 sy 189 189 hm 239 239 sa 157 157 sa 262 262 sa"

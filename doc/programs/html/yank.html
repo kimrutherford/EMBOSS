@@ -1,0 +1,609 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: yank
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+yank
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+    Function
+</H2>
+Reads a sequence range, appends the full USA to a list file
+<H2>
+    Description
+</H2>
+
+<b>yank</b> is a simple utility to add a specified sequence name to a
+list file. 
+
+<p>
+
+In fact, it writes out not just the name of the sequence, but also the
+start and end position of a region within that sequence and, if the
+sequence is nucleic, if can specify whether the sequence is the reverse
+complement. 
+
+<p>
+
+Without the program <b>yank</b> you would need to use a text editor such
+as <i>pico</i> to create the appropriate list files.  <b>yank</b>
+makes this process easy. 
+
+
+<H3>List Files</H3>
+
+Many EMBOSS programs can read in a set of sequences.  (Some examples are
+<b>emma</b> and <b>union</b>) There are many ways of specifying these
+sequences, including wildcarded sequence file names, wildcarded database
+entry names and list files.  List files (files of file names) are the
+most flexible. <b>yank</b> is a utility to add sequences to a list file.
+
+<p>
+
+
+Instead of containing the sequences themselves, a List file contains
+"references" to sequences - so, for example, you might include database
+entries, the names of files containing sequences, or even the names of
+other list files.  For example, here's a valid list file, called
+<i>seq.list</i>:
+
+<p>
+<pre>
+unix % more seq.list 
+
+opsd_abyko.fasta
+sw:opsd_xenla
+sw:opsd_c*
+@another_list
+</pre>
+
+<p>
+
+This looks a bit odd, but it's really very straightforward; the file
+contains:
+
+<p>
+
+<ul>
+      <li><b>opsd_abyko.fasta</b> - this is the name of a sequence file. The file is read in from the current directory. 
+      <li><b>sw:opsd_xenla</b> - this is a reference to a specific sequence in the SwissProt database 
+      <li><b>sw:opsd_c*</b> - this represents all the sequences in SwissProt whose identifiers start with ``opsd_c'' 
+      <li><b>another_list</b> - this is the name of a second list file 
+</ul>
+
+<p>
+
+Notice the <b>@</b> in front of the last entry.  This is the way you tell
+EMBOSS that this file is a list file, not a regular sequence file. 
+
+
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with yank</b>
+<p>
+This is an example of adding an entry for the part of tembl:x65921 between positions 1913 and 1915 to the existing list file 'cds.list': 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>yank </b>
+Reads a sequence range, appends the full USA to a list file
+Input (gapped) sequence: <b>tembl:x65921</b>
+     Begin at position [start]: <b>1913</b>
+       End at position [end]: <b>1915</b>
+        Reverse strand [N]: <b></b>
+List of USAs output file [x65921.yank]: <b>cds.list</b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          sequence   (Gapped) sequence filename and optional
+                                  format, or reference (input USA)
+  [-outfile]           outfile    [*.yank] List of USAs output file
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -newfile            boolean    [N] Overwrite existing output file
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>(Gapped) sequence filename and optional format, or reference (input USA)</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>List of USAs output file</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.yank</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-newfile</td>
+<td>Overwrite existing output file</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>
+
+<H2>
+    Input file format
+</H2>
+
+<b>yank</b> reads any valid sequence USA.
+
+<p>
+
+You will be prompted for the start and end positions you wish to use.
+
+<p>
+
+If the sequence is nucleic, you will be prompted whether you wish to use
+the reverse complement of the sequence. 
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:x65921' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:x65921</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   X65921; SV 1; linear; genomic DNA; STD; HUM; 2016 BP.
+XX
+AC   X65921; S45242;
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 7)
+XX
+DE   H.sapiens fau 1 gene
+XX
+KW   fau 1 gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-2016
+RA   Kas K.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   K. Kas, University of Antwerp, Dept of Biochemistry T3.22,
+RL   Universiteitsplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-2016
+RX   DOI; 10.1016/0006-291X(92)91286-Y.
+RX   PUBMED; 1326960.
+RA   Kas K., Michiels L., Merregaert J.;
+RT   "Genomic structure and expression of the human fau gene: encoding the
+RT   ribosomal protein S30 fused to a ubiquitin-like protein.";
+RL   Biochem. Biophys. Res. Commun. 187(2):927-933(1992).
+XX
+DR   GDB; 191789.
+DR   GDB; 191790.
+DR   GDB; 354872.
+DR   GDB; 4590236.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..2016
+FT                   /organism="Homo sapiens"
+FT                   /mol_type="genomic DNA"
+FT                   /clone_lib="CML cosmid"
+FT                   /clone="15.1"
+FT                   /db_xref="taxon:9606"
+FT   mRNA            join(408..504,774..856,951..1095,1557..1612,1787..&gt;1912)
+FT                   /gene="fau 1"
+FT   exon            408..504
+FT                   /number=1
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   intron          857..950
+FT                   /number=2
+FT   exon            951..1095
+FT                   /number=3
+FT   intron          1096..1556
+FT                   /number=3
+FT   exon            1557..1612
+FT                   /number=4
+FT   intron          1613..1786
+FT                   /number=4
+FT   exon            1787..&gt;1912
+FT                   /number=5
+FT   polyA_signal    1938..1943
+XX
+SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
+     ctaccatttt ccctctcgat tctatatgta cactcgggac aagttctcct gatcgaaaac        60
+     ggcaaaacta aggccccaag taggaatgcc ttagttttcg gggttaacaa tgattaacac       120
+     tgagcctcac acccacgcga tgccctcagc tcctcgctca gcgctctcac caacagccgt       180
+     agcccgcagc cccgctggac accggttctc catccccgca gcgtagcccg gaacatggta       240
+     gctgccatct ttacctgcta cgccagcctt ctgtgcgcgc aactgtctgg tcccgccccg       300
+     tcctgcgcga gctgctgccc aggcaggttc gccggtgcga gcgtaaaggg gcggagctag       360
+     gactgccttg ggcggtacaa atagcaggga accgcgcggt cgctcagcag tgacgtgaca       420
+     cgcagcccac ggtctgtact gacgcgccct cgcttcttcc tctttctcga ctccatcttc       480
+     gcggtagctg ggaccgccgt tcaggtaaga atggggcctt ggctggatcc gaagggcttg       540
+     tagcaggttg gctgcggggt cagaaggcgc ggggggaacc gaagaacggg gcctgctccg       600
+     tggccctgct ccagtcccta tccgaactcc ttgggaggca ctggccttcc gcacgtgagc       660
+     cgccgcgacc accatcccgt cgcgatcgtt tctggaccgc tttccactcc caaatctcct       720
+     ttatcccaga gcatttcttg gcttctctta caagccgtct tttctttact cagtcgccaa       780
+     tatgcagctc tttgtccgcg cccaggagct acacaccttc gaggtgaccg gccaggaaac       840
+     ggtcgcccag atcaaggtaa ggctgcttgg tgcgccctgg gttccatttt cttgtgctct       900
+     tcactctcgc ggcccgaggg aacgcttacg agccttatct ttccctgtag gctcatgtag       960
+     cctcactgga gggcattgcc ccggaagatc aagtcgtgct cctggcaggc gcgcccctgg      1020
+     aggatgaggc cactctgggc cagtgcgggg tggaggccct gactaccctg gaagtagcag      1080
+     gccgcatgct tggaggtgag tgagagagga atgttctttg aagtaccggt aagcgtctag      1140
+     tgagtgtggg gtgcatagtc ctgacagctg agtgtcacac ctatggtaat agagtacttc      1200
+     tcactgtctt cagttcagag tgattcttcc tgtttacatc cctcatgttg aacacagacg      1260
+     tccatgggag actgagccag agtgtagttg tatttcagtc acatcacgag atcctagtct      1320
+     ggttatcagc ttccacacta aaaattaggt cagaccaggc cccaaagtgc tctataaatt      1380
+     agaagctgga agatcctgaa atgaaactta agatttcaag gtcaaatatc tgcaactttg      1440
+     ttctcattac ctattgggcg cagcttctct ttaaaggctt gaattgagaa aagaggggtt      1500
+     ctgctgggtg gcaccttctt gctcttacct gctggtgcct tcctttccca ctacaggtaa      1560
+     agtccatggt tccctggccc gtgctggaaa agtgagaggt cagactccta aggtgagtga      1620
+     gagtattagt ggtcatggtg ttaggacttt ttttcctttc acagctaaac caagtccctg      1680
+     ggctcttact cggtttgcct tctccctccc tggagatgag cctgagggaa gggatgctag      1740
+     gtgtggaaga caggaaccag ggcctgatta accttccctt ctccaggtgg ccaaacagga      1800
+     gaagaagaag aagaagacag gtcgggctaa gcggcggatg cagtacaacc ggcgctttgt      1860
+     caacgttgtg cccacctttg gcaagaagaa gggccccaat gccaactctt aagtcttttg      1920
+     taattctggc tttctctaat aaaaaagcca cttagttcag tcatcgcatt gtttcatctt      1980
+     tacttgcaag gcctcaggga gaggtgtgct tctcgg                                2016
+//
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: cds.list</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+tembl-id:X65921[782:856]
+tembl-id:X65921[951:1095]
+tembl-id:X65921[1557:1612]
+tembl-id:X65921[1787:1912]
+tembl-id:X65921[1913:1915]
+</pre>
+</td></tr></table><p>
+
+
+<p>
+
+The output list file can now be read in by a program such as
+<b>union</b> by specifying the list file as '@cds.list' when
+<b>union</b> prompts for input. 
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+
+<H2>
+    References
+</H2>
+
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="biosed.html">biosed</a></td>
+<td>Replace or delete sequence sections</td>
+</tr>
+
+<tr>
+<td><a href="codcopy.html">codcopy</a></td>
+<td>Reads and writes a codon usage table</td>
+</tr>
+
+<tr>
+<td><a href="cutseq.html">cutseq</a></td>
+<td>Removes a specified section from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="degapseq.html">degapseq</a></td>
+<td>Removes gap characters from sequences</td>
+</tr>
+
+<tr>
+<td><a href="descseq.html">descseq</a></td>
+<td>Alter the name or description of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="entret.html">entret</a></td>
+<td>Reads and writes (returns) flatfile entries</td>
+</tr>
+
+<tr>
+<td><a href="extractalign.html">extractalign</a></td>
+<td>Extract regions from a sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="extractfeat.html">extractfeat</a></td>
+<td>Extract features from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="extractseq.html">extractseq</a></td>
+<td>Extract regions from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="listor.html">listor</a></td>
+<td>Write a list file of the logical OR of two sets of sequences</td>
+</tr>
+
+<tr>
+<td><a href="makenucseq.html">makenucseq</a></td>
+<td>Creates random nucleotide sequences</td>
+</tr>
+
+<tr>
+<td><a href="makeprotseq.html">makeprotseq</a></td>
+<td>Creates random protein sequences</td>
+</tr>
+
+<tr>
+<td><a href="maskfeat.html">maskfeat</a></td>
+<td>Mask off features of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="maskseq.html">maskseq</a></td>
+<td>Mask off regions of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="newseq.html">newseq</a></td>
+<td>Type in a short new sequence</td>
+</tr>
+
+<tr>
+<td><a href="noreturn.html">noreturn</a></td>
+<td>Removes carriage return from ASCII files</td>
+</tr>
+
+<tr>
+<td><a href="notseq.html">notseq</a></td>
+<td>Exclude a set of sequences and write out the remaining ones</td>
+</tr>
+
+<tr>
+<td><a href="nthseq.html">nthseq</a></td>
+<td>Writes one sequence from a multiple set of sequences</td>
+</tr>
+
+<tr>
+<td><a href="pasteseq.html">pasteseq</a></td>
+<td>Insert one sequence into another</td>
+</tr>
+
+<tr>
+<td><a href="revseq.html">revseq</a></td>
+<td>Reverse and complement a sequence</td>
+</tr>
+
+<tr>
+<td><a href="seqret.html">seqret</a></td>
+<td>Reads and writes (returns) sequences</td>
+</tr>
+
+<tr>
+<td><a href="seqretsplit.html">seqretsplit</a></td>
+<td>Reads and writes (returns) sequences in individual files</td>
+</tr>
+
+<tr>
+<td><a href="skipseq.html">skipseq</a></td>
+<td>Reads and writes (returns) sequences, skipping first few</td>
+</tr>
+
+<tr>
+<td><a href="splitter.html">splitter</a></td>
+<td>Split a sequence into (overlapping) smaller sequences</td>
+</tr>
+
+<tr>
+<td><a href="trimest.html">trimest</a></td>
+<td>Trim poly-A tails off EST sequences</td>
+</tr>
+
+<tr>
+<td><a href="trimseq.html">trimseq</a></td>
+<td>Trim ambiguous bits off the ends of sequences</td>
+</tr>
+
+<tr>
+<td><a href="union.html">union</a></td>
+<td>Reads sequence fragments and builds one sequence</td>
+</tr>
+
+<tr>
+<td><a href="vectorstrip.html">vectorstrip</a></td>
+<td>Strips out DNA between a pair of vector sequences</td>
+</tr>
+
+</table>
+<p>
+
+The program <b>extract</b> does not make list files, but creates a
+sequence from sub-regions of a single other sequence. 
+
+<H2>
+    Author(s)
+</H2>
+Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
+<H2>
+    History
+</H2>
+
+Written (March 2002) - Peter Rice.
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+<H2>
+    Comments
+</H2>
+None
+
+
+</BODY>
+</HTML>
+

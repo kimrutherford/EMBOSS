@@ -1,0 +1,20 @@
+# IUB codes for nucleotides
+# Substitution is for OR'd A=1, C=2, G=4 and T=8
+#
+A	1	A
+B	14	TGC
+C	2	C
+D	13	TGA
+G	4	G
+H	11	TCA
+K	12	TG
+M	3	CA
+N	15	TGCA
+R	5	GA
+S	6	GC
+T	8	T
+U	8	T
+V	7	GCA
+W	9	TA
+X	15	TGCA
+Y	10	TC

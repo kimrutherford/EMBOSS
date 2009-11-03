@@ -1,0 +1,707 @@
+
+                                 prophecy 
+
+
+
+Function
+
+   Creates matrices/profiles from multiple alignments
+
+Description
+
+   prophecy produces a simple frequency matrix for use by profit or a
+   position specific weighted profile using either the Gribskov (1) or
+   Henikoff (2) method for use by prophet.
+
+   Profile analysis is a method for detecting distantly related proteins
+   by sequence comparison. The basis for comparison is not only the
+   customary Dayhoff mutational-distance matrix but also the results of
+   structural studies and information implicit in the alignments of the
+   sequences of families of similar proteins. This information is
+   expressed in a position-specific scoring table (profile), which is
+   created from a group of sequences previously aligned by structural or
+   sequence similarity. The similarity of any other target sequence to
+   the group of aligned probe sequences can be tested by comparing the
+   target to the profile using dynamic programming algorithms. The
+   profile method differs in two major respects from methods of sequence
+   comparison in common use: (i) Any number of known sequences can be
+   used to construct the profile, allowing more information to be used in
+   the testing of the target than is possible with pairwise alignment
+   methods. (ii) The profile includes the penalties for insertion or
+   deletion at each position, which allow one to include the probe
+   secondary structure in the testing scheme.
+
+  Algorithm
+
+   For Gribskov the scoring scheme is based on a notion of distance
+   between a sequence and an ancestral or generalized sequence.
+
+   For Henikoff it is based on weights of the diversity observed at each
+   position in the alignment, rather than on a sequence distance measure.
+
+Usage
+
+   Here is a sample session with prophecy
+
+
+% prophecy 
+Creates matrices/profiles from multiple alignments
+Input (aligned) sequence set: globins.msf
+Profile type
+         F : Frequency
+         G : Gribskov
+         H : Henikoff
+Select type [F]: 
+Enter a name for the profile [mymatrix]: globins
+Enter threshold reporting percentage [75]: 
+Output file [globins.prophecy]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+   Example 2
+
+
+% prophecy 
+Creates matrices/profiles from multiple alignments
+Input (aligned) sequence set: globins.msf
+Profile type
+         F : Frequency
+         G : Gribskov
+         H : Henikoff
+Select type [F]: g
+Scoring matrix [Epprofile]: 
+Enter a name for the profile [mymatrix]: globins
+Gap opening penalty [3.0]: 
+Gap extension penalty [0.3]: 
+Output file [globins.prophecy]: 
+
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-sequence]          seqset     (Aligned) sequence set filename and optional
+                                  format, or reference (input USA)
+   -type               menu       [F] Select type (Values: F (Frequency); G
+                                  (Gribskov); H (Henikoff))
+*  -datafile           matrixf    ['Epprofile' for Gribskov type, or
+                                  EBLOSUM62] Scoring matrix
+   -name               string     [mymatrix] Enter a name for the profile (Any
+                                  string is accepted)
+*  -threshold          integer    [75] Enter threshold reporting percentage
+                                  (Integer from 1 to 100)
+*  -open               float      [3.0] Gap opening penalty (Any numeric
+                                  value)
+*  -extension          float      [0.3] Gap extension penalty (Any numeric
+                                  value)
+  [-outfile]           outfile    [*.prophecy] Output file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   prophecy reads a protein or a nucleic sequence alignment USA.
+
+  Input files for usage example
+
+  File: globins.msf
+
+!!AA_MULTIPLE_ALIGNMENT 1.0
+
+  ../data/globins.msf MSF:  164 Type: P 25/06/01 CompCheck: 4278 ..
+
+  Name: HBB_HUMAN Len: 164  Check: 6914 Weight: 0.61
+  Name: HBB_HORSE Len: 164  Check: 6007 Weight: 0.65
+  Name: HBA_HUMAN Len: 164  Check: 3921 Weight: 0.65
+  Name: HBA_HORSE Len: 164  Check: 4770 Weight: 0.83
+  Name: MYG_PHYCA Len: 164  Check: 7930 Weight: 1.00
+  Name: GLB5_PETMA Len: 164  Check: 1857 Weight: 0.91
+  Name: LGB2_LUPLU Len: 164  Check: 2879 Weight: 0.43
+
+//
+
+           1                                               50
+HBB_HUMAN  ~~~~~~~~VHLTPEEKSAVTALWGKVN.VDEVGGEALGR.LLVVYPWTQR
+HBB_HORSE  ~~~~~~~~VQLSGEEKAAVLALWDKVN.EEEVGGEALGR.LLVVYPWTQR
+HBA_HUMAN  ~~~~~~~~~~~~~~VLSPADKTNVKAA.WGKVGAHAGEYGAEALERMFLS
+HBA_HORSE  ~~~~~~~~~~~~~~VLSAADKTNVKAA.WSKVGGHAGEYGAEALERMFLG
+MYG_PHYCA  ~~~~~~~VLSEGEWQLVLHVWAKVEAD.VAGHGQDILIR.LFKSHPETLE
+GLB5_PETMA PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQE
+LGB2_LUPLU ~~~~~~~~GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKD
+
+           51                                             100
+HBB_HUMAN  FFESFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSE
+HBB_HORSE  FFDSFGDLSNPGAVMGNPKVKAHGKKVLHSFGEGVHHLDNLKGTFAALSE
+HBA_HUMAN  FPTTKTYFPHFDLSHGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSD
+HBA_HORSE  FPTTKTYFPHFDLSHGSAQVKAHGKKVGDALTLAVGHLDDLPGALSNLSD
+MYG_PHYCA  KFDRFKHLKTEAEMKASEDLKKHGVTVLTALGAILKKKGHHEAELKPLAQ
+GLB5_PETMA FFPKFKGLTTADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRD
+LGB2_LUPLU LFSFLKGTSEVPQNNPELQAHAGKVFKLVYEAAIQLQVTGVVVTDATLKN
+
+           101                                            150
+HBB_HUMAN  LHCDKLH..VDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVA
+HBB_HORSE  LHCDKLH..VDPENFRLLGNVLVVVLARHFGKDFTPELQASYQKVVAGVA
+HBA_HUMAN  LHAHKLR..VDPVNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKFLASVS
+HBA_HORSE  LHAHKLR..VDPVNFKLLSHCLLSTLAVHLPNDFTPAVHASLDKFLSSVS
+MYG_PHYCA  SHATKHK..IPIKYLEFISEAIIHVLHSRHPGDFGADAQGAMNKALELFR
+GLB5_PETMA LSGKHAK..SFQVDPQYFKVLAAVIADTVAAGDAGFEKLMSMICILLRSA
+LGB2_LUPLU LGSVHVSKGVADAHFPVVKEAILKTIKEVVGAKWSEELNSAWTIAYDELA
+
+           151        164
+HBB_HUMAN  NALAHKYH~~~~~~
+HBB_HORSE  NALAHKYH~~~~~~
+HBA_HUMAN  TVLTSKYR~~~~~~
+HBA_HORSE  TVLTSKYR~~~~~~
+MYG_PHYCA  KDIAAKYKELGYQG
+GLB5_PETMA Y~~~~~~~~~~~~~
+LGB2_LUPLU IVIKKEMNDAA~~~
+
+Output file format
+
+   The output is a profile file.
+
+  Output files for usage example
+
+  File: globins.prophecy
+
+# Pure Frequency Matrix
+# Columns are amino acid counts A->Z
+# Rows are alignment positions 1->n
+Simple
+Name            globins
+Length          164
+Maximum score   496
+Thresh          75
+Consensus       PIVDTGSVVALSEEEKSAVDAAWVKANAVAEVGGHALERGLLALEPATLEFFDSFKDLSTFDA
+SHGSAQVKAHGKKVLDALGAAVAHLDDLEGTLAALSDLHADKLHKGVDPVNFKLLSEALLVTLAAHFGADFTPEVQASL
+DKALAGVANVLAHKYHDAAYQG
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0
+
+0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  2  0  0  0  0  0
+
+1  0  0  0  0  0  1  0  0  0  0  1  0  0  0  0  0  0  0  0  0  2  0  0  0  0  0
+
+1  0  0  0  0  0  0  1  0  0  0  0  0  0  0  1  1  0  1  0  0  0  0  0  0  0  0
+
+0  0  0  0  1  0  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  2  2  0  0  0  0  0  0  0
+
+1  0  0  0  2  0  1  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0
+
+1  0  0  0  2  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  1  0  0  0  0
+
+0  0  0  0  3  0  0  0  0  0  0  0  0  0  0  0  2  0  0  0  0  2  0  0  0  0  0
+
+1  0  0  0  0  0  0  0  0  0  3  3  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+2  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  3  1  0  1  0  0  0  0  0
+
+3  0  0  0  0  0  0  0  0  0  1  2  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0
+
+2  0  0  0  0  0  0  1  1  0  0  0  0  0  0  0  0  0  0  0  0  3  0  0  0  0  0
+
+0  0  0  2  0  0  0  0  0  0  1  1  0  0  0  0  0  1  0  1  0  1  0  0  0  0  0
+
+2  0  0  0  0  0  0  0  0  0  2  0  0  0  0  0  0  0  2  0  0  0  1  0  0  0  0
+
+2  0  0  0  0  0  0  0  0  0  0  2  0  0  0  0  0  0  1  2  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  1  0  0  2  0  0  0  0  0  0  0  0  4  0  0  0  0
+
+1  0  0  1  1  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  3  0  0  0  0  0
+
+0  0  0  0  2  0  0  0  0  0  4  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0
+
+3  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  3  0  0  0  0  0
+
+2  0  0  1  0  0  0  0  0  0  0  0  0  3  0  0  0  0  0  0  0  0  0  0  1  0  0
+
+1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0
+
+0  0  0  0  1  0  0  0  0  0  0  0  0  1  0  0  0  0  0  1  0  2  2  0  0  0  0
+
+1  0  0  1  1  0  1  0  1  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  1  0  0
+
+0  0  0  0  3  0  1  0  0  0  2  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  1  0  0  1  0  0  0  0  0  0  0  0  1  0  4  0  0  0  0  0
+
+0  0  0  0  0  0  5  1  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0
+
+1  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  1  0  0  1  0  0  0  0  0  0  0
+
+0  0  0  1  2  0  0  3  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0
+
+4  0  0  1  0  0  0  0  1  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  1  2  0  1  0  0  3  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  2  1  2  0  1  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  3  0  0  0  1  0  0  2  0  0
+
+0  0  0  0  0  0  2  0  0  0  1  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+2  0  0  0  0  1  0  0  0  0  0  3  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0
+
+
+
+  [Part of this file has been deleted for brevity]
+
+0  0  0  1  0  0  0  1  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  0  1  0  0
+
+0  0  0  0  0  5  0  0  0  0  0  1  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  1  0  0  0  0  0  2  0  0  0  0  1  1  2  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  1  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  1  0  0  1  0  0
+
+0  0  0  0  0  1  0  0  1  0  0  4  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0
+
+0  0  0  0  0  0  2  0  0  0  2  0  0  0  0  0  0  0  3  0  0  0  0  0  0  0  0
+
+0  0  0  0  2  0  0  2  0  0  0  0  0  2  0  0  0  0  0  0  0  1  0  0  0  0  0
+
+2  0  2  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  2  0  0  0  0  0
+
+1  0  0  0  0  0  0  0  2  0  0  4  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+1  0  0  0  0  0  0  0  1  0  0  3  0  0  0  0  0  0  0  0  0  2  0  0  0  0  0
+
+0  0  1  0  0  0  0  1  0  0  1  0  0  0  0  0  0  0  1  0  0  3  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  3  0  3  0  0  0  0  0
+
+1  0  0  0  0  0  0  0  1  0  0  5  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+4  0  0  1  0  0  0  1  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+1  0  0  0  1  0  0  1  0  0  0  0  0  0  0  0  0  1  1  1  0  1  0  0  0  0  0
+
+0  0  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  1  0  0  0  2  0  0  0  0  0
+
+1  0  0  0  0  2  0  1  0  0  0  2  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0
+
+1  0  0  0  0  0  3  0  0  0  0  0  0  0  0  3  0  0  0  0  0  0  0  0  0  0  0
+
+2  0  0  0  0  0  2  0  0  0  2  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  4  2  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+1  0  0  0  0  5  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0
+
+0  0  0  0  0  0  2  0  0  0  0  0  0  0  0  0  0  0  1  4  0  0  0  0  0  0  0
+
+1  0  0  0  1  1  0  0  0  0  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  0  0
+
+2  0  0  1  3  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0
+
+1  0  0  0  0  0  0  0  0  0  1  2  0  0  0  0  0  0  0  0  0  3  0  0  0  0  0
+
+0  0  0  0  0  0  0  2  0  0  0  1  0  1  0  0  3  0  0  0  0  0  0  0  0  0  0
+
+4  0  0  0  0  0  1  0  0  0  0  0  1  0  0  0  0  0  1  0  0  0  0  0  0  0  0
+
+3  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  2  2  0  0  0  0  0  0  0  0  0  1  0  2  0  0
+
+0  0  0  2  0  0  0  0  1  0  0  0  0  1  0  0  2  0  0  1  0  0  0  0  0  0  0
+
+0  0  1  0  0  0  0  0  1  0  5  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+2  0  0  0  0  2  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  2  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  2  0  0  1  0  0
+
+3  0  0  1  1  0  0  0  0  0  0  1  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0
+
+0  0  0  0  1  0  2  0  0  0  0  1  0  0  0  0  0  1  2  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  1  0  0  0  0  0  1  0  0  0  0  0  0  1  0  0  4  0  0  0  0  0
+
+4  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  2  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  1  0  1  0  0  2  0  0  0  0  0  2  0  0  0  0  1  0  0
+
+2  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  3  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  2  0  0  4  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+3  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  2  0  0  0  0  0  0  0
+
+1  0  0  0  0  0  0  2  0  0  1  0  0  0  0  0  0  0  2  0  0  0  0  0  0  0  0
+
+0  0  0  0  1  0  0  0  0  0  5  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  5  0  0
+
+0  0  0  0  0  0  0  2  0  0  1  0  0  1  0  0  0  2  0  0  0  0  0  0  0  0  0
+
+0  0  0  1  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+1  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+1  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+  Output files for usage example 2
+
+  File: globins.prophecy
+
+# Gribskov Protein Profile
+# Columns are amino acids A->Z
+# Last column is indel penalty
+# Rows are alignment positions 1->n
+Gribskov
+Name            globins
+Matrix          pprofile
+Length          164
+Max_score       939.76
+Threshold       75
+Gap_open        3.00
+Gap_extend      0.30
+Consensus       PIVDTGSVVSLSEEELSAVDKAWVKANSVAEVGGHALERGLFASEPMTLEFFDTFKYLSTFDL
+SKGSADVKAHGKKVLDALGDAVAHLDDLEGTLAALSDLHAHKLKKGVDPVNFKLLSHCLLVVLASHLPGDFTPEVQASM
+DKFLASVATVLASKYRELGYQG
+0.65 0.00 0.13 0.13 0.13 -0.78 0.39 0.26 -0.26 0.00 0.13 -0.39 -0.26 0.00 0.00
+1.95 0.39 0.39 0.52 0.39 0.00 0.13 -1.04 0.00 -1.04 0.00 0.87 0.87
+0.00 0.00 0.26 -0.26 -0.26 0.78 -0.39 -0.39 1.95 0.00 -0.26 1.04 0.78 -0.39 0.0
+0 -0.26 -0.39 -0.39 -0.13 0.26 0.00 1.43 -0.65 0.00 0.13 0.00 0.87 0.87
+0.26 0.00 0.26 -0.26 -0.26 0.26 0.26 -0.39 1.43 0.00 -0.26 1.04 0.78 -0.39 0.00
+ 0.13 -0.26 -0.39 -0.13 0.26 0.00 1.95 -1.04 0.00 -0.13 0.00 0.87 0.87
+0.39 0.00 -0.65 1.95 1.30 -1.30 0.78 0.52 -0.26 0.00 0.39 -0.65 -0.52 0.78 0.00
+ 0.13 0.78 0.00 0.26 0.26 0.00 -0.26 -1.43 0.00 -0.65 0.00 0.87 0.87
+0.52 0.00 0.26 0.26 0.26 -0.39 0.52 -0.13 0.26 0.00 0.26 -0.13 0.00 0.26 0.00 0
+.39 -0.13 -0.13 0.39 1.95 0.00 0.26 -0.78 0.00 -0.39 0.00 0.87 0.87
+0.78 0.00 0.26 0.78 0.65 -0.78 1.95 -0.26 -0.39 0.00 -0.13 -0.65 -0.39 0.52 0.0
+0 0.39 0.26 -0.39 0.78 0.52 0.00 0.26 -1.30 0.00 -0.78 0.00 0.87 0.87
+0.52 0.00 0.78 0.26 0.26 -0.39 0.78 -0.26 -0.13 0.00 0.26 -0.52 -0.39 0.39 0.00
+ 0.52 -0.13 0.13 1.95 0.39 0.00 -0.13 0.39 0.00 -0.52 0.00 0.87 0.87
+0.55 0.00 0.55 -0.55 -0.55 0.55 0.55 -0.82 3.00 0.00 -0.55 2.18 1.64 -0.82 0.00
+ 0.27 -0.55 -0.82 -0.27 0.55 0.00 4.09 -2.18 0.00 -0.27 0.00 0.87 0.87
+2.54 0.00 -0.27 -0.32 -0.09 1.06 1.35 -1.08 2.94 0.00 -0.85 3.15 2.61 -0.61 0.0
+0 0.59 -0.12 -1.69 0.14 0.98 0.00 4.23 -2.38 0.00 -0.51 0.00 0.87 0.87
+2.24 0.00 0.53 1.51 1.51 -2.35 1.63 1.78 -0.94 0.00 0.87 -1.29 -0.95 1.36 0.00
+3.28 2.29 1.16 2.64 0.88 0.00 -0.34 -1.65 0.00 -2.09 0.00 0.87 0.87
+0.06 0.00 -3.83 -0.43 1.03 3.60 -1.14 -0.17 2.69 0.00 -0.69 5.14 4.17 -0.77 0.0
+0 -0.97 0.49 -1.49 -1.20 -0.09 0.00 2.69 0.29 0.00 0.40 0.00 0.87 0.87
+2.34 0.00 1.92 1.60 1.46 -1.97 4.07 -0.88 -0.35 0.00 0.60 -1.75 -1.10 1.54 0.00
+ 1.77 -0.09 -0.35 4.65 3.47 0.00 0.36 -1.65 0.00 -2.19 0.00 0.87 0.87
+3.56 0.00 -0.56 3.08 4.01 -2.96 3.46 0.68 -0.86 0.00 0.61 -1.47 -0.86 1.65 0.00
+ 2.44 1.93 -0.41 1.83 1.56 0.00 0.12 -4.91 0.00 -2.67 0.00 0.87 0.87
+1.59 0.00 -2.04 0.74 1.64 -0.20 0.62 0.32 -1.14 0.00 0.81 -0.20 -0.97 0.92 0.00
+ -0.07 0.56 1.53 2.23 0.21 0.00 -1.30 -0.69 0.00 0.04 0.00 0.87 0.87
+1.76 0.00 -2.66 3.90 5.45 -3.07 2.38 1.83 1.09 0.00 1.32 0.56 0.65 1.73 0.00 1.
+13 4.50 0.18 0.20 0.84 0.00 2.14 -6.12 0.00 -2.99 0.00 4.55 4.55
+0.57 0.00 -4.51 -0.66 0.05 2.08 -1.71 -0.46 2.21 0.00 3.59 4.32 4.87 -0.05 0.00
+ -0.45 1.01 0.88 -0.55 0.51 0.00 2.34 1.59 0.00 -0.98 0.00 4.55 4.55
+4.31 0.00 2.80 1.03 1.03 -1.77 3.52 -1.31 1.53 0.00 0.57 -0.34 -0.04 1.04 0.00
+2.50 -0.41 -0.72 5.34 3.75 0.00 2.41 -2.26 0.00 -2.19 0.00 4.55 4.55
+4.74 0.00 -1.43 0.36 0.77 -0.38 0.92 -0.39 1.19 0.00 1.43 2.10 2.53 0.30 0.00 2
+.40 1.19 -0.39 1.01 1.53 0.00 2.06 -1.98 0.00 -1.81 0.00 4.55 4.55
+3.51 0.00 1.23 0.46 0.46 0.06 1.08 0.82 4.18 0.00 -0.60 2.47 1.80 0.02 0.00 1.3
+2 0.41 -1.03 0.19 1.45 0.00 5.05 -4.42 0.00 -0.32 0.00 4.55 4.55
+0.79 0.00 -2.10 2.78 1.91 -1.99 0.99 0.86 1.55 0.00 2.21 0.69 1.51 1.02 0.00 0.
+79 1.57 1.55 0.42 1.92 0.00 2.12 -1.78 0.00 -2.33 0.00 4.55 4.55
+2.32 0.00 -1.29 -0.01 -0.01 -1.03 0.59 -0.49 -1.33 0.00 3.70 -0.87 -0.58 1.35 0
+.00 0.73 0.30 3.20 4.44 0.86 0.00 -1.40 1.49 0.00 -1.00 0.00 4.55 4.55
+5.00 0.00 0.17 0.46 0.82 -0.02 1.95 -0.97 1.80 0.00 0.01 1.97 1.98 0.43 0.00 1.
+70 0.09 -1.69 1.93 4.27 0.00 2.35 -2.37 0.00 -1.16 0.00 4.55 4.55
+-2.55 0.00 -5.95 -2.39 -2.60 2.54 -3.01 0.83 -2.78 0.00 3.36 0.58 -1.46 2.63 0.
+00 -2.83 -0.44 6.18 2.03 -1.52 0.00 -3.89 5.08 0.00 3.02 0.00 4.55 4.55
+3.64 0.00 0.44 2.21 1.97 -1.76 3.66 -0.75 3.33 0.00 -0.33 1.62 1.37 0.41 0.00 1
+.42 0.65 -1.71 1.00 1.89 0.00 5.44 -6.44 0.00 -2.04 0.00 4.55 4.55
+1.26 0.00 -3.44 3.35 4.37 -4.35 1.02 1.47 -1.45 0.00 6.61 -2.18 0.11 2.59 0.00
+2.55 3.18 3.52 1.71 1.58 0.00 -1.06 -2.90 0.00 -4.41 0.00 4.55 4.55
+5.63 0.00 1.62 -0.17 0.07 -0.23 2.38 -1.35 3.78 0.00 -0.99 2.86 2.17 -0.53 0.00
+ 1.71 -0.40 -2.30 0.92 1.85 0.00 5.48 -4.58 0.00 -0.57 0.00 4.55 4.55
+3.69 0.00 0.50 3.58 2.62 -2.00 2.31 1.96 -0.88 0.00 0.61 -1.50 -1.43 4.77 0.00
+0.16 1.47 -1.17 1.34 1.22 0.00 -0.72 -2.56 0.00 0.36 0.00 4.55 4.55
+1.44 0.00 0.96 0.44 0.44 -0.70 1.15 -0.32 -0.13 0.00 0.26 -0.58 -0.39 0.51 0.00
+ 0.83 -0.01 -0.05 2.20 0.64 0.00 -0.01 -0.10 0.00 -0.70 0.00 3.49 3.49
+-0.31 0.00 -2.56 -1.23 -0.83 1.74 -0.42 -0.35 1.36 0.00 0.54 2.24 0.38 0.32 0.0
+0 -0.98 -0.84 1.99 1.16 1.45 0.00 1.65 -0.65 0.00 1.18 0.00 4.55 4.55
+3.32 0.00 1.76 2.69 2.62 -1.00 2.98 0.36 0.29 0.00 -0.22 -0.91 -0.93 1.69 0.00
+0.48 0.47 -1.55 2.69 1.39 0.00 0.54 -2.57 0.00 -0.35 0.00 4.55 4.55
+2.09 0.00 -2.78 4.65 6.06 -4.35 3.67 1.29 -1.59 0.00 4.02 -2.46 -0.75 2.97 0.00
+ 1.87 3.18 1.45 2.15 1.80 0.00 -0.70 -5.12 0.00 -4.17 0.00 4.55 4.55
+1.16 0.00 0.53 0.23 0.23 -0.12 0.96 0.90 4.01 0.00 0.54 2.53 2.04 0.05 0.00 1.1
+3 0.19 -0.10 -0.16 2.71 0.00 5.58 -3.99 0.00 -0.72 0.00 4.55 4.55
+3.66 0.00 1.79 3.71 3.18 -3.66 8.67 -0.41 -1.92 0.00 -0.21 -3.31 -2.18 2.83 0.0
+0 2.25 1.31 -1.17 5.03 2.47 0.00 0.75 -5.01 0.00 -3.54 0.00 4.55 4.55
+4.50 0.00 0.40 3.83 3.40 -4.36 7.52 -0.15 -1.59 0.00 0.27 -2.44 -1.29 2.59 0.00
+ 2.36 3.12 -1.05 2.98 2.86 0.00 0.88 -6.11 0.00 -3.89 0.00 4.55 4.55
+0.96 0.00 -1.81 4.77 4.96 -2.52 1.47 4.99 -0.03 0.00 0.98 -0.76 -0.97 2.73 0.00
+ 1.00 3.31 0.97 -0.03 0.63 0.00 0.49 -4.86 0.00 -0.93 0.00 4.55 4.55
+6.08 0.00 0.63 2.84 2.19 -2.71 2.52 0.01 1.70 0.00 0.60 -0.14 0.46 1.20 0.00 1.
+99 1.38 -0.68 1.74 2.05 0.00 1.91 -4.48 0.00 -2.05 0.00 4.55 4.55
+0.64 0.00 -1.96 -1.22 -0.54 4.31 0.80 -1.52 4.27 0.00 -1.81 5.56 4.33 -1.14 0.0
+0 -0.96 -0.78 -2.62 -0.34 0.60 0.00 4.56 -0.41 0.00 0.63 0.00 4.55 4.55
+
+
+  [Part of this file has been deleted for brevity]
+
+0.68 0.00 -0.46 3.83 2.79 -1.46 1.37 3.83 -1.48 0.00 1.16 -1.91 -2.02 6.82 0.00
+ -0.89 1.86 -0.16 0.74 0.55 0.00 -1.76 -1.09 0.00 1.29 0.00 4.55 4.55
+-1.76 0.00 -1.47 -5.11 -3.02 7.73 -3.04 -0.48 3.60 0.00 -3.02 7.19 3.72 -2.84 0
+.00 -1.20 -3.38 -2.45 -1.41 -1.11 0.00 2.18 5.11 0.00 5.28 0.00 4.55 4.55
+0.46 0.00 -3.38 2.90 3.62 -4.43 0.41 2.59 -1.76 0.00 5.62 -2.10 0.37 2.26 0.00
+2.21 4.56 5.10 1.00 0.58 0.00 -1.45 -0.16 0.00 -4.33 0.00 4.55 4.55
+-1.37 0.00 -1.85 -4.16 -2.80 8.65 -3.47 -0.72 4.79 0.00 -2.93 8.47 5.65 -2.59 0
+.00 -3.01 -2.44 -3.24 -2.58 -1.09 0.00 4.21 4.61 0.00 4.92 0.00 4.55 4.55
+-0.92 0.00 -2.85 -3.67 -2.36 7.63 -3.04 -1.53 6.73 0.00 -2.36 9.07 6.57 -2.83 0
+.00 -2.18 -1.98 -2.83 -2.16 -0.37 0.00 5.88 2.31 0.00 2.95 0.00 4.55 4.55
+2.50 0.00 1.34 2.36 2.18 -3.29 4.63 -0.88 -1.28 0.00 3.40 -2.89 -1.22 2.55 0.00
+ 2.15 0.77 1.35 6.78 2.17 0.00 -0.38 -0.55 0.00 -3.65 0.00 4.55 4.55
+1.02 0.00 -1.72 3.71 4.55 -2.08 1.58 4.50 -0.15 0.00 1.28 -0.72 -0.80 4.39 0.00
+ 0.76 2.95 0.85 0.40 0.82 0.00 0.37 -4.04 0.00 -0.70 0.00 4.55 4.55
+3.93 0.00 3.10 -1.45 -1.41 0.69 1.36 -1.22 3.44 0.00 -2.02 1.49 1.37 -1.29 0.00
+ 1.02 -1.35 -2.31 1.39 1.47 0.00 4.57 -4.96 0.00 1.71 0.00 4.55 4.55
+1.56 0.00 -2.33 -1.98 -1.19 5.27 -1.79 -1.53 6.20 0.00 -1.58 7.38 5.92 -1.92 0.
+00 -0.93 -0.74 -2.57 -1.25 0.54 0.00 5.64 -0.10 0.00 0.99 0.00 4.55 4.55
+2.04 0.00 -1.15 -1.62 -1.07 3.84 -0.65 -1.64 6.31 0.00 -1.46 6.55 5.21 -1.80 0.
+00 -0.27 -0.80 -2.45 -0.89 0.89 0.00 6.71 -1.83 0.00 0.39 0.00 4.55 4.55
+1.22 0.00 2.14 -0.07 -0.16 -0.32 1.17 0.93 2.98 0.00 0.15 0.88 0.71 0.11 0.00 1
+.22 -0.17 0.12 1.82 1.14 0.00 4.24 -3.30 0.00 0.14 0.00 4.55 4.55
+1.74 0.00 1.45 -0.36 -0.36 0.61 1.35 -1.63 6.05 0.00 -0.36 3.35 2.72 -0.81 0.00
+ 0.88 -1.31 -1.63 0.37 5.00 0.00 6.82 -4.87 0.00 -1.01 0.00 4.55 4.55
+1.42 0.00 -3.76 -2.40 -1.34 6.13 -2.08 -1.38 5.20 0.00 -1.73 8.38 6.78 -2.06 0.
+00 -1.08 -0.46 -2.71 -1.68 0.11 0.00 5.21 1.32 0.00 1.27 0.00 4.55 4.55
+6.12 0.00 0.01 3.88 3.23 -3.77 2.78 2.33 -0.81 0.00 1.45 -1.51 -0.83 2.52 0.00
+2.43 2.67 0.03 1.66 1.81 0.00 -0.03 -4.64 0.00 -1.76 0.00 4.55 4.55
+2.54 0.00 0.90 1.55 1.86 -1.97 2.03 1.15 0.76 0.00 1.32 -0.58 0.08 1.35 0.00 2.
+06 0.94 1.21 2.83 2.93 0.00 1.42 -1.60 0.00 -1.96 0.00 4.55 4.55
+-0.44 0.00 -0.44 1.18 1.18 -0.72 -0.83 6.01 0.50 0.00 1.15 0.18 0.26 1.53 0.00
+1.40 2.54 3.53 -0.83 -0.15 0.00 1.27 -0.07 0.00 0.13 0.00 4.55 4.55
+0.82 0.00 -1.50 -2.02 -0.88 4.57 -1.52 1.23 3.02 0.00 -1.69 5.41 3.38 -0.96 0.0
+0 -0.72 -0.66 -1.61 -1.21 -0.25 0.00 2.80 1.54 0.00 2.95 0.00 4.55 4.55
+5.17 0.00 1.23 2.19 1.95 -4.22 5.46 0.10 -1.43 0.00 0.11 -2.40 -1.43 1.23 0.00
+6.69 1.81 -0.05 3.39 2.55 0.00 1.10 -6.29 0.00 -4.67 0.00 4.55 4.55
+4.19 0.00 -0.43 3.35 2.96 -4.08 5.31 0.07 -1.53 0.00 2.90 -2.53 -0.81 3.90 0.00
+ 1.77 2.05 0.28 2.97 2.31 0.00 0.14 -4.14 0.00 -3.30 0.00 4.55 4.55
+1.99 0.00 -3.87 9.25 7.73 -6.29 3.74 2.72 -1.45 0.00 2.91 -3.15 -2.17 4.05 0.00
+ 0.73 4.23 0.49 1.45 1.45 0.00 -1.45 -7.25 0.00 -3.69 0.00 4.55 4.55
+-1.21 0.00 -0.88 -5.63 -3.49 8.10 -3.04 -0.73 2.90 0.00 -3.14 6.59 2.49 -2.60 0
+.00 -3.05 -4.32 -2.26 -0.90 -1.45 0.00 0.84 6.29 0.00 7.23 0.00 4.55 4.55
+3.45 0.00 1.70 2.54 2.27 -3.00 6.03 -1.06 -0.10 0.00 0.63 -2.00 -1.00 2.06 0.00
+ 2.24 0.09 -1.15 3.73 7.15 0.00 1.27 -4.89 0.00 -3.06 0.00 4.55 4.55
+3.63 0.00 0.32 0.13 0.96 -1.48 1.56 0.76 -0.13 0.00 -0.20 0.06 -0.26 -0.06 0.00
+ 5.87 0.79 0.10 1.87 1.48 0.00 0.81 -3.39 0.00 -2.18 0.00 4.55 4.55
+4.89 0.00 -1.70 5.71 6.41 -4.71 3.81 1.67 -1.03 0.00 1.37 -2.04 -1.31 2.70 0.00
+ 2.79 3.25 -0.37 2.05 1.96 0.00 -0.34 -7.09 0.00 -3.47 0.00 4.55 4.55
+2.59 0.00 -0.99 -0.55 -0.24 0.95 0.55 -1.22 4.26 0.00 0.89 4.17 3.90 -0.71 0.00
+ 0.68 0.05 -0.90 -0.08 1.27 0.00 5.74 -2.63 0.00 -1.04 0.00 4.55 4.55
+0.43 0.00 -3.37 2.50 2.70 -1.54 -0.18 5.16 -0.75 0.00 1.36 0.96 0.74 2.75 0.00
+1.00 6.23 1.89 -1.08 -0.54 0.00 -0.42 -1.36 0.00 -0.97 0.00 4.55 4.55
+6.97 0.00 1.05 1.63 1.75 -2.35 4.47 -1.19 0.29 0.00 0.24 0.21 1.34 1.15 0.00 2.
+37 1.01 -1.28 2.95 2.32 0.00 1.79 -4.77 0.00 -2.41 0.00 4.55 4.55
+6.11 0.00 3.48 1.74 1.74 -2.76 4.35 -1.16 -0.43 0.00 0.87 -2.03 -1.30 1.89 0.00
+ 3.19 0.15 -0.44 7.68 2.47 0.00 0.15 -1.03 0.00 -2.61 0.00 4.55 4.55
+-1.24 0.00 -2.27 -3.72 -2.76 6.98 -3.57 -0.76 3.20 0.00 -1.11 7.29 6.27 -2.03 0
+.00 -3.11 -1.60 -0.58 -2.20 -1.12 0.00 2.66 3.14 0.00 3.74 0.00 4.55 4.55
+1.53 0.00 -2.18 4.97 3.77 -3.67 2.06 2.19 0.68 0.00 1.79 -0.83 -0.49 3.86 0.00
+0.68 4.09 0.41 0.73 1.71 0.00 0.34 -4.67 0.00 -2.33 0.00 4.55 4.55
+0.39 0.00 -1.13 0.83 0.70 -2.97 -0.46 0.22 0.11 0.00 7.11 -2.15 0.66 1.56 0.00
+0.54 1.17 3.70 1.79 1.45 0.00 -0.13 -1.33 0.00 -1.84 0.00 4.55 4.55
+2.37 0.00 1.02 -2.12 -1.28 3.29 -0.07 -1.35 5.20 0.00 -1.89 4.81 2.92 -1.58 0.0
+0 -0.33 -2.03 -2.60 -0.13 0.80 0.00 4.96 -1.19 0.00 2.09 0.00 4.55 4.55
+-0.31 0.00 -2.90 -3.09 -2.12 6.97 -2.43 -1.32 5.92 0.00 -2.18 8.89 6.83 -2.54 0
+.00 -1.76 -1.21 -2.85 -2.36 -0.31 0.00 6.51 1.66 0.00 2.19 0.00 4.55 4.55
+5.05 0.00 -0.67 2.76 3.42 -1.63 2.78 0.05 0.51 0.00 0.46 0.47 0.67 1.46 0.00 1.
+65 1.52 -1.22 2.76 1.73 0.00 1.06 -3.42 0.00 -1.92 0.00 4.55 4.55
+1.58 0.00 -0.27 1.40 1.82 -1.02 3.17 -0.17 -0.12 0.00 1.04 -0.31 0.68 1.22 0.00
+ 1.41 0.89 1.05 3.93 1.20 0.00 0.78 0.56 0.00 -2.58 0.00 4.55 4.55
+0.53 0.00 0.93 -2.26 -1.56 3.27 0.40 -1.70 5.52 0.00 -1.56 5.25 3.41 -1.74 0.00
+ -0.13 -2.12 -2.00 0.88 0.68 0.00 6.52 -0.72 0.00 1.13 0.00 4.55 4.55
+5.99 0.00 1.95 1.54 1.54 -3.21 3.07 -0.08 -0.64 0.00 1.57 -1.79 -0.35 1.52 0.00
+ 3.13 1.10 1.24 4.80 1.98 0.00 0.10 -0.48 0.00 -2.82 0.00 4.55 4.55
+0.82 0.00 0.45 1.16 0.98 -0.33 0.46 1.04 0.65 0.00 2.38 -0.48 -0.02 3.38 0.00 -
+0.39 0.12 0.15 0.88 3.55 0.00 0.14 -0.54 0.00 0.34 0.00 4.55 4.55
+3.67 0.00 0.37 2.14 1.42 -1.78 2.48 -0.43 2.72 0.00 -0.12 1.29 1.07 0.40 0.00 1
+.32 0.67 -1.36 0.73 1.55 0.00 4.17 -5.19 0.00 -1.53 0.00 0.92 0.92
+-0.39 0.00 -2.72 -2.37 -1.58 5.92 -2.57 -1.40 6.20 0.00 -1.58 7.51 5.92 -2.18 0
+.00 -1.58 -1.00 -2.18 -1.77 0.02 0.00 5.38 0.94 0.00 1.38 0.00 0.92 0.92
+5.69 0.00 1.02 1.58 1.58 -2.62 2.72 -0.47 0.30 0.00 1.34 -0.72 0.12 1.31 0.00 2
+.31 0.68 -0.69 2.05 4.59 0.00 0.95 -3.79 0.00 -1.97 0.00 0.92 0.92
+2.81 0.00 1.15 1.76 1.76 -1.90 1.70 2.20 -0.87 0.00 1.52 -1.53 -1.05 2.07 0.00
+1.98 1.40 1.17 3.51 1.15 0.00 -0.59 -0.63 0.00 -1.10 0.00 0.92 0.92
+0.18 0.00 -3.57 2.22 2.52 -3.57 -0.23 0.78 -1.19 0.00 8.20 -1.79 0.95 2.44 0.00
+ 0.60 2.51 4.27 1.19 1.19 0.00 -1.19 -0.14 0.00 -3.51 0.00 0.92 0.92
+-1.60 0.00 4.97 -2.92 -2.79 7.25 -3.39 1.42 0.90 0.00 -3.08 2.34 0.39 -0.72 0.0
+0 -4.40 -3.21 -3.08 -2.32 -1.60 0.00 -0.17 5.69 0.00 7.95 0.00 0.92 0.92
+-0.69 0.00 -1.86 1.52 1.46 -2.40 -0.89 4.21 -1.64 0.00 4.26 -1.88 -0.02 2.60 0.
+00 1.14 2.74 5.28 0.32 0.02 0.00 -1.64 2.53 0.00 -1.65 0.00 0.92 0.92
+0.61 0.00 -1.16 2.35 2.76 -1.47 1.08 0.82 -0.41 0.00 0.61 -0.74 -0.53 1.08 0.00
+ 0.20 1.23 0.00 0.41 0.41 0.00 -0.41 -2.25 0.00 -1.02 0.00 0.92 0.92
+0.78 0.00 -0.96 -0.53 -0.24 1.41 -0.35 -0.35 1.14 0.00 -0.43 2.08 1.71 -0.45 0.
+00 -0.12 -0.02 -0.76 -0.33 0.10 0.00 1.27 0.22 0.00 0.24 0.00 0.92 0.92
+1.78 0.00 0.47 1.04 0.90 -1.16 2.51 -0.35 -0.43 0.00 -0.14 -0.78 -0.43 0.69 0.0
+0 0.74 0.41 -0.61 1.10 0.82 0.00 0.41 -1.92 0.00 -1.04 0.00 0.92 0.92
+-0.43 0.00 1.43 -0.71 -0.71 1.86 -0.86 0.43 0.14 0.00 -0.86 0.43 -0.14 -0.14 0.
+00 -1.14 -0.86 -0.86 -0.57 -0.43 0.00 -0.14 1.57 0.00 2.14 0.00 0.92 0.92
+0.29 0.00 -0.86 0.86 0.86 -1.14 0.29 0.86 -0.43 0.00 0.57 -0.14 0.00 0.57 0.00
+0.43 2.14 0.57 -0.14 -0.14 0.00 -0.29 -0.71 0.00 -0.86 0.00 0.92 0.92
+0.86 0.00 0.29 0.86 0.71 -0.86 2.14 -0.29 -0.43 0.00 -0.14 -0.71 -0.43 0.57 0.0
+0 0.43 0.29 -0.43 0.86 0.57 0.00 0.29 -1.43 0.00 -0.86 0.00 0.92 0.92
+
+  Simple frequency matrix
+
+   The columns represent amino acid counts for the amino acid residues
+   from A to Z. The rows represent the alignment positions from 1->n. The
+   file is a "Simple" frequency matrix of "Length" 20 amino acids. The
+   maximum score this matrix can give is 496. The "Threshold" value is an
+   instruction to the profit application to only report matches above the
+   given score.
+
+  Gribskov profile
+
+   The columns represent the amino acids from A to Z, the rows denote the
+   alignment position from 1 to n. The last column is the indel penalty.
+   The "Name" is the name used by prophet to refer to the profile, the
+   "Matrix" is the name of the scoring matrix used (containing residue
+   substitution values). "Length" is the length of the alignment.
+   "Max_score" is the maximum score this profile can produce. The
+   threshold is an instruction to prophet to only report hits equal to or
+   above the given value. The gap opening and extension values are used
+   by prophet in the dynamic alignment (Smith Waterman equivalent).
+
+Data files
+
+   The two profile methods require a residue substitution scoring matrix.
+
+   The Gribskov marices use the data file 'Epprofile' by default. This is
+   derived from a PAM250 scoring matrix.
+
+   The Henikoff matrices use the data file 'EBLOSUM62' by default.
+
+   EMBOSS data files are distributed with the application and stored in
+   the standard EMBOSS data directory, which is defined by the EMBOSS
+   environment variable EMBOSS_DATA.
+
+   To see the available EMBOSS data files, run:
+
+% embossdata -showall
+
+   To fetch one of the data files (for example 'Exxx.dat') into your
+   current directory for you to inspect or modify, run:
+
+% embossdata -fetch -file Exxx.dat
+
+   Users can provide their own data files in their own directories.
+   Project specific files can be put in the current directory, or for
+   tidier directory listings in a subdirectory called ".embossdata".
+   Files for all EMBOSS runs can be put in the user's home directory, or
+   again in a subdirectory called ".embossdata".
+
+   The directories are searched in the following order:
+     * . (your current directory)
+     * .embossdata (under your current directory)
+     * ~/ (your home directory)
+     * ~/.embossdata
+
+Notes
+
+   None.
+
+References
+
+    1. Gribskov M, McLachlan AD, Eisenberg D. Proc Natl Acad Sci U S A.
+       1987 Jul; 84(13): 4355-8.
+    2. Henikoff S, Henikoff JG. J Mol Biol. 1994 Nov 4; 243(4): 574-8.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name                     Description
+   profit       Scan a sequence or database with a matrix or profile
+   prophet      Gapped alignment for profiles
+
+Author(s)
+
+   Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+History
+
+   1999 - Written Alan Bleasby.
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

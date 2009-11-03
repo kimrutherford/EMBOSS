@@ -1,0 +1,224 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: merger
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+merger
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/merger.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+
+This joins two overlapping nucleic acid sequences into one merged
+sequence. 
+
+<p>
+It uses a global alignment algorithm (Needleman & Wunsch) to optimally
+align the sequences and then it creates the merged sequence from the
+alignment.  When there is a mismatch in the alignment between the two
+sequences, the correct base to include in the resulting sequence is
+chosen by using the base from the sequence which has the best local
+sequence quality score.  The following heuristic is used to find the
+sequence quality score:
+
+<p>
+If one of the bases is a 'N', then the other sequence's base is used,
+else:
+
+<p>
+A window size around the disputed base is used to find the local quality
+score.  This window size is increased from 5, to 10 to 20 bases or until
+there is a clear decision on the best choice.  If there is no best
+choice after using a window of 20, then the base in the first sequence
+is used. 
+
+<p>
+To calculate the quality of a window of a sequence around a base:
+
+<ul>
+<li>quality = sequence value/length under window either side of the base
+<li>sequence value = sum of points in that window
+<li>unambiguous bases (ACGTU) score 2 points
+<li>ambiguous bases (MRWSYKVHDB) score 1 point
+<li>Ns score 0 points
+<li>off end of the sequence scores 0 points
+</ul>
+
+<p>
+N.B.  This heavily discriminates against the iffy bits at the end of
+sequence reads. 
+
+<p>
+This program was originally written to aid in the reconstruction of mRNA
+sequences which had been sequenced from both ends as a 5' and 3' EST
+(cDNA). eg. joining two reads produced by primer walking sequencing.
+
+<p>
+Care should be taken to reverse one of the sequences (e.g.  using the
+qualifier '-sreverse2') if this is required to get them both in the
+correct orientation. 
+
+<p>
+Because it uses a Needleman & Wunsch alignment the required memory may
+be greater than the available memory when attempting to merge large
+(cosmid-sized or greater) sequences. 
+
+<p>
+The gap open and gap extension penalties have been set at a higher level
+than is usual (50 and 5).  This was experimentally determined to give
+the best results with a set of poor quality EST test sequences. 
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/merger.usage" -->
+
+
+<p>
+
+Typically, one of the sequences will need to be reverse-complemented to put it
+into the correct orientation to make it join. For example:
+
+<p>
+
+<pre>
+% merger file1.seq file2.seq -sreverse2 -outseq merged.seq
+</pre>
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/merger.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/merger.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>merger</b> reads any two sequence USAs of the same type (protein or
+nucleic acid.)
+
+<p>
+
+<!--#include file="inc/merger.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+
+The output <i>sequence file</i> contains the joined sequence, by default in
+FASTA format.  Where there is a mismatch in the alignment, the chosen
+base is written to the output sequence in uppercase. 
+
+<p>
+
+<!--#include file="inc/alignformats.ihtml" -->
+ 
+<p>
+
+The output <i>report file</i> contains descriptions of the positions where
+there is a mismatch in the alignment and shows the alignment.  Where
+there is a mismatch in the alignment, the chosen base is written in
+uppercase. 
+
+
+<p>
+
+<!--#include file="inc/merger.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+It reads the scoring matrix for the alignment from the standard EMBOSS
+'data' directory.  By default it is the file 'EBLOSUM62' (for proteins)
+or the file 'EDNAFULL' (for nucleic sequences). 
+
+<H2>
+    Notes
+</H2>
+
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It exits with a status of 0
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/merger.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/gwilliam.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/merger.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/merger.comment" -->
+
+</BODY>
+</HTML>
+

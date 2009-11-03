@@ -1,0 +1,170 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: skipseq
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+skipseq
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/skipseq.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<b>skipseq</b> skips the first few sequences in a multiple set of
+sequences, and writes out the rest of them. 
+
+<p>
+
+<b>skipseq</b> is a variant of the standard program for reading and
+writing sequences, <b>seqret</b>. 
+
+<p>
+
+<b>seqret</b> has an option to allow it to only read the first sequence
+from a multiple set of sequences (-firstonly).  <b>seqret</b> cannot,
+however, skip the first few sequences from a multiple set of sequence,
+writing out the rest; this is what <b>skipseq</b> is for.
+
+<p>
+
+
+In all other respects, <b>skipseq</b> is the same as <b>seqret</b>. 
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/skipseq.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/skipseq.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/skipseq.itable" -->
+
+<H2>
+    Input file format
+</H2>
+<b>skipseq</b> reads one or more sequence USAs.
+
+<p>
+
+<!--#include file="inc/skipseq.input" -->
+
+<p>
+
+See the documentation for 
+<A href="seqret.html">seqret</a>
+to see the full range of things that you can do when reading and writing
+sequences. 
+
+<H2>
+    Output file format
+</H2>
+
+<b>skipseq</b> writes one or more sequences files, having optionally
+skipped the first few sequences. 
+
+<p>
+
+<!--#include file="inc/skipseq.output" -->
+
+<p>
+
+
+See the documentation for
+<A href="seqret.html">seqret</a>
+to see the full range of things that you can do when reading and writing
+sequences.
+         
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+You may skip all of the input files.
+<br>
+If the -skip value is greater than or equal to the number of input
+sequences, there is no warning: this is legal.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+
+<!--#include file="inc/skipseq.isee" -->
+<p>
+
+
+<b>skipseq</b> is a variant of the standard program for reading and
+writing sequences, <b>seqret</b>.
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/price.address" -->
+
+
+<H2>
+    History
+</H2>
+
+<!--#include file="inc/skipseq.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/skipseq.comment" -->
+
+</BODY>
+</HTML>
+

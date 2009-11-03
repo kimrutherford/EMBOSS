@@ -1,0 +1,38 @@
+<b>Here is a sample session with dbxgcg</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>dbxgcg </b>
+Database b+tree indexing for GCG formatted databases
+Basename for index files: <b>embl</b>
+Resource name: <b>embl</b>
+      EMBL : EMBL
+     SWISS : Swiss-Prot, SpTrEMBL, TrEMBLnew
+   GENBANK : Genbank, DDBJ
+       PIR : NBRF
+Entry format [SWISS]: <b>embl</b>
+Database directory [.]: <b>embl</b>
+Wildcard database filename [*.seq]: <b></b>
+        id : ID
+       acc : Accession number
+        sv : Sequence Version and GI
+       des : Description
+       key : Keywords
+       org : Taxonomy
+Index fields [id,acc]: <b></b>
+
+Processing file /homes/user/test/embl/eem_ba1.seq
+Processing file /homes/user/test/embl/eem_est.seq
+Processing file /homes/user/test/embl/eem_fun.seq
+Processing file /homes/user/test/embl/eem_htginv1.seq
+Processing file /homes/user/test/embl/eem_hum1.seq
+Processing file /homes/user/test/embl/eem_in.seq
+Processing file /homes/user/test/embl/eem_ov.seq
+Processing file /homes/user/test/embl/eem_ro.seq
+Processing file /homes/user/test/embl/eem_vi.seq
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>

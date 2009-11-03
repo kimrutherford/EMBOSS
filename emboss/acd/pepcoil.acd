@@ -1,0 +1,59 @@
+application: pepcoil [
+  documentation: "Predicts coiled coil regions"
+  groups: "Protein:2D Structure, Protein:Motifs"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "PureProtein"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: window [
+    standard: "Y"
+    minimum: "7"
+    maximum: "28"
+    default: "28"
+    information: "Window size"
+  ]
+
+endsection: required
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  boolean: coil [
+    default: "Y"
+    information: "Report coiled coil regions"
+  ]
+
+  boolean: frame [
+    default: "$(coil)"
+    information: "Show coil frameshifts"
+    expected: "Yes if -coil is true"
+  ]
+
+  boolean: other [
+    default: "Y"
+    information: "Report non coiled coil regions"
+  ]
+
+  outfile: outfile [
+    parameter: "Y"
+    knowntype: "pepcoil output"
+  ]
+
+endsection: output

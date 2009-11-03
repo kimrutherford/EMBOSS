@@ -1,0 +1,30 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: h45989.est2genome</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Note Best alignment is between forward est and forward genome, but splice sites imply REVERSED GENE
+Exon       163  91.8 25685 25874 Z69719           1   193 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+-Intron    -20   0.0 25875 26278 Z69719      
+Exon       207  98.1 26279 26492 Z69719         194   407 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+-Intron    -20   0.0 26493 27390 Z69719      
+Exon        63  86.4 27391 27476 Z69719         408   494 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+
+Span       393  93.6 25685 27476 Z69719           1   494 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+
+Segment     14  83.3 25685 25702 Z69719           1    18 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     28  85.7 25703 25737 Z69719          20    54 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment      4 100.0 25738 25741 Z69719          56    59 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     13 100.0 25742 25754 Z69719          61    73 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment      4 100.0 25756 25759 Z69719          74    77 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment    110  97.4 25760 25874 Z69719          79   193 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     37 100.0 26279 26315 Z69719         194   230 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment    162  98.8 26317 26480 Z69719         231   394 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     12 100.0 26481 26492 Z69719         396   407 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     16 100.0 27391 27406 Z69719         408   423 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     10  91.7 27407 27418 Z69719         425   436 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     19  95.2 27419 27439 Z69719         438   458 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     24  80.6 27441 27476 Z69719         459   494 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+</pre>
+</td></tr></table><p>

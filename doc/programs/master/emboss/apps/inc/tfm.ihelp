@@ -1,0 +1,38 @@
+   Standard (Mandatory) qualifiers:
+  [-program]           string     Enter the name of an EMBOSS program (Any
+                                  string of at least 1 characters)
+
+   Additional (Optional) qualifiers:
+   -outfile            outfile    [stdout] Program documentation text output
+                                  file
+   -html               boolean    [N] This will format the output for
+                                  displaying as a WWW document.
+   -more               boolean    [@(!$(html))] This uses the standard UNIX
+                                  utility 'more' to display the text
+                                  page-by-page, waiting for you to read one
+                                  screen-full before going on to the next
+                                  page. When you have finished reading a page,
+                                  press the SPACE bar to proceed to the next
+                                  page.
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+

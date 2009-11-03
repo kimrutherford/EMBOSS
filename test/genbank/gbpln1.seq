@@ -1,0 +1,46 @@
+LOCUS       AB009602                 561 bp    mRNA    linear   PLN 13-DEC-1997
+DEFINITION  Schizosaccharomyces pombe mRNA for MET1 homolog, partial cds.
+ACCESSION   AB009602
+VERSION     AB009602.1  GI:2696651
+KEYWORDS    MET1 homolog.
+SOURCE      Schizosaccharomyces pombe (fission yeast)
+  ORGANISM  Schizosaccharomyces pombe
+            Eukaryota; Fungi; Ascomycota; Schizosaccharomycetes;
+            Schizosaccharomycetales; Schizosaccharomycetaceae;
+            Schizosaccharomyces.
+REFERENCE   1
+  AUTHORS   Kawamukai,M.
+  TITLE     S.pmbe MET1 homolog
+  JOURNAL   Published Only in Database (1997)
+REFERENCE   2  (bases 1 to 561)
+  AUTHORS   Kawamukai,M.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (07-DEC-1997) Makoto Kawamukai, Shimane University, Life
+            and Environmental Science; 1060 Nishikawatsu, Matsue, Shimane 690,
+            Japan (E-mail:kawamuka@life.shimane-u.ac.jp, Tel:0852-32-6587,
+            Fax:0852-32-6499)
+FEATURES             Location/Qualifiers
+     source          1. .561
+                     /organism="Schizosaccharomyces pombe"
+                     /mol_type="mRNA"
+                     /db_xref="taxon:4896"
+                     /clone_lib="pGAD GH"
+     CDS             <1. .275
+                     /codon_start=3
+                     /product="MET1 homolog"
+                     /protein_id="BAA23999.1"
+                     /db_xref="GI:2696652"
+                     /translation="SMPKIPSFVPTQTTVFLMALHRLEILVQALIESGWPRVLPVCIA
+                     ERVSCPDQRFIFSTLEDVVEEYNKYESLPPGLLITGYSCNTLRNTA"
+ORIGIN
+       1  GTTCGATGCC TAAAATACCT TCTTTTGTCC CTACACAGAC CACAGTTTTC CTAATGGCTT
+      61  TACACCGACT AGAAATTCTT GTGCAAGCAC TAATTGAAAG CGGTTGGCCT AGAGTGTTAC
+     121  CGGTTTGTAT AGCTGAGCGC GTCTCTTGCC CTGATCAAAG GTTCATTTTC TCTACTTTGG
+     181  AAGACGTTGT GGAAGAATAC AACAAGTACG AGTCTCTCCC CCCTGGTTTG CTGATTACTG
+     241  GATACAGTTG TAATACCCTT CGCAACACCG CGTAACTATC TATATGAATT ATTTTCCCTT
+     301  TATTATATGT AGTAGGTTCG TCTTTAATCT TCCTTTAGCA AGTCTTTTAC TGTTTTCGAC
+     361  CTCAATGTTC ATGTTCTTAG GTTGTTTTGG ATAATATGCG GTCAGTTTAA TCTTCGTTGT
+     421  TTCTTCTTAA AATATTTATT CATGGTTTAA TTTTTGGTTT GTACTTGTTC AGGGGCCAGT
+     481  TCATTATTTA CTCTGTTTGT ATACAGCAGT TCTTTTATTT TTAGTATGAT TTTAATTTAA
+     541  AACAATTCTA ATGGTCAAAA A
+//

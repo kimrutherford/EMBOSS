@@ -1,0 +1,58 @@
+# Example ACD file for QA testing - for calculated attributes
+#
+
+appl: qatestcalcfeat [ groups: "test" doc: "ACD file for QA testing" ]
+
+#sequence: test [ param: Y ]
+#
+#seqall: test [ param: Y ]
+#
+#seqset: test [ param: Y ]
+#
+features: test [ param: Y ]
+
+#regexp: test [ param: Y info: "Regular expression" ]
+
+#string: test [ param: Y info: "String" ]
+
+string: testflength [
+	 standard: "Y"
+	 info: "FLength"
+	 default: "$(test.flength)"
+]
+
+string: testfname [
+	 standard: "Y"
+	 info: "FName"
+	 default: "$(test.fname)"
+]
+
+string: testfbegin [
+	 standard: "Y"
+	 info: "FBegin"
+	 default: "$(test.fbegin)"
+]
+
+string: testfend [
+	 standard: "Y"
+	 info: "FEnd"
+	 default: "$(test.fend)"
+]
+
+string: testfprotein [
+	 standard: "Y"
+	 info: "FProtein"
+	 default: "$(test.fprotein)"
+]
+
+string: testfnucleic [
+	 standard: "Y"
+	 info: "FNucleic"
+	 default: "$(test.fnucleic)"
+]
+
+string: testfsize [
+	 standard: "Y"
+	 info: "FSize"
+	 default: "$(test.fsize)"
+]

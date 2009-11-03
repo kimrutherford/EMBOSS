@@ -1,0 +1,23 @@
+<b>Here is a sample session with tfscan</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>tfscan </b>
+Scans DNA sequences for transcription factors
+Input nucleotide sequence(s): <b>tembl:k00650</b>
+Transcription Factor Class
+         F : fungi
+         I : insect
+         P : plant
+         V : vertebrate
+         O : other
+         C : Custom
+Select class [V]: <b>v</b>
+Number of mismatches [0]: <b></b>
+Output file [k00650.tfscan]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

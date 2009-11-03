@@ -1,0 +1,360 @@
+
+                                  octanol 
+
+
+
+Function
+
+   Displays protein hydropathy
+
+Description
+
+   Protein sequences that form transmembrane regions are assumed to have
+   a thermodynamic preference for a hydrophobic environment (inside the
+   membrane lipid bilayer), rather than an aqueous environment in water.
+
+   The free energy change for each amino acid residue between a lipid and
+   a water environment can be measured experimentally, and the values for
+   peptides can be shown to be additive (White and Wimley 1999).
+
+   The octanol program calculates two free energy differences.
+
+   The first is the free energy difference between solution in water and
+   association with the interface (glycerol group) of a POPC
+   (palmitoyloleoylphosphocholine) bilayer.
+
+   The second is the free energy difference between water and octanol,
+   equivalent to the environment inside a lipid bilayer.
+
+   Residues which can be buried inside a lipid bilayer must be in a
+   region of the peptide where most residues show a free energy
+   difference in favour of being in an octanol environment or at least
+   being in the lipid/water interface region.
+
+   White and Wimley (1999) showed that a sliding window of either free
+   energy difference will indicate the location of probably transmembrane
+   regions, but that the best indicator is the difference between the two
+   values, which is the free energy difference between the interface and
+   octanol environments.
+
+   The free energies are calculated over a sliding window of 19 residues,
+   about the size of a membrane spanning alphahelix. The energy values
+   for each residue are added over the window.
+
+Usage
+
+   Here is a sample session with octanol
+
+
+% octanol 
+Displays protein hydropathy
+Input protein sequence: tsw:opsd_human
+Graph type [x11]: ps
+
+Created octanol.ps
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          sequence   Protein sequence filename and optional
+                                  format, or reference (input USA)
+  [-graph]             xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png, gif)
+
+   Additional (Optional) qualifiers:
+   -datafile           datafile   [Ewhite-wimley.dat] White-Wimley data file
+   -width              integer    [19] Window size (Integer from 1 to 200)
+   -octanolplot        boolean    [N] Display the octanol plot
+   -interfaceplot      boolean    [N] Display the interface plot
+   -[no]differenceplot boolean    [Y] Display the difference plot
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-graph" associated qualifiers
+   -gprompt2           boolean    Graph prompting
+   -gdesc2             string     Graph description
+   -gtitle2            string     Graph title
+   -gsubtitle2         string     Graph subtitle
+   -gxtitle2           string     Graph x axis title
+   -gytitle2           string     Graph y axis title
+   -goutfile2          string     Output file for non interactive displays
+   -gdirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   octanol reads any protein sequence USA.
+
+  Input files for usage example
+
+   'tsw:opsd_human' is a sequence entry in the example protein database
+   'tsw'
+
+  Database entry: tsw:opsd_human
+
+ID   OPSD_HUMAN              Reviewed;         348 AA.
+AC   P08100; Q16414; Q2M249;
+DT   01-AUG-1988, integrated into UniProtKB/Swiss-Prot.
+DT   01-AUG-1988, sequence version 1.
+DT   20-MAR-2007, entry version 91.
+DE   Rhodopsin (Opsin-2).
+GN   Name=RHO; Synonyms=OPN2;
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+OC   Catarrhini; Hominidae; Homo.
+OX   NCBI_TaxID=9606;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RX   MEDLINE=84272729; PubMed=6589631;
+RA   Nathans J., Hogness D.S.;
+RT   "Isolation and nucleotide sequence of the gene encoding human
+RT   rhodopsin.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 81:4851-4855(1984).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RA   Suwa M., Sato T., Okouchi I., Arita M., Futami K., Matsumoto S.,
+RA   Tsutsumi S., Aburatani H., Asai K., Akiyama Y.;
+RT   "Genome-wide discovery and analysis of human seven transmembrane helix
+RT   receptor genes.";
+RL   Submitted (JUL-2001) to the EMBL/GenBank/DDBJ databases.
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA].
+RC   TISSUE=Retina;
+RG   The German cDNA consortium;
+RL   Submitted (JUN-2003) to the EMBL/GenBank/DDBJ databases.
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA].
+RX   PubMed=15489334; DOI=10.1101/gr.2596504;
+RG   The MGC Project Team;
+RT   "The status, quality, and expansion of the NIH full-length cDNA
+RT   project: the Mammalian Gene Collection (MGC).";
+RL   Genome Res. 14:2121-2127(2004).
+RN   [5]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA] OF 1-120.
+RX   PubMed=8566799; DOI=10.1016/0378-1119(95)00688-5;
+RA   Bennett J., Beller B., Sun D., Kariko K.;
+RT   "Sequence analysis of the 5.34-kb 5' flanking region of the human
+RT   rhodopsin-encoding gene.";
+RL   Gene 167:317-320(1995).
+RN   [6]
+RP   REVIEW ON RP4 VARIANTS.
+RX   MEDLINE=94004905; PubMed=8401533;
+RA   Al-Maghtheh M., Gregory C., Inglehearn C., Hardcastle A.,
+RA   Bhattacharya S.;
+
+
+  [Part of this file has been deleted for brevity]
+
+FT                                /FTId=VAR_004816.
+FT   VARIANT     209    209       V -> M (effect not known).
+FT                                /FTId=VAR_004817.
+FT   VARIANT     211    211       H -> P (in RP4).
+FT                                /FTId=VAR_004818.
+FT   VARIANT     211    211       H -> R (in RP4).
+FT                                /FTId=VAR_004819.
+FT   VARIANT     216    216       M -> K (in RP4).
+FT                                /FTId=VAR_004820.
+FT   VARIANT     220    220       F -> C (in RP4).
+FT                                /FTId=VAR_004821.
+FT   VARIANT     222    222       C -> R (in RP4).
+FT                                /FTId=VAR_004822.
+FT   VARIANT     255    255       Missing (in RP4).
+FT                                /FTId=VAR_004823.
+FT   VARIANT     264    264       Missing (in RP4).
+FT                                /FTId=VAR_004824.
+FT   VARIANT     267    267       P -> L (in RP4).
+FT                                /FTId=VAR_004825.
+FT   VARIANT     267    267       P -> R (in RP4).
+FT                                /FTId=VAR_004826.
+FT   VARIANT     292    292       A -> E (in CSNBAD1).
+FT                                /FTId=VAR_004827.
+FT   VARIANT     296    296       K -> E (in RP4).
+FT                                /FTId=VAR_004828.
+FT   VARIANT     297    297       S -> R (in RP4).
+FT                                /FTId=VAR_004829.
+FT   VARIANT     342    342       T -> M (in RP4).
+FT                                /FTId=VAR_004830.
+FT   VARIANT     345    345       V -> L (in RP4).
+FT                                /FTId=VAR_004831.
+FT   VARIANT     345    345       V -> M (in RP4).
+FT                                /FTId=VAR_004832.
+FT   VARIANT     347    347       P -> A (in RP4).
+FT                                /FTId=VAR_004833.
+FT   VARIANT     347    347       P -> L (in RP4; common variant).
+FT                                /FTId=VAR_004834.
+FT   VARIANT     347    347       P -> Q (in RP4).
+FT                                /FTId=VAR_004835.
+FT   VARIANT     347    347       P -> R (in RP4).
+FT                                /FTId=VAR_004836.
+FT   VARIANT     347    347       P -> S (in RP4).
+FT                                /FTId=VAR_004837.
+SQ   SEQUENCE   348 AA;  38893 MW;  6F4F6FCBA34265B2 CRC64;
+     MNGTEGPNFY VPFSNATGVV RSPFEYPQYY LAEPWQFSML AAYMFLLIVL GFPINFLTLY
+     VTVQHKKLRT PLNYILLNLA VADLFMVLGG FTSTLYTSLH GYFVFGPTGC NLEGFFATLG
+     GEIALWSLVV LAIERYVVVC KPMSNFRFGE NHAIMGVAFT WVMALACAAP PLAGWSRYIP
+     EGLQCSCGID YYTLKPEVNN ESFVIYMFVV HFTIPMIIIF FCYGQLVFTV KEAAAQQQES
+     ATTQKAEKEV TRMVIIMVIA FLICWVPYAS VAFYIFTHQG SNFGPIFMTI PAFFAKSAAI
+     YNPVIYIMMN KQFRNCMLTT ICCGKNPLGD DEASATVSKT ETSQVAPA
+//
+
+Output file format
+
+   octanol draws a graph showing the free energy calcuated over a sliding
+   window.
+
+  Output files for usage example
+
+  Graphics File: octanol.ps
+
+   [octanol results]
+
+   The line on the default plot is the difference between the interface
+   and octanol free energy calculations. Command line options allow the
+   display of the interface and octanol values, or hiding the difference
+   values.
+
+   In the example, the human opsin protein has 7 transmembrane regions:
+   37-61, 74-98, 114-133, 153-176, 203-230, 253-276 and 285-309. Each is
+   about 20 residues in length, which is also the gap between tick marks
+   on the sequence axis. All have energetic preferences for being in the
+   lipid (octanol) enviroment - shown as being above the zero line - or
+   have at least no clear preference.
+
+   Running octanol with all three plots:
+
+% octanol -interface -octanol
+Input sequence: tsw:opsd_human
+   Graph type [x11]:
+
+   gives a graph with the water-interface and water-octanol plots.
+
+   For those regions where the diference plot is close to zero, both the
+   other two plots are above the line, showing a preference for either
+   the octanol or the interface membrane environments rather than water.
+
+Data files
+
+   File Ewhite-wimley.dat contains the experimental free energy values
+   for the water-interface and water-octanol transitions.
+
+   EMBOSS data files are distributed with the application and stored in
+   the standard EMBOSS data directory, which is defined by the EMBOSS
+   environment variable EMBOSS_DATA.
+
+   To see the available EMBOSS data files, run:
+
+% embossdata -showall
+
+   To fetch one of the data files (for example 'Exxx.dat') into your
+   current directory for you to inspect or modify, run:
+
+% embossdata -fetch -file Exxx.dat
+
+   Users can provide their own data files in their own directories.
+   Project specific files can be put in the current directory, or for
+   tidier directory listings in a subdirectory called ".embossdata".
+   Files for all EMBOSS runs can be put in the user's home directory, or
+   again in a subdirectory called ".embossdata".
+
+   The directories are searched in the following order:
+     * . (your current directory)
+     * .embossdata (under your current directory)
+     * ~/ (your home directory)
+     * ~/.embossdata
+
+Notes
+
+   None.
+
+References
+
+    1. White S.H. and Wimley W.C. (1999) "Membrane protein folding and
+       stability: physical principles" Ann. Rev.Biophys. Biomol. Struct.
+       28:319-365.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name                         Description
+   backtranambig Back translate a protein sequence to ambiguous codons
+   backtranseq   Back translate a protein sequence
+   charge        Protein charge plot
+   checktrans    Reports STOP codons and ORF statistics of a protein
+   compseq       Count composition of dimer/trimer/etc words in a sequence
+   emowse        Protein identification by mass spectrometry
+   freak         Residue/base frequency table or plot
+   iep           Calculates the isoelectric point of a protein
+   mwcontam      Shows molwts that match across a set of files
+   mwfilter      Filter noisy molwts from mass spec output
+   pepinfo       Plots simple amino acid properties in parallel
+   pepstats      Protein statistics
+   pepwindow     Displays protein hydropathy
+   pepwindowall  Displays protein hydropathy of a set of sequences
+
+Author(s)
+
+   Ian Longden (il © sanger.ac.uk)
+   Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
+   CB10 1SA, UK.
+
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

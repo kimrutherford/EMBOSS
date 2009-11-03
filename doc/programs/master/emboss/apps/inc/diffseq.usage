@@ -1,0 +1,16 @@
+<b>Here is a sample session with diffseq</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>diffseq tembl:x65923 tembl:ay411291 </b>
+Find differences between nearly identical sequences
+Word size [10]: <b></b>
+Output report [x65923.diffseq]: <b></b>
+Features output [X65923.diffgff]: <b></b>
+Second features output [AY411291.diffgff]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

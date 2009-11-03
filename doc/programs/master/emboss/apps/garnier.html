@@ -1,0 +1,252 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: garnier
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+garnier
+<!--#include file="header2.inc" -->
+<H2>
+    Function
+</H2>
+<!--#include file="inc/garnier.ione" -->
+
+<H2>
+    Description
+</H2>
+
+This is an implementation of the original Garnier Osguthorpe Robson
+algorithm (GOR I) for predicting protein secondary structure.
+
+<p>
+
+Secondary structure prediction is notoriously difficult to do accurately.
+The GOR I alogorithm is one of the first semi-successful methods.
+
+<p>
+
+The Garnier method is not regarded as the most accurate prediction, but
+is simple to calculate on most workstations.
+
+<p>
+
+The accuracy of any secondary structure prediction program is not much
+better than 70% to 80% at best.  This is an early algorithm and will
+probably not predict with much better than about 65% accuracy. 
+
+<p>
+
+The Web servers for PHD, DSC, and others are generally preferred.
+
+<p>
+
+<b>Do not rely on this (or any other) program alone to make your
+predictions with.  Use several programs and take a consensus of the
+results.</b>
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/garnier.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/garnier.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/garnier.itable" -->
+
+<p>
+
+The meaning and use of the parameter 'idc' is currently being
+investigated.  The original author, Bill Pearson writes:
+
+<p>
+<i>"In their paper, GOR mention that if you know something about the
+secondary structure content of the protein you are analyzing, you can do
+better in prediction.  "idc" is an index into a set of arrays, dharr[]
+and dsarr[], which provide "decision constants" (dch, dcs), which are
+offsets that are applied to the weights for the helix and sheet (extend)
+terms.  So, idc=0 says don't use the decision constant offsets, and
+idc=1 to 6 indicates that various combinations of dch,dcs offsets should
+be used.  I don't remember what they are, but I must have gotten the
+values from their paper."</i>
+
+<H2>
+    Input file format
+</H2>
+
+
+<b>garnier</b> read any protein sequence USA.
+
+<p>
+<!--#include file="inc/garnier.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/reportformats.ihtml" -->
+<p>
+
+By default <b>garnier</b> writes a 'tagseq' report file.
+
+<p>
+<!--#include file="inc/garnier.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+
+<H2>
+    Notes
+</H2>
+
+
+The Garnier method is not regarded as the most accurate prediction, but
+is simple to calculate on most workstations.
+
+<p>
+
+The Web servers for PHD, DSC, and others are generally preferred.
+
+<p>
+
+<b>Do not rely on this (or any other) program alone to make your
+predictions with.  Use several programs and take a consensus of the
+results.</b>
+
+<p>
+
+The 3D structure for the example sequence is known, although the
+2D structure elements were not in the SwissProt feature table for
+release 38 when the test data was extracted.
+
+<p>
+DSSP shows:
+
+<pre>
+ From     To   Structure
+    9     13   E beta sheet
+   21     39   H alpha helix
+   50     54   E beta sheet
+   60     72   H alpha helix
+   78     81   E beta sheet
+   85     97   H alpha helix
+  101    104   E beta sheet
+  117    119   E beta sheet
+  128    136   H alpha helix
+  142    148   E beta sheet
+  151    166   H alpha helix
+  170    177   E beta sheet
+  183    196   H alpha helix
+  200    204   E beta sheet
+  208    221   H alpha helix
+  229    231   E beta sheet
+  236    239   H alpha helix
+  244    247   H alpha helix
+  251    254   E beta sheet
+  263    273   H alpha helix
+  284    303   H alpha helix
+  308    315   H alpha helix
+  320    322   E beta sheet
+  325    329   E beta sheet
+  336    337   E beta sheet
+  341    345   E beta sheet
+  351    356   E beta sheet
+
+</pre>
+
+<H2>
+    References
+</H2>
+
+
+<ol>
+
+<li>Garnier J, Osguthorpe DJ, Robson B
+Analysis of the accuracy and implications of simple methods for
+predicting the secondary structure of globular proteins. 
+J Mol Biol 1978 Mar 25;120(1):97-120
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+
+The accuracy of any secondary structure prediction program is not much
+better than 70% to 80% at best.  This is an early algorithm and will
+probably not predict with much better than about 65% accuracy. 
+
+<p>
+You are advised to use several of the latest Web-based prediction sites
+and combine them to make a consensus prediction.
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+None. 
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None. 
+
+<!--#include file="inc/garnier.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+
+This program ('GARNIER') was originally written by William Pearson
+(wrp@virginia.edu) and released as part of his FASTA package. 
+
+<p>
+This application was modified for inclusion in EMBOSS by 
+
+<!--#include file="inc/rlopez.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/garnier.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/garnier.comment" -->
+
+</BODY>
+</HTML>
+

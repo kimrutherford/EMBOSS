@@ -1,0 +1,51 @@
+application: garnier [
+  documentation: "Predicts protein secondary structure"
+  groups: "Protein:2D Structure"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "PureProtein"
+  ]
+
+endsection: input
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  integer: idc [
+    default: "0"
+    minimum: "0"
+    maximum: "6"
+    information: "Index decision constants parameter"
+    help: "In their paper, GOR mention that if you know something
+           about the secondary structure content of the protein you are
+           analyzing, you can do better in prediction. 'idc' is an index into
+           a set of arrays, dharr[] and dsarr[], which provide 'decision
+           constants' (dch, dcs), which are offsets that are applied to the
+           weights for the helix and sheet (extend) terms. So, idc=0 says
+           don't use the decision constant offsets, and idc=1 to 6 indicates
+           that various combinations of dch,dcs offsets should be used."
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  report: outfile [
+    parameter: "Y"
+    rformat: "tagseq"
+    taglist: "str:helix str:sheet str:turns str:coil"
+  ]
+
+endsection: output

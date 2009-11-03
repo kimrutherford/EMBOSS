@@ -1,0 +1,10 @@
+# ACD file for QA testing - missing the application definition
+#
+
+appl: testarray [ doc: "testing" group: "testing" ]
+
+section: advanced [ info: "Advanced section" type: "page" ]
+
+array: numlist [ standard: Y info: "array with size zero" size: 0 ]
+
+endsection: advanced

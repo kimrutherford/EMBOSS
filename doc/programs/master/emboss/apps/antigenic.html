@@ -1,0 +1,235 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: antigenic
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+antigenic
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/antigenic.ione" -->
+
+
+
+
+
+<H2>
+    Description
+</H2>
+
+
+Antigenic predicts potentially antigenic regions of a protein
+sequence, using the method of Kolaskar and Tongaonkar.
+
+<p>
+
+Analysis of data from experimentally determined antigenic sites on
+proteins has revealed that the hydrophobic residues Cys, Leu and Val, if
+they occur on the surface of a protein, are more likely to be a part of
+antigenic sites.  A semi-empirical method which makes use of
+physicochemical properties of amino acid residues and their frequencies
+of occurrence in experimentally known segmental epitopes was developed
+by Kolaskar and Tongaonkar
+to predict antigenic determinants on proteins.  Application of this
+method to a large number of proteins has shown that their method can
+predict antigenic determinants with about 75% accuracy which is better
+than most of the known methods.  This method is based on a single
+parameter and thus very simple to use. 
+
+<H2>
+    Usage
+</H2>
+
+<!--#include file="inc/antigenic.usage" -->
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/antigenic.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/antigenic.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+
+The input sequence can be one or more protein sequences.
+
+<p>
+
+<!--#include file="inc/antigenic.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/reportformats.ihtml" -->
+
+
+By default <b>antigenic</b> writes a 'motif' report file.
+
+<p>
+
+<!--#include file="inc/antigenic.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+
+Antigenic uses a data file called <em>Eantigenic.dat</em>.
+
+
+<!--#include file="inc/localfiles.ihtml" -->
+
+<p>
+Here is the default <em>Eantigenic.dat</em> file:
+
+<pre>
+
+#                                               Antigenic  Surface  Antigenic
+# Amino     -- Occurrence of amino acids in --   frequency frequency propensity
+# Acid       Epitopes      Surface     Protein   f(Ag)    f(s)      A(p)
+  A             135          328         524     0.065    0.061     1.064
+  C              53           97         186     0.026    0.018     1.412
+  D             118          352         414     0.057    0.066     0.866
+  E             132          401         499     0.064    0.075     0.851
+  F              76          180         365     0.037    0.034     1.091
+  G             116          343         487     0.056    0.064     0.874
+  H              59          138         191     0.029    0.026     1.105
+  I              86          193         437     0.042    0.036     1.152
+  K             158          439         523     0.076    0.082     0.930
+  L             149          308         684     0.072    0.058     1.250
+  M              23           72         152     0.011    0.013     0.826
+  N              94          313         407     0.045    0.058     0.776
+  P             135          328         411     0.065    0.061     1.064
+  Q              99          252         332     0.048    0.047     1.015
+  R             106          314         394     0.051    0.058     0.873
+  S             168          429         553     0.081    0.080     1.012
+  T             141          401         522     0.068    0.075     0.909
+  V             128          239         515     0.062    0.045     1.383
+  W              19           55         103     0.009    0.010     0.893
+  Y              71          158         245     0.034    0.029     1.161
+Total          2066         5340        7944
+
+</pre>
+
+<H2>
+    Notes
+</H2>
+
+
+<H2>
+    References
+</H2>
+
+
+<ol>
+<li>
+Kolaskar,AS and Tongaonkar,PC (1990).
+A semi-empirical method for prediction of antigenic determinants
+on protein antigens.
+FEBS Letters 276: 172-174.
+
+<li>
+Parker,JMR, Guo,D and Hodges,RS (1986).
+Biochemistry 25: 5425-5432.
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+
+The program will warn you if the sequence is not a protein or has
+ambiguity codes.
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+It exits with status 0, unless a region is badly constructed.
+
+<H2>
+    Known bugs
+</H2>
+
+
+None.
+
+<!--#include file="inc/antigenic.isee" -->
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/ableasby.address" -->
+
+
+<p>
+Original program "ANTIGENIC" by Peter Rice (EGCG 1991)
+
+<!--#include file="inc/price.address" -->
+
+<H2>
+    History
+</H2>
+
+
+<!--#include file="inc/antigenic.history" -->
+
+<H2>
+    Target users
+</H2>
+
+<!--#include file="inc/target.itxt" -->
+
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/antigenic.comment" -->
+
+
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,31 @@
+application: demoreport [
+  documentation: "Reads a sequence and feature table, writes
+                  a report"
+  groups: "Test"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  sequence: sequence [
+    parameter: "Y"
+    features: "Y"
+    type: "any"
+  ]
+
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  report: outfile [
+    parameter: "Y"
+    taglist: "int:demo=demo_tag float:test
+              int:pos=Maximum_position"
+  ]
+
+endsection: output

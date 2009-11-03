@@ -1,0 +1,66 @@
+EMBOSS THANKS file
+
+EMBOSS is a collaborative project, coordinated at the EBI, Hinxton.
+
+In the past EMBOSS was coordinated at the Sanger Centre, Hinxton
+(1996-2000) and at the HGMP/RFCGR, Hinxton (2000-2005).
+
+Many people have further contributed to EMBOSS by reporting problems,
+suggesting various improvements, or submitting actual code. Here is a
+list of those people. Help us to keep this complete and free from
+errors by mailing any changes to emboss-bug@emboss.open-bio.org
+
+Peter Rice <pmr@ebi.ac.uk>
+Ian Longden <ianl@inpharmatica.co.uk>
+Alan Bleasby <ajb@ebi.ac.uk>
+Jon Ison <jison@ebi.ac.uk>
+Gary Williams <gwilliam@hgmp.mrc.ac.uk>
+Ewan Birney <birney@ebi.ac.uk>
+Bill Pearson <wrp@virginia.edu>
+Thomas Laurent <thomas.laurent@uk.lionbioscience.com>
+Michael Schuster <schuster@emb1.bcc.univie.ac.at>
+Scott McMahan <smcmahan@wisc.edu>
+Henrikki Almusa <henrikki.almusa@helsinki.fi>
+Cedric Rossi <cedric@cedricrossi.com>
+
+Regexp
+======
+
+The regular expression library is derived from the PCRE (Perl
+Compatible Regular Expressions) library.
+
+The regular expression functions were originally derived from Henry Spencer's
+regexp library.
+
+CII
+===
+
+Some of the suggestions and code examples from David Hanson's book
+"C Interfaces and Implementations" are included in the AJAX library.
+This library is available from http://www.cs.princeton.edu/software/cii/
+or ftp://ftp.cs.princeton.edu/pub/packages/cii/
+
+The COPYRIGHT file in release 1.10 says:
+
+> The author of this software is David R. Hanson.
+> 
+> Copyright (c) 1994,1995,1996 by David R. Hanson. All Rights Reserved.
+> 
+> Permission to use, copy, modify, and distribute this software for any
+> purpose, subject to the provisions described below, without fee is
+> hereby granted, provided that this entire notice is included in all
+> copies of any software that is or includes a copy or modification of
+> this software and in all copies of the supporting documentation for
+> such software.
+> 
+> THIS SOFTWARE IS BEING PROVIDED "AS IS", WITHOUT ANY EXPRESS OR IMPLIED
+> WARRANTY. IN PARTICULAR, THE AUTHOR DOES MAKE ANY REPRESENTATION OR
+> WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY OF THIS SOFTWARE OR
+> ITS FITNESS FOR ANY PARTICULAR PURPOSE.
+> 
+> David Hanson / drh@cs.princeton.edu / http://www.cs.princeton.edu/~drh/
+> Wed Apr 24 13:44:16 PDT 1996
+> Mon Dec 12 15:58:13 EST 1994
+
+
+Thanks to Michael Schmitz for varargs handling code for linux ppc.

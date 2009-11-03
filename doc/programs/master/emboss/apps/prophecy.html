@@ -1,0 +1,222 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: prophecy
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+prophecy
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/prophecy.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+<b>prophecy</b> produces a simple frequency matrix for use by
+<b>profit</b> or a position specific weighted profile using either the
+Gribskov (1) or Henikoff (2) method for use by <b>prophet</b>. 
+
+<p>
+
+Profile analysis is a method for detecting distantly related proteins by
+sequence comparison.  The basis for comparison is not only the customary
+Dayhoff mutational-distance matrix but also the results of structural
+studies and information implicit in the alignments of the sequences of
+families of similar proteins.  This information is expressed in a
+position-specific scoring table (profile), which is created from a group
+of sequences previously aligned by structural or sequence similarity. 
+The similarity of any other target sequence to the group of aligned
+probe sequences can be tested by comparing the target to the profile
+using dynamic programming algorithms.  The profile method differs in two
+major respects from methods of sequence comparison in common use: (i)
+Any number of known sequences can be used to construct the profile,
+allowing more information to be used in the testing of the target than
+is possible with pairwise alignment methods.  (ii) The profile includes
+the penalties for insertion or deletion at each position, which allow
+one to include the probe secondary structure in the testing scheme. 
+
+
+<h3>Algorithm</h3>
+
+For Gribskov the scoring scheme is based on a notion of distance between
+a sequence and an ancestral or generalized sequence.
+
+<p>
+
+
+For Henikoff it is based on weights of the diversity observed at each
+position in the alignment, rather than on a sequence distance measure. 
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/prophecy.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/prophecy.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/prophecy.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>prophecy</b> reads a protein or a nucleic sequence alignment USA.
+
+<p>
+
+<!--#include file="inc/prophecy.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+The output is a profile file.
+
+<p>
+
+<!--#include file="inc/prophecy.output" -->
+
+<p>
+
+<h3>Simple frequency matrix</h3>
+
+<p>
+
+The columns represent amino acid counts for the amino acid residues from
+A to Z.  The rows represent the alignment positions from 1->n.  The file
+is a "Simple" frequency matrix of "Length" 20 amino acids.  The maximum
+score this matrix can give is 496.  The "Threshold" value is an
+instruction to the <b>profit</b> application to only report matches
+above the given score. 
+
+<p>
+
+<h3>Gribskov profile</h3>
+
+<p>
+
+The columns represent the amino acids from A to Z, the rows denote the
+alignment position from 1 to n.  The last column is the indel penalty. 
+The "Name" is the name used by <b>prophet</b> to refer to the profile,
+the "Matrix" is the name of the scoring matrix used (containing residue
+substitution values).  "Length" is the length of the alignment. 
+"Max_score" is the maximum score this profile can produce.  The
+threshold is an instruction to <b>prophet</b> to only report hits equal
+to or above the given value.  The gap opening and extension values are
+used by <b>prophet</b> in the dynamic alignment (Smith Waterman
+equivalent). 
+
+
+<H2>
+    Data files
+</H2>
+
+
+The two profile methods require a residue substitution scoring
+matrix.
+
+<p>
+
+The Gribskov marices use the data file 'Epprofile' by default.  This is
+derived from a PAM250 scoring matrix. 
+
+<p>
+
+The Henikoff matrices use the data file 'EBLOSUM62' by default.
+
+<!--#include file="inc/localfiles.ihtml" -->
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+
+<H2>
+    References
+</H2>
+
+<ol>
+
+<li> Gribskov M, McLachlan AD, Eisenberg D. Proc Natl Acad Sci U S
+A. 1987 Jul; 84(13): 4355-8.
+
+<li> Henikoff S, Henikoff JG. J Mol Biol. 1994 Nov 4; 243(4): 574-8.
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+
+None.
+
+<!--#include file="inc/prophecy.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/ableasby.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/prophecy.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/prophecy.comment" -->
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,57 @@
+application: backtranambig [
+  documentation: "Back translate a protein sequence to
+                  ambiguous codons"
+  groups: "Nucleic:Translation, Protein:Composition"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  sequence: sequence [
+    parameter: "Y"
+    type: "gapstopprotein"
+  ]
+
+endsection: input
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  list: table [
+    additional: "Y"
+    default: "0"
+    minimum: "1"
+    maximum: "1"
+    header: "Genetic codes"
+    values: "0:Standard; 1:Standard (with alternative initiation
+             codons); 2:Vertebrate Mitochondrial; 3:Yeast Mitochondrial;
+             4:Mold, Protozoan, Coelenterate Mitochondrial and
+             Mycoplasma/Spiroplasma; 5:Invertebrate Mitochondrial; 6:Ciliate
+             Macronuclear and Dasycladacean; 9:Echinoderm Mitochondrial;
+             10:Euplotid Nuclear; 11:Bacterial; 12:Alternative Yeast Nuclear;
+             13:Ascidian Mitochondrial; 14:Flatworm Mitochondrial;
+             15:Blepharisma Macronuclear; 16:Chlorophycean Mitochondrial;
+             21:Trematode Mitochondrial; 22:Scenedesmus obliquus;
+             23:Thraustochytrium Mitochondrial"
+    delimiter: ";"
+    codedelimiter: ":"
+    information: "Genetic code to use"
+  ]
+
+endsection: additional
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  seqout: outfile [
+    parameter: "Y"
+    type: "gapnucleotide"
+  ]
+
+endsection: output

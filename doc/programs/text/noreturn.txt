@@ -1,0 +1,180 @@
+
+                                 noreturn 
+
+
+
+Function
+
+   Removes carriage return from ASCII files
+
+Description
+
+   The way that Unix and PC operating systems store simple text files,
+   (including sequence files), differs slightly.
+
+   Unix files have a hidden character called 'new line' at the end of
+   every line.
+
+   PC files have two hidden characters called 'carriage return' and then
+   'new line' at the end of every line.
+
+   When files are transferred from PC machines to Unix machines, it is
+   often useful to convert the file from the PC format to the Unix
+   format, otherwise commands like 'more', to display the file, and text
+   editors can become confused.
+
+   This simple utility removes 'carriage return' characters from such
+   files, converting them from PC format to Unix format text files.
+
+   EMBOSS programs can read in both PC and Unix text file formats, so it
+   is not necessary for you to use this utility all of the time.
+
+Usage
+
+   Here is a sample session with noreturn
+
+
+% noreturn abc.dat 
+Removes carriage return from ASCII files
+ASCII text output file [abc.noreturn]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-infile]            infile     ASCII text file
+  [-outfile]           outfile    [*.noreturn] ASCII text output file
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -system             menu       [unix] Target operating system for
+                                  end-of-line format (Values: unix (Unix/Linux
+                                  systems); pc (Windows/DOS); mac (Apple
+                                  Macintosh))
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   The input file is a text data file with unwanted trailing carriage
+   returns.
+
+  Input files for usage example
+
+  File: abc.dat
+
+>ABC Test sequence with PC carriage return format
+ACDEFGHIKLMNPQRSTVWY
+
+Output file format
+
+  Output files for usage example
+
+  File: abc.noreturn
+
+>ABC Test sequence with PC carriage return format
+ACDEFGHIKLMNPQRSTVWY
+
+   The output file is identical to the input file, except that any
+   trailing carriage returns have been removed. For most files this will
+   make no difference.
+
+Data files
+
+   None.
+
+Notes
+
+   EMBOSS programs can read in both PC and Unix text file formats, so it
+   is not necessary for you to use this utility all of the time.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with a status of 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name                         Description
+   biosed       Replace or delete sequence sections
+   codcopy      Reads and writes a codon usage table
+   cutseq       Removes a specified section from a sequence
+   degapseq     Removes gap characters from sequences
+   descseq      Alter the name or description of a sequence
+   entret       Reads and writes (returns) flatfile entries
+   extractalign Extract regions from a sequence alignment
+   extractfeat  Extract features from a sequence
+   extractseq   Extract regions from a sequence
+   listor       Write a list file of the logical OR of two sets of sequences
+   makenucseq   Creates random nucleotide sequences
+   makeprotseq  Creates random protein sequences
+   maskfeat     Mask off features of a sequence
+   maskseq      Mask off regions of a sequence
+   newseq       Type in a short new sequence
+   notseq       Exclude a set of sequences and write out the remaining ones
+   nthseq       Writes one sequence from a multiple set of sequences
+   pasteseq     Insert one sequence into another
+   revseq       Reverse and complement a sequence
+   seqret       Reads and writes (returns) sequences
+   seqretsplit  Reads and writes (returns) sequences in individual files
+   skipseq      Reads and writes (returns) sequences, skipping first few
+   splitter     Split a sequence into (overlapping) smaller sequences
+   trimest      Trim poly-A tails off EST sequences
+   trimseq      Trim ambiguous bits off the ends of sequences
+   union        Reads sequence fragments and builds one sequence
+   vectorstrip  Strips out DNA between a pair of vector sequences
+   yank         Reads a sequence range, appends the full USA to a list file
+
+Author(s)
+
+   Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+History
+
+   Written (1999) - Alan Bleasby
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

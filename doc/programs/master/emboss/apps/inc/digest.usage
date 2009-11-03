@@ -1,0 +1,24 @@
+<b>Here is a sample session with digest</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>digest </b>
+Protein proteolytic enzyme or reagent cleavage digest
+Input protein sequence(s): <b>tsw:opsd_human</b>
+Enzymes and Reagents
+         1 : Trypsin
+         2 : Lys-C
+         3 : Arg-C
+         4 : Asp-N
+         5 : V8-bicarb
+         6 : V8-phosph
+         7 : Chymotrypsin
+         8 : CNBr
+Select number [1]: <b></b>
+Output report [opsd_human.digest]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

@@ -1,0 +1,45 @@
+<b>Here is a sample session with prophecy</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>prophecy </b>
+Creates matrices/profiles from multiple alignments
+Input (aligned) sequence set: <b>globins.msf</b>
+Profile type
+         F : Frequency
+         G : Gribskov
+         H : Henikoff
+Select type [F]: <b></b>
+Enter a name for the profile [mymatrix]: <b>globins</b>
+Enter threshold reporting percentage [75]: <b></b>
+Output file [globins.prophecy]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>prophecy </b>
+Creates matrices/profiles from multiple alignments
+Input (aligned) sequence set: <b>globins.msf</b>
+Profile type
+         F : Frequency
+         G : Gribskov
+         H : Henikoff
+Select type [F]: <b>g</b>
+Scoring matrix [Epprofile]: <b></b>
+Enter a name for the profile [mymatrix]: <b>globins</b>
+Gap opening penalty [3.0]: <b></b>
+Gap extension penalty [0.3]: <b></b>
+Output file [globins.prophecy]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>

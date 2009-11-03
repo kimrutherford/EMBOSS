@@ -1,0 +1,10 @@
+# ACD file for QA testing - missing the application name
+#
+appl: secondappl [ doc: "testing" group: "testing" ]
+
+sequence: asequence [ ]
+
+outfile: outtest [ param: Y odirectory: "$(outdir)" ]
+
+appl: extraappl [ doc: "testing" group: "testing" ]
+

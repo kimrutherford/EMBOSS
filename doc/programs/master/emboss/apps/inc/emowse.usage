@@ -1,0 +1,16 @@
+<b>Here is a sample session with emowse</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>emowse </b>
+Protein identification by mass spectrometry
+Input protein sequence(s): <b>tsw:*</b>
+Peptide molecular weight values file: <b>test.mowse</b>
+Whole sequence molwt [0]: <b></b>
+Output file [edd1_rat.emowse]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

@@ -1,0 +1,37 @@
+application: testplot [
+  documentation: "Test plot"
+  groups: "Test"
+]
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: points [
+    standard: "y"
+    default: "90"
+    minimum: "2"
+    maximum: "360"
+    information: "Number of degrees to plot"
+  ]
+
+endsection: required
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  boolean: overlap [
+    standard: "y"
+    default: "y"
+    information: "Overlap the graphs"
+  ]
+
+  xygraph: graph [
+    standard: "y"
+    multiple: "3"
+  ]
+
+endsection: output

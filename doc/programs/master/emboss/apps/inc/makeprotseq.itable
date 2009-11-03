@@ -1,0 +1,73 @@
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-pepstatsfile</td>
+<td>This file should be a pepstats output file. Protein sequences will be created with the composition in the pepstats output file.</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-amount</td>
+<td>Number of sequences created</td>
+<td>Integer 1 or more</td>
+<td>100</td>
+</tr>
+
+<tr>
+<td>-length</td>
+<td>Length of each sequence</td>
+<td>Integer 1 or more</td>
+<td>100</td>
+</tr>
+
+<tr>
+<td>-insert</td>
+<td>String that is inserted into sequence</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>-start</td>
+<td>Start point of inserted sequence</td>
+<td>Integer 1 or more</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 1)</td>
+<td>Protein sequence set(s) filename and optional format (output USA)</td>
+<td>Writeable sequence(s)</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-useinsert</td>
+<td>Do you want to make an insert</td>
+<td>Toggle value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>

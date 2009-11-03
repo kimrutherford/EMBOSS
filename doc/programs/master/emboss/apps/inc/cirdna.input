@@ -1,0 +1,45 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: data.cirp</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+Start   1001
+End     4270
+
+
+group
+label
+Block    1011   1362    3
+ex1
+endlabel
+label
+Tick     1610   8
+EcoR1
+endlabel
+label
+Block    1647   1815    1
+endlabel
+label
+Tick     2459   8
+BamH1
+endlabel
+label
+Block    4139   4258    3
+ex2
+endlabel
+endgroup
+
+
+group
+label
+Range    2541    2812    [       ]       5
+Alu
+endlabel
+label
+Range    3322    3497    &gt;       &lt;       5
+MER13
+endlabel
+endgroup
+</pre>
+</td></tr></table><p>

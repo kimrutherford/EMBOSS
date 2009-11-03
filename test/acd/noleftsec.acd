@@ -1,0 +1,7 @@
+# ACD file for QA testing - missing the application definition
+#
+appl: noleftsec [ doc: "testing" group: "testing" ]
+
+section: output
+
+outfile: outtest [ param: Y odirectory: "$(outdir)" ]

@@ -1,0 +1,272 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: preg
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+preg
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/preg.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+
+This searches for matches of a regular expression to a protein sequence.
+
+<p>
+A regular expression is a way of specifying an ambiguous pattern to
+search for.  Regular expressions are commonly used in some computer
+programming languages and may be more familiar to some users than to
+others. 
+
+<p>
+The following is a short guide to regular expressions in EMBOSS:
+
+
+<dl>
+<dt>^</dt><dd>
+use this at the start of a pattern to insist that the pattern can only
+match at the start of a sequence.  (eg.  '^M' matches a methionine at
+the start of the sequence)
+
+
+<dt>$</dt><dd>
+use this at the end of a pattern to insist that the pattern can only
+match at the end of a sequence (eg.  'R$' matches an arginine at
+the end of the sequence)
+
+<dt>()</dt><dd>
+groups a pattern.  This is commonly used with '|' (eg.  '(ACD)|(VWY)'
+matches either the first 'ACD' or the second 'VWY' pattern )
+
+<dt>|</dt><dd>
+This is the OR operator to enable a match to be made to either one
+pattern OR another.  There is no AND operator in this version of regular
+expressions. 
+</dl>
+
+<p>
+
+The following quantifier characters specify the number of time that
+the character before (in this case 'x') matches:
+
+<dl>
+<dt>x?</dt><dd>
+matches 0 or 1 times (ie, '' or 'x')
+<dt>x*</dt><dd>
+matches 0 or more times (ie, '' or 'x' or 'xx' or 'xxx', etc)
+<dt>x+</dt><dd>
+matches 1 or more times (ie, 'x' or 'xx' or 'xxx', etc)
+
+
+<p>
+
+<dt>{min,max}</dt><dd>
+Braces can enclose the specification of the minimum and maximum number
+of matches. A match of 'x' of between 3 and 6 times is: 'x{3,6}'
+
+</dl>
+
+<p>
+Quantifiers can follow any of the following types of character specification:
+
+<dl>
+<dt>x</dt><dd>
+any character (ie 'A')
+
+<dt>\x</dt><dd>
+the character after the backslash is used instead of its normal
+regular expression meaning.  This is commonly used to turn off the
+special meaning of the characters '^$()|?*+[]-.'.  It may be especially
+useful when searching for gap characters in a sequence (eg '\.' matches
+only a dot character '.')
+
+<dt>[xy]</dt><dd>
+match one of the characters 'x' or 'y'.  You may have one or more
+characters in this set. 
+
+<dt>[x-z]</dt><dd>
+match any one of the set of characters starting with 'x' and
+ending in 'y' in ASCII order (eg '[A-G]' matches any one of: 'A', 'B',
+'C', 'D', 'E', 'F', 'G')
+
+<dt>[^x-z]</dt><dd>
+matches anything except any one of the group of characters in
+ASCII order (eg '[^A-G]' matches anything EXCEPT any one of: 'A', 'B',
+'C', 'D', 'E', 'F', 'G')
+
+<dt>.</dt><dd>
+the dot character matches any other character (eg: 'A.G' matches
+'AAG', 'AaG', 'AZG', 'A-G' 'A G', etc.)
+</dl>
+
+<p>
+Combining some of these features gives these examples from the PROSITE
+patterns database: 
+
+<pre>
+'[STAGCN][RKH][LIVMAFY]$'
+</pre>
+
+<p>
+which is the 'Microbodies C-terminal targeting
+signal'. 
+
+<pre>
+'LP.TG[STGAVDE]'
+</pre>
+
+<p>
+which is the 'Gram-positive cocci surface proteins
+anchoring hexapeptide'. 
+
+<p>
+Regular expressions are case-sensitive.
+The pattern 'AAAA' will not match the sequence 'aaaa'.
+For this reason, both your pattern and the input sequences are
+converted to upper-case.      
+
+
+<H2>The syntax in detail</H2>
+
+<!--#include file="inc/pcre.inc" -->
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/preg.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/preg.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/preg.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<b>preg</b> reads any protein sequence USA.
+
+<p>
+
+<!--#include file="inc/preg.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+
+<!--#include file="inc/preg.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+
+Regular expressions are case-sensitive.
+The pattern 'AAAA' will not match the sequence 'aaaa'.
+For this reason, both your pattern and the input sequences are
+converted to upper-case.      
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+Always returns 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/preg.isee" -->
+<p>
+
+Other EMBOSS programs allow you to search for simple patterns and may be
+easier for the user who has never used regular expressions before:
+
+<p>
+<ul>
+<li><a href="fuzznuc.html">fuzznuc</a>  - Nucleic acid pattern search
+<li><a href="fuzzpro.html">fuzzpro</a>  - Protein pattern search
+<li><a href="fuzztran.html">fuzztran</a> - Protein pattern search after translation
+</ul>
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/price.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/preg.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/preg.comment" -->
+
+</BODY>
+</HTML>
+

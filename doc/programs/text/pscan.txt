@@ -1,0 +1,409 @@
+
+                                   pscan 
+
+
+
+Function
+
+   Scans proteins using PRINTS
+
+Description
+
+   PRINTS is a database of diagnostic protein signatures, or
+   fingerprints.
+
+   Fingerprints are groups of conserved motifs or elements that together
+   form a diagnostic signature for particular protein families.
+
+   An uncharacterised sequence matching all motifs or elements can then
+   be readily diagnosed as a true match to a particular family
+   fingerprint.
+
+   They can be used to diagnose family relationships in newly-determined
+   sequences (especially from genome projects).
+
+   Usually the motifs or elements do not overlap, but are separated along
+   a sequence, though they may be contiguous in 3D-space. Fingerprints
+   can encode protein folds and functionalities more flexibly and
+   powerfully than can single motifs, full diagnostic potency deriving
+   from the mutual context provided by motif neighbours.
+
+   Diagnostically, this is more powerful than using single motifs by
+   virtue of the biological context afforded by matching motif
+   neighbours.
+
+   pscan finds matches between a query protein sequence and the motifs or
+   elements in the PRINTS database. It reports various classes of
+   matches:
+
+     * Matches where all elements of a motif exist in the correct order
+     * Matches where all elements exist but some are in the incorrect
+       order
+     * Matches where some elements match and are in the correct order
+     * Miscellaneous matches.
+
+   The home web page of the PRINTS database is:
+   http://www.bioinf.man.ac.uk/dbbrowser/PRINTS/
+
+Usage
+
+   Here is a sample session with pscan
+
+
+% pscan 
+Scans proteins using PRINTS
+Input protein sequence(s): tsw:opsd_human
+Minimum number of elements per fingerprint [2]: 
+Maximum number of elements per fingerprint [20]: 
+Output file [opsd_human.pscan]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Protein sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -emin               integer    [2] Minimum number of elements per
+                                  fingerprint (Integer from 1 to 20)
+   -emax               integer    [20] Maximum number of elements per
+                                  fingerprint (Integer up to 20)
+  [-outfile]           outfile    [*.pscan] Output file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   pscan reads one or more protein sequence USAs.
+
+  Input files for usage example
+
+   'tsw:opsd_human' is a sequence entry in the example protein database
+   'tsw'
+
+  Database entry: tsw:opsd_human
+
+ID   OPSD_HUMAN              Reviewed;         348 AA.
+AC   P08100; Q16414; Q2M249;
+DT   01-AUG-1988, integrated into UniProtKB/Swiss-Prot.
+DT   01-AUG-1988, sequence version 1.
+DT   20-MAR-2007, entry version 91.
+DE   Rhodopsin (Opsin-2).
+GN   Name=RHO; Synonyms=OPN2;
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+OC   Catarrhini; Hominidae; Homo.
+OX   NCBI_TaxID=9606;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RX   MEDLINE=84272729; PubMed=6589631;
+RA   Nathans J., Hogness D.S.;
+RT   "Isolation and nucleotide sequence of the gene encoding human
+RT   rhodopsin.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 81:4851-4855(1984).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RA   Suwa M., Sato T., Okouchi I., Arita M., Futami K., Matsumoto S.,
+RA   Tsutsumi S., Aburatani H., Asai K., Akiyama Y.;
+RT   "Genome-wide discovery and analysis of human seven transmembrane helix
+RT   receptor genes.";
+RL   Submitted (JUL-2001) to the EMBL/GenBank/DDBJ databases.
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA].
+RC   TISSUE=Retina;
+RG   The German cDNA consortium;
+RL   Submitted (JUN-2003) to the EMBL/GenBank/DDBJ databases.
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA].
+RX   PubMed=15489334; DOI=10.1101/gr.2596504;
+RG   The MGC Project Team;
+RT   "The status, quality, and expansion of the NIH full-length cDNA
+RT   project: the Mammalian Gene Collection (MGC).";
+RL   Genome Res. 14:2121-2127(2004).
+RN   [5]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA] OF 1-120.
+RX   PubMed=8566799; DOI=10.1016/0378-1119(95)00688-5;
+RA   Bennett J., Beller B., Sun D., Kariko K.;
+RT   "Sequence analysis of the 5.34-kb 5' flanking region of the human
+RT   rhodopsin-encoding gene.";
+RL   Gene 167:317-320(1995).
+RN   [6]
+RP   REVIEW ON RP4 VARIANTS.
+RX   MEDLINE=94004905; PubMed=8401533;
+RA   Al-Maghtheh M., Gregory C., Inglehearn C., Hardcastle A.,
+RA   Bhattacharya S.;
+
+
+  [Part of this file has been deleted for brevity]
+
+FT                                /FTId=VAR_004816.
+FT   VARIANT     209    209       V -> M (effect not known).
+FT                                /FTId=VAR_004817.
+FT   VARIANT     211    211       H -> P (in RP4).
+FT                                /FTId=VAR_004818.
+FT   VARIANT     211    211       H -> R (in RP4).
+FT                                /FTId=VAR_004819.
+FT   VARIANT     216    216       M -> K (in RP4).
+FT                                /FTId=VAR_004820.
+FT   VARIANT     220    220       F -> C (in RP4).
+FT                                /FTId=VAR_004821.
+FT   VARIANT     222    222       C -> R (in RP4).
+FT                                /FTId=VAR_004822.
+FT   VARIANT     255    255       Missing (in RP4).
+FT                                /FTId=VAR_004823.
+FT   VARIANT     264    264       Missing (in RP4).
+FT                                /FTId=VAR_004824.
+FT   VARIANT     267    267       P -> L (in RP4).
+FT                                /FTId=VAR_004825.
+FT   VARIANT     267    267       P -> R (in RP4).
+FT                                /FTId=VAR_004826.
+FT   VARIANT     292    292       A -> E (in CSNBAD1).
+FT                                /FTId=VAR_004827.
+FT   VARIANT     296    296       K -> E (in RP4).
+FT                                /FTId=VAR_004828.
+FT   VARIANT     297    297       S -> R (in RP4).
+FT                                /FTId=VAR_004829.
+FT   VARIANT     342    342       T -> M (in RP4).
+FT                                /FTId=VAR_004830.
+FT   VARIANT     345    345       V -> L (in RP4).
+FT                                /FTId=VAR_004831.
+FT   VARIANT     345    345       V -> M (in RP4).
+FT                                /FTId=VAR_004832.
+FT   VARIANT     347    347       P -> A (in RP4).
+FT                                /FTId=VAR_004833.
+FT   VARIANT     347    347       P -> L (in RP4; common variant).
+FT                                /FTId=VAR_004834.
+FT   VARIANT     347    347       P -> Q (in RP4).
+FT                                /FTId=VAR_004835.
+FT   VARIANT     347    347       P -> R (in RP4).
+FT                                /FTId=VAR_004836.
+FT   VARIANT     347    347       P -> S (in RP4).
+FT                                /FTId=VAR_004837.
+SQ   SEQUENCE   348 AA;  38893 MW;  6F4F6FCBA34265B2 CRC64;
+     MNGTEGPNFY VPFSNATGVV RSPFEYPQYY LAEPWQFSML AAYMFLLIVL GFPINFLTLY
+     VTVQHKKLRT PLNYILLNLA VADLFMVLGG FTSTLYTSLH GYFVFGPTGC NLEGFFATLG
+     GEIALWSLVV LAIERYVVVC KPMSNFRFGE NHAIMGVAFT WVMALACAAP PLAGWSRYIP
+     EGLQCSCGID YYTLKPEVNN ESFVIYMFVV HFTIPMIIIF FCYGQLVFTV KEAAAQQQES
+     ATTQKAEKEV TRMVIIMVIA FLICWVPYAS VAFYIFTHQG SNFGPIFMTI PAFFAKSAAI
+     YNPVIYIMMN KQFRNCMLTT ICCGKNPLGD DEASATVSKT ETSQVAPA
+//
+
+Output file format
+
+  Output files for usage example
+
+  File: opsd_human.pscan
+
+
+
+CLASS 1
+Fingerprints with all elements in order
+
+Fingerprint GPCRRHODOPSN Elements 7
+    Accession number PR00237
+    Rhodopsin-like GPCR superfamily signature
+  Element 1 Threshold 54% Score 64%
+             Start position 39 Length 25
+  Element 2 Threshold 49% Score 75%
+             Start position 72 Length 22
+  Element 3 Threshold 48% Score 56%
+             Start position 117 Length 23
+  Element 4 Threshold 50% Score 69%
+             Start position 152 Length 22
+  Element 5 Threshold 51% Score 74%
+             Start position 204 Length 24
+  Element 6 Threshold 42% Score 75%
+             Start position 250 Length 25
+  Element 7 Threshold 46% Score 67%
+             Start position 288 Length 27
+
+
+CLASS 2
+All elements match but not all in the correct order
+
+
+
+CLASS 3
+Not all elements match but those that do are in order
+
+
+
+CLASS 4
+Remaining partial matches
+
+   The program reports hits in four classes.
+
+   Class1:
+          Matches where all elements of a motif exist in the correct
+          order
+
+   Class2:
+          Matches where all elements exist but some are in the incorrect
+          order
+
+   Class3:
+          Matches where some elements match and are in the correct order
+
+   Class4:
+          Miscellaneous matches
+
+Data files
+
+   The data file is stored in the PRINTS directory of the standard EMBOSS
+   data directory.
+     * prints.mat Matrices derived from PRINTS
+     * Pxxxxx Information for each fingerprint
+
+   The column information is described at the top of the matrix data file
+
+Notes
+
+   The matrix information used to scan a sequence is derived from the
+   final motif sets in the PRINTS database. The matrices are of the
+   simple frequency type and contain the number of times a residue occurs
+   in each position of the alignment. Each matrix therefore has a highest
+   possible score, being the sum of the maximum score of each column. A
+   match to the sequence window is obtained if it has a score equal to or
+   greater than the percentage of the maximum score of the lowest scoring
+   sequence in the final motif set.
+
+   The data files must have been created before running this program.
+   This is done by running the printsextract program with the
+   "prints.dat" file from a PRINTS release. You may have to ask your
+   system manager to do this.
+
+References
+
+    1. Attwood, T.K., Flower, D.R., Lewis, A.P., Mabey, J.E., Morgan,
+       S.R., Scordis, P., Selley, J. and Wright, W. (1999) PRINTS
+       prepares for the new millennium. Nucleic Acids Research, 27(1),
+       220-225.
+    2. Attwood, T.K., Beck, M.E., Flower, D.R., Scordis, P. and Selley,
+       J. (1998) The PRINTS protein fingerprint database in its fifth
+       year. Nucleic Acids Research, 26(1), 304-308.
+    3. Attwood, T.K., Beck, M.E., Bleasby, A.J., Degtyarenko, K., Michie,
+       A.D. and Parry-Smith, D.J. (1997) Novel developments with the
+       PRINTS protein motif fingerprint database. Nucleic Acids Research,
+       25 (1), 212-216.
+    4. Attwood, T.K. and Beck, M.E. (1994) PRINTS - A protein motif
+       fingerprint database. Protein Engineering, 7(7), 841-848.
+    5. Bleasby, A.J., Akrigg, D.A. and Attwood, T.K. (1994) OWL - A
+       non-redundant composite protein sequence database. Nucleic Acids
+       Research, 22(17), 3574-77.
+    6. Bleasby, A.J. and Wootton, J.C. (1990) Constructing validated,
+       non- redundant composite protein sequence databases. Protein
+       Engineering, 3(3), 153-159.
+    7. Parry-Smith, D.J. and Attwood, T.K. (1992) ADSP - A new package
+       for computational sequence analysis. CABIOS, 8(5), 451-459.
+    8. Attwood, T.K. and Findlay, J.B.C. (1994) Fingerprinting
+       G-protein-coupled receptors. Prot.Engng. 7(2), 195-203.
+    9. Attwood, T.K. and Findlay, J.B.C. (1993) Design of a
+       discriminating finger- print for G-protein-coupled receptors.
+       Prot.Engng. 6(2) 167-176.
+   10. Akrigg, D., Attwood, T.K., Bleasby, A.J., Findlay, J.B.C, North,
+       A.C.T., Maughan, N.A., Parry-Smith, D.J., Perkins, D.N. and
+       Wootton, J.C. (1992) SERPENT - An information storage and analysis
+       resource for protein sequences. CABIOS 8(3) 295-296.
+   11. Parry-Smith, D.J. and Attwood, T.K. (1991) SOMAP - A novel
+       interactive approach to multiple protein sequence aligment.
+       CABIOS, 7(2), 233-235.
+   12. Perkins, D.N. and Attwood, T.K. (1995) VISTAS - A package for
+       VIsualising STructures And Sequences of proteins. J.Mol.Graph.,
+       13, 73-75.
+   13. Parry-Smith, D.J., Payne, A.W.R, Michie, A.D. and Attwood, T.K.
+       (1998) CINEMA - A novel Colour INteractive Editor for Multiple
+       Alignments. Gene, 211(2), GC45-56.
+
+Warnings
+
+   The program will warn you if a DNA sequence is given.
+
+Diagnostic Error Messages
+
+   If you get the following EMBOSS FATAL ERROR message:
+
+"prints.mat file not found. Create it with printsextract."
+
+   then your local PRINTS data has not been set up correctly in your
+   EMBOSS DATA directory. Use 'printsextract' to do this.
+
+Exit status
+
+   It exits with status 0 unless an error is reported.
+
+Known bugs
+
+See also
+
+    Program name                         Description
+   antigenic      Finds antigenic sites in proteins
+   digest         Protein proteolytic enzyme or reagent cleavage digest
+   epestfind      Finds PEST motifs as potential proteolytic cleavage sites
+   fuzzpro        Protein pattern search
+   fuzztran       Protein pattern search after translation
+   helixturnhelix Report nucleic acid binding motifs
+   oddcomp        Find protein sequence regions with a biased composition
+   patmatdb       Search a protein sequence with a motif
+   patmatmotifs   Search a PROSITE motif database with a protein sequence
+   pepcoil        Predicts coiled coil regions
+   preg           Regular expression search of a protein sequence
+   sigcleave      Reports protein signal cleavage sites
+
+     * printsextract - Extract data from PRINTS. pscan uses the PRINTS
+       data. Until printsextract has been run to set up the PRINTS data,
+       pscan will not run correctly.
+
+Author(s)
+
+   Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

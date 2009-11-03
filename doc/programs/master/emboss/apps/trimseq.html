@@ -1,0 +1,173 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: trimseq
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+trimseq
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/trimseq.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+
+This program is used to tidy up the ends of sequences, removing all
+the bits that you would really rather were not published.
+
+<p>
+Specifically, it:
+<ul>
+
+<li>removes all gap characters from the ends.
+<li>removes X's and N's (in nucleic sequences) from the ends.
+<li>optionally removes *'s from the ends
+<li>optionally removes IUPAC ambiguity codes from the ends
+  (B and Z in proteins, M,R,W,S,Y,K,V,H,D and B in nucleic sequences)
+</ul>
+<p>
+It then optionally trims off poor quality regions from the end, using
+a threshold percentage of unwanted characters in a window which is moved
+along the sequence from the ends. The unwanted characters which are used
+are X's and N's (in nucleic sequences), optionally *'s, and optionally
+IUPAC ambiguity codes.
+
+<p>
+The program stops trimming the ends when the percentage of
+unwanted characters in the moving window drops below the
+threshold percentage. 
+	
+<p>
+Thus if the window size is set to 1 and the percentage threshold
+is 100, no further poor quality regions will be removed.
+If the window size is set to 5 and the percentage threshold is 40
+then the sequence  AAGCTNNNNATT   will be trimmed to AAGCT,
+while AAGCTNATT or AAGCTNNNNATTT will not be trimmed as less than
+40% of the last 5 characters are N's.
+
+<p>
+After trimming these poor quality regions, it will again then
+trim off any dangling gap characters from the ends .
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/trimseq.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/trimseq.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/trimseq.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+Normal sequence.
+
+<p>
+<!--#include file="inc/trimseq.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+
+Normal sequence file.
+<p>
+<!--#include file="inc/trimseq.output" -->
+
+<H2>
+    Data files
+</H2>
+
+None.
+	
+<H2>
+    Notes
+</H2>
+
+
+If you use the '-star' qualifier and set the window size to greater
+than 1, you may trim bits of sequence with internal *'s. This may
+not be what you expected.
+
+<H2>
+    References
+</H2>
+
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+
+None noted.
+
+<!--#include file="inc/trimseq.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/gwilliam.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/trimseq.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/trimseq.comment" -->
+
+</BODY>
+</HTML>
+

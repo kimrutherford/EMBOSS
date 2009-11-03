@@ -1,0 +1,62 @@
+application: wordmatch [
+  documentation: "Finds all exact matches of a given size
+                  between 2 sequences"
+  groups: "Alignment:Local"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  sequence: asequence [
+    parameter: "Y"
+    type: "any"
+  ]
+
+  sequence: bsequence [
+    parameter: "Y"
+    type: "@($(acdprotein) ? stopprotein : nucleotide)"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: wordsize [
+    standard: "Y"
+    default: "4"
+    minimum: "2"
+    information: "Word size"
+  ]
+
+endsection: required
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  align: outfile [
+    parameter: "Y"
+    aformat: "match"
+    minseqs: "2"
+    maxseqs: "2"
+  ]
+
+  featout: aoutfeat [
+    parameter: "Y"
+    ofname: "$(asequence.name)"
+    offormat: "gff"
+  ]
+
+  featout: boutfeat [
+    parameter: "Y"
+    ofname: "$(bsequence.name)"
+    offormat: "gff"
+  ]
+
+endsection: output

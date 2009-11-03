@@ -1,0 +1,190 @@
+application: prima [
+  documentation: "Selects primers for PCR and DNA
+                  amplification."
+  groups: "Nucleic:Primers"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  sequence: sequence [
+    parameter: "Y"
+    type: "dna"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  section: targetsection [
+    information: "Target options"
+    type: "frame"
+  ]
+
+    toggle: targetrange [
+      parameter: "Y"
+      default: "N"
+      information: "Specify a Target Range?"
+    ]
+
+    integer: targetstart [
+      standard: "$(targetrange)"
+      default: "$(sequence.begin)"
+      information: "Target start position."
+      expected: "Start of sequence"
+    ]
+
+    integer: targetend [
+      standard: "$(targetrange)"
+      default: "$(sequence.length)"
+      information: "Target end position."
+      expected: "End of sequence"
+    ]
+
+  endsection: targetsection
+
+  float: minprimertm [
+    standard: "Y"
+    default: "53"
+    information: "Minimum Primer Tm (deg Celsius)"
+  ]
+
+  float: maxprimertm [
+    standard: "Y"
+    default: "58"
+    information: "Maximum Primer Tm (deg Celsius)"
+  ]
+
+endsection: required
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  section: productsection [
+    information: "Product options"
+    type: "frame"
+  ]
+
+    integer: minprodlen [
+      additional: "@(!$(targetrange))"
+      default: "100"
+      information: "Minimum product length"
+    ]
+
+    integer: maxprodlen [
+      additional: "@(!$(targetrange))"
+      default: "300"
+      information: "Maximum product length"
+    ]
+
+    float: minprodgccont [
+      additional: "@(!$(targetrange))"
+      minimum: ".30"
+      maximum: ".70"
+      default: ".40"
+      information: "Minimum product GC fraction"
+    ]
+
+    float: maxprodgccont [
+      additional: "@(!$(targetrange))"
+      minimum: ".30"
+      maximum: ".70"
+      default: ".55"
+      information: "Maximum product GC fraction"
+    ]
+
+  endsection: productsection
+
+  section: primersection [
+    information: "Primer options"
+    type: "frame"
+  ]
+
+    toggle: primer [
+      additional: "Y"
+      information: "Pick PCR primer(s)"
+      default: "Y"
+      help: "Specify primer properties"
+    ]
+
+    integer: minprimerlen [
+      additional: "$(primer)"
+      default: "18"
+      information: "Minimum primer length"
+    ]
+
+    integer: maxprimerlen [
+      additional: "$(primer)"
+      default: "22"
+      information: "Maximum primer length"
+    ]
+
+    float: minpmgccont [
+      additional: "$(primer)"
+      minimum: ".30"
+      maximum: ".70"
+      default: ".40"
+      information: "Minimum primer GC fraction"
+    ]
+
+    float: maxpmgccont [
+      additional: "$(primer)"
+      minimum: ".30"
+      maximum: ".70"
+      default: ".55"
+      information: "Maximum primer GC fraction"
+    ]
+
+  endsection: primersection
+
+endsection: additional
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  integer: overlap [
+    default: "50"
+    information: "Minimum overlap of sequences"
+  ]
+
+  float: saltconc [
+    minimum: "1"
+    maximum: "100"
+    default: "50"
+    information: "Salt concentration (mM)"
+  ]
+
+  float: dnaconc [
+    minimum: "1"
+    maximum: "100"
+    default: "50"
+    information: "DNA concentration (mM)"
+  ]
+
+  boolean: list [
+    default: "N"
+    information: "Force list-style output"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    knowntype: "prima output"
+  ]
+
+endsection: output

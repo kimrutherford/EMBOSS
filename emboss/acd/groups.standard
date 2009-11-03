@@ -1,0 +1,49 @@
+#
+# Application groups
+#
+Acd ACD file utilities
+Alignment:Consensus Merging sequences to make a consensus
+Alignment:Differences Finding differences between sequences
+Alignment:Dot_plots Dot plot sequence comparisons
+Alignment:Global Global sequence alignment
+Alignment:Local Local sequence alignment
+Alignment:Multiple Multiple sequence alignment
+Display Publication-quality display
+Edit Sequence editing
+Enzyme_Kinetics Enzyme kinetics calculations
+Feature_tables Manipulation and display of sequence annotation
+HMM Hidden Markov Model analysis
+Information Information and general help for users
+Menus Menu interface(s)
+Nucleic:2D_structure Nucleic acid secondary structure
+Nucleic:Codon_usage Codon usage analysis
+Nucleic:Composition Composition of nucleotide sequences
+Nucleic:CpG_islands CpG island detection and analysis
+Nucleic:Gene_finding Predictions of genes and other genomic features
+Nucleic:Motifs Nucleic acid motif searches
+Nucleic:Mutation Nucleic acid sequence mutation
+Nucleic:Profiles Nucleic acid profile generation and searching
+Nucleic:Primers Primer prediction
+Nucleic:Repeats Nucleic acid repeat detection
+Nucleic:RNA_folding RNA folding methods and analysis
+Nucleic:Restriction Restriction enzyme sites in nucleotide sequences
+Nucleic:Transcription Transcription factors, promoters and terminator prediction
+Nucleic:Translation Translation of nucleotide sequence to protein sequence
+Phylogeny:Consensus Phylogenetic consensus methods
+Phylogeny:Continuous_characters Phylogenetic continuous character methods
+Phylogeny:Discrete_characters Phylogenetic discrete character methods
+Phylogeny:Distance_matrix Phylogenetic distance matrix methods
+Phylogeny:Gene_frequencies Phylogenetic gene frequency methods
+Phylogeny:Molecular_sequence Phylogenetic tree drawing methods
+Phylogeny:Tree_drawing Phylogenetic molecular sequence methods
+Phylogeny:Misc Phylogenetic other tools
+Protein:2D_structure Protein secondary structure
+Protein:3D_structure Protein tertiary structure
+Protein:Composition Composition of protein sequences
+Protein:Motifs Protein motif searches
+Protein:Mutation Protein sequence mutation
+Protein:Profiles Protein profile generation and searching
+Test Testing tools, not for general use.
+Utils:Database_creation Database installation
+Utils:Database_indexing Database indexing
+Utils:Misc Utility tools

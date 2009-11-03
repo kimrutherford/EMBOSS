@@ -1,0 +1,224 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: rebaseextract
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+rebaseextract
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/rebaseextract.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+
+The Restriction Enzyme database (REBASE) is a collection of information
+about restriction enzymes and related proteins.  It contains published
+and unpublished references, recognition and cleavage sites,
+isoschizomers, commercial availability, methylation sensitivity, crystal
+and sequence data.  DNA methyltransferases, homing endonucleases,
+nicking enzymes, specificity subunits and control proteins are also
+included.  Most recently, putative DNA methyltransferases and
+restriction enzymes, as predicted from analysis of genomic sequences,
+are also listed. 
+
+<p>
+
+The home page of REBASE is:
+<A HREF="http://rebase.neb.com/">http://rebase.neb.com/</A>
+
+<p>
+
+This program derives recognition site and cleavage information from the
+"withrefm" file of an REBASE distribution.  It creates three files in
+the EMBOSS data subdirectory REBASE.  A pattern file, a reference file
+and a supplier file.  
+
+<p>
+
+It will also (by default) produce an 'embossre.equ' file.  This can be
+turned off by setting the -equivalences option to be false.  This option
+calculates an 'embossre.equ' file using restriction enzyme prototypes in
+the "withrefm" file.  The 'embossre.equ' file is a file of preferred
+isoschizomers.  You may edit it to contain your available restriction
+enzymes. 
+
+<p>
+
+The EMBOSS programs that find restriction cutting sites use the data
+files produced by this program and will not work without them. 
+
+<p>
+
+Running this program may be the job of your system manager. 
+
+<H2>
+    Usage
+</H2>
+
+
+<!--#include file="inc/rebaseextract.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/rebaseextract.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/rebaseextract.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+The input file must be the "withrefm" file of a REBASE distribution.
+
+<p>
+
+For example, the withrefm file for REBASE version 005 is at: <a
+href="ftp://ftp.neb.com/pub/rebase/withrefm.005">ftp://ftp.neb.com/pub/rebase/withrefm.005</a>
+
+<p>
+
+<!--#include file="inc/rebaseextract.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+
+<!--#include file="inc/rebaseextract.output" -->
+
+<p>
+
+The output files are held in the REBASE subdirectory of the EMBOSS data
+directory. There are three:
+
+
+<ul>
+	<li> embossre.enz		Enzyme pattern file
+	<li> embossre.ref		Enzyme references
+	<li> embossre.sup		Enzyme suppliers
+</ul>
+
+<p>
+
+<b>rebaseextract</b> will also (by default) produce an 'embossre.equ'
+file in the EMBOSS data directory.  This can be turned off by setting
+the -equivalences option to be false.  This option calculates an
+'embossre.equ' file using restriction enzyme prototypes in the
+"withrefm" file.  The 'embossre.equ' file is a file of preferred
+isoschizomers.  You may edit it to contain your available restriction
+enzymes. 
+
+<p>
+
+
+
+<H2>
+    Data files
+</H2>
+
+
+The "withrefm" file of an REBASE distribution is the input file for this
+program.
+
+<H2>
+    Notes
+</H2>
+
+
+The home page of REBASE is:
+<A HREF="http://rebase.neb.com/">http://rebase.neb.com/</A>
+
+<p>
+Running this program may be the job of your system manager. 
+
+<p>
+The ready-made files produced by this program may already be available
+at the REBASE web site:
+<a href="http://rebase.neb.com/rebase/rebase.files.html">http://rebase.neb.com/rebase/rebase.files.html</a>
+or
+<a href="http://rebase.neb.com/rebase/rebase.f37.html">http://rebase.neb.com/rebase/rebase.f37.html</a>
+
+<H2>
+    References
+</H2>
+
+
+<ol>
+
+<li>
+Nucleic Acids Research 27: 312-313 (1999).
+
+</ol>
+<H2>
+    Warnings
+</H2>
+
+
+The program will warn you if the input file is incorrectly formatted.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+It exits with status 0 unless an error is reported.
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--#include file="inc/rebaseextract.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/ableasby.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/rebaseextract.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/targetadmin.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/rebaseextract.comment" -->
+
+</BODY>
+</HTML>
+

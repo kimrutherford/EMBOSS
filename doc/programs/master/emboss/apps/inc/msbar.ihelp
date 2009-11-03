@@ -1,0 +1,110 @@
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-sequence]          seqall     Sequence(s) filename and optional format, or
+                                  reference (input USA)
+   -count              integer    [1] Number of times to perform the mutation
+                                  operations (Integer 0 or more)
+   -point              menu       [0] Types of point mutations to perform
+                                  (Values: 0 (None); 1 (Any of the following);
+                                  2 (Insertions); 3 (Deletions); 4 (Changes);
+                                  5 (Duplications); 6 (Moves))
+   -block              menu       [0] Types of block mutations to perform
+                                  (Values: 0 (None); 1 (Any of the following);
+                                  2 (Insertions); 3 (Deletions); 4 (Changes);
+                                  5 (Duplications); 6 (Moves))
+*  -codon              menu       [0] Types of codon mutations to perform.
+                                  These are only done if the sequence is
+                                  nucleic. (Values: 0 (None); 1 (Any of the
+                                  following); 2 (Insertions); 3 (Deletions); 4
+                                  (Changes); 5 (Duplications); 6 (Moves))
+  [-outseq]            seqoutall  [<sequence>.<format>] Sequence set(s)
+                                  filename and optional format (output USA)
+
+   Additional (Optional) qualifiers (* if not always prompted):
+*  -inframe            boolean    [N] Do 'codon' and 'block' operations in
+                                  frame
+
+   Advanced (Unprompted) qualifiers:
+   -othersequence      seqall     [asis:N] If you require that the resulting
+                                  mutated sequence should not match a set of
+                                  other sequences, then you can specify that
+                                  set of sequences here. For example, if you
+                                  require that the mutated sequence should not
+                                  be the same as the input sequence, enter
+                                  the input sequence here. If you want the
+                                  result to be different to previous results
+                                  of this program, specify the previous result
+                                  sequences here. The program will check that
+                                  the result does not match the sequences
+                                  specified here before writing it out. If a
+                                  match is found, then the mutation is started
+                                  again with a fresh copy of the input
+                                  sequence. If, after 10 such retries, there
+                                  is still a match to the set of sequence
+                                  given here, then the matching mutated
+                                  sequence is written with a warning message.
+   -minimum            integer    [1] Minimum size for a block mutation
+                                  (Integer 0 or more)
+   -maximum            integer    [10] Maximum size for a block mutation (Any
+                                  integer value)
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-othersequence" associated qualifiers
+   -sbegin             integer    Start of each sequence to be used
+   -send               integer    End of each sequence to be used
+   -sreverse           boolean    Reverse (if DNA)
+   -sask               boolean    Ask for begin/end/reverse
+   -snucleotide        boolean    Sequence is nucleotide
+   -sprotein           boolean    Sequence is protein
+   -slower             boolean    Make lower case
+   -supper             boolean    Make upper case
+   -sformat            string     Input sequence format
+   -sdbname            string     Database name
+   -sid                string     Entryname
+   -ufo                string     UFO features
+   -fformat            string     Features format
+   -fopenfile          string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+

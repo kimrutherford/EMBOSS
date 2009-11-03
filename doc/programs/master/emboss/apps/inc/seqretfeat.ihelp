@@ -1,0 +1,15 @@
+   Mandatory qualifiers: (none)
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -featignore         string     Comma delimited list of Features NOT to be
+                                  output
+   -featonlyallow      string     Comma delimited list of Features to be
+                                  output,
+                                  will have no effect if featignore is set
+   -tagignore          string     Comma delimited list of Tags NOT to be
+                                  output
+   -tagonlyallow       string     Comma delimited list of Tags to be output,
+                                  will have no effect if tagignore is set
+   -sortbytype         bool       Sort output features by their type
+   -sortbystart        bool       Sort output features by their start position
+

@@ -1,0 +1,14 @@
+<b>Here is a sample session with whichdb</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>whichdb -showall </b>
+Search all databases for an entry
+ID or Accession number: <b>x65921</b>
+Output file [outfile.whichdb]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>

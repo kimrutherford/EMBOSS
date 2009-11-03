@@ -1,0 +1,657 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: dotmatcher
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+dotmatcher
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+    Function
+</H2>
+Displays a thresholded dotplot of two sequences
+<H2>
+    Description
+</H2>
+A dotplot is a graphical representation of the regions of similarity
+between two sequences. 
+
+<p>
+
+The two sequences are placed on the axes of a rectangular image and
+(subject to threshold conditions) wherever there is a similarity between
+the sequences a dot is placed on the image. 
+
+<p>
+
+Where the two sequences have substantial regions of similarity, many
+dots align to form diagonal lines.  It is therefore possible to see at a
+glance where there are local regions of similarity as these will have
+long diagonal lines.  It is also easy to see other features such as
+repeats (which form parallel diagonal lines), and insertions or
+deletions (which form breaks or discontinuities in the diagonal lines). 
+
+<p>
+
+<b>dotmatcher</b> uses a threshold to define whether a match is plotted
+(calculated from the substitution matrix).  A window of specified length
+is moved up all possible diagonals and a score is calculated within each
+window for each position along the diagonals.  The score is the sum of
+the comparisons of the two sequences using the given similarity matrix
+along the window.  If the score is above the threshold, then a line is
+plotted on the image over the position of the window. 
+
+<p>
+
+
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with dotmatcher</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>dotmatcher tsw:hba_human tsw:hbb_human -graph cps </b>
+Displays a thresholded dotplot of two sequences
+
+Created dotmatcher.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-asequence]         sequence   Sequence filename and optional format, or
+                                  reference (input USA)
+  [-bsequence]         sequence   Sequence filename and optional format, or
+                                  reference (input USA)
+*  -graph              graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png, gif)
+*  -xygraph            xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png, gif)
+
+   Additional (Optional) qualifiers:
+   -matrixfile         matrix     [EBLOSUM62 for protein, EDNAFULL for DNA]
+                                  This is the scoring matrix file used when
+                                  comparing sequences. By default it is the
+                                  file 'EBLOSUM62' (for proteins) or the file
+                                  'EDNAFULL' (for nucleic sequences). These
+                                  files are found in the 'data' directory of
+                                  the EMBOSS installation.
+   -windowsize         integer    [10] Window size over which to test
+                                  threshhold (Integer 3 or more)
+   -threshold          integer    [23] Threshold (Integer 0 or more)
+
+   Advanced (Unprompted) qualifiers:
+   -stretch            toggle     [N] Display a non-proportional graph
+
+   Associated qualifiers:
+
+   "-asequence" associated qualifiers
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-bsequence" associated qualifiers
+   -sbegin2            integer    Start of the sequence to be used
+   -send2              integer    End of the sequence to be used
+   -sreverse2          boolean    Reverse (if DNA)
+   -sask2              boolean    Ask for begin/end/reverse
+   -snucleotide2       boolean    Sequence is nucleotide
+   -sprotein2          boolean    Sequence is protein
+   -slower2            boolean    Make lower case
+   -supper2            boolean    Make upper case
+   -sformat2           string     Input sequence format
+   -sdbname2           string     Database name
+   -sid2               string     Entryname
+   -ufo2               string     UFO features
+   -fformat2           string     Features format
+   -fopenfile2         string     Features file name
+
+   "-graph" associated qualifiers
+   -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
+
+   "-xygraph" associated qualifiers
+   -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-asequence]<br>(Parameter 1)</td>
+<td>Sequence filename and optional format, or reference (input USA)</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-bsequence]<br>(Parameter 2)</td>
+<td>Sequence filename and optional format, or reference (input USA)</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-graph</td>
+<td>Graph type</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png, gif</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
+</tr>
+
+<tr>
+<td>-xygraph</td>
+<td>Graph type</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png, gif</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-matrixfile</td>
+<td>This is the scoring matrix file used when comparing sequences. By default it is the file 'EBLOSUM62' (for proteins) or the file 'EDNAFULL' (for nucleic sequences). These files are found in the 'data' directory of the EMBOSS installation.</td>
+<td>Comparison matrix file in EMBOSS data path</td>
+<td>EBLOSUM62 for protein<br>EDNAFULL for DNA</td>
+</tr>
+
+<tr>
+<td>-windowsize</td>
+<td>Window size over which to test threshhold</td>
+<td>Integer 3 or more</td>
+<td>10</td>
+</tr>
+
+<tr>
+<td>-threshold</td>
+<td>Threshold</td>
+<td>Integer 0 or more</td>
+<td>23</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-stretch</td>
+<td>Display a non-proportional graph</td>
+<td>Toggle value Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>
+
+<H2>
+    Input file format
+</H2>
+
+Any 2 sequence USAs of the same type (DNA or protein).
+
+<p>
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tsw:hba_human' is a sequence entry in the example protein database 'tsw'
+<p>
+<p><h3>Database entry: tsw:hba_human</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   HBA_HUMAN               Reviewed;         142 AA.
+AC   P69905; P01922; Q96KF1; Q9NYR7;
+DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
+DT   23-JAN-2007, sequence version 2.
+DT   03-APR-2007, entry version 41.
+DE   Hemoglobin subunit alpha (Hemoglobin alpha chain) (Alpha-globin).
+GN   Name=HBA1;
+GN   and
+GN   Name=HBA2;
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+OC   Catarrhini; Hominidae; Homo.
+OX   NCBI_TaxID=9606;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA] (HBA1).
+RX   MEDLINE=81088339; PubMed=7448866; DOI=10.1016/0092-8674(80)90347-5;
+RA   Michelson A.M., Orkin S.H.;
+RT   "The 3' untranslated regions of the duplicated human alpha-globin
+RT   genes are unexpectedly divergent.";
+RL   Cell 22:371-377(1980).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (HBA2).
+RX   MEDLINE=80137531; PubMed=6244294;
+RA   Wilson J.T., Wilson L.B., Reddy V.B., Cavallesco C., Ghosh P.K.,
+RA   Deriel J.K., Forget B.G., Weissman S.M.;
+RT   "Nucleotide sequence of the coding portion of human alpha globin
+RT   messenger RNA.";
+RL   J. Biol. Chem. 255:2807-2815(1980).
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA] (HBA2).
+RX   MEDLINE=81175088; PubMed=6452630;
+RA   Liebhaber S.A., Goossens M.J., Kan Y.W.;
+RT   "Cloning and complete nucleotide sequence of human 5'-alpha-globin
+RT   gene.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 77:7054-7058(1980).
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RX   PubMed=6946451;
+RA   Orkin S.H., Goff S.C., Hechtman R.L.;
+RT   "Mutation in an intervening sequence splice junction in man.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 78:5041-5045(1981).
+RN   [5]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA], AND VARIANT LYS-32.
+RX   MEDLINE=21303311; PubMed=11410421;
+RA   Zhao Y., Xu X.;
+RT   "Alpha2(CD31 AGG--&gt;AAG, Arg--&gt;Lys) causing non-deletional alpha-
+RT   thalassemia in a Chinese family with HbH disease.";
+RL   Haematologica 86:541-542(2001).
+RN   [6]
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT                                /FTId=VAR_002840.
+FT   VARIANT     131    131       A -&gt; D (in Yuda; O(2) affinity down).
+FT                                /FTId=VAR_002842.
+FT   VARIANT     131    131       A -&gt; P (in Sun Prairie; unstable).
+FT                                /FTId=VAR_002841.
+FT   VARIANT     132    132       S -&gt; P (in Questembert; highly unstable;
+FT                                causes alpha-thalassemia).
+FT                                /FTId=VAR_002843.
+FT   VARIANT     134    134       S -&gt; R (in Val de Marne; O(2) affinity
+FT                                up).
+FT                                /FTId=VAR_002844.
+FT   VARIANT     136    136       V -&gt; E (in Pavie).
+FT                                /FTId=VAR_002845.
+FT   VARIANT     137    137       L -&gt; M (in Chicago).
+FT                                /FTId=VAR_002846.
+FT   VARIANT     137    137       L -&gt; P (in Bibba; unstable; causes alpha-
+FT                                thalassemia).
+FT                                /FTId=VAR_002847.
+FT   VARIANT     139    139       S -&gt; P (in Attleboro; O(2) affinity up).
+FT                                /FTId=VAR_002848.
+FT   VARIANT     140    140       K -&gt; E (in Hanamaki; O(2) affinity up).
+FT                                /FTId=VAR_002849.
+FT   VARIANT     140    140       K -&gt; T (in Tokoname; O(2) affinity up).
+FT                                /FTId=VAR_002850.
+FT   VARIANT     141    141       Y -&gt; H (in Rouen; O(2) affinity up).
+FT                                /FTId=VAR_002851.
+FT   VARIANT     142    142       R -&gt; C (in Nunobiki; O(2) affinity up).
+FT                                /FTId=VAR_002852.
+FT   VARIANT     142    142       R -&gt; H (in Suresnes; O(2) affinity up).
+FT                                /FTId=VAR_002854.
+FT   VARIANT     142    142       R -&gt; L (in Legnano; O(2) affinity up).
+FT                                /FTId=VAR_002853.
+FT   VARIANT     142    142       R -&gt; P (in Singapore).
+FT                                /FTId=VAR_002855.
+FT   HELIX         4     15
+FT   HELIX        16     20
+FT   HELIX        21     35
+FT   HELIX        37     42
+FT   HELIX        53     71
+FT   HELIX        73     75
+FT   HELIX        76     79
+FT   HELIX        81     89
+FT   HELIX        96    112
+FT   TURN        114    116
+FT   HELIX       119    136
+FT   TURN        137    139
+SQ   SEQUENCE   142 AA;  15258 MW;  15E13666573BBBAE CRC64;
+     MVLSPADKTN VKAAWGKVGA HAGEYGAEAL ERMFLSFPTT KTYFPHFDLS HGSAQVKGHG
+     KKVADALTNA VAHVDDMPNA LSALSDLHAH KLRVDPVNFK LLSHCLLVTL AAHLPAEFTP
+     AVHASLDKFL ASVSTVLTSK YR
+//
+</pre>
+</td></tr></table><p>
+<p><h3>Database entry: tsw:hbb_human</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   HBB_HUMAN               Reviewed;         147 AA.
+AC   P68871; P02023; Q13852; Q14481; Q14510; Q45KT0; Q6FI08; Q8IZI1;
+AC   Q9BX96; Q9UCP8; Q9UCP9;
+DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
+DT   23-JAN-2007, sequence version 2.
+DT   20-MAR-2007, entry version 43.
+DE   Hemoglobin subunit beta (Hemoglobin beta chain) (Beta-globin).
+GN   Name=HBB;
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+OC   Catarrhini; Hominidae; Homo.
+OX   NCBI_TaxID=9606;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE.
+RX   MEDLINE=81064667; PubMed=6254664; DOI=10.1016/0092-8674(80)90428-6;
+RA   Lawn R.M., Efstratiadis A., O'Connell C., Maniatis T.;
+RT   "The nucleotide sequence of the human beta-globin gene.";
+RL   Cell 21:647-651(1980).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE.
+RX   MEDLINE=77126403; PubMed=1019344;
+RA   Marotta C., Forget B., Cohen-Solal M., Weissman S.M.;
+RT   "Nucleotide sequence analysis of coding and noncoding regions of human
+RT   beta-globin mRNA.";
+RL   Prog. Nucleic Acid Res. Mol. Biol. 19:165-175(1976).
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE.
+RA   Lu L., Hu Z.H., Du C.S., Fu Y.S.;
+RT   "DNA sequence of the human beta-globin gene isolated from a healthy
+RT   Chinese.";
+RL   Submitted (JUN-1997) to the EMBL/GenBank/DDBJ databases.
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE, AND VARIANT DURHAM-N.C. PRO-115.
+RC   TISSUE=Blood;
+RA   Kutlar F., Abboud M., Leithner C., Holley L., Brisco J., Kutlar A.;
+RT   "Electrophoretically silent, very unstable, thalassemic mutation at
+RT   codon 114 of beta globin (hemoglobin Durham-N.C.) detected by cDNA
+RT   sequencing of mRNA, from a Russian women.";
+RL   Submitted (AUG-1999) to the EMBL/GenBank/DDBJ databases.
+RN   [5]
+RP   NUCLEOTIDE SEQUENCE, AND VARIANT LOUISVILLE LEU-43.
+RC   TISSUE=Blood;
+RA   Kutlar F., Harbin J., Brisco J., Kutlar A.;
+RT   "Rapid detection of electrophoretically silent, unstable human
+RT   hemoglobin 'Louisville', (Beta; Phe 42 Leu/TTT to CTT) by cDNA
+RT   sequencing of mRNA.";
+RL   Submitted (JAN-1999) to the EMBL/GenBank/DDBJ databases.
+RN   [6]
+RP   NUCLEOTIDE SEQUENCE, AND VARIANT TY GARD GLN-125.
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT   VARIANT     141    141       A -&gt; T (in St Jacques: O(2) affinity up).
+FT                                /FTId=VAR_003081.
+FT   VARIANT     141    141       A -&gt; V (in Puttelange; polycythemia; O(2)
+FT                                affinity up).
+FT                                /FTId=VAR_003082.
+FT   VARIANT     142    142       L -&gt; R (in Olmsted; unstable).
+FT                                /FTId=VAR_003083.
+FT   VARIANT     143    143       A -&gt; D (in Ohio; O(2) affinity up).
+FT                                /FTId=VAR_003084.
+FT   VARIANT     144    144       H -&gt; D (in Rancho Mirage).
+FT                                /FTId=VAR_003085.
+FT   VARIANT     144    144       H -&gt; P (in Syracuse; O(2) affinity up).
+FT                                /FTId=VAR_003087.
+FT   VARIANT     144    144       H -&gt; Q (in Little Rock; O(2) affinity
+FT                                up).
+FT                                /FTId=VAR_003086.
+FT   VARIANT     144    144       H -&gt; R (in Abruzzo; O(2) affinity up).
+FT                                /FTId=VAR_003088.
+FT   VARIANT     145    145       K -&gt; E (in Mito; O(2) affinity up).
+FT                                /FTId=VAR_003089.
+FT   VARIANT     146    146       Y -&gt; C (in Rainier; O(2) affinity up).
+FT                                /FTId=VAR_003090.
+FT   VARIANT     146    146       Y -&gt; H (in Bethesda; O(2) affinity up).
+FT                                /FTId=VAR_003091.
+FT   VARIANT     147    147       H -&gt; D (in Hiroshima; O(2) affinity up).
+FT                                /FTId=VAR_003092.
+FT   VARIANT     147    147       H -&gt; L (in Cowtown; O(2) affinity up).
+FT                                /FTId=VAR_003093.
+FT   VARIANT     147    147       H -&gt; P (in York; O(2) affinity up).
+FT                                /FTId=VAR_003094.
+FT   VARIANT     147    147       H -&gt; Q (in Kodaira; O(2) affinity up).
+FT                                /FTId=VAR_003095.
+FT   HELIX         5     15
+FT   TURN         20     22
+FT   HELIX        23     34
+FT   HELIX        36     41
+FT   HELIX        43     45
+FT   HELIX        51     56
+FT   HELIX        58     76
+FT   TURN         77     79
+FT   HELIX        81     93
+FT   TURN         94     96
+FT   HELIX       101    118
+FT   HELIX       119    121
+FT   HELIX       124    141
+FT   HELIX       143    145
+SQ   SEQUENCE   147 AA;  15998 MW;  A31F6D621C6556A1 CRC64;
+     MVHLTPEEKS AVTALWGKVN VDEVGGEALG RLLVVYPWTQ RFFESFGDLS TPDAVMGNPK
+     VKAHGKKVLG AFSDGLAHLD NLKGTFATLS ELHCDKLHVD PENFRLLGNV LVCVLAHHFG
+     KEFTPPVQAA YQKVVAGVAN ALAHKYH
+//
+</pre>
+</td></tr></table><p>
+
+
+
+<H2>
+    Output file format
+</H2>
+
+
+An image is output to the requested graphics device.
+
+<p>
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>Graphics File: dotmatcher.ps</h3>
+<p><img src="dotmatcher.1.dotmatcher.gif" alt="[dotmatcher results]">
+
+<H2>
+    Data files
+</H2>
+
+
+It uses the specified matrix substitution file to compare the two sequences.
+
+<p>
+
+For protein sequences EBLOSUM62 is used for the substitution
+matrix. For nucleotide sequence, EDNAFULL is used. Others can be
+specified.
+
+<p>
+<p>
+EMBOSS data files are distributed with the application and stored
+in the standard EMBOSS data directory, which is defined
+by the EMBOSS environment variable EMBOSS_DATA.
+
+<p>
+
+To see the available EMBOSS data files, run:
+<p>
+<pre>
+% embossdata -showall
+</pre>
+<p>
+To fetch one of the data files (for example 'Exxx.dat') into your
+current directory for you to inspect or modify, run:
+
+<pre>
+
+% embossdata -fetch -file Exxx.dat
+
+</pre>
+<p>
+
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called
+".embossdata". Files for all EMBOSS runs can be put in the user's home
+directory, or again in a subdirectory called ".embossdata".
+
+<p>
+The directories are searched in the following order:
+
+<ul>
+   <li> . (your current directory)
+   <li> .embossdata (under your current directory)
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+<p>
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="dotpath.html">dotpath</a></td>
+<td>Non-overlapping wordmatch dotplot of two sequences</td>
+</tr>
+
+<tr>
+<td><a href="dottup.html">dottup</a></td>
+<td>Displays a wordmatch dotplot of two sequences</td>
+</tr>
+
+<tr>
+<td><a href="polydot.html">polydot</a></td>
+<td>Displays all-against-all dotplots of a set of sequences</td>
+</tr>
+
+</table>
+
+<a href="dottup.html">dottup,</a> by comparison, has no threshold, using
+a wordmatch-style method.  <b>dottup</b> is less sensitive, but substantially
+faster than <b>dotmatcher</b>. 
+
+
+<H2>
+    Author(s)
+</H2>
+
+Ian Longden (il&nbsp;&copy;&nbsp;sanger.ac.uk)
+<br>
+Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.                      
+
+<H2>
+    History
+</H2>
+
+Completed 1st June 1999. 
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+None
+
+</BODY>
+</HTML>
+

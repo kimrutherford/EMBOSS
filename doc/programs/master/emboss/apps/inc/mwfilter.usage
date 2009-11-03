@@ -1,0 +1,15 @@
+<b>Here is a sample session with mwfilter</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>mwfilter </b>
+Filter noisy molwts from mass spec output
+Molecular weights file: <b>molwts.dat</b>
+Ppm tolerance [50.0]: <b></b>
+Molecular weights output file [molwts.mwfilter]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

@@ -1,0 +1,19 @@
+<b>Here is a sample session with complex</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>complex -omnia </b>
+Find the linguistic complexity in nucleotide sequences
+Input nucleotide sequence(s): <b>tembl:*</b>
+Window length [100]: <b></b>
+Step size [5]: <b></b>
+Minimum word length [4]: <b></b>
+Maximum word length [6]: <b></b>
+Output file [hs989235.complex]: <b></b>
+output sequence(s) [hs989235.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

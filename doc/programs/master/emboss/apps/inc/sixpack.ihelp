@@ -1,0 +1,131 @@
+   Standard (Mandatory) qualifiers:
+  [-sequence]          sequence   Nucleotide sequence filename and optional
+                                  format, or reference (input USA)
+  [-outfile]           outfile    [*.sixpack] Output file name
+   -outseq             seqoutall  [<sequence>.<format>] ORF sequence output
+
+   Additional (Optional) qualifiers:
+   -table              menu       [0] Genetics code used for the translation
+                                  (Values: 0 (Standard); 1 (Standard (with
+                                  alternative initiation codons)); 2
+                                  (Vertebrate Mitochondrial); 3 (Yeast
+                                  Mitochondrial); 4 (Mold, Protozoan,
+                                  Coelenterate Mitochondrial and
+                                  Mycoplasma/Spiroplasma); 5 (Invertebrate
+                                  Mitochondrial); 6 (Ciliate Macronuclear and
+                                  Dasycladacean); 9 (Echinoderm
+                                  Mitochondrial); 10 (Euplotid Nuclear); 11
+                                  (Bacterial); 12 (Alternative Yeast Nuclear);
+                                  13 (Ascidian Mitochondrial); 14 (Flatworm
+                                  Mitochondrial); 15 (Blepharisma
+                                  Macronuclear); 16 (Chlorophycean
+                                  Mitochondrial); 21 (Trematode
+                                  Mitochondrial); 22 (Scenedesmus obliquus);
+                                  23 (Thraustochytrium Mitochondrial))
+   -[no]firstorf       boolean    [Y] Count the beginning of a sequence as a
+                                  possible ORF, even if it's inferior to the
+                                  minimal ORF size.
+   -[no]lastorf        boolean    [Y] Count the end of a sequence as a
+                                  possible ORF, even if it's not finishing
+                                  with a STOP, or inferior to the minimal ORF
+                                  size.
+   -mstart             boolean    [N] Displays only ORFs starting with an M.
+
+   Advanced (Unprompted) qualifiers:
+   -[no]reverse        boolean    [Y] Display also the translation of the DNA
+                                  sequence in the 3 reverse frames
+   -orfminsize         integer    [1] Minimum size of Open Reading Frames
+                                  (ORFs) to display in the translations.
+                                  (Integer 1 or more)
+   -uppercase          range      [If this is left blank, then the sequence
+                                  case is left alone.] Regions to put in
+                                  uppercase.
+                                  If this is left blank, then the sequence
+                                  case is left alone.
+                                  A set of regions is specified by a set of
+                                  pairs of positions.
+                                  The positions are integers.
+                                  They are separated by any non-digit,
+                                  non-alpha character.
+                                  Examples of region specifications are:
+                                  24-45, 56-78
+                                  1:45, 67=99;765..888
+                                  1,5,8,10,23,45,57,99
+   -highlight          range      [(full sequence)] Regions to colour if
+                                  formatting for HTML.
+                                  If this is left blank, then the sequence is
+                                  left alone.
+                                  A set of regions is specified by a set of
+                                  pairs of positions.
+                                  The positions are integers.
+                                  They are followed by any valid HTML font
+                                  colour.
+                                  Examples of region specifications are:
+                                  24-45 blue 56-78 orange
+                                  1-100 green 120-156 red
+                                  A file of ranges to colour (one range per
+                                  line) can be specifed as '@filename'.
+   -[no]number         boolean    [Y] Number the sequence at the beginning and
+                                  the end of each line.
+   -width              integer    [60] Number of nucleotides displayed on each
+                                  line (Integer 1 or more)
+   -length             integer    [0] Line length of page (0 for indefinite)
+                                  (Integer 0 or more)
+   -margin             integer    [10] Margin around sequence for numbering.
+                                  (Integer 0 or more)
+   -[no]name           boolean    [Y] Set this to be false if you do not wish
+                                  to display the ID name of the sequence.
+   -[no]description    boolean    [Y] Set this to be false if you do not wish
+                                  to display the description of the sequence.
+   -offset             integer    [1] Number from which you want the DNA
+                                  sequence to be numbered. (Any integer value)
+   -html               boolean    [N] Use HTML formatting
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   "-outseq" associated qualifiers
+   -osformat           string     Output seq format
+   -osextension        string     File name extension
+   -osname             string     Base file name
+   -osdirectory        string     Output directory
+   -osdbname           string     Database name to add
+   -ossingle           boolean    Separate file for each entry
+   -oufo               string     UFO features
+   -offormat           string     Features format
+   -ofname             string     Features file name
+   -ofdirectory        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+

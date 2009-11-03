@@ -1,0 +1,183 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: maskfeat
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+maskfeat
+<!--#include file="header2.inc" -->
+
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/maskfeat.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+<b>maskfeat</b> reads in a sequence with its associated features.  The
+features can be found in the annotation of the sequence if it is in a
+format such as EMBL or SWISSPROT which includes features in the
+annotation, or they may be supplied explicitly in a GFF file by using
+the command-lin option '-gff filename'.
+
+<p>
+
+The feature table is then searched for features whose type matches the
+specified feature type to be masked.  By default, the type is 'repeat*'
+(i.e.  any type whose name starts with 'repeat').  You can specify the
+name of any other type of feature, or features that you wish to mask. 
+If you wish to specify more than one type of feature, separate their
+names with spaces or commas.  The names of the types of feature to be
+found may be wild-carded with asterisks '*' to find gruops of feature
+types sharing a common part of their names. 
+
+<p>
+
+If you are unsure of the names of feature types in use, please consult
+<A HREF="http://www3.ebi.ac.uk/Services/WebFeat/">
+http://www3.ebi.ac.uk/Services/WebFeat/</A>
+for a list of the EMBL feature types and see Appendix A of the Swissprot
+user manual in 
+<A HREF="http://www.expasy.ch/txt/userman.txt">
+http://www.expasy.ch/txt/userman.txt</A>
+for a list of the Swissprot feature types. 
+
+<p>
+
+If any features matching the specified names of feature types are found,
+then those regions of the sequence will be masked out by replacing that
+part of the sequence by masking characters.  The default masking
+characters are 'X' for a protein sequence and 'N' for a nucleic acid
+sequence, although you can specify your own masking character, if
+required. 
+
+<p>
+
+Some non-EMBOSS programs (for example FASTA) are capable of treating
+lower-case regions as if they are masked.  <b>maskfeat</b> can mask a
+region to lower-case instead of replacing the sequence with 'N's or 'X's
+if you use the qualifier '-tolower' or use a space character as the
+masking character.   
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/maskfeat.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/maskfeat.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/maskfeat.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>maskfeat</b> reads in a sequence USA.  You can optionally specify a
+GFF feature file to use with the command-line option '-gff filename'. 
+
+<p>
+
+<!--#include file="inc/maskfeat.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+<b>maskfeat</b> writes out a normal, masked, sequence file.
+
+<p>
+
+<!--#include file="inc/maskfeat.output" -->
+
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/maskfeat.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/gwilliam.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/maskfeat.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/maskfeat.comment" -->
+
+</BODY>
+</HTML>
+

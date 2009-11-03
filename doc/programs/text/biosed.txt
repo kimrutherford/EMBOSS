@@ -1,0 +1,385 @@
+
+                                  biosed 
+
+
+
+Function
+
+   Replace or delete sequence sections
+
+Description
+
+   biosed is a simple sequence editing utility that searches for a target
+   subsequence in one or more input sequences and replaces it with a
+   specified second subsequence (or optionally just deletes the found
+   target subsequence).
+
+   biosed was inspired by the useful UNIX utility sed which searches for
+   a pattern in text and can replace or delete the found pattern.
+
+   If the target subsequence occurs more than once, then each instance of
+   the target is replaced.
+
+   The target subsequence is not any sort of an ambiguity pattern, it is
+   just a short sequence. A simple string match is done and if it exactly
+   matches then the replacement is done. The matching is independent of
+   the case of the sequence or the target - both uppercase and lowercase
+   will match.
+
+Usage
+
+   Here is a sample session with biosed
+
+   Replace all 'T's with 'U's to create an RNA sequence
+
+
+% biosed tembl:x65923 x65923.rna -target T -replace U 
+Replace or delete sequence sections
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+   Example 2
+
+   Replace all 'PPP' protein motifs with 'XXPPPXX'
+
+
+% biosed tsw:amir_pseae amir_pseae.pep -target PPP -replace XXPPPXX 
+Replace or delete sequence sections
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-sequence]          seqall     (Gapped) sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -target             string     [N] Sequence section to match (Any string is
+                                  accepted)
+*  -replace            string     [A] Replacement sequence section (Any string
+                                  is accepted)
+  [-outseq]            seqout     [.] Sequence filename and
+                                  optional format (output USA)
+
+   Additional (Optional) qualifiers:
+   -position           integer    [0] Sequence position to match (Integer 0 or
+                                  more)
+
+   Advanced (Unprompted) qualifiers:
+   -delete             toggle     [N] Delete the target sequence sections
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   It reads the USA of one or more nucleic acid or protein sequences.
+
+  Input files for usage example
+
+   'tembl:x65923' is a sequence entry in the example nucleic acid
+   database 'tembl'
+
+  Database entry: tembl:x65923
+
+ID   X65923; SV 1; linear; mRNA; STD; HUM; 518 BP.
+XX
+AC   X65923;
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   18-APR-2005 (Rel. 83, Last updated, Version 11)
+XX
+DE   H.sapiens fau mRNA
+XX
+KW   fau gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-518
+RA   Michiels L.M.R.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
+RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-518
+RX   PUBMED; 8395683.
+RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
+RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
+RL   Oncogene 8(9):2537-2546(1993).
+XX
+DR   H-InvDB; HIT000322806.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..518
+FT                   /organism="Homo sapiens"
+FT                   /chromosome="11q"
+FT                   /map="13"
+FT                   /mol_type="mRNA"
+FT                   /clone_lib="cDNA"
+FT                   /clone="pUIA 631"
+FT                   /tissue_type="placenta"
+FT                   /db_xref="taxon:9606"
+FT   misc_feature    57..278
+FT                   /note="ubiquitin like part"
+FT   CDS             57..458
+FT                   /gene="fau"
+FT                   /db_xref="GDB:135476"
+FT                   /db_xref="GOA:P35544"
+FT                   /db_xref="GOA:P62861"
+FT                   /db_xref="HGNC:3597"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P62861"
+FT                   /protein_id="CAA46716.1"
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLA
+G
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKT
+G
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   misc_feature    98..102
+FT                   /note="nucleolar localization signal"
+FT   misc_feature    279..458
+FT                   /note="S30 part"
+FT   polyA_signal    484..489
+FT   polyA_site      509
+XX
+SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        6
+0
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       12
+0
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       18
+0
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       24
+0
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       30
+0
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       36
+0
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       42
+0
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       48
+0
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               51
+8
+//
+
+  Input files for usage example 2
+
+   'tsw:amir_pseae' is a sequence entry in the example protein database
+   'tsw'
+
+  Database entry: tsw:amir_pseae
+
+ID   AMIR_PSEAE              Reviewed;         196 AA.
+AC   P10932;
+DT   01-JUL-1989, integrated into UniProtKB/Swiss-Prot.
+DT   08-DEC-2000, sequence version 2.
+DT   20-MAR-2007, entry version 55.
+DE   Aliphatic amidase regulator.
+GN   Name=amiR; OrderedLocusNames=PA3363;
+OS   Pseudomonas aeruginosa.
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
+OC   Pseudomonadaceae; Pseudomonas.
+OX   NCBI_TaxID=287;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RC   STRAIN=PAC433;
+RX   MEDLINE=89211409; PubMed=2495988; DOI=10.1016/0014-5793(89)80249-2;
+RA   Lowe N., Rice P.M., Drew R.E.;
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene (amiR) of
+RT   Pseudomonas aeruginosa.";
+RL   FEBS Lett. 246:39-43(1989).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RC   STRAIN=ATCC 15692 / PAO1 / 1C / PRS 101 / LMG 12228;
+RX   MEDLINE=20437337; PubMed=10984043; DOI=10.1038/35023079;
+RA   Stover C.K., Pham X.-Q.T., Erwin A.L., Mizoguchi S.D., Warrener P.,
+RA   Hickey M.J., Brinkman F.S.L., Hufnagle W.O., Kowalik D.J., Lagrou M.,
+RA   Garber R.L., Goltry L., Tolentino E., Westbrock-Wadman S., Yuan Y.,
+RA   Brody L.L., Coulter S.N., Folger K.R., Kas A., Larbig K., Lim R.M.,
+RA   Smith K.A., Spencer D.H., Wong G.K.-S., Wu Z., Paulsen I.T.,
+RA   Reizer J., Saier M.H. Jr., Hancock R.E.W., Lory S., Olson M.V.;
+RT   "Complete genome sequence of Pseudomonas aeruginosa PAO1, an
+RT   opportunistic pathogen.";
+RL   Nature 406:959-964(2000).
+RN   [3]
+RP   CHARACTERIZATION.
+RX   MEDLINE=95286483; PubMed=7539417;
+RA   Wilson S.A., Drew R.E.;
+RT   "Transcriptional analysis of the amidase operon from Pseudomonas
+RT   aeruginosa.";
+RL   J. Bacteriol. 177:3052-3057(1995).
+RN   [4]
+RP   X-RAY CRYSTALLOGRAPHY (2.25 ANGSTROMS) OF COMPLEX WITH AMIC.
+RC   STRAIN=PAC1;
+RX   MEDLINE=99437995; PubMed=10508151; DOI=10.1093/emboj/18.19.5175;
+RA   O'Hara B.P., Norman R.A., Wan P.T., Roe S.M., Barrett T.E., Drew R.E.,
+RA   Pearl L.H.;
+RT   "Crystal structure and induction mechanism of AmiC-AmiR: a ligand-
+RT   regulated transcription antitermination complex.";
+RL   EMBO J. 18:5175-5186(1999).
+CC   -!- FUNCTION: Positive controlling element of amiE, the gene for
+CC       aliphatic amidase. Acts as a transcriptional antitermination
+
+
+  [Part of this file has been deleted for brevity]
+
+CC   -!- SIMILARITY: Contains 1 ANTAR domain.
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; X13776; CAA32023.1; -; Genomic_DNA.
+DR   EMBL; AE004091; AAG06751.1; -; Genomic_DNA.
+DR   PIR; B83226; B83226.
+DR   PIR; S03884; S03884.
+DR   PDB; 1QO0; X-ray; D/E=1-196.
+DR   IntAct; P10932; -.
+DR   GenomeReviews; AE004091_GR; PA3363.
+DR   KEGG; pae:PA3363; -.
+DR   BioCyc; PAER287:PA3363-MONOMER; -.
+DR   InterPro; IPR005561; AmiR_NasR_reg.
+DR   InterPro; IPR011006; CheY_like.
+DR   InterPro; IPR008327; Res_reg_antiterm.
+DR   Pfam; PF03861; ANTAR; 1.
+DR   PIRSF; PIRSF036382; RR_antiterm; 1.
+DR   PROSITE; PS50921; ANTAR; 1.
+KW   3D-structure; Complete proteome; Transcription;
+KW   Transcription antitermination; Transcription regulation.
+FT   CHAIN         1    196       Aliphatic amidase regulator.
+FT                                /FTId=PRO_0000064582.
+FT   DOMAIN      129    190       ANTAR.
+FT   CONFLICT     48     48       S -> A (in Ref. 1).
+FT   CONFLICT     64     64       R -> G (in Ref. 1).
+FT   CONFLICT    141    141       E -> D (in Ref. 1).
+FT   CONFLICT    154    154       A -> V (in Ref. 1).
+FT   CONFLICT    170    170       Y -> H (in Ref. 1).
+FT   HELIX         3      8
+FT   HELIX         9     12
+FT   STRAND       14     19
+FT   HELIX        23     35
+FT   STRAND       38     42
+FT   STRAND       54     59
+FT   HELIX        65     75
+FT   STRAND       81     86
+FT   HELIX        91    100
+FT   STRAND      103    109
+FT   HELIX       112    114
+FT   HELIX       115    160
+FT   HELIX       164    175
+FT   TURN        176    179
+FT   HELIX       182    189
+SQ   SEQUENCE   196 AA;  21903 MW;  306A4F30E8E4C6C0 CRC64;
+     MSANSLLGSL RELQVLVLNP PGEVSDALVL QLIRIGCSVR QCWPPPESFD VPVDVVFTSI
+     FQNRHHDEIA ALLAAGTPRT TLVALVEYES PAVLSQIIEL ECHGVITQPL DAHRVLPVLV
+     SARRISEEMA KLKQKTEQLQ ERIAGQARIN QAKALLMQRH GWDEREAHQY LSREAMKRRE
+     PILKIAQELL GNEPSA
+//
+
+Output file format
+
+   The edited sequence is output.
+
+   The sequence will be in uppercase.
+
+  Output files for usage example
+
+  File: x65923.rna
+
+>X65923 X65923.1 H.sapiens fau mRNA
+UUCCUCUUUCUCGACUCCAUCUUCGCGGUAGCUGGGACCGCCGUUCAGUCGCCAAUAUGC
+AGCUCUUUGUCCGCGCCCAGGAGCUACACACCUUCGAGGUGACCGGCCAGGAAACGGUCG
+CCCAGAUCAAGGCUCAUGUAGCCUCACUGGAGGGCAUUGCCCCGGAAGAUCAAGUCGUGC
+UCCUGGCAGGCGCGCCCCUGGAGGAUGAGGCCACUCUGGGCCAGUGCGGGGUGGAGGCCC
+UGACUACCCUGGAAGUAGCAGGCCGCAUGCUUGGAGGUAAAGUUCAUGGUUCCCUGGCCC
+GUGCUGGAAAAGUGAGAGGUCAGACUCCUAAGGUGGCCAAACAGGAGAAGAAGAAGAAGA
+AGACAGGUCGGGCUAAGCGGCGGAUGCAGUACAACCGGCGCUUUGUCAACGUUGUGCCCA
+CCUUUGGCAAGAAGAAGGGCCCCAAUGCCAACUCUUAAGUCUUUUGUAAUUCUGGCUUUC
+UCUAAUAAAAAAGCCACUUAGUUCAGUCAAAAAAAAAA
+
+  Output files for usage example 2
+
+  File: amir_pseae.pep
+
+>AMIR_PSEAE P10932 Aliphatic amidase regulator.
+MSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWXXPPPXXESFDVPVDVV
+FTSIFQNRHHDEIAALLAAGTPRTTLVALVEYESPAVLSQIIELECHGVITQPLDAHRVL
+PVLVSARRISEEMAKLKQKTEQLQERIAGQARINQAKALLMQRHGWDEREAHQYLSREAM
+KRREPILKIAQELLGNEPSA
+
+Data files
+
+   None.
+
+Notes
+
+   The edited sequence will be output in uppercase.
+
+References
+
+   None.
+
+Warnings
+
+   No check is made on the replacement subsequence.
+   Any text can be used as the replacement, including characters only
+   used in proteins (e.g. D, E, F, etc.), characters rarely used in
+   proteins (e.g. U, J, O, etc), digits and punctuation characters.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status

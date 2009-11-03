@@ -1,0 +1,128 @@
+application: epestfind [
+  documentation: "Finds PEST motifs as potential proteolytic
+                  cleavage sites"
+  groups: "Protein:Motifs"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  sequence: sequence [
+    parameter: "Y"
+    type: "protein"
+    help: "Protein sequence USA to be analysed."
+  ]
+
+  datafile: aadata [
+    additional: "Y"
+    default: "Eamino.dat"
+    information: "Amino acids properties and molecular weight
+                  data file"
+    knowntype: "amino acid properties"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: window [
+    standard: "Y"
+    default: "10"
+    help: "Minimal distance between positively charged amino acids."
+    information: "Window length"
+    maximum: "$(sequence.length)"
+    minimum: "2"
+  ]
+
+  selection: order [
+    standard: "Y"
+    button: "Y"
+    casesensitive: "N"
+    default: "score"
+    delimiter: ","
+    header: "Sort order of results"
+    help: "Name of the output file which holds the results of the
+           analysis. Results may be sorted by length, position and score."
+    information: "Sort order of results"
+    maximum: "1"
+    minimum: "1"
+    values: "length, position, score"
+  ]
+
+endsection: required
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  float: threshold [
+    additional: "Y"
+    default: "+5.0"
+    help: "Threshold value to discriminate weak from potential PEST
+           motifs. Valid PEST motifs are discriminated into 'poor' and
+           'potential' motifs depending on this threshold score. By default,
+           the default value is set to +5.0 based on experimental data.
+           Alterations are not recommended since significance is a matter of
+           biology, not mathematics."
+    information: "Threshold score"
+    maximum: "+55.0"
+    minimum: "-55.0"
+    precision: "2"
+  ]
+
+endsection: additional
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  boolean: potential [
+    default: "Y"
+    help: "Decide whether potential PEST motifs should be printed."
+    information: "Display potential PEST motifs"
+  ]
+
+  boolean: poor [
+    default: "Y"
+    help: "Decide whether poor PEST motifs should be printed."
+    information: "Display poor PEST motifs"
+  ]
+
+  boolean: invalid [
+    default: "N"
+    help: "Decide whether invalid PEST motifs should be printed."
+    information: "Display invalid PEST motifs"
+  ]
+
+  boolean: map [
+    default: "Y"
+    help: "Decide whether PEST motifs should be mapped to sequence."
+    information: "Display PEST motifs map"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    help: "Name of file to which results will be written."
+    knowntype: "epestfind output"
+  ]
+
+  xygraph: graph [
+    standard: "Y"
+    multiple: "1"
+  ]
+
+endsection: output

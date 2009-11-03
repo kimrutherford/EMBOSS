@@ -1,0 +1,44 @@
+<b>Here is a sample session with descseq</b>
+<p>
+Set the name of a sequence to "myclone23"  
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>descseq -seq dna.text -out clone23.seq -name "myclone23" </b>
+Alter the name or description of a sequence.
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+Set the description of a sequence to "This is my clone number 244"  
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>descseq -seq dna.text -out xy24.seq -desc "This is my clone number 244" </b>
+Alter the name or description of a sequence.
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+Append some text to the description of a sequence 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>descseq -seq dna.text -out est4.seq -desc " (submitted)" -append </b>
+Alter the name or description of a sequence.
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.3">Go to the output files for this example</a><p><p>

@@ -1,0 +1,5 @@
+# ACD file for QA testing - missing the application definition
+#
+appl: noquote [ doc: "testing" group: "testing" ]
+
+outfile: outtest [ param: Y odirectory: "$(outdir) ]

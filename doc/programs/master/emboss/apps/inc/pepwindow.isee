@@ -1,0 +1,74 @@
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="backtranambig.html">backtranambig</a></td>
+<td>Back translate a protein sequence to ambiguous codons</td>
+</tr>
+
+<tr>
+<td><a href="backtranseq.html">backtranseq</a></td>
+<td>Back translate a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="charge.html">charge</a></td>
+<td>Protein charge plot</td>
+</tr>
+
+<tr>
+<td><a href="checktrans.html">checktrans</a></td>
+<td>Reports STOP codons and ORF statistics of a protein</td>
+</tr>
+
+<tr>
+<td><a href="compseq.html">compseq</a></td>
+<td>Count composition of dimer/trimer/etc words in a sequence</td>
+</tr>
+
+<tr>
+<td><a href="emowse.html">emowse</a></td>
+<td>Protein identification by mass spectrometry</td>
+</tr>
+
+<tr>
+<td><a href="freak.html">freak</a></td>
+<td>Residue/base frequency table or plot</td>
+</tr>
+
+<tr>
+<td><a href="iep.html">iep</a></td>
+<td>Calculates the isoelectric point of a protein</td>
+</tr>
+
+<tr>
+<td><a href="mwcontam.html">mwcontam</a></td>
+<td>Shows molwts that match across a set of files</td>
+</tr>
+
+<tr>
+<td><a href="mwfilter.html">mwfilter</a></td>
+<td>Filter noisy molwts from mass spec output</td>
+</tr>
+
+<tr>
+<td><a href="octanol.html">octanol</a></td>
+<td>Displays protein hydropathy</td>
+</tr>
+
+<tr>
+<td><a href="pepinfo.html">pepinfo</a></td>
+<td>Plots simple amino acid properties in parallel</td>
+</tr>
+
+<tr>
+<td><a href="pepstats.html">pepstats</a></td>
+<td>Protein statistics</td>
+</tr>
+
+<tr>
+<td><a href="pepwindowall.html">pepwindowall</a></td>
+<td>Displays protein hydropathy of a set of sequences</td>
+</tr>
+
+</table>

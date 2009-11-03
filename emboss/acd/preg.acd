@@ -1,0 +1,36 @@
+application: preg [
+  documentation: "Regular expression search of a protein
+                  sequence"
+  groups: "Protein:Motifs"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "protein"
+  ]
+
+  regexp: pattern [
+    parameter: "Y"
+    upper: "Y"
+    information: "Regular expression pattern"
+  ]
+
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  report: outfile [
+    parameter: "Y"
+    taglist: "str:pat=Pattern_name"
+    rformat: "seqtable"
+  ]
+
+endsection: output

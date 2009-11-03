@@ -1,0 +1,16 @@
+# ACD file for QA testing - missing the application definition
+#
+
+appl: testlist [ doc: "testing" group: "testing" ]
+
+section: input [ info: "Input section" type: "page" ]
+
+list: test [
+      standard: Y
+      values: "a:one;b:two;c:three;fa:four;fb:five"
+      info: "list value"
+      max: 3
+]
+
+
+endsection: input

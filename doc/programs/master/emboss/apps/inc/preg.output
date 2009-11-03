@@ -1,0 +1,50 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: edd1_rat.preg</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: preg
+# Rundate: Sun 15 Jul 2007 12:00:00
+# Commandline: preg
+#    -sequence "tsw:*_rat"
+#    -pattern "IA[QWF]A"
+# Report_format: seqtable
+# Report_file: edd1_rat.preg
+########################################
+
+#=======================================
+#
+# Sequence: EDD1_RAT     from: 1   to: 920
+# HitCount: 1
+#
+# Pattern: IA[QWF]A
+#
+#=======================================
+
+  Start     End Pattern_name Sequence
+    421     424 regex1       IAQA
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: ARF3_RAT     from: 1   to: 181
+# HitCount: 0
+#
+# Pattern: IA[QWF]A
+#
+#=======================================
+
+  Start     End Pattern_name Sequence
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 2
+# Total_hitcount: 1
+#---------------------------------------
+</pre>
+</td></tr></table><p>

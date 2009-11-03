@@ -1,0 +1,80 @@
+application: hmoment [
+  documentation: "Hydrophobic moment calculation"
+  groups: "Protein:2D Structure"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: seqall [
+    parameter: "Y"
+    type: "protein"
+  ]
+
+endsection: input
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  integer: window [
+    additional: "Y"
+    default: "10"
+    information: "Window"
+  ]
+
+  integer: aangle [
+    additional: "Y"
+    default: "100"
+    information: "Alpha helix angle (degrees)"
+  ]
+
+  integer: bangle [
+    additional: "Y"
+    default: "160"
+    information: "Beta sheet angle (degrees)"
+  ]
+
+endsection: additional
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  float: baseline [
+    default: "0.35"
+    information: "Graph marker line"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  toggle: plot [
+    default: "N"
+    information: "Produce graphic"
+  ]
+
+  boolean: double [
+    default: "N"
+    information: "Plot two graphs"
+  ]
+
+  xygraph: graph [
+    standard: "$(plot)"
+  ]
+
+  outfile: outfile [
+    standard: "@(!$(plot))"
+    knowntype: "hmoment output"
+    nullok: "$(plot)"
+  ]
+
+endsection: output

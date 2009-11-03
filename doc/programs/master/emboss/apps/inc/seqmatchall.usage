@@ -1,0 +1,17 @@
+<b>Here is a sample session with seqmatchall</b>
+<p>
+Here is an example using an increased word size to avoid accidental matches: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqmatchall </b>
+All-against-all comparison of a set of sequences
+Input sequence set: <b>@eclac.list</b>
+Word size [4]: <b>15</b>
+Output alignment [j01636.seqmatchall]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

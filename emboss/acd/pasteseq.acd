@@ -1,0 +1,50 @@
+application: pasteseq [
+  documentation: "Insert one sequence into another"
+  groups: "Edit"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  sequence: asequence [
+    parameter: "Y"
+    type: "gapany"
+  ]
+
+  sequence: bsequence [
+    parameter: "Y"
+    information: "Sequence to insert"
+    type: "@($(acdprotein) ? gapstopprotein : gapnucleotide)"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: pos [
+    standard: "Y"
+    default: "$(asequence.end)"
+    maximum: "$(asequence.end)"
+    minimum: "0"
+    information: "Position to insert after"
+    help: "The position in the main input sequence to insert after. \
+           To insert before the start use the position 0."
+  ]
+
+endsection: required
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  seqout: outseq [
+    parameter: "Y"
+  ]
+
+endsection: output

@@ -1,0 +1,86 @@
+>AAABGLOB\L16978\join(1..125,886..1105,1796..1909)\459\AAA62149.1\Anadara trapezia\Anadara trapezia beta globin gene, complete cds./codon_start=1/product="beta globin"/protein_id="AAA62149.1"/db_xref="GI:303945"
+0 0 0 1 4 3 0 2 2 4 5 5 3 1 0 3 3 3 4 1 0 2 0 1 0 0 3 4 2 10 4 1 1 3 5 2 1 7 5 3 4 4 3 2 1 1 5 1 4 7 1 1 0 1 3 3 2 3 0 6 2 1 0 0 
+>AAAGLOBIN\L20699\join(447..571,1786..2005,3441..3554)\459\AAA72395.1\Anadara trapezia\Anadara trapezia globin gene, complete cds./codon_start=1/protein_id="AAA72395.1"/db_xref="GI:472795"
+0 0 0 1 5 4 4 2 4 1 5 3 1 2 0 3 1 3 1 1 0 2 2 0 0 0 3 3 2 6 7 0 1 3 5 2 0 6 4 3 6 3 2 0 1 3 7 2 6 4 2 1 0 1 3 5 1 2 4 7 2 0 0 1 
+>AAAJ3190\AJ003190\83..1504\1422\CAA05969.1\Astacus astacus\Astacus astacus mRNA for astacin./gene="AEA"/function="potential hatching enzyme"/codon_start=1/product="astacus egg astacin"/protein_id="CAA05969.1"/db_xref="GI:2661464"/db_xref="SPTREMBL:O44072"
+7 5 5 5 0 0 1 0 0 1 16 20 14 1 4 11 0 2 10 0 4 11 4 8 6 6 8 9 4 8 11 9 4 14 13 5 6 7 9 9 7 16 7 7 1 6 17 14 6 19 11 14 7 5 11 5 17 16 7 14 9 0 0 1 
+>AAASTACIN\X95684\join(336..347,616..937,1832..2011,2118..2270,2329..2417)\756\CAA64981.1\Astacus astacus\A.astacus astacin gene./codon_start=1/product="astacin"/protein_id="CAA64981.1"/db_xref="GI:1200203"/db_xref="SWISS-PROT:P07584"
+2 3 1 2 0 3 2 5 6 1 0 4 4 4 3 0 3 4 3 6 1 4 1 3 0 4 6 4 5 3 9 3 2 8 4 3 6 4 2 2 8 3 6 7 3 5 4 9 8 7 12 7 2 3 4 3 4 9 6 8 3 0 1 0 
+>AADHR\X60192 M59934\join(317..396,453..933)\561\CAA42748.1\Aedes albopictus\A.albopictus gene for dihydrofolate reductase./EC_number="1.5.1.3"/codon_start=1/product="dihydrofolate  reductase"/protein_id="CAA42748.1"/db_xref="GI:5556"/db_xref="SWISS-PROT:P28019"
+4 2 0 1 4 0 1 0 6 2 0 3 1 0 3 1 1 3 0 2 2 3 2 2 4 2 4 3 1 2 3 4 1 2 2 1 5 4 7 9 4 5 4 4 1 0 8 9 4 7 4 4 1 3 5 2 0 4 12 6 2 1 0 0 
+>AAE290428\AJ290428\61..507\447\CAC19819.1\Aedes aegypti\Aedes aegypti mRNA for putative lysozyme (lysozyme gene)./codon_start=1/evidence=experimental/product="putative lysozyme"/protein_id="CAC19819.1"/db_xref="GI:12044523"
+3 2 0 0 2 0 2 3 6 3 1 4 1 1 2 1 2 2 0 2 0 1 1 1 0 0 0 5 2 3 2 3 1 2 3 0 3 1 9 12 9 5 1 3 1 0 3 2 4 6 3 1 3 5 3 1 0 3 2 2 5 1 0 0 
+>AAE400338\AJ400338\412..3018\2607\CAB88873.1\Aedes aegypti\Aedes aegypti mRNA for GATA transcription factor (gatar gene)./gene="gatar"/function="repressor factor interacting with dCtBP"/codon_start=1/evidence=experimental/product="GATA transcription factor"/protein_id="CAB88873.1"/db_xref="GI:7649393"/db_xref="SPTREMBL:Q9NFF4"
+7 8 6 3 6 2 4 7 12 1 4 18 20 13 24 10 39 40 7 9 16 12 16 7 14 10 18 15 29 11 16 14 5 16 8 12 15 10 7 17 33 34 18 31 30 37 24 17 10 26 17 12 8 5 9 2 5 14 8 14 6 1 0 0 
+>AAHCHITA\L42010\16..1590\1575\AAB68959.1\Acanthocheilonema viteae\Acanthocheilonema viteae chitinase mRNA, complete cds./codon_start=1/product="chitinase"/protein_id="AAB68959.1"/db_xref="GI:804649"
+1 2 2 3 3 1 1 1 7 12 6 4 10 3 7 1 1 9 22 7 8 14 10 3 11 1 18 6 7 9 12 12 4 14 6 2 4 11 29 7 8 15 6 3 6 5 38 17 6 22 7 14 6 5 9 11 7 5 15 16 12 0 0 1 
+>AAHNECY\L43053\23..496\474\AAA87228.1\Acanthocheilonema viteae\Acanthocheilonema viteae (clone Av17) nematode cystatin mRNA,complete cds./codon_start=1/function="cysteine protease inhibitor"/evidence=experimental/product="cystatin"/protein_id="AAA87228.1"/db_xref="GI:867675"
+0 2 0 0 2 0 2 1 5 1 4 11 8 0 1 2 0 1 2 0 2 0 2 2 2 0 2 0 1 2 4 1 0 2 4 1 6 5 12 3 1 6 4 5 1 1 13 7 1 2 2 0 1 2 1 1 3 2 3 5 3 0 0 1 
+>AAOEH2\U96112\join(U96111.1:644..712,1960..2337)\-9231\AAD00823.1\Aedes aegypti\Aedes aegypti ovarian ecdysteroidogenic hormone I (OEH-I) gene,exon 2 and complete cds./gene="OEH-I"/codon_start=1/product="ovarian ecdysteroidogenic hormone I"/protein_id="AAD00823.1"/db_xref="GI:4100311"
+1 1 1 1 1 0 0 5 4 1 0 4 2 1 2 0 2 3 0 4 0 2 0 0 6 3 0 3 2 0 8 6 3 1 1 4 3 0 2 6 6 0 4 4 3 1 0 6 2 3 4 1 10 2 5 2 1 3 3 5 0 0 1 0 
+>AAS242595\AJ242595\1..756\756\CAB43519.1\Astacus astacus\Astacus astacus mRNA for zinc proteinase (astacin gene)./gene="astacin"/EC_number="3.4.24.21"/function="proteolytic"/codon_start=1/product="zinc proteinase"/protein_id="CAB43519.1"/db_xref="GI:4902487"/IGNORED_CODON=1
+2 3 1 2 0 3 2 5 6 1 0 4 4 4 3 0 3 4 2 7 1 4 1 3 0 4 6 4 5 3 9 3 2 8 3 3 6 4 2 2 8 3 6 7 3 5 4 9 8 7 12 7 2 3 4 3 4 9 6 8 3 0 1 0 
+>AATRAMY\U01209\22..1497\1476\AAA03322.1\Aedes atropalpus\Aedes atropalpus alpha-amylase mRNA, complete cds./codon_start=1/function="digestive enzyme"/product="alpha-amylase"/protein_id="AAA03322.1"/db_xref="GI:397985"
+2 5 1 13 4 2 3 2 8 3 0 17 2 3 5 4 9 2 1 11 2 9 11 2 4 6 5 7 3 20 26 12 1 16 10 8 7 13 7 5 27 10 8 10 6 12 10 8 8 21 9 7 7 4 20 4 0 9 14 12 14 1 0 0 
+>AATRYP3A1\X64362\34..798\765\CAA45714.1\Aedes aegypti\A.aegypti mRNA 3A1 for put. trypsin./codon_start=1/product="put. trypsin"/protein_id="CAA45714.1"/db_xref="GI:5562"/db_xref="SWISS-PROT:P29786"
+3 4 2 2 1 0 0 1 9 1 0 6 3 6 5 4 3 3 3 6 5 1 2 0 6 3 4 8 2 10 9 5 2 9 1 10 5 11 3 4 8 3 2 7 2 2 3 7 7 6 4 3 6 2 3 5 1 10 3 4 4 1 0 0 
+>AAU02021\U02021\1518..3545\2028\AAA87394.1\Aedes aegypti\Aedes aegypti ecdysteroid receptor mRNA, complete cds./codon_start=1/product="ecdysteroid receptor"/protein_id="AAA87394.1"/db_xref="GI:451328"
+3 3 19 1 3 3 8 18 32 0 2 2 6 12 21 1 13 23 3 12 16 0 7 7 16 3 3 23 10 1 8 17 8 12 5 15 8 2 8 22 39 15 10 32 15 5 10 28 19 9 18 1 14 4 13 1 9 21 5 27 4 0 1 0 
+>AAU02548\U02548\10..6429\6420\AAA18221.1\Aedes aegypti\Aedes aegypti UGALS vitellogenin mRNA, complete cds./codon_start=1/product="vitellogenin"/protein_id="AAA18221.1"/db_xref="GI:472308"
+2 31 0 41 4 0 4 12 58 10 0 30 18 60 34 39 54 10 3 48 2 27 63 17 10 15 4 59 5 85 54 21 1 22 5 36 18 45 30 117 93 22 42 60 41 20 86 37 51 64 185 32 14 5 155 18 0 42 27 39 12 0 1 0 
+>AAU03281\U03281\114..1067\954\AAB86499.1\Amblyomma americanum\Amblyomma americanum stearoyl-CoA desaturase mRNA, complete cds./EC_number="1.14.99.5"/codon_start=1/product="stearoyl-CoA desaturase"/protein_id="AAB86499.1"/db_xref="GI:437279"
+1 11 6 2 2 2 0 3 16 5 0 1 1 5 5 2 5 2 8 7 8 3 2 3 4 4 8 2 3 5 2 13 3 2 0 2 17 4 2 9 8 2 2 4 14 2 2 8 9 5 11 4 4 0 12 7 2 8 9 10 14 0 0 1 
+>AAU03871\U03871\36..428\393\AAA60326.1\Aedes albopictus\Aedes albopictus ribosomal protein (rpL31) gene, complete cds./gene="rpL31"/codon_start=1/function="unknown"/product="ribosomal protein L31"/protein_id="AAA60326.1"/db_xref="GI:506631"
+2 7 2 6 2 0 0 2 9 0 0 1 0 1 1 1 5 0 0 6 1 1 3 2 3 0 1 4 0 0 1 4 0 2 0 7 4 1 2 17 2 0 1 6 0 1 1 3 0 1 3 0 4 1 2 0 0 5 0 2 0 1 0 0 
+>AAU07708\U07708\1..1233\1233\AAC79094.1\Amblyomma americanum\Amblyomma americanum calreticulin (crt-1) mRNA, complete cds./gene="crt-1"/codon_start=1/product="calreticulin"/protein_id="AAC79094.1"/db_xref="GI:3924593"
+0 3 3 0 0 2 0 6 14 1 1 2 0 7 0 2 5 0 0 10 7 0 0 20 8 0 2 11 5 1 2 16 2 4 1 6 11 1 3 47 14 0 0 8 10 0 8 45 47 3 14 0 6 0 16 1 0 16 4 4 11 0 0 1 
+>AAU20287\U20287\1..1131\1131\AAA62350.1\Aedes aegypti\Aedes aegypti actin (Aaeact-1) mRNA, complete cds./gene="Aaeact-1"/codon_start=1/product="actin"/protein_id="AAA62350.1"/db_xref="GI:677901"
+1 6 0 12 1 0 2 3 17 2 0 3 1 15 2 9 2 0 1 16 0 6 11 3 1 3 0 13 2 13 3 5 1 19 0 13 1 11 2 18 8 3 1 9 7 3 13 12 10 13 13 3 6 0 9 1 0 21 7 15 4 1 0 0 
+>AAU27581\U27581\92..1555\1464\AAC31639.1\Aedes aegypti\Aedes aegypti dopa decarboxylase mRNA, complete cds./codon_start=1/product="dopa decarboxylase"/protein_id="AAC31639.1"/db_xref="GI:3417234"
+5 3 0 14 2 0 2 7 15 7 0 14 3 2 7 6 6 4 2 9 3 4 11 4 9 2 5 19 5 19 17 1 1 11 4 11 9 9 8 18 18 2 9 5 10 3 23 15 8 13 13 4 4 6 17 6 2 20 5 14 12 1 0 0 
+>AAU28803\U28803\681..2282\1602\AAA68961.1\Aedes aegypti\Aedes aegypti GABA receptor subunit (Rdl) mRNA, complete cds./gene="Rdl"/codon_start=1/product="GABA receptor subunit"/protein_id="AAA68961.1"/db_xref="GI:881590"
+3 2 3 6 7 6 9 4 15 2 11 3 6 1 14 4 10 8 13 6 7 5 13 4 14 4 7 6 7 4 13 18 5 18 16 11 9 6 7 13 6 10 6 14 12 8 15 7 9 13 9 12 4 3 10 15 12 13 13 16 6 1 0 0 
+>AAU46754\U46754\136..591\456\AAC47259.1\Aphrodite aculeata\Aphrodita aculeata nerve myoglobin mRNA, complete cds./codon_start=1/product="nerve myoglobin"/protein_id="AAC47259.1"/db_xref="GI:1491803"
+0 0 1 0 0 3 0 2 8 3 0 0 1 1 0 0 5 3 5 4 3 1 2 1 2 0 1 7 8 7 4 10 1 2 0 4 3 0 2 8 3 2 2 2 2 1 2 4 3 4 2 1 0 1 7 0 1 4 3 3 2 1 0 0 
+>AAU56423\U56423\18..824\807\AAB01218.1\Aedes aegypti\Aedes aegypti chymotrypsin-like protease precursor mRNA, completecds./codon_start=1/product="chymotrypsin-like protease precursor"/protein_id="AAB01218.1"/db_xref="GI:1336053"
+0 0 0 6 1 1 1 4 8 1 0 6 1 8 7 0 0 5 0 6 5 1 2 4 5 1 2 10 5 10 10 6 1 4 3 10 11 8 5 8 6 2 5 7 5 2 12 5 8 10 4 2 4 2 10 2 0 7 2 2 5 0 0 1 
+>AAU65314\U65314\827..1354\528\AAB06179.1\Aedes aegypti\Aedes aegypti allatotropin mRNA, complete cds./function="regulatory peptide"/codon_start=1/product="allatotropin"/protein_id="AAB06179.1"/db_xref="GI:1490880"
+0 0 3 5 2 1 1 2 5 1 2 5 2 2 4 1 4 6 3 3 2 1 3 1 2 2 5 7 2 2 4 4 2 1 0 6 4 1 5 2 8 2 1 4 2 1 7 4 4 4 1 0 2 2 4 3 2 2 5 6 3 1 0 0 
+>AAU66832\U66832\100..786\687\AAC47656.1\Aedes aegypti\Aedes aegypti preproleucokinin mRNA, complete cds./function="myotropic and diuretic"/codon_start=1/product="preproleucokinin"/protein_id="AAC47656.1"/db_xref="GI:2138176"
+0 2 7 0 1 1 0 1 10 0 2 5 2 5 3 0 2 5 0 3 2 0 8 1 5 2 5 6 4 2 2 5 0 4 1 5 6 2 6 10 11 13 4 5 1 3 9 4 7 5 5 1 3 2 8 3 1 1 6 4 7 0 0 1 
+>AAU66841\U66841\538..1131\594\AAB08870.1\Aedes aegypti\Aedes aegypti preproallatostatin mRNA, complete cds./codon_start=1/product="preproallatostatin"/protein_id="AAB08870.1"/db_xref="GI:1561761"
+5 0 4 5 2 2 0 5 8 2 0 4 2 2 7 3 3 5 1 1 0 1 2 5 1 0 2 8 4 1 7 11 3 5 2 2 1 2 5 6 5 1 2 2 1 2 4 3 10 6 11 2 2 0 5 3 0 5 0 3 1 1 0 0 
+>AAU66869\U66869\279..590\312\AAC47489.1\Aedes aegypti\Aedes aegypti enhancer of rudimentary homolog mRNA, complete cds./codon_start=1/product="enhancer of rudimentary homolog"/protein_id="AAC47489.1"/db_xref="GI:1519515"
+1 2 2 0 0 0 0 2 6 0 1 0 0 2 0 0 4 0 1 6 3 0 0 0 5 0 0 2 2 0 0 1 2 0 0 2 4 0 0 6 4 2 2 3 1 1 1 7 2 4 8 0 3 0 2 0 1 4 1 2 1 0 1 0 
+>AAU69542\U69542\145..594\450\AAC38958.1\Aedes aegypti\Aedes aegypti ovary ecdysteroidogenic hormone I precursor, mRNA,complete cds./codon_start=1/product="ovary ecdysteroidogenic hormone I precursor"/protein_id="AAC38958.1"/db_xref="GI:2911278"
+0 1 1 1 0 0 0 4 7 1 0 5 1 2 3 1 3 4 0 4 0 0 1 2 5 2 0 4 2 2 7 5 3 5 0 4 4 1 1 6 4 1 2 5 3 1 1 4 2 1 5 1 9 3 3 0 0 4 1 6 1 0 1 0 
+>AAU72939\U72939\76..4248\4173\AAB17094.1\Aedes aegypti\Aedes aegypti insulin receptor mRNA, complete cds./codon_start=1/product="insulin receptor"/protein_id="AAB17094.1"/db_xref="GI:1620750"
+14 14 36 8 3 2 1 23 62 6 3 21 0 16 31 3 24 12 6 41 32 7 13 12 51 5 8 34 18 8 17 37 13 21 9 39 30 18 22 61 59 18 9 38 21 7 34 53 59 30 44 12 27 16 41 5 8 60 17 36 15 1 0 0 
+>AAU84118\U84118\97..1785\1689\AAB95197.1\Aedes aegypti\Aedes aegypti asparagine synthetase mRNA, complete cds./codon_start=1/product="asparagine synthetase"/protein_id="AAB95197.1"/db_xref="GI:2754744"
+6 6 6 6 6 3 2 10 15 5 1 16 4 8 5 2 6 7 5 9 10 2 8 3 12 3 13 8 11 8 16 9 3 13 2 7 16 11 12 19 13 5 6 11 9 5 20 23 11 24 20 10 5 7 11 14 8 17 8 14 7 1 0 0 
+>AAU84248\U84248\364..2853\2490\AAB41787.2\Aedes aegypti\Aedes aegypti blood meal-induced protein (MRRG) mRNA, complete cds./gene="MRRG"/codon_start=1/product="blood meal-induced protein"/protein_id="AAB41787.2"/db_xref="GI:6690117"
+7 7 17 3 3 8 8 7 33 1 0 10 7 23 32 7 27 27 8 19 24 7 8 13 18 3 8 33 14 8 24 25 13 14 5 10 18 10 16 21 16 13 8 17 16 14 20 14 27 17 11 4 20 11 15 7 9 18 6 12 8 1 0 0 
+>AAU87543#2\U87543\9306..12875\3570\AAB65093.1\Aedes aegypti\Aedes aegypti steroid hormone receptor homolog (AaHR3-1) gene,partial cds, and Lian-Aa1 retrotransposon protein gene, completecds./codon_start=1/product="Lian-Aa1 retrotransposon protein"/protein_id="AAB65093.1"/db_xref="GI:2290213"
+11 14 5 13 19 9 13 16 21 36 18 27 21 14 18 29 5 26 27 13 8 23 22 8 4 11 24 11 14 32 20 16 6 16 21 14 18 28 34 20 23 38 30 13 15 16 37 20 16 37 18 21 17 21 25 28 15 18 32 20 24 0 1 0 
+>AAU88851\U88851\330..2408\2079\AAC04894.1\Aedes aegypti\Aedes aegypti eye pigment transporter (white) mRNA, complete cds./gene="white"/codon_start=1/product="eye pigment transporter"/protein_id="AAC04894.1"/db_xref="GI:1857990"
+6 9 7 4 3 4 12 9 26 12 5 11 8 17 9 5 7 13 11 14 11 5 7 8 11 7 17 14 9 11 21 6 4 11 9 12 18 10 17 19 19 9 6 18 7 1 21 13 12 15 15 10 12 5 27 15 8 16 15 20 9 0 0 1 
+>AAU91680\U91680\1835..2161\327\AAB51282.1\Aedes aegypti\Aedes aegypti vitelline membrane protein homolog (15a) gene,complete cds./gene="15a"/codon_start=1/product="vitelline membrane protein homolog"/protein_id="AAB51282.1"/db_xref="GI:1916972"
+0 0 0 1 0 0 0 1 3 0 0 2 0 0 2 0 1 0 0 1 0 0 11 4 4 2 2 9 0 9 4 1 0 1 1 3 2 2 0 3 2 0 0 1 12 1 2 1 2 1 5 0 2 1 4 0 0 3 0 2 0 1 0 0 
+>AAU91681\U91681\2173..2466\294\AAB51283.1\Aedes aegypti\Aedes aegypti vitelline membrane protein homolog (15a) gene,complete cds./gene="15a"/codon_start=1/product="vitelline membrane protein homolog"/protein_id="AAB51283.1"/db_xref="GI:1916974"
+0 0 0 0 0 0 0 2 2 1 0 1 0 0 0 0 1 0 1 1 0 0 17 3 5 3 2 10 0 5 1 0 0 2 1 5 2 2 0 4 2 0 0 0 9 1 0 0 1 0 4 1 3 0 1 0 0 3 0 1 0 1 0 0 
+>AAU91682\U91682\2144..2512\369\AAB51284.1\Aedes aegypti\Aedes aegypti vitelline membrane protein homolog (15a) gene,complete cds./gene="15a"/codon_start=1/product="vitelline membrane protein homolog"/protein_id="AAB51284.1"/db_xref="GI:1916976"
+0 0 0 0 0 1 0 2 1 0 0 2 0 1 1 0 1 1 0 1 0 0 24 5 2 1 3 10 0 8 6 0 0 0 1 3 3 1 0 3 3 0 0 1 13 3 3 0 1 1 6 0 2 1 3 0 0 2 0 2 0 1 0 0 
+>AB000109#1\AB000109\36..1658\1623\BAA78051.1\Dictyostelium discoideum\Dictyostelium discoideum mitochondrial DNA, complete sequence./gene="nad4"/EC_number="1.6.5.3"/codon_start=1/product="NADH dehydrogenase subunit 4"/protein_id="BAA78051.1"/db_xref="GI:4958874"
+2 0 0 0 11 2 3 0 0 0 57 1 6 1 1 1 0 21 14 4 2 1 11 0 1 1 24 0 2 0 34 2 2 5 32 3 4 2 23 2 2 22 12 0 0 5 20 3 1 12 0 22 0 7 0 31 78 11 14 22 3 1 0 0 
+>AB000109#2\AB000109\1662..3128\1467\BAA78052.1\Dictyostelium discoideum\Dictyostelium discoideum mitochondrial DNA, complete sequence./gene="nad2"/EC_number="1.6.5.3"/codon_start=1/product="NADH dehydrogenase subunit 2"/protein_id="BAA78052.1"/db_xref="GI:4958875"
+1 0 0 0 5 0 8 0 0 0 62 0 0 0 0 1 0 27 23 2 2 1 4 0 0 1 12 0 1 0 29 1 1 4 33 2 0 1 28 2 1 26 7 0 0 3 22 3 0 5 1 26 0 1 1 15 87 6 11 19 3 1 0 0 
+>AB000109#3\AB000109\3687..4994\1308\BAA78053.1\Dictyostelium discoideum\Dictyostelium discoideum mitochondrial DNA, complete sequence./gene="cox3"/EC_number="1.9.3.1"/codon_start=1/product="cytochrome oxidase subunit 3"/protein_id="BAA78053.1"/db_xref="GI:4958876"
+1 0 0 0 13 1 3 0 0 0 47 0 9 1 0 1 0 12 19 2 1 1 13 0 0 0 17 1 2 1 25 0 2 3 30 0 1 2 23 2 6 19 10 0 0 9 20 2 3 8 0 24 1 3 5 34 28 6 5 10 9 1 0 0 
+>AB000109#4\AB000109\5020..6363\1344\BAA78054.1\Dictyostelium discoideum\Dictyostelium discoideum mitochondrial DNA, complete sequence./codon_start=1/product="ORF 447"/protein_id="BAA78054.1"/db_xref="GI:4958877"
+3 0 0 0 13 1 6 1 2 7 29 3 7 3 3 4 1 7 7 2 1 5 7 2 2 4 7 2 0 6 8 1 2 6 13 3 1 5 40 8 4 17 13 4 0 11 30 11 4 22 1 28 0 1 4 22 27 5 6 9 6 1 0 0 
+>AB000109#5\AB000109\join(6411..6676,7133..7640,9981..10367,11729..12478, 13479..13862)\2295\BAA78055.1\Dictyostelium discoideum\Dictyostelium discoideum mitochondrial DNA, complete sequence./gene="cox1/2"/EC_number="1.9.3.1"/codon_start=1/product="cytochrome oxidase subunit 1 and subunit 2"/protein_id="BAA78055.1"/db_xref="GI:4958878"
+7 0 0 1 11 0 5 0 1 2 69 3 18 2 1 3 1 18 38 1 1 4 24 0 1 3 35 2 2 4 67 0 1 6 44 1 3 14 22 1 9 20 12 1 3 17 19 2 5 23 2 36 0 3 13 42 56 10 27 28 20 1 0 0 
+>AB000109#6\AB000109\7957..8886\930\BAA78056.1\Dictyostelium discoideum\Dictyostelium discoideum mitochondrial DNA, complete sequence./gene="cox1/2"/codon_start=1/product="site-specific DNA endonuclease"/protein_id="BAA78056.1"/db_xref="GI:4958879"
+5 1 0 3 10 0 7 1 0 3 19 3 1 2 1 1 0 9 8 1 2 3 2 0 1 1 3 3 1 3 6 2 1 4 7 1 2 2 37 10 3 13 11 4 1 6 17 15 3 4 1 15 0 7 0 12 13 0 8 5 5 0 1 0 
+>AB000109#7\AB000109\8890..9678\789\BAA78057.1\Dictyostelium discoideum\Dictyostelium discoideum mitochondrial DNA, complete sequence./gene="cox1/2"/codon_start=1/protein_id="BAA78057.1"/db_xref="GI:4958880"
+3 0 0 1 6 0 3 0 1 1 19 2 2 1 1 3 1 5 7 3 0 5 2 1 0 1 1 0 1 3 8 1 2 7 10 0 2 1 22 9 3 14 13 4 0 3 15 4 3 7 1 14 0 3 1 7 14 3 9 5 4 0 1 0 

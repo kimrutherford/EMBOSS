@@ -1,0 +1,39 @@
+>P1;JH0225
+L96 protein - Tipula iridescent virus
+C;Species: Tipula iridescent virus
+C;Date: 16-Jul-1999 #sequence_revision 16-Jul-1999 #text_change 09-Jul-2004
+C;Accession: JH0225
+R;Home, W.A.; Tajbakhsh, S.; Seligy, V.L.
+Gene 94, 243-248, 1990
+A;Title: Molecular cloning and characterization of a late Tipula iridescent virus gene.
+A;Reference number: JH0225; MUID:91078646; PMID:1701750
+A;Accession: JH0225
+A;Status: preliminary
+A;Molecule type: DNA
+A;Residues: 1-867 A;Cross-references: UNIPROT:P22856; UNIPARC:UPI000013892F; GB:M34853; NID:g335215; PIDN:AAA47919.1; PID:g335216
+>F1;PT0034
+baseplate protein gp10 - phage T4 (fragments)
+C;Species: phage T4
+C;Date: 05-Feb-1999 #sequence_revision 05-Feb-1999 #text_change 09-Jul-2004
+C;Accession: PT0034
+R;Miyatake, N.; Zurbishivili, T.G.; Efimov, V.P.; Prilipov, A.G.; Mesyanzhinov, V.V.; Tsugita, A.
+submitted to JIPID, June 1990
+A;Reference number: PT0033
+A;Accession: PT0034
+A;Status: preliminary
+A;Molecule type: protein
+A;Residues: 1-46 A;Cross-references: UNIPROT:Q7M2A6; UNIPARC:UPI0000178783
+C;Superfamily: phage T4 gene 10 protein
+>P1;B45963
+hypothetical protein uvsY.-1 - phage T4
+N;Alternate names: hypothetical protein uvsY 3'-region
+C;Species: phage T4
+C;Date: 05-Dec-1998 #sequence_revision 05-Dec-1998 #text_change 09-Jul-2004
+C;Accession: B45963
+R;Gruidl, M.E.; Mosig, G.
+Genetics 114, 1061-1079, 1986
+A;Title: Sequence and transcripts of the bacteriophage T4 DNA repair gene uvsY.
+A;Reference number: A45963; MUID:87106763; PMID:3026891
+A;Accession: B45963
+A;Molecule type: DNA
+A;Residues: 1-74 A;Cross-references: UNIPROT:P32281; UNIPARC:UPI000005CBA8; GB:X04856; NID:g15399; PIDN:CAA28550.1; PID:g15403

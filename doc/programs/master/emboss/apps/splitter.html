@@ -1,0 +1,169 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: splitter
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+splitter
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/splitter.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+
+This simple editing program allows you to split a long sequence
+into smaller, optionally overlapping, subsequences. 
+
+<p>
+
+
+
+There should be little requirement to split sequences into smaller
+sub-sequences in EMBOSS, but there may be circumstances where memory
+usage becomes restrictive when dealing with truly large sequences.  In
+this case, memory usage may be reduced by repeating the analysis several
+times on split sub-sequences. 
+
+<p>
+
+If you need to split a large sequence into smaller subsequences so that
+a non-EMBOSS program can analyse the smaller sequence, it may also be
+useful to write the sub-sequences into separate files instead of the
+default EMBOSS behaviour of concatenating them together into one file. 
+
+<p>
+
+To write the output sequences to separate files, use the command-line
+switch '-ossingle'. 
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/splitter.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/splitter.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/splitter.itable" -->
+
+
+<H2>
+    Input File Format
+</H2>
+
+
+<b>splitter</b>	reads one or more sequence USAs.
+
+<p>
+
+<!--#include file="inc/splitter.input" -->
+
+<H2>
+    Output File Format
+</H2>
+
+<!--#include file="inc/splitter.output" -->
+
+
+<p>
+The names of the sequences are the same as the original sequence, with
+'_start-end' appended, where 'start', and 'end' are the start and end
+positions of the sub-sequence. eg: The name HSHBB would be changed in
+the sub-sequences to: HSHBB_1-50000 and HSHBB_50001-73308 if they were
+split at the size of 50000 with no overlap.
+
+<H2>
+    Data files
+</H2>
+
+
+None.	
+
+<H2>
+    Notes
+</H2>
+
+
+There should be little requirement to split sequences into smaller
+sub-sequences in EMBOSS, but there may be circumstances where memory
+usage becomes restrictive when dealing with truly large sequences.
+
+<H2>
+    References
+</H2>
+
+
+None
+
+<H2>
+    Warnings
+</H2>
+
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+
+It always exits with status 0
+
+<H2>
+    Known bugs
+</H2>
+
+
+None.
+
+<!--#include file="inc/splitter.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/gwilliam.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/splitter.history" -->
+
+<H2>
+    Target users
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/splitter.comment" -->
+
+</BODY>
+</HTML>
+

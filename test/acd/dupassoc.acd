@@ -1,0 +1,10 @@
+# ACD file for QA testing - missing the application definition
+#
+appl: dupassoc [ doc: "testing" group: "testing" ]
+
+bool: sbegin [ ]
+
+sequence: sequence [ param: Y ]
+
+outfile: outtest [ standard: Y prompt: "Some text" ]
+

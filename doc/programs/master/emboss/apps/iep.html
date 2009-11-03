@@ -1,0 +1,188 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: iep
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+
+<!--#include file="header1.inc" -->
+iep
+<!--#include file="header2.inc" -->
+
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/iep.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+
+This calculates the isoelectric point of a protein from its amino acid
+composition assuming that no electrostatic interactions change the
+propensity for ionization. 
+
+<p>
+
+Adjusting the pH of an aqueous protein solution to the point where the
+numbers of positive and negative charges on the protein are equal brings
+the protein to its isoelectric point.  This is often the point of lowest
+solubility, presumably because it is the point at which there are fewest
+intermolecular repulsions, so that the molecules tend to form
+aggregates. 
+
+<p>
+
+The application can make a plot of the ionization curve with respect to
+pH and can write an output file of the data. 
+
+<H2>
+    Usage
+</H2>
+
+<!--#include file="inc/iep.usage" -->
+
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/iep.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/iep.itable" -->
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<p>iep</p> reads in any protein sequence USA.
+
+<p>
+
+<!--#include file="inc/iep.input" -->
+
+
+
+<H2>
+    Output file format
+</H2>
+
+
+
+<!--#include file="inc/iep.output" -->
+<p>
+
+For each pH point it gives the number of bound electrons and the charge.
+
+
+<H2>
+    Data files
+</H2>
+
+<b>iep</b> reads in local data file <em>Epk.dat</em> which contains amino acid
+pK values used to calculate the isoelectric point of the whole protein
+
+<p>
+
+<!--#include file="inc/localfiles.ihtml" -->
+
+<p>
+Here is the default <em>Epk.dat</em> file:
+
+<pre>
+# pK values for amino acids
+# O=Ornithine J=Hydroxyproline
+#
+# Amino acid	pK
+Amino		8.6
+Carboxyl	3.6
+
+C		8.5
+D		3.9
+E		4.1
+H		6.5
+K		10.8
+R		12.5
+Y		10.1
+</pre>
+
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+0 if successful.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/iep.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/ableasby.address" -->
+
+<H2>
+    History
+</H2>
+
+
+<!--#include file="inc/iep.history" -->
+
+<H2>
+    Target users
+</H2>
+
+
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/iep.comment" -->
+
+</BODY>
+</HTML>
+

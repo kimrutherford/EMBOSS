@@ -1,0 +1,420 @@
+
+                                  hmoment 
+
+
+
+Function
+
+   Hydrophobic moment calculation
+
+Description
+
+   hmoment plots or writes out the hydrophobic moment. Hydrophic moment
+   is the hydrophobicity of a peptide measured for a specified angle of
+   rotation per residue.
+
+   Periodicities in the polar/apolar character of the amino acid sequence
+   of a protein can be examined by assigning to each residue a numerical
+   hydrophobicity and searching for periodicity in the resulting
+   one-dimensional function. The strength of each periodic component is
+   the quantity that has been termed the hydrophobic moment.
+
+   When proteins of known three-dimensional structure are examined, it is
+   found that sequences that form alpha helices tend to have, on average,
+   a strong periodicity in the hydrophobicity of af 3.6 residues, the
+   period of the alpha helix. The angle of rotation per residue in alpha
+   helices is 100 degrees. Similarly, many sequences that form strands of
+   beta sheets tend to have a periodicity in their hydrophobicity of
+   about 2.3 residues, the period typical of beta structure. The angle of
+   rotation per residue in beta sheets is 160 degrees. This means that
+   many protein sequences tend to form the periodic structure that
+   maximizes their amphiphilicity.
+
+   The hydrophobic moment is measured within a moving window using the
+   method of Eisenberg et al. The default angle of 100 degrees is used
+   for the alpha-helix results and the default of 160 degrees is used for
+   the beta-sheet results. These angles can be changed if required using
+   the appropriate options.
+
+   hmoment can plot two graphs when the option '-double' is given, one
+   for the alpha helix moment and one for the beta sheet moment.
+   Otherwise it just plots the alpha helix moment.
+
+Usage
+
+   Here is a sample session with hmoment
+
+
+% hmoment tsw:hbb_human 
+Hydrophobic moment calculation
+Output file [hbb_human.hmoment]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-seqall]            seqall     Protein sequence(s) filename and optional
+                                  format, or reference (input USA)
+*  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png, gif)
+*  -outfile            outfile    [*.hmoment] Output file name
+
+   Additional (Optional) qualifiers:
+   -window             integer    [10] Window (Any integer value)
+   -aangle             integer    [100] Alpha helix angle (degrees) (Any
+                                  integer value)
+   -bangle             integer    [160] Beta sheet angle (degrees) (Any
+                                  integer value)
+
+   Advanced (Unprompted) qualifiers:
+   -baseline           float      [0.35] Graph marker line (Any numeric value)
+   -plot               toggle     [N] Produce graphic
+   -double             boolean    [N] Plot two graphs
+
+   Associated qualifiers:
+
+   "-seqall" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-graph" associated qualifiers
+   -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   hmoment reads in a protein sequence USA.
+
+  Input files for usage example
+
+   'tsw:hbb_human' is a sequence entry in the example protein database
+   'tsw'
+
+  Database entry: tsw:hbb_human
+
+ID   HBB_HUMAN               Reviewed;         147 AA.
+AC   P68871; P02023; Q13852; Q14481; Q14510; Q45KT0; Q6FI08; Q8IZI1;
+AC   Q9BX96; Q9UCP8; Q9UCP9;
+DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
+DT   23-JAN-2007, sequence version 2.
+DT   20-MAR-2007, entry version 43.
+DE   Hemoglobin subunit beta (Hemoglobin beta chain) (Beta-globin).
+GN   Name=HBB;
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+OC   Catarrhini; Hominidae; Homo.
+OX   NCBI_TaxID=9606;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE.
+RX   MEDLINE=81064667; PubMed=6254664; DOI=10.1016/0092-8674(80)90428-6;
+RA   Lawn R.M., Efstratiadis A., O'Connell C., Maniatis T.;
+RT   "The nucleotide sequence of the human beta-globin gene.";
+RL   Cell 21:647-651(1980).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE.
+RX   MEDLINE=77126403; PubMed=1019344;
+RA   Marotta C., Forget B., Cohen-Solal M., Weissman S.M.;
+RT   "Nucleotide sequence analysis of coding and noncoding regions of human
+RT   beta-globin mRNA.";
+RL   Prog. Nucleic Acid Res. Mol. Biol. 19:165-175(1976).
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE.
+RA   Lu L., Hu Z.H., Du C.S., Fu Y.S.;
+RT   "DNA sequence of the human beta-globin gene isolated from a healthy
+RT   Chinese.";
+RL   Submitted (JUN-1997) to the EMBL/GenBank/DDBJ databases.
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE, AND VARIANT DURHAM-N.C. PRO-115.
+RC   TISSUE=Blood;
+RA   Kutlar F., Abboud M., Leithner C., Holley L., Brisco J., Kutlar A.;
+RT   "Electrophoretically silent, very unstable, thalassemic mutation at
+RT   codon 114 of beta globin (hemoglobin Durham-N.C.) detected by cDNA
+RT   sequencing of mRNA, from a Russian women.";
+RL   Submitted (AUG-1999) to the EMBL/GenBank/DDBJ databases.
+RN   [5]
+RP   NUCLEOTIDE SEQUENCE, AND VARIANT LOUISVILLE LEU-43.
+RC   TISSUE=Blood;
+RA   Kutlar F., Harbin J., Brisco J., Kutlar A.;
+RT   "Rapid detection of electrophoretically silent, unstable human
+RT   hemoglobin 'Louisville', (Beta; Phe 42 Leu/TTT to CTT) by cDNA
+RT   sequencing of mRNA.";
+RL   Submitted (JAN-1999) to the EMBL/GenBank/DDBJ databases.
+RN   [6]
+RP   NUCLEOTIDE SEQUENCE, AND VARIANT TY GARD GLN-125.
+
+
+  [Part of this file has been deleted for brevity]
+
+FT   VARIANT     141    141       A -> T (in St Jacques: O(2) affinity up).
+FT                                /FTId=VAR_003081.
+FT   VARIANT     141    141       A -> V (in Puttelange; polycythemia; O(2)
+FT                                affinity up).
+FT                                /FTId=VAR_003082.
+FT   VARIANT     142    142       L -> R (in Olmsted; unstable).
+FT                                /FTId=VAR_003083.
+FT   VARIANT     143    143       A -> D (in Ohio; O(2) affinity up).
+FT                                /FTId=VAR_003084.
+FT   VARIANT     144    144       H -> D (in Rancho Mirage).
+FT                                /FTId=VAR_003085.
+FT   VARIANT     144    144       H -> P (in Syracuse; O(2) affinity up).
+FT                                /FTId=VAR_003087.
+FT   VARIANT     144    144       H -> Q (in Little Rock; O(2) affinity
+FT                                up).
+FT                                /FTId=VAR_003086.
+FT   VARIANT     144    144       H -> R (in Abruzzo; O(2) affinity up).
+FT                                /FTId=VAR_003088.
+FT   VARIANT     145    145       K -> E (in Mito; O(2) affinity up).
+FT                                /FTId=VAR_003089.
+FT   VARIANT     146    146       Y -> C (in Rainier; O(2) affinity up).
+FT                                /FTId=VAR_003090.
+FT   VARIANT     146    146       Y -> H (in Bethesda; O(2) affinity up).
+FT                                /FTId=VAR_003091.
+FT   VARIANT     147    147       H -> D (in Hiroshima; O(2) affinity up).
+FT                                /FTId=VAR_003092.
+FT   VARIANT     147    147       H -> L (in Cowtown; O(2) affinity up).
+FT                                /FTId=VAR_003093.
+FT   VARIANT     147    147       H -> P (in York; O(2) affinity up).
+FT                                /FTId=VAR_003094.
+FT   VARIANT     147    147       H -> Q (in Kodaira; O(2) affinity up).
+FT                                /FTId=VAR_003095.
+FT   HELIX         5     15
+FT   TURN         20     22
+FT   HELIX        23     34
+FT   HELIX        36     41
+FT   HELIX        43     45
+FT   HELIX        51     56
+FT   HELIX        58     76
+FT   TURN         77     79
+FT   HELIX        81     93
+FT   TURN         94     96
+FT   HELIX       101    118
+FT   HELIX       119    121
+FT   HELIX       124    141
+FT   HELIX       143    145
+SQ   SEQUENCE   147 AA;  15998 MW;  A31F6D621C6556A1 CRC64;
+     MVHLTPEEKS AVTALWGKVN VDEVGGEALG RLLVVYPWTQ RFFESFGDLS TPDAVMGNPK
+     VKAHGKKVLG AFSDGLAHLD NLKGTFATLS ELHCDKLHVD PENFRLLGNV LVCVLAHHFG
+     KEFTPPVQAA YQKVVAGVAN ALAHKYH
+//
+
+Output file format
+
+   With the '-plot' option hmoment displays a graphical plot of the
+   hydrophobic moment of the specified alpha helix angle. With the '-plot
+   -double' options it also displays the beta-sheet hydrophobic moment.
+
+   Otherwise it writes out a files containing the two columns separated
+   by space or TAB characters. The first column is the position of the
+   start of the window that the hydrophobic moment was calculated in. The
+   second is the hydrophobic moment ('uH'). (If the option '-double' is
+   given then the beta-sheet angle hydrophobicity is given as a third
+   column.)
+
+  Output files for usage example
+
+  File: hbb_human.hmoment
+
+HMOMENT of HBB_HUMAN from 1 to 147
+
+Window: 10 Angle: 100 Max uH: 0.714
+Position        uH
+1               0.086
+2               0.091
+3               0.216
+4               0.208
+5               0.123
+6               0.211
+7               0.194
+8               0.185
+9               0.169
+10              0.312
+11              0.292
+12              0.185
+13              0.092
+14              0.050
+15              0.164
+16              0.245
+17              0.187
+18              0.130
+19              0.262
+20              0.396
+21              0.317
+22              0.342
+23              0.492
+24              0.508
+25              0.517
+26              0.418
+27              0.416
+28              0.350
+29              0.292
+30              0.196
+31              0.102
+32              0.288
+33              0.314
+34              0.442
+35              0.560
+36              0.464
+37              0.577
+38              0.584
+39              0.676
+40              0.714
+41              0.670
+42              0.462
+43              0.369
+44              0.221
+45              0.176
+46              0.073
+
+
+  [Part of this file has been deleted for brevity]
+
+88              0.179
+89              0.201
+90              0.065
+91              0.041
+92              0.110
+93              0.181
+94              0.261
+95              0.312
+96              0.200
+97              0.263
+98              0.369
+99              0.310
+100             0.362
+101             0.495
+102             0.585
+103             0.450
+104             0.488
+105             0.547
+106             0.315
+107             0.311
+108             0.252
+109             0.187
+110             0.215
+111             0.295
+112             0.425
+113             0.303
+114             0.421
+115             0.528
+116             0.487
+117             0.436
+118             0.501
+119             0.532
+120             0.409
+121             0.447
+122             0.308
+123             0.383
+124             0.252
+125             0.361
+126             0.374
+127             0.314
+128             0.219
+129             0.310
+130             0.361
+131             0.439
+132             0.433
+133             0.507
+134             0.336
+135             0.344
+136             0.207
+137             0.234
+138             0.299
+
+Data files
+
+   None.
+
+Notes
+
+   None.
+
+References
+
+    1. Eisenberg D, Weiss RM, Terwilliger TC "The hydrophobic moment
+       detects periodicity in protein hydrophobicity." Proc Natl Acad Sci
+       U S A 1984 Jan;81(1):140-4
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+    Program name              Description
+   garnier        Predicts protein secondary structure
+   helixturnhelix Report nucleic acid binding motifs
+   pepcoil        Predicts coiled coil regions
+   pepnet         Displays proteins as a helical net
+   pepwheel       Shows protein sequences as helices
+   tmap           Displays membrane spanning regions
+
+Author(s)
+
+   Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+History
+
+   Written (March 2001) - Alan Bleasby.
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

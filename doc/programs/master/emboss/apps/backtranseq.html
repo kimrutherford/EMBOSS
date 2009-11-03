@@ -1,0 +1,164 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: backtranseq
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+backtranseq
+<!--#include file="header2.inc" -->
+
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/backtranseq.ione" -->
+
+<H2>
+    Description
+</H2>
+
+
+<b>backtranseq</b> takes a protein sequence and makes a best estimate of the
+likely nucleic acid sequence it could have come from.  It does this by
+using a codon frequency table. For each amino acid, the corresponding
+most frequently occuring codon is used in the construction of the nucleic
+acid sequence.
+
+<h3>Codon usage table name</h3>
+
+<b>backtranseq</b> reads in a data file containing the codon frequency
+tables.  The default codon frequency table is 'Ehum.cut' - the human
+codon frequency table.  It is important to use a codon frequency table
+that is appropriate for the species that your protein comes from. 
+See the <b>Data Files</b> section below for more details on these files.
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/backtranseq.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/backtranseq.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/backtranseq.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+
+Any DNA sequence USA.
+
+<p>
+<!--#include file="inc/backtranseq.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+
+The output is a nucleotide sequence containing the most favoured back
+translation of the specified protein, and using the specified
+translation table (which defaults to human).
+
+<p>
+<!--#include file="inc/backtranseq.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+
+The codon usage table is read by default from "Ehum.cut" in the 'data/CODONS'
+directory of the EMBOSS distribution.  If the name of a codon usage file
+is specified on the command line, then this file will first be searched
+for in the current directory and then in the 'data/CODONS' directory of
+the EMBOSS distribution. 
+
+<p>
+<!--#include file="inc/localfiles.ihtml" -->
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+"Corrupt codon index file" - the codon usage file is incomplete or empty.
+
+<p>
+"The file 'drosoph.cut' does not exist" - the codon usage file cannot be opened.
+
+<H2>
+    Exit status
+</H2>
+
+
+This program always exits with a status of 0, unless the codon usage
+table cannot be opened.
+
+<H2>
+    Known bugs
+</H2>
+
+
+None.
+
+<!--#include file="inc/backtranseq.isee" -->
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/ableasby.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/backtranseq.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/backtranseq.comment" -->
+
+
+</BODY>
+</HTML>
+

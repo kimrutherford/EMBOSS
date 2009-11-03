@@ -1,0 +1,631 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: maskseq
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+maskseq
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+<H2>
+    Function
+</H2>
+Mask off regions of a sequence
+
+<H2>
+    Description
+</H2>
+
+
+This simple editing program allows you to mask off regions of a
+sequence with a specified letter. 
+
+<p>
+
+Why would you wish to do this? It is common for database
+searches to mask out low-complexity or biased composition
+regions of a sequence so that spurious matches do not occur.
+It is just possible that you have a program that has reported
+such biased regions but which has not masked the sequence
+itself.  In that case, you can use this program to do the
+masking.
+
+<p>
+
+You may find other uses for it.
+
+<p>
+
+Some non-EMBOSS programs (for example FASTA) are capable of treating
+lower-case regions as if they are masked.  <b>maskseq</b> can mask a
+region to lower-case instead of replacing the sequence with 'N's or 'X's
+if you use the qualifier '-tolower' or use a space character as the
+masking character. 
+
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with maskseq</b>
+<p>
+Mask off bases 10 to 12 from a sequence 'prot.fasta' and write to the new sequence file 'prot2.seq': 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>maskseq prot.fasta prot2.seq -reg=10-12 </b>
+Mask off regions of a sequence.
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+Mask off bases 20 to 30 from a sequence 'prot.fasta' using the character 'x' and write to the new sequence file 'prot2.seq':  
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>maskseq prot.fasta prot2.seq -reg=20-30 -mask=x </b>
+Mask off regions of a sequence.
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+Mask off the regions 20 to 23, 34 to 45 and 88 to 90 in 'prot.fasta': 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>maskseq prot.fasta prot2.seq -reg=20-23,34-45,88-90 </b>
+Mask off regions of a sequence.
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.3">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 4</b>
+<p>
+Change to lower-case the regions 20 to 23, 34 to 45 and 88 to 90 in 'prot.fasta': 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>maskseq prot.fasta prot2.seq -reg=20-23,34-45,88-90 -tolower </b>
+Mask off regions of a sequence.
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.4">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          sequence   Sequence filename and optional format, or
+                                  reference (input USA)
+   -regions            range      [None] Regions to mask.
+                                  A set of regions is specified by a set of
+                                  pairs of positions.
+                                  The positions are integers.
+                                  They are separated by any non-digit,
+                                  non-alpha character.
+                                  Examples of region specifications are:
+                                  24-45, 56-78
+                                  1:45, 67=99;765..888
+                                  1,5,8,10,23,45,57,99
+  [-outseq]            seqout     [<sequence>.<format>] Sequence filename and
+                                  optional format (output USA)
+
+   Additional (Optional) qualifiers (* if not always prompted):
+   -tolower            toggle     [N] The region can be 'masked' by converting
+                                  the sequence characters to lower-case, some
+                                  non-EMBOSS programs e.g. fasta can
+                                  interpret this as a masked region. The
+                                  sequence is unchanged apart from the case
+                                  change. You might like to ensure that the
+                                  whole sequence is in upper-case before
+                                  masking the specified regions to lower-case
+                                  by using the '-supper' flag.
+*  -maskchar           string     ['X' for protein, 'N' for nucleic] Character
+                                  to use when masking.
+                                  Default is 'X' for protein sequences, 'N'
+                                  for nucleic sequences.
+                                  If the mask character is set to be the SPACE
+                                  character or a null character, then the
+                                  sequence is 'masked' by changing it to
+                                  lower-case, just as with the '-lowercase'
+                                  flag. (Any string from 1 to 1 characters)
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence filename and optional format, or reference (input USA)</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-regions</td>
+<td>Regions to mask.
+A set of regions is specified by a set of pairs of positions.
+The positions are integers.
+They are separated by any non-digit, non-alpha character.
+Examples of region specifications are:
+24-45, 56-78
+1:45, 67=99;765..888
+1,5,8,10,23,45,57,99</td>
+<td>Sequence range</td>
+<td>None</td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 2)</td>
+<td>Sequence filename and optional format (output USA)</td>
+<td>Writeable sequence</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-tolower</td>
+<td>The region can be 'masked' by converting the sequence characters to lower-case, some non-EMBOSS programs e.g. fasta can interpret this as a masked region. The sequence is unchanged apart from the case change. You might like to ensure that the whole sequence is in upper-case before masking the specified regions to lower-case by using the '-supper' flag.</td>
+<td>Toggle value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-maskchar</td>
+<td>Character to use when masking.
+Default is 'X' for protein sequences, 'N' for nucleic sequences.
+If the mask character is set to be the SPACE character or a null character, then the sequence is 'masked' by changing it to lower-case, just as with the '-lowercase' flag.</td>
+<td>Any string from 1 to 1 characters</td>
+<td>'X' for protein, 'N' for nucleic</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<b>maskseq</b> reads in a single sequence USA.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: prot.fasta</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+&gt;FASTA F00001 FASTA FORMAT PROTEIN SEQUENCE
+ACDEFGHIKLMNPQRSTVWY
+ACDEFGHIKLMNPQRSTVWY
+ACDEFGHIKLMNPQRSTVWY
+ACDEFGHIKLMNPQRSTVWY
+ACDEFGHIKLMNPQRSTVWY
+</pre>
+</td></tr></table><p>
+
+<p>
+
+You can specify a file of ranges to mask out by giving the '-regions'
+qualifier the value '@' followed by the name of the file containing the
+ranges. (eg: '-regions @myfile').
+
+<p>
+
+The format of the range file is:
+
+<ul>
+<li>Comment lines start with '#' in the first column.
+<li>Comment lines and blank lines are ignored.
+<li>The line may start with white-space.
+<li>There are two positive (integer) numbers per line separated by one or
+	more space or TAB characters. 
+<li>The second number must be greater or equal to the first number.
+<li>There can be optional text after the two numbers to annotate the line. 
+<li>White-space before or after the text is removed.
+</ul>
+
+<p>
+
+An example range file is:
+
+<p>
+
+<hr>
+<pre>
+# this is my set of ranges
+12   23
+ 4   5       this is like 12-23, but smaller
+67   10348   interesting region
+</pre>
+<hr>
+
+<H2>
+    Output file format
+</H2>
+
+
+<b>maskseq</b> writes s single masked sequence file.
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: prot2.seq</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;FASTA F00001 FASTA FORMAT PROTEIN SEQUENCE
+ACDEFGHIKXXXPQRSTVWYACDEFGHIKLMNPQRSTVWYACDEFGHIKLMNPQRSTVWY
+ACDEFGHIKLMNPQRSTVWYACDEFGHIKLMNPQRSTVWY
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: prot2.seq</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;FASTA F00001 FASTA FORMAT PROTEIN SEQUENCE
+ACDEFGHIKLMNPQRSTVWxxxxxxxxxxxMNPQRSTVWYACDEFGHIKLMNPQRSTVWY
+ACDEFGHIKLMNPQRSTVWYACDEFGHIKLMNPQRSTVWY
+</pre>
+</td></tr></table><p>
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: prot2.seq</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;FASTA F00001 FASTA FORMAT PROTEIN SEQUENCE
+ACDEFGHIKLMNPQRSTVWXXXXEFGHIKLMNPXXXXXXXXXXXXGHIKLMNPQRSTVWY
+ACDEFGHIKLMNPQRSTVWYACDEFGHXXXMNPQRSTVWY
+</pre>
+</td></tr></table><p>
+
+<a name="output.4"></a>
+<h3>Output files for usage example 4</h3>
+<p><h3>File: prot2.seq</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;FASTA F00001 FASTA FORMAT PROTEIN SEQUENCE
+ACDEFGHIKLMNPQRSTVWyacdEFGHIKLMNPqrstvwyacdefGHIKLMNPQRSTVWY
+ACDEFGHIKLMNPQRSTVWYACDEFGHiklMNPQRSTVWY
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+
+You can mask out a complete sequence.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+Several warning messages about malformed region specifications:
+<p>
+
+<ul>
+	<li>Non-digit found in region ...
+	<li>Unpaired start of a region found in ...
+	<li>Non-digit found in region ...
+	<li>The start of a pair of region positions must be smaller than the
+		end in ... 
+</ul>
+
+<H2>
+    Exit status
+</H2>
+
+
+	It exits with status 0, unless a region is badly constructed.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="biosed.html">biosed</a></td>
+<td>Replace or delete sequence sections</td>
+</tr>
+
+<tr>
+<td><a href="codcopy.html">codcopy</a></td>
+<td>Reads and writes a codon usage table</td>
+</tr>
+
+<tr>
+<td><a href="cutseq.html">cutseq</a></td>
+<td>Removes a specified section from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="degapseq.html">degapseq</a></td>
+<td>Removes gap characters from sequences</td>
+</tr>
+
+<tr>
+<td><a href="descseq.html">descseq</a></td>
+<td>Alter the name or description of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="entret.html">entret</a></td>
+<td>Reads and writes (returns) flatfile entries</td>
+</tr>
+
+<tr>
+<td><a href="extractalign.html">extractalign</a></td>
+<td>Extract regions from a sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="extractfeat.html">extractfeat</a></td>
+<td>Extract features from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="extractseq.html">extractseq</a></td>
+<td>Extract regions from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="listor.html">listor</a></td>
+<td>Write a list file of the logical OR of two sets of sequences</td>
+</tr>
+
+<tr>
+<td><a href="makenucseq.html">makenucseq</a></td>
+<td>Creates random nucleotide sequences</td>
+</tr>
+
+<tr>
+<td><a href="makeprotseq.html">makeprotseq</a></td>
+<td>Creates random protein sequences</td>
+</tr>
+
+<tr>
+<td><a href="maskfeat.html">maskfeat</a></td>
+<td>Mask off features of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="newseq.html">newseq</a></td>
+<td>Type in a short new sequence</td>
+</tr>
+
+<tr>
+<td><a href="noreturn.html">noreturn</a></td>
+<td>Removes carriage return from ASCII files</td>
+</tr>
+
+<tr>
+<td><a href="notseq.html">notseq</a></td>
+<td>Exclude a set of sequences and write out the remaining ones</td>
+</tr>
+
+<tr>
+<td><a href="nthseq.html">nthseq</a></td>
+<td>Writes one sequence from a multiple set of sequences</td>
+</tr>
+
+<tr>
+<td><a href="pasteseq.html">pasteseq</a></td>
+<td>Insert one sequence into another</td>
+</tr>
+
+<tr>
+<td><a href="revseq.html">revseq</a></td>
+<td>Reverse and complement a sequence</td>
+</tr>
+
+<tr>
+<td><a href="seqret.html">seqret</a></td>
+<td>Reads and writes (returns) sequences</td>
+</tr>
+
+<tr>
+<td><a href="seqretsplit.html">seqretsplit</a></td>
+<td>Reads and writes (returns) sequences in individual files</td>
+</tr>
+
+<tr>
+<td><a href="skipseq.html">skipseq</a></td>
+<td>Reads and writes (returns) sequences, skipping first few</td>
+</tr>
+
+<tr>
+<td><a href="splitter.html">splitter</a></td>
+<td>Split a sequence into (overlapping) smaller sequences</td>
+</tr>
+
+<tr>
+<td><a href="trimest.html">trimest</a></td>
+<td>Trim poly-A tails off EST sequences</td>
+</tr>
+
+<tr>
+<td><a href="trimseq.html">trimseq</a></td>
+<td>Trim ambiguous bits off the ends of sequences</td>
+</tr>
+
+<tr>
+<td><a href="union.html">union</a></td>
+<td>Reads sequence fragments and builds one sequence</td>
+</tr>
+
+<tr>
+<td><a href="vectorstrip.html">vectorstrip</a></td>
+<td>Strips out DNA between a pair of vector sequences</td>
+</tr>
+
+<tr>
+<td><a href="yank.html">yank</a></td>
+<td>Reads a sequence range, appends the full USA to a list file</td>
+</tr>
+
+</table>
+
+<H2>
+    Author(s)
+</H2>
+
+
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+
+
+<H2>
+    History
+</H2>
+
+Completed 3 March 1999
+
+<H2>
+    Target users
+</H2>
+
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+<H2>
+    Comments
+</H2>
+None
+
+
+</BODY>
+</HTML>
+

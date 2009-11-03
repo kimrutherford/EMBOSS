@@ -1,0 +1,102 @@
+application: textsearch [
+  documentation: "Search sequence documentation. Slow, use
+                  SRS and Entrez!"
+  groups: "Display, Information"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "gapany"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  string: pattern [
+    parameter: "Y"
+    information: "Enter a pattern to search for"
+    help: "The search pattern is a regular expression. Use a | to
+           indicate OR. \
+           For example: \
+           human|mouse \
+           will find text with either 'human' OR 'mouse' in the text"
+    knowntype: "regular expression"
+  ]
+
+endsection: required
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  boolean: casesensitive [
+    additional: "Y"
+    default: "N"
+    information: "Do a case-sensitive search"
+  ]
+
+endsection: additional
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  boolean: html [
+    additional: "Y"
+    default: "N"
+    information: "Format output as an HTML table"
+    outputmodifier: "Y"
+  ]
+
+  boolean: only [
+    default: "N"
+    information: "Display the specified columns"
+    help: "This is a way of shortening the command line if you only
+           want a few things to be displayed. Instead of specifying: \
+           '-nohead -noname -nousa -noacc -nodesc' \
+           to get only the name output, you can specify \
+           '-only -name'"
+  ]
+
+  boolean: heading [
+    default: "@(!$(only))"
+    information: "Display column headings"
+  ]
+
+  boolean: usa [
+    default: "@(!$(only))"
+    information: "Display the USA of the sequence"
+  ]
+
+  boolean: accession [
+    default: "@(!$(only))"
+    information: "Display 'accession' column"
+  ]
+
+  boolean: name [
+    default: "@(!$(only))"
+    information: "Display 'name' column"
+  ]
+
+  boolean: description [
+    default: "@(!$(only))"
+    information: "Display 'description' column"
+  ]
+
+  outfile: outfile [
+    parameter: "Y"
+    knowntype: "textsearch output"
+  ]
+
+endsection: output

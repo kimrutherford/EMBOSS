@@ -1,0 +1,77 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: tmap.res</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: tmap
+# Rundate: Sun 15 Jul 2007 12:00:00
+# Commandline: tmap
+#    [-sequences] ../../data/opsd.msf
+#    -outfile tmap.res
+#    -graph cps
+# Report_format: seqtable
+# Report_file: tmap.res
+########################################
+
+#=======================================
+#
+# Sequence: Consensus     from: 1   to: 354
+# HitCount: 7
+#=======================================
+
+  Start     End TransMem Sequence
+     43      70        1 YMFLLIvLGxPINFlTLyVTvQHKKLRT
+     71      98        2 PLNYILLNLxxAdxFMVLxGFTxTlYTS
+    112     140        3 lEGFFATLGGEiALWSLVVLAiERYvVVC
+    148     176        4 FGENHAIMGVAFTWvMALaCAAPPLxGWS
+    201     229        5 ESFVIYMFvVHFTIPmIiIFFCYGqLvxT
+    256     276        6 IMVixFLICWVPYAxVAFYIF
+    285     305        7 PiFMTiPAFFAKSaAIYNPVI
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: OPSD_HUMAN     from: 1   to: 354
+# HitCount: 7
+#=======================================
+
+  Start     End TransMem Sequence
+     43      70        1 YMFLLIVLGFPINFLTLYVTVQHKKLRT
+     71      98        2 PLNYILLNLAVADLFMVLGGFTSTLYTS
+    112     140        3 LEGFFATLGGEIALWSLVVLAIERYVVVC
+    148     176        4 FGENHAIMGVAFTWVMALACAAPPLAGWS
+    201     229        5 ESFVIYMFVVHFTIPMIIIFFCYGQLVFT
+    256     276        6 IMVIAFLICWVPYASVAFYIF
+    285     305        7 PIFMTIPAFFAKSAAIYNPVI
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: OPSD_XENLA     from: 1   to: 354
+# HitCount: 7
+#=======================================
+
+  Start     End TransMem Sequence
+     43      70        1 YMFLLILLGLPINFMTLFVTIQHKKLRT
+     71      98        2 PLNYILLNLVFANHFMVLCGFTVTMYTS
+    112     140        3 IEGFFATLGGEVALWSLVVLAVERYIVVC
+    148     176        4 FGENHAIMGVAFTWIMALSCAAPPLFGWS
+    201     229        5 ESFVIYMFIVHFTIPLIVIFFCYGRLLCT
+    256     276        6 IMVVFFLICWVPYAYVAFYIF
+    285     305        7 PVFMTVPAFFAKSSAIYNPVI
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 3
+# Total_hitcount: 21
+#---------------------------------------
+</pre>
+</td></tr></table><p>
+<p><h3>Graphics File: tmap.ps</h3>
+<p><img src="tmap.1.tmap.gif" alt="[tmap results]">

@@ -1,0 +1,86 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: edd1_rat.patmatdb </h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: patmatdb
+# Rundate: Sun 15 Jul 2007 12:00:00
+# Commandline: patmatdb
+#    -sequence "tsw:*"
+#    -motif "st[ty]s"
+# Report_format: dbmotif
+# Report_file: edd1_rat.patmatdb
+########################################
+
+#=======================================
+#
+# Sequence: HD_FUGRU     from: 1   to: 3148
+# HitCount: 1
+#
+# Motif: ST[TY]S
+#
+#=======================================
+
+Length = 4
+Start = position 1038 of sequence
+End = position 1041 of sequence
+
+
+STPASSTTSSAVDP
+     |  |
+  1038  1041
+
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GCN4_YEAST     from: 1   to: 281
+# HitCount: 1
+#
+# Motif: ST[TY]S
+#
+#=======================================
+
+Length = 4
+Start = position 158 of sequence
+End = position 161 of sequence
+
+
+SNLEVSTTSFLPTP
+     |  |
+   158  161
+
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: PAXI_HUMAN     from: 1   to: 591
+# HitCount: 1
+#
+# Motif: ST[TY]S
+#
+#=======================================
+
+Length = 4
+Start = position 13 of sequence
+End = position 16 of sequence
+
+
+LADLESTTSHISKR
+     |  |
+    13  16
+
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 3
+# Total_hitcount: 3
+#---------------------------------------
+</pre>
+</td></tr></table><p>

@@ -1,0 +1,486 @@
+# some simple testing stuff
+
+SET emboss_qadata /homes/pmr/cvsemboss/test
+SET emboss_tempdata /homes/pmr/local/share/EMBOSS/test
+
+# Standard date for test runs - set to the date of the release
+# Used to make the output consistent where an application reports
+# today's date
+
+SET emboss_timetoday "2007-07-15 12:00:00"
+
+#######################################
+# Standard test databases
+#######################################
+
+# Should be uncommented in the installed copy of emboss.default
+
+##################################################################
+# Test Databases
+# Used by the qatest.pl script to test an EMBOSS installation.
+# Comment them out if you do not want your users to use them.
+# Examples in the EMBOSS documentation should all run by using
+# TEMBL: in place of EMBL:, TSW: in place of SW:, and so on.
+##################################################################
+
+
+# swissprot
+# =========
+
+DB tsw [ type: P dir: $emboss_tempdata/swiss
+   method: emblcd format: swiss release: 36
+   fields: "sv des org key"
+   comment: "Swissprot native format with EMBL CD-ROM index" ]
+
+# trembl
+# ======
+
+DB tswnew [ type: P dir: $emboss_tempdata/swnew
+   method: emblcd format: swiss release: 37 
+   fields: "sv des org key"
+   comment: "SpTrEmbl as 3 files in native format with EMBL CD-ROM index" ]
+
+# wormpep
+# =======
+
+DB twp [ type: P dir: $emboss_tempdata/wormpep
+   method: emblcd format: fasta release: 16 
+   fields: "des"
+   comment: "EMBL new in native format with EMBL CD-ROM index" ]
+
+# embl
+# ====
+
+DB tembl [ type: N dir: $emboss_tempdata/embl
+   method: emblcd format: embl release: 57 
+   fields: "sv des org key"
+   comment: "EMBL in native format with EMBL CD-ROM index" ]
+
+# pir
+# ===
+
+DB tpir [ type: P dir: $emboss_tempdata/pir
+   method: gcg
+   file: pir*.seq
+   format: nbrf
+   fields: "des org key"
+   comment: "PIR using NBRF access for 4 files" ]
+
+# Genbank (DKFZ - we are not using the GCG formatted files in test/gb)
+# =======
+
+DB tgb [ type: N method: srswww format: genbank
+   url: "http://genius.embnet.dkfz-heidelberg.de/menu/cgi-bin/srs7.1.3.1/wgetz"
+   dbalias: genbank
+   fields: "sv des org key"
+   comment: "Genbank IDs" ]
+
+# Genbank
+# =======
+
+DB tgenbank [ type: N dir: $emboss_tempdata/genbank
+   method: emblcd format: genbank release: 01 
+   fields: "sv des org key"
+   comment: "GenBank in native format with EMBL CD-ROM index" ]
+
+# TestDB
+# =======
+
+DB testdb [ type: N dir: $emboss_tempdata/testdb
+   method: emblcd format: fasta release: 01
+   fields: "des"
+   comment: "test sequence data" ]
+
+#######################################
+### Access method EMBLCD, flatfile data
+#######################################
+
+# Nucleotide data (1 file)
+# ===============
+
+DB qanflat  [ type: N format: embl method: emblcd
+  dir: $emboss_qadata/embl
+  indexdir: $emboss_qadata/qa/dbiflat-ex-keep
+  comment: "EMBL flatfiles"
+]
+
+DB qanflatall  [ type: N format: embl method: emblcd
+  dir: $emboss_qadata/embl
+  indexdir: $emboss_qadata/qa/dbiflat-embl-allsys-keep
+  comment: "EMBL flatfiles"
+]
+
+DB qanflatexc  [ type: N format: embl method: emblcd
+  dir: $emboss_qadata/embl
+  exclude: rod.dat
+  indexdir: $emboss_qadata/qa/dbiflat-embl-allsys-keep
+  comment: "EMBL flatfiles, no rodent file"
+]
+
+DB qanflatinc  [ type: N format: embl method: emblcd
+  dir: $emboss_qadata/embl
+  file: rod.dat
+  exclude: *.dat
+  indexdir: $emboss_qadata/qa/dbiflat-embl-allsys-keep
+  comment: "EMBL flatfiles, only rodent file"
+]
+
+DB qanxflat  [ type: N format: embl method: emboss
+  dir: $emboss_qadata/embl
+  indexdir: $emboss_qadata/qa/dbxflat-ex-keep
+  dbalias: embl
+  comment: "EMBL flatfiles"
+]
+
+DB qanxflatall  [ type: N format: embl method: emboss
+  dir: $emboss_qadata/embl
+  indexdir: $emboss_qadata/qa/dbxflat-all-keep
+  dbalias: embl
+  comment: "EMBL flatfiles"
+]
+
+DB qanxflatexc  [ type: N format: embl method: emboss
+  dir: $emboss_qadata/embl
+  exclude: rod.dat
+  indexdir: $emboss_qadata/qa/dbxflat-all-keep
+  dbalias: embl
+  comment: "EMBL flatfiles, no rodent file"
+]
+
+DB qanxflatinc  [ type: N format: embl method: emboss
+  dir: $emboss_qadata/embl
+  file: rod.dat
+  exclude: *.dat
+  indexdir: $emboss_qadata/qa/dbxflat-all-keep
+  dbalias: embl
+  comment: "EMBL flatfiles, only rodent file"
+]
+
+# Protein data (3 files)
+# ============
+
+DB qapflat  [ type: P format: swiss method: emblcd
+  dir: $emboss_qadata/swnew
+  indexdir: $emboss_qadata/qa/dbiflat-swiss-keep
+  comment: "SpTrEmbl flatfile"
+]
+
+DB qapflatall  [ type: P format: swiss method: emblcd
+  dir: $emboss_qadata/swnew
+  indexdir: $emboss_qadata/qa/dbiflat-swiss-keep
+  comment: "SpTrEmbl flatfiles, all fields indexed"
+  fields: "sv des org key"
+]
+
+DB qapxflat  [ type: P format: swiss method: emboss
+  dir: $emboss_qadata/swnew
+  indexdir: $emboss_qadata/qa/dbxflat-swiss-keep
+  dbalias: swnew
+  comment: "Swissnew flatfiles"
+]
+
+DB qanxflatall  [ type: N format: embl method: emboss
+  dir: $emboss_qadata/embl
+  indexdir: $emboss_qadata/qa/dbxflat-all-keep
+  fields: "des org key"
+  dbalias: embl
+  comment: "EMBL flatfiles, all fields indexed"
+]
+
+###########################################
+### Access method EMBLCD, FASTA format data
+###########################################
+
+DB qanfasta  [ type: N format: fasta method: emblcd
+  dir: $emboss_qadata/data
+  indexdir: $emboss_qadata/qa/dbifasta-ex-keep
+  comment: "FASTA file EMBL rodents"
+]
+
+DB qapfasta  [ type: P format: fasta method: emblcd
+  dir: $emboss_qadata/data
+  indexdir: $emboss_qadata/qa/dbifasta-swiss-keep
+  comment: "FASTA file swissnew entries"
+]
+
+DB qawfasta  [ type: N format: fasta method: emblcd
+  dir: $emboss_qadata/data
+  indexdir: $emboss_qadata/qa/dbifasta-worm-keep
+  comment: "FASTA file wormpep entries"
+]
+
+DB qanfastaall  [ type: N format: fasta method: emblcd
+  dir: $emboss_qadata/data
+  indexdir: $emboss_qadata/qa/dbifasta-allsys-keep
+  comment: "FASTA file EMBL rodents, all fields indexed"
+  fields: "sv des"
+]
+
+###########################################
+### Access method EMBOSS, FASTA format data
+###########################################
+
+DB qanxfasta  [ type: N format: fasta method: emboss
+  dir: $emboss_qadata/data
+  indexdir: $emboss_qadata/qa/dbxfasta-ex-keep
+  dbalias: emrod
+  comment: "FASTA file EMBL rodents"
+]
+
+DB qapxfasta  [ type: P format: fasta method: emboss
+  dir: $emboss_qadata/data
+  indexdir: $emboss_qadata/qa/dbxfasta-swiss-keep
+  dbalias: swnew
+  comment: "FASTA file swissnew entries"
+]
+
+DB qawxfasta  [ type: N format: fasta method: emboss
+  dir: $emboss_qadata/data
+  indexdir: $emboss_qadata/qa/dbxfasta-worm-keep
+  dbalias: worm
+  comment: "FASTA file wormpep entries"
+]
+
+DB qanxfastaall  [ type: N format: fasta method: emboss
+  dir: $emboss_qadata/data
+  indexdir: $emboss_qadata/qa/dbxfasta-allsys-keep
+  fields: "sv des"
+  comment: "FASTA file EMBL rodents, all fields indexed"
+  dbalias: emrod
+]
+
+#######################
+### Access method BLAST
+#######################
+
+DB qapblast  [ type: P format: ncbi method: blast
+  dir: $emboss_qadata/data
+  indexdir: $emboss_qadata/qa/dbiblast-ex-keep
+  comment: "BLAST swissnew"
+]
+
+DB qapblastsplit  [ type: P format: ncbi method: blast
+  dir: $emboss_qadata/data
+  indexdir: $emboss_qadata/qa/dbiblast-split-keep
+  comment: "BLAST swissnew split in 5 files"
+]
+
+DB qapblastsplitexc  [ type: P format: ncbi method: blast
+  dir: $emboss_qadata/data
+  exclude: swsplit.02.*
+  indexdir: $emboss_qadata/qa/dbiblast-split-keep
+  comment: "BLAST swissnew split in 5 files, not file 02"
+]
+
+DB qapblastsplitinc  [ type: P format: ncbi method: blast
+  dir: $emboss_qadata/data
+  file: swsplit.02.*
+  exclude: *
+  indexdir: $emboss_qadata/qa/dbiblast-split-keep
+  comment: "BLAST swissnew split in 5 files, only file 02"
+]
+
+DB qapblastall  [ type: P format: ncbi method: blast
+  dir: $emboss_qadata/data
+  indexdir: $emboss_qadata/qa/dbiblast-allsys-keep
+  comment: "BLAST swissnew, all fields indexed"
+  fields: "sv des"
+]
+
+#####################
+### access method GCG
+#####################
+
+DB qangcg  [ type: N format: embl method: gcg
+  dir: $emboss_qadata/embl
+  indexdir: $emboss_qadata/qa/dbigcg-ex-keep
+  comment: "GCG format EMBL"
+]
+
+DB qangcgexc  [ type: N format: embl method: gcg
+  dir: $emboss_qadata/embl
+  exclude: eem_ba1.*
+  indexdir: $emboss_qadata/qa/dbigcg-ex-keep
+  comment: "GCG format EMBL without prokaryotes"
+]
+
+DB qangcginc  [ type: N format: embl method: gcg
+  dir: $emboss_qadata/embl
+  file: eem_ba1.*
+  exclude: *
+  indexdir: $emboss_qadata/qa/dbigcg-ex-keep
+  comment: "GCG format EMBL only prokaryotes"
+]
+
+DB qangcgall  [ type: N format: embl method: gcg
+  dir: $emboss_qadata/embl
+  indexdir: $emboss_qadata/qa/dbigcg-allsys-keep
+  comment: "GCG format EMBL"
+  fields: "sv des org key"
+]
+
+DB qapir  [ type: P format: nbrf method: gcg
+  dir: $emboss_qadata/pir
+  indexdir: $emboss_qadata/qa/dbigcg-pir-keep
+  comment: "PIR"
+]
+
+DB qapirexc  [ type: N format: nbrf method: gcg
+  dir: $emboss_qadata/pir
+  exclude: pir1.*
+  indexdir: $emboss_qadata/qa/dbigcg-pir-keep
+  comment: "PIR"
+]
+
+DB qapirinc  [ type: P format: nbrf method: gcg
+  dir: $emboss_qadata/pir
+  file: pir1.*
+  exclude: *
+  indexdir: $emboss_qadata/qa/dbigcg-pir-keep
+  comment: "PIR"
+]
+
+DB qapirall  [ type: P format: nbrf method: gcg
+  dir: $emboss_qadata/pir
+  indexdir: $emboss_qadata/qa/dbigcg-pirall-keep
+  comment: "PIR"
+  fields: "des org key"
+]
+
+###########################
+### access method EMBOSSGCG
+###########################
+
+DB qanxgcg  [ type: N format: embl method: embossgcg
+  dir: $emboss_qadata/embl
+  indexdir: $emboss_qadata/qa/dbxgcg-ex-keep
+  dbalias: embl
+  comment: "GCG format EMBL"
+]
+
+DB qanxgcgexc  [ type: N format: embl method: embossgcg
+  dir: $emboss_qadata/embl
+  exclude: eem_ba1.*
+  indexdir: $emboss_qadata/qa/dbxgcg-ex-keep
+  dbalias: embl
+  comment: "GCG format EMBL without prokaryotes"
+]
+
+DB qanxgcginc  [ type: N format: embl method: embossgcg
+  dir: $emboss_qadata/embl
+  file: eem_ba1.*
+  exclude: *
+  indexdir: $emboss_qadata/qa/dbxgcg-ex-keep
+  dbalias: embl
+  comment: "GCG format EMBL only prokaryotes"
+]
+
+DB qanxgcgall  [ type: N format: embl method: embossgcg
+  dir: $emboss_qadata/embl
+  indexdir: $emboss_qadata/qa/dbxgcg-allsys-keep
+  fields: "sv des org key"
+  dbalias: embl
+  comment: "GCG format EMBL"
+]
+
+DB qaxpir  [ type: P format: nbrf method: embossgcg
+  dir: $emboss_qadata/pir
+  indexdir: $emboss_qadata/qa/dbxgcg-pir-keep
+  dbalias: pir
+  comment: "PIR"
+]
+
+DB qaxpirexc  [ type: N format: nbrf method: embossgcg
+  dir: $emboss_qadata/pir
+  exclude: pir1.*
+  indexdir: $emboss_qadata/qa/dbxgcg-pir-keep
+  dbalias: pir
+  comment: "PIR"
+]
+
+DB qaxpirinc  [ type: P format: nbrf method: embossgcg
+  dir: $emboss_qadata/pir
+  file: pir1.*
+  exclude: *
+  indexdir: $emboss_qadata/qa/dbxgcg-pir-keep
+  dbalias: pir
+  comment: "PIR"
+]
+
+DB qaxpirall  [ type: P format: nbrf method: embossgcg
+  dir: $emboss_qadata/pir
+  indexdir: $emboss_qadata/qa/dbxgcg-pirall-keep
+  fields: "des org key"
+  dbalias: pir
+  comment: "PIR"
+]
+
+#####################
+### access method SRS
+#####################
+
+#DB qasrs [ type: N format: embl method: srs
+#  dbalias: embl
+#  fields: "sv des org"     # key omitted to test error messages
+#  comment: "EMBL in local srs installation"
+#]
+
+##########################
+### access method SRSFASTA
+##########################
+
+#DB qasrsfasta [ type: N format: fasta method: srsfasta
+#  dbalias: embl
+#  fields: "sv des org key"
+#  comment: "EMBL in local srs installation, fasta format"
+#]
+
+########################
+### access method SRSWWW
+########################
+
+DB qasrswww [ type: N format: embl method: srswww
+  dbalias: embl
+  fields: "sv des org key"
+  url: http://srs.ebi.ac.uk/srs6bin/cgi-bin/wgetz
+  comment: "Remote SRS web server"
+]
+
+############################
+### access method direct ###
+############################
+
+# embl (worm cosmid ZK637 and a few other entries)
+# ====
+
+DB temblall [ type: N dir: "$emboss_tempdata/embl"
+   method: direct format: embl release: 57 
+   fields: "sv des org key"
+   comment: "EMBL in native format with EMBL CD-ROM index"
+  filename: "*.dat"
+]
+
+# embl (worm cosmid ZK637 and a few other entries)
+# ====
+
+DB temblvrt [ type: N dir: "$emboss_tempdata/embl"
+   method: direct format: embl release: 57 
+   fields: "sv des org key"
+   comment: "EMBL in native format with EMBL CD-ROM index"
+  filename: "hum*.dat rod*.dat vrt*.dat"
+]
+
+# embl (worm cosmid ZK637 and a few other entries)
+# ====
+
+DB temblrest [ type: N dir: "$emboss_tempdata/embl"
+   method: direct format: embl release: 57 
+   fields: "sv des org key"
+   comment: "EMBL in native format with EMBL CD-ROM index"
+   filename: "*.dat"
+   exclude: "hum*.dat rod*.dat vrt*.dat"
+]
+
+RES embl [ type: "Index" ]
+RES swnew [ type: "Index" ]
+RES pir [ type: "Index" ]

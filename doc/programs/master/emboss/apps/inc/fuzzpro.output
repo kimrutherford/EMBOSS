@@ -1,0 +1,113 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: edd1_rat.fuzzpro</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: fuzzpro
+# Rundate: Sun 15 Jul 2007 12:00:00
+# Commandline: fuzzpro
+#    -sequence "tsw:*"
+#    -pattern "[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G"
+# Report_format: seqtable
+# Report_file: edd1_rat.fuzzpro
+########################################
+
+#=======================================
+#
+# Sequence: ACTB1_FUGRU     from: 1   to: 375
+# HitCount: 1
+#
+# Pattern_name Mismatch Pattern
+# pattern1            0 [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
+#
+#=======================================
+
+  Start     End Pattern_name Mismatch Sequence
+     53      63 pattern1            . YVGDEAQSKRG
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: ACTB_OREMO     from: 1   to: 375
+# HitCount: 1
+#
+# Pattern_name Mismatch Pattern
+# pattern1            0 [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
+#
+#=======================================
+
+  Start     End Pattern_name Mismatch Sequence
+     53      63 pattern1            . YVGDEAQSKRG
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: ACTB2_FUGRU     from: 1   to: 375
+# HitCount: 1
+#
+# Pattern_name Mismatch Pattern
+# pattern1            0 [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
+#
+#=======================================
+
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+#---------------------------------------
+#=======================================
+#
+# Sequence: ACTSA_FUGRU     from: 1   to: 377
+# HitCount: 1
+#
+# Pattern_name Mismatch Pattern
+# pattern1            0 [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
+#
+#=======================================
+
+  Start     End Pattern_name Mismatch Sequence
+     55      65 pattern1            . YVGDEAQSKRG
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: ACTS_OREMO     from: 1   to: 377
+# HitCount: 1
+#
+# Pattern_name Mismatch Pattern
+# pattern1            0 [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
+#
+#=======================================
+
+  Start     End Pattern_name Mismatch Sequence
+     55      65 pattern1            . YVGDEAQSKRG
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: ACTSB_FUGRU     from: 1   to: 377
+# HitCount: 1
+#
+# Pattern_name Mismatch Pattern
+# pattern1            0 [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
+#
+#=======================================
+
+  Start     End Pattern_name Mismatch Sequence
+     55      65 pattern1            . YVGDEAQSKRG
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 8
+# Total_hitcount: 8
+#---------------------------------------
+</pre>
+</td></tr></table><p>

@@ -1,0 +1,223 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: x13776.sixpack</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+X13776
+Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
+regulation
+
+
+          G  T  A  G  R  A  S  A  R  S  P  P  A  G  R  R  E  L  H  D     F1
+           V  P  L  A  E  H  L  L  D  H  H  Q  P  G  D  G  N  C  T  I    F2
+            Y  R  W  P  S  I  C  S  I  T  T  S  R  A  T  G  T  A  R  S   F3
+        1 ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat 60
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+        1 ccatggcgaccggctcgtagacgagctagtggtggtcggcccgctgcccttgacgtgcta 60
+           P  V  A  P  R  A  D  A  R  D  G  G  A  P  R  R  S  S  C  S    F6
+          X  Y  R  Q  G  L  M  Q  E  I  V  V  L  R  A  V  P  V  A  R     F5
+            T  G  S  A  S  C  R  S  S  *  W  W  G  P  S  P  F  Q  V  I   F4
+
+
+          L  P  G  E  P  G  A  R  A  G  S  L  R  T  A  L  S  D  S  H     F1
+           Y  L  A  S  L  E  H  E  R  V  R  F  V  R  R  *  A  T  V  T    F2
+            T  W  R  A  W  S  T  S  G  F  A  S  Y  G  A  E  R  Q  S  Q   F3
+       61 ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac 120
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+       61 gatggaccgctcggacctcgtgctcgcccaagcgaagcatgccgcgactcgctgtcagtg 120
+           R  G  P  S  G  P  A  R  A  P  E  S  R  V  A  S  L  S  L  *    F6
+          D  V  Q  R  A  Q  L  V  L  P  N  A  E  Y  P  A  S  R  C  D     F5
+            *  R  A  L  R  S  C  S  R  T  R  K  T  R  R  Q  A  V  T  V   F4
+
+
+          R  R  G  N  G  W  D  R  T  R  S  G  R  *  S  A  C  C  S  P     F1
+           G  E  E  T  D  G  I  A  P  G  A  A  A  D  R  P  A  V  L  R    F2
+            E  R  K  R  M  G  S  H  Q  E  R  P  L  I  G  L  L  F  S  E   F3
+      121 aggagaggaaacggatgggatcgcaccaggagcggccgctgatcggcctgctgttctccg 180
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+      121 tcctctcctttgcctaccctagcgtggtcctcgccggcgactagccggacgacaagaggc 180
+           L  L  P  F  P  H  S  R  V  L  L  P  R  Q  D  A  Q  Q  E  G    F6
+          C  S  L  F  R  I  P  D  C  W  S  R  G  S  I  P  R  S  N  E     F5
+            P  S  S  V  S  P  I  A  G  P  A  A  A  S  R  G  A  T  R  R   F4
+
+
+          K  P  A  S  P  P  I  S  S  A  R  T  R  M  A  H  C  S  R  S     F1
+           N  R  R  H  R  R  Y  R  A  L  A  R  V  W  R  I  A  R  G  R    F2
+            T  G  V  T  A  D  I  E  R  S  H  A  Y  G  A  L  L  A  V  E   F3
+      181 aaaccggcgtcaccgccgatatcgagcgctcgcacgcgtatggcgcattgctcgcggtcg 240
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+      181 tttggccgcagtggcggctatagctcgcgagcgtgcgcataccgcgtaacgagcgccagc 240
+           F  G  A  D  G  G  I  D  L  A  R  V  R  I  A  C  Q  E  R  D    F6
+          S  V  P  T  V  A  S  I  S  R  E  C  A  Y  P  A  N  S  A  T     F5
+            F  R  R  *  R  R  Y  R  A  S  A  R  T  H  R  M  A  R  P  R   F4
+
+
+          S  N  *  T  A  R  A  A  S  A  V  A  R  S  K  R  C  P  R  T     F1
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+     1981 caacgacccgttctagtcgccagccctccaccgccactagttgaaggaccagccgcacga 2040
+           T  A  P  C  S  *  R  D  P  P  P  P  S  *  S  G  P  R  R  A    F6
+          P  Q  Q  A  L  D  A  T  P  L  H  R  H  D  V  E  Q  D  A  H     F5
+            N  S  P  L  I  L  P  R  S  T  A  T  I  L  K  R  T  P  T  S   F4
+
+
+          E  R  L  R  R  V  L  P  D  L  F  R  S  S  R  A  G  L  A  E     F1
+           S  A  C  V  A  F  Y  L  I  F  S  A  A  A  G  Q  G  S  L  K    F2
+            A  P  A  S  R  S  T  *  S  F  P  Q  Q  P  G  R  A  R  *  R   F3
+     2041 gagcgcctgcgtcgcgttctacctgatcttttccgcagcagccgggcagggctcgctgaa 2100
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+     2041 ctcgcggacgcagcgcaagatggactagaaaaggcgtcgtcggcccgtcccgagcgactt 2100
+           S  R  R  R  R  T  R  G  S  R  K  R  L  L  R  A  P  S  A  S    F6
+          Q  A  G  A  D  R  E  V  Q  D  K  G  C  C  G  P  L  A  R  Q     F5
+            L  A  Q  T  A  N  *  R  I  K  E  A  A  A  P  C  P  E  S  F   F4
+
+
+          G  R  S  A  D  P  A  I  R  F  Y  L  S  V  G  G  R  Q  P  V     F1
+           A  G  A  L  T  L  L  F  A  F  T  Y  L  W  V  A  A  N  Q  F    F2
+            P  E  R  *  P  C  Y  S  L  L  P  I  C  G  W  P  P  T  S  S   F3
+     2101 ggccggagcgctgaccctgctattcgcttttacctatctgtgggtggccgccaaccagtt 2160
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+     2101 ccggcctcgcgactgggacgataagcgaaaatggatagacacccaccggcggttggtcaa 2160
+           P  R  L  A  S  G  A  I  R  K  *  R  D  T  P  P  R  W  G  T    F6
+          L  G  S  R  Q  G  Q  *  E  S  K  G  I  Q  P  H  G  G  V  L     F5
+            A  P  A  S  V  R  S  N  A  K  V  *  R  H  T  A  A  L  W  N   F4
+
+
+          P  R  X                                                        F1
+           L  E                                                          F2
+            S  X                                                         F3
+     2161 cctcgag 2167
+          ----:--
+     2161 ggagctc 2220
+           G  R                                                          F6
+          E  E  L                                                        F5
+            R  S                                                         F4
+
+##############################
+Minimum size of ORFs : 1
+
+Total ORFs in frame 1 :     8
+Total ORFs in frame 2 :     5
+Total ORFs in frame 3 :    13
+Total ORFs in frame 4 :    10
+Total ORFs in frame 5 :    16
+Total ORFs in frame 6 :    15
+
+Total ORFs :    67
+##############################
+
+</pre>
+</td></tr></table><p>
+<p><h3>File: x13776.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X13776_1_ORF1  Translation of X13776 in frame 1, ORF 1, threshold 1, 53aa
+GTAGRASARSPPAGRRELHDLPGEPGARAGSLRTALSDSHRRGNGWDRTRSGR
+&gt;X13776_1_ORF2  Translation of X13776 in frame 1, ORF 2, threshold 1, 28aa
+SACCSPKPASPPISSARTRMAHCSRSSN
+&gt;X13776_1_ORF3  Translation of X13776 in frame 1, ORF 3, threshold 1, 52aa
+TARAASAVARSKRCPRTPAATRTAIGCAPRTSFATGGYGSSWAATCRTRARR
+&gt;X13776_1_ORF4  Translation of X13776 in frame 1, ORF 4, threshold 1, 43aa
+CRWSSAPTRCSATRPPTRASSIRRTSSTAVRRRTRTVRRWRRT
+&gt;X13776_1_ORF5  Translation of X13776 in frame 1, ORF 5, threshold 1, 23aa
+FATTASGWCSSARTTSIRGKATM
+&gt;X13776_1_ORF6  Translation of X13776 in frame 1, ORF 6, threshold 1, 72aa
+CATCIASTAARCSRKSTFRCIPPTTTCSAPSSASTRRAPTWSSPPWWAPAPPSCIAPSPV
+ATATAGGRRSPA
+&gt;X13776_1_ORF7  Translation of X13776 in frame 1, ORF 7, threshold 1, 357aa
+PPARRRWRRWRVTWQRGRWWSRLTSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGR
+PCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSR
+SAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHERQLAARQPARVAGAGPQPAGGGQRRP
+GLAADPHRLFGAPVLAAAGSLRRAGGRGLHQHFPEWPPRRDRCAARRRDSAHYPGGAGGV
+RKPRGALADHRAGVPRRDHPAARCPPGAACAGIGAAHQRGNGEAEAEDRAAPGPHRRPGP
+DQPGQGVADAAPWLGRARGAPAPVAGSDEAARADPEDRSGVAGKRAVRLSDPGRPEQ
+&gt;X13776_1_ORF8  Translation of X13776 in frame 1, ORF 8, threshold 1, 88aa
+QEGYRHHAGTGSAVRWRGAVSQCRLVAGQDQRSGGGGDQLPGRRAERLRRVLPDLFRSSR
+AGLAEGRSADPAIRFYLSVGGRQPVPRX
+&gt;X13776_2_ORF1  Translation of X13776 in frame 2, ORF 1, threshold 1, 35aa
+VPLAEHLLDHHQPGDGNCTIYLASLEHERVRFVRR
+&gt;X13776_2_ORF2  Translation of X13776 in frame 2, ORF 2, threshold 1, 252aa
+ATVTGEETDGIAPGAAADRPAVLRNRRHRRYRALARVWRIARGRATEPRGRRRRSPDRNA
+VPGPRRRPGPLSAVRRGLHSQPGGTVPRGLLHVAHAQGGDAGGRARRRAALLPDPLRGLR
+VFAEHRLRRSGAEPEQCAAGGVPDSPLRRAGGVHRLGLHLSAGKQPCDAPPVSPARRHGA
+RGNLHSAVSLRRRLAARRRAHLPGARRRGLLHRGGHRHRRAVSRHRPSLRRRQAAADRQP
+DHQRGGGGEDGE
+&gt;X13776_2_ORF3  Translation of X13776 in frame 2, ORF 3, threshold 1, 125aa
+RGRGAGGGRALLLQHRYARQPGLRPGLPWFLPGERDHHRLGRGGLLADLVARPRRAGRRQ
+LAGGRRAAAPVRHRHRRATGAGPGGAPEQPQPPVFAHRGNRCARRVPGPLAVARTDSPRP
+LCRRA
+&gt;X13776_2_ORF4  Translation of X13776 in frame 2, ORF 4, threshold 1, 210aa
+PRRLVRQHGRGTAPMSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWPPP
+EAFDVPVDVVFTSIFQNGHHDEIAALLAAGTPRTTLVALVEYESPAVLSQIIELECHGVI
+TQPLDAHRVLPVLVSARRISEEMAKLKQKTEQLQDRIAGQARINQAKVLLMQRHGWDERE
+AHQHLSREAMKRREPILKIAQELLGNEPSA
+&gt;X13776_2_ORF5  Translation of X13776 in frame 2, ORF 5, threshold 1, 96aa
+AIRADQNNNKRGIVIMLGLVLLYVGAVLFLNAVWLLGKISGREVAVINFLVGVLSACVAF
+YLIFSAAAGQGSLKAGALTLLFAFTYLWVAANQFLE
+&gt;X13776_3_ORF1  Translation of X13776 in frame 3, ORF 1, threshold 1, 429aa
+YRWPSICSITTSRATGTARSTWRAWSTSGFASYGAERQSQERKRMGSHQERPLIGLLFSE
+TGVTADIERSHAYGALLAVEQLNREGGVGGRPIETLSQDPGGDPDRYRLCAEDFIRNRGV
+RFLVGCYMSHTRKAVMPVVERADALLCYPTPYEGFEYSPNIVYGGPAPNQNSAPLAAYLI
+RHYGERVVFIGSDYIYPRESNHVMRHLYRQHGGTVLEEIYIPLYPSDDDLQRAVERIYQA
+RADVVFSTVVGTGTAELYRAIARRYGDGRRPPIASLTTSEAEVAKMESDVAEGQVVVAPY
+FSSIDTPASRAFVQACHGFFPENATITAWAEAAYWQTLLLGRAAQAAGNWRVEDVQRHLY
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+SEPMNTTRSP
+&gt;X13776_5_ORF11  Translation of X13776 in frame 5, ORF 11, threshold 1, 19aa
+WRIRYAASGALFWFGAGPP
+&gt;X13776_5_ORF12  Translation of X13776 in frame 5, ORF 12, threshold 1, 10aa
+TMFGEYSKPS
+&gt;X13776_5_ORF13  Translation of X13776 in frame 5, ORF 13, threshold 1, 3aa
+GVG
+&gt;X13776_5_ORF14  Translation of X13776 in frame 5, ORF 14, threshold 1, 20aa
+QSSASARSTTGITALRVCDM
+&gt;X13776_5_ORF15  Translation of X13776 in frame 5, ORF 15, threshold 1, 19aa
+QPTRNRTPRLRMKSSAHSR
+&gt;X13776_5_ORF16  Translation of X13776 in frame 5, ORF 16, threshold 1, 107aa
+RSGSPPGSWDSVSIGRPPTPPSRFSCSTASNAPYACERSISAVTPVSENSRPISGRSWCD
+PIRFLSCDCRSAPYEANPLVLQARQVDRAVPVARLVVIEQMLGQRYX
+&gt;X13776_6_ORF1  Translation of X13776 in frame 6, ORF 1, threshold 1, 11aa
+RGTGWRPPTDR
+&gt;X13776_6_ORF2  Translation of X13776 in frame 6, ORF 2, threshold 1, 36aa
+KRIAGSALRPSASPARLLRKRSGRTRRRRSARRPGS
+&gt;X13776_6_ORF3  Translation of X13776 in frame 6, ORF 3, threshold 1, 7aa
+SPPPPDR
+&gt;X13776_6_ORF4  Translation of X13776 in frame 6, ORF 4, threshold 1, 8aa
+SCPATRRH
+&gt;X13776_6_ORF5  Translation of X13776 in frame 6, ORF 5, threshold 1, 14aa
+ETAPRQRTAEPVPA
+&gt;X13776_6_ORF6  Translation of X13776 in frame 6, ORF 6, threshold 1, 61aa
+RYPSCYCSGRPGSLRRTARFPATPERSSGSARAASSLPATGAGAPRARPSHGAASATPWP
+G
+&gt;X13776_6_ORF7  Translation of X13776 in frame 6, ORF 7, threshold 1, 23aa
+SGPGRRCGPGAARSSASASPFPR
+&gt;X13776_6_ORF8  Translation of X13776 in frame 6, ORF 8, threshold 1, 18aa
+CAAPIPAQAAPGGHRAAG
+&gt;X13776_6_ORF9  Translation of X13776 in frame 6, ORF 9, threshold 1, 8aa
+SRRGTPAR
+&gt;X13776_6_ORF10  Translation of X13776 in frame 6, ORF 10, threshold 1, 16aa
+SARAPRGFRTPPAPPG
+&gt;X13776_6_ORF11  Translation of X13776 in frame 6, ORF 11, threshold 1, 22aa
+CAESRRRAAQRSRRGGHSGKCW
+&gt;X13776_6_ORF12  Translation of X13776 in frame 6, ORF 12, threshold 1, 32aa
+RPRPPARRRLPAAASTGAPNNRCGSAARPGRR
+&gt;X13776_6_ORF13  Translation of X13776 in frame 6, ORF 13, threshold 1, 5aa
+PPPAG
+&gt;X13776_6_ORF14  Translation of X13776 in frame 6, ORF 14, threshold 1, 407aa
+GPAPATRAGCRAASWRSWERSPAHAGGPVVEVMHDDIRVGANRFGRLPADLEHAARIDFR
+DARRQAAVVVLALHPDRPLWRVDVDVVQVPLHVFHPPVACGLRGAAEQQGLPVGRLGPGG
+DGRVLREETMAGLDEGPAGGRIDAGEVRRDHHLPLCHVTLHLRHLRLAGGQAGDRRPPAV
+AVATGDGAIQLGGAGAHHGGEDHVGARLVDALDGALQVVVGGIQRNVDFLEHRAAVLAIQ
+VAHHMVAFPRIDVVRADEHHPLAVVANQVRRQRRTVLVRRRTAVDDVRRILEALVGGRVA
+EQRVGALDHRHHRLARVRHVAAHEEPYPPVANEVLGAQPIAVRVAAGVLGQRFDRATADA
+ALAVQLLDREQCAIRVRALDIGGDAGFGEQQADQRPLLVRSHPFPLL
+&gt;X13776_6_ORF15  Translation of X13776 in frame 6, ORF 15, threshold 1, 39aa
+LSLSAVRSEPARAPGSPGRSCSSRRPAGGDRADARPAVP
+</pre>
+</td></tr></table><p>

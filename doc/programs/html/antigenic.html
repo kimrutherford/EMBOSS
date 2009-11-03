@@ -1,0 +1,729 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: antigenic
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+antigenic
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+    Function
+</H2>
+Finds antigenic sites in proteins
+
+
+
+
+<H2>
+    Description
+</H2>
+
+
+Antigenic predicts potentially antigenic regions of a protein
+sequence, using the method of Kolaskar and Tongaonkar.
+
+<p>
+
+Analysis of data from experimentally determined antigenic sites on
+proteins has revealed that the hydrophobic residues Cys, Leu and Val, if
+they occur on the surface of a protein, are more likely to be a part of
+antigenic sites.  A semi-empirical method which makes use of
+physicochemical properties of amino acid residues and their frequencies
+of occurrence in experimentally known segmental epitopes was developed
+by Kolaskar and Tongaonkar
+to predict antigenic determinants on proteins.  Application of this
+method to a large number of proteins has shown that their method can
+predict antigenic determinants with about 75% accuracy which is better
+than most of the known methods.  This method is based on a single
+parameter and thus very simple to use. 
+
+<H2>
+    Usage
+</H2>
+
+<b>Here is a sample session with antigenic</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>antigenic </b>
+Finds antigenic sites in proteins
+Input protein sequence(s): <b>tsw:actb1_fugru</b>
+Minimum length of antigenic region [6]: <b></b>
+Output report [actb1_fugru.antigenic]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+By using the '-rformat gff' qualifier, a GFF file of the predicted regions can be produced. 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>antigenic -rformat gff </b>
+Finds antigenic sites in proteins
+Input protein sequence(s): <b>tsw:actb1_fugru</b>
+Minimum length of antigenic region [6]: <b></b>
+Output report [actb1_fugru.antigenic]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Protein sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -minlen             integer    [6] Minimum length of antigenic region
+                                  (Integer from 1 to 50)
+  [-outfile]           report     [*.antigenic] Output report file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Protein sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-minlen</td>
+<td>Minimum length of antigenic region</td>
+<td>Integer from 1 to 50</td>
+<td>6</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output report file name</td>
+<td>Report output file</td>
+<td><i>&lt;*&gt;</i>.antigenic</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+
+
+The input sequence can be one or more protein sequences.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tsw:actb1_fugru' is a sequence entry in the example protein database 'tsw'
+<p>
+<p><h3>Database entry: tsw:actb1_fugru</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   ACTB1_FUGRU             Reviewed;         375 AA.
+AC   P68142; P53484;
+DT   25-OCT-2004, integrated into UniProtKB/Swiss-Prot.
+DT   25-OCT-2004, sequence version 1.
+DT   20-MAR-2007, entry version 16.
+DE   Actin, cytoplasmic 1 (Beta-actin A).
+GN   Name=ACTB-A;
+OS   Fugu rubripes (Japanese pufferfish) (Takifugu rubripes).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Actinopterygii; Neopterygii; Teleostei; Euteleostei; Neoteleostei;
+OC   Acanthomorpha; Acanthopterygii; Percomorpha; Tetraodontiformes;
+OC   Tetradontoidea; Tetraodontidae; Takifugu.
+OX   NCBI_TaxID=31033;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA], AND TISSUE SPECIFICITY.
+RX   MEDLINE=96275651; PubMed=8683572; DOI=10.1006/jmbi.1996.0347;
+RA   Venkatesh B., Tay B.H., Elgar G., Brenner S.;
+RT   "Isolation, characterization and evolution of nine pufferfish (Fugu
+RT   rubripes) actin genes.";
+RL   J. Mol. Biol. 259:655-665(1996).
+CC   -!- FUNCTION: Actins are highly conserved proteins that are involved
+CC       in various types of cell motility and are ubiquitously expressed
+CC       in all eukaryotic cells.
+CC   -!- SUBUNIT: Polymerization of globular actin (G-actin) leads to a
+CC       structural filament (F-actin) in the form of a two-stranded helix.
+CC       Each actin can bind to 4 others.
+CC   -!- SUBCELLULAR LOCATION: Cytoplasm.
+CC   -!- TISSUE SPECIFICITY: Widely distributed. Not expressed in skeletal
+CC       muscle.
+CC   -!- MISCELLANEOUS: In vertebrates 3 main groups of actin isoforms,
+CC       alpha, beta and gamma have been identified. The alpha actins are
+CC       found in muscle tissues and are a major constituent of the
+CC       contractile apparatus. The beta and gamma actins coexist in most
+CC       cell types as components of the cytoskeleton and as mediators of
+CC       internal cell motility.
+CC   -!- MISCELLANEOUS: There are three different beta-cytoplasmic actins
+CC       in Fugu rubripes.
+CC   -!- SIMILARITY: Belongs to the actin family.
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; U37499; AAC59889.1; -; Genomic_DNA.
+DR   PIR; S71124; S71124.
+DR   HSSP; P02570; 1HLU.
+DR   SMR; P68142; 4-371.
+DR   Ensembl; NEWSINFRUG00000152503; Fugu rubripes.
+DR   InterPro; IPR004001; Actin.
+DR   InterPro; IPR004000; Actin_like.
+DR   PANTHER; PTHR11937; Actin_like; 1.
+DR   Pfam; PF00022; Actin; 1.
+DR   PRINTS; PR00190; ACTIN.
+DR   SMART; SM00268; ACTIN; 1.
+DR   PROSITE; PS00406; ACTINS_1; 1.
+DR   PROSITE; PS00432; ACTINS_2; 1.
+DR   PROSITE; PS01132; ACTINS_ACT_LIKE; 1.
+KW   Acetylation; ATP-binding; Cytoskeleton; Methylation;
+KW   Nucleotide-binding; Structural protein.
+FT   PROPEP        1      1       Removed in mature form (By similarity).
+FT                                /FTId=PRO_0000000808.
+FT   CHAIN         2    375       Actin, cytoplasmic 1.
+FT                                /FTId=PRO_0000000809.
+FT   MOD_RES       1      1       N-acetylmethionine (By similarity).
+FT   MOD_RES       2      2       N-acetylglutamate (By similarity).
+FT   MOD_RES      73     73       Tele-methylhistidine (By similarity).
+SQ   SEQUENCE   375 AA;  41767 MW;  9C505616D33E9495 CRC64;
+     MEDEIAALVV DNGSGMCKAG FAGDDAPRAV FPSIVGRPRH QGVMVGMGQK DSYVGDEAQS
+     KRGILTLKYP IEHGIVTNWD DMEKIWHHTF YNELRVAPEE HPVLLTEAPL NPKANREKMT
+     QIMFETFNTP AMYVAIQAVL SLYASGRTTG IVMDSGDGVT HTVPIYEGYA LPHAILRLDL
+     AGRDLTDYLM KILTERGYSF TTTAEREIVR DIKEKLCYVA LDFEQEMGTA ASSSSLEKSY
+     ELPDGQVITI GNERFRCPEA LFQPSFLGME SCGIHETTYN SIMKCDVDIR KDLYANTVLS
+     GGTTMYPGIA DRMQKEITAL APSTMKIKII APPERKYSVW IGGSILASLS TFQQMWISKQ
+     EYDESGPSIV HRKCF
+//
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Output file format
+</H2>
+
+<p>
+
+The output is a standard EMBOSS report file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: embl,
+genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+feattable, motif, regions, seqtable, simple, srs, table, tagseq
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/ReportFormats.html">
+http://emboss.sf.net/docs/themes/ReportFormats.html</A>
+for further information on report formats.
+
+<p>
+
+
+By default <b>antigenic</b> writes a 'motif' report file.
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: actb1_fugru.antigenic</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: antigenic
+# Rundate: Sun 15 Jul 2007 12:00:00
+# Commandline: antigenic
+#    -sequence tsw:actb1_fugru
+# Report_format: motif
+# Report_file: actb1_fugru.antigenic
+########################################
+
+#=======================================
+#
+# Sequence: ACTB1_FUGRU     from: 1   to: 375
+# HitCount: 18
+#=======================================
+
+Max_score_pos at "*"
+
+(1) Score 1.207 length 9 at residues 214-&gt;222
+               *
+ Sequence: EKLCYVALD
+           |       |
+         214       222
+
+(2) Score 1.187 length 15 at residues 131-&gt;145
+                 *
+ Sequence: AMYVAIQAVLSLYAS
+           |             |
+         131             145
+
+(3) Score 1.166 length 8 at residues 5-&gt;12
+              *
+ Sequence: IAALVVDN
+           |      |
+           5      12
+
+(4) Score 1.164 length 12 at residues 27-&gt;38
+                *
+ Sequence: PRAVFPSIVGRP
+           |          |
+          27          38
+
+(5) Score 1.136 length 24 at residues 160-&gt;183
+                        *
+ Sequence: THTVPIYEGYALPHAILRLDLAGR
+           |                      |
+         160                      183
+
+(6) Score 1.135 length 6 at residues 367-&gt;372
+                *
+ Sequence: PSIVHR
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+(11) Score 1.102 length 15 at residues 62-&gt;76
+                 *
+ Sequence: RGILTLKYPIEHGIV
+           |             |
+          62             76
+
+(12) Score 1.086 length 19 at residues 232-&gt;250
+                        *
+ Sequence: SSSSLEKSYELPDGQVITI
+           |                 |
+         232                 250
+
+(13) Score 1.083 length 6 at residues 327-&gt;332
+              *
+ Sequence: IKIIAP
+           |    |
+         327    332
+
+(14) Score 1.074 length 7 at residues 317-&gt;323
+              *
+ Sequence: ITALAPS
+           |     |
+         317     323
+
+(15) Score 1.068 length 7 at residues 186-&gt;192
+                *
+ Sequence: TDYLMKI
+           |     |
+         186     192
+
+(16) Score 1.066 length 7 at residues 40-&gt;46
+              *
+ Sequence: HQGVMVG
+           |     |
+          40     46
+
+(17) Score 1.045 length 7 at residues 269-&gt;275
+           *
+ Sequence: MESCGIH
+           |     |
+         269     275
+
+(18) Score 1.034 length 7 at residues 51-&gt;57
+            *
+ Sequence: DSYVGDE
+           |     |
+          51     57
+
+
+#---------------------------------------
+#---------------------------------------
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: actb1_fugru.antigenic</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+##gff-version 2.0
+##date 2006-07-15
+##Type Protein ACTB1_FUGRU
+ACTB1_FUGRU	antigenic	region	214	222	1.207	+	.	Sequence "ACTB1_FUGRU.1" ; note "*pos 218"
+ACTB1_FUGRU	antigenic	region	131	145	1.187	+	.	Sequence "ACTB1_FUGRU.2" ; note "*pos 137"
+ACTB1_FUGRU	antigenic	region	5	12	1.166	+	.	Sequence "ACTB1_FUGRU.3" ; note "*pos 8"
+ACTB1_FUGRU	antigenic	region	27	38	1.164	+	.	Sequence "ACTB1_FUGRU.4" ; note "*pos 32"
+ACTB1_FUGRU	antigenic	region	160	183	1.136	+	.	Sequence "ACTB1_FUGRU.5" ; note "*pos 173"
+ACTB1_FUGRU	antigenic	region	367	372	1.135	+	.	Sequence "ACTB1_FUGRU.6" ; note "*pos 372"
+ACTB1_FUGRU	antigenic	region	93	108	1.116	+	.	Sequence "ACTB1_FUGRU.7" ; note "*pos 103"
+ACTB1_FUGRU	antigenic	region	295	301	1.113	+	.	Sequence "ACTB1_FUGRU.8" ; note "*pos 296"
+ACTB1_FUGRU	antigenic	region	256	266	1.110	+	.	Sequence "ACTB1_FUGRU.9" ; note "*pos 264"
+ACTB1_FUGRU	antigenic	region	336	352	1.107	+	.	Sequence "ACTB1_FUGRU.10" ; note "*pos 347"
+ACTB1_FUGRU	antigenic	region	62	76	1.102	+	.	Sequence "ACTB1_FUGRU.11" ; note "*pos 68"
+ACTB1_FUGRU	antigenic	region	232	250	1.086	+	.	Sequence "ACTB1_FUGRU.12" ; note "*pos 245"
+ACTB1_FUGRU	antigenic	region	327	332	1.083	+	.	Sequence "ACTB1_FUGRU.13" ; note "*pos 330"
+ACTB1_FUGRU	antigenic	region	317	323	1.074	+	.	Sequence "ACTB1_FUGRU.14" ; note "*pos 320"
+ACTB1_FUGRU	antigenic	region	186	192	1.068	+	.	Sequence "ACTB1_FUGRU.15" ; note "*pos 191"
+ACTB1_FUGRU	antigenic	region	40	46	1.066	+	.	Sequence "ACTB1_FUGRU.16" ; note "*pos 43"
+ACTB1_FUGRU	antigenic	region	269	275	1.045	+	.	Sequence "ACTB1_FUGRU.17" ; note "*pos 269"
+ACTB1_FUGRU	antigenic	region	51	57	1.034	+	.	Sequence "ACTB1_FUGRU.18" ; note "*pos 52"
+</pre>
+</td></tr></table><p>
+
+
+<H2>
+    Data files
+</H2>
+
+
+Antigenic uses a data file called <em>Eantigenic.dat</em>.
+
+
+<p>
+EMBOSS data files are distributed with the application and stored
+in the standard EMBOSS data directory, which is defined
+by the EMBOSS environment variable EMBOSS_DATA.
+
+<p>
+
+To see the available EMBOSS data files, run:
+<p>
+<pre>
+% embossdata -showall
+</pre>
+<p>
+To fetch one of the data files (for example 'Exxx.dat') into your
+current directory for you to inspect or modify, run:
+
+<pre>
+
+% embossdata -fetch -file Exxx.dat
+
+</pre>
+<p>
+
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called
+".embossdata". Files for all EMBOSS runs can be put in the user's home
+directory, or again in a subdirectory called ".embossdata".
+
+<p>
+The directories are searched in the following order:
+
+<ul>
+   <li> . (your current directory)
+   <li> .embossdata (under your current directory)
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+<p>
+
+<p>
+Here is the default <em>Eantigenic.dat</em> file:
+
+<pre>
+
+#                                               Antigenic  Surface  Antigenic
+# Amino     -- Occurrence of amino acids in --   frequency frequency propensity
+# Acid       Epitopes      Surface     Protein   f(Ag)    f(s)      A(p)
+  A             135          328         524     0.065    0.061     1.064
+  C              53           97         186     0.026    0.018     1.412
+  D             118          352         414     0.057    0.066     0.866
+  E             132          401         499     0.064    0.075     0.851
+  F              76          180         365     0.037    0.034     1.091
+  G             116          343         487     0.056    0.064     0.874
+  H              59          138         191     0.029    0.026     1.105
+  I              86          193         437     0.042    0.036     1.152
+  K             158          439         523     0.076    0.082     0.930
+  L             149          308         684     0.072    0.058     1.250
+  M              23           72         152     0.011    0.013     0.826
+  N              94          313         407     0.045    0.058     0.776
+  P             135          328         411     0.065    0.061     1.064
+  Q              99          252         332     0.048    0.047     1.015
+  R             106          314         394     0.051    0.058     0.873
+  S             168          429         553     0.081    0.080     1.012
+  T             141          401         522     0.068    0.075     0.909
+  V             128          239         515     0.062    0.045     1.383
+  W              19           55         103     0.009    0.010     0.893
+  Y              71          158         245     0.034    0.029     1.161
+Total          2066         5340        7944
+
+</pre>
+
+<H2>
+    Notes
+</H2>
+
+
+<H2>
+    References
+</H2>
+
+
+<ol>
+<li>
+Kolaskar,AS and Tongaonkar,PC (1990).
+A semi-empirical method for prediction of antigenic determinants
+on protein antigens.
+FEBS Letters 276: 172-174.
+
+<li>
+Parker,JMR, Guo,D and Hodges,RS (1986).
+Biochemistry 25: 5425-5432.
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+
+The program will warn you if the sequence is not a protein or has
+ambiguity codes.
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+It exits with status 0, unless a region is badly constructed.
+
+<H2>
+    Known bugs
+</H2>
+
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="digest.html">digest</a></td>
+<td>Protein proteolytic enzyme or reagent cleavage digest</td>
+</tr>
+
+<tr>
+<td><a href="epestfind.html">epestfind</a></td>
+<td>Finds PEST motifs as potential proteolytic cleavage sites</td>
+</tr>
+
+<tr>
+<td><a href="fuzzpro.html">fuzzpro</a></td>
+<td>Protein pattern search</td>
+</tr>
+
+<tr>
+<td><a href="fuzztran.html">fuzztran</a></td>
+<td>Protein pattern search after translation</td>
+</tr>
+
+<tr>
+<td><a href="helixturnhelix.html">helixturnhelix</a></td>
+<td>Report nucleic acid binding motifs</td>
+</tr>
+
+<tr>
+<td><a href="oddcomp.html">oddcomp</a></td>
+<td>Find protein sequence regions with a biased composition</td>
+</tr>
+
+<tr>
+<td><a href="patmatdb.html">patmatdb</a></td>
+<td>Search a protein sequence with a motif</td>
+</tr>
+
+<tr>
+<td><a href="patmatmotifs.html">patmatmotifs</a></td>
+<td>Search a PROSITE motif database with a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="pepcoil.html">pepcoil</a></td>
+<td>Predicts coiled coil regions</td>
+</tr>
+
+<tr>
+<td><a href="preg.html">preg</a></td>
+<td>Regular expression search of a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="pscan.html">pscan</a></td>
+<td>Scans proteins using PRINTS</td>
+</tr>
+
+<tr>
+<td><a href="sigcleave.html">sigcleave</a></td>
+<td>Reports protein signal cleavage sites</td>
+</tr>
+
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
+
+<p>
+Original program "ANTIGENIC" by Peter Rice (EGCG 1991)
+
+Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+<H2>
+    History
+</H2>
+
+
+<p>
+Completed 9th March 1999
+
+
+<H2>
+    Target users
+</H2>
+
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+
+<H2>
+    Comments
+</H2>
+None
+
+
+
+</BODY>
+</HTML>
+

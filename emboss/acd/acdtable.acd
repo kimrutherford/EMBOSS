@@ -1,0 +1,5 @@
+application: acdtable [
+  documentation: "Creates an HTML table from an ACD file"
+  gui: "no"
+  groups: "Acd"
+]

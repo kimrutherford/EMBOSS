@@ -1,0 +1,139 @@
+
+                                prosextract 
+
+
+
+Function
+
+   Build the PROSITE motif database for use by patmatmotifs
+
+Description
+
+   Takes the IDentity, ACcession number and motif PAttern line contents
+   from prosite entries. Also converts the PAttern into a regular
+   expression and writes these four pieces to an output file - defaulted
+   to be called 'prosite.lines'.
+
+Usage
+
+   Here is a sample session with prosextract
+
+
+% prosextract 
+Build the PROSITE motif database for use by patmatmotifs
+PROSITE database directory [.]: 
+
+   Go to the output files for this example
+
+   The output files named after the prosite accession numbers can now
+   also be seen in the prosite directory. This files are automatically
+   created after prosextract is run.
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-prositedir]        directory  PROSITE database directory
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers: (none)
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+                 Standard (Mandatory) qualifiers      Allowed values Default
+   [-prositedir]
+   (Parameter 1) PROSITE database directory Directory
+                 Additional (Optional) qualifiers     Allowed values Default
+                 (none)
+                 Advanced (Unprompted) qualifiers     Allowed values Default
+                 (none)
+
+Input file format
+
+   These files must be the "prosite.dat" and "prosite.doc" file of a
+   Prosite distribution, containing all current prosite data.
+
+Output file format
+
+   These files are held in the prosite subdirectory of the emboss data
+   directory. The default names are "prosite.lines" and "PS*****"
+   (accession number documentation files)
+
+  Output files for usage example
+
+  Directory: PROSITE
+
+   This directory contains output files.
+
+Data files
+
+   See Input file format above.
+
+Notes
+
+   This program is most useful when used as a prerequisite for
+   patmatmotifs.
+
+References
+
+    1. Bairoch, A., Bucher P. (1994) PROSITE: recent developments.
+       Nucleic Acids Research, Vol 22, No.17 3583-3589.
+    2. Bairoch, A., (1992) PROSITE: a dictionary of sites and patterns in
+       proteins. Nucleic Acids Research, Vol 20, Supplement, 2013-2018.
+    3. Peek, J., O'Reilly, T., Loukides, M., (1997) Unix Power Tools, 2nd
+       Edition.
+
+Warnings
+
+   The program will warn the user if the input file is incorrectly
+   formatted.
+
+Diagnostic Error Messages
+
+   As in warnings.
+
+Exit status
+
+   Always exits with status 0
+
+Known bugs
+
+See also
+
+    Program name         Description
+   aaindexextract Extract data from AAINDEX
+   cutgextract    Extract data from CUTG
+   printsextract  Extract data from PRINTS
+   rebaseextract  Extract data from REBASE
+   tfextract      Extract data from TRANSFAC
+
+Author(s)
+
+   Sinead O'Leary (current e-mail address unknown)
+   while she was at:
+   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+
+History
+
+   Completed March 24 1999.
+
+Target users
+
+   This program is intended to be used by administrators responsible for
+   software and database installation and maintenance.
+
+Comments
+
+   None

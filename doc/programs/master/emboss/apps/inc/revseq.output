@@ -1,0 +1,54 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: x65923.rev</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X65923 X65923.1 H.sapiens fau mRNA
+ttttttttttgactgaactaagtggcttttttattagagaaagccagaattacaaaagac
+ttaagagttggcattggggcccttcttcttgccaaaggtgggcacaacgttgacaaagcg
+ccggttgtactgcatccgccgcttagcccgacctgtcttcttcttcttcttctcctgttt
+ggccaccttaggagtctgacctctcacttttccagcacgggccagggaaccatgaacttt
+acctccaagcatgcggcctgctacttccagggtagtcagggcctccaccccgcactggcc
+cagagtggcctcatcctccaggggcgcgcctgccaggagcacgacttgatcttccggggc
+aatgccctccagtgaggctacatgagccttgatctgggcgaccgtttcctggccggtcac
+ctcgaaggtgtgtagctcctgggcgcggacaaagagctgcatattggcgactgaacggcg
+gtcccagctaccgcgaagatggagtcgagaaagaggaa
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: x65923.rev</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X65923 X65923.1 H.sapiens fau mRNA
+aaggagaaagagctgaggtagaagcgccatcgaccctggcggcaagtcagcggttatacg
+tcgagaaacaggcgcgggtcctcgatgtgtggaagctccactggccggtcctttgccagc
+gggtctagttccgagtacatcggagtgacctcccgtaacggggccttctagttcagcacg
+aggaccgtccgcgcggggacctcctactccggtgagacccggtcacgccccacctccggg
+actgatgggaccttcatcgtccggcgtacgaacctccatttcaagtaccaagggaccggg
+cacgaccttttcactctccagtctgaggattccaccggtttgtcctcttcttcttcttct
+tctgtccagcccgattcgccgcctacgtcatgttggccgcgaaacagttgcaacacgggt
+ggaaaccgttcttcttcccggggttacggttgagaattcagaaaacattaagaccgaaag
+agattattttttcggtgaatcaagtcagtttttttttt
+</pre>
+</td></tr></table><p>
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: x65923.rev</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X65923 X65923.1 H.sapiens fau mRNA
+aaaaaaaaaactgacttgattcaccgaaaaaataatctctttcggtcttaatgttttctg
+aattctcaaccgtaaccccgggaagaagaacggtttccacccgtgttgcaactgtttcgc
+ggccaacatgacgtaggcggcgaatcgggctggacagaagaagaagaagaagaggacaaa
+ccggtggaatcctcagactggagagtgaaaaggtcgtgcccggtcccttggtacttgaaa
+tggaggttcgtacgccggacgatgaaggtcccatcagtcccggaggtggggcgtgaccgg
+gtctcaccggagtaggaggtccccgcgcggacggtcctcgtgctgaactagaaggccccg
+ttacgggaggtcactccgatgtactcggaactagacccgctggcaaaggaccggccagtg
+gagcttccacacatcgaggacccgcgcctgtttctcgacgtataaccgctgacttgccgc
+cagggtcgatggcgcttctacctcagctctttctcctt
+</pre>
+</td></tr></table><p>

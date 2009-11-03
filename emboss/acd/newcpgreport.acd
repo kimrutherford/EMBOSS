@@ -1,0 +1,75 @@
+application: newcpgreport [
+  documentation: "Report CpG rich areas"
+  groups: "Nucleic:CpG Islands"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "DNA"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: window [
+    standard: "Y"
+    minimum: "1"
+    maximum: "$(sequence.end)"
+    default: "100"
+    information: "Window size"
+  ]
+
+  integer: shift [
+    standard: "Y"
+    minimum: "1"
+    maximum: "$(window)"
+    default: "1"
+    information: "Shift increment"
+  ]
+
+  integer: minlen [
+    standard: "Y"
+    minimum: "1"
+    maximum: "$(sequence.end)"
+    default: "200"
+    information: "Minimum Length"
+  ]
+
+  float: minoe [
+    standard: "Y"
+    minimum: "0."
+    maximum: "10."
+    default: "0.6"
+    information: "Minimum observed/expected"
+  ]
+
+  float: minpc [
+    standard: "Y"
+    minimum: "0."
+    maximum: "100."
+    default: "50."
+    information: "Minimum percentage"
+  ]
+
+endsection: required
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    knowntype: "newcpgreport output"
+  ]
+
+endsection: output

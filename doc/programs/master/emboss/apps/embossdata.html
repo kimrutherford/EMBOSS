@@ -1,0 +1,181 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: embossdata
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+embossdata
+<!--#include file="header2.inc" -->
+
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/embossdata.ione" -->
+
+<H2>
+    Description
+</H2>
+
+This is a utility to indicate which directories can hold EMBOSS
+data files and what the names of these files are. 
+<p>
+
+The names of EMBOSS data files all start with the character 'E', by
+convention, to distinguish them somewhat from any other files,
+especially files in your home directory. 
+
+<p>
+EMBOSS data files are read in by assorted EMBOSS programs, for
+example the files holding the various genetic codes to translate from
+nucleic acid codons to amino acids are held in files called "EGC.0",
+"EGC.1", "EGC.2", etc.  These files normally are kept in a standard data
+directory under the EMBOSS package installation position:
+".../emboss/emboss/data/".  When EMBOSS programs require a data file,
+they search for it, in order, through the following set of
+directories:
+
+<ul>
+<li> The current directory
+<li> '.embossdata' in the current directory
+<li> Your home directory
+<li> '.embossdata' in your home directory
+<li> The EMBOSS standard data directory
+</ul>
+<p>
+If a data file is placed in the current directory, EMBOSS
+programs will use it in preference to the file of the same name in the
+EMBOSS standard data directory.  Thus if you wish to modify a
+data file to change the behaviour of an EMBOSS program, you
+should obtain it from the EMBOSS standard data directory, edit it, and
+place it in one of the other directories, such as the current directory
+or your home directory. 
+
+<p>
+The program embossdata is a utility to enable you to check on
+the location of the directories which could hold data files, to display
+the names of data files in those directories and to make local copies
+of the data files from the EMBOSS standard data directory in
+order for you to modify them. 
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/embossdata.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/embossdata.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/embossdata.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+
+None.
+
+<p>
+<!--#include file="inc/embossdata.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+
+All output is to stdout by default.
+
+<p>
+<!--#include file="inc/embossdata.output" -->
+
+<H2>
+    Data files
+</H2>
+
+
+No data files are read by this program.
+	
+<H2>
+    Notes
+</H2>
+
+
+None.
+
+<H2>
+    References
+</H2>
+
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+When copying a file, this program will report if the file has
+been copied successfully, e.g.:
+
+<pre>
+"'Epepcoil.dat' has been copied successfully."
+</pre>
+
+<H2>
+    Exit status
+</H2>
+
+
+It always exits with status 0
+
+<H2>
+    Known bugs
+</H2>
+
+
+None noted.
+
+<!--#include file="inc/embossdata.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/gwilliam.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/embossdata.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/embossdata.comment" -->
+
+</BODY>
+</HTML>
+

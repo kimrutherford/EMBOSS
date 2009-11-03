@@ -1,0 +1,102 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:Z46957' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:Z46957</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   Z46957; SV 1; linear; mRNA; STD; ROD; 1493 BP.
+XX
+AC   Z46957;
+XX
+DT   20-DEC-1994 (Rel. 42, Created)
+DT   18-APR-2005 (Rel. 83, Last updated, Version 9)
+XX
+DE   R.norvegicus mRNA for rhodopsin.
+XX
+KW   rhodopsin.
+XX
+OS   Rattus norvegicus (Norway rat)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea;
+OC   Muridae; Murinae; Rattus.
+XX
+RN   [1]
+RP   1-1493
+RX   DOI; 10.1074/jbc.271.20.11710.
+RX   PUBMED; 8662634.
+RA   Huber A., Sander P.H., Paulsen R.;
+RT   "Phosphorylation of the InaD gene product, a photoreceptor membrane protein
+RT   required for recovery of visual excitation";
+RL   J. Biol. Chem. 271(20):11710-11717(1996).
+XX
+RN   [2]
+RP   1-1493
+RA   Huber A.;
+RT   ;
+RL   Submitted (20-DEC-1994) to the EMBL/GenBank/DDBJ databases.
+RL   Huber A., Universitaet Karlsruhe, Zoologie I, Kornblumenstr. 13, 76128
+RL   Karlsruhe, Germany
+XX
+DR   EMBL-ALIGN; ALIGN_000323.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1493
+FT                   /organism="Rattus norvegicus"
+FT                   /strain="Sprague-Dawley"
+FT                   /mol_type="mRNA"
+FT                   /dev_stage="adult"
+FT                   /clone_lib="rat retinal library"
+FT                   /clone="pRO4"
+FT                   /cell_type="rod"
+FT                   /tissue_type="retina"
+FT                   /db_xref="taxon:10116"
+FT   5'UTR           1..83
+FT   CDS             84..1130
+FT                   /product="rhodopsin"
+FT                   /function="phototransduction"
+FT                   /db_xref="GOA:P51489"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P51489"
+FT                   /citation=[1]
+FT                   /protein_id="CAA87081.1"
+FT                   /translation="MNGTEGPNFYVPFSNITGVVRSPFEQPQYYLAEPWQFSMLAAYMF
+FT                   LLIVLGFPINFLTLYVTVQHKKLRTPLNYILLNLAVADLFMVFGGFTTTLYTSLHGYFV
+FT                   FGPTGCNLEGFFATLGGEIGLWSLVVLAIERYVVVCKPMSNFRFGENHAIMGVAFTWVM
+FT                   ALACAAPPLVGWSRYIPEGMQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIPMIVIFFC
+FT                   YGQLVFTVKEAAAQQQESATTQKAEKEVTRMVIIMVIFFLICWLPYASVAMYIFTHQGS
+FT                   NFGPIFMTLPAFFAKTASIYNPIIYIMMNKQFRNCMLTTLCCGKNPLGDDEASATASKT
+FT                   ETSQVAPA"
+FT   3'UTR           1128..1493
+XX
+SQ   Sequence 1493 BP; 309 A; 475 C; 365 G; 344 T; 0 other;
+     ggagccgtag gtagctgagc tcgccaggca gccttggtct ctgtctacga acagcccgtg        60
+     gggcagcctc aagggccgca gccatgaacg gcacagaggg ccccaatttt tatgtgccct       120
+     tctccaacat cacgggcgtg gtgcgcagcc cctttgagca gccgcagtac tacctggcgg       180
+     agccatggca gttctccatg ctggcagcct acatgttcct gctcatcgtg ctgggcttcc       240
+     ccatcaactt cctcacgctc tacgtcaccg tacagcacaa gaagctgcgc acaccactca       300
+     actacatcct gctcaacttg gctgtggctg acctcttcat ggtcttcgga ggattcacca       360
+     ccaccctcta cacctcactg catggctact ttgtctttgg gcccacaggc tgcaaccttg       420
+     agggcttctt tgccaccctt ggaggtgaaa tcggcctgtg gtccctggta gtcctggcca       480
+     ttgagcgcta cgtggtggtc tgcaagccca tgagcaactt ccgctttggg gagaatcatg       540
+     ccattatggg tgtggccttc acctgggtca tggcgttggc ctgtgctgct cccccactgg       600
+     ttggctggtc caggtacatc cccgagggca tgcagtgttc atgtgggatt gactactata       660
+     cactcaagcc tgaggtcaac aatgagtcct tcgtcatcta catgttcgtg gtccacttca       720
+     ccatccccat gatcgtcatc ttcttctgct acgggcagct ggtcttcacc gtcaaggagg       780
+     ccgccgccca gcaacaggag tcggctacca ctcagaaggc agagaaggaa gtcacgcgca       840
+     tggtcatcat catggtcatc ttcttcctga tctgctggct tccctatgcc agtgtggcca       900
+     tgtacatctt tacccaccag ggctccaact tcggccccat cttcatgacc cttcccgctt       960
+     tctttgctaa gaccgcctcc atctacaacc caatcatcta catcatgatg aacaagcagt      1020
+     tccggaactg catgctcacc acgctctgct gcggcaagaa tccactggga gatgatgagg      1080
+     cctctgccac tgcctccaag acggagacca gccaggtggc tccagcctaa gcctggccag      1140
+     agactgtggc tgactgtagg agtctcctgt ccccactcac cccagccaca gcccccacca      1200
+     ggagcagcac ccgttggaat gaggtcatgc aggctccctc agtgttcttt tctttgtttt      1260
+     taatgaattc atgaaagcaa aatgaggctc cccactcaac agggacagcc tgacaaagga      1320
+     catccatcca ccaagacccc cagcctggag tccccaattc ccgggggcca gcgggatctg      1380
+     tacccctccc ctcagcttgt gtctcaggaa catgacaagt gtcccggctt acggctaagt      1440
+     gtctaggaca gaatggaaca catagtagct gattaataaa tgctacctgg atg             1493
+//
+</pre>
+</td></tr></table><p>

@@ -1,0 +1,26 @@
+# Example ACD file for QA testing
+#
+
+appl: calcparam [ groups: "test" doc: "ACD file for QA testing" ]
+
+sequence: asequence [ param: Y features: Y ]
+
+sequence: bsequence [ param: Y ]
+
+outfile: outfile [ param: Y ]
+
+int: aint [ prompt: "first integer" ]
+
+int: bint [ prompt: "second integer" def: 57 ]
+
+string: testalen [ standard: Y info: "asequence length $(asequence.length)" ]
+
+string: testblen [ standard: "@(!$(aint))" info: "bsequence length $(bsequence.length)" ]
+
+string: outdir [ info: "output directory" ]
+
+outfile: outtest [ param: "@(!$(aint))" odirectory: "$(outdir)" ]
+
+seqout: outseq [ param: Y features: Y
+	         osdirectory: "$(outdir)"  ofdirectory: "$(outdir)"
+               ]

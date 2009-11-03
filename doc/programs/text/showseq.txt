@@ -1,0 +1,1333 @@
+
+                                  showseq 
+
+
+
+Function
+
+   Display a sequence with features, translation etc
+
+Description
+
+   showseq displays a protein or a nucleic acid sequence in a style
+   suitable for publication.
+
+   The output is sent to the screen by default for the user to view, but
+   it can write the results to a file.
+
+   The display style of the output is very flexible. The user can select
+   a style from the pre-set choice of formats, or can design a style to
+   suit their purposes and aesthetic tastes.
+
+   If designing a new format, you can choose the order in which things
+   are printed around the sequence. The things that you can display are:
+
+s       Sequence
+b       Blank line
+1       Frame 1 translation
+2       Frame 2 translation
+3       Frame 3 translation
+-1      Frame -1 translation
+-2      Frame -2 translation
+-2      Frame -3 translation
+t       Ticks line
+n       Number ticks line
+c       Complement sequence
+f       Features (from the feature table or from a command line -ufo file)
+r       Restriction enzyme cut sites in the forward sense
+-r      Restriction enzyme cut sites in the reverse sense
+a       User Annotation
+
+   The letters for these things can be in upper or lower case.
+   They can be displayed in any order.
+
+   You do not have to make your own format; there is a selection of
+   pre-defined standard formats for you to choose from.
+
+   The default standard format displays the following: for every new line
+   that the sequence starts to write, the output display will contain
+   first a blank line ('b'), then the position numbers of the ticks ('n')
+   then the ticks every 10 characters ('t') then the sequence itself
+   ('s') then any user-supplied annotation ('a') then the features from
+   the feature table ('f'). Subsequent lines of the sequence output will
+   repeat this format.
+
+   The 'thing' codes used in the list of standard formats are:
+
+Sequence only:                  S A
+Default sequence:               B N T S A F
+Pretty sequence:                B N T S A
+One frame translation:          B N T S B 1 A F
+Three frame translations:       B N T S B 1 2 3 A F
+Six frame translations:         B N T S B 1 2 3 T -3 -2 -1 A F
+Restriction enzyme map:         B R S N T C -R B 1 2 3 T -3 -2 -1 A
+Baroque:                        B 1 2 3 N T R S T C -R T -3 -2 -1 A F
+
+   The displayed sequence can be numbered either by numbering the start
+   and ending positions, or by placing a ruler with ticks above or below
+   the sequence.
+
+   The width of a line can be set. The width of a margin around the
+   sequence reserved for numbering can be set. The initial position to
+   start numbering from can be set.
+
+   The sequence can be translated, using the selectable genetic code
+   tables. The translation can be done in one, three or six frames. The
+   translation can be displayed in one-letter or three-letter amino acid
+   codes. The translation can optionally be displayed only when it is in
+   open reading frames (ORFs) of a specified minimum size. One or more
+   specified regions of the sequence can be individually translated.
+
+   Specified regions of the sequence can be displayed in uppercase to
+   highlight them.
+
+   The output can be formatted for HTML.
+
+   If the output is being formatted for HTML, then specified regions of
+   the sequence can be displayed in any valid HTML colours.
+
+   The Restriction Enzyme database (REBASE) is a collection of
+   information about restriction enzymes and related proteins. It
+   contains published and unpublished references, recognition and
+   cleavage sites, isoschizomers, commercial availability, methylation
+   sensitivity, crystal and sequence data. DNA methyltransferases, homing
+   endonucleases, nicking enzymes, specificity subunits and control
+   proteins are also included. Most recently, putative DNA
+   methyltransferases and restriction enzymes, as predicted from analysis
+   of genomic sequences, are also listed.
+
+   The home page of REBASE is: http://rebase.neb.com/
+
+   This program can use REBASE data to find the recognition sites and/or
+   cut sites of restriction enzymes in a nucleic acid sequence.
+
+   This program can display the cut sites on both strands.
+
+   One potentially very useful option is '-flatreformat' that displays
+   not only the cut sites which many other restriction cut-site programs
+   will show, but also shows the recognition site.
+
+   If the sequence is in EMBL, Genbank or SwissProt format, the feature
+   table of the sequence can be dispalyed with the sequence. GFF file
+   features can also be displayed if they are included on the command
+   line with the -ufo=file qualifier.
+
+Usage
+
+   Here is a sample session with showseq
+
+
+% showseq tembl:x13776 -sbeg 1 -send 100 
+Display a sequence with features, translation etc..
+Things to display
+         0 : Enter your own list of things to display
+         1 : Sequence only
+         2 : Default sequence with features
+         3 : Pretty sequence
+         4 : One frame translation
+         5 : Three frame translations
+         6 : Six frame translations
+         7 : Restriction enzyme map
+         8 : Baroque
+Display format [2]: 
+Output file [x13776.showseq]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+   Example 2
+
+   The standard list of output formats are only a small selection of the
+   possible ways in which a sequence might be displayed. Precise control
+   over the output format is acheived by selecting the qualifier '-format
+   0' (Option 0 in the list of things to display). For example, by
+   choosing format '0' and then specifying that we want to display the
+   things: 'b,s,t,c', we will output the sequence in the following way:
+
+
+% showseq tembl:x13776 -sbeg 1 -send 120 
+Display a sequence with features, translation etc..
+Things to display
+         0 : Enter your own list of things to display
+         1 : Sequence only
+         2 : Default sequence with features
+         3 : Pretty sequence
+         4 : One frame translation
+         5 : Three frame translations
+         6 : Six frame translations
+         7 : Restriction enzyme map
+         8 : Baroque
+Display format [2]: 0
+Specify your own things to display
+         S : Sequence
+         B : Blank line
+         1 : Frame1 translation
+         2 : Frame2 translation
+         3 : Frame3 translation
+        -1 : CompFrame1 translation
+        -2 : CompFrame2 translation
+        -3 : CompFrame3 translation
+         T : Ticks line
+         N : Number ticks line
+         C : Complement sequence
+         F : Features
+         R : Restriction enzyme cut sites in forward sense
+        -R : Restriction enzyme cut sites in reverse sense
+         A : Annotation
+Enter a list of things to display [B,N,T,S,A,F]: b,s,t,c
+Output file [x13776.showseq]: 
+
+   Go to the output files for this example
+
+   Example 3
+
+   Display only the sequence:
+
+
+% showseq tembl:x13776 -sbeg 1 -send 100 -noname -nodesc -format 0 -thing S 
+Display a sequence with features, translation etc..
+Output file [x13776.showseq]: 
+
+   Go to the output files for this example
+
+   Example 4
+
+   Protein sequence can be displayed in three-letter codes. (The codes
+   are displayed downwards, so the first code is 'Met'):
+
+
+% showseq tsw:rs24_fugru -three -format 2 
+Display a sequence with features, translation etc..
+Output file [rs24_fugru.showseq]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+   Example 5
+
+   Number the sequence lines in the margin:
+
+
+% showseq tembl:x13776 -sbeg 1 -send 100 -format 1 -number 
+Display a sequence with features, translation etc..
+Output file [x13776.showseq]: 
+
+   Go to the output files for this example
+
+   Example 6
+
+   Start the numbering at a specified value ('123' in this case):
+
+
+% showseq tembl:x13776 -sbeg 1 -send 100 -format 1 -number -offset 123 
+Display a sequence with features, translation etc..
+Output file [x13776.showseq]: 
+
+   Go to the output files for this example
+
+   Example 7
+
+   Make selected regions uppercase. (Use '-slower' to force the rest of
+   the sequence to be lowercase).
+
+
+% showseq tembl:x13776 -sbeg 1 -send 100 -format 1 -slower -upper '25-45,101-20
+3,333-362' 
+Display a sequence with features, translation etc..
+Output file [x13776.showseq]: 
+
+   Go to the output files for this example
+
+   Example 8
+
+   Translate selected regions:
+
+
+% showseq tembl:x13776 -sbeg 1 -send 120 -format 4 -trans 25-49,66-76 
+Display a sequence with features, translation etc..
+Output file [x13776.showseq]: 
+
+   Go to the output files for this example
+
+   Example 9
+
+   Add your own annotation to the display:
+
+
+% showseq tembl:x13776 -sbeg 1 -send 100 -format 2 -send 120 -annotation '13-26
+ binding site 15-15 SNP' 
+Display a sequence with features, translation etc..
+Output file [x13776.showseq]: 
+
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-sequence]          seqall     (Gapped) sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -format             menu       [2] Display format (Values: 0 (Enter your
+                                  own list of things to display); 1 (Sequence
+                                  only); 2 (Default sequence with features); 3
+                                  (Pretty sequence); 4 (One frame
+                                  translation); 5 (Three frame translations);
+                                  6 (Six frame translations); 7 (Restriction
+                                  enzyme map); 8 (Baroque))
+*  -things             menu       [B,N,T,S,A,F] Specify a list of one or more
+                                  code characters in the order in which you
+                                  wish things to be displayed one above the
+                                  other down the page. For example if you wish
+                                  to see things displayed in the order:
+                                  sequence, complement sequence, ticks line,
+                                  frame 1 translation, blank line; then you
+                                  should enter 'S,C,T,1,B'. (Values: S
+                                  (Sequence); B (Blank line); 1 (Frame1
+                                  translation); 2 (Frame2 translation); 3
+                                  (Frame3 translation); -1 (CompFrame1
+                                  translation); -2 (CompFrame2 translation);
+                                  -3 (CompFrame3 translation); T (Ticks line);
+                                  N (Number ticks line); C (Complement
+                                  sequence); F (Features); R (Restriction
+                                  enzyme cut sites in forward sense); -R
+                                  (Restriction enzyme cut sites in reverse
+                                  sense); A (Annotation))
+  [-outfile]           outfile    [*.showseq] Output file name
+
+   Additional (Optional) qualifiers:
+   -translate          range      [If this is left blank the complete sequence
+                                  is translated.] Regions to translate (if
+                                  translating).
+                                  If this is left blank the complete sequence
+                                  is translated.
+                                  A set of regions is specified by a set of
+                                  pairs of positions.
+                                  The positions are integers.
+                                  They are separated by any non-digit,
+                                  non-alpha character.
+                                  Examples of region specifications are:
+                                  24-45, 56-78
+                                  1:45, 67=99;765..888
+                                  1,5,8,10,23,45,57,99
+   -uppercase          range      [If this is left blank, then the sequence
+                                  case is left alone.] Regions to put in
+                                  uppercase.
+                                  If this is left blank, then the sequence
+                                  case is left alone.
+                                  A set of regions is specified by a set of
+                                  pairs of positions.
+                                  The positions are integers.
+                                  They are separated by any non-digit,
+                                  non-alpha character.
+                                  Examples of region specifications are:
+                                  24-45, 56-78
+                                  1:45, 67=99;765..888
+                                  1,5,8,10,23,45,57,99
+   -highlight          range      [(full sequence)] Regions to colour if
+                                  formatting for HTML.
+                                  If this is left blank, then the sequence is
+                                  left alone.
+                                  A set of regions is specified by a set of
+                                  pairs of positions.
+                                  The positions are integers.
+                                  They are followed by any valid HTML font
+                                  colour.
+                                  Examples of region specifications are:
+                                  24-45 blue 56-78 orange
+                                  1-100 green 120-156 red
+                                  A file of ranges to colour (one range per
+                                  line) can be specified as '@filename'.
+   -annotation         range      [If this is left blank, then no annotation
+                                  is added.] Regions to annotate by marking.
+                                  If this is left blank, then no annotation is
+                                  added.
+                                  A set of regions is specified by a set of
+                                  pairs of positions followed by optional
+                                  text.
+                                  The positions are integers.
+                                  They are followed by any text (but not
+                                  digits when on the command-line).
+                                  Examples of region specifications are:
+                                  24-45 new domain 56-78 match to Mouse
+                                  1-100 First part 120-156 oligo
+                                  A file of ranges to annotate (one range per
+                                  line) can be specified as '@filename'.
+   -enzymes            string     [all] The name 'all' reads in all enzyme
+                                  names from the REBASE database. You can
+                                  specify enzymes by giving their names with
+                                  commas between then, such as:
+                                  'HincII,hinfI,ppiI,hindiii'.
+                                  The case of the names is not important. You
+                                  can specify a file of enzyme names to read
+                                  in by giving the name of the file holding
+                                  the enzyme names with a '@' character in
+                                  front of it, for example, '@enz.list'.
+                                  Blank lines and lines starting with a hash
+                                  character or '!' are ignored and all other
+                                  lines are concatenated together with a comma
+                                  character ',' and then treated as the list
+                                  of enzymes to search for.
+                                  An example of a file of enzyme names is:
+                                  ! my enzymes
+                                  HincII, ppiII
+                                  ! other enzymes
+                                  hindiii
+                                  HinfI
+                                  PpiI (Any string is accepted)
+   -table              menu       [0] Genetic code to use (Values: 0
+                                  (Standard); 1 (Standard (with alternative
+                                  initiation codons)); 2 (Vertebrate
+                                  Mitochondrial); 3 (Yeast Mitochondrial); 4
+                                  (Mold, Protozoan, Coelenterate Mitochondrial
+                                  and Mycoplasma/Spiroplasma); 5
+                                  (Invertebrate Mitochondrial); 6 (Ciliate
+                                  Macronuclear and Dasycladacean); 9
+                                  (Echinoderm Mitochondrial); 10 (Euplotid
+                                  Nuclear); 11 (Bacterial); 12 (Alternative
+                                  Yeast Nuclear); 13 (Ascidian Mitochondrial);
+                                  14 (Flatworm Mitochondrial); 15
+                                  (Blepharisma Macronuclear); 16
+                                  (Chlorophycean Mitochondrial); 21 (Trematode
+                                  Mitochondrial); 22 (Scenedesmus obliquus);
+                                  23 (Thraustochytrium Mitochondrial))
+   -matchsource        string     [*] By default any feature source in the
+                                  feature table is shown. You can set this to
+                                  match any feature source you wish to show.
+                                  The source name is usually either the name
+                                  of the program that detected the feature or
+                                  it is the feature table (eg: EMBL) that the
+                                  feature came from.
+                                  The source may be wildcarded by using '*'.
+                                  If you wish to show more than one source,
+                                  separate their names with the character '|',
+                                  eg:
+                                  gene* | embl (Any string is accepted)
+   -matchtype          string     [*] By default any feature type in the
+                                  feature table is shown. You can set this to
+                                  match any feature type you wish to show.
+                                  See http://www3.ebi.ac.uk/Services/WebFeat/
+                                  for a list of the EMBL feature types and see
+                                  Appendix A of the Swissprot user manual in
+                                  http://www.expasy.ch/txt/userman.txt for a
+                                  list of the Swissprot feature types.
+                                  The type may be wildcarded by using '*'.
+                                  If you wish to show more than one type,
+                                  separate their names with the character '|',
+                                  eg:
+                                  *UTR | intron (Any string is accepted)
+   -matchsense         integer    [0 - any sense, 1 - forward sense, -1 -
+                                  reverse sense] By default any feature type
+                                  in the feature table is shown. You can set
+                                  this to match any feature sense you wish to
+                                  show. 0 - any sense, 1 - forward sense, -1 -
+                                  reverse sense (Any integer value)
+   -minscore           float      [0.0] If this is greater than or equal to
+                                  the maximum score, then any score is
+                                  permitted (Any numeric value)
+   -maxscore           float      [0.0] If this is less than or equal to the
+                                  maximum score, then any score is permitted
+                                  (Any numeric value)
+   -matchtag           string     [*] Tags are the types of extra values that
+                                  a feature may have. For example in the EMBL
+                                  feature table, a 'CDS' type of feature may
+                                  have the tags '/codon', '/codon_start',
+                                  '/db_xref', '/EC_number', '/evidence',
+                                  '/exception', '/function', '/gene',
+                                  '/label', '/map', '/note', '/number',
+                                  '/partial', '/product', '/protein_id',
+                                  '/pseudo', '/standard_name', '/translation',
+                                  '/transl_except', '/transl_table', or
+                                  '/usedin'. Some of these tags also have
+                                  values, for example '/gene' can have the
+                                  value of the gene name.
+                                  By default any feature tag in the feature
+                                  table is shown. You can set this to match
+                                  any feature tag you wish to show.
+                                  The tag may be wildcarded by using '*'.
+                                  If you wish to show more than one tag,
+                                  separate their names with the character '|',
+                                  eg:
+                                  gene | label (Any string is accepted)
+   -matchvalue         string     [*] Tag values are the values associated
+                                  with a feature tag. Tags are the types of
+                                  extra values that a feature may have. For
+                                  example in the EMBL feature table, a 'CDS'
+                                  type of feature may have the tags '/codon',
+                                  '/codon_start', '/db_xref', '/EC_number',
+                                  '/evidence', '/exception', '/function',
+                                  '/gene', '/label', '/map', '/note',
+                                  '/number', '/partial', '/product',
+                                  '/protein_id', '/pseudo', '/standard_name',
+                                  '/translation', '/transl_except',
+                                  '/transl_table', or '/usedin'. Only some of
+                                  these tags can have values, for example
+                                  '/gene' can have the value of the gene name.
+                                  By default any feature tag value in the
+                                  feature table is shown. You can set this to
+                                  match any feature tag valueyou wish to show.
+                                  The tag value may be wildcarded by using
+                                  '*'.
+                                  If you wish to show more than one tag value,
+                                  separate their names with the character
+                                  '|', eg:
+                                  pax* | 10 (Any string is accepted)
+   -stricttags         boolean    [N] By default if any tag/value pair in a
+                                  feature matches the specified tag and value,
+                                  then all the tags/value pairs of that
+                                  feature will be displayed. If this is set to
+                                  be true, then only those tag/value pairs in
+                                  a feature that match the specified tag and
+                                  value will be displayed.
+
+   Advanced (Unprompted) qualifiers:
+   -flatreformat       boolean    [N] This changes the output format to one
+                                  where the recognition site is indicated by a
+                                  row of '===' characters and the cut site is
+                                  pointed to by a '>' character in the
+                                  forward sense, or a '<' in the reverse sense
+                                  strand.
+   -mincuts            integer    [1] This sets the minimum number of cuts for
+                                  any restriction enzyme that will be
+                                  considered. Any enzymes that cut fewer times
+                                  than this will be ignored. (Integer from 1
+                                  to 1000)
+   -maxcuts            integer    [2000000000] This sets the maximum number of
+                                  cuts for any restriction enzyme that will
+                                  be considered. Any enzymes that cut more
+                                  times than this will be ignored. (Integer up
+                                  to 2000000000)
+   -sitelen            integer    [4] This sets the minimum length of the
+                                  restriction enzyme recognition site. Any
+                                  enzymes with sites shorter than this will be
+                                  ignored. (Integer from 2 to 20)
+   -single             boolean    [N] If this is set then this forces the
+                                  values of the mincuts and maxcuts qualifiers
+                                  to both be 1. Any other value you may have
+                                  set them to will be ignored.
+   -[no]blunt          boolean    [Y] This allows those enzymes which cut at
+                                  the same position on the forward and reverse
+                                  strands to be considered.
+   -[no]sticky         boolean    [Y] This allows those enzymes which cut at
+                                  different positions on the forward and
+                                  reverse strands, leaving an overhang, to be
+                                  considered.
+   -[no]ambiguity      boolean    [Y] This allows those enzymes which have one
+                                  or more 'N' ambiguity codes in their
+                                  pattern to be considered
+   -plasmid            boolean    [N] If this is set then this allows searches
+                                  for restriction enzyme recognition site and
+                                  cut postions that span the end of the
+                                  sequence to be considered.
+   -[no]commercial     boolean    [Y] If this is set, then only those enzymes
+                                  with a commercial supplier will be searched
+                                  for. This qualifier is ignored if you have
+                                  specified an explicit list of enzymes to
+                                  search for, rather than searching through
+                                  'all' the enzymes in the REBASE database. It
+                                  is assumed that, if you are asking for an
+                                  explicit enzyme, then you probably know
+                                  where to get it from and so all enzymes
+                                  names that you have asked to be searched
+                                  for, and which cut, will be reported whether
+                                  or not they have a commercial supplier.
+   -[no]limit          boolean    [Y] This limits the reporting of enzymes to
+                                  just one enzyme from each group of
+                                  isoschizomers. The enzyme chosen to
+                                  represent an isoschizomer group is the
+                                  prototype indicated in the data file
+                                  'embossre.equ', which is created by the
+                                  program 'rebaseextract'. If you prefer
+                                  different prototypes to be used, make a copy
+                                  of embossre.equ in your home directory and
+                                  edit it. If this value is set to be false
+                                  then all of the input enzymes will be
+                                  reported. You might like to set this to
+                                  false if you are supplying an explicit set
+                                  of enzymes rather than searching 'all' of
+                                  them.
+   -orfminsize         integer    [0] This sets the minimum size of Open
+                                  Reading Frames (ORFs) to display in the
+                                  translations. All other translation regions
+                                  are masked by changing the amino acids to
+                                  '-' characters. (Integer 0 or more)
+   -threeletter        boolean    [N] Display protein sequences in
+                                  three-letter code
+   -number             boolean    [N] Number the sequences
+   -width              integer    [60] Width of sequence to display (Integer 1
+                                  or more)
+   -length             integer    [0] Line length of page (0 for indefinite)
+                                  (Integer 0 or more)
+   -margin             integer    [10] Margin around sequence for numbering
+                                  (Integer 0 or more)
+   -[no]name           boolean    [Y] Set this to be false if you do not wish
+                                  to display the ID name of the sequence
+   -[no]description    boolean    [Y] Set this to be false if you do not wish
+                                  to display the description of the sequence
+   -offset             integer    [1] Offset to start numbering the sequence
+                                  from (Any integer value)
+   -html               boolean    [N] Use HTML formatting
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   showseq reads normal sequence USAs.
+
+  Input files for usage example
+
+   'tembl:x13776' is a sequence entry in the example nucleic acid
+   database 'tembl'
+
+  Database entry: tembl:x13776
+
+ID   X13776; SV 1; linear; genomic DNA; STD; PRO; 2167 BP.
+XX
+AC   X13776; M43175;
+XX
+DT   19-APR-1989 (Rel. 19, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 24)
+XX
+DE   Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+XX
+KW   aliphatic amidase regulator; amiC gene; amiR gene.
+XX
+OS   Pseudomonas aeruginosa
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
+OC   Pseudomonadaceae; Pseudomonas.
+XX
+RN   [1]
+RP   1167-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (16-DEC-1988) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
+.
+XX
+RN   [2]
+RP   1167-2167
+RX   DOI; 10.1016/0014-5793(89)80249-2.
+RX   PUBMED; 2495988.
+RA   Lowe N., Rice P.M., Drew R.E.;
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene of Pseudomona
+s
+RT   aeruginosa";
+RL   FEBS Lett. 246(1-2):39-43(1989).
+XX
+RN   [3]
+RP   1-1292
+RX   PUBMED; 1907262.
+RA   Wilson S., Drew R.;
+RT   "Cloning and DNA seqence of amiC, a new gene regulating expression of the
+RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
+RT   product.";
+RL   J. Bacteriol. 173(16):4914-4921(1991).
+XX
+RN   [4]
+RP   1-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
+.
+XX
+DR   GOA; Q51417.
+DR   UniProtKB/Swiss-Prot; Q51417; AMIS_PSEAE.
+XX
+
+
+  [Part of this file has been deleted for brevity]
+
+FT                   /replace=""
+FT                   /note="ClaI fragment deleted in pSW36,  constitutive
+FT                   phenotype"
+FT   misc_feature    1
+FT                   /note="last base of an XhoI site"
+FT   misc_feature    648..653
+FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 cause
+s
+FT                   constitutive expression of amiE"
+FT   conflict        1281
+FT                   /replace="g"
+FT                   /citation=[3]
+XX
+SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
+     ggtaccgctg gccgagcatc tgctcgatca ccaccagccg ggcgacggga actgcacgat        6
+0
+     ctacctggcg agcctggagc acgagcgggt tcgcttcgta cggcgctgag cgacagtcac       12
+0
+     aggagaggaa acggatggga tcgcaccagg agcggccgct gatcggcctg ctgttctccg       18
+0
+     aaaccggcgt caccgccgat atcgagcgct cgcacgcgta tggcgcattg ctcgcggtcg       24
+0
+     agcaactgaa ccgcgagggc ggcgtcggcg gtcgcccgat cgaaacgctg tcccaggacc       30
+0
+     ccggcggcga cccggaccgc tatcggctgt gcgccgagga cttcattcgc aaccgggggg       36
+0
+     tacggttcct cgtgggctgc tacatgtcgc acacgcgcaa ggcggtgatg ccggtggtcg       42
+0
+     agcgcgccga cgcgctgctc tgctacccga ccccctacga gggcttcgag tattcgccga       48
+0
+     acatcgtcta cggcggtccg gcgccgaacc agaacagtgc gccgctggcg gcgtacctga       54
+0
+     ttcgccacta cggcgagcgg gtggtgttca tcggctcgga ctacatctat ccgcgggaaa       60
+0
+     gcaaccatgt gatgcgccac ctgtatcgcc agcacggcgg cacggtgctc gaggaaatct       66
+0
+     acattccgct gtatccctcc gacgacgact tgcagcgcgc cgtcgagcgc atctaccagg       72
+0
+     cgcgcgccga cgtggtcttc tccaccgtgg tgggcaccgg caccgccgag ctgtatcgcg       78
+0
+     ccatcgcccg tcgctacggc gacggcaggc ggccgccgat cgccagcctg accaccagcg       84
+0
+     aggcggaggt ggcgaagatg gagagtgacg tggcagaggg gcaggtggtg gtcgcgcctt       90
+0
+     acttctccag catcgatacg cccgccagcc gggccttcgt ccaggcctgc catggtttct       96
+0
+     tcccggagaa cgcgaccatc accgcctggg ccgaggcggc ctactggcag accttgttgc      102
+0
+     tcggccgcgc cgcgcaggcc gcaggcaact ggcgggtgga agacgtgcag cggcacctgt      108
+0
+     acgacatcga catcgacgcg ccacaggggc cggtccgggt ggagcgccag aacaaccaca      114
+0
+     gccgcctgtc ttcgcgcatc gcggaaatcg atgcgcgcgg cgtgttccag gtccgctggc      120
+0
+     agtcgcccga accgattcgc cccgaccctt atgtcgtcgt gcataacctc gacgactggt      126
+0
+     ccgccagcat gggcggggga ccgctcccat gagcgccaac tcgctgctcg gcagcctgcg      132
+0
+     cgagttgcag gtgctggtcc tcaacccgcc gggggaggtc agcgacgccc tggtcttgca      138
+0
+     gctgatccgc atcggttgtt cggtgcgcca gtgctggccg ccgccggaag ccttcgacgt      144
+0
+     gccggtggac gtggtcttca ccagcatttt ccagaatggc caccacgacg agatcgctgc      150
+0
+     gctgctcgcc gccgggactc cgcgcactac cctggtggcg ctggtggagt acgaaagccc      156
+0
+     cgcggtgctc tcgcagatca tcgagctgga gtgccacggc gtgatcaccc agccgctcga      162
+0
+     tgcccaccgg gtgctgcctg tgctggtatc ggcgcggcgc atcagcgagg aaatggcgaa      168
+0
+     gctgaagcag aagaccgagc agctccagga ccgcatcgcc ggccaggccc ggatcaacca      174
+0
+     ggccaaggtg ttgctgatgc agcgccatgg ctgggacgag cgcgaggcgc accagcacct      180
+0
+     gtcgcgggaa gcgatgaagc ggcgcgagcc gatcctgaag atcgctcagg agttgctggg      186
+0
+     aaacgagccg tccgcctgag cgatccgggc cgaccagaac aataacaaga ggggtatcgt      192
+0
+     catcatgctg ggactggttc tgctgtacgt tggcgcggtg ctgtttctca atgccgtctg      198
+0
+     gttgctgggc aagatcagcg gtcgggaggt ggcggtgatc aacttcctgg tcggcgtgct      204
+0
+     gagcgcctgc gtcgcgttct acctgatctt ttccgcagca gccgggcagg gctcgctgaa      210
+0
+     ggccggagcg ctgaccctgc tattcgcttt tacctatctg tgggtggccg ccaaccagtt      216
+0
+     cctcgag                                                                216
+7
+//
+
+  Input files for usage example 4
+
+   'tsw:rs24_fugru' is a sequence entry in the example protein database
+   'tsw'
+
+  Database entry: tsw:rs24_fugru
+
+ID   RS24_FUGRU              Reviewed;         132 AA.
+AC   O42387;
+DT   15-JUL-1998, integrated into UniProtKB/Swiss-Prot.
+DT   01-JAN-1998, sequence version 1.
+DT   20-MAR-2007, entry version 25.
+DE   40S ribosomal protein S24.
+GN   Name=RPS24;
+OS   Fugu rubripes (Japanese pufferfish) (Takifugu rubripes).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Actinopterygii; Neopterygii; Teleostei; Euteleostei; Neoteleostei;
+OC   Acanthomorpha; Acanthopterygii; Percomorpha; Tetraodontiformes;
+OC   Tetradontoidea; Tetraodontidae; Takifugu.
+OX   NCBI_TaxID=31033;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RA   Crosio C., Cecconi F., Giorgi M., Amaldi F., Mariottini P.;
+RL   Submitted (SEP-1997) to the EMBL/GenBank/DDBJ databases.
+CC   -!- SIMILARITY: Belongs to the ribosomal protein S24e family.
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; AJ001398; CAA04728.1; -; Genomic_DNA.
+DR   Ensembl; NEWSINFRUG00000143641; Fugu rubripes.
+DR   LinkHub; O42387; -.
+DR   InterPro; IPR001976; Ribosomal_S24E.
+DR   PANTHER; PTHR10496; Ribosomal_S24E; 1.
+DR   Pfam; PF01282; Ribosomal_S24e; 1.
+DR   ProDom; PD006052; Ribosomal_S24E; 1.
+DR   PROSITE; PS00529; RIBOSOMAL_S24E; 1.
+KW   Ribonucleoprotein; Ribosomal protein.
+FT   CHAIN         1    132       40S ribosomal protein S24.
+FT                                /FTId=PRO_0000137627.
+SQ   SEQUENCE   132 AA;  15305 MW;  DC437F60F20C14F5 CRC64;
+     MNDTVTVRTR KFMTNRLLQR KQMVVDVLHP GKATVPKTEI REKLAKMYKT TPDVVFVFGF
+     RTQFGGGKTT GFAMVYDSLD YAKKNEPKHR LARHGLFEKK KTSRKQRKER KNRMKKVRGT
+     KKASVGASKK KD
+//
+
+   You can specifiy a file of ranges to display in uppercase by giving
+   the '-uppercase' qualifier the value '@' followed by the name of the
+   file containing the ranges. (eg: '-upper @myfile').
+
+   The format of the range file is:
+
+     * Comment lines start with '#' in the first column.
+     * Comment lines and blank lines are ignored.
+     * The line may start with white-space.
+     * There are two positive (integer) numbers per line separated by one
+       or more space or
+     * TAB characters.
+     * The second number must be greater or equal to the first number.
+     * There can be optional text after the two numbers to annotate the
+       line.
+     * White-space before or after the text is removed.
+
+   An example range file is:
+
+
+# this is my set of ranges
+12   23
+ 4   5       this is like 12-23, but smaller
+67   10348   interesting region
+
+   You can specifiy a file of ranges to highlight in a different colour
+   when outputting in HTML format (using the '-html' qualifier) by giving
+   the '-highlight' qualifier the value '@' followed by the name of the
+   file containing the ranges. (eg: '-highlight @myfile').
+
+   The format of this file is very similar to the format of the above
+   uppercase range file, except that the text after the start and end
+   positions is used as the HTML colour name. This colour name is used
+   'as is' when specifying the colour in HTML in a '' construct, (where
+   'xxx' is the name of the colour).
+
+   The standard names of HTML font colours are given in:
+   http://http://www.w3.org/TR/REC-html40/types.html and
+   http://www.ausmall.com.au/freegraf/ncolour2.htm and
+   http://mindprod.com/htmlcolours.html (amongst other places).
+
+   An example highlight range file is:
+
+
+# this is my set of ranges
+12   23         red
+ 4   5          darkturquoise
+67   10348      #FFE4E1
+
+   You can specifiy a file of ranges to annotate by giving the
+   '-annotate' qualifier the value '@' followed by the name of the file
+   containing the ranges. (eg: '-annotate @myfile').
+
+   The format of this file is very similar to the format of the above
+   highlight range file, except that the text after the start and end
+   positions is used as the displayed text of the annotated region.
+
+   An example annotation range file is:
+
+# this is my set of ranges
+12   23         exon 1
+ 4   5          CAP site
+67   10348      exon 2
+
+   You can specify a file of enzyme names to read in by giving the
+   '-enzymes' qualifier the name of the file holding the enzyme names
+   with a '@' character in front of it, for example, '@enz.list'.
+
+   Blank lines and lines starting with a '#' or '!' character are ignored
+   and all other lines are concatenated together with a comma character
+   ',' and then treated as the list of enzymes to search for.
+
+   An example of a file of enzyme names is:
+
+
+# my enzymes
+HincII, ppiI
+# other enzymes
+hindiii
+HinfI
+
+Output file format
+
+  Output files for usage example
+
+   Note that although we asked for the sequence display to end at
+   position '100', it has displayed the sequence up to the end of the
+   line - position '120'. This is a feature of this program to make the
+   display of things like restriction enzyme cutting sites easier.
+
+  File: x13776.showseq
+
+X13776
+Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
+regulation
+
+                   10        20        30        40        50        60
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat
+                 |===============|
+                 promoter note="proposed rpoN-dependent promoter"
+          |
+          misc_feature note="last base of an XhoI site"
+
+                   70        80        90        100
+          ----:----|----:----|----:----|----:----|
+          ctacctggcgagcctggagcacgagcgggttcgcttcgta
+              |===============|
+          promoter note="proposed rpoN-dependent promoter"
+
+  Output files for usage example 2
+
+  File: x13776.showseq
+
+X13776
+Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
+regulation
+
+          ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          ccatggcgaccggctcgtagacgagctagtggtggtcggcccgctgcccttgacgtgcta
+
+          ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          gatggaccgctcggacctcgtgctcgcccaagcgaagcatgccgcgactcgctgtcagtg
+
+  Output files for usage example 3
+
+  File: x13776.showseq
+
+          ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat
+          ctacctggcgagcctggagcacgagcgggttcgcttcgta
+
+  Output files for usage example 4
+
+  File: rs24_fugru.showseq
+
+RS24_FUGRU
+40S ribosomal protein S24.
+
+                   10        20        30        40        50        60
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          MAATVTVATALPMTAALLGALGMVVAVLHPGLATVPLTGIAGLLALMTLTTPAVVPVPGP
+          esshaharhryhehsreelryleaasaeirlylharyhllrlyelyeyyhhrsaahahlh
+          tnprlrlgrgsetrnguungsntllplusoysarlosruegusuastrsrroplleleye
+          |===========================================================
+          chain ftid="PRO_0000137627" note="40S ribosomal protein S24"
+
+                   70        80        90        100       110       120
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          ATGPGGGLTTGPAMVTASLATALLAGPLHALAAHGLPGLLLTSALGALGALAAMLLVAGT
+          rhlhlllyhhlhleayseesylyyslryirelrilehlyyyherylrylrysreyyarlh
+          grneyyysrryeatlrpruprassnuossguagsyueusssrrgsngsugsngtsslgyr
+          ============================================================
+          chain ftid="PRO_0000137627" note="40S ribosomal protein S24"
+
+                   130
+          ----:----|--
+          LLASVGASLLLA
+          yylealleyyys
+          ssarlyarsssp
+          ===========|
+          chain ftid="PRO_0000137627" note="40S ribosomal protein S24"
+
+  Output files for usage example 5
+
+  File: x13776.showseq
+
+X13776
+Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
+regulation
+        1 ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat 60
+       61 ctacctggcgagcctggagcacgagcgggttcgcttcgta 100
+
+  Output files for usage example 6
+
+  File: x13776.showseq
+
+X13776
+Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
+regulation
+      123 ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat 182
+      183 ctacctggcgagcctggagcacgagcgggttcgcttcgta 222
+
+  Output files for usage example 7
+
+  File: x13776.showseq
+
+X13776
+Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
+regulation
+          ggtaccgctggccgagcatctgctCGATCACCACCAGCCGGGCGAcgggaactgcacgat
+          ctacctggcgagcctggagcacgagcgggttcgcttcgta
+
+  Output files for usage example 8
+
+  File: x13776.showseq
+
+X13776
+Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
+regulation
+
+                   10        20        30        40        50        60
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat
+
+                                  R  S  P  P  A  G  R  R  V
+                 |===============|
+                 promoter note="proposed rpoN-dependent promoter"
+          |
+          misc_feature note="last base of an XhoI site"
+
+                   70        80        90        100       110       120
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac
+
+                 A  S  L
+              |===============|
+              promoter note="proposed rpoN-dependent promoter"
+
+  Output files for usage example 9
+
+  File: x13776.showseq
+
+X13776
+Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
+regulation
+
+                   10        20        30        40        50        60
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat
+                      |------------|
+                      binding site
+                        |
+                        SNP
+                 |===============|
+                 promoter note="proposed rpoN-dependent promoter"
+          |
+          misc_feature note="last base of an XhoI site"
+
+                   70        80        90        100       110       120
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac
+              |===============|
+              promoter note="proposed rpoN-dependent promoter"
+
+   Most of the variants of the output format have already been described
+   in the 'Description' and 'Usage' sections, but here is some more just
+   to fill out this section ;-)
+
+   The output format is extremely variable and under the control of the
+   qualifiers used.
+
+   The sequence can be formatted for HTML display by using the '-html'
+   qualifier. The top and tail html tags <HEAD>, <BODY> etc. are not
+   included as it is expected that the output of this program will be
+   included in a more extensive HTML page and so these parts are left to
+   the user to provide.
+
+   The name of the sequence is displayed, followed by the description of
+   the sequence. These can be turned off with the '-noname' and
+   '-nodescription' qualifiers.
+
+   Then the sequence is output, one line at a time. Any associated
+   information to be displayed is also output above and below the
+   sequence line, as specified by the '-format' and or '-things'
+   qualifiers. (See the 'Description' section for detals).
+
+   The margins around the sequence are specified by the use of the
+   '-margin' qaulifier and any numbering of the sequence and its
+   translations are placed in the margin.
+
+   A display of the restriction enzyme cut sites can be selected via
+   '-format 6' option or the '-format 0 -thing b,r,s,-r' style of
+   options.
+
+   The option '-format 7' will produce a formatted display of cut sites
+   on the sequence, with the six-frame translation below it. The cut
+   sites are indicated by a slash character '\' that points to the
+   poition between the nucleotides where the cuts occur. Cuts by many
+   enzymes at the same position are indicated by stacking the enzyme
+   names on top of each other.
+
+   At the end the section header 'Enzymes that cut' is displayed followed
+   by a list of the enzymes that cut the specified sequence and the
+   number of times that they cut.
+
+   The '-flatreformat' qualifier changes the display to emphasise the
+   recognition site of the restriction enzyme, which is indicated by a
+   row of '=' characters. The cut site if pointed to by a '>' or '<'
+   character and if the cut site is not within or imemdiately adjacent to
+   the recognition site, they are linked by a row or '.' characters.
+
+   The name of the enzyme is displayed above (or below when the reverse
+   sense site if displayed) the recognition site. The name of the enzyme
+   is also displayed above the cut site if this occurs on a different
+   display line to the recognition site (i.e. if it wraps onto the next
+   line of sequence).
+
+Data files
+
+   EMBOSS data files are distributed with the application and stored in
+   the standard EMBOSS data directory, which is defined by the EMBOSS
+   environment variable EMBOSS_DATA.
+
+   To see the available EMBOSS data files, run:
+
+% embossdata -showall
+
+   To fetch one of the data files (for example 'Exxx.dat') into your
+   current directory for you to inspect or modify, run:
+
+% embossdata -fetch -file Exxx.dat
+
+   Users can provide their own data files in their own directories.
+   Project specific files can be put in the current directory, or for
+   tidier directory listings in a subdirectory called ".embossdata".
+   Files for all EMBOSS runs can be put in the user's home directory, or
+   again in a subdirectory called ".embossdata".
+
+   The directories are searched in the following order:
+     * . (your current directory)
+     * .embossdata (under your current directory)
+     * ~/ (your home directory)
+     * ~/.embossdata
+
+   The Genetic Code data files are based on the NCBI genetic code tables.
+   Their names and descriptions are:
+
+   EGC.0
+          Standard (Differs from GC.1 in that it only has initiation site
+          'AUG')
+
+   EGC.1
+          Standard
+
+   EGC.2
+          Vertebrate Mitochodrial
+
+   EGC.3
+          Yeast Mitochondrial
+
+   EGC.4
+          Mold, Protozoan, Coelenterate Mitochondrial and
+          Mycoplasma/Spiroplasma
+
+   EGC.5
+          Invertebrate Mitochondrial
+
+   EGC.6
+          Ciliate Macronuclear and Dasycladacean
+
+   EGC.9
+          Echinoderm Mitochondrial
+
+   EGC.10
+          Euplotid Nuclear
+
+   EGC.11
+          Bacterial
+
+   EGC.12
+          Alternative Yeast Nuclear
+
+   EGC.13
+          Ascidian Mitochondrial
+
+   EGC.14
+          Flatworm Mitochondrial
+
+   EGC.15
+          Blepharisma Macronuclear
+
+   EGC.16
+          Chlorophycean Mitochondrial
+
+   EGC.21
+          Trematode Mitochondrial
+
+   EGC.22
+          Scenedesmus obliquus
+
+   EGC.23
+          Thraustochytrium Mitochondrial
+
+   The format of these files is very simple.
+
+   It consists of several lines of optional comments, each starting with
+   a '#' character.
+
+   These are followed the line: 'Genetic Code [n]', where 'n' is the
+   number of the genetic code file.
+
+   This is followed by the description of the code and then by four lines
+   giving the IUPAC one-letter code of the translated amino acid, the
+   start codons (indicdated by an 'M') and the three bases of the codon,
+   lined up one on top of the other.
+
+   For example:
+
+------------------------------------------------------------------------------
+# Genetic Code Table
+#
+# Obtained from: http://www.ncbi.nlm.nih.gov/collab/FT/genetic_codes.html
+# and: http://www3.ncbi.nlm.nih.gov/htbin-post/Taxonomy/wprintgc?mode=c
+#
+# Differs from Genetic Code [1] only in that the initiation sites have been
+# changed to only 'AUG'
+
+Genetic Code [0]
+Standard
+
+AAs  =   FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG
+Starts = -----------------------------------M----------------------------
+Base1  = TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG
+Base2  = TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG
+Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
+------------------------------------------------------------------------------
+
+   The EMBOSS REBASE restriction enzyme data files are stored iin
+   directory 'data/REBASE/*' under the EMBOSS installation directory.
+
+   These files must first be set up using the program 'rebaseextract'.
+   Running 'rebaseextract' may be the job of your system manager.
+
+   The data files are stored in the REBASE directory of the standard
+   EMBOSS data directory. The names are:
+     * embossre.enz Cleavage information
+     * embossre.ref Reference/methylation information
+     * embossre.sup Supplier information
+
+   The column information is described at the top of the data files
+
+   The reported enzyme from any one group of isoschizomers (the
+   prototype) is specified in the REBASE database and the information is
+   held in the data file 'embossre.equ'. You may edit this file to set
+   your own preferred prototype, if you wish.
+
+   The format of the file "embossre.equ" is
+   Enzyme-name Prototype-name
+
+   i.e. two columns of enzyme names separated by a space. The first name
+   of the pair of enzymes is the name that is not preferred and the
+   second is the preferred (prototype) name.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None known.
+
+   If you ask for the sequence display to end at position '100', with the
+   qualifier '-send 100', it will display the sequence up to the end of
+   the line - position '120'. This is a feature of this program to make
+   the display of things like restriction enzyme cutting sites easier.
+
+   It is not a bug. Please don't report it.
+
+See also
+
+   Program name                         Description
+   abiview       Reads ABI file and display the trace
+   backtranambig Back translate a protein sequence to ambiguous codons
+   backtranseq   Back translate a protein sequence
+   cirdna        Draws circular maps of DNA constructs
+   coderet       Extract CDS, mRNA and translations from feature tables
+   lindna        Draws linear maps of DNA constructs
+   pepnet        Displays proteins as a helical net
+   pepwheel      Shows protein sequences as helices
+   plotorf       Plot potential open reading frames
+   prettyplot    Displays aligned sequences, with colouring and boxing
+   prettyseq     Output sequence with translated ranges
+   recoder       Remove restriction sites but maintain same translation
+   redata        Search REBASE for enzyme name, references, suppliers etc
+   remap         Display sequence with restriction sites, translation etc
+   restover      Find restriction enzymes producing specific overhang
+   restrict      Finds restriction enzyme cleavage sites
+   seealso       Finds programs sharing group names
+   showalign     Displays a multiple sequence alignment
+   showdb        Displays information on the currently available databases
+   showfeat      Show features of a sequence
+   showorf       Pretty output of DNA translations
+   silent        Silent mutation restriction enzyme scan
+   sixpack       Display a DNA sequence with 6-frame translation and ORFs
+   textsearch    Search sequence documentation. Slow, use SRS and Entrez!
+   transeq       Translate nucleic acid sequences
+
+Author(s)
+
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+History
+
+   Written 1999 - GWW
+   23 Aug 2000 - features display added - GWW
+   20 Nov 2001 - feature matches and annotation display added - GWW
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

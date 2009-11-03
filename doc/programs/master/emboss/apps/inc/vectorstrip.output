@@ -1,0 +1,92 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: vector.strip</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+
+Sequence: pBlueScript 	 Vector: pTYB1	No match
+
+
+Sequence: pBlueScript 	 Vector: pBS_KS+
+5' sequence matches:
+	From 67 to 83 with 0 mismatches
+3' sequence matches:
+	From 205 to 219 with 0 mismatches
+Sequences output to file:
+	from 84 to 204
+		tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagca
+		cacagtgacatgagagacacagatatagagacagatagacgatagacaga
+		cagcatatatagacagatagc
+	sequence trimmed from 5' end:
+		GGAAACAGCTAATGACCATGATTACGCCAAGCGCGCAATTAACCCTCACT
+		AAAGGGAACAAAAGCTGGGTACCGGGCCCCCCC
+	sequence trimmed from 3' end:
+		TCGAGGTCGACGGTATCGATAAGCTTGATATCG
+
+
+Sequence: pBlueScript 	 Vector: pLITMUS	No match
+
+Sequence: litmus.seq 	 Vector: pTYB1	No match
+
+Sequence: litmus.seq 	 Vector: pBS_KS+	No match
+
+
+Sequence: litmus.seq 	 Vector: pLITMUS
+5' sequence matches:
+	From 43 to 61 with 0 mismatches
+3' sequence matches:
+	From 183 to 199 with 0 mismatches
+Sequences output to file:
+	from 62 to 182
+		tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagca
+		cacagtgacatgagagacacagatatagagacagatagacgatagacaga
+		cagcatatatagacagatagc
+	sequence trimmed from 5' end:
+		TCTAGAACCGGTGACGTCTCCCATGGTGAAGCTTGGATCCACGATATCCT
+		GCAGGAATTCC
+	sequence trimmed from 3' end:
+		TCGAGACCGTACGTGCGCGCGAATGCATCCAGATCTTCCCTCTAGTCAAG
+		GCCTTAAGTGAGTCGTATTACGGA
+
+
+
+Sequence: pTYB1.seq 	 Vector: pTYB1
+5' sequence matches:
+	From 40 to 58 with 0 mismatches
+3' sequence matches:
+	From 180 to 196 with 0 mismatches
+Sequences output to file:
+	from 59 to 179
+		tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagca
+		cacagtgacatgagagacacagatatagagacagatagacgatagacaga
+		cagcatatatagacagatagc
+	sequence trimmed from 5' end:
+		CTTTAAGAAGGAGATATACATATGGCTAGCTCGCGAGTCGACGGCGGCCG
+		CGAATTCC
+	sequence trimmed from 3' end:
+		TCGAGGGCTCTTCCTGCTTTGCCAAGGGTACCAATGTTTTAATGGCGGAT
+
+
+Sequence: pTYB1.seq 	 Vector: pBS_KS+	No match
+
+Sequence: pTYB1.seq 	 Vector: pLITMUS	No match
+</pre>
+</td></tr></table><p>
+<p><h3>File: vector.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;pBlueScript_from_84_to_204 KS+
+tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagcacacagtgaca
+tgagagacacagatatagagacagatagacgatagacagacagcatatatagacagatag
+c
+&gt;litmus.seq_from_62_to_182
+tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagcacacagtgaca
+tgagagacacagatatagagacagatagacgatagacagacagcatatatagacagatag
+c
+&gt;pTYB1.seq_from_59_to_179
+tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagcacacagtgaca
+tgagagacacagatatagagacagatagacgatagacagacagcatatatagacagatag
+c
+</pre>
+</td></tr></table><p>

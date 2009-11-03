@@ -1,0 +1,65 @@
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-name]<br>(Parameter 1)</td>
+<td>The name of of the sequence should be a single word that you will use to identify the sequence. It should have no (or few) punctuation characters in it.</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>[-description]<br>(Parameter 2)</td>
+<td>Enter any description of the sequence that you require.</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>[-type]<br>(Parameter 3)</td>
+<td>Type of sequence</td>
+<td><table><tr><td>N</td> <td><i>(Nucleic)</i></td></tr><tr><td>P</td> <td><i>(Protein)</i></td></tr></table></td>
+<td>N</td>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 4)</td>
+<td>The sequence itself.
+Because of the limitation of the operating system, you will only be able to type in a short sequence of (typically) 250 characters, or so.
+The keyboard will beep at you when you have reached this limit and you will not be able to press the RETURN/ENTER key until you have deleted a few characters.</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 5)</td>
+<td>Sequence filename and optional format (output USA)</td>
+<td>Writeable sequence</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>

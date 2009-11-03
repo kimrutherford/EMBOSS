@@ -1,0 +1,166 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: backtranambig
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+backtranambig
+<!--#include file="header2.inc" -->
+
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/backtranambig.ione" -->
+
+<H2>
+    Description
+</H2>
+
+
+<b>backtranambig</b> takes a protein sequence and makes the nucleic
+acid sequence it could have come from.  It does this by generating
+nucleotide ambiguity codes that represent all possible codons for each
+amino acid.
+
+<p>
+The resulting ambiguous nucleotide sequence can be translated to the
+original protein using <b>transeq</b>, which will recognise highly
+redundant codons (for example "WSN" for serine) as being produced by a
+program such as <b>backtranambig</b>.
+
+
+<h3>Genetic code</h3>
+
+<b>backtranambig</b> needs a genetic code to generate the ambiguous
+codons.  The default genetic code is the standard ('Universal') code.
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/backtranambig.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/backtranambig.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/backtranambig.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+
+Any DNA sequence USA.
+
+<p>
+<!--#include file="inc/backtranambig.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+
+The output is a nucleotide sequence containing the most favoured back
+translation of the specified protein, and using the specified
+translation table (which defaults to human).
+
+<p>
+<!--#include file="inc/backtranambig.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+
+The codon usage table is read by default from "Ehum.cut" in the 'data/CODONS'
+directory of the EMBOSS distribution.  If the name of a codon usage file
+is specified on the command line, then this file will first be searched
+for in the current directory and then in the 'data/CODONS' directory of
+the EMBOSS distribution. 
+
+<p>
+<!--#include file="inc/localfiles.ihtml" -->
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+"Corrupt codon index file" - the codon usage file is incomplete or empty.
+
+<p>
+"The file 'drosoph.cut' does not exist" - the codon usage file cannot be opened.
+
+<H2>
+    Exit status
+</H2>
+
+
+This program always exits with a status of 0, unless the codon usage
+table cannot be opened.
+
+<H2>
+    Known bugs
+</H2>
+
+
+None.
+
+<!--#include file="inc/backtranambig.isee" -->
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/ableasby.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/backtranambig.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/backtranambig.comment" -->
+
+
+</BODY>
+</HTML>
+

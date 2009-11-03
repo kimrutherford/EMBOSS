@@ -1,0 +1,95 @@
+application: pepwheel [
+  documentation: "Shows protein sequences as helices"
+  groups: "Display, Protein:2D Structure"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  sequence: sequence [
+    parameter: "Y"
+    type: "Protein"
+  ]
+
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  boolean: wheel [
+    default: "Y"
+    information: "Plot the wheel"
+  ]
+
+  integer: steps [
+    additional: "Y"
+    minimum: "2"
+    maximum: "100"
+    default: "18"
+    information: "Number of steps"
+    help: "The number of residues plotted per turn is this value
+           divided by the 'turns' value."
+  ]
+
+  integer: turns [
+    additional: "Y"
+    minimum: "1"
+    maximum: "100"
+    default: "5"
+    information: "Number of turns"
+    help: "The number of residues plotted per turn is the 'steps'
+           value divided by this value."
+  ]
+
+  graph: graph [
+    standard: "Y"
+    gdesc: "Helical wheel"
+    gxtitle: "$(sequence.name)"
+  ]
+
+  section: markupsection [
+    information: "Markup section"
+    type: "frame"
+  ]
+
+    toggle: amphipathic [
+      information: "Prompt for amphipathic residue marking"
+      help: "If this is true then the residues ACFGILMVWY are marked
+             as squares and all other residues are unmarked. This overrides
+             any other markup that you may have specified using the
+             qualifiers '-squares', '-diamonds' and '-octags'."
+    ]
+
+    string: squares [
+      additional: "@(!$(amphipathic))"
+      default: "ILVM"
+      information: "Mark as squares"
+      help: "By default the aliphatic residues ILVM are marked with
+             squares."
+      knowntype: "protein codes"
+    ]
+
+    string: diamonds [
+      additional: "@(!$(amphipathic))"
+      default: "DENQST"
+      information: "Mark as diamonds"
+      help: "By default the residues DENQST are marked with diamonds."
+      knowntype: "protein codes"
+    ]
+
+    string: octags [
+      additional: "@(!$(amphipathic))"
+      default: "HKR"
+      information: "Mark as octagons"
+      help: "By default the positively charged residues HKR are marked
+             with octagons."
+      knowntype: "protein codes"
+    ]
+
+  endsection: markupsection
+
+endsection: output

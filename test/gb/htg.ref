@@ -1,0 +1,115 @@
+>>>>AC002095  4/1998
+AC002095 Homo sapiens chromosome 9 clone 81H10 map 9q34, *** SEQUENCING IN PROGRESS ***, 3 ordered pieces. 4/1998
+LOCUS       AC002095               45437 bp    DNA     linear   HTG 16-APR-1998
+DEFINITION  Homo sapiens chromosome 9 clone 81H10 map 9q34, *** SEQUENCING IN
+            PROGRESS ***, 3 ordered pieces.
+ACCESSION   AC002095
+VERSION     AC002095.1  GI:3056623
+KEYWORDS    HTG; HTGS_PHASE2.
+SOURCE      human.
+  ORGANISM  Homo sapiens
+            Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+            Mammalia; Eutheria; Primates; Catarrhini; Hominidae; Homo.
+REFERENCE   1  (bases 1 to 45437)
+  AUTHORS   Birren,B., Fasman,K., McKernan,K., Nusbaum,C., Richardson,P. and
+            Lander,E.
+  TITLE     Homo sapiens chromosome 9q34, clone 81H10
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 45437)
+  AUTHORS   Hawkins,T.L., Reeve,M.P., Christoffersen,A., Birren,B.W.,
+            Fasman,K.H., Lander,E.S., McKernan,K., Munro,C., Richardson,P.,
+            Barna,N., Chang,A., Cooke,P., Daly,M.J., Forrest,C., Fripp,W.J.,
+            Gage,D., Geraigery,K., Hagos,B., Jacotot,L., Lane,M., MacKenzie,J.,
+            Marquis,N., McDermott,J., Moloney,N., Morrow,J., Nachman,A.,
+            Naylor,J., O'Connor,T., Peterson,K., Rollins,G., Spencer,J.,
+            Stilwell,J., Stone,C., Strickland,C., Sydney,K., Wilmer,F. and
+            Zody,M.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (13-MAY-1997) Whitehead Institute/MIT Center for Genome
+            Research, 320 Charles Street, Cambridge, MA 02141, USA
+COMMENT     On Apr 16, 1998 this sequence version replaced gi:2921921.
+            All repeats were identified using RepeatMasker: Smit, A.F.A. &
+            Green, P. (1996-1997)
+            http://ftp.genome.washington.edu/RM/RepeatMasker.html.
+            * NOTE: This is a 'working draft' sequence. It currently
+            * consists of 3 contigs. Gaps between the contigs
+            * are represented as runs of N. The order of the pieces
+            * is believed to be correct as given, however the sizes
+            * of the gaps between them are based on estimates that have
+            * provided by the submittor.
+            * This sequence will be replaced
+            * by the finished sequence as soon as it is available and
+            * the accession number will be preserved.
+            *        1     7963: contig of 7963 bp in length
+            *                    gap of unknown length
+            *     7964    32373: contig of 24410 bp in length
+            *                    gap of unknown length
+            *    32374    45437: contig of 13064 bp in length.
+FEATURES             Location/Qualifiers
+     source          1. .45437
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+                     /clone="81H10"
+                     /clone_lib="Dr. David Kwiatkowski"
+                     /map="9q34"
+                     /chromosome="9"
+BASE COUNT    11780 a  10461 c  11047 g  12149 t
+ORIGIN
+>>>>AC002296  8/1997
+AC002296 Homo sapiens chromosome 9q34 clone L197C2, *** SEQUENCING IN PROGRESS ***, 2 ordered pieces. 8/1997
+LOCUS       AC002296               14465 bp    DNA     linear   HTG 06-AUG-1997
+DEFINITION  Homo sapiens chromosome 9q34 clone L197C2, *** SEQUENCING IN
+            PROGRESS ***, 2 ordered pieces.
+ACCESSION   AC002296
+VERSION     AC002296.2  GI:9055390
+KEYWORDS    HTG; HTGS_PHASE2.
+SOURCE      human.
+  ORGANISM  Homo sapiens
+            Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+            Mammalia; Eutheria; Primates; Catarrhini; Hominidae; Homo.
+REFERENCE   1  (bases 1 to 14465)
+  AUTHORS   Hawkins,T.L., Reeve,M.P., Birren,B.W., Fasman,K.H. and Lander,E.S.
+  TITLE     Genomic sequence from Human 9q34
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 14465)
+  AUTHORS   Hawkins,T.L., Reeve,M.P., Christoffersen,A., Birren,B.W.,
+            Fasman,K.H., Lander,E.S., McKernan,K., Munro,C., Richardson,P.,
+            Barna,N., Chang,A., Cooke,P., Daly,M.J., Devon,K., Dewar,K.,
+            Forrest,C., Fripp,W.J., Gage,D., Geraigery,K., Hagos,B.,
+            Jacotot,L., Lane,M., MacKenzie,J., Marquis,N., McDermott,J.,
+            Moloney,N., Morrow,J., Nachman,A., Naylor,J., O'Connor,T.,
+            Olotu,A., Peterson,K., Rollins,G., Spencer,J., Stilwell,J.,
+            Stone,C., Strickland,C., Sydney,K., Wilmer,F., Zemtseva,I. and
+            Zody,M.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (10-JUN-1997) Whitehead Institute/MIT Center for Genome
+            Research, 320 Charles Street, Cambridge, MA 02141, USA
+COMMENT     On Jul 12, 2000 this sequence version replaced gi:2314779.
+            The Staden databases, finishing information, and all
+            chromatographic files used in the assembly of this clone are
+            available from our anonymous ftp site.
+
+            All repeats were identified using RepeatMasker: Smit, A.F.A. &
+            Green, P. (1996-1997)
+            http://ftp.genome.washington.edu/RM/RepeatMasker.html.
+            * NOTE: This is a 'working draft' sequence. It currently
+            * consists of 2 contigs. Gaps between the contigs
+            * are represented as runs of N. The order of the pieces
+            * is believed to be correct as given, however the sizes
+            * of the gaps between them are based on estimates that have
+            * provided by the submittor.
+            * This sequence will be replaced
+            * by the finished sequence as soon as it is available and
+            * the accession number will be preserved.
+            *        1    10349: contig of 10349 bp in length
+            *    10350    10449: gap of unknown length
+            *    10450    14465: contig of 4016 bp in length.
+FEATURES             Location/Qualifiers
+     source          1. .14465
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+                     /chromosome="9q34"
+                     /clone="L197C2"
+                     /clone_lib="unknown"
+BASE COUNT     4338 a   3236 c   3629 g   3162 t    100 others
+ORIGIN

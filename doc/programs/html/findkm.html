@@ -1,0 +1,321 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: findkm
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+findkm
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+    Function
+</H2>
+Find Km and Vmax for an enzyme reaction
+<H2>
+    Description
+</H2>
+
+Takes a file of enzymatic data and plots Michaelis Menten and
+Hanes Woolf plots of the data. From these it calculates the Michaelis
+Menten constant (Km) and the maximum velocity (Vmax) of the reaction.
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with findkm</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>findkm -graph cps </b>
+Find Km and Vmax for an enzyme reaction
+Enzyme kinetics data (application-specific) file: <b>enztest.dat</b>
+Output file [enztest.findkm]: <b></b>
+
+Created findkm.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-infile]            infile     Enzyme kinetics data (application-specific)
+                                  file
+  [-outfile]           outfile    [*.findkm] Output file name
+   -graphlb            xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png, gif)
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -[no]plot           boolean    [Y] S/V vs S
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   "-graphlb" associated qualifiers
+   -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-infile]<br>(Parameter 1)</td>
+<td>Enzyme kinetics data (application-specific) file</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.findkm</td>
+</tr>
+
+<tr>
+<td>-graphlb</td>
+<td>Graph type</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png, gif</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-[no]plot</td>
+<td>S/V vs S</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+</table>
+
+<H2>
+    Input file format
+</H2>
+
+The input file is a file of enzymatic data, [S] against V, Substrate
+concentration against reaction velocity.
+
+<p>
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: enztest.dat</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+  0.10   2
+  0.20   4
+  0.50   9
+  1.00  17
+  2.00  29
+  5.00  50
+ 10.00  67
+ 20.00  80
+ 50.00  91
+100.00  95
+</pre>
+</td></tr></table><p>
+
+
+<H2>
+    Output file format
+</H2>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: enztest.findkm</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+---Hanes Woolf Plot Calculations---
+Slope of best fit line is a = 0.01
+Coefficient in Eqn of line y = ma +b is b = 0.05
+Where line cuts x axis = (-0.20, 0)
+Where line cuts y axis = (0, 0.05)
+Limit-point of graph for plot = (103.00, 1.08)
+
+Vmax = 99.70, Km = 4.894611
+</pre>
+</td></tr></table><p>
+<p><h3>Graphics File: findkm.ps</h3>
+<p><img src="findkm.1.findkm.gif" alt="[findkm results]">
+
+<H2>
+    Data files
+</H2>
+
+None.
+        
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+
+<ol>
+
+<li>
+Voet & Voet (1993) 'Biochemistry' 
+
+<li>
+Dawes 'Quantitative Problems in Biochemistry' 5th Edition.
+
+<li>
+Manuel G. Claros, Francisco M. Canovas 
+'Lines&amp;Kinetics: a graphic tool to deal with linear regressions and
+enzyme kinetics.'
+EMBnet.news vol 5.1
+<a href="http://www.uk.embnet.org/embnet.news/vol5_1/kinetics.html">
+http://www.uk.embnet.org/embnet.news/vol5_1/kinetics.html</a>
+
+<li>
+Cornish-Bowden (1996) 'Fundamentals of Enzyme kinetics'
+Portland Press, London.
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+It exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+</table>
+
+<H2>
+    Author(s)
+</H2>
+
+Sinead O'Leary (current e-mail address unknown)
+<br>
+while she was at:
+<br>
+HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+
+
+
+
+<p>
+
+This application was modified by 
+David Martin (dmartin&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+<br>
+
+<H2>
+    History
+</H2>
+
+
+
+Completed November 1999
+
+<p>
+Modified May 2000
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+None
+
+</BODY>
+</HTML>
+

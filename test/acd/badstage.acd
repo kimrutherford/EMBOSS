@@ -1,0 +1,7 @@
+# ACD file for QA testing - missing the application definition
+#
+appl: badstage [ doc: "testing" group: "testing" ]
+
+dingsbum: wotsit [ info: "Dingsbum is german for wotsit" ]
+
+outfile: outtest [ param: Y odirectory: "$(outdir)" ]

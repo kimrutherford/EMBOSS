@@ -1,0 +1,39 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: paamir_1.checktrans</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+
+
+CHECKTRANS of PAAMIR_1 from 1 to 724
+
+	ORF#	Pos	Len	ORF Range	Sequence name
+
+	7	635	357	278-634	PAAMIR_1_7
+
+	Total STOPS:     7
+
+ </pre>
+</td></tr></table><p>
+<p><h3>File: paamir_1.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;PAAMIR_1_7
+PPARRRWRRWRVTWQRGRWWSRLTSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGR
+PCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSR
+SAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHERQLAARQPARVAGAGPQPAGGGQRRP
+GLAADPHRLFGAPVLAAAGSLRRAGGRGLHQHFPEWPPRRDRCAARRRDSAHYPGGAGGV
+RKPRGALADHRAGVPRRDHPAARCPPGAACAGIGAAHQRGNGEAEAEDRAAPGPHRRPGP
+DQPGQGVADAAPWLGRARGAPAPVAGSDEAARADPEDRSGVAGKRAVRLSDPGRPEQ
+</pre>
+</td></tr></table><p>
+<p><h3>File: paamir_1.gff</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+##gff-version 2.0
+##date 2006-07-15
+##Type Protein PAAMIR_1
+PAAMIR_1	checktrans	misc_feature	278	634	0.000	+	.	Sequence "PAAMIR_1.1"
+</pre>
+</td></tr></table><p>

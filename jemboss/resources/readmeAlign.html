@@ -1,0 +1,286 @@
+<html>
+<head>
+   <meta name="keywords" content="java, biology, bioinformatics, EMBOSS, GUI, Jemboss, alignment, computational biology, sequence analysis, interface, alignment">
+
+   <title>Jemboss Alignment Editor</title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#0000EE" vlink="#551A8B" alink="#FF0000">
+
+<center>
+<a href="http://emboss.sourceforge.net/Jemboss/"><img SRC="../images/Jemboss_logo_large.gif" BORDER=0 height=110 width=240></a></h1></center>
+
+<p>
+<h1>Jemboss Alignment Editor</h1>
+
+This is under development by the EMBOSS team.
+
+<p>
+The Jemboss Alignment Editor can be used interactively to
+edit a sequence alignment (read in fasta or MSF format). It can
+also be used from the command line to produce image files
+of the alignment (e.g. within a script).
+
+<p>
+
+<table align=center>
+<td valign=top>
+<ul>
+<li><b><a href="#Load">Loading Sequences</a></b>
+<li><b><a href="#Edit">Editing Functions</a></b>
+<li><b><a href="#Lock">Locking Sequences</a></b>
+<li><b><a href="#Trim">Trim Sequences</a></b>
+<li><b><a href="#Colour">Colour Schemes</a></b>
+<li><b><a href="#Score">Scoring Matrix</a></b>
+<li><b><a href="#Cons">Consensus Sequence</a></b>
+<li><b><a href="#Plotcon">Consensus Plot</a></b>
+<li><b><a href="#ID">Identity Table</a></b>
+<li><b><a href="#ANN">Inserting Annotation Sequences</a></b>
+</ul>
+</td>
+<td valign=top>
+<ul>
+<li><b><a href="#Command">Command Line</a></b>
+<li><b><a href="#CommandOptions">Command Line Options</a></b>
+<li><b><a href="#CommandExamples">Command Line Examples</a></b>
+</td>
+</ul>
+</table>
+
+<p>
+
+<table width=100%>
+<tr><td class="section">INTERACTIVE INTERFACE</td></tr>
+</table>
+<a NAME="Load"><h2>Loading Sequences</h2></a>
+Supported sequence file formats are FASTA and MSF (so far).
+Load the aligned sequences in via the "File" menu and "Open".
+
+<p>
+When loaded the alignment appears in the order the sequences
+appear in the sequence file. The name is on the right hand
+side with the length of each sequence. At the top of the editor
+is the relative sequence numbering. A tooltip popup when the
+mouse arrow is placed over a site. The tooltip gives the name
+of the sequence, the residue and the position of that site.
+
+<a NAME="Edit"><h2>Editing Functions</h2></a>
+Gaps can be introduced into a sequence by clicking on a 
+site and dragging the mouse to the right. Gaps can similarly
+be removed by dragging to the left. Sequences can be deleted
+from the the viewer by right mouse clicking on the sequence
+and selecting "Delete" from the pop up menu.
+
+<a NAME="Lock">
+<p>Sequences can be locked by selecting the name on the right
+hand side of the alignment and clicking the 'Lock' button.
+When gaps are then introduced into one of these sequences
+the gap will also appear in those sequence in this group of
+locked sequences. The lock can be switched off with the
+'Unlock' button or 'Unlock All Sequences' in the 'Edit' menu.
+
+<a NAME="Trim">
+<p>Also under the 'Edit' menu there is an utility to 
+trim the ends of sequences. This can be used to tidy up
+the termini of an alignment.
+ 
+<a NAME="Colour"><h2>Colour Schemes</h2></a>
+There are various colour schemes for the residues these
+can be found under the View menu. The residues
+can be coloured by there property or using one of the other
+common colour schemes (e.g. the <a href="#Taylor">Taylor method</a>). 
+These colour schemes can be edited using the "Colour Display"
+window and right clicking on a colour to bring up a palette to
+select from.
+
+<p>
+Alternatively sequences can be coloured based on the number of
+identities and positive matches in a column. This is the <b>"Colour Identical/Matches"</b>
+option under the "View" menu. The positive matches
+are defined by the scoring matrix selected. This method is based
+on the EMBOSS program prettyplot colour scheme. The user can 
+define the number of identities that are required in a column for
+them to be set to a given colour. Also, a threshold can be set
+for the positive match score, above which the contributing 
+matches are set to a given colour.
+
+
+<a NAME="Score"><h2>Scoring Matrix</h2></a>
+The are used to calculate scores in the consensus. A different
+scoring matrix can be selected from the "View" menu and clicking
+on "Matrix Display". The current scoring matrix being used
+is reported at the bottom of the alignment viewer.
+
+<a NAME="Cons"><h2>Consensus Sequence</h2></a>
+This uses the same algorithm as used by 
+<a href="http://emboss.sourceforge.net/apps/release/4.1/emboss/apps/cons.html">
+cons</a> in EMBOSS. The consensus when calculated appears below the 
+other sequences in the viewer.
+
+<a NAME="Plotcon"><h2>Consensus Plot</h2></a>
+Gives a graphical representation of the consensus. This is
+based on
+<a href="http://emboss.sourceforge.net/apps/release/4.1/emboss/apps/plotcon.html">
+plotcon</a> in EMBOSS.
+
+<a Name="ID"><h2>Identity Table</h2></a>
+This can be calculated and gives the percentage of identical 
+matches between each pair of sequences. 
+
+<p>
+
+<a Name="ANN"><h2>Inserting Annotation Sequences</h2></a>
+Annotation can be cut and pasted or read in from a file. These will
+appear under the alignment. As well as taking any of the 
+supported sequence formats the concise output from 
+<a href="http://www.compbio.dundee.ac.uk/~www-jpred/">JPred</a> can be 
+used directly, <i>e.g.</i><p>
+
+<tt>
+jpred:-,-,-,-,-,-,-,-,-,-,-,-,-,E,E,E,E,-,-,-,-,-,-,H,H,H,H,H,H,H,H,H,H,-,-,-,</tt>
+
+
+<p>
+
+<table width=100%>
+<tr><td class="section"><a NAME="Command"></a><b>COMMAND LINE INTERFACE</b></td></tr>
+</table>
+
+
+<h3>Command Line Usage</h3>
+
+The following jars need to be in your classpath:<p>
+
+<tt>setenv CLASSPATH Jemboss.jar:jakarta-regexp-1.2.jar:JembossPrintAlignment.jar
+
+<p>
+
+java org/emboss/jemboss/editor/AlignJFrame file [options] </tt>
+
+<p>
+<table>
+<tr><td class="blue" valign=top>file</td>
+    <td>This is the multiple sequence alignment in
+           fasta or MSF format.</td></tr>
+
+<tr><td>&nbsp;</td></tr>
+<tr><td colspan=2>
+<a NAME="CommandOptions"><h3>Command Line Options</h3></a>
+</td></tr>
+
+<tr><td class="blue" valign=top>-calc</td>
+    <td>Calculate consensus and display under the alignment.
+           The following 3 flags can be used to define values
+           used in the calculations.</td></tr>
+<tr><td class="blue" valign=top>-plu</td>
+    <td>(plurality) minimum positive match score
+        value for there to be a consensus.</td></tr>
+<tr><td class="blue" valign=top>-numid</td>
+    <td>minimum number of identities for there to
+        be a consensus.</td></tr>
+<tr><td class="blue" valign=top>-case</td>
+    <td>minimum positive match score for setting
+        the consensus to upper-case.</td></tr>
+<tr><td class="blue" valign=top>-color</td>
+    <td>Used to define a colour scheme, below is the list of
+        available colour schemes:<br>
+           taylor<br>
+           residue<br>
+           rasmol<br>
+           acid<br>
+           polar<br>
+           hydrophobic<br>
+           aromatic<br>
+           surface<br>
+           charge<br>
+           size<br>
+           base<p>
+
+       java org.emboss.jemboss.editor.AlignJFrame file -color size
+
+<tr><td class="blue" valign=top>-font</td>
+    <td>Set the font size.</td></tr>
+<tr><td class="blue" valign=top>-id</td>
+    <td>Display a percentage ID pair table.</td></tr>
+<tr><td class="blue" valign=top>-noshow</td>
+    <td>Turns of the alignment display.</td></tr>
+<tr><td class="blue" valign=top>-nres</td>
+    <td>Number of residues to each line is a print out.</td></tr>
+<tr><td class="blue" valign=top>-pretty</td>
+    <td>EMBOSS prettyplot colour scheme. The -matrix flag option
+        can be used to define a scoring matrix for identifying
+        positive matches.</td></tr>
+<tr><td class="blue" valign=top>-noBox</td>
+    <td>switch off box drawing around identical and
+        positive matches.</td></tr>
+<tr><td class="blue" valign=top>-minID</td>
+    <td>define the minimum number of identities. The
+        default for this is the number of sequences
+        file.</td></tr>
+<tr><td class="blue" valign=top>-match</td>
+    <td>define a threshold value for the number of
+        positive matches, the default is half the
+        total wgt.</td></tr>
+<tr><td class="blue" valign=top>-colID</td>
+    <td>define a lettering colour for the identities.</td></tr>
+<tr><td class="blue" valign=top>-colIDBack</td>
+    <td>define a background colour for identities.</td></tr>
+<tr><td class="blue" valign=top>-colMatch</td>
+    <td>define a lettering  colour for positive matches.</td></tr>
+<tr><td class="blue" valign=top>-colMatchBack</td>
+    <td>define a background colour for positive
+        matches.
+        Available colour options:<br>
+           red, blue, cyan, darkGray, gray , green, lightGray,
+           magenta , orange, pink, white, yellow, black</td></tr>
+<tr><td class="blue" valign=top>-print</td>
+    <td>Print the alignment image. The following 2 flags can be
+        used along with the print flag</td></tr>
+<tr><td class="blue" valign=top>-prefix</td>
+    <td>prefix for image output file.</td></tr>
+<tr><td class="blue" valign=top>-onePage</td>
+    <td>fit the alignment to one page. This option must be
+        be used with the -nres flag to define the residues
+        per line.</td></tr>
+<tr><td class="blue" valign=top>-type</td>
+    <td>png or jpeg (default is jpeg).</td></tr>
+<tr><td class="blue" valign=top>-antialias</td>
+    <td>turn anti-aliasing on.</td></tr>
+<tr><td class="blue" valign=top>-landscape</td>
+    <td>Print as landscape (the default is portrait).</td></tr>
+<tr><td class="blue" valign=top>-margin</td>
+    <td>Define the left, right, top and bottom margin
+        (in cm).<p>
+       java org.emboss.jemboss.editor.AlignJFrame file -matrix EBLOSUM62 \ <br>
+                -noshow -print -margin 0.5 0.5 0.5 0.5</td></tr>
+
+<tr><td class="blue" valign=top>-matrix</td>
+    <td>To define a scoring matrix. Used with the -pretty and -calc
+        option.</td></tr>
+<tr><td class="blue" valign=top>-list</td>
+    <td>List the available scoring matrix files.</td></tr>
+
+</table>
+
+<a NAME="CommandExamples"><h3>Command Line Examples</h3></a>
+java org.emboss.jemboss.editor.AlignJFrame file -matrix EBLOSUM80 \ <br>
+                             -pretty -noshow -id -print -type png
+
+<p>
+
+java org.emboss.jemboss.editor.AlignJFrame file -matrix EPAM250 \ <br>
+                -pretty -colIDBack black -colID white -print \ <br>
+                -margin 0.5 0.5 0.5 0.0 -noshow
+
+
+<p>&nbsp;
+<p>
+<a NAME="Taylor">W.R.Taylor</a>
+Protein residue colour references:
+Protein Eng. vol.10 no. 7 pp743-746, 1997
+
+<p>
+<hr>
+</body>
+</html>
+
+

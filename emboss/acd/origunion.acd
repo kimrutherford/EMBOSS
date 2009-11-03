@@ -1,0 +1,28 @@
+application: origunion [
+  documentation: "Reads sequence fragments and builds one
+                  sequence"
+  groups: "Edit"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "gapany"
+  ]
+
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  seqout: outseq [
+    parameter: "Y"
+  ]
+
+endsection: output

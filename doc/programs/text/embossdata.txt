@@ -1,0 +1,703 @@
+
+                                embossdata 
+
+
+
+Function
+
+   Finds or fetches data files read by EMBOSS programs
+
+Description
+
+   This is a utility to indicate which directories can hold EMBOSS data
+   files and what the names of these files are.
+
+   The names of EMBOSS data files all start with the character 'E', by
+   convention, to distinguish them somewhat from any other files,
+   especially files in your home directory.
+
+   EMBOSS data files are read in by assorted EMBOSS programs, for example
+   the files holding the various genetic codes to translate from nucleic
+   acid codons to amino acids are held in files called "EGC.0", "EGC.1",
+   "EGC.2", etc. These files normally are kept in a standard data
+   directory under the EMBOSS package installation position:
+   ".../emboss/emboss/data/". When EMBOSS programs require a data file,
+   they search for it, in order, through the following set of
+   directories:
+     * The current directory
+     * '.embossdata' in the current directory
+     * Your home directory
+     * '.embossdata' in your home directory
+     * The EMBOSS standard data directory
+
+   If a data file is placed in the current directory, EMBOSS programs
+   will use it in preference to the file of the same name in the EMBOSS
+   standard data directory. Thus if you wish to modify a data file to
+   change the behaviour of an EMBOSS program, you should obtain it from
+   the EMBOSS standard data directory, edit it, and place it in one of
+   the other directories, such as the current directory or your home
+   directory.
+
+   The program embossdata is a utility to enable you to check on the
+   location of the directories which could hold data files, to display
+   the names of data files in those directories and to make local copies
+   of the data files from the EMBOSS standard data directory in order for
+   you to modify them.
+
+Usage
+
+   Here is a sample session with embossdata
+
+   Display the directories searched for EMBOSS data files:
+
+
+% embossdata 
+Finds or fetches data files read by EMBOSS programs
+Data file name: 
+
+# The following directories can contain EMBOSS data files.
+# They are searched in the following order until the file is found.
+# If the directory does not exist, then this is noted below.
+# '.' is the UNIX name for your current working directory.
+
+.                                                            Exists
+.embossdata                                                  Does not exist
+/homes/pmr                                                   Exists
+/homes/pmr/.embossdata                                       Does not exist
+/homes/pmr/local/share/EMBOSS/data/                          Exists
+
+   Example 2
+
+   Display the names of data files in all of the possible data
+   directories: This is run on a small test system and so the results
+   will probably be different when you run this.
+
+
+% embossdata -showall 
+Finds or fetches data files read by EMBOSS programs
+Data file name: 
+
+
+
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/
+
+  EGC.10
+  EGC.11
+  EGC.12
+  EGC.13
+  EGC.14
+  EGC.15
+  EGC.16
+  EGC.21
+  EGC.22
+  EGC.23
+  EPAM10
+  EPAM20
+  EPAM30
+  EPAM40
+  EPAM50
+  EPAM60
+  EPAM70
+  EPAM80
+  EPAM90
+  edialignmat
+  Eenergy.dat
+  EDNAMAT
+  Etags.swiss
+  Matrices.proteinstructure
+  Emass.dat
+  Etags.gffprotein
+  EGC.txt
+  Ehth87.dat
+  Eaa_hydropathy.dat
+  Enakai.dat
+  EGC.0
+  EGC.1
+  EGC.2
+  EGC.3
+  EGC.4
+  EGC.5
+  EGC.6
+  EGC.9
+  Eangles_tri.dat
+  Epprofile
+  Efreqs.dat
+  Emwfilter.dat
+  ENUC.4.2
+  ENUC.4.4
+  Etags.embl
+  Etags.gff3
+  tp400_trans
+  Etags.gff
+  Etags.pir
+  EPAM100
+  EPAM110
+  EPAM120
+  EPAM130
+  EPAM140
+  EPAM150
+  EPAM160
+  EPAM170
+  EPAM180
+  EPAM190
+  EPAM200
+  EPAM210
+  EPAM220
+  EPAM230
+  EPAM240
+  EPAM250
+  EPAM260
+  EPAM270
+  EPAM280
+  EPAM290
+  EPAM300
+  EPAM310
+  EPAM320
+  EPAM330
+  EPAM340
+  EPAM350
+  EPAM360
+  EPAM370
+  EPAM380
+  EPAM390
+  EPAM400
+  EPAM410
+  EPAM420
+  EPAM430
+  EPAM440
+  EPAM450
+  EPAM460
+  EPAM470
+  EPAM480
+  EPAM490
+  EPAM500
+  Ehet.dat
+  Evdw.dat
+  Edna.melt
+  Eaa_properties.dat
+  Eamino.dat~
+  EBLOSUMN
+  Eangles.dat
+  tfinsect
+  tffungi
+  Etcode.dat
+  tfother
+  tfplant
+  Ehth.dat
+  Etags.emboss
+  tp400_dna
+  Ebases.iub
+  Efeatures.gff
+  Efeatures.pir
+  Etags.protein
+  Eaa_acc_surface.dat
+  Epepcoil.dat
+  Ememe.dat
+  Efeatures.gffprotein
+  Eprior1.plib
+  Efeatures.embl
+  Efeatures.gff3
+  EBLOSUM30
+  EBLOSUM35
+  EBLOSUM40
+  EBLOSUM45
+  EBLOSUM50
+  EBLOSUM55
+  EBLOSUM60
+  EBLOSUM62
+  EBLOSUM65
+  EBLOSUM70
+  EBLOSUM75
+  EBLOSUM80
+  EBLOSUM85
+  EBLOSUM90
+  EDNAFULL
+  Emassmod.dat
+  Efeatures.emboss
+  Matrices.nucleotide
+  Epk.dat
+  tfvertebrate
+  Efeatures.protein
+  Erna.melt
+  Eamino.dat
+  EBLOSUM62-12
+  Eantigenic.dat
+  Efeatures.swiss
+  Eembl.ior
+  tp400_prot
+  Eprior30.plib
+  Esig.euk
+  Esig.pro
+  EGC.index
+  Ewhite-wimley.dat
+  Matrices.protein
+  embossre.equ
+  Edayhoff.freq
+
+
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/REBASE
+
+  dummyfile
+  embossre.enz
+  embossre.equ
+  embossre.ref
+  embossre.sup
+
+
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/AAINDEX
+
+  dummyfile
+  kytj820101
+  chop780101
+  chop780201
+  chop780202
+  chop780203
+  chop780204
+  chop780205
+  chop780206
+  chop780207
+  chop780208
+  chop780209
+  chop780210
+  chop780211
+  chop780212
+  chop780213
+  chop780214
+  chop780215
+  chop780216
+
+
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/CODONS
+
+  EAedes_aegypti.cut
+  Ecyapa.cut
+  Eerwct.cut
+  Ehuman.cut
+  Eratsp.cut
+  Esta.cut
+  Ecaeel.cut
+  EAedes_atropalpus.cut
+  Estaau.cut
+  Edrome_high.cut
+  Echmp.cut
+  Eyerpe.cut
+  Ecrisp.cut
+  Efish.cut
+  Esty.cut
+  Ehalsa.cut
+  Emyctu.cut
+  Esus.cut
+  Echnt.cut
+  Edicdi.cut
+  Echos.cut
+  EAmblyomma_americanum.cut
+  Encr.cut
+  Epolyomaa2.cut
+  EAphrodite_aculeata.cut
+  Ebommo.cut
+  Eysc_h.cut
+  Eschpo_high.cut
+  Etob.cut
+  Eneu.cut
+  Etom.cut
+  Ephix174.cut
+  Emedsa.cut
+  Eanidmit.cut
+  Emsa.cut
+  Engo.cut
+  Emse.cut
+  Epethy.cut
+  Esynsp.cut
+  Emta.cut
+  Etrb.cut
+  Eani_h.cut
+  Etheth.cut
+  Echicken.cut
+  Emtu.cut
+  Emva.cut
+  Ebpphx.cut
+  Eschpo_cai.cut
+  Emus.cut
+  Eacc.cut
+  Eorysa.cut
+  Eham.cut
+  Ebraja.cut
+  Eshpsp.cut
+  Emanse.cut
+  Emaize_chl.cut
+  Edro_h.cut
+  Echzm.cut
+  Echzmrubp.cut
+  Emze.cut
+  Evibch.cut
+  Epombecai.cut
+  EAstacus_astacus.cut
+  Ebrana.cut
+  Erhoca.cut
+  Eemeni_high.cut
+  Evco.cut
+  Ehha.cut
+  Eanasp.cut
+  Ebacme.cut
+  Esyhsp.cut
+  Erabit.cut
+  Eneigo.cut
+  Ecanal.cut
+  Ehin.cut
+  Elyces.cut
+  Eklepn.cut
+  Ebrare.cut
+  Eyscmt.cut
+  Epseae.cut
+  Eemeni_mit.cut
+  Ehma.cut
+  Eani.cut
+  Ecanfa.cut
+  Emixlg.cut
+  Ecaucr.cut
+  Epae.cut
+  Ephavu.cut
+  Ebovin.cut
+  Ehorvu.cut
+  Ebacst.cut
+  Ebacsu.cut
+  Echlre.cut
+  Epea.cut
+  Edrome.cut
+  Esheep.cut
+  Erabsp.cut
+  Epfa.cut
+  Esalsa.cut
+  Easn.cut
+  Ebacsu_high.cut
+  Eecoli_high.cut
+  Eath.cut
+  Epet.cut
+  Ebja.cut
+  Emacfa.cut
+  EAcanthocheilonema_viteae.cut
+  Esalsp.cut
+  Eyeast_cai.cut
+  Eatu.cut
+  Echltr.cut
+  Eoncmy.cut
+  Eavi.cut
+  Ecac.cut
+  Eemeni.cut
+  Esalty.cut
+  Ehum.cut
+  Eprovu.cut
+  Epig.cut
+  Esoybn.cut
+  Ecal.cut
+  Ephv.cut
+  Ephy.cut
+  Ebme.cut
+  Erhosh.cut
+  Ebna.cut
+  Ewht.cut
+  Ebly.cut
+  Ebmo.cut
+  Ef1.cut
+  Emetth.cut
+  EAnadara_trapezia.cut
+  Ebovsp.cut
+  Eccr.cut
+  Erhile.cut
+  Eplafa.cut
+  Erhime.cut
+  Ebov.cut
+  Ecel.cut
+  Eoncsp.cut
+  Epsepu.cut
+  Estrco.cut
+  Echi.cut
+  Epot.cut
+  Echk.cut
+  Epsesm.cut
+  Etetsp.cut
+  Eklula.cut
+  Etetth.cut
+  Ebsu_h.cut
+  Ebst.cut
+  Ebsu.cut
+  Emaize.cut
+  Eppu.cut
+  Exel.cut
+  Emouse.cut
+  Eagrtu.cut
+  Epse.cut
+  Eserma.cut
+  Eazovi.cut
+  Epsy.cut
+  Ewheat.cut
+  Eyeast.cut
+  Eacica.cut
+  Erab.cut
+  Eddi.cut
+  EAedes_albopictus.cut
+  Espo_h.cut
+  Epvu.cut
+  Etobac.cut
+  Erat.cut
+  Erca.cut
+  Eaidlav.cut
+  Ezebrafish.cut
+  Ecpx.cut
+  Ecre.cut
+  Cut.index
+  Estrmu.cut
+  Efmdvpolyp.cut
+  Etobcp.cut
+  Eyeastcai.cut
+  Estrpn.cut
+  Eyen.cut
+  Ectr.cut
+  Estrpu.cut
+  Emzecp.cut
+  Exenopus.cut
+  Edrosophila.cut
+  Eeco_h.cut
+  Eorysa_chl.cut
+  Erhm.cut
+  Eric.cut
+  Ekla.cut
+  Earath.cut
+  Eeca.cut
+  Echick.cut
+  EAedes.cut
+  Eeco.cut
+  Erle.cut
+  Edog.cut
+  Emam_h.cut
+  Eyeast_high.cut
+  Erme.cut
+  Esau.cut
+  Esoltu.cut
+  Emammal_high.cut
+  Esco.cut
+  Ekpn.cut
+  Edro.cut
+  Eadenovirus5.cut
+  Exenla.cut
+  Eadenovirus7.cut
+  Etobac_chl.cut
+  Elacdl.cut
+  Esgi.cut
+  EDictyostelium_discoideum.cut
+  Erabbit.cut
+  Eddi_h.cut
+  Eshp.cut
+  Ersp.cut
+  Eysc.cut
+  Ella.cut
+  Ecrigr.cut
+  Emac.cut
+  Emarpo_chl.cut
+  Eecoli.cut
+  Edicdi_high.cut
+  Eysp.cut
+  Esv40.cut
+  Eyeren.cut
+  Edayhoff.cut
+  Etrybr.cut
+  Ehaein.cut
+  Etrycr.cut
+  Esli.cut
+  Esynco.cut
+  Esma.cut
+  Eslm.cut
+  Eschma.cut
+  Esmi.cut
+  Esyncy.cut
+  Ezma.cut
+  Etbr.cut
+  Esmu.cut
+  Etcr.cut
+  Ehalma.cut
+  Eneucr.cut
+  Echisp.cut
+  Espi.cut
+  Emussp.cut
+  Ecloab.cut
+  Epombe.cut
+  Espiol.cut
+  Esoy.cut
+  Espn.cut
+  Espo.cut
+  Eter.cut
+  Eyeast_mit.cut
+  Eschpo.cut
+  Espu.cut
+
+   Example 3
+
+   Make a copy of an EMBOSS data file in the current directory:
+
+
+% embossdata -fetch Epepcoil.dat 
+Finds or fetches data files read by EMBOSS programs
+
+File '/homes/pmr/local/share/EMBOSS/data/Epepcoil.dat' has been copied successf
+ully.
+
+   Go to the output files for this example
+
+   Example 4
+
+   Display the directories which contain a particular EMBOSS data file:
+
+
+% embossdata EPAM60 
+Finds or fetches data files read by EMBOSS programs
+
+# The following directories can contain EMBOSS data files.
+# They are searched in the following order until the file is found.
+# If the directory does not exist, then this is noted below.
+# '.' is the UNIX name for your current working directory.
+
+File ./EPAM60                                                     Does not exis
+t
+File .embossdata/EPAM60                                           Does not exis
+t
+File /homes/pmr/EPAM60                                            Does not exis
+t
+File /homes/pmr/.embossdata/EPAM60                                Does not exis
+t
+File /homes/pmr/local/share/EMBOSS/data/EPAM60                    Exists
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-filename]          string     This specifies the name of the file that
+                                  should be fetched into the current directory
+                                  or searched for in all of the directories
+                                  that EMBOSS programs search when looking for
+                                  a data file. The name of the file is not
+                                  altered when it is fetched. (Any string is
+                                  accepted)
+
+   Additional (Optional) qualifiers (* if not always prompted):
+   -showall            toggle     Show all potential EMBOSS data files
+*  -fetch              boolean    Fetch a data file
+   -outfile            outfile    [stdout] This specifies the name of the file
+                                  that the results of a search for a file in
+                                  the various data directories is written to.
+                                  By default these results are written to the
+                                  screen (stdout).
+
+   Advanced (Unprompted) qualifiers:
+   -reject             selection  [3, 5, 6] This specifies the names of the
+                                  sub-directories of the EMBOSS data directory
+                                  that should be ignored when displaying data
+                                  directories.
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   None.
+
+Output file format
+
+   All output is to stdout by default.
+
+  Output files for usage example 3
+
+  File: Epepcoil.dat
+
+# Input data for PEPCOIL
+# from Lupas A, van Dyke M & Stock J; Science 252:1162-4 (1991)
+#
+#   Freq in       Relative occurrence at heptad position
+# R GenBank     a      b      c      d      e      f      g
+  L  9.33     3.167  0.297  0.398  3.902  0.585  0.501  0.483
+  I  5.35     2.597  0.098  0.345  0.894  0.514  0.471  0.431
+  V  6.42     1.665  0.403  0.386  0.949  0.211  0.342  0.360
+  M  2.34     2.240  0.370  0.480  1.409  0.541  0.772  0.663
+  F  3.88     0.531  0.076  0.403  0.662  0.189  0.106  0.013
+  Y  3.16     1.417  0.090  0.122  1.659  0.190  0.130  0.155
+  G  7.10     0.045  0.275  0.578  0.216  0.211  0.426  0.156
+  A  7.59     1.297  1.551  1.084  2.612  0.377  1.248  0.877
+  K  5.72     1.375  2.639  1.763  0.191  1.815  1.961  2.795
+  R  5.39     0.659  1.163  1.210  0.031  1.358  1.937  1.798
+  H  2.25     0.347  0.275  0.679  0.395  0.294  0.579  0.213
+  E  6.10     0.262  3.496  3.108  0.998  5.685  2.494  3.048
+  D  5.03     0.030  2.352  2.268  0.237  0.663  1.620  1.448
+  Q  4.27     0.179  2.114  1.778  0.631  2.550  1.578  2.526
+  N  4.25     0.835  1.475  1.534  0.039  1.722  2.456  2.280
+  S  7.28     0.382  0.583  1.052  0.419  0.525  0.916  0.628
+  T  5.97     0.169  0.702  0.955  0.654  0.791  0.843  0.647
+  C  1.86     0.824  0.022  0.308  0.152  0.180  0.156  0.044
+  W  1.41     0.240  0.0    0.0    0.456  0.019  0.0    0.0
+  P  5.28     0.0    0.008  0.0    0.013  0.0    0.0    0.0
+
+Data files
+
+   No data files are read by this program.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   When copying a file, this program will report if the file has been
+   copied successfully, e.g.:
+"'Epepcoil.dat' has been copied successfully."
+
+Exit status
+
+   It always exits with status 0
+
+Known bugs
+
+   None noted.
+
+See also
+
+   Program name                Description
+   embossversion Writes the current EMBOSS version number
+
+Author(s)
+
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   It should be possible to format the output for html.

@@ -1,0 +1,278 @@
+
+                                  plotcon 
+
+
+
+Function
+
+   Plot quality of conservation of a sequence alignment
+
+Description
+
+   Displays a graphical representation of the similarity along a set of
+   aligned sequences.
+
+   The similarity is calculated by moving a window of a specified length
+   along the aligned sequences. Within the window, the similarity of any
+   one position is taken to be the average of all the possible pairwise
+   scores of the bases or residues at that position. The pairwise scores
+   are taken from the specified similarity matrix. The average of the
+   position similarities within the window is plotted.
+
+   The program is useful for determining where the quality of alignments
+   is good or bad.
+
+   The average similarity is calculated by:
+
+Av. Sim. =       sum( Mij*wi + Mji*wj  )
+                      -------------------
+                  (Nseq*Wsize)*((Nseq-1)*Wsize)
+
+   sum - over column*window size
+   w - sequence weighting
+   M - matrix comparison table
+   i,j - with respect to residue i or j
+   Nseq - number of sequences in the alignment
+   Wsize - window size
+
+   This program is useful for gaining a qualitative insight into where
+   there are regions of conservation in a group of aligned sequences.
+
+   Note that you should only compare the results of two runs of plotcon
+   if you use the same window size in each. This is because the
+   'similarity score' units that are output are very sensitive to the
+   size of the window. A large window (e.g. 100) gives a nice, smooth
+   curve, and very low 'similarity score' units, whereas a small window
+   (e.g. 4) gives a very spikey, noisy plot with 'similarity score' units
+   of a round 1.00
+
+Usage
+
+   Here is a sample session with plotcon
+
+
+% plotcon -sformat msf globins.msf -graph cps 
+Plot quality of conservation of a sequence alignment
+Window size [4]: 
+
+Created plotcon.ps
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequences]         seqset     File containing a sequence alignment
+   -winsize            integer    [4] Number of columns to average alignment
+                                  quality over. The larger this value is, the
+                                  smoother the plot will be. (Any integer
+                                  value)
+   -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png, gif)
+
+   Additional (Optional) qualifiers:
+   -scorefile          matrix     [EBLOSUM62 for protein, EDNAFULL for DNA]
+                                  This is the scoring matrix file used when
+                                  comparing sequences. By default it is the
+                                  file 'EBLOSUM62' (for proteins) or the file
+                                  'EDNAFULL' (for nucleic sequences). These
+                                  files are found in the 'data' directory of
+                                  the EMBOSS installation.
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequences" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-graph" associated qualifiers
+   -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   plotcon reads a set of gapped, aligned sequences.
+
+  Input files for usage example
+
+  File: globins.msf
+
+!!AA_MULTIPLE_ALIGNMENT 1.0
+
+  ../data/globins.msf MSF:  164 Type: P 25/06/01 CompCheck: 4278 ..
+
+  Name: HBB_HUMAN Len: 164  Check: 6914 Weight: 0.61
+  Name: HBB_HORSE Len: 164  Check: 6007 Weight: 0.65
+  Name: HBA_HUMAN Len: 164  Check: 3921 Weight: 0.65
+  Name: HBA_HORSE Len: 164  Check: 4770 Weight: 0.83
+  Name: MYG_PHYCA Len: 164  Check: 7930 Weight: 1.00
+  Name: GLB5_PETMA Len: 164  Check: 1857 Weight: 0.91
+  Name: LGB2_LUPLU Len: 164  Check: 2879 Weight: 0.43
+
+//
+
+           1                                               50
+HBB_HUMAN  ~~~~~~~~VHLTPEEKSAVTALWGKVN.VDEVGGEALGR.LLVVYPWTQR
+HBB_HORSE  ~~~~~~~~VQLSGEEKAAVLALWDKVN.EEEVGGEALGR.LLVVYPWTQR
+HBA_HUMAN  ~~~~~~~~~~~~~~VLSPADKTNVKAA.WGKVGAHAGEYGAEALERMFLS
+HBA_HORSE  ~~~~~~~~~~~~~~VLSAADKTNVKAA.WSKVGGHAGEYGAEALERMFLG
+MYG_PHYCA  ~~~~~~~VLSEGEWQLVLHVWAKVEAD.VAGHGQDILIR.LFKSHPETLE
+GLB5_PETMA PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQE
+LGB2_LUPLU ~~~~~~~~GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKD
+
+           51                                             100
+HBB_HUMAN  FFESFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSE
+HBB_HORSE  FFDSFGDLSNPGAVMGNPKVKAHGKKVLHSFGEGVHHLDNLKGTFAALSE
+HBA_HUMAN  FPTTKTYFPHFDLSHGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSD
+HBA_HORSE  FPTTKTYFPHFDLSHGSAQVKAHGKKVGDALTLAVGHLDDLPGALSNLSD
+MYG_PHYCA  KFDRFKHLKTEAEMKASEDLKKHGVTVLTALGAILKKKGHHEAELKPLAQ
+GLB5_PETMA FFPKFKGLTTADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRD
+LGB2_LUPLU LFSFLKGTSEVPQNNPELQAHAGKVFKLVYEAAIQLQVTGVVVTDATLKN
+
+           101                                            150
+HBB_HUMAN  LHCDKLH..VDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVA
+HBB_HORSE  LHCDKLH..VDPENFRLLGNVLVVVLARHFGKDFTPELQASYQKVVAGVA
+HBA_HUMAN  LHAHKLR..VDPVNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKFLASVS
+HBA_HORSE  LHAHKLR..VDPVNFKLLSHCLLSTLAVHLPNDFTPAVHASLDKFLSSVS
+MYG_PHYCA  SHATKHK..IPIKYLEFISEAIIHVLHSRHPGDFGADAQGAMNKALELFR
+GLB5_PETMA LSGKHAK..SFQVDPQYFKVLAAVIADTVAAGDAGFEKLMSMICILLRSA
+LGB2_LUPLU LGSVHVSKGVADAHFPVVKEAILKTIKEVVGAKWSEELNSAWTIAYDELA
+
+           151        164
+HBB_HUMAN  NALAHKYH~~~~~~
+HBB_HORSE  NALAHKYH~~~~~~
+HBA_HUMAN  TVLTSKYR~~~~~~
+HBA_HORSE  TVLTSKYR~~~~~~
+MYG_PHYCA  KDIAAKYKELGYQG
+GLB5_PETMA Y~~~~~~~~~~~~~
+LGB2_LUPLU IVIKKEMNDAA~~~
+
+Output file format
+
+   A graph of the quality of the alignment is dispalyed on the specifed
+   graphics device.
+
+  Output files for usage example
+
+  Graphics File: plotcon.ps
+
+   [plotcon results]
+
+Data files
+
+   It reads in the specified similarity matrix.
+
+   EMBOSS data files are distributed with the application and stored in
+   the standard EMBOSS data directory, which is defined by the EMBOSS
+   environment variable EMBOSS_DATA.
+
+   To see the available EMBOSS data files, run:
+
+% embossdata -showall
+
+   To fetch one of the data files (for example 'Exxx.dat') into your
+   current directory for you to inspect or modify, run:
+
+% embossdata -fetch -file Exxx.dat
+
+   Users can provide their own data files in their own directories.
+   Project specific files can be put in the current directory, or for
+   tidier directory listings in a subdirectory called ".embossdata".
+   Files for all EMBOSS runs can be put in the user's home directory, or
+   again in a subdirectory called ".embossdata".
+
+   The directories are searched in the following order:
+     * . (your current directory)
+     * .embossdata (under your current directory)
+     * ~/ (your home directory)
+     * ~/.embossdata
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   If you give it a set of unaligned sequences, it will plot the (poor!)
+   quality of these as if they were aligned.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name                        Description
+   edialign     Local multiple alignment of sequences
+   emma         Multiple alignment program - interface to ClustalW program
+   infoalign    Information on a multiple sequence alignment
+   prettyplot   Displays aligned sequences, with colouring and boxing
+   showalign    Displays a multiple sequence alignment
+   tranalign    Align nucleic coding regions given the aligned proteins
+
+Author(s)
+
+   Tim Carver (tcarver © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+History
+
+   Written (Sept 2000) - Tim Carver.
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

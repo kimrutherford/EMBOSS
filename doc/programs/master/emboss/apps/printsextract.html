@@ -1,0 +1,237 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: printsextract
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+printsextract
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/printsextract.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+Preprocesses the PRINTS database for use with the program PSCAN.
+
+<p>
+This program derives matrix information from the final motif sets of the
+PRINTS data file (prints.dat).  It creates files in the EMBOSS data
+subdirectory PRINTS these being a matrix file and files containing text
+information for each fingerprint.  Running this program may be the job
+of your system manager. 
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/printsextract.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/printsextract.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/printsextract.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<!--#include file="inc/printsextract.input" -->
+
+<p>
+
+The input file must be the "prints.dat" file of a PRINTS distribution. 
+
+<p>
+The PRINTS database is currently available via the anonymous ftp servers at: 
+
+<ul>
+
+<li>  Manchester   <a href="ftp://bioinf.man.ac.uk/pub/prints/">ftp://bioinf.man.ac.uk/pub/prints/</a>
+<li>  EBI          <a href="ftp://ftp.ebi.ac.uk/pub/databases/">ftp://ftp.ebi.ac.uk/pub/databases/</a>
+<li>  EMBL         <a href="ftp://ftp.embl-heidelberg.de/">ftp://ftp.embl-heidelberg.de/</a>
+<li>  NCBI         <a href="ftp://ncbi.nlm.nih.gov/">ftp://ncbi.nlm.nih.gov/</a>
+
+</ul>
+
+<p>
+It is also distributed on the EMBL CD-ROMs. 
+<p>
+
+The home page for PRINTS is: <a
+href="http://www.bioinf.man.ac.uk/dbbrowser/PRINTS/">http://www.bioinf.man.ac.uk/dbbrowser/PRINTS/</a>
+
+<H2>
+    Output file format
+</H2>
+
+
+<!--#include file="inc/printsextract.output" -->
+
+<p>
+
+The output files are held in the PRINTS subdirectory of the EMBOSS data
+directory.
+
+<ul>
+	<li> prints.mat		matrices calculated from PRINTS
+	<li> Pxxxxx		text information for each fingerprint
+</ul>
+
+<H2>
+    Data files
+</H2>
+
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+You may have to ask your system manager to run this program.
+
+
+<H2>
+    References
+</H2>
+
+
+<ol>
+
+<li>
+ Attwood, T.K., Flower, D.R., Lewis, A.P., Mabey, J.E., Morgan, S.R., 
+   Scordis, P., Selley, J. and Wright, W. (1999) PRINTS prepares for the new
+   millennium. Nucleic Acids Research, 27(1), 220-225. 
+
+<li>
+ Attwood, T.K., Beck, M.E., Flower, D.R., Scordis, P. and Selley, J. (1998)
+   The PRINTS protein fingerprint database in its fifth year. Nucleic Acids 
+   Research, 26(1), 304-308. 
+
+<li>
+ Attwood, T.K., Beck, M.E., Bleasby, A.J., Degtyarenko, K., Michie, A.D. and 
+   Parry-Smith, D.J. (1997) Novel developments with the PRINTS protein motif
+   fingerprint database. Nucleic Acids Research, 25 (1), 212-216.
+
+<li>
+ Attwood, T.K. and Beck, M.E. (1994) PRINTS - A protein motif fingerprint
+   database. Protein Engineering, 7(7), 841-848.
+
+<li>
+ Bleasby, A.J., Akrigg, D.A. and Attwood, T.K. (1994) OWL - A non-redundant
+   composite protein sequence database. Nucleic Acids Research, 22(17), 3574-77.
+
+<li>
+Bleasby, A.J. and Wootton, J.C. (1990) Constructing validated, non-
+   redundant composite protein sequence databases. Protein Engineering, 3(3), 
+   153-159. 
+
+<li>
+Parry-Smith, D.J. and Attwood, T.K. (1992) ADSP - A new package for
+   computational sequence analysis. CABIOS, 8(5), 451-459.
+
+<li>
+Attwood, T.K. and Findlay, J.B.C. (1994) Fingerprinting G-protein-coupled
+   receptors. Prot.Engng. 7(2), 195-203.
+
+<li>
+Attwood, T.K. and Findlay, J.B.C. (1993) Design of a discriminating finger-
+   print for G-protein-coupled receptors. Prot.Engng. 6(2) 167-176.
+
+<li>
+ Akrigg, D., Attwood, T.K., Bleasby, A.J., Findlay, J.B.C, North, A.C.T.,
+   Maughan, N.A., Parry-Smith, D.J., Perkins, D.N. and Wootton, J.C. (1992)
+   SERPENT - An information storage and analysis resource for protein
+   sequences. CABIOS 8(3) 295-296.
+
+<li>
+Parry-Smith, D.J. and Attwood, T.K. (1991) SOMAP - A novel interactive
+    approach to multiple protein sequence aligment. CABIOS, 7(2), 233-235.
+
+<li>
+Perkins, D.N. and Attwood, T.K. (1995) VISTAS - A package for VIsualising
+    STructures And Sequences of proteins. J.Mol.Graph., 13, 73-75. 
+
+<li>
+Parry-Smith, D.J., Payne, A.W.R, Michie, A.D. and Attwood, T.K. (1998) 
+    CINEMA - A novel Colour INteractive Editor for Multiple Alignments.
+    Gene, 211(2), GC45-56. 
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+
+The program will warn you if the input file is incorrectly formatted.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+
+It exits with status 0 unless an error is reported.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+
+<!--#include file="inc/printsextract.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/ableasby.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/printsextract.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/targetadmin.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/printsextract.comment" -->
+
+
+</BODY>
+</HTML>
+

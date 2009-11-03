@@ -1,0 +1,64 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: qatest.acdpretty</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+application: qatest [
+  groups: "test"
+  documentation: "ACD file for QA testing"
+]
+
+sequence: asequence [
+  parameter: "Y"
+  features: "Y"
+]
+
+sequence: bsequence [
+  parameter: "Y"
+]
+
+outfile: outfile [
+  parameter: "Y"
+]
+
+integer: aint [
+  prompt: "first integer"
+]
+
+integer: bint [
+  prompt: "second integer, first was $(aint)"
+  default: "57"
+]
+
+string: testalen [
+  standard: "Y"
+  information: "asequence length $(asequence.length)"
+]
+
+string: testblen [
+  standard: "Y"
+  information: "bsequence length $(bsequence.length)"
+]
+
+string: outdir [
+  information: "output directory"
+]
+
+boolean: logic [
+  information: "boolean value"
+]
+
+outfile: outtest [
+  parameter: "Y"
+  odirectory: "$(outdir)"
+]
+
+seqout: outseq [
+  parameter: "Y"
+  features: "Y"
+  osdirectory: "$(outdir)"
+  ofdirectory: "$(outdir)"
+]
+</pre>
+</td></tr></table><p>

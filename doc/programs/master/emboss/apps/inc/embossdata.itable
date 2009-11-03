@@ -1,0 +1,55 @@
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-filename]<br>(Parameter 1)</td>
+<td>This specifies the name of the file that should be fetched into the current directory or searched for in all of the directories that EMBOSS programs search when looking for a data file. The name of the file is not altered when it is fetched.</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-showall</td>
+<td>Show all potential EMBOSS data files</td>
+<td>Toggle value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-fetch</td>
+<td>Fetch a data file</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-outfile</td>
+<td>This specifies the name of the file that the results of a search for a file in the various data directories is written to. By default these results are written to the screen (stdout).</td>
+<td>Output file</td>
+<td>stdout</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-reject</td>
+<td>This specifies the names of the sub-directories of the EMBOSS data directory that should be ignored when displaying data directories.</td>
+<td>Choose from selection list of values</td>
+<td>3, 5, 6</td>
+</tr>
+
+</table>

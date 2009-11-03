@@ -1,0 +1,13 @@
+<b>Here is a sample session with aaindexextract</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>aaindexextract </b>
+Extract data from AAINDEX
+AAINDEX database file: <b>aaindex1.test</b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

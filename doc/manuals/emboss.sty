@@ -1,0 +1,31 @@
+\ProvidesPackage{emboss}
+
+\newcommand{\ilcomm}[1]{{\tt #1}}
+\newcommand{\filename}[1]{{\sf\textsl {#1}}}
+\newcommand{\progname}[1]{{\sc #1}}
+\newcommand{\URL}[1]{\footnote{{\tt #1}}}
+\newcommand{\EMBOSS}{{\sf\bfseries EMBOSS}}
+%page formatting
+\renewcommand{\chaptername}{}
+
+\setlength{\hoffset}{-0.8in}
+\setlength{\textwidth}{6in}
+\setlength{\voffset}{-0.5in}
+\setlength{\topmargin}{12pt}
+\setlength{\textheight}{9in}
+\setlength{\parsep}{0.8\baselineskip}
+\tolerance=5000
+
+\def\@makechapterhead#1{%
+  \vspace*{10\p@}%
+  {\parindent \z@ \raggedright \normalfont
+    \ifnum \c@secnumdepth >\m@ne
+        \huge\bfseries \@chapapp\space \thechapter
+%        \par\nobreak
+%        \vskip 20\p@
+    \fi
+%    \interlinepenalty\@M
+\quad
+    \Huge \bfseries #1\par\nobreak
+    \vskip 40\p@
+  }}

@@ -1,0 +1,332 @@
+
+                                 wordcount 
+
+
+
+Function
+
+   Counts words of a specified size in a DNA sequence
+
+Description
+
+   Displays all the words of the specified length with the number of
+   times it occurs.
+
+Usage
+
+   Here is a sample session with wordcount
+
+
+% wordcount tembl:u68037 -wordsize=3 
+Counts words of a specified size in a DNA sequence
+Output file [u68037.wordcount]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -wordsize           integer    [4] Word size (Integer 2 or more)
+  [-outfile]           outfile    [*.wordcount] Output file name
+
+   Additional (Optional) qualifiers:
+   -mincount           integer    [1] Minimum word count to report (Integer 1
+                                  or more)
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   wordcount reads any sequence USA.
+
+  Input files for usage example
+
+   'tembl:u68037' is a sequence entry in the example nucleic acid
+   database 'tembl'
+
+  Database entry: tembl:u68037
+
+ID   U68037; SV 1; linear; mRNA; STD; ROD; 1218 BP.
+XX
+AC   U68037;
+XX
+DT   23-SEP-1996 (Rel. 49, Created)
+DT   04-MAR-2000 (Rel. 63, Last updated, Version 2)
+XX
+DE   Rattus norvegicus EP1 prostanoid receptor mRNA, complete cds.
+XX
+KW   .
+XX
+OS   Rattus norvegicus (Norway rat)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea;
+OC   Muridae; Murinae; Rattus.
+XX
+RN   [1]
+RP   1-1218
+RA   Abramovitz M., Boie Y.;
+RT   "Cloning of the rat EP1 prostanoid receptor";
+RL   Unpublished.
+XX
+RN   [2]
+RP   1-1218
+RA   Abramovitz M., Boie Y.;
+RT   ;
+RL   Submitted (26-AUG-1996) to the EMBL/GenBank/DDBJ databases.
+RL   Biochemistry & Molecular Biology, Merck Frosst Center for Therapeutic
+RL   Research, P. O. Box 1005, Pointe Claire - Dorval, Quebec H9R 4P8, Canada
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1218
+FT                   /organism="Rattus norvegicus"
+FT                   /strain="Sprague-Dawley"
+FT                   /mol_type="mRNA"
+FT                   /db_xref="taxon:10116"
+FT   CDS             1..1218
+FT                   /codon_start=1
+FT                   /product="EP1 prostanoid receptor"
+FT                   /note="family 1 G-protein coupled receptor"
+FT                   /db_xref="GOA:P70597"
+FT                   /db_xref="InterPro:IPR000276"
+FT                   /db_xref="InterPro:IPR000708"
+FT                   /db_xref="InterPro:IPR001244"
+FT                   /db_xref="InterPro:IPR008365"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P70597"
+FT                   /protein_id="AAB07735.1"
+FT                   /translation="MSPYGLNLSLVDEATTCVTPRVPNTSVVLPTGGNGTSPALPIFS
+M
+FT                   TLGAVSNVLALALLAQVAGRLRRRRSTATFLLFVASLLAIDLAGHVIPGALVLRLYTA
+G
+FT                   RAPAGGACHFLGGCMVFFGLCPLLLGCGMAVERCVGVTQPLIHAARVSVARARLALAL
+L
+FT                   AAMALAVALLPLVHVGHYELQYPGTWCFISLGPPGGWRQALLAGLFAGLGLAALLAAL
+V
+FT                   CNTLSGLALLRARWRRRRSRRFRENAGPDDRRRWGSRGLRLASASSASSITSTTAALR
+S
+FT                   SRGGGSARRVHAHDVEMVGQLVGIMVVSCICWSPLLVLVVLAIGGWNSNSLQRPLFLA
+V
+FT                   RLASWNQILDPWVYILLRQAMLRQLLRLLPLRVSAKGGPTELSLTKSAWEASSLRSSR
+H
+FT                   SGFSHL"
+XX
+SQ   Sequence 1218 BP; 162 A; 397 C; 387 G; 272 T; 0 other;
+     atgagcccct acgggcttaa cctgagccta gtggatgagg caacaacgtg tgtaacaccc        6
+0
+     agggtcccca atacatctgt ggtgctgcca acaggcggta acggcacatc accagcgctg       12
+0
+     cctatcttct ccatgacgct gggtgctgtg tccaacgtgc tggcgctggc gctgctggcc       18
+0
+     caggttgcag gcagactgcg gcgccgccgc tcgactgcca ccttcctgtt gttcgtcgcc       24
+0
+     agcctgcttg ccatcgacct agcaggccat gtgatcccgg gcgccttggt gcttcgcctg       30
+0
+     tatactgcag gacgtgcgcc cgctggcggg gcctgtcatt tcctgggcgg ctgtatggtc       36
+0
+     ttctttggcc tgtgcccact tttgcttggc tgtggcatgg ccgtggagcg ctgcgtgggt       42
+0
+     gtcacgcagc cgctgatcca cgcggcgcgc gtgtccgtag cccgcgcacg cctggcacta       48
+0
+     gccctgctgg ccgccatggc tttggcagtg gcgctgctgc cactagtgca cgtgggtcac       54
+0
+     tacgagctac agtaccctgg cacttggtgt ttcattagcc ttgggcctcc tggaggttgg       60
+0
+     cgccaggcgt tgcttgcggg cctcttcgcc ggccttggcc tggctgcgct ccttgccgca       66
+0
+     ctagtgtgta atacgctcag cggcctggcg ctccttcgtg cccgctggag gcggcgtcgc       72
+0
+     tctcgacgtt tccgagagaa cgcaggtccc gatgatcgcc ggcgctgggg gtcccgtgga       78
+0
+     ctccgcttgg cctccgcctc gtctgcgtca tccatcactt caaccacagc tgccctccgc       84
+0
+     agctctcggg gaggcggctc cgcgcgcagg gttcacgcac acgacgtgga aatggtgggc       90
+0
+     cagctcgtgg gcatcatggt ggtgtcgtgc atctgctgga gccccctgct ggtattggtg       96
+0
+     gtgttggcca tcgggggctg gaactctaac tccctgcagc ggccgctctt tctggctgta      102
+0
+     cgcctcgcgt cgtggaacca gatcctggac ccatgggtgt acatcctgct gcgccaggct      108
+0
+     atgctgcgcc aacttcttcg cctcctaccc ctgagggtta gtgccaaggg tggtccaacg      114
+0
+     gagctgagcc taaccaagag tgcctgggag gccagttcac tgcgtagctc ccggcacagt      120
+0
+     ggcttcagcc acttgtga                                                    121
+8
+//
+
+Output file format
+
+  Output files for usage example
+
+  File: u68037.wordcount
+
+ctg     54
+gcc     53
+tgg     53
+ggc     51
+gct     47
+cgc     47
+gtg     40
+tgc     39
+cct     38
+gcg     36
+cca     29
+ggg     26
+tcc     25
+ctt     25
+cag     25
+ccc     24
+ggt     24
+ctc     23
+tgt     23
+ccg     22
+gca     22
+cgt     22
+cac     22
+agc     21
+ttg     19
+acg     19
+cgg     19
+tcg     18
+ttc     17
+cat     17
+agg     17
+gag     16
+act     16
+gtc     16
+aac     15
+tct     14
+atc     14
+gga     14
+tca     13
+cta     13
+atg     12
+acc     11
+gta     11
+gtt     11
+aca     10
+tga     10
+caa     10
+tac     10
+gac     9
+tag     9
+agt     9
+ttt     8
+cga     7
+gat     6
+taa     6
+aga     5
+tat     5
+gaa     4
+aat     3
+tta     3
+ata     3
+att     3
+aag     2
+aaa     1
+
+   The file simply consists of two columns, separated by spaces or TAB
+   characters.
+
+   The first column consists of all the possible words of size wordsize.
+   The second column consists of the count of those words in the input
+   sequence.
+
+Data files
+
+   None.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   0 if successful.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name                        Description
+   banana       Bending and curvature plot in B-DNA
+   btwisted     Calculates the twisting in a B-DNA sequence
+   chaos        Create a chaos game representation plot for a sequence
+   compseq      Count composition of dimer/trimer/etc words in a sequence
+   dan          Calculates DNA RNA/DNA melting temperature
+   freak        Residue/base frequency table or plot
+   isochore     Plots isochores in large DNA sequences
+   sirna        Finds siRNA duplexes in mRNA
+
+Author(s)
+
+   Ian Longden (il © sanger.ac.uk)
+   Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
+   CB10 1SA, UK.
+
+History
+
+   Completed 27th November 1998.
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

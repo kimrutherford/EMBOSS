@@ -1,0 +1,539 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: nthseq
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+nthseq
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+<H2>
+    Function
+</H2>
+Writes one sequence from a multiple set of sequences
+
+<H2>
+    Description
+</H2>
+
+
+In EMBOSS, when an application has to write out many sequences, the
+normal style is to write them all into one file containing multiple
+sequences. 
+
+<p>
+This default behaviour can be changed by using the qualifier '-ossingle'
+which writes many sequences into many files, each containing one
+sequence.  
+
+<p>
+
+The program <a href="seqretsplit.html">seqretsplit</a> will take a file
+containing many sequences and will output many files, each containing
+one sequence.  However you have no choice over the naming of the files -
+they are named after the ID name fo the sequence they contain. 
+
+<p>
+
+If, however you have the situation where you have a file containing
+multiple sequences and you wish to extract one of them, then this
+application may be useful. 
+
+<p>
+
+<b>nthseq</b> allows you to specify the name of the output file, so you
+may find that it is useful to include this program in scripts where you
+need to be able to specify the name of the resulting sequence files you
+create. 
+
+<p>
+
+This application extracts the indicated sequence from a multiple set of
+sequences and writes it out. 
+
+<H2>
+    Usage
+</H2>
+
+
+<b>Here is a sample session with nthseq</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>nthseq </b>
+Writes one sequence from a multiple set of sequences
+Input (gapped) sequence(s): <b>@eclac.list</b>
+The number of the sequence to output [1]: <b>2</b>
+output sequence [j01636.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     (Gapped) sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -number             integer    [1] The number of the sequence to output
+                                  (Integer 1 or more)
+  [-outseq]            seqout     [<sequence>.<format>] Sequence filename and
+                                  optional format (output USA)
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>(Gapped) sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-number</td>
+<td>The number of the sequence to output</td>
+<td>Integer 1 or more</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 2)</td>
+<td>Sequence filename and optional format (output USA)</td>
+<td>Writeable sequence</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>nthseq</b> reads a a normal sequence USA.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: eclac.list</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+#Formerly ECLAC
+tembl:J01636
+
+#Formerly ECLACA
+tembl:X51872
+
+#Formerly ECLACI
+tembl:V00294
+
+#Formerly ECLACY
+tembl:V00295
+
+#Formerly ECLACZ
+tembl:V00296
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Output file format
+</H2>
+
+
+The output is the specified ordinal sequence from the input USA.
+
+<p>
+
+In the example, the second sequence from the input file will be written
+out to the specified output file. 
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: j01636.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X51872 X51872.1 Escherichia coli lacA gene for thiogalactoside transacetylase
+gtgaatgaagtcgcttaagcaatcaatgtcggatgcggcgcgacgcttatccgaccaaca
+tatcataacggagtgatcgcattgaacatgccaatgaccgaaagaataagagcaggcaag
+ctatttaccgatatgtgcgaaggcttaccggaaaaaagacttcgtgggaaaacgttaatg
+tatgagtttaatcactcgcatccatcagaagttgaaaaaagagaaagcctgattaaagaa
+atgtttgccacggtaggggaaaacgcctgggtagaaccgcctgtctatttctcttacggt
+tccaacatccatataggccgcaatttttatgcaaatttcaatttaaccattgtcgatgac
+tacacggtaacaatcggtgataacgtactgattgcacccaacgttactctttccgttacg
+ggacaccctgtacaccatgaattgagaaaaaacggcgagatgtactcttttccgataacg
+attggcaataacgtctggatcggaagtcatgtggttattaatccaggcgtcaccatcggg
+gataattctgttattggcgcgggtagtatcgtcacaaaagacattccaccaaacgtcgtg
+gcggctggcgttccttgtcgggttattcgcgaaataaacgaccgggataagcactattat
+ttcaaagattataaagttgaatcgtcagtttaaattataaaaattgcctgatacgctgcg
+cttatcaggcctacaagttcagcgatctacattagccgcatccggcatgaacaaagcgca
+ggaacaagcgtcgcatcatgcctctttgacccacagctgcggaaaacgtactggtgcaaa
+acgcagggttatgatcatcagcccaacgacgcacagcgcatgaaatgcccagtccatcag
+gtaattgccgctgatactacgcagcacgccagaaaaccacggggcaagcccggcgatgat
+aaaaccgattccctgcataaacgccaccagcttgccagcaatagccggttgcacagagtg
+atcgagcgccagcagcaaacagagcggaaacgcgccgcccagacctaacccacacaccat
+cgcccacaataccggcaattgcatcggcagccagataaagccgcagaaccccaccagttg
+taacaccagcgccagcattaacagtttgcgccgatcctgatggcgagccatagcaggcat
+cagcaaagctcctgcggcttgcccaagcgtcatcaatgccagtaaggaaccgctgtactg
+cgcgctggcaccaatctcaatatagaaagcgggtaaccaggcaatcaggctggcgtaacc
+gccgttaatcagaccgaagtaaacacccagcgtccacgcgcggggagtgaataccacgcg
+aaccggagtggttgttgtcttgtgggaagaggcgacctcgcgggcgctttgccaccacca
+ggcaaagagcgcaacaacggcaggcagcgccaccaggcgagtgtttgataccaggtttcg
+ctatgttgaactaaccagggcgttatggcggcaccaagcccaccgccgcccatcagagcc
+gcggaccacagccccatcaccagtggcgtgcgctgctgaaaccgccgtttaatcaccgaa
+gcatcaccgcctgaatgatgccgatccccaccccaccaagcagtgcgctgctaagcagca
+gcgcactttgcgggtaaagctcacgcatcaatgcaccgacggcaatcagcaacagactga
+tggcgacactgcgacgttcgctgacatgctgatgaagccagcttccggccagcgccagcc
+cgcccatggtaaccaccggcagagcggtcgac
+</pre>
+</td></tr></table><p>
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+
+It may be useful to use this application in a small script that extracts
+all sequences from a multiple sequence file and explicitly names the
+output files in the way that you require. 
+
+<p>
+For example:
+
+<p>
+
+<pre>
+#!/usr/local/bin/perl -w
+if ($#ARGV !=1) {
+  die "Usage: scriptname in out\n";
+}
+$count=1;
+@list = `infoseq $ARGV[0] -auto -only -name`;
+while ($count &lt;= $#list+1) {
+  system("nthseq -auto $ARGV[0] -n $count $ARGV[1]-$count.seq");
+  $count++;
+}
+</pre>
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="biosed.html">biosed</a></td>
+<td>Replace or delete sequence sections</td>
+</tr>
+
+<tr>
+<td><a href="codcopy.html">codcopy</a></td>
+<td>Reads and writes a codon usage table</td>
+</tr>
+
+<tr>
+<td><a href="cutseq.html">cutseq</a></td>
+<td>Removes a specified section from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="degapseq.html">degapseq</a></td>
+<td>Removes gap characters from sequences</td>
+</tr>
+
+<tr>
+<td><a href="descseq.html">descseq</a></td>
+<td>Alter the name or description of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="entret.html">entret</a></td>
+<td>Reads and writes (returns) flatfile entries</td>
+</tr>
+
+<tr>
+<td><a href="extractalign.html">extractalign</a></td>
+<td>Extract regions from a sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="extractfeat.html">extractfeat</a></td>
+<td>Extract features from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="extractseq.html">extractseq</a></td>
+<td>Extract regions from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="listor.html">listor</a></td>
+<td>Write a list file of the logical OR of two sets of sequences</td>
+</tr>
+
+<tr>
+<td><a href="makenucseq.html">makenucseq</a></td>
+<td>Creates random nucleotide sequences</td>
+</tr>
+
+<tr>
+<td><a href="makeprotseq.html">makeprotseq</a></td>
+<td>Creates random protein sequences</td>
+</tr>
+
+<tr>
+<td><a href="maskfeat.html">maskfeat</a></td>
+<td>Mask off features of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="maskseq.html">maskseq</a></td>
+<td>Mask off regions of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="newseq.html">newseq</a></td>
+<td>Type in a short new sequence</td>
+</tr>
+
+<tr>
+<td><a href="noreturn.html">noreturn</a></td>
+<td>Removes carriage return from ASCII files</td>
+</tr>
+
+<tr>
+<td><a href="notseq.html">notseq</a></td>
+<td>Exclude a set of sequences and write out the remaining ones</td>
+</tr>
+
+<tr>
+<td><a href="pasteseq.html">pasteseq</a></td>
+<td>Insert one sequence into another</td>
+</tr>
+
+<tr>
+<td><a href="revseq.html">revseq</a></td>
+<td>Reverse and complement a sequence</td>
+</tr>
+
+<tr>
+<td><a href="seqret.html">seqret</a></td>
+<td>Reads and writes (returns) sequences</td>
+</tr>
+
+<tr>
+<td><a href="seqretsplit.html">seqretsplit</a></td>
+<td>Reads and writes (returns) sequences in individual files</td>
+</tr>
+
+<tr>
+<td><a href="skipseq.html">skipseq</a></td>
+<td>Reads and writes (returns) sequences, skipping first few</td>
+</tr>
+
+<tr>
+<td><a href="splitter.html">splitter</a></td>
+<td>Split a sequence into (overlapping) smaller sequences</td>
+</tr>
+
+<tr>
+<td><a href="trimest.html">trimest</a></td>
+<td>Trim poly-A tails off EST sequences</td>
+</tr>
+
+<tr>
+<td><a href="trimseq.html">trimseq</a></td>
+<td>Trim ambiguous bits off the ends of sequences</td>
+</tr>
+
+<tr>
+<td><a href="union.html">union</a></td>
+<td>Reads sequence fragments and builds one sequence</td>
+</tr>
+
+<tr>
+<td><a href="vectorstrip.html">vectorstrip</a></td>
+<td>Strips out DNA between a pair of vector sequences</td>
+</tr>
+
+<tr>
+<td><a href="yank.html">yank</a></td>
+<td>Reads a sequence range, appends the full USA to a list file</td>
+</tr>
+
+</table>
+<p>
+
+The program <a href="seqretsplit.html">seqretsplit</a> will take a file
+containing many sequences and will output many files, each containing
+one sequence.  However you have no choice over the naming of the files -
+they are named after the ID name fo the sequence they contain. 
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+
+
+<H2>
+    History
+</H2>
+
+Written (2000) - Gary Williams
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+<H2>
+    Comments
+</H2>
+None
+
+
+</BODY>
+</HTML>
+

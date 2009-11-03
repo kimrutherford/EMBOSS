@@ -1,0 +1,383 @@
+{PDOC00000}
+{BEGIN}
+**********************************
+*** PROSITE documentation file ***
+**********************************
+
+Release  : 16.0 of July 1999
+
+Copyright: Amos Bairoch
+           Swiss Institute of Bioinformatics (SIB)
+           CMU
+           University of Geneva
+           1, Rue Michel Servet, 1211 Geneva 4
+           Switzerland
+
+Email    : bairoch@medecine.unige.ch
+Telephone: +41-22-702 54 77
+Fax      : +41-22-702 55 02
+
+Acknowledgements:
+
+ - To  all those mentioned in this document  who  have reviewed the entry(ies)
+   for which they are listed as experts. With specific thanks to Rein Aasland,
+   Mark Boguski,  Peer  Bork,  Josh  Cherry,  Andre Chollet, Frank Kolakowski,
+   David Landsman, Bernard Henrissat,  Eugene Koonin,  Steve Henikoff,  Manuel
+   Peitsch and Jonathan Reizer.
+ - Brigitte  Boeckmann  is  the author of the PDOC00691, PDOC00703, PDOC00829,
+   PDOC00796, PDOC00798,    PDOC00799,    PDOC00906,   PDOC00907,   PDOC00908,
+   PDOC00912, PDOC00913,    PDOC00924,    PDOC00928,   PDOC00929,   PDOC00955,
+   PDOC00961, PDOC00966, PDOC00988 and PDOC50020 entries.
+ - Philipp Bucher is the author of the PDOC50001 and PDOC50002 entries.
+ - Kay  Hofmann  is  the  author of  the  PDOC50003, PDOC50006,  PDOC50007 and
+   PDOC50017 entries.
+ - Keith Robison is the author of the PDOC00830 and PDOC00861 entries.
+ - Chantal Hulo is the author of the PDOC00987 entry.
+ - Vivienne Baillie Gerritsen for undertaking the major task of correcting the
+   grammar and style of this document.
+
+   ------------------------------------------------------------------------
+   PROSITE is copyright.   It  is  produced  by  the  Swiss  Institute   of
+   Bioinformatics (SIB). There are no restrictions on its use by non-profit
+   institutions as long as its  content is in no way modified. Usage by and
+   for commercial  entities requires a license agreement.   For information
+   about the licensing scheme  see: http://www.isb-sib.ch/announce/ or send
+   an email to license@isb-sib.ch.
+   ------------------------------------------------------------------------
+{END}
+{PDOC00210}
+{PS00237; G_PROTEIN_RECEPTOR}
+{BEGIN}
+*****************************************
+* G-protein coupled receptors signature *
+*****************************************
+
+G-protein coupled receptors [1 to 4,E1,E2] (also called R7G) are  an extensive
+group of  hormones,  neurotransmitters,  odorants  and  light  receptors which
+transduce extracellular  signals   by  interaction  with  guanine  nucleotide-
+binding (G) proteins. The receptors that are currently known to belong to this
+family are listed below.
+
+ - 5-hydroxytryptamine (serotonin) 1A to 1F, 2A to 2C, 4, 5A, 5B, 6 and 7 [5].
+ - Acetylcholine, muscarinic-type, M1 to M5.
+ - Adenosine A1, A2A, A2B and A3 [6].
+ - Adrenergic alpha-1A to -1C; alpha-2A to -2D;  beta-1 to -3 [7].
+ - Angiotensin II types I and II.
+ - Bombesin subtypes 3 and 4.
+ - Bradykinin B1 and B2.
+ - c3a and C5a anaphylatoxin.
+ - Cannabinoid CB1 and CB2.
+ - Chemokines C-C CC-CKR-1 to CC-CKR-8.
+ - Chemokines C-X-C CXC-CKR-1 to CXC-CKR-4.
+ - Cholecystokinin-A and cholecystokinin-B/gastrin.
+ - Dopamine D1 to D5 [8].
+ - Endothelin ET-a and ET-b [9].
+ - fMet-Leu-Phe (fMLP) (N-formyl peptide).
+ - Follicle stimulating hormone (FSH-R) [10].
+ - Galanin.
+ - Gastrin-releasing peptide (GRP-R).
+ - Gonadotropin-releasing hormone (GNRH-R).
+ - Histamine H1 and H2 (gastric receptor I).
+ - Lutropin-choriogonadotropic hormone (LSH-R) [10].
+ - Melanocortin MC1R to MC5R.
+ - Melatonin.
+ - Neuromedin B (NMB-R).
+ - Neuromedin K (NK-3R).
+ - Neuropeptide Y types 1 to 6.
+ - Neurotensin (NT-R).
+ - Octopamine (tyramine), from insects.
+ - Odorants [11].
+ - Opioids delta-, kappa- and mu-types [12].
+ - Oxytocin (OT-R).
+ - Platelet activating factor (PAF-R).
+ - Prostacyclin.
+ - Prostaglandin D2.
+ - Prostaglandin E2, EP1 to EP4 subtypes.
+ - Prostaglandin F2.
+ - Purinoreceptors (ATP) [13].
+ - Somatostatin types 1 to 5.
+ - Substance-K (NK-2R).
+ - Substance-P (NK-1R).
+ - Thrombin.
+ - Thromboxane A2.
+ - Thyrotropin (TSH-R) [10].
+ - Thyrotropin releasing factor (TRH-R).
+ - Vasopressin V1a, V1b and V2.
+ - Visual pigments (opsins and rhodopsin) [14].
+
+ - Proto-oncogene mas.
+ - A number of orphan receptors (whose ligand is not known) from  mammals  and
+   birds.
+ - Caenorhabditis  elegans  putative    receptors  C06G4.5, C38C10.1, C43C3.2,
+   T27D1.3 and ZC84.4.
+ - Three putative receptors encoded  in  the  genome of cytomegalovirus: US27,
+   US28, and UL33.
+ - ECRF3, a putative receptor encoded in the genome of herpesvirus saimiri.
+
+The  structure of all  these receptors is  thought  to be identical. They have
+seven hydrophobic regions,  each  of which most probably  spans  the membrane.
+The N-terminus is located on the  extracellular  side of the  membrane  and is
+often  glycosylated,  while  the  C-terminus  is  cytoplasmic   and  generally
+phosphorylated.  Three extracellular loops  alternate with three intracellular
+loops to link the seven transmembrane regions.  Most,  but  not  all  of these
+receptors, lack a signal peptide. The most conserved parts  of  these proteins
+are the transmembrane regions and the first two cytoplasmic loops. A conserved
+acidic-Arg-aromatic triplet is  present  in  the N-terminal  extremity  of the
+second cytoplasmic loop [15] and could be implicated in the interaction with G
+proteins.
+
+To detect this widespread family of  proteins we have developed a pattern that
+contains the conserved triplet and that also spans the major part of the third
+transmembrane helix.
+
+-Consensus pattern: [GSTALIVMFYWC]-[GSTANCPDE]-{EDPKRH}-x(2)-[LIVMNQGA]-x(2)-
+                    [LIVMFT]-[GSTANC]-[LIVMFYWSTAC]-[DENH]-R-[FYWCSH]-x(2)-
+                    [LIVM]
+-Sequences known to belong to this class detected by the pattern: the majority
+ of receptors. About 5% are not detected.
+-Other sequence(s) detected in SWISS-PROT: 50.
+
+-Expert(s) to contact by email:
+           Attwood T.K.; attwood@bsm.bioc.ucl.ac.uk
+           Kolakowski L.F. Jr.; kolakowski@uthsca.edu
+
+-Last update: July 1998 / Text revised.
+
+[ 1] Strosberg A.D.
+     Eur. J. Biochem. 196:1-10(1991).
+[ 2] Kerlavage A.R.
+     Curr. Opin. Struct. Biol. 1:394-401(1991).
+[ 3] Probst W.C., Snyder L.A., Schuster D.I., Brosius J., Sealfon S.C.
+     DNA Cell Biol. 11:1-20(1992).
+[ 4] Savarese T.M., Fraser C.M.
+     Biochem. J. 283:1-9(1992).
+[ 5] Branchek T.
+     Curr. Biol. 3:315-317(1993).
+[ 6] Stiles G.L.
+     J. Biol. Chem. 267:6451-6454(1992).
+[ 7] Friell T., Kobilka B.K., Lefkowitz R.J., Caron M.G.
+     Trends Neurosci. 11:321-324(1988).
+[ 8] Stevens C.F.
+     Curr. Biol. 1:20-22(1991).
+[ 9] Sakurai T., Yanagisawa M., Masaki T.
+     Trends Pharmacol. Sci. 13:103-107(1992).
+[10] Salesse R., Remy J.J., Levin J.M., Jallal B., Garnier J.
+     Biochimie 73:109-120(1991).
+[11] Lancet D., Ben-Arie N.
+     Curr. Biol. 3:668-674(1993).
+[12] Uhl G.R., Childers S., Pasternak G.
+     Trends Neurosci. 17:89-93(1994).
+[13] Barnard E.A., Burnstock G., Webb T.E.
+     Trends Pharmacol. Sci. 15:67-70(1994).
+[14] Applebury M.L., Hargrave P.A.
+     Vision Res. 26:1881-1895(1986).
+[15] Attwood T.K., Eliopoulos E.E., Findlay J.B.C.
+     Gene 98:153-159(1991).
+{END}
+{PDOC00559}
+{PS00649; G_PROTEIN_RECEP_F2_1}
+{PS00650; G_PROTEIN_RECEP_F2_2}
+{BEGIN}
+***************************************************
+* G-protein coupled receptors family 2 signatures *
+***************************************************
+
+A number of peptide hormones bind to  G-protein coupled  receptors that, while
+structurally similar to the majority of G-protein coupled receptors (R7G) (see
+the relevant entry <PDOC00210>),  do not show any  similarity  at the level of
+their sequence,  thus  representing  a  new family whose current known members
+[1,2] are listed below:
+
+ - Calcitonin receptor.
+ - Calcitonin gene-related peptide receptor.
+ - Corticotropin releasing factor receptor types 1 and 2.
+ - Gastric inhibitory polypeptide receptor.
+ - Glucagon receptor.
+ - Glucagon-like peptide 1 receptor.
+ - Growth hormone-releasing hormone receptor.
+ - Parathyroid hormone / parathyroid hormone-related peptide types 1 and 2.
+ - Pituitary adenylate cyclase activating polypeptide receptor.
+ - Secretin receptor.
+ - Vasoactive intestinal peptide receptor types 1 and 2.
+ - Insects diuretic hormone receptor.
+
+In addition to the above characterized receptors, this family also includes:
+
+ - Caenorhabditis elegans putative receptor C13B9.4.
+ - Caenorhabditis elegans putative receptor ZK643.3.
+ - Human  leucocyte  antigen  CD97, a protein that contains, in its N-terminal
+   section, 3 EGF-like domains (see <PDOC00021>).
+ - Human cell surface glycoprotein EMR1,  a protein  that  contains, in its N-
+   terminal section, 6 EGF-like domains (see <PDOC00021>).
+ - Mouse  cell  surface glycoprotein F4/80, a protein that contains, in its N-
+   terminal section, 7 EGF-like domains (see <PDOC00021>).
+
+All the  characterized receptors are coupled to G-proteins which activate both
+adenylyl cyclase and the phosphatidylinositol-calcium pathway.
+
+Like classical R7G they  seem  to  contain seven transmembrane regions.  Their
+N-terminus is probably located on the extracellular side of the  membrane  and
+potentially glycosylated, while their C-terminus is probably cytoplasmic.  But
+apart from these topological similarities they do share any region of sequence
+similarity and are therefore probably not evolutionary related.
+
+Every receptor  gene  in this family is encoded on multiple exons, and several
+of these  genes  are  alternatively  spliced  to  yield  functionally distinct
+products.
+
+The N-terminal extracellular domain of these receptors contains five conserved
+cysteines  residues  which  could  be  involved in  disulfide  bonds;  we have
+developed a pattern in the region that spans the first three cysteines.
+
+One of the most highly conserved regions spans the C-terminal part of the last
+transmembrane  region and the  beginning of the adjacent intracellular region.
+We have used this region as a second signature pattern.
+
+-Consensus pattern: C-x(3)-[FYWLIV]-D-x(3,4)-C-[FW]-x(2)-[STAGV]-x(8,9)-C-[PF]
+-Sequences known to belong to this class detected by the pattern: ALL,  except
+ for CD97, EMR1 and F4/80.
+-Other sequence(s) detected in SWISS-PROT: NONE.
+
+-Consensus pattern: Q-G-[LMFCA]-[LIVMFT]-[LIV]-x-[LIVFST]-[LIF]-[VFYH]-C-
+                    [LFY]-x-N-x(2)-V
+-Sequences known to belong to this class detected by the pattern: ALL.
+-Other sequence(s) detected in SWISS-PROT: NONE.
+
+-Expert(s) to contact by email:
+           Kolakowski L.F. Jr.; kolakowski@uthsca.edu
+
+-Last update: July 1998 / Patterns and text revised.
+
+[ 1] Jueppner H., Abou-Samra A.-B., Freeman M., Kong X.-F., Schipani E.,
+     Richards J., Kolakowski L.F. Jr., Hock J., Potts J.T. Jr.,
+     Kronenberg H.M., Segre G.V.
+     Science 254:1024-1026(1991).
+[ 2] Hamann J., Hartmann E., Van Lier R.A.W.
+     Genomics 32:144-147(1996).
+{END}
+{PDOC00754}
+{PS00979; G_PROTEIN_RECEP_F3_1}
+{PS00980; G_PROTEIN_RECEP_F3_2}
+{PS00981; G_PROTEIN_RECEP_F3_3}
+{BEGIN}
+***************************************************
+* G-protein coupled receptors family 3 signatures *
+***************************************************
+
+Glutamate and  calcium  bind  to  G-protein  coupled    receptors  that, while
+structurally similar to the majority of G-protein coupled receptors (R7G) (see
+the relevant entry <PDOC00210>),  do not show any  similarity  at the level of
+their sequence, thus representing a new family whose current known members are
+listed below:
+
+ - The  metabotropic  glutamate  receptors  which evoke a variety of function,
+   such as  long-tern  potentiation,  memory  acquisition  and learning, etc.,
+   through the modulation of intracellular effectors [1,2,3].  Currently there
+   are eight known  subtypes  of  metabotropic glutamate  receptors; mGluR1 to
+   mGluR8. The  subtypes  mGluR1  and mGluR5 are coupled to the stimulation of
+   the phosphatidylinositol-calcium  second  messenger  system  while  mGluR2,
+   mGluR3, mGluR4,  mGluR6,  mGluR7  and mGluR8 are coupled to G proteins that
+   inhibit adenylate cyclase activity.
+ - The extracellular calcium-sensing receptor [4]  which  sense changes in the
+   extracellular concentration of calcium ions.  The activity of this receptor
+   is coupled  to  the  stimulation of the phosphatidylinositol-calcium second
+   messenger system.
+ - Caenorhabditis elegans hypothetical protein ZC506.4.
+
+Structurally these receptors are composed of:
+
+ a) A signal sequence;
+ b) A  very  large  hydrophilic extracellular region of about 540 to 600 amino
+    acid  residues. This region contains 17 conserved cysteines which could be
+    involved in disulfide bonds;
+ c) A region of about 250 residues that  seem  to  contain seven transmembrane
+    domains;
+ d) A C-terminal cytoplasmic domain of variable length (50 to 350 residues).
+
+There are quite a number of regions of high sequence conservation both  in the
+N-terminal domain  and  in the region containing the transmembrane domains. We
+have selected  three  of  these  conserved  regions as signature patterns. The
+first one corresponds to a highly conserved hydrophobic segment in the central
+part of  the  N-terminal  extracellular  region.  The  second corresponds to a
+section that contains a cluster of six cysteines in the C-terminal part of the
+extracellular domain.  The  last one corresponds to the C-terminal part of the
+cytoplasmic loop between the fifth and sixth transmembrane domains.
+
+-Expert(s) to contact by email:
+           Kolakowski L.F. Jr.; kolakowski@uthsca.edu
+
+-Consensus pattern: [LV]-x-N-[LIVM](2)-x-L-F-x-I-[PA]-Q-[LIVM]-[STA]-x-
+                    [STA](3)-[STAN]
+-Sequences known to belong to this class detected by the pattern: ALL.
+-Other sequence(s) detected in SWISS-PROT: NONE.
+
+-Consensus pattern: C-C-[FYW]-x-C-x(2)-C-x(4)-[FYW]-x(2,4)-[DN]-x(2)-[STAH]-C-
+                    x(2)-C
+-Sequences known to belong to this class detected by the pattern: ALL.
+-Other sequence(s) detected in SWISS-PROT: NONE.
+
+-Consensus pattern: F-N-E-[STA]-K-x-I-[STAG]-F-[ST]-M
+-Sequences known to belong to this class detected by the pattern: ALL.
+-Other sequence(s) detected in SWISS-PROT: NONE.
+
+-Last update: July 1998 / Patterns and text revised.
+
+[ 1] Tanabe Y., Masu M., Ishii T., Shigemoto R., Nakanishi S.
+     Neuron 8:169-179(1992).
+[ 2] Okamoto N., Hori S., Akazawa C., Hayashi Y., Shigemoto R., Mizuno N.,
+     Nakanishi S.
+     J. Biol. Chem. 269:1231-1236(1994).
+[ 3] Duvoisin R.M., Zhang C., Ramonell K.
+     J. Neurosci. 15:3075-3083(1995).
+[ 4] Brown E.M., Gamba G., Riccardi D., Lombardi M., Butters R., Kifor O.,
+     Sun A., Hediger M.A., Lytton J., Hebert S.C.
+     Nature 366:575-580(1993).
+{END}
+{PDOC00211}
+{PS00238; OPSIN}
+{BEGIN}
+*************************************************
+* Visual pigments (opsins) retinal binding site *
+*************************************************
+
+Visual pigments [1,2] are the light-absorbing  molecules that  mediate vision.
+They consist of  an apoprotein, opsin,  covalently  linked  to the chromophore
+cis-retinal.  Vision is  effected through  the absorption of a  photon by cis-
+retinal  which is isomerized to  trans-retinal.  This isomerization leads to a
+change  of conformation  of the protein. Opsins are integral membrane proteins
+with  seven transmembrane regions that belong to family 1 of G-protein coupled
+receptors (see <PDOC00210>).
+
+In vertebrates four different pigments are generally found.   Rod cells, which
+mediate vision in dim light, contain the pigment rhodopsin.  Cone cells, which
+function in bright light, are responsible  for  color vision and contain three
+or more color pigments (for example, in mammals: red, blue and green).
+
+In Drosophila, the  eye   is composed   of 800   facets  or   ommatidia.  Each
+ommatidium contains eight photoreceptor cells (R1-R8):  the R1 to R6 cells are
+outer cells,  R7  and R8 inner cells. Each of the three types of cells (R1-R6,
+R7 and R8) expresses a specific opsin.
+
+Proteins evolutionary related to opsins include squid retinochrome, also known
+as retinal  photoisomerase, which converts various isomers of retinal into 11-
+cis retinal and mammalian retinal pigment  epithelium (RPE) RGR [3], a protein
+that may also act in retinal isomerization.
+
+The attachment  site  for  retinal in the above proteins is a conserved lysine
+residue in  the  middle  of  the  seventh  transmembrane helix. The pattern we
+developed includes this residue.
+
+-Consensus pattern: [LIVMWAC]-[PGAC]-x(3)-[SAC]-K-[STALIMR]-[GSACPNV]-[STACP]-
+                    x(2)-[DENF]-[AP]-x(2)-[IY]
+                    [K is the retinal binding site]
+-Sequences known to belong to this class detected by the pattern: ALL.
+-Other sequence(s) detected in SWISS-PROT: NONE.
+-Last update: July 1998 / Pattern and text revised.
+
+[ 1] Applebury M.L., Hargrave P.A.
+     Vision Res. 26:1881-1895(1986).
+[ 2] Fryxell K.J., Meyerowitz E.M.
+     J. Mol. Evol. 33:367-378(1991).
+[ 3] Shen D., Jiang M., Hao W., Tao L., Salazar M., Fong H.K.W.
+     Biochemistry 33:13117-13125(1994).
+{END}

@@ -1,0 +1,70 @@
+<b>Here is a sample session with emma</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>emma </b>
+Multiple alignment program - interface to ClustalW program
+Input (gapped) sequence(s): <b>globins.fasta</b>
+output sequence set [hbb_human.aln]: <b></b>
+Dendrogram (tree file) from clustalw output file [hbb_human.dnd]: <b></b>
+
+
+
+
+ CLUSTAL W (1.83) Multiple Sequence Alignments
+
+
+
+Sequence type explicitly set to Protein
+Sequence format is Pearson
+Sequence 1: HBB_HUMAN       146 aa
+Sequence 2: HBB_HORSE       146 aa
+Sequence 3: HBA_HUMAN       141 aa
+Sequence 4: HBA_HORSE       141 aa
+Sequence 5: MYG_PHYCA       153 aa
+Sequence 6: GLB5_PETMA      149 aa
+Sequence 7: LGB2_LUPLU      153 aa
+Start of Pairwise alignments
+Aligning...
+Sequences (1:2) Aligned. Score:  83
+Sequences (1:3) Aligned. Score:  43
+Sequences (1:4) Aligned. Score:  42
+Sequences (1:5) Aligned. Score:  24
+Sequences (1:6) Aligned. Score:  21
+Sequences (1:7) Aligned. Score:  14
+Sequences (2:3) Aligned. Score:  41
+Sequences (2:4) Aligned. Score:  43
+Sequences (2:5) Aligned. Score:  24
+Sequences (2:6) Aligned. Score:  19
+Sequences (2:7) Aligned. Score:  15
+Sequences (3:4) Aligned. Score:  87
+Sequences (3:5) Aligned. Score:  26
+Sequences (3:6) Aligned. Score:  29
+Sequences (3:7) Aligned. Score:  16
+Sequences (4:5) Aligned. Score:  26
+Sequences (4:6) Aligned. Score:  27
+Sequences (4:7) Aligned. Score:  12
+Sequences (5:6) Aligned. Score:  21
+Sequences (5:7) Aligned. Score:  7
+Sequences (6:7) Aligned. Score:  11
+Guide tree        file created:   [12345678A]
+Start of Multiple Alignment
+There are 6 groups
+Aligning...
+Group 1: Sequences:   2      Score:2194
+Group 2: Sequences:   2      Score:2165
+Group 3: Sequences:   4      Score:960
+Group 4:                     Delayed
+Group 5:                     Delayed
+Group 6:                     Delayed
+Sequence:5     Score:865
+Sequence:6     Score:797
+Sequence:7     Score:1044
+Alignment Score 4164
+GCG-Alignment file created      [12345678A]
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

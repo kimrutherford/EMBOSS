@@ -1,0 +1,146 @@
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-database</td>
+<td>Name of a single database to give information on</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>-html</td>
+<td>Format output as an HTML table</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]protein</td>
+<td>Display protein databases</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]nucleic</td>
+<td>Display nucleic acid databases</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-full</td>
+<td>Display all columns</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-methods</td>
+<td>This displays the access methods that can be used on this database, for all, query or ID access</td>
+<td>Boolean value Yes/No</td>
+<td>$(full)</td>
+</tr>
+
+<tr>
+<td>-fields</td>
+<td>This displays the search fields that can be used on this database, other than the standard 'id' or 'acc' fields.</td>
+<td>Boolean value Yes/No</td>
+<td>$(full)</td>
+</tr>
+
+<tr>
+<td>-defined</td>
+<td>This displays a short name for the file containing the database definition</td>
+<td>Boolean value Yes/No</td>
+<td>$(full)</td>
+</tr>
+
+<tr>
+<td>-release</td>
+<td>Display 'release' column</td>
+<td>Boolean value Yes/No</td>
+<td>$(full)</td>
+</tr>
+
+<tr>
+<td>-outfile</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td>stdout</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-only</td>
+<td>This is a way of shortening the command line if you only want a few standard columns to be displayed. Instead of specifying:
+'-nohead -notype -noid -noquery -noall'
+to get only the comment output, you can specify
+'-only -comment'</td>
+<td>Toggle value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-heading</td>
+<td>Display column headings</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr>
+<td>-type</td>
+<td>Display 'type' column</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr>
+<td>-id</td>
+<td>Display 'id' column</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr>
+<td>-query</td>
+<td>Display 'qry' column</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr>
+<td>-all</td>
+<td>Display 'all' column</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr>
+<td>-comment</td>
+<td>Display 'comment' column</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+</table>

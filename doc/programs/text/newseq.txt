@@ -1,0 +1,202 @@
+
+                                  newseq 
+
+
+
+Function
+
+   Type in a short new sequence
+
+Description
+
+   This allows you to type a sequence into a file in a quick and easy
+   manner.
+
+   The length of the sequence you can type in is restricted to a fairly
+   short length (typically less than 255 characters). This length
+   restriction is not a property of the EMBOSS package, but of the
+   computer system you are using. This is because, as you type in
+   response to a prompt from this program, what you type is stored in the
+   computer operating system before being handed over to the program.
+   There is often a limit of less than 255 characters on the length of a
+   response that a computer system will allow you to give.
+
+   Despite this restriction, it is expected that this program will be a
+   useful and easy way of constructing new sequence files.
+
+   (You wouldn't want to type a long sequence in by hand, anyway, would
+   you?)
+
+Usage
+
+   Here is a sample session with newseq
+
+   Type in a short sequence to the file 'mycc.pep' in SWISSPROT format:
+
+
+% newseq 
+Type in a short new sequence.
+Name of the sequence: cytoc
+Description of the sequence: fragment of cytochrome c
+Type of sequence
+         N : Nucleic
+         P : Protein
+Type of sequence [N]: p
+Enter the sequence: KKKEERADLIAY
+output sequence [outfile.fasta]: swiss::mycc.pep
+
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-name]              string     The name of of the sequence should be a
+                                  single word that you will use to identify
+                                  the sequence. It should have no (or few)
+                                  punctuation characters in it. (Any string is
+                                  accepted)
+  [-description]       string     Enter any description of the sequence that
+                                  you require. (Any string is accepted)
+  [-type]              menu       [N] Type of sequence (Values: N (Nucleic); P
+                                  (Protein))
+  [-sequence]          string     The sequence itself.
+                                  Because of the limitation of the operating
+                                  system, you will only be able to type in a
+                                  short sequence of (typically) 250
+                                  characters, or so.
+                                  The keyboard will beep at you when you have
+                                  reached this limit and you will not be able
+                                  to press the RETURN/ENTER key until you have
+                                  deleted a few characters. (Any string is
+                                  accepted)
+  [-outseq]            seqout     [.] Sequence filename and
+                                  optional format (output USA)
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outseq" associated qualifiers
+   -osformat5          string     Output seq format
+   -osextension5       string     File name extension
+   -osname5            string     Base file name
+   -osdirectory5       string     Output directory
+   -osdbname5          string     Database name to add
+   -ossingle5          boolean    Separate file for each entry
+   -oufo5              string     UFO features
+   -offormat5          string     Features format
+   -ofname5            string     Features file name
+   -ofdirectory5       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+Output file format
+
+   newseq writes a normal sequence file.
+
+  Output files for usage example
+
+  File: mycc.pep
+
+ID   cytoc          Unreviewed;         12 AA.
+DE   fragment of cytochrome c
+SQ   SEQUENCE    12 AA;   1464 MW;  6F142FA88DADC40B CRC64;
+     KKKEERADLI AY
+//
+
+Data files
+
+   None.
+
+Notes
+
+   The length of the sequence you can type in is restricted to a fairly
+   short length (typically less than 255 characters). If your computer
+   beeps at you, you will typically have to delete the last character you
+   typed and press the RETURN key.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name                         Description
+   biosed       Replace or delete sequence sections
+   codcopy      Reads and writes a codon usage table
+   cutseq       Removes a specified section from a sequence
+   degapseq     Removes gap characters from sequences
+   descseq      Alter the name or description of a sequence
+   entret       Reads and writes (returns) flatfile entries
+   extractalign Extract regions from a sequence alignment
+   extractfeat  Extract features from a sequence
+   extractseq   Extract regions from a sequence
+   listor       Write a list file of the logical OR of two sets of sequences
+   makenucseq   Creates random nucleotide sequences
+   makeprotseq  Creates random protein sequences
+   maskfeat     Mask off features of a sequence
+   maskseq      Mask off regions of a sequence
+   noreturn     Removes carriage return from ASCII files
+   notseq       Exclude a set of sequences and write out the remaining ones
+   nthseq       Writes one sequence from a multiple set of sequences
+   pasteseq     Insert one sequence into another
+   revseq       Reverse and complement a sequence
+   seqret       Reads and writes (returns) sequences
+   seqretsplit  Reads and writes (returns) sequences in individual files
+   skipseq      Reads and writes (returns) sequences, skipping first few
+   splitter     Split a sequence into (overlapping) smaller sequences
+   trimest      Trim poly-A tails off EST sequences
+   trimseq      Trim ambiguous bits off the ends of sequences
+   union        Reads sequence fragments and builds one sequence
+   vectorstrip  Strips out DNA between a pair of vector sequences
+   yank         Reads a sequence range, appends the full USA to a list file
+
+Author(s)
+
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+History
+
+   Written (1999) - Gary Williams
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

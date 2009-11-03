@@ -1,0 +1,126 @@
+>>>>L07770
+ 
+ID   L07770     standard; RNA; VRT; 1684 BP.
+XX
+AC   L07770;
+XX
+SV   L07770.1
+XX
+DT   12-DEC-1992 (Rel. 34, Created)
+DT   04-MAR-2000 (Rel. 63, Last updated, Version 7)
+XX
+DE   Xenopus laevis rhodopsin mRNA, complete cds.
+XX
+KW   G protein-coupled receptor; phototransduction protein; retinal protein;
+KW   rhodopsin; transmembrane protein.
+XX
+OS   Xenopus laevis (African clawed frog)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Teleostomi;
+OC   Euteleostomi; Amphibia; Batrachia; Anura; Mesobatrachia; Pipoidea; Pipidae;
+OC   Xenopodinae; Xenopus.
+XX
+RN   [1]
+RP   1-1684
+RA   Knox B.E., Scalzetti L.C., Batni S., Wang J.Q.;
+RT   "Molecular cloning of the abundant rhodopsin and transducin from Xenopus
+RT   laevis";
+RL   Unpublished.
+XX
+RN   [2]
+RP   1-1684
+RX   MEDLINE; 96216396.
+RA   Batni S., Scalzetti L., Moody S.A., Knox B.E.;
+RT   "Characterization of the Xenopus rhodopsin gene";
+RL   J. Biol. Chem. 271(6):3179-3186(1996).
+XX
+DR   SWISS-PROT; P29403; OPSD_XENLA.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .1684
+FT                   /db_xref="taxon:8355"
+FT                   /organism="Xenopus laevis"
+FT                   /dev_stage="adult"
+FT                   /tissue_type="retina"
+FT                   /tissue_lib="lambda-ZAPII"
+FT   CDS             110. .1174
+FT                   /codon_start=1
+FT                   /db_xref="SWISS-PROT:P29403"
+FT                   /note="gene accession number U23808"
+FT                   /product="rhodopsin"
+FT                   /protein_id="AAC42232.1"
+FT                   /translation="MNGTEGPNFYVPMSNKTGVVRSPFDYPQYYLAEPWQYSALAAYMF
+FT                   LLILLGLPINFMTLFVTIQHKKLRTPLNYILLNLVFANHFMVLCGFTVTMYTSMHGYFI
+FT                   FGQTGCYIEGFFATLGGEVALWSLVVLAVERYMVVCKPMANFRFGENHAIMGVAFTWIM
+FT                   ALSCAAPPLFGWSRYIPEGMQCSCGVDYYTLKPEVNNESFVIYMFIVHFTIPLIVIFFC
+FT                   YGRLLCTVKEAAAQQQESATTQKAEKEVTRMVVIMVVFFLICWVPYAYVAFYIFTHQGS
+FT                   NFGPVFMTVPAFFAKSSAIYNPVIYIVLNKQFRNCLITTLCCGKNPFGDEDGSSAATSK
+FT                   TEASSVSSSQVSPA"
+FT   misc_feature    189. .1684
+FT                   /note="sequenced from clone pXOP71"
+FT   variation       1224
+FT                   /note="clone pX0P5 contained deletion from bp 1224-1534"
+XX
+SQ   Sequence 1684 BP; 426 A; 431 C; 339 G; 488 T; 0 other;
+>>>>U23808
+ 
+ID   U23808     standard; DNA; VRT; 4734 BP.
+XX
+AC   U23808;
+XX
+SV   U23808.1
+XX
+DT   23-APR-1995 (Rel. 43, Created)
+DT   04-MAR-2000 (Rel. 63, Last updated, Version 7)
+XX
+DE   Xenopus laevis rhodopsin gene, complete cds.
+XX
+KW   .
+XX
+OS   Xenopus laevis (African clawed frog)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Teleostomi;
+OC   Euteleostomi; Amphibia; Batrachia; Anura; Mesobatrachia; Pipoidea; Pipidae;
+OC   Xenopodinae; Xenopus.
+XX
+RN   [1]
+RP   1-4734
+RX   MEDLINE; 96216396.
+RA   Batni S., Scalzetti L., Moody S.A., Knox B.E.;
+RT   "Characterization of the Xenopus rhodopsin gene";
+RL   J. Biol. Chem. 271(6):3179-3186(1996).
+XX
+RN   [2]
+RP   1-4734
+RA   Batni S., Scalzetti L., Knox B.E.;
+RT   ;
+RL   Submitted (30-MAR-1995) to the EMBL/GenBank/DDBJ databases.
+RL   Barry E. Knox, Biochemistry and Molecular Biology, SUNY HSC at Syracuse,
+RL   750 E. Adams St., Syracuse, NY 13210, USA
+XX
+DR   SWISS-PROT; P29403; OPSD_XENLA.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .4734
+FT                   /db_xref="taxon:8355"
+FT                   /organism="Xenopus laevis"
+FT   mRNA            join(1181. .1650,1899. .2067,2669. .2834,3085. .3324,
+FT                   4030. .4687)
+FT                   /product="rhodopsin"
+FT   CDS             join(1290. .1650,1899. .2067,2669. .2834,3085. .3324,
+FT                   4030. .4158)
+FT                   /codon_start=1
+FT                   /db_xref="SWISS-PROT:P29403"
+FT                   /note="cDNA sequence deposited under GenBank Accession
+FT                   Number L07770"
+FT                   /product="rhodopsin"
+FT                   /protein_id="AAC59901.1"
+FT                   /translation="MNGTEGPNFYVPMSNKTGVVRSPFDYPQYYLAEPWQYSALAAYMF
+FT                   LLILLGLPINFMTLFVTIQHKKLRTPLNYILLNLVFANHFMVLCGFTVTMYTSMHGYFI
+FT                   FGQTGCYIEGFFATLGGEVALWSLVVLAVERYMVVCKPMANFRFGENHAIMGVAFTWIM
+FT                   ALSCAAPPLFGWSRYIPEGMQCSCGVDYYTLKPEVNNESFVIYMFIVHFTIPLIVIFFC
+FT                   YGRLLCTVKEAAAQQQESATTQKAEKEVTRMVVIMVVFFLICWVPYAYVAFYIFTHQGS
+FT                   NFGPVFMTVPAFFAKSSAIYNPVIYIVLNKQFRNCLITTLCCGKNPFGDEDGSSAATSK
+FT                   TEASSVSSSQVSPA"
+XX
+SQ   Sequence 4734 BP; 1315 A; 1046 C; 985 G; 1388 T; 0 other;

@@ -1,0 +1,113 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: x13776.prettyseq </h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+PRETTYSEQ of X13776 from 1 to 2167
+
+           ---------|---------|---------|---------|---------|---------|
+         1 GGTACCGCTGGCCGAGCATCTGCTCGATCACCACCAGCCGGGCGACGGGAACTGCACGAT 60
+                                                                        
+
+           ---------|---------|---------|---------|---------|---------|
+        61 CTACCTGGCGAGCCTGGAGCACGAGCGGGTTCGCTTCGTACGGCGCTGAGCGACAGTCAC 120
+                                                                        
+
+           ---------|---------|---------|---------|---------|---------|
+       121 AGGAGAGGAAACGGatgggatcgcaccaggagcggccgctgatcggcctgctgttctccg 180
+         1               M  G  S  H  Q  E  R  P  L  I  G  L  L  F  S  E 16
+
+           ---------|---------|---------|---------|---------|---------|
+       181 aaaccggcgtcaccgccgatatcgagcgctcgcacgcgtatggcgcattgctcgcggtcg 240
+        17   T  G  V  T  A  D  I  E  R  S  H  A  Y  G  A  L  L  A  V  E 36
+
+           ---------|---------|---------|---------|---------|---------|
+       241 agcaactgaaccgcgagggcggcgtcggcggtcgcccgatcgaaacgctgtcccaggacc 300
+        37   Q  L  N  R  E  G  G  V  G  G  R  P  I  E  T  L  S  Q  D  P 56
+
+           ---------|---------|---------|---------|---------|---------|
+       301 ccggcggcgacccggaccgctatcggctgtgcgccgaggacttcattcgcaaccgggggg 360
+        57   G  G  D  P  D  R  Y  R  L  C  A  E  D  F  I  R  N  R  G  V 76
+
+           ---------|---------|---------|---------|---------|---------|
+       361 tacggttcctcgtgggctgctacatgtcgcacacgcgcaaggcggtgatgccggtggtcg 420
+        77   R  F  L  V  G  C  Y  M  S  H  T  R  K  A  V  M  P  V  V  E 96
+
+           ---------|---------|---------|---------|---------|---------|
+       421 agcgcgccgacgcgctgctctgctacccgaccccctacgagggcttcgagtattcgccga 480
+        97   R  A  D  A  L  L  C  Y  P  T  P  Y  E  G  F  E  Y  S  P  N 116
+
+           ---------|---------|---------|---------|---------|---------|
+       481 acatcgtctacggcggtccggcgccgaaccagaacagtgcgccgctggcggcgtacctga 540
+       117   I  V  Y  G  G  P  A  P  N  Q  N  S  A  P  L  A  A  Y  L  I 136
+
+           ---------|---------|---------|---------|---------|---------|
+       541 ttcgccactacggcgagcgggtggtgttcatcggctcggactacatctatccgcgggaaa 600
+       137   R  H  Y  G  E  R  V  V  F  I  G  S  D  Y  I  Y  P  R  E  S 156
+
+           ---------|---------|---------|---------|---------|---------|
+       601 gcaaccatgtgatgcgccacctgtatcgccagcacggcggcacggtgctcgaggaaatct 660
+       157   N  H  V  M  R  H  L  Y  R  Q  H  G  G  T  V  L  E  E  I  Y 176
+
+           ---------|---------|---------|---------|---------|---------|
+       661 acattccgctgtatccctccgacgacgacttgcagcgcgccgtcgagcgcatctaccagg 720
+       177   I  P  L  Y  P  S  D  D  D  L  Q  R  A  V  E  R  I  Y  Q  A 196
+
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+      1441 GCCGGTGGACGTGGTCTTCACCAGCATTTTCCAGAATGGCCACCACGACGAGATCGCTGC 1500
+                                                                        
+
+           ---------|---------|---------|---------|---------|---------|
+      1501 GCTGCTCGCCGCCGGGACTCCGCGCACTACCCTGGTGGCGCTGGTGGAGTACGAAAGCCC 1560
+                                                                        
+
+           ---------|---------|---------|---------|---------|---------|
+      1561 CGCGGTGCTCTCGCAGATCATCGAGCTGGAGTGCCACGGCGTGATCACCCAGCCGCTCGA 1620
+                                                                        
+
+           ---------|---------|---------|---------|---------|---------|
+      1621 TGCCCACCGGGTGCTGCCTGTGCTGGTATCGGCGCGGCGCATCAGCGAGGAAATGGCGAA 1680
+                                                                        
+
+           ---------|---------|---------|---------|---------|---------|
+      1681 GCTGAAGCAGAAGACCGAGCAGCTCCAGGACCGCATCGCCGGCCAGGCCCGGATCAACCA 1740
+                                                                        
+
+           ---------|---------|---------|---------|---------|---------|
+      1741 GGCCAAGGTGTTGCTGATGCAGCGCCATGGCTGGGACGAGCGCGAGGCGCACCAGCACCT 1800
+                                                                        
+
+           ---------|---------|---------|---------|---------|---------|
+      1801 GTCGCGGGAAGCGATGAAGCGGCGCGAGCCGATCCTGAAGATCGCTCAGGAGTTGCTGGG 1860
+                                                                        
+
+           ---------|---------|---------|---------|---------|---------|
+      1861 AAACGAGCCGTCCGCCTGAGCGATCCGGGCCGACCAGAACAATAACAAGAGGGGTATCGT 1920
+                                                                        
+
+           ---------|---------|---------|---------|---------|---------|
+      1921 CATCATGCTGGGACTGGTTCTGCTGTACGTTGGCGCGGTGCTGTTTCTCAATGCCGTCTG 1980
+                                                                        
+
+           ---------|---------|---------|---------|---------|---------|
+      1981 GTTGCTGGGCAAGATCAGCGGTCGGGAGGTGGCGGTGATCAACTTCCTGGTCGGCGTGCT 2040
+                                                                        
+
+           ---------|---------|---------|---------|---------|---------|
+      2041 GAGCGCCTGCGTCGCGTTCTACCTGATCTTTTCCGCAGCAGCCGGGCAGGGCTCGCTGAA 2100
+                                                                        
+
+           ---------|---------|---------|---------|---------|---------|
+      2101 GGCCGGAGCGCTGACCCTGCTATTCGCTTTTACCTATCTGTGGGTGGCCGCCAACCAGTT 2160
+                                                                        
+
+           -------
+      2161 CCTCGAG 2167
+                   
+
+</pre>
+</td></tr></table><p>

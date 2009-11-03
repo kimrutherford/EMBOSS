@@ -1,0 +1,214 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: seqretsplit
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+
+<!--#include file="header1.inc" -->
+seqretsplit
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/seqretsplit.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<b>seqretsplit</b> is exactly the same as the program <b>seqret</b>
+except that when it writes out more than one sequence, it writes each
+sequence to an individual file. 
+<P>
+
+Its main use is therefore to split a file containing multiple sequences
+into many files, each containing one sequence. 
+<p>
+
+The names of the files it creates are derived from the ID name of the
+sequence, followed by an extension denoting the format of the sequence. 
+You have no control over the names of the files it writes out. 
+<P>
+
+For example, if the files <i>embl:hsfa11*</i> are read in and the
+output is specified as <i>wibble.seq</i>, then the following files are
+expected to be created:
+<P>
+
+<pre>
+hsfa110.fasta
+hsfa111.fasta
+hsfa112.fasta
+hsfa113.fasta
+hsfa114.fasta
+</pre>
+<p>
+(No file <i>wibble.seq</i> is created.)
+<p>
+
+Why would you want to split a multiple sequence file into many
+individual files? 
+<p>
+
+EMBOSS programs can read in many sequences from one file where this is
+sensible.  Sometimes EMBOSS programs can only read in one sequence at a
+time because that is the sensible way to do things, but your sequence is
+one sequence of many in a file.  You can specify that sequence using the
+USA <i>filename:sequenceID</i>, but you may still feel more comfortable
+splitting your sequences up into many files first.
+<p>
+
+Many non-EMBOSS programs will also have restrictions on whether they can
+read in multiple sequence files or not.
+<p>
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/seqretsplit.usage" -->
+
+<p>
+
+The specification of the output file is not used in this case.
+<p>
+
+At some point this ought to change and you will not be prompted for the
+output file at all. 
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/seqretsplit.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/seqretsplit.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+<b>seqretsplit</b> reads a normal sequence USA.
+
+<p>
+
+<!--#include file="inc/seqretsplit.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/seqretsplit.output" -->
+
+<p>
+
+One file for each input sequence is written out.
+
+<p>
+
+The names of the files it creates are derived from the ID name of the
+sequence, followed by an extension denoting the format of the sequence. 
+You have no control over the names of the files it writes out. 
+
+<p>
+
+For example, if the files <i>embl:hsfa11*</i> are read in and the
+output is specified as <i>wibble.seq</i>, then the following files are
+expected to be created:
+
+<p>
+
+<pre>
+hsfa110.fasta
+hsfa111.fasta
+hsfa112.fasta
+hsfa113.fasta
+hsfa114.fasta
+</pre>
+
+<p>
+
+(No file <i>wibble.seq</i> is created.)
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+It shouldn't really prompt for the output filename.
+<p>
+This isa side effect of the waysequence output works in
+EMBOSS. Writing multiple sequences to separate files (the -ossingle
+qualifier) does this, and seqretsplit has set it automatically on.
+
+<!--#include file="inc/seqretsplit.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/price.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/seqretsplit.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/seqretsplit.comment" -->
+
+
+</BODY>
+</HTML>
+

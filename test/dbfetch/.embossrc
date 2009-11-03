@@ -1,0 +1,44 @@
+#include .embossrc
+
+DB srsembl [ method: "srswww" format: "embl"
+    url: "http://srs.ebi.ac.uk/srs7bin/cgi-bin/wgetz"
+    dbalias: "emblrelease"
+    type: "N"
+]
+
+DB srspir [ method: "srswww" format: "pir"
+    url: "http://srs.ebi.ac.uk/srs7bin/cgi-bin/wgetz"
+    dbalias: "pir"
+    type: "P"
+]
+
+DB srssw [ method: "srswww" format: "swiss"
+    url: "http://srs.ebi.ac.uk/srs7bin/cgi-bin/wgetz"
+    dbalias: "swissprot"
+    type: "P"
+]
+
+DB srsswnew [ method: "srswww" format: "swiss"
+    url: "http://srs.ebi.ac.uk/srs7bin/cgi-bin/wgetz"
+    dbalias: "sptrembl"
+    type: "P"
+]
+
+DB srsrefseqn [ method: "srswww" format: "refseq"
+    url: "http://srs.ebi.ac.uk/srs7bin/cgi-bin/wgetz"
+    dbalias: "refseq"
+    type: "N"
+]
+
+DB srsrefseqp [ method: "srswww" format: "refseq"
+    url: "http://srs.ebi.ac.uk/srs7bin/cgi-bin/wgetz"
+    dbalias: "refseq"
+    type: "P"
+]
+
+DB srsgenbank [ method: "srswww" format: "genbank"
+    url: "http://genius.embnet.dkfz-heidelberg.de/menu/cgi-bin/srs7.1.3.1/wgetz"
+    dbalias: "genbank"
+    type: "N"
+   ]
+

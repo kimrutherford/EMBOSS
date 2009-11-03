@@ -1,0 +1,58 @@
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>(Gapped) sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-exclude]<br>(Parameter 2)</td>
+<td>Enter a list of sequence names or accession numbers to exclude from the sequences read in. The excluded sequences will be written to the file specified in the 'junkout' parameter. The remainder will be written out to the file specified in the 'outseq' parameter.
+The list of sequence names can be separated by either spaces or commas.
+The sequence names can be wildcarded.
+The sequence names are case independent.
+An example of a list of sequences to be excluded is:
+myseq, hs*, one two three
+a file containing a list of sequence names can be specified by giving the file name preceeded by a '@', eg: '@names.dat'</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 3)</td>
+<td>Sequence set(s) filename and optional format (output USA)</td>
+<td>Writeable sequence(s)</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-junkoutseq</td>
+<td>This file collects the sequences which you have excluded from the main output file of sequences.</td>
+<td>Writeable sequence(s)</td>
+<td>/dev/null</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>

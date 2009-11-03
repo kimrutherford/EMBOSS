@@ -1,0 +1,219 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: globins.infoalign</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+# USA             Name        SeqLen	AlignLen	Gaps	GapLen	Ident	Similar	Differ	% Change	Weight	Description
+msf::../../data/globins.msf:HBB_HUMAN	HBB_HUMAN     146	150	3	4	68	17	61	54.666668	0.610000	
+msf::../../data/globins.msf:HBB_HORSE	HBB_HORSE     146	150	3	4	68	17	61	54.666668	0.650000	
+msf::../../data/globins.msf:HBA_HUMAN	HBA_HUMAN     141	144	2	3	60	9	72	58.333332	0.650000	
+msf::../../data/globins.msf:HBA_HORSE	HBA_HORSE     141	144	2	3	63	6	72	56.250000	0.830000	
+msf::../../data/globins.msf:MYG_PHYCA	MYG_PHYCA     153	157	3	4	30	15	108	80.891716	1.000000	
+msf::../../data/globins.msf:GLB5_PETMA	GLB5_PETMA    149	151	1	2	32	16	101	78.807945	0.910000	
+msf::../../data/globins.msf:LGB2_LUPLU	LGB2_LUPLU    153	153	0	0	19	24	110	87.581696	0.430000	
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: globins.infoalign</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+# Name        SeqLen	AlignLen	Gaps	GapLen	Ident	Similar	Differ	% Change	Weight	Description
+HBB_HUMAN     146	150	3	4	68	17	61	54.666668	0.610000	
+HBB_HORSE     146	150	3	4	68	17	61	54.666668	0.650000	
+HBA_HUMAN     141	144	2	3	60	9	72	58.333332	0.650000	
+HBA_HORSE     141	144	2	3	63	6	72	56.250000	0.830000	
+MYG_PHYCA     153	157	3	4	30	15	108	80.891716	1.000000	
+GLB5_PETMA    149	151	1	2	32	16	101	78.807945	0.910000	
+LGB2_LUPLU    153	153	0	0	19	24	110	87.581696	0.430000	
+</pre>
+</td></tr></table><p>
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: globins.infoalign</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+HBB_HUMAN     146
+HBB_HORSE     146
+HBA_HUMAN     141
+HBA_HORSE     141
+MYG_PHYCA     153
+GLB5_PETMA    149
+LGB2_LUPLU    153
+</pre>
+</td></tr></table><p>
+
+<a name="output.4"></a>
+<h3>Output files for usage example 4</h3>
+<p><h3>File: globins.infoalign</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+HBB_HUMAN     4	61
+HBB_HORSE     4	61
+HBA_HUMAN     3	72
+HBA_HORSE     3	72
+MYG_PHYCA     4	108
+GLB5_PETMA    2	101
+LGB2_LUPLU    0	110
+</pre>
+</td></tr></table><p>
+
+<a name="output.5"></a>
+<h3>Output files for usage example 5</h3>
+<p><h3>File: globins.infoalign</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+HBB_HUMAN     3
+HBB_HORSE     3
+HBA_HUMAN     2
+HBA_HORSE     2
+MYG_PHYCA     3
+GLB5_PETMA    1
+LGB2_LUPLU    0
+</pre>
+</td></tr></table><p>
+
+<a name="output.6"></a>
+<h3>Output files for usage example 6</h3>
+<p><h3>File: globins.infoalign</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&lt;table border cellpadding=4 bgcolor="#FFFFF0"&gt;
+&lt;tr&gt;&lt;th&gt;USA&lt;/th&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Sequence Length&lt;/th&gt;&lt;th&gt;Aligned Length&lt;/th&gt;&lt;th&gt;Gaps&lt;/th&gt;&lt;th&gt;Gap Length&lt;/th&gt;&lt;th&gt;Identity&lt;/th&gt;&lt;th&gt;Similarity&lt;/th&gt;&lt;th&gt;Difference&lt;/th&gt;&lt;th&gt;% Change&lt;/th&gt;&lt;th&gt;Weight&lt;/th&gt;&lt;th&gt;Description&lt;/th&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;msf::../../data/globins.msf:HBB_HUMAN&lt;/td&gt;
+&lt;td&gt;HBB_HUMAN&lt;/td&gt;
+&lt;td&gt;146&lt;/td&gt;
+&lt;td&gt;150&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;68&lt;/td&gt;
+&lt;td&gt;17&lt;/td&gt;
+&lt;td&gt;61&lt;/td&gt;
+&lt;td&gt;54.666668&lt;/td&gt;
+&lt;td&gt;0.610000&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;msf::../../data/globins.msf:HBB_HORSE&lt;/td&gt;
+&lt;td&gt;HBB_HORSE&lt;/td&gt;
+&lt;td&gt;146&lt;/td&gt;
+&lt;td&gt;150&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;68&lt;/td&gt;
+&lt;td&gt;17&lt;/td&gt;
+&lt;td&gt;61&lt;/td&gt;
+&lt;td&gt;54.666668&lt;/td&gt;
+&lt;td&gt;0.650000&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;msf::../../data/globins.msf:HBA_HUMAN&lt;/td&gt;
+&lt;td&gt;HBA_HUMAN&lt;/td&gt;
+&lt;td&gt;141&lt;/td&gt;
+&lt;td&gt;144&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;60&lt;/td&gt;
+&lt;td&gt;9&lt;/td&gt;
+&lt;td&gt;72&lt;/td&gt;
+&lt;td&gt;58.333332&lt;/td&gt;
+&lt;td&gt;0.650000&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;msf::../../data/globins.msf:HBA_HORSE&lt;/td&gt;
+&lt;td&gt;HBA_HORSE&lt;/td&gt;
+&lt;td&gt;141&lt;/td&gt;
+&lt;td&gt;144&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;63&lt;/td&gt;
+&lt;td&gt;6&lt;/td&gt;
+&lt;td&gt;72&lt;/td&gt;
+&lt;td&gt;56.250000&lt;/td&gt;
+&lt;td&gt;0.830000&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;msf::../../data/globins.msf:MYG_PHYCA&lt;/td&gt;
+&lt;td&gt;MYG_PHYCA&lt;/td&gt;
+&lt;td&gt;153&lt;/td&gt;
+&lt;td&gt;157&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;30&lt;/td&gt;
+&lt;td&gt;15&lt;/td&gt;
+&lt;td&gt;108&lt;/td&gt;
+&lt;td&gt;80.891716&lt;/td&gt;
+&lt;td&gt;1.000000&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;msf::../../data/globins.msf:GLB5_PETMA&lt;/td&gt;
+&lt;td&gt;GLB5_PETMA&lt;/td&gt;
+&lt;td&gt;149&lt;/td&gt;
+&lt;td&gt;151&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;32&lt;/td&gt;
+&lt;td&gt;16&lt;/td&gt;
+&lt;td&gt;101&lt;/td&gt;
+&lt;td&gt;78.807945&lt;/td&gt;
+&lt;td&gt;0.910000&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;msf::../../data/globins.msf:LGB2_LUPLU&lt;/td&gt;
+&lt;td&gt;LGB2_LUPLU&lt;/td&gt;
+&lt;td&gt;153&lt;/td&gt;
+&lt;td&gt;153&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;19&lt;/td&gt;
+&lt;td&gt;24&lt;/td&gt;
+&lt;td&gt;110&lt;/td&gt;
+&lt;td&gt;87.581696&lt;/td&gt;
+&lt;td&gt;0.430000&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+</pre>
+</td></tr></table><p>
+
+<a name="output.7"></a>
+<h3>Output files for usage example 7</h3>
+<p><h3>File: globins.infoalign</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+# USA             Name        SeqLen	AlignLen	Gaps	GapLen	Ident	Similar	Differ	% Change	Weight	Description
+msf::../../data/globins.msf:HBB_HUMAN	HBB_HUMAN     146	150	3	4	146	0	0	2.666667	0.610000	
+msf::../../data/globins.msf:HBB_HORSE	HBB_HORSE     146	150	3	4	122	10	14	18.666666	0.650000	
+msf::../../data/globins.msf:HBA_HUMAN	HBA_HUMAN     141	144	2	3	48	19	74	66.666664	0.650000	
+msf::../../data/globins.msf:HBA_HORSE	HBA_HORSE     141	144	2	3	51	18	72	64.583336	0.830000	
+msf::../../data/globins.msf:MYG_PHYCA	MYG_PHYCA     153	157	3	4	30	22	101	80.891716	1.000000	
+msf::../../data/globins.msf:GLB5_PETMA	GLB5_PETMA    149	151	1	2	24	27	98	84.105957	0.910000	
+msf::../../data/globins.msf:LGB2_LUPLU	LGB2_LUPLU    153	153	0	0	21	28	104	86.274513	0.430000	
+</pre>
+</td></tr></table><p>
+
+<a name="output.8"></a>
+<h3>Output files for usage example 8</h3>
+<p><h3>File: test.out</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+# USA             Name        SeqLen	AlignLen	Gaps	GapLen	Ident	Similar	Differ	% Change	Weight	Description
+tembl-id:J01636   J01636        7477	7477	0	0	374	0	7103	94.997993	1.000000	E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
+tembl-id:X51872   X51872        1832	1832	0	0	374	0	1458	79.585152	1.000000	Escherichia coli lacA gene for thiogalactoside transacetylase
+tembl-id:V00294   V00294        1113	1113	0	0	302	0	811	72.866127	1.000000	E. coli laci gene (codes for the lac repressor).
+tembl-id:V00295   V00295        1500	1500	0	0	336	0	1164	77.599998	1.000000	E. coli lacY gene (codes for lactose permease).
+tembl-id:V00296   V00296        3078	3078	0	0	373	0	2705	87.881744	1.000000	E. coli gene lacZ coding for beta-galactosidase (EC 3.2.1.23).
+</pre>
+</td></tr></table><p>
+
+<a name="output.9"></a>
+<h3>Output files for usage example 9</h3>
+<p><h3>File: test.out</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+# USA             Name        SeqLen	AlignLen	Gaps	GapLen	Ident	Similar	Differ	% Change	Weight	Description
+tembl-id:V00296   V00296        3078	3078	0	0	3078	0	0	0.000000	1.000000	E. coli gene lacZ coding for beta-galactosidase (EC 3.2.1.23).
+</pre>
+</td></tr></table><p>

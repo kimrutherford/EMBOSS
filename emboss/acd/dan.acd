@@ -1,0 +1,194 @@
+application: dan [
+  documentation: "Calculates DNA RNA/DNA melting temperature"
+  groups: "Nucleic:Composition"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "DNA"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: windowsize [
+    standard: "Y"
+    minimum: "1"
+    maximum: "100"
+    default: "20"
+    information: "Enter window size"
+    help: "The values of melting point and other thermodynamic
+           properties of the sequence are determined by taking a short length
+           of sequence known as a window and determining the properties of
+           the sequence in that window. The window is incrementally moved
+           along the sequence with the properties being calculated at each
+           new position."
+  ]
+
+  integer: shiftincrement [
+    standard: "Y"
+    minimum: "1"
+    maximum: "$(windowSize)"
+    default: "1"
+    information: "Enter Shift Increment"
+    help: "This is the amount by which the window is moved at each
+           increment in order to find the melting point and other properties
+           along the sequence."
+  ]
+
+  float: dnaconc [
+    standard: "Y"
+    minimum: "1."
+    maximum: "100000."
+    default: "50."
+    information: "Enter DNA concentration (nM)"
+  ]
+
+  float: saltconc [
+    standard: "Y"
+    minimum: "1."
+    maximum: "1000."
+    default: "50."
+    information: "Enter salt concentration (mM)"
+  ]
+
+endsection: required
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  section: productsection [
+    information: "Product options"
+    type: "frame"
+  ]
+
+    toggle: product [
+      additional: "Y"
+      information: "Prompt for product values"
+      help: "This prompts for percent formamide, percent of mismatches
+             allowed and product length."
+    ]
+
+    float: formamide [
+      additional: "$(product)"
+      minimum: "0."
+      maximum: "100."
+      default: "0."
+      information: "Enter percentage of formamide"
+      help: "This specifies the percent formamide to be used in
+             calculations (it is ignored unless -product is used)."
+    ]
+
+    float: mismatch [
+      additional: "$(product)"
+      minimum: "0."
+      maximum: "100."
+      default: "0."
+      information: "Enter percent mismatch"
+      help: "This specifies the percent mismatch to be used in
+             calculations (it is ignored unless -product is used)."
+    ]
+
+    integer: prodlen [
+      additional: "$(product)"
+      minimum: "$(windowSize)"
+      default: "$(windowSize)"
+      information: "Enter the product length"
+      expected: "Window size (20)"
+      help: "This specifies the product length to be used in
+             calculations (it is ignored unless -product is used)."
+    ]
+
+  endsection: productsection
+
+  section: thermosection [
+    information: "Thermodynamic options"
+    type: "frame"
+  ]
+
+    toggle: thermo [
+      additional: "Y"
+      information: "Thermodynamic calculations"
+      help: "Output the DeltaG, DeltaH and DeltaS values of the
+             sequence windows to the output data file."
+    ]
+
+    float: temperature [
+      additional: "$(thermo)"
+      minimum: "0."
+      maximum: "100."
+      default: "25."
+      information: "Enter temperature"
+      help: "If -thermo has been specified then this specifies the
+             temperature at which to calculate the DeltaG, DeltaH and DeltaS
+             values."
+    ]
+
+  endsection: thermosection
+
+endsection: additional
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  boolean: rna [
+    information: "Use RNA data values"
+    help: "This specifies that the sequence is an RNA sequence and not
+           a DNA sequence."
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  toggle: plot [
+    information: "Produce a plot"
+    help: "If this is not specified then the file of output data is
+           produced, else a plot of the melting point along the sequence is
+           produced."
+  ]
+
+  float: mintemp [
+    standard: "$(plot)"
+    minimum: "0."
+    maximum: "150."
+    default: "55."
+    information: "Enter minimum temperature"
+    help: "Enter a minimum value for the temperature scale (y-axis) of
+           the plot."
+  ]
+
+  xygraph: graph [
+    standard: "$(plot)"
+    multiple: "1"
+    gdesc: "DNA melting plot"
+  ]
+
+  report: outfile [
+    standard: "@(!$(plot))"
+    help: "If a plot is not being produced then data on the melting
+           point etc. in each window along the sequence is output to the
+           file."
+    rformat: "seqtable"
+    taglist: "float:tm=Tm float:gc=GC float:dg=DeltaG
+              float:dh=DeltaH float:ds=DeltaS float:tmprod=TmProd"
+    nullok: "$(plot)"
+  ]
+
+endsection: output

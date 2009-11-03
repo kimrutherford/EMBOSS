@@ -1,0 +1,116 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:j01636' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:j01636</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   J01636; SV 1; linear; genomic DNA; STD; PRO; 7477 BP.
+XX
+AC   J01636; J01637; K01483; K01793;
+XX
+DT   30-NOV-1990 (Rel. 26, Created)
+DT   09-SEP-2004 (Rel. 81, Last updated, Version 8)
+XX
+DE   E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
+XX
+KW   acetyltransferase; beta-D-galactosidase; galactosidase; lac operon;
+KW   lac repressor protein; lacA gene; lacI gene; lactose permease; lacY gene;
+KW   lacZ gene; mutagenesis; palindrome; promoter region;
+KW   thiogalactoside acetyltransferase.
+XX
+OS   Escherichia coli
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Escherichia.
+XX
+RN   [1]
+RP   1243-1266
+RX   PUBMED; 4587255.
+RA   Gilbert W., Maxam A.;
+RT   "The nucleotide sequence of the lac operator";
+RL   Proc. Natl. Acad. Sci. U.S.A. 70(12):3581-3584(1973).
+XX
+RN   [2]
+RP   1246-1308
+RX   PUBMED; 4587256.
+RA   Maizels N.M.;
+RT   "The nucleotide sequence of the lactose messenger ribonucleic acid
+RT   transcribed from the UV5 promoter mutant of Escherichia coli";
+RL   Proc. Natl. Acad. Sci. U.S.A. 70(12):3585-3589(1973).
+XX
+RN   [3]
+RX   PUBMED; 4598642.
+RA   Gilbert W., Maizels N., Maxam A.;
+RT   "Sequences of controlling regions of the lactose operon";
+RL   Cold Spring Harb. Symp. Quant. Biol. 38:845-855(1974).
+XX
+RN   [4]
+RA   Gilbert W., Gralla J., Majors A.J., Maxam A.;
+RT   "Lactose operator sequences and the action of lac repressor";
+RL   (in) Sund H., Blauer G. (Eds.);
+RL   PROTEIN-LIGAND INTERACTIONS:193-207;
+RL   Walter de Gruyter, New York (1975)
+XX
+RN   [5]
+RP   1146-1282
+RX   PUBMED; 1088926.
+RA   Dickson R.C., Abelson J.N., Barnes W.M., Reznikoff W.S.;
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+     cgatttggct acatgacatc aaccatatca gcaaaagtga tacgggtatt atttttgccg      4560
+     ctatttctct gttctcgcta ttattccaac cgctgtttgg tctgctttct gacaaactcg      4620
+     ggctgcgcaa atacctgctg tggattatta ccggcatgtt agtgatgttt gcgccgttct      4680
+     ttatttttat cttcgggcca ctgttacaat acaacatttt agtaggatcg attgttggtg      4740
+     gtatttatct aggcttttgt tttaacgccg gtgcgccagc agtagaggca tttattgaga      4800
+     aagtcagccg tcgcagtaat ttcgaatttg gtcgcgcgcg gatgtttggc tgtgttggct      4860
+     gggcgctgtg tgcctcgatt gtcggcatca tgttcaccat caataatcag tttgttttct      4920
+     ggctgggctc tggctgtgca ctcatcctcg ccgttttact ctttttcgcc aaaacggatg      4980
+     cgccctcttc tgccacggtt gccaatgcgg taggtgccaa ccattcggca tttagcctta      5040
+     agctggcact ggaactgttc agacagccaa aactgtggtt tttgtcactg tatgttattg      5100
+     gcgtttcctg cacctacgat gtttttgacc aacagtttgc taatttcttt acttcgttct      5160
+     ttgctaccgg tgaacagggt acgcgggtat ttggctacgt aacgacaatg ggcgaattac      5220
+     ttaacgcctc gattatgttc tttgcgccac tgatcattaa tcgcatcggt gggaaaaacg      5280
+     ccctgctgct ggctggcact attatgtctg tacgtattat tggctcatcg ttcgccacct      5340
+     cagcgctgga agtggttatt ctgaaaacgc tgcatatgtt tgaagtaccg ttcctgctgg      5400
+     tgggctgctt taaatatatt accagccagt ttgaagtgcg tttttcagcg acgatttatc      5460
+     tggtctgttt ctgcttcttt aagcaactgg cgatgatttt tatgtctgta ctggcgggca      5520
+     atatgtatga aagcatcggt ttccagggcg cttatctggt gctgggtctg gtggcgctgg      5580
+     gcttcacctt aatttccgtg ttcacgctta gcggccccgg cccgctttcc ctgctgcgtc      5640
+     gtcaggtgaa tgaagtcgct taagcaatca atgtcggatg cggcgcgacg cttatccgac      5700
+     caacatatca taacggagtg atcgcattga acatgccaat gaccgaaaga ataagagcag      5760
+     gcaagctatt taccgatatg tgcgaaggct taccggaaaa aagacttcgt gggaaaacgt      5820
+     taatgtatga gtttaatcac tcgcatccat cagaagttga aaaaagagaa agcctgatta      5880
+     aagaaatgtt tgccacggta ggggaaaacg cctgggtaga accgcctgtc tatttctctt      5940
+     acggttccaa catccatata ggccgcaatt tttatgcaaa tttcaattta accattgtcg      6000
+     atgactacac ggtaacaatc ggtgataacg tactgattgc acccaacgtt actctttccg      6060
+     ttacgggaca ccctgtacac catgaattga gaaaaaacgg cgagatgtac tcttttccga      6120
+     taacgattgg caataacgtc tggatcggaa gtcatgtggt tattaatcca ggcgtcacca      6180
+     tcggggataa ttctgttatt ggcgcgggta gtatcgtcac aaaagacatt ccaccaaacg      6240
+     tcgtggcggc tggcgttcct tgtcgggtta ttcgcgaaat aaacgaccgg gataagcact      6300
+     attatttcaa agattataaa gttgaatcgt cagtttaaat tataaaaatt gcctgatacg      6360
+     ctgcgcttat caggcctaca agttcagcga tctacattag ccgcatccgg catgaacaaa      6420
+     gcgcaggaac aagcgtcgca tcatgcctct ttgacccaca gctgcggaaa acgtactggt      6480
+     gcaaaacgca gggttatgat catcagccca acgacgcaca gcgcatgaaa tgcccagtcc      6540
+     atcaggtaat tgccgctgat actacgcagc acgccagaaa accacggggc aagcccggcg      6600
+     atgataaaac cgattccctg cataaacgcc accagcttgc cagcaatagc cggttgcaca      6660
+     gagtgatcga gcgccagcag caaacagagc ggaaacgcgc cgcccagacc taacccacac      6720
+     accatcgccc acaataccgg caattgcatc ggcagccaga taaagccgca gaaccccacc      6780
+     agttgtaaca ccagcgccag cattaacagt ttgcgccgat cctgatggcg agccatagca      6840
+     ggcatcagca aagctcctgc ggcttgccca agcgtcatca atgccagtaa ggaaccgctg      6900
+     tactgcgcgc tggcaccaat ctcaatatag aaagcgggta accaggcaat caggctggcg      6960
+     taaccgccgt taatcagacc gaagtaaaca cccagcgtcc acgcgcgggg agtgaatacc      7020
+     acgcgaaccg gagtggttgt tgtcttgtgg gaagaggcga cctcgcgggc gctttgccac      7080
+     caccaggcaa agagcgcaac aacggcaggc agcgccacca ggcgagtgtt tgataccagg      7140
+     tttcgctatg ttgaactaac cagggcgtta tggcggcacc aagcccaccg ccgcccatca      7200
+     gagccgcgga ccacagcccc atcaccagtg gcgtgcgctg ctgaaaccgc cgtttaatca      7260
+     ccgaagcatc accgcctgaa tgatgccgat ccccacccca ccaagcagtg cgctgctaag      7320
+     cagcagcgca ctttgcgggt aaagctcacg catcaatgca ccgacggcaa tcagcaacag      7380
+     actgatggcg acactgcgac gttcgctgac atgctgatga agccagcttc cggccagcgc      7440
+     cagcccgccc atggtaacca ccggcagagc ggtcgac                               7477
+//
+</pre>
+</td></tr></table><p>

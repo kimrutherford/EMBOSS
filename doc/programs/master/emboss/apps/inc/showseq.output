@@ -1,0 +1,194 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+Note that although we asked for the sequence display to end at position '100', it has displayed the sequence up to the end of the line - position '120'.  This is a feature of this program to make the display of things like restriction enzyme cutting sites easier.  <p><h3>File: x13776.showseq </h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+X13776
+Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
+regulation
+
+                   10        20        30        40        50        60        
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat
+                 |===============|
+                 promoter note="proposed rpoN-dependent promoter"
+          |
+          misc_feature note="last base of an XhoI site"
+
+                   70        80        90        100       
+          ----:----|----:----|----:----|----:----|
+          ctacctggcgagcctggagcacgagcgggttcgcttcgta
+              |===============|
+          promoter note="proposed rpoN-dependent promoter"
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: x13776.showseq </h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+X13776
+Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
+regulation
+
+          ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          ccatggcgaccggctcgtagacgagctagtggtggtcggcccgctgcccttgacgtgcta
+
+          ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          gatggaccgctcggacctcgtgctcgcccaagcgaagcatgccgcgactcgctgtcagtg
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: x13776.showseq </h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+          ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat
+          ctacctggcgagcctggagcacgagcgggttcgcttcgta
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.4"></a>
+<h3>Output files for usage example 4</h3>
+<p><h3>File: rs24_fugru.showseq</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+RS24_FUGRU
+40S ribosomal protein S24.
+
+                   10        20        30        40        50        60        
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          MAATVTVATALPMTAALLGALGMVVAVLHPGLATVPLTGIAGLLALMTLTTPAVVPVPGP
+          esshaharhryhehsreelryleaasaeirlylharyhllrlyelyeyyhhrsaahahlh
+          tnprlrlgrgsetrnguungsntllplusoysarlosruegusuastrsrroplleleye
+          |===========================================================
+          chain ftid="PRO_0000137627" note="40S ribosomal protein S24"
+
+                   70        80        90        100       110       120       
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          ATGPGGGLTTGPAMVTASLATALLAGPLHALAAHGLPGLLLTSALGALGALAAMLLVAGT
+          rhlhlllyhhlhleayseesylyyslryirelrilehlyyyherylrylrysreyyarlh
+          grneyyysrryeatlrpruprassnuossguagsyueusssrrgsngsugsngtsslgyr
+          ============================================================
+          chain ftid="PRO_0000137627" note="40S ribosomal protein S24"
+
+                   130       
+          ----:----|--
+          LLASVGASLLLA
+          yylealleyyys
+          ssarlyarsssp
+          ===========|
+          chain ftid="PRO_0000137627" note="40S ribosomal protein S24"
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.5"></a>
+<h3>Output files for usage example 5</h3>
+<p><h3>File: x13776.showseq </h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+X13776
+Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
+regulation
+        1 ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat 60
+       61 ctacctggcgagcctggagcacgagcgggttcgcttcgta 100
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.6"></a>
+<h3>Output files for usage example 6</h3>
+<p><h3>File: x13776.showseq </h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+X13776
+Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
+regulation
+      123 ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat 182
+      183 ctacctggcgagcctggagcacgagcgggttcgcttcgta 222
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.7"></a>
+<h3>Output files for usage example 7</h3>
+<p><h3>File: x13776.showseq </h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+X13776
+Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
+regulation
+          ggtaccgctggccgagcatctgctCGATCACCACCAGCCGGGCGAcgggaactgcacgat
+          ctacctggcgagcctggagcacgagcgggttcgcttcgta
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.8"></a>
+<h3>Output files for usage example 8</h3>
+<p><h3>File: x13776.showseq </h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+X13776
+Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
+regulation
+
+                   10        20        30        40        50        60        
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat
+
+                                  R  S  P  P  A  G  R  R  V           
+                 |===============|
+                 promoter note="proposed rpoN-dependent promoter"
+          |
+          misc_feature note="last base of an XhoI site"
+
+                   70        80        90        100       110       120       
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac
+
+                 A  S  L                                              
+              |===============|
+              promoter note="proposed rpoN-dependent promoter"
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.9"></a>
+<h3>Output files for usage example 9</h3>
+<p><h3>File: x13776.showseq </h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+X13776
+Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
+regulation
+
+                   10        20        30        40        50        60        
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat
+                      |------------|
+                      binding site
+                        |
+                        SNP
+                 |===============|
+                 promoter note="proposed rpoN-dependent promoter"
+          |
+          misc_feature note="last base of an XhoI site"
+
+                   70        80        90        100       110       120       
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac
+              |===============|
+              promoter note="proposed rpoN-dependent promoter"
+
+</pre>
+</td></tr></table><p>

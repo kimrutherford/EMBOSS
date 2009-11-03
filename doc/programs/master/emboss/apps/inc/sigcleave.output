@@ -1,0 +1,88 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: ach2_drome.sig</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: sigcleave
+# Rundate: Sun 15 Jul 2007 12:00:00
+# Commandline: sigcleave
+#    -sequence tsw:ach2_drome
+# Report_format: motif
+# Report_file: ach2_drome.sig
+########################################
+
+#=======================================
+#
+# Sequence: ACH2_DROME     from: 1   to: 576
+# HitCount: 9
+#
+# Reporting scores over 3.50
+#
+#=======================================
+
+(1) Score 13.739 length 13 at residues 29-&gt;41
+ Sequence: LLVLLLLCETVQA
+           |           |
+          29           41
+ mature_peptide: NPDAKRLYDDLLSNYNRLIRPVSNNTDTVLVKLGLRLSQLIDLNLKDQIL
+
+(2) Score 12.135 length 13 at residues 26-&gt;38
+ Sequence: LCLLLVLLLLCET
+           |           |
+          26           38
+ mature_peptide: VQANPDAKRLYDDLLSNYNRLIRPVSNNTDTVLVKLGLRLSQLIDLNLKD
+
+(3) Score 10.465 length 13 at residues 28-&gt;40
+ Sequence: LLLVLLLLCETVQ
+           |           |
+          28           40
+ mature_peptide: ANPDAKRLYDDLLSNYNRLIRPVSNNTDTVLVKLGLRLSQLIDLNLKDQI
+
+(4) Score 7.360 length 13 at residues 528-&gt;540
+ Sequence: FLWLFMIASLVGT
+           |           |
+         528           540
+ mature_peptide: FVILGEAPSLYDDTKAIDVQLSDVAKQIYNLTEKKN
+
+(5) Score 6.981 length 13 at residues 330-&gt;342
+ Sequence: FTMLLVGLSVVIT
+           |           |
+         330           342
+ mature_peptide: IIILNIHYRKPSTHKMRPWIRSFFIKRLPKLLLMRVPKDLLRDLAANKIN
+
+(6) Score 5.057 length 13 at residues 24-&gt;36
+ Sequence: KPLCLLLVLLLLC
+           |           |
+          24           36
+ mature_peptide: ETVQANPDAKRLYDDLLSNYNRLIRPVSNNTDTVLVKLGLRLSQLIDLNL
+
+(7) Score 4.026 length 13 at residues 31-&gt;43
+ Sequence: VLLLLCETVQANP
+           |           |
+          31           43
+ mature_peptide: DAKRLYDDLLSNYNRLIRPVSNNTDTVLVKLGLRLSQLIDLNLKDQILTT
+
+(8) Score 3.751 length 13 at residues 527-&gt;539
+ Sequence: LFLWLFMIASLVG
+           |           |
+         527           539
+ mature_peptide: TFVILGEAPSLYDDTKAIDVQLSDVAKQIYNLTEKKN
+
+(9) Score 3.632 length 13 at residues 308-&gt;320
+ Sequence: LLISEIIPSTSLA
+           |           |
+         308           320
+ mature_peptide: LPLLGKYLLFTMLLVGLSVVITIIILNIHYRKPSTHKMRPWIRSFFIKRL
+
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_hitcount: 9
+#---------------------------------------
+</pre>
+</td></tr></table><p>

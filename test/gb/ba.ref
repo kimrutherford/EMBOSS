@@ -1,0 +1,988 @@
+>>>>LLIS904  9/1993
+X52273 Lactococcus lactis insertion element iso-IS904 coding for a transposase. 9/1993
+LOCUS       LLIS904                 1245 bp    DNA     linear   BCT 12-SEP-1993
+DEFINITION  Lactococcus lactis insertion element iso-IS904 coding for a
+            transposase.
+ACCESSION   X52273
+VERSION     X52273.1  GI:44028
+KEYWORDS    insertion element; insertion element iso-IS904; transposon.
+SOURCE      Lactococcus lactis.
+  ORGANISM  Lactococcus lactis
+            Bacteria; Firmicutes; Bacillus/Clostridium group; Streptococcaceae;
+            Lactococcus.
+REFERENCE   1  (bases 1 to 1245)
+  AUTHORS   Rauch,P.J.G.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (11-APR-1990) Rauch P.J.G., Netherlands Institute for
+            Dairy Research, P O Box 20, 6710 BA EDE, The Netherlands
+REFERENCE   2  (bases 1 to 1245)
+  AUTHORS   Rauch,P.J., Beerthuyzen,M.M. and de Vos,W.M.
+  TITLE     Nucleotide sequence of IS904 from Lactococcus lactis subsp. lactis
+            strain NIZO R5
+  JOURNAL   Nucleic Acids Res. 18 (14), 4253-4254 (1990)
+  MEDLINE   90332428
+FEATURES             Location/Qualifiers
+     source          1. .1245
+                     /organism="Lactococcus lactis"
+                     /strain="lactis NIZO R5."
+                     /db_xref="taxon:1358"
+     repeat_unit     1. .39
+                     /note="imperfect inverted repeat A"
+     promoter        265. .270
+                     /note="put. -35 region (1)"
+     promoter        286. .291
+                     /note="put. -10 region (1)"
+     misc_feature    289. .336
+                     /note="dyad symmetry region"
+     promoter        302. .307
+                     /note="put. -35 region (2)"
+     promoter        326. .331
+                     /note="put. -10 region (2)"
+     CDS             444. .1205
+                     /note="put. transposase (AA 1-253)"
+                     /codon_start=1
+                     /transl_table=11
+                     /protein_id="CAA36516.1"
+                     /db_xref="GI:44029"
+                     /db_xref="SPTREMBL:Q48648"
+                     /translation="MHRRPSKQQVEREILSEKIKAVFHEHKGRYGAVRITKVLHNTGI
+                     MTNTKRVGKLMHLMGLYAKGSRYKYKHYNRKGSSLSRPNLINQIFKATAPNKVWLGDM
+                     TYIPTKEGTLYLAVNIDVFSRKIVGWSMSSRMQDKLVRDYFLQACGKEHPQPGLIVHT
+                     DQGSQYTSSRYQSTLRQVGAQSSMSRKGNPYDNAMMESFYKTLKRELINDAHFETRAE
+                     ATQEIFKYIETYYNTKRMHSGLDYKSPKDFEKYNS"
+     repeat_unit     1207. .1245
+                     /note="imperfect inverted repeat A'"
+BASE COUNT      426 a    213 c    255 g    351 t
+ORIGIN
+>>>>LLISS1  6/1992
+X62737 L.lactis plasmid pTD1 insertion sequence ISS1. 6/1992
+LOCUS       LLISS1                   808 bp    DNA     linear   BCT 05-JUN-1992
+DEFINITION  L.lactis plasmid pTD1 insertion sequence ISS1.
+ACCESSION   X62737
+VERSION     X62737.1  GI:44030
+KEYWORDS    insertion sequence; insertion sequence ISS1; transposase.
+SOURCE      Lactococcus lactis.
+  ORGANISM  Lactococcus lactis
+            Bacteria; Firmicutes; Bacillus/Clostridium group; Streptococcaceae;
+            Lactococcus.
+REFERENCE   1  (bases 1 to 808)
+  AUTHORS   Schaefer,A., Jahns,A., Geis,A. and Teuber,M.
+  TITLE     Distribution of the IS elements ISS1 and IS904 in lactococci
+  JOURNAL   FEMS Microbiol. Lett. 80, 311-318 (1991)
+REFERENCE   2  (bases 1 to 808)
+  AUTHORS   Schaefer,A.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (13-JAN-1992) Schaefer A., Institut fuer Mikrobiologie,
+            Bundesanstalt fuer Milchforschung, D-2300 Kiel, FRG
+COMMENT     See also M18290-4 & M37395-6.
+FEATURES             Location/Qualifiers
+     source          1. .808
+                     /organism="Lactococcus lactis"
+                     /plasmid="pTD1"
+                     /strain="W67"
+                     /db_xref="taxon:1358"
+                     /insertion_seq="ISS1"
+     repeat_region   1. .17
+                     /rpt_type=INVERTED
+     -35_signal      8. .13
+     -10_signal      30. .35
+     RBS             61. .66
+     CDS             74. .754
+                     /codon_start=1
+                     /transl_table=11
+                     /product="putative transposase"
+                     /protein_id="CAA44601.1"
+                     /db_xref="GI:44031"
+                     /db_xref="SPTREMBL:Q04224"
+                     /translation="MNHFKGKQFKKDVIIVAVGYYLRYNLSYREVQELLYDRGINVCH
+                     TTIYRWVQEYSKVLYYLWKKKNRQSFYSWKMDETYIKIKGRWHYLYRAIDADGLTLDI
+                     WLRKKRDTQAAYAFLKRLHKQFGEPKAIVTDKAPSLGSAFRKLQSVGLYTKTEHRTVK
+                     YLNNLIEQDHQPIKRRNKFCQSLRTASSTIKGIKTLRGIYKKNRRNGTLFGFSVSTEI
+                     KVLMGITA"
+     repeat_region   791. .808
+                     /rpt_type=INVERTED
+BASE COUNT      277 a    141 c    165 g    225 t
+ORIGIN
+>>>>LLISS1T  12/1992
+Z14022 L.lactis insertion sequence ISS1T. 12/1992
+LOCUS       LLISS1T                 1108 bp    DNA     linear   BCT 15-DEC-1992
+DEFINITION  L.lactis insertion sequence ISS1T.
+ACCESSION   Z14022
+VERSION     Z14022.1  GI:44032
+KEYWORDS    insertion sequence; insertion sequence ISS1T.
+SOURCE      Lactococcus lactis.
+  ORGANISM  Lactococcus lactis
+            Bacteria; Firmicutes; Bacillus/Clostridium group; Streptococcaceae;
+            Lactococcus.
+REFERENCE   1  (bases 86 to 134; 849 to 891)
+  AUTHORS   Gasson,M.J. and Swindell,S.R.
+  TITLE     Molecular rearrangement of lactose plasmid DNA associated with high
+            frequency aggregation in Lactococcus lactis 712
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 1056)
+  AUTHORS   Swindell,S.R.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (08-JUL-1992) S.R. Swindell, Genetics & Microbiology,
+            Institute of Food Research, Norwich Research Park, Norwich,
+            Norfolk, NR4 7UA, ENGLAND
+FEATURES             Location/Qualifiers
+     source          1. .1108
+                     /organism="Lactococcus lactis"
+                     /strain="Lactococcus lactis 712"
+                     /db_xref="taxon:1358"
+                     /clone="pFI341"
+     source          111. .867
+                     /organism="Lactococcus lactis"
+                     /insertion_seq=""
+                     /db_xref="taxon:1358"
+BASE COUNT      381 a    187 c    204 g    336 t
+ORIGIN
+>>>>LLISTRA  11/1993
+X60594 L.lactis insertion sequence (plasmid pUCL22) gene for transposase. 11/1993
+LOCUS       LLISTRA                  934 bp    DNA     linear   BCT 22-NOV-1993
+DEFINITION  L.lactis insertion sequence (plasmid pUCL22) gene for transposase.
+ACCESSION   X60594 S43267
+VERSION     X60594.1  GI:44033
+KEYWORDS    insertion sequence; transposase.
+SOURCE      Lactococcus lactis.
+  ORGANISM  Lactococcus lactis
+            Bacteria; Firmicutes; Bacillus/Clostridium group; Streptococcaceae;
+            Lactococcus.
+REFERENCE   1  (bases 1 to 934)
+  AUTHORS   Huang,D.C.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (07-AUG-1991) D.C. Huang, Lab de Genetique Microbienne,
+            Universite' de Caen, Esplanade de la Paix 14032, Caen Cedex, FRANCE
+REFERENCE   2  (bases 1 to 934)
+  AUTHORS   Huang,D.C., Novel,M., Huang,X.F. and Novel,G.
+  TITLE     Nonidentity between plasmid and chromosomal copies of ISS1-like
+            sequences in Lactococcus lactis subsp. lactis CNRZ270 and their
+            possible role in chromosomal integration of plasmid genes
+  JOURNAL   Gene 118 (1), 39-46 (1992)
+  MEDLINE   92380489
+FEATURES             Location/Qualifiers
+     source          1. .934
+                     /organism="Lactococcus lactis"
+                     /plasmid=""
+                     /strain="Z270"
+                     /db_xref="taxon:1358"
+                     /clone="D472"
+     source          61. .868
+                     /organism="Lactococcus lactis"
+                     /insertion_seq=""
+                     /db_xref="taxon:1358"
+     -35_signal      68. .73
+     -10_signal      90. .95
+     RBS             121. .126
+     CDS             134. .814
+                     /note="orf1"
+                     /codon_start=1
+                     /transl_table=11
+                     /protein_id="CAA43047.1"
+                     /db_xref="GI:44034"
+                     /db_xref="SPTREMBL:Q48649"
+                     /translation="MNYFKGKQFQKDVIIVAVGYYLRYNLSYREIQELLYDRGINVCH
+                     TTIYRWVQEYSKVLYHLWKKKNRQSFYSWKMDETYIKIKGRWHYLYRAIDADGLTLDI
+                     WLRKKRNTQAAYAFLKRLHKQFGQPRVIVTDKAPSIGSAFRKLQSNGLYTKTEHRTVK
+                     YLNNLIEQDHRPIKRRNKFYRSLQTASTTIKGMETIRGIYKKNRRNGTLFGFSVSTEI
+                     KVLMGILA"
+     CDS             complement(209. .394)
+                     /note="orf3"
+                     /codon_start=1
+                     /transl_table=11
+                     /protein_id="CAA43049.1"
+                     /db_xref="GI:44036"
+                     /db_xref="SPTREMBL:Q48651"
+                     /translation="MPTTFDFDISFIHFPRIEGLSIFLFPEMIEDFTVFLYPTINSCV
+                     TNINSTIIKEFLNFTIA"
+     CDS             240. .428
+                     /note="orf2"
+                     /codon_start=1
+                     /transl_table=11
+                     /protein_id="CAA43048.1"
+                     /db_xref="GI:44035"
+                     /db_xref="SPTREMBL:Q48650"
+                     /translation="MIVELMFVTQLFIVGYKNTVKSSIISGKRKIDSPSIRGKWMKLI
+                     SKSKVVGIISIVQLMRMD"
+     CDS             complement(508. .630)
+                     /note="orf4"
+                     /codon_start=1
+                     /transl_table=11
+                     /protein_id="CAA43050.1"
+                     /db_xref="GI:44037"
+                     /db_xref="SPTREMBL:Q48652"
+                     /translation="MRLLRYFTVRCSVLVYKPLLCNFLNAEPIEGALSVTITLG"
+BASE COUNT      340 a    150 c    174 g    270 t
+ORIGIN
+>>>>LLJ000883  11/1998
+AJ000883 Lactococcus lactis lactis purDEK operon. 11/1998
+LOCUS       LLJ000883               3573 bp    DNA     linear   BCT 17-NOV-1998
+DEFINITION  Lactococcus lactis lactis purDEK operon.
+ACCESSION   AJ000883
+VERSION     AJ000883.1  GI:3892881
+KEYWORDS    purDEK operon.
+SOURCE      Lactococcus lactis.
+  ORGANISM  Lactococcus lactis
+            Bacteria; Firmicutes; Bacillus/Clostridium group; Streptococcaceae;
+            Lactococcus.
+REFERENCE   1  (bases 1 to 3573)
+  AUTHORS   Nilsson,D. and Kilstrup,M.
+  TITLE     Cloning and expression of the Lactococcus lactis purDEK genes,
+            required for growth in milk
+  JOURNAL   Appl. Environ. Microbiol. 64 (11), 4321-4327 (1998)
+  MEDLINE   99013630
+REFERENCE   2  (bases 1 to 3573)
+  AUTHORS   Nilsson,D.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (27-JAN-1998) Nilsson D., Department of Physiology and
+            Metabolism, Chr. Hansen A/S, Boege Alle 10-12,, DK-2970 Hoersholm,
+            DENMARK
+FEATURES             Location/Qualifiers
+     source          1. .3573
+                     /organism="Lactococcus lactis"
+                     /strain="CHCC373"
+                     /sub_species="lactis"
+                     /db_xref="taxon:1358"
+     CDS             complement(<1. .364)
+                     /note="orf1"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="hypothetical protein"
+                     /protein_id="CAA04373.1"
+                     /db_xref="GI:3892882"
+                     /translation="MATQPTKDKIISSSWELLEELTLTEFSMRKLASAVGMTVSSLYY
+                     HFSSKEALFAELIDKASLEIIFPANEKTWQDRLFVYGKNIYTVLESYPNLAQLMMDYP
+                     PESENYLRLFDKLLMIVDD"
+     gene            join(563. .568,575. .3573)
+                     /gene="purDEK"
+     -10_signal      563. .568
+                     /gene="purDEK"
+                     /citation=[1]
+     prim_transcript 575. .>3573
+                     /gene="purDEK"
+                     /citation=[1]
+                     /evidence=experimental
+     gene            711. .715
+                     /gene="purD"
+     RBS             711. .715
+                     /gene="purD"
+                     /citation=[1]
+     gene            720. .1958
+                     /gene="purD"
+     CDS             720. .1958
+                     /gene="purD"
+                     /codon_start=1
+                     /transl_table=11
+                     /protein_id="CAA04374.1"
+                     /db_xref="GI:3892883"
+                     /translation="MKILVIGSGGREHALAKKFMESPQVEEVFVAPGNSGMEKDGIQI
+                     VHISELSNDKLVKFAQNQNIGLTFVGPETALMNGVVDAFIKAELPIFGPNKMAAELEG
+                     SKDFAKSIMKKYGVPTADYATFDSLEPALAYLDEKGVPLVIKADGLAAGKGVTVAFDI
+                     ETAKSALADIFSGSQGKVVIEEFLDGEEFSLFSFIHDGKIYPMPIAQDHKRAFDEDKG
+                     PNTGGMGAYSPVLHISKEVVNEALEKVVKPTVAGMIEEGKSFTGVLYAGLILTEDGVK
+                     TIEFNARFGDPETQVVLPRLKSDLAQAIIDILAGNEPTLEWLESGVTLGVVVAAEGYP
+                     SQAKLGLILPEIPEGLNVYYAGVSKNENNQLISSGGRVYLVSETGEDVKSTQKLLYEK
+                     LDKLENDGFFYRHDIGSRAI"
+     gene            1982. .1986
+                     /gene="purE"
+     RBS             1982. .1986
+                     /gene="purE"
+                     /citation=[1]
+     gene            1991. .2476
+                     /gene="purE"
+     CDS             1991. .2476
+                     /gene="purE"
+                     /codon_start=1
+                     /transl_table=11
+                     /protein_id="CAA04375.1"
+                     /db_xref="GI:3892884"
+                     /translation="MAEVAIIMGCSSDWATMKETAKILDDFGLAYEKKVVSAHRTPAL
+                     MAEFSSQARERGYKVIIAGAGGAAHLPGMVSAQTLVPVIGVPIKSRALSGLDSLYSIV
+                     QMPAGVPVATMAIGEAGAKNAALFALQLLANTNENLIQKLLVYRAAAQEMVEESNKAL
+                     L"
+     gene            2518. .2522
+                     /gene="purK"
+     RBS             2518. .2522
+                     /gene="purK"
+                     /citation=[1]
+     gene            2527. .3573
+                     /gene="purK"
+     CDS             2527. .>3573
+                     /gene="purK"
+                     /codon_start=1
+                     /transl_table=11
+                     /protein_id="CAA04376.1"
+                     /db_xref="GI:3892885"
+                     /translation="MIKNTKQTIGIIGGGQLGQMMAIAAQYMGHKVITLDPNPNCSAA
+                     KVSDELIVAPYDDVENLLRLAYACDVITYEFENVSAKALHEIEGCVRIPQGIRLLEIT
+                     QNRRFEKEFLTNEAKVNVAPWQLVDSAEKLPETVTRKQVLKTTTGGYDGHGQVVLNTD
+                     EKLSAAKSLTELSECVLEDFISFEREISVIISGNGHEYVVFPLAENEHRENILHQTIS
+                     PARISAEITENAYKIATSIAEKLELSGVLCVEMFLTADGQIYVNELAPRPHNSGHFTI
+                     EACDFNQFDLHIKGILGEDLPEPKLLKPAIMLNVLGQHVEAVKKLNHEHADWHQHDYG
+                     KADAKHNRKMGHVTI"
+BASE COUNT     1172 a    569 c    753 g   1079 t
+ORIGIN
+>>>>LLJ002203  8/2000
+AJ002203 Lactococcus lactis subsp. lactis plasmid pBL1 DNA for lactococcin 972 operon. 8/2000
+LOCUS       LLJ002203               2455 bp    DNA     linear   BCT 18-AUG-2000
+DEFINITION  Lactococcus lactis subsp. lactis plasmid pBL1 DNA for lactococcin
+            972 operon.
+ACCESSION   AJ002203
+VERSION     AJ002203.2  GI:9795227
+KEYWORDS    lactococcin 972; lcn972; operon.
+SOURCE      Lactococcus lactis subsp. lactis.
+  ORGANISM  Lactococcus lactis subsp. lactis
+            Bacteria; Firmicutes; Bacillus/Clostridium group; Streptococcaceae;
+            Lactococcus.
+REFERENCE   1  (bases 1 to 2455)
+  AUTHORS   Martinez,B., Fernandez,M., Suarez,J.E. and Rodriguez,A.
+  TITLE     Synthesis of lactococcin 972, a bacteriocin produced by Lactococcus
+            lactis IPLA 972, depends on the expression of a plasmid-encoded
+            bicistronic operon
+  JOURNAL   Microbiology 145 (Pt 11), 3155-3161 (1999)
+  MEDLINE   20055640
+REFERENCE   2  (bases 1 to 2455)
+  AUTHORS   Suarez,J.E.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (26-JAN-1998) Suarez J.E., Microbiologia, Universidad de
+            Oviedo, Julian Claveria sn, 33006 Oviedo, SPAIN
+  REMARK    Revised by [3]
+REFERENCE   3  (bases 1 to 2455)
+  AUTHORS   Martinez,B.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (07-AUG-2000) Martinez B.,Instituto de Productos Lacteos
+            de Asturias, CSIC Apdo. 85, 33300 Villaviciosa, SPAIN
+COMMENT     On Aug 11, 2000 this sequence version replaced gi:3355781.
+            Related sequence AF242367.
+FEATURES             Location/Qualifiers
+     source          1. .2455
+                     /organism="Lactococcus lactis subsp. lactis"
+                     /plasmid="pBL1"
+                     /strain="IPLA 972"
+                     /sub_species="lactis"
+                     /db_xref="taxon:1360"
+     -35_signal      57. .62
+                     /gene="lcn972"
+                     /evidence=experimental
+     gene            57. .2455
+                     /gene="lcn972"
+     -10_signal      80. .85
+                     /gene="lcn972"
+                     /evidence=experimental
+     prim_transcript 93. .456
+                     /gene="lcn972"
+                     /evidence=experimental
+     prim_transcript 93. .2455
+                     /gene="lcn972"
+                     /note="ORF2"
+                     /evidence=experimental
+     stem_loop       126. .150
+                     /gene="lcn972"
+     RBS             166. .171
+                     /gene="lcn972"
+     CDS             178. .453
+                     /gene="lcn972"
+                     /function="bacteriocin"
+                     /codon_start=1
+                     /transl_table=11
+                     /evidence=experimental
+                     /product="lactococcin 972"
+                     /protein_id="CAA05247.1"
+                     /db_xref="GI:3355782"
+                     /db_xref="SPTREMBL:O86283"
+                     /translation="MKTKSLVLALSAVTLFSAGGIVAQAEGTWQHGYGVSSAYSNYHH
+                     GSKTHSATVVNNNTGRQGKDTQRAGVWAKATVGRNLTEKASFYYNFW"
+     sig_peptide     178. .252
+                     /gene="lcn972"
+     mat_peptide     253. .450
+                     /gene="lcn972"
+                     /function="bacteriocin"
+                     /product="lactococcin 972"
+     terminator      456. .493
+                     /gene="lcn972"
+                     /evidence=experimental
+     RBS             498. .503
+                     /gene="lcn972"
+                     /note="ORF2"
+     CDS             509. .2455
+                     /gene="lcn972"
+                     /function="putative immunity"
+                     /note="ORF2"
+                     /codon_start=1
+                     /transl_table=11
+                     /protein_id="CAC03468.1"
+                     /db_xref="GI:9795228"
+                     /translation="MYKKLERVLITLSIVLVSAFSMIIVINKHKQMFAGTNGGVLVLK
+                     AKSNIKESIAEIAKKNNVLIAKQIMVPSTDGKTDNQPTFQKFGNGTLPKDFPEQKNKE
+                     FIEDSNDSVYYFIFGKTLSSIDLSKYLNEKGNTSMVSDNDWRFQGITALLDTRMIVGL
+                     LLFLISYTSILMANIIINLKKQGVQRLAGISCFRLSFLGLKKRLTYIFITTIITLLTS
+                     SLILYIINLRRIMYFYVIIFPTIFIVLVLLLIELIVGILVYLFLQRQKINLVIKDMAP
+                     IRALMSFVFLLQLISLLCLIFSFSSISSSHKDLVLLKKATNKWKSQDYYSPSLLNGNT
+                     EKSKENVLRFLSEANQKEEVLIIADNFNKYPLQNQYFPTSNGNENILYVTPNYLKKVG
+                     IKFNNTMKSDITILVPETEKSRKNKLSTLWSQAFNSLNETSFSYNSSVYKSPSKDLFT
+                     FRIFGWSAVDNQAFVQEPLIVVMSPKLFNINNKNINSDVLFSWFSREQILFSNNKTTA
+                     DLIKKYRLENVLGSFSNGNLSVKNRFVEIKSQQLFIVVTSSIALISSTFLFYLMNKIY
+                     LYQNRKKFAVARISGESLFTTHKTYLIQLFIIIIFAIGMIFIWHLNPLTLIIPPILGG
+                     LQLILLTRQIKNNKTFNISVLKGE"
+BASE COUNT      890 a    354 c    350 g    861 t
+ORIGIN
+>>>>LLJW563RP  11/1995
+X85168 L.lactis plasmid pJW563 repB and ORFX genes. 11/1995
+LOCUS       LLJW563RP               2297 bp    DNA     linear   BCT 10-NOV-1995
+DEFINITION  L.lactis plasmid pJW563 repB and ORFX genes.
+ACCESSION   X85168
+VERSION     X85168.1  GI:728598
+KEYWORDS    orfX gene; repB gene.
+SOURCE      Lactococcus lactis.
+  ORGANISM  Lactococcus lactis
+            Bacteria; Firmicutes; Bacillus/Clostridium group; Streptococcaceae;
+            Lactococcus.
+REFERENCE   1  (bases 1 to 2297)
+  AUTHORS   Gravesen,A., Josephsen,J., von Wright,A. and Vogensen,F.K.
+  TITLE     Characterization of the replicon from the lactococcal
+            theta-replicating plasmid pJW563
+  JOURNAL   Plasmid 34 (2), 105-118 (1995)
+  MEDLINE   96117602
+REFERENCE   2  (bases 1 to 2297)
+  AUTHORS   Gravesen,A.L.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (07-MAR-1995) A.L. Gravesen, The Royal Veterinary &
+            Agric. Univ., Dept of Dairy & Food Science, Rolighedsvej 30, 1958
+            Frederiksberg C, DENMARK
+FEATURES             Location/Qualifiers
+     source          1. .2297
+                     /organism="Lactococcus lactis"
+                     /plasmid="pJW563"
+                     /sub_species="cremoris"
+                     /db_xref="taxon:1358"
+                     /clone_lib="pAG34,35,36,37,38,39,40,41,43"
+     repeat_region   178. .199
+                     /note="DRI"
+                     /rpt_type=DIRECT
+     repeat_region   257. .337
+                     /note="DRII"
+                     /rpt_type=DIRECT
+     repeat_region   328. .354
+                     /note="IR1"
+                     /rpt_type=INVERTED
+     -35_signal      343. .347
+     -10_signal      365. .370
+     repeat_region   373. .414
+                     /note="IR2"
+                     /rpt_type=INVERTED
+     gene            join(431. .436,446. .1603)
+                     /gene="repB"
+     RBS             431. .436
+                     /gene="repB"
+     CDS             446. .1603
+                     /gene="repB"
+                     /codon_start=1
+                     /transl_table=11
+                     /protein_id="CAA59451.1"
+                     /db_xref="GI:728599"
+                     /db_xref="SPTREMBL:Q48654"
+                     /translation="MEIITKNDRNSNERTVCSLKEIEKRKIVEHNDLITSVAKMDKTP
+                     LKIFELAVSCIDTENLPKDNIIYLSKKELFTFFDVSDNGKHTRFKEAVEKMQKQAFFE
+                     IKEVKGKGYKVKSIVPIPYVEWNSYNDVVTLQFQPQIMPYLIELKKNFTKYALSDIMR
+                     LNSKYSIILYKWLCMFYNQYEHYSVKGGRRAEQVETYRNPSIKISELRSLTDTINEYK
+                     DMSNFTKRVLDNSLKEINHHTSFNVTYDKIKKGRSIDSIVFHIEKKRMADDNSYKLDD
+                     RAYQEDKARKAETEDKLAIEAMKSKYTTLLLENMLLSPFEMQDTKIMAGLQAHVYPLY
+                     DELKALRGLKGVKEHLSYVAAKQEAYSKRNVAKYLKKAIEQYLPTVKRQDL"
+     gene            1600. .2193
+                     /gene="ORFX"
+     CDS             1600. .2193
+                     /gene="ORFX"
+                     /codon_start=1
+                     /transl_table=11
+                     /protein_id="CAA59452.1"
+                     /db_xref="GI:728600"
+                     /db_xref="SPTREMBL:Q48655"
+                     /translation="MMSEKLKTIKELADEFNVSKQAVRKRLTEEFRANHVETVTSNGV
+                     KTLVVTYTGYMLLKQHFTTSNATSNDKVTDTSNPTNADLSVVKILEQQLFVKDKQLEN
+                     KDSQISQMQNLLDQQQRLALQDKKLIEEYKSEINELRALKMPQEDMKDGSPIRGEAQE
+                     EIERLKAQLKLSEEERNKEKEKDRVKTESKKWWQLWK"
+BASE COUNT      901 a    352 c    441 g    603 t
+ORIGIN
+>>>>LLL216SRR  5/1998
+X97364 L.lyticum 16S rRNA gene, strain L2. 5/1998
+LOCUS       LLL216SRR               1481 bp    DNA     linear   BCT 06-MAY-1998
+DEFINITION  L.lyticum 16S rRNA gene, strain L2.
+ACCESSION   X97364
+VERSION     X97364.1  GI:1310678
+KEYWORDS    16S ribosomal RNA; 16S rRNA.
+SOURCE      Legionella lytica.
+  ORGANISM  Legionella lytica
+            Bacteria; Proteobacteria; gamma subdivision; Legionellaceae group;
+            Legionellaceae; Legionella.
+REFERENCE   1  (bases 1 to 1481)
+  AUTHORS   Birtles,R.J., Rowbotham,T.J., Raoult,D. and Harrison,T.G.
+  TITLE     Phylogenetic diversity of intra-amoebal legionellae as revealed by
+            16S rRNA gene sequence comparison
+  JOURNAL   Microbiology 142 (Pt 12), 3525-3530 (1996)
+  MEDLINE   97158243
+REFERENCE   2  (bases 1 to 1481)
+  AUTHORS   Birtles,R.J.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (19-APR-1996) R.J. Birtles, UNITE DES RICKETTSIES, CNRS
+            EP J0054, Fac. de Medicine, 27, bd Jean Moulin, F-13385 Marseille
+            Cedex 5, FRANCE
+FEATURES             Location/Qualifiers
+     source          1. .1481
+                     /organism="Legionella lytica"
+                     /strain="L2"
+                     /db_xref="taxon:96232"
+     rRNA            1. .1481
+                     /gene="16S rRNA"
+                     /product="16S ribosomal RNA"
+     gene            1. .1481
+                     /gene="16S rRNA"
+BASE COUNT      394 a    317 c    468 g    302 t
+ORIGIN
+>>>>LLL5SRA  2/1999
+D90253 Leptonema illini 5S ribosomal RNA gene A. 2/1999
+LOCUS       LLL5SRA                  550 bp    DNA     linear   BCT 07-FEB-1999
+DEFINITION  Leptonema illini 5S ribosomal RNA gene A.
+ACCESSION   D90253
+VERSION     D90253.1  GI:216766
+KEYWORDS    5S ribosomal RNA.
+SOURCE      Leptonema illini (strain:3055) DNA.
+  ORGANISM  Leptonema illini
+            Bacteria; Spirochaetales; Leptospiraceae; Leptonema.
+REFERENCE   1  (bases 1 to 550)
+  AUTHORS   Fukunaga,M., Horie,I., Mifuchi,I. and Takemoto,M.
+  TITLE     Cloning, characterization and taxonomic significance of genes for
+            the 5S ribosomal RNA of Leptonema illini strain 3055
+  JOURNAL   J. Gen. Microbiol. 137 (Pt 7), 1523-1528 (1991)
+  MEDLINE   92065221
+COMMENT     These data kindly submitted in computer readable form by: Masahito
+            Fukunaga
+            Faculty of Pharmacy and Pharmaceutical Sciences
+            Fukuyama University
+            985 Higashimura-cho, Fukuyama
+            Hiroshima 729-02
+            Japan
+            Phone:  0849-36-2111 x5216
+            Fax:    0849-36-2213.
+FEATURES             Location/Qualifiers
+     source          1. .550
+                     /organism="Leptonema illini"
+                     /strain="3055"
+                     /db_xref="taxon:183"
+     -35_signal      216. .221
+     -10_signal      239. .243
+     rRNA            251. .357
+                     /note="5S ribosomal RNA gene A"
+BASE COUNT      125 a    148 c    127 g    150 t
+ORIGIN      28 bp upstream of PvuII site.
+>>>>LLL5SRB  2/1999
+D90254 Leptonema illini 5S ribosomal RNA gene B. 2/1999
+LOCUS       LLL5SRB                  550 bp    DNA     linear   BCT 07-FEB-1999
+DEFINITION  Leptonema illini 5S ribosomal RNA gene B.
+ACCESSION   D90254
+VERSION     D90254.1  GI:216767
+KEYWORDS    5S ribosomal RNA.
+SOURCE      Leptonema illini (strain:3055) DNA.
+  ORGANISM  Leptonema illini
+            Bacteria; Spirochaetales; Leptospiraceae; Leptonema.
+REFERENCE   1  (bases 1 to 550)
+  AUTHORS   Fukunaga,M., Horie,I., Mifuchi,I. and Takemoto,M.
+  TITLE     Cloning, characterization and taxonomic significance of genes for
+            the 5S ribosomal RNA of Leptonema illini strain 3055
+  JOURNAL   J. Gen. Microbiol. 137 (Pt 7), 1523-1528 (1991)
+  MEDLINE   92065221
+COMMENT     These data kindly submitted in computer readable form by: Masahito
+            Fukunaga
+            Faculty of Pharmacy and Pharmaceutical Sciences
+            Fukuyama University
+            985 Higashimura-cho, Fukuyama
+            Hiroshima 729-02
+            Japan
+            Phone:  0849-36-2111 x5216
+            Fax:    0849-36-2213.
+FEATURES             Location/Qualifiers
+     source          1. .550
+                     /organism="Leptonema illini"
+                     /strain="3055"
+                     /db_xref="taxon:183"
+     -35_signal      216. .221
+     -10_signal      239. .243
+     rRNA            251. .357
+                     /note="5S ribosomal RNA gene B"
+BASE COUNT      123 a    145 c    117 g    165 t
+ORIGIN      38 bp upstream of StuI site.
+>>>>LLLACA  4/1996
+X81358 L.lactis lacA gene. 4/1996
+LOCUS       LLLACA                   784 bp    DNA     linear   BCT 15-APR-1996
+DEFINITION  L.lactis lacA gene.
+ACCESSION   X81358
+VERSION     X81358.1  GI:1263134
+KEYWORDS    galactoside O-acetyltransferase; lacA gene.
+SOURCE      Lactococcus lactis.
+  ORGANISM  Lactococcus lactis
+            Bacteria; Firmicutes; Bacillus/Clostridium group; Streptococcaceae;
+            Lactococcus.
+REFERENCE   1  (bases 1 to 784)
+  AUTHORS   Griffin,H.G. and Gasson,M.J.
+  TITLE     The gene (1acA) encoding galactoside acetyltransferase from
+            Lactococcus lactis
+  JOURNAL   Biotechnol. Lett. 16, 1125-1130 (1994)
+REFERENCE   2  (bases 1 to 784)
+  AUTHORS   Griffin,H.G.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (02-SEP-1994) H.G. Griffin, Institute of Food Research,
+            Norwich Research Park, Colney, Norwich NR4 7UA, UK
+COMMENT     Related sequence: X80037.
+FEATURES             Location/Qualifiers
+     source          1. .784
+                     /organism="Lactococcus lactis"
+                     /strain="ATCC7962"
+                     /db_xref="taxon:1358"
+     RBS             10. .16
+     gene            25. .648
+                     /gene="lacA"
+     CDS             25. .648
+                     /gene="lacA"
+                     /EC_number="2.3.1.18"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="galactoside O-acetyltransferase"
+                     /protein_id="CAA57126.1"
+                     /db_xref="GI:1263135"
+                     /db_xref="SWISS-PROT:P52984"
+                     /translation="MPKLESYKRVHTEELYFPNDQKLWKEQQEALVLLEKFNQTSVTQ
+                     PEQQMELLKKMFSEIGENCFIQPPFYANFGGKNVHFGTGIYANFNLTLVDDTDIFVGN
+                     HVMFGPNVTIDTATHPVSPDLRKRGAQYNKKVYIEENVWLGAGVIVLPGVRIGKNSVI
+                     GAGSLVTKDIPDNVVAFGTPCMVKRKINDSDFKTYDHGKKIDLDEFI"
+BASE COUNT      273 a    109 c    163 g    239 t
+ORIGIN
+>>>>LLLACZ  10/1996
+X80037 Lactococcus lactis lacZ gene. 10/1996
+LOCUS       LLLACZ                  3071 bp    DNA     linear   BCT 07-OCT-1996
+DEFINITION  Lactococcus lactis lacZ gene.
+ACCESSION   X80037
+VERSION     X80037.1  GI:1556405
+KEYWORDS    beta-D-galactosidase; lacz gene.
+SOURCE      Lactococcus lactis.
+  ORGANISM  Lactococcus lactis
+            Bacteria; Firmicutes; Bacillus/Clostridium group; Streptococcaceae;
+            Lactococcus.
+REFERENCE   1  (bases 1 to 3071)
+  AUTHORS   Griffin,H.G., MacCormick,C.A. and Gasson,M.J.
+  TITLE     Cloning and analysis of a gene expressing a temperature-sensitive
+            beta-galactosidase from lactococcus lactis
+  JOURNAL   DNA Seq. In press
+REFERENCE   2  (bases 1 to 3071)
+  AUTHORS   Griffin,H.G.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (05-JUL-1994) H.G. Griffin, Institute of Food Research,
+            Norwich Research Park, Colney, Norwich NR4 7UA, UK
+FEATURES             Location/Qualifiers
+     source          1. .3071
+                     /organism="Lactococcus lactis"
+                     /strain="ATCC7962"
+                     /db_xref="taxon:1358"
+     RBS             24. .30
+                     /gene="lacZ"
+     gene            24. .3027
+                     /gene="lacZ"
+     CDS             37. .3027
+                     /gene="lacZ"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="beta-D-galactosidase"
+                     /protein_id="CAA56341.1"
+                     /db_xref="GI:1556406"
+                     /db_xref="SWISS-PROT:Q48727"
+                     /translation="MMTMIDVLERKDWENPVVSNWNRLPMHTPMDFLEKQSLNGLWNF
+                     DHFSRISDVPKNWLELTESKTEIIVPSNWQIEFKDKSDVPIYTNVTYPIPIQPPYVPE
+                     ANPVGAYSRYFDITKEWLESGHVHLTFEGVGSAFHFWLNGEYGGYSEDSRLPAEFDIS
+                     NLAKEGQNCLKVLVFRWSKGTYFEDQDMWRMSGIFRSVNLQWLPDNYLLDFSIKTDLD
+                     EDLDFANVKLQAYAKNMDDACLEFKLYDDEQLIGECHGFDAEIGVVNPKLWSDEIPYL
+                     YRLELTLMDRSGAVFHKETKKIGIRKIAIEKGQLKINGKALLVRGVNKHEFTPEHGYV
+                     VSEEVMIKDIKLMKEHNFNAVRCSHYPNDSRWYELCDEYGLYVMDEANIETHGMTPMN
+                     RLTNDPTYLPLMSERVTRMVMRDRNHPSIIIWSLGNESGYGSNHQALYDWCKSFDSSR
+                     PVHYEGGDDASRGATDATDIICPMYARVDSPSINAPYSLKTWMGVAGENRPLILCEYA
+                     HDMGNSLGGFGKYWQAFREIDRLQGGFIWDWVDQGLLKDGNYAYGGDFGDKPNDRQFS
+                     LNGLVFPNRQAKPALREAKYWQQYYQFELEKTPLGQVFAFTVTNEYLFRSTDNEKLCY
+                     QLTNGLEVLWENELILNMPAGGSMRIDLSELPIDGTDNLFLNIQVKTIEKYNLLESDF
+                     EVAHQQFVLQEKINFTDKIDSNEEITLLEDEELLTVRSAKQKFIFNKSNGNLSRWLDE
+                     KGNEKLLHELSEQFTRAPLDNDIGVSEVEHIDPNAWLERWKAVGFYELKTLLKNMIIQ
+                     ATENEVIISVQTDYEAKGKIAFSTIREYHIFRNGELLLKVDFKRNIEFPEPARIGLSL
+                     QLAEKAENVTYFGLGPDENYPDRRGASLFGQWNLRITDMTTPYIFPSENGLRMETREL
+                     NYGRLKVRAMGQSFAFNLSPYSQNQLAKKGHWHLLEEEAGTWLNIDGFHMGVGGDDSW
+                     SPSVAQEYLLTKGNYHYEVSFKLT"
+BASE COUNT     1020 a    430 c    667 g    954 t
+ORIGIN
+>>>>LLLCPJ  9/1996
+X89503 L.lactis DNA for lcp J gene. 9/1996
+LOCUS       LLLCPJ                   400 bp    DNA     linear   BCT 11-SEP-1996
+DEFINITION  L.lactis DNA for lcp J gene.
+ACCESSION   X89503
+VERSION     X89503.1  GI:1536913
+KEYWORDS    bacteriocin J46; lcp J gene.
+SOURCE      Lactococcus lactis.
+  ORGANISM  Lactococcus lactis
+            Bacteria; Firmicutes; Bacillus/Clostridium group; Streptococcaceae;
+            Lactococcus.
+REFERENCE   1  (bases 1 to 400)
+  AUTHORS   Huot,E., Meghrous,J., Barrena-Gonzalez,C. and Petitdemange,H.
+  TITLE     Bacteriocin J46, a new bacteriocin produced by Lactococcus lactis
+            subsp. cremoris J46 : isolation and characterization of the protein
+            and its gene
+  JOURNAL   Anaerobe 2, 137-145 (1996)
+REFERENCE   2  (bases 1 to 400)
+  AUTHORS   Petitdemange,H.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (10-JUL-1995) H. Petitdemange, Laboratoire de chimie
+            biologique 1, Boulevard des Aiguillettes, BP 239 Faculte des
+            Sciences, F- 54506 Vandoeuvre-Les-Nancy Cedex, FRANCE
+FEATURES             Location/Qualifiers
+     source          1. .400
+                     /organism="Lactococcus lactis"
+                     /strain="J46"
+                     /sub_species="cremoris"
+                     /db_xref="taxon:1358"
+     gene            62. .351
+                     /gene="lcp J"
+     -35_signal      62. .67
+                     /gene="lcp J"
+     TATA_signal     85. .90
+                     /gene="lcp J"
+     RBS             132. .135
+                     /gene="lcp J"
+     CDS             145. .300
+                     /gene="lcp J"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="bacteriocin J46"
+                     /protein_id="CAA61674.1"
+                     /db_xref="GI:1536914"
+                     /db_xref="SPTREMBL:P71449"
+                     /translation="MKEQNSFNLLQEVTESELDLILGAKGGSGVIHTISHEVIYNSWN
+                     FVFTCCS"
+     sig_peptide     145. .216
+                     /gene="lcp J"
+     terminator      328. .351
+                     /gene="lcp J"
+BASE COUNT      145 a     51 c     69 g    135 t
+ORIGIN
+>>>>LLLCT  9/1993
+X71410 L.lactis gene for lacticin 481. 9/1993
+LOCUS       LLLCT                   1345 bp    DNA     linear   BCT 24-SEP-1993
+DEFINITION  L.lactis gene for lacticin 481.
+ACCESSION   X71410
+VERSION     X71410.1  GI:296368
+KEYWORDS    lacticin; lantibiotic; lct gene; structural gene.
+SOURCE      Lactococcus lactis.
+  ORGANISM  Lactococcus lactis
+            Bacteria; Firmicutes; Bacillus/Clostridium group; Streptococcaceae;
+            Lactococcus.
+REFERENCE   1  (bases 1 to 1345)
+  AUTHORS   Piard,J.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (13-APR-1993) J. Piard, Lab de Genetique Microbienne,
+            Institut de Biotechnologie, INRA, 78350 Jouy en Josas, FRANCE
+REFERENCE   2  (bases 1 to 1345)
+  AUTHORS   Piard,J.C., Kuipers,O.P., Rollema,H.S., Desmazeaud,M.J. and de
+            Vos,W.M.
+  TITLE     Structure, organization, and expression of the lct gene for
+            lacticin 481, a novel lantibiotic produced by Lactococcus lactis
+  JOURNAL   J. Biol. Chem. 268 (22), 16361-16368 (1993)
+  MEDLINE   93346379
+FEATURES             Location/Qualifiers
+     source          1. .1345
+                     /organism="Lactococcus lactis"
+                     /strain="CNRZ481"
+                     /sub_species="lactis"
+                     /db_xref="taxon:1358"
+     -35_signal      729. .734
+     -10_signal      752. .757
+     mRNA            764. .>1345
+     RBS             798. .801
+                     /note="putative"
+     gene            811. .966
+                     /gene="lct"
+     sig_peptide     811. .882
+                     /gene="lct"
+     CDS             811. .966
+                     /gene="lct"
+                     /codon_start=1
+                     /transl_table=11
+                     /protein_id="CAA50534.1"
+                     /db_xref="GI:296369"
+                     /db_xref="SWISS-PROT:P36499"
+                     /translation="MKEQNSFNLLQEVTESELDLILGAKGGSGVIHTISHECNMNSWQ
+                     FVFTCCS"
+     mat_peptide     883. .963
+                     /gene="lct"
+                     /product="lacticin 481"
+     repeat_region   994. .1017
+                     /note="putative rho-independant transcription terminator"
+                     /rpt_type=INVERTED
+BASE COUNT      487 a    185 c    219 g    454 t
+ORIGIN
+>>>>LLLLAP316  5/1998
+X97358 L.lyticum 16S rRNA gene, strain LLAP3. 5/1998
+LOCUS       LLLLAP316               1466 bp    DNA     linear   BCT 06-MAY-1998
+DEFINITION  L.lyticum 16S rRNA gene, strain LLAP3.
+ACCESSION   X97358
+VERSION     X97358.1  GI:1310679
+KEYWORDS    16S ribosomal RNA; 16S rRNA.
+SOURCE      Legionella lytica.
+  ORGANISM  Legionella lytica
+            Bacteria; Proteobacteria; gamma subdivision; Legionellaceae group;
+            Legionellaceae; Legionella.
+REFERENCE   1  (bases 1 to 1466)
+  AUTHORS   Birtles,R.J., Rowbotham,T.J., Raoult,D. and Harrison,T.G.
+  TITLE     Phylogenetic diversity of intra-amoebal legionellae as revealed by
+            16S rRNA gene sequence comparison
+  JOURNAL   Microbiology 142 (Pt 12), 3525-3530 (1996)
+  MEDLINE   97158243
+REFERENCE   2  (bases 1 to 1466)
+  AUTHORS   Birtles,R.J.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (19-APR-1996) R.J. Birtles, UNITE DES RICKETTSIES, CNRS
+            EP J0054, Fac. de Medicine, 27, bd Jean Moulin, F-13385 Marseille
+            Cedex 5, FRANCE
+FEATURES             Location/Qualifiers
+     source          1. .1466
+                     /organism="Legionella lytica"
+                     /strain="LLAP3"
+                     /db_xref="taxon:96232"
+     rRNA            1. .1466
+                     /gene="16S rRNA"
+                     /product="16S ribosomal RNA"
+     gene            1. .1466
+                     /gene="16S rRNA"
+BASE COUNT      387 a    316 c    463 g    300 t
+ORIGIN
+>>>>LLLMRP  11/1995
+X89779 L.lactis DNA for LmrP gene. 11/1995
+LOCUS       LLLMRP                  2019 bp    DNA     linear   BCT 06-NOV-1995
+DEFINITION  L.lactis DNA for LmrP gene.
+ACCESSION   X89779
+VERSION     X89779.1  GI:1052753
+KEYWORDS    integral membrane protein; lmrP gene.
+SOURCE      Lactococcus lactis.
+  ORGANISM  Lactococcus lactis
+            Bacteria; Firmicutes; Bacillus/Clostridium group; Streptococcaceae;
+            Lactococcus.
+REFERENCE   1  (bases 1 to 2019)
+  AUTHORS   Bolhuis,H., Poelarends,G., van Veen,H.W., Poolman,B., Driessen,A.J.
+            and Konings,W.N.
+  TITLE     The Lactococcal lmrP gene encodes a proton motive force-dependent
+            drug transporter
+  JOURNAL   J. Biol. Chem. 270 (44), 26092-26098 (1995)
+  MEDLINE   96064673
+REFERENCE   2  (bases 1 to 2019)
+  AUTHORS   Bolhuis,H.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (12-JUL-1995) H. Bolhuis, University of Groningen,
+            Department of Microbiology, Kerklaan 30, NL-9751 NN Haren,
+            NETHERLANDS
+FEATURES             Location/Qualifiers
+     source          1. .2019
+                     /organism="Lactococcus lactis"
+                     /strain="MG1363"
+                     /sub_species="lactis"
+                     /db_xref="taxon:1358"
+     -35_signal      417. .422
+     -10_signal      439. .444
+     RBS             625. .628
+     gene            634. .1860
+                     /gene="lmrP"
+     CDS             634. .1860
+                     /gene="lmrP"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="LmrP integral membrane protein"
+                     /protein_id="CAA61918.1"
+                     /db_xref="GI:1052754"
+                     /db_xref="SPTREMBL:Q48658"
+                     /translation="MKEFWNLDKNLQLRLGIVFLGAFSYGTVFSSMTIYYNQYLGSAI
+                     TGILLALSAVATFVAGILAGFFADRNGRKPVMVFGTIIQLLGAALAIASNLPGHVNPW
+                     STFIAFLLISFGYNFVITAGNAMIIDASNAENRKVVFMLDYWAQNLSVILGAALGAWL
+                     FRPAFEALLVILLLTVLVSFFLTTFVMTETFKPTVKVDEKAENIFQAYKTVLQDKTYM
+                     IFMGANIATTFIIMQFDNFLPVHLSNSFKTITFWGFEIYGQRMLTIYLILACVLVVLL
+                     MTTLNRLTKDWSHQKGFIWGSLFMAIGMIFSFLTTTFTPIFIAGIVYTLGEIVYTPSV
+                     QTLGADLMNPEKIGSYNGVAAIKMPIASILAGLLVSISPMIKAIGVSLVLALTEVLAI
+                     ILVLVAVNRHQKTKLN"
+     terminator      1888. .1910
+BASE COUNT      633 a    286 c    349 g    751 t
+ORIGIN
+>>>>LLLNISZ  10/1999
+Y13384 Lactococcus lactis nisZ gene and 3 ORF's. 10/1999
+LOCUS       LLLNISZ                 2778 bp    DNA     linear   BCT 27-OCT-1999
+DEFINITION  Lactococcus lactis nisZ gene and 3 ORF's.
+ACCESSION   Y13384
+VERSION     Y13384.1  GI:3157416
+KEYWORDS    Nisin Z; NisZ gene.
+SOURCE      Lactococcus lactis subsp. lactis.
+  ORGANISM  Lactococcus lactis subsp. lactis
+            Bacteria; Firmicutes; Bacillus/Clostridium group; Streptococcaceae;
+            Lactococcus.
+REFERENCE   1  (bases 1 to 2778)
+  AUTHORS   Immonen,T., Wahlstrom,G., Takala,T. and Saris,P.E.
+  TITLE     Evidence for a mosaic structure of the Tn5481 in Lactococcus lactis
+            N8
+  JOURNAL   DNA Seq. 9 (5-6), 245-261 (1998)
+  MEDLINE   99452384
+REFERENCE   2  (bases 1 to 2778)
+  AUTHORS   Immonen,T.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (27-MAY-1997) T. Immonen, Institute Of Biotechnology,
+            Biocenter 1, Viikinkaari 9, P.O.Box 56, 00014 University Of
+            Helsinki, FINLAND
+FEATURES             Location/Qualifiers
+     source          1. .2778
+                     /organism="Lactococcus lactis subsp. lactis"
+                     /strain="N8"
+                     /db_xref="taxon:1360"
+                     /clone="pLEB506"
+                     /clone="pLEB461"
+                     /clone="pLEB462"
+                     /clone="pLEB41"
+                     /clone="pLEB43"
+     CDS             complement(<1. .423)
+                     /codon_start=1
+                     /transl_table=11
+                     /product="homologous to branched chain amino acid
+                     transporters of LIV-II class"
+                     /protein_id="CAA73811.1"
+                     /db_xref="GI:3157417"
+                     /db_xref="SPTREMBL:O69437"
+                     /translation="MEEKLAGKDYLFIGSMLFGLFFGAGNLIFPIHMGQEAGAAISQA
+                     NFGFLITAVGFPFLGIIALGISQSNGVFELASRVNRIYAYIFTILLYLVIGPFFALPR
+                     LATTSFEIGISPFLSHELQAPLLALFSILFFGTAWFLSR"
+     CDS             complement(660. .977)
+                     /codon_start=1
+                     /transl_table=11
+                     /product="YjdJ-like protein"
+                     /protein_id="CAA73812.1"
+                     /db_xref="GI:3157418"
+                     /db_xref="SPTREMBL:O69438"
+                     /translation="MPFWSTKIFGEGEKLMNIIERENLFELLSDKGEIIGEMAYMPMN
+                     NSIIITHTGVSLDYRGQGLAKKLVLAGIQKARREQLKLGATCPYAVKYFREHKEELTD
+                     VLK"
+     CDS             complement(932. .1204)
+                     /codon_start=1
+                     /transl_table=11
+                     /product="YjdI-like protein"
+                     /protein_id="CAA73813.1"
+                     /db_xref="GI:3157419"
+                     /db_xref="SPTREMBL:O69439"
+                     /translation="MDNSKLFGEAANEEQLLKNDYRKYCGENMDIYYNVAICEHAGEC
+                     VRGNPLVFEVSRKPWIIPDNGDVASNQSVINRCPSGALKYLAKEKN"
+     gene            2605. .2778
+                     /gene="nisZ"
+     CDS             2605. .2778
+                     /gene="nisZ"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="nisin Z"
+                     /protein_id="CAA73814.1"
+                     /db_xref="GI:3157420"
+                     /translation="MSTKDFNLDLVSVSKKDSGASPRITSISLCTPGCKTGALMGCNM
+                     KTATCNCSIHVSK"
+BASE COUNT     1020 a    399 c    436 g    923 t
+ORIGIN

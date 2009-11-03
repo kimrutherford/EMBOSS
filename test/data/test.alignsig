@@ -1,0 +1,198 @@
+DE   Results of signature search
+XX
+CL   Alpha and beta proteins (a/b)
+XX
+FO   NAD(P)-binding Rossmann-fold domains
+XX
+SF   NAD(P)-binding Rossmann-fold domains
+XX
+FA   Lactate & malate dehydrogenases, N-terminal domain
+XX
+P06994    1      MKVAVLGAAGGIGQALALLLKTQLPSGSELSLYDIAPVTPGVAVDLSHIPTAV 53
+SIGNATURE -      -*--*-------*----------------*-*-*-----------*-------
+P05414    1      MEITNVNEYEAIAKQKLPKMVYDYYASGAEDQWTLAENRNAFSRILFRPRILI 53
+SIGNATURE -      -----------------------------------------------------
+P16528    1      MVAPIPAKRGRKPAVATAPATGQVQSLTRGLKLLEWIAESNGSVALTELAQQA 53
+SIGNATURE -      -------------------*--*------*----------------*-*-*--
+Q08269    1      MSSSSSSSESSPNLSRSNSLANTMVSMKTEDHTGLYDHRQHPDSLPVRHQPPT 53
+SIGNATURE -      -----------------------------------------------------
+P05313    1      MKTRTQQIEELQKEWTQPRWEGITRPYSAEDVVKLRGSVNPECTLAQLGAAKM 53
+SIGNATURE -      -----------------------------------------------------
+XX
+P06994    54     KIKGFSGEDATPALEGADVVLISAGVARKPGMDRSDLFNVNAGIVKNLVQQVA 106
+SIGNATURE -      -------------------*-*--------------*---*-------*--*-
+P05414    54     DVTNIDMTTTILGFKISMPIMIAPTAMQKMAHPEGEYATARAASAAGTIMTLS 106
+SIGNATURE -      -----------------------------------------------------
+P16528    54     GLPNSTTHRLLTTMQQQGFVRQVGELGHWAIGAHAFMVGSSFLQSRNLLAIVH 106
+SIGNATURE -      ----------*--------------------------*-*-------------
+Q08269    54     LKNKEIAKSTKPSIPKEQKSATRYNSHVDVGSVPSRGRMDFEDEGQGMDETVA 106
+SIGNATURE -      -----------------------------------------------------
+P05313    54     WRLLHGESKKGYINSLGALTGGQALQQAKAGIEAVYLSGWQVAADANLAASMY 106
+SIGNATURE -      -----------------------------------------------------
+XX
+P06994    107    KTCPKACIGIITNPVNTTVAIAAEVLKKAGVYDKNKLFGVTTLDIIRSNTFVA 159
+SIGNATURE -      ---------*-*-*---------------------------------------
+P05414    107    SWATSSVEEVASTGPGIRFFQLYVYKDRNVVAQLVRRAERAGFKAIALTVDTP 159
+SIGNATURE -      -----------------------------------------------------
+P16528    107    PILRNLMEESGETVNMAVLDQSDHEAIIIDQVQCTHLMRMSAPIGGKLPMHAS 159
+SIGNATURE -      -*---*-------*--*----------*-*-*---------------------
+Q08269    107    HHQLRASAILTSNARPSRLAHSMPHQRQLYVESNIHTPPKDVGVKRDYTMSSS 159
+SIGNATURE -      -----------------------------------------------------
+P05313    107    PDQSLYPANSVPAVVERINNTFRRADQIQWSAGIEPGDPRYVDYFLPIVADAE 159
+SIGNATURE -      -----------------------------------------------------
+XX
+P06994    160    ELKGKQPGEVEVPVIGGHSGVTILPLLSQVPGVSFTEQEVADLTKRIQNAGTE 212
+SIGNATURE -      -----------------------------------------------------
+P05414    160    RLGRREADIKNRFVLPPFLTLKNFEGIDLGKMDKANDSGLSSYVAGQIDRSLS 212
+SIGNATURE -      -----------------------------------------------------
+P16528    160    GAGKAFLAQLSEEQVTKLLHRKGLHAYTHATLVSPVHLKEDLAQTRKRGYSFD 212
+SIGNATURE -      -----------------------------------------------------
+Q08269    160    TASSGNKSKLSASSSASPITKVRKSSLVSPVLEIPHESKSDTHSKLAKPKKRT 212
+SIGNATURE -      -----------------------------------------------------
+P05313    160    AGFGGVLNAFELMKAMIEAGAAAVHFEDQLASVKKCGHMGGKVLVPTQEAIQK 212
+SIGNATURE -      -----------------------------------------*--*-------*
+XX
+P06994    213    VVEAKAGGGSATLSMGQAAARFGLSLVRALQGEQGVVECAYVEGDGQYARFFS 265
+SIGNATURE -      -----------------------------------------------------
+P05414    213    WKDVAWLQTITSLPILVKGVITAEDARLAVQHGAAGIIVSNHGARQLDYVPAT 265
+SIGNATURE -      --------------------------*--*-------*---------------
+P16528    213    DEEHALGLRCLAACIFDEHREPFAAISISGPISRITDDRVTEFGAMVIKAAKE 265
+SIGNATURE -      -----------------------------------------------------
+Q08269    213    YSTTSAHSSINPAVLLTKSTSQKSDADDDTLERKPVRMNTRASFDSDVSQASR 265
+SIGNATURE -      -----------------------------------------------------
+P05313    213    LVAARLAADVTGVPTLLVARTDADAADLITSDCDPYDSEFITGERTSEGFFRT 265
+SIGNATURE -      ----------------*-*-*------------*-------------------
+XX
+P06994    266    QPLLLGKNGVEERKSIGTLSAFEQNALEGMLDTLKKDIALGEEFVNK       318
+SIGNATURE -      -----------------------------------------------      
+P05414    266    IMALEEVVKAAQGRIPVFLDGGVRRGTDVFKALALGAAGVFIGRPVVFSLAAE 318
+SIGNATURE -      -*-*-*------------*--------------------------*-*-----
+P16528    266    VTLAYGGMR                                             318
+SIGNATURE -      ---------                                            
+Q08269    266    DSQETEEDVCFPMPPQLHTRVNGIDFDELEEYAQFANAEKSQFLASLQVPNEQ 318
+SIGNATURE -      -----------------------------------------------------
+P05313    266    HAGIEQAISRGLAYAPYADLVWCETSTPDLELARRFAQAIHAKYPGKLLAYNC 318
+SIGNATURE -      -------*-*--------------*---*-------*--*----------*-*
+XX
+P06994    319                                                          371
+SIGNATURE -                                                           
+P05414    319    GEAGVKKVLQMMRDEFELTMALSGCRSLKEISRSHIAADWDGPSSRAVARL   371
+SIGNATURE -      ---------*---*-------*--*----------*-*-*-----------  
+P16528    319                                                          371
+SIGNATURE -                                                           
+Q08269    319    KYSNVSQDIGFTSSTSTSGSSAALKYTPRVSQTGEKSESTNETEIHEKKEDEH 371
+SIGNATURE -      -----------------------------------------------------
+P05313    319    SPSFNWQKNLDDKTIASFQQQLSDMGYKFQFITLAGIHSMWFNMFDLANAYAQ 371
+SIGNATURE -      -*---------------------------------------------------
+XX
+P06994    372                                                          424
+SIGNATURE -                                                           
+P05414    372                                                          424
+SIGNATURE -                                                           
+P16528    372                                                          424
+SIGNATURE -                                                           
+Q08269    372    EKIKPSLHPGISFGKNKVEGEENENIPSNDPAYCSYQGTDFQIPNRFSFFCSE 424
+SIGNATURE -      -----------------------------------------------------
+P05313    372    GEGMKHYVEKVQQPEFAAAKDGYTFVSHQQEVGTGYFDKVTTIIQGGTSSVTA 424
+SIGNATURE -      -----------------------------------------------------
+XX
+P06994    425                                                          477
+SIGNATURE -                                                           
+P05414    425                                                          477
+SIGNATURE -                                                           
+P16528    425                                                          477
+SIGNATURE -                                                           
+Q08269    425    SDETVHASDIPSLVSEGQTFYELFRGGEPTWWLDCSCPTDDEMRCIAKAFGIH 477
+SIGNATURE -      ------*--*------*---------------*-*-*-----------*----
+P05313    425    LTGSTEESQF                                            477
+SIGNATURE -      ----------                                           
+XX
+P06994    478                                                          530
+SIGNATURE -                                                           
+P05414    478                                                          530
+SIGNATURE -                                                           
+P16528    478                                                          530
+SIGNATURE -                                                           
+Q08269    478    PLTAEDIRMQETREKVELFKSYYFVCFHTFENDKESEDFLEPINVYIVVCRSG 530
+SIGNATURE -      ----------------------*-*--------------*---*-------*-
+P05313    478                                                          530
+SIGNATURE -                                                           
+XX
+P06994    531                                                          583
+SIGNATURE -                                                           
+P05414    531                                                          583
+SIGNATURE -                                                           
+P16528    531                                                          583
+SIGNATURE -                                                           
+Q08269    531    VLTFHFGPISHCANVRRRVRQLRDYVNVNSDWLCYALIDDITDSFAPVIQSIE 583
+SIGNATURE -      -*----------*-*-*------------------------------------
+P05313    531                                                          583
+SIGNATURE -                                                           
+XX
+P06994    584                                                          636
+SIGNATURE -                                                           
+P05414    584                                                          636
+SIGNATURE -                                                           
+P16528    584                                                          636
+SIGNATURE -                                                           
+Q08269    584    YEADAIEDSVFMARDMDFAAMLQRIGESRRKTMTLMRLLSGKADVIKMFAKRC 636
+SIGNATURE -      -----------------------------------------------------
+P05313    584                                                          636
+SIGNATURE -                                                           
+XX
+P06994    637                                                          689
+SIGNATURE -                                                           
+P05414    637                                                          689
+SIGNATURE -                                                           
+P16528    637                                                          689
+SIGNATURE -                                                           
+Q08269    637    QDEANGIGPALTSQINIANLQARQDNASHIKNNSSTTVPNNYAPTTSQPRGDI 689
+SIGNATURE -      -----------------------------------------------------
+P05313    637                                                          689
+SIGNATURE -                                                           
+XX
+P06994    690                                                          742
+SIGNATURE -                                                           
+P05414    690                                                          742
+SIGNATURE -                                                           
+P16528    690                                                          742
+SIGNATURE -                                                           
+Q08269    690    ALYLGDIQDHLLTMFQNLLAYEKIFSRSHTNYLAQLQVESFNSNNKVTEMLGK 742
+SIGNATURE -      -----------------------------------------------------
+P05313    690                                                          742
+SIGNATURE -                                                           
+XX
+P06994    743                                                          795
+SIGNATURE -                                                           
+P05414    743                                                          795
+SIGNATURE -                                                           
+P16528    743                                                          795
+SIGNATURE -                                                           
+Q08269    743    VTMIGTMLVPLNVITGLFGMNVKVPGENSSIAWWFGILGVLLLLAVLGWFLAS 795
+SIGNATURE -      -----------------------------------------------------
+P05313    743                                                          795
+SIGNATURE -                                                           
+XX
+P06994    796                                                          848
+SIGNATURE -                                                           
+P05414    796                                                          848
+SIGNATURE -                                                           
+P16528    796                                                          848
+SIGNATURE -                                                           
+Q08269    796    YWIKRIDPPATLNEAAESGAKSVISSFLPKRNKRFNDRSKNINVRAGPSNKSV 848
+SIGNATURE -      -----------------------------------------------------
+P05313    796                                                          848
+SIGNATURE -                                                           
+XX
+P06994    849                                                          901
+SIGNATURE -                                                           
+P05414    849                                                          901
+SIGNATURE -                                                           
+P16528    849                                                          901
+SIGNATURE -                                                           
+Q08269    849    ASLPSRYSRYD                                           901
+SIGNATURE -      -----------                                          
+P05313    849                                                          901
+SIGNATURE -                                                           
+XX
+//

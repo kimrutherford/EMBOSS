@@ -1,0 +1,13 @@
+<b>Here is a sample session with seqretsplit</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqretsplit tembl:m1190* </b>
+Reads and writes (returns) sequences in individual files
+output sequence(s) [m11903.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

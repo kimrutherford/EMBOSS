@@ -1,0 +1,20 @@
+<b>Here is a sample session with lindna</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>lindna -graph cps </b>
+Draws linear maps of DNA constructs
+Commands to the lindna drawing program file [inputfile]: <b>data.linp</b>
+Draw a ruler [Y]: <b></b>
+      Open : Open blocks
+    Filled : Filled blocks
+   Outline : Black border
+Type of blocks [Filled]: <b></b>
+
+Created lindna.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

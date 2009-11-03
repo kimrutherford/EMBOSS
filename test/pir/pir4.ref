@@ -1,0 +1,61 @@
+>F1;A32902
+GMP reductase / glucose-6-phosphate 1-dehydrogenase fusion protein - human (fragment)
+C;Species: Homo sapiens (man)
+C;Date: 10-Sep-1998 #sequence_revision 10-Sep-1998 #text_change 30-Jun-2001
+C;Accession: A32902
+R;Kanno, H.; Huang, I.Y.; Kan, Y.W.; Yoshida, A.
+Cell 58, 595-606, 1989
+A;Title: Two structural genes on different chromosomes are required for encoding the major subunit of human red cell glucose-6-phosphate dehydrogenase.
+A;Reference number: A32902; MUID:89336791; PMID:2758468
+A;Accession: A32902
+A;Molecule type: protein
+A;Residues: 1-21 A;Cross-references: UNIPARC:UPI000017CEA5
+R;Yoshida, A.; Kan, Y.W.
+Cell 62, 11-12, 1990
+A;Title: Origin of "fused" glucose-6-phosphate dehydrogenase.
+A;Reference number: A55177; MUID:90304899; PMID:1694726
+A;Contents: annotation
+C;Comment: This peptide was sequenced from a fragment of a chimeric protein produced from GMP reductase (see PIR:B32902) and glucose-6-phosphate 1-dehydrogenase (see PIR:DEHUG6). The chimeric protein was later shown to be an artifact of purification and not a natural component of erythrocytes.
+C;Keywords: fusion protein
+F;1-13/Region: GMP reductase
+F;14-21/Region: glucose-6-phosphate 1-dehydrogenase
+>F1;A45758
+hypothetical glucose-6-phosphate 1-dehydrogenase (EC 1.1.1.49) long splice form - human (fragment)
+C;Species: Homo sapiens (man)
+C;Date: 10-Sep-1998 #sequence_revision 10-Sep-1998 #text_change 20-Apr-2000
+C;Accession: A45758; I79513
+R;Hirono, A.; Beutler, E.
+J. Clin. Invest. 83, 343-346, 1989
+A;Title: Alternative splicing of human glucose-6-phosphate dehydrogenase messenger RNA in different tissues.
+A;Reference number: A45758; MUID:89093442; PMID:2910917
+A;Accession: A45758
+A;Molecule type: DNA
+A;Residues: 1-46 A;Cross-references: UNIPARC:UPI000017CED4; GB:M23423; NID:g340914; PIDN:AAB59390.1; PID:g533203
+R;Hirono, A.; Beutler, E.
+Proc. Natl. Acad. Sci. U.S.A. 85, 3951-3954, 1988
+A;Title: Molecular cloning and nucleotide sequence of cDNA for human glucose-6-phosphate dehydrogenase variant A(-).
+A;Reference number: I59122; MUID:88234536; PMID:2836867
+A;Accession: I79513
+A;Status: translated from GB/EMBL/DDBJ
+A;Molecule type: mRNA
+A;Residues: 1-45 A;Cross-references: UNIPARC:UPI000016A942; GB:M19866; GB:J03231; NID:g182872; PIDN:AAA52501.1; PID:g553297
+C;Comment: This entry shows additional sequence derived from the 3' end of intron 7 of glucose-6-phosphate 1-dehydrogenase (see PIR:DEHUG6) and found in certain mRNA species from lymphoblastoid cell, sperm, and granulocyte libraries. It has not been shown that this predicted long splice form of the protein is expressed.
+C;Genetics:
+A;Gene: GDB:G6PD; G6PD1
+A;Cross-references: GDB:120621; OMIM:305900
+A;Map position: Xq28-Xq28
+C;Keywords: alternative splicing
+>P1;JC5705
+alpha-amylase inhibitor 0.19 - synthetic
+C;Species: synthetic
+A;Note: Triticum aestivum (common wheat) gene engineered and expressed in Escherichia coli
+C;Date: 03-Sep-1998 #sequence_revision 03-Sep-1998 #text_change 08-Dec-2000
+C;Accession: JC5705
+R;Okuda, M.; Satoh, T.; Sakurai, N.; Shibuya, K.; Kaji, H.; Samejima, T.
+J. Biochem. 122, 918-926, 1997
+A;Title: Overexpression in Escherichia coli of chemically synthesized gene for active 0.19 alpha-amylase inhibitor from wheat kernel.
+A;Reference number: JC5705; MUID:98104043; PMID:9443806
+A;Accession: JC5705
+A;Molecule type: DNA
+A;Residues: 1-125 A;Cross-references: UNIPARC:UPI000017CEAC; DDBJ:AB003682; NID:g2575815; PIDN:BAA20139.1; PID:g2116581
+C;Comment: The sequence from wheat (see PIR:A01324) has signal and propeptide sequences not included in this synthetic sequence.

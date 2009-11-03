@@ -1,0 +1,44 @@
+<b>Here is a sample session with msbar</b>
+<p>
+This asks for 5 mutations, with point mutations as changes (substitutions), and the codon and block mutations ignored. 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>msbar </b>
+Mutate sequence beyond all recognition
+Input sequence(s): <b>tembl:j01636</b>
+Number of times to perform the mutation operations [1]: <b>5</b>
+Point mutation operations
+         0 : None
+         1 : Any of the following
+         2 : Insertions
+         3 : Deletions
+         4 : Changes
+         5 : Duplications
+         6 : Moves
+Types of point mutations to perform [0]: <b>4</b>
+Block mutation operations
+         0 : None
+         1 : Any of the following
+         2 : Insertions
+         3 : Deletions
+         4 : Changes
+         5 : Duplications
+         6 : Moves
+Types of block mutations to perform [0]: <b></b>
+Codon mutation operations
+         0 : None
+         1 : Any of the following
+         2 : Insertions
+         3 : Deletions
+         4 : Changes
+         5 : Duplications
+         6 : Moves
+Types of codon mutations to perform [0]: <b></b>
+output sequence(s) [j01636.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

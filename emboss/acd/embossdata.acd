@@ -1,0 +1,71 @@
+application: embossdata [
+  documentation: "Finds or fetches data files read by EMBOSS
+                  programs"
+  groups: "Utils:Misc"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  toggle: showall [
+    additional: "Y"
+    information: "Show all potential EMBOSS data files"
+  ]
+
+  boolean: fetch [
+    additional: "@(!$(showall))"
+    information: "Fetch a data file"
+  ]
+
+  string: filename [
+    parameter: "Y"
+    default: ""
+    information: "Data file name"
+    help: "This specifies the name of the file that should be fetched
+           into the current directory or searched for in all of the
+           directories that EMBOSS programs search when looking for a data
+           file. The name of the file is not altered when it is fetched."
+    knowntype: "filename"
+  ]
+
+endsection: input
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  selection: reject [
+    default: "3, 5, 6"
+    minimum: "1"
+    maximum: "6"
+    values: "None, AAINDEX, CVS, CODONS, PRINTS, PROSITE, REBASE"
+    delimiter: ","
+    header: "Directories to ignore"
+    information: "Select directories"
+    help: "This specifies the names of the sub-directories of the
+           EMBOSS data directory that should be ignored when displaying data
+           directories."
+    button: "Y"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    additional: "Y"
+    default: "stdout"
+    help: "This specifies the name of the file that the results of a
+           search for a file in the various data directories is written to.
+           By default these results are written to the screen (stdout)."
+    knowntype: "emboss datafile"
+    information: "EMBOSS datafile output file"
+  ]
+
+endsection: output

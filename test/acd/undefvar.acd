@@ -1,0 +1,11 @@
+# ACD file for QA testing - missing the application definition
+#
+appl: undefvar [ doc: "testing" group: "testing" ]
+
+sequence: sequence [ param: Y ]
+
+outfile: outtest [ standard: "$(seqmod)"
+]
+
+bool: seqmod [ info: "modify sequence" ]
+

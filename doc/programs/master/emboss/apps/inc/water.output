@@ -1,0 +1,51 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: hba_human.water </h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: water
+# Rundate: Sun 15 Jul 2007 12:00:00
+# Commandline: water
+#    [-asequence] tsw:hba_human
+#    [-bsequence] tsw:hbb_human
+# Align_format: srspair
+# Report_file: hba_human.water
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: HBA_HUMAN
+# 2: HBB_HUMAN
+# Matrix: EBLOSUM62
+# Gap_penalty: 10.0
+# Extend_penalty: 0.5
+#
+# Length: 145
+# Identity:      63/145 (43.4%)
+# Similarity:    88/145 (60.7%)
+# Gaps:           8/145 ( 5.5%)
+# Score: 293.5
+# 
+#
+#=======================================
+
+HBA_HUMAN          3 LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLS-     50
+                     |:|.:|:.|.|.||||  :..|.|.|||.|:.:.:|.|:.:|..| ||| 
+HBB_HUMAN          4 LTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDLST     51
+
+HBA_HUMAN         51 ----HGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDP     96
+                         .|:.:||.|||||..|.::.:||:|::....:.||:||..||.|||
+HBB_HUMAN         52 PDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDP    101
+
+HBA_HUMAN         97 VNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKFLASVSTVLTSKY    141
+                     .||:||.:.|:..||.|...||||.|.|:..|.:|.|:..|..||
+HBB_HUMAN        102 ENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY    146
+
+
+#---------------------------------------
+#---------------------------------------
+</pre>
+</td></tr></table><p>

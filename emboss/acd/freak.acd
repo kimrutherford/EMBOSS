@@ -1,0 +1,71 @@
+application: freak [
+  documentation: "Residue/base frequency table or plot"
+  groups: "Nucleic:Composition, Protein:Composition"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: seqall [
+    parameter: "Y"
+    type: "any"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  string: letters [
+    standard: "Y"
+    default: "gc"
+    information: "Residue letters"
+    knowntype: "nucleotide sequence"
+  ]
+
+endsection: required
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  integer: step [
+    additional: "Y"
+    default: "1"
+    information: "Stepping value"
+  ]
+
+  integer: window [
+    additional: "Y"
+    default: "30"
+    information: "Averaging window"
+  ]
+
+endsection: additional
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  toggle: plot [
+    default: "N"
+    information: "Produce graphic"
+  ]
+
+  xygraph: graph [
+    standard: "$(plot)"
+  ]
+
+  outfile: outfile [
+    standard: "@(!$(plot))"
+    knowntype: "freak output"
+    nullok: "$(plot)"
+  ]
+
+endsection: output

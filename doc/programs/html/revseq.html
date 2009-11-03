@@ -1,0 +1,596 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: revseq
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+revseq
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+    Function
+</H2>
+Reverse and complement a sequence
+
+<H2>
+    Description
+</H2>
+
+
+This takes a sequence and outputs the reverse complement
+(also known as the anti-sense or reverse sense) sequence. 
+<p>
+It can also output just the reversed sequence or just the
+complement of the sequence. 
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with revseq</b>
+<p>
+To create the reverse complement (reverse sense) of 'tembl:x65923' in the file 'x65923.rev': 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>revseq tembl:x65923 x65923.rev </b>
+Reverse and complement a sequence
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+To create the complement of 'tembl:x65923' in the file 'x65923.rev': 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>revseq tembl:x65923 x65923.rev -norev </b>
+Reverse and complement a sequence
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+To create the reverse of 'tembl:x65923' in the file 'x65923.rev': 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>revseq tembl:x65923 x65923.rev -nocomp </b>
+Reverse and complement a sequence
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.3">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     (Gapped) nucleotide sequence(s) filename and
+                                  optional format, or reference (input USA)
+  [-outseq]            seqoutall  [<sequence>.<format>] Sequence set(s)
+                                  filename and optional format (output USA)
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -[no]reverse        boolean    [Y] Set this to be false if you do not wish
+                                  to reverse the output sequence
+   -[no]complement     boolean    [Y] Set this to be false if you do not wish
+                                  to complement the output sequence
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>(Gapped) nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 2)</td>
+<td>Sequence set(s) filename and optional format (output USA)</td>
+<td>Writeable sequence(s)</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-[no]reverse</td>
+<td>Set this to be false if you do not wish to reverse the output sequence</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]complement</td>
+<td>Set this to be false if you do not wish to complement the output sequence</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>revseq</b> reads one or more nucleic acid sequence USAs.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:x65923' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:x65923</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   X65923; SV 1; linear; mRNA; STD; HUM; 518 BP.
+XX
+AC   X65923;
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   18-APR-2005 (Rel. 83, Last updated, Version 11)
+XX
+DE   H.sapiens fau mRNA
+XX
+KW   fau gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-518
+RA   Michiels L.M.R.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
+RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-518
+RX   PUBMED; 8395683.
+RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
+RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
+RL   Oncogene 8(9):2537-2546(1993).
+XX
+DR   H-InvDB; HIT000322806.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..518
+FT                   /organism="Homo sapiens"
+FT                   /chromosome="11q"
+FT                   /map="13"
+FT                   /mol_type="mRNA"
+FT                   /clone_lib="cDNA"
+FT                   /clone="pUIA 631"
+FT                   /tissue_type="placenta"
+FT                   /db_xref="taxon:9606"
+FT   misc_feature    57..278
+FT                   /note="ubiquitin like part"
+FT   CDS             57..458
+FT                   /gene="fau"
+FT                   /db_xref="GDB:135476"
+FT                   /db_xref="GOA:P35544"
+FT                   /db_xref="GOA:P62861"
+FT                   /db_xref="HGNC:3597"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P62861"
+FT                   /protein_id="CAA46716.1"
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   misc_feature    98..102
+FT                   /note="nucleolar localization signal"
+FT   misc_feature    279..458
+FT                   /note="S30 part"
+FT   polyA_signal    484..489
+FT   polyA_site      509
+XX
+SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        60
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       120
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       180
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       240
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       300
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       360
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       420
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       480
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               518
+//
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Output file format
+</H2>
+
+
+One or more sequences are written out.
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: x65923.rev</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X65923 X65923.1 H.sapiens fau mRNA
+ttttttttttgactgaactaagtggcttttttattagagaaagccagaattacaaaagac
+ttaagagttggcattggggcccttcttcttgccaaaggtgggcacaacgttgacaaagcg
+ccggttgtactgcatccgccgcttagcccgacctgtcttcttcttcttcttctcctgttt
+ggccaccttaggagtctgacctctcacttttccagcacgggccagggaaccatgaacttt
+acctccaagcatgcggcctgctacttccagggtagtcagggcctccaccccgcactggcc
+cagagtggcctcatcctccaggggcgcgcctgccaggagcacgacttgatcttccggggc
+aatgccctccagtgaggctacatgagccttgatctgggcgaccgtttcctggccggtcac
+ctcgaaggtgtgtagctcctgggcgcggacaaagagctgcatattggcgactgaacggcg
+gtcccagctaccgcgaagatggagtcgagaaagaggaa
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: x65923.rev</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X65923 X65923.1 H.sapiens fau mRNA
+aaggagaaagagctgaggtagaagcgccatcgaccctggcggcaagtcagcggttatacg
+tcgagaaacaggcgcgggtcctcgatgtgtggaagctccactggccggtcctttgccagc
+gggtctagttccgagtacatcggagtgacctcccgtaacggggccttctagttcagcacg
+aggaccgtccgcgcggggacctcctactccggtgagacccggtcacgccccacctccggg
+actgatgggaccttcatcgtccggcgtacgaacctccatttcaagtaccaagggaccggg
+cacgaccttttcactctccagtctgaggattccaccggtttgtcctcttcttcttcttct
+tctgtccagcccgattcgccgcctacgtcatgttggccgcgaaacagttgcaacacgggt
+ggaaaccgttcttcttcccggggttacggttgagaattcagaaaacattaagaccgaaag
+agattattttttcggtgaatcaagtcagtttttttttt
+</pre>
+</td></tr></table><p>
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: x65923.rev</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X65923 X65923.1 H.sapiens fau mRNA
+aaaaaaaaaactgacttgattcaccgaaaaaataatctctttcggtcttaatgttttctg
+aattctcaaccgtaaccccgggaagaagaacggtttccacccgtgttgcaactgtttcgc
+ggccaacatgacgtaggcggcgaatcgggctggacagaagaagaagaagaagaggacaaa
+ccggtggaatcctcagactggagagtgaaaaggtcgtgcccggtcccttggtacttgaaa
+tggaggttcgtacgccggacgatgaaggtcccatcagtcccggaggtggggcgtgaccgg
+gtctcaccggagtaggaggtccccgcgcggacggtcctcgtgctgaactagaaggccccg
+ttacgggaggtcactccgatgtactcggaactagacccgctggcaaaggaccggccagtg
+gagcttccacacatcgaggacccgcgcctgtttctcgacgtataaccgctgacttgccgc
+cagggtcgatggcgcttctacctcagctctttctcctt
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+
+	It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+
+        Bugs noted but not yet fixed.
+<p>
+	None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="biosed.html">biosed</a></td>
+<td>Replace or delete sequence sections</td>
+</tr>
+
+<tr>
+<td><a href="codcopy.html">codcopy</a></td>
+<td>Reads and writes a codon usage table</td>
+</tr>
+
+<tr>
+<td><a href="cutseq.html">cutseq</a></td>
+<td>Removes a specified section from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="degapseq.html">degapseq</a></td>
+<td>Removes gap characters from sequences</td>
+</tr>
+
+<tr>
+<td><a href="descseq.html">descseq</a></td>
+<td>Alter the name or description of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="entret.html">entret</a></td>
+<td>Reads and writes (returns) flatfile entries</td>
+</tr>
+
+<tr>
+<td><a href="extractalign.html">extractalign</a></td>
+<td>Extract regions from a sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="extractfeat.html">extractfeat</a></td>
+<td>Extract features from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="extractseq.html">extractseq</a></td>
+<td>Extract regions from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="listor.html">listor</a></td>
+<td>Write a list file of the logical OR of two sets of sequences</td>
+</tr>
+
+<tr>
+<td><a href="makenucseq.html">makenucseq</a></td>
+<td>Creates random nucleotide sequences</td>
+</tr>
+
+<tr>
+<td><a href="makeprotseq.html">makeprotseq</a></td>
+<td>Creates random protein sequences</td>
+</tr>
+
+<tr>
+<td><a href="maskfeat.html">maskfeat</a></td>
+<td>Mask off features of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="maskseq.html">maskseq</a></td>
+<td>Mask off regions of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="newseq.html">newseq</a></td>
+<td>Type in a short new sequence</td>
+</tr>
+
+<tr>
+<td><a href="noreturn.html">noreturn</a></td>
+<td>Removes carriage return from ASCII files</td>
+</tr>
+
+<tr>
+<td><a href="notseq.html">notseq</a></td>
+<td>Exclude a set of sequences and write out the remaining ones</td>
+</tr>
+
+<tr>
+<td><a href="nthseq.html">nthseq</a></td>
+<td>Writes one sequence from a multiple set of sequences</td>
+</tr>
+
+<tr>
+<td><a href="pasteseq.html">pasteseq</a></td>
+<td>Insert one sequence into another</td>
+</tr>
+
+<tr>
+<td><a href="seqret.html">seqret</a></td>
+<td>Reads and writes (returns) sequences</td>
+</tr>
+
+<tr>
+<td><a href="seqretsplit.html">seqretsplit</a></td>
+<td>Reads and writes (returns) sequences in individual files</td>
+</tr>
+
+<tr>
+<td><a href="skipseq.html">skipseq</a></td>
+<td>Reads and writes (returns) sequences, skipping first few</td>
+</tr>
+
+<tr>
+<td><a href="splitter.html">splitter</a></td>
+<td>Split a sequence into (overlapping) smaller sequences</td>
+</tr>
+
+<tr>
+<td><a href="trimest.html">trimest</a></td>
+<td>Trim poly-A tails off EST sequences</td>
+</tr>
+
+<tr>
+<td><a href="trimseq.html">trimseq</a></td>
+<td>Trim ambiguous bits off the ends of sequences</td>
+</tr>
+
+<tr>
+<td><a href="union.html">union</a></td>
+<td>Reads sequence fragments and builds one sequence</td>
+</tr>
+
+<tr>
+<td><a href="vectorstrip.html">vectorstrip</a></td>
+<td>Strips out DNA between a pair of vector sequences</td>
+</tr>
+
+<tr>
+<td><a href="yank.html">yank</a></td>
+<td>Reads a sequence range, appends the full USA to a list file</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+
+
+<H2>
+    History
+</H2>
+
+Completed 26 Jan 1999
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+<H2>
+    Comments
+</H2>
+None
+
+
+
+</BODY>
+</HTML>
+

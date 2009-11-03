@@ -1,0 +1,24 @@
+
+Written (Dec 2001) - Gary Williams
+
+<p>
+
+Changed name (version 2.3.0) - Gary Williams
+
+<p>
+
+When I wrote the EMBOSS wrapper for the Whitehead's primer3 version
+3.0.9 program, I called it 'primer3'.  This did not conflict with the
+Whitehead program becuase although the package is called 'primer3' the
+program itself is called primer3_core. 
+
+<p>
+
+I wasn't aware that the Whitehead's primer3 version 3.0.6 program was
+itself called 'primer3'.  This caused a name conflict in those sites
+with version 3.0.6 installed. 
+
+<p>
+
+To avoid the conflict, the EMBOSS program was renamed 'eprimer3'. 
+eprimer3 was released in version 2.3.0 of EMBOSS

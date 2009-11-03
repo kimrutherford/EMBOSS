@@ -1,0 +1,19 @@
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="dotpath.html">dotpath</a></td>
+<td>Non-overlapping wordmatch dotplot of two sequences</td>
+</tr>
+
+<tr>
+<td><a href="dottup.html">dottup</a></td>
+<td>Displays a wordmatch dotplot of two sequences</td>
+</tr>
+
+<tr>
+<td><a href="polydot.html">polydot</a></td>
+<td>Displays all-against-all dotplots of a set of sequences</td>
+</tr>
+
+</table>

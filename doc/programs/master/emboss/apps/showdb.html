@@ -1,0 +1,277 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: showdb
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+showdb
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/showdb.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+
+This writes out a simple table displaying the names, contents and
+available ways of accessing the sequence databases.
+
+<p>
+The available ways of accessing the databases are 'ID', 'Query' and
+'All'.  These refer to the way that you can search the databases to
+get entries from them, which is governed by the ways the database has
+been set up and the way it is organised and indexed.
+
+<p>
+Different databases may have different access capabilities, depending
+on how your local site is organised.
+
+<p>
+EMBOSS has been designed to be extremely flexible in its use of
+sequence databases formats, so that it is easy to set EMBOSS up to use
+your site's existing databases.  Sometimes this means that it is hard
+to extract entries from some databases in particular ways.  For
+example, a flat file database with no index is only useful for reading
+all entries, while a database located in another site that is
+available via the WWW may only provide single entries.
+
+<p>
+'ID' (also known as 'single entry') allows the programs to extract a
+single explicitly named entry from the database, for example
+embl:x13776
+
+<p>
+'Query' (also known as 'wild') indicates that programs can extract a
+set of matching wildcard entry names (this may be slow for some
+methods of access).  For example you can look at all of the human PAX
+proteins in SWISS_PROT by: swissprot:pax*_human
+
+<p>
+'All' allows the programs to analyse all the entries in the database
+sequentially.  For example this lets you look at all entries in the
+database with the notation: embl:*
+
+<p>
+A database may have several different methods of access available.
+Ideally all of the databases available on your site will be available
+in all three ways, but this is not the best of all posssible worlds
+and so you might like to check how you can access the databases by
+running this program and having a look.
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/showdb.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/showdb.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/showdb.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+    None.
+
+<p>
+
+<!--#include file="inc/showdb.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+
+<!--#include file="inc/showdb.output" -->
+
+<p>
+
+The output is a simple table.
+
+<p>
+
+Type 'P' indicates that this is a Protein database.
+
+<p>
+
+Type 'N' indicates that this is a Nucleic database.
+
+<p>
+
+'OK' under ID, Qry or All indicates that that access method can be
+used on this database.  A '-' indicates that you cannot access this
+database in that way.
+
+<p>
+
+Note that 'OK' does not mean that the database is working correctly.  It
+simply means that <b>showdb</b> has read the database definition
+correctly and that this method of access to the database should be
+possible. 
+
+<p>
+
+If you are setting up a new database, then you should check that it
+works correctly by extracting entries from it using <b>seqret</b>. 
+
+<p>
+
+When the -html qualifier is specified, then the output will be wrapped
+in HTML tags, ready for inclusion in a Web page.  Note that tags such
+as &lt;HTML&gt;, &lt;BODY&gt;, &lt;/BODY&gt; and &lt;/HTML&gt; are not
+output by this program as the table of databases is expected to form
+only part of the contents of a web page - the rest of the web page
+must be supplied by the user.
+
+
+<H2>
+    Data files
+</H2>
+
+
+The databases are specified in the files <i>"emboss.defaults"</i> for
+site wide definitions, and <i>"~/.embossrc"</i> for the user's own
+settings.
+	
+<H2>
+    Notes
+</H2>
+
+
+Note that 'OK' in the output does not mean that the database is working
+correctly.  It simply means that <b>showdb</b> has read the database
+definition correctly and that this method of access to the database
+should be possible. 
+
+<p>
+
+If you are setting up a new database, then you should check that it
+works correctly by extracting entries from it using <b>seqret</b>. 
+
+<p>
+
+You can set up your own private databases by editing a file called
+'.embossrc' to contain database specifications. 
+
+<p>
+
+You can set up public databases by editing the file
+'/usr/local/share/EMBOSS/emboss.default' (if you have the permission to
+do this). 
+
+<p>
+
+The 'emboss.default' file will already have the definitions of the test
+databases in: tsw, tembl, tpir, etc.  These are the databases that are
+used in the examples shown in the documentation of the programs. 
+
+<p>
+
+For details of the database definitions, you should first read David's
+Administration Guide:
+<a href="/docs/adminguide/">
+http://emboss.sourceforge.net/docs/adminguide/
+</a>
+especially:
+<a href="/docs/adminguide/node4.html">
+http://emboss.sourceforge.net/docs/adminguide/adminguide/node4.html
+</a>
+
+<p>
+
+See also:
+<a href="/docs/themes/Databases.html">
+http://emboss.sourceforge.net/docs/themes/Databases.html
+</a>
+for a lot of detail of the syntax of database definition.
+
+<p>
+
+Just because showdb can display the database definitions, it does NOT
+mean that the databases are set up correctly.  You must now test them
+using <b>seqret</b>. 
+
+
+<H2>
+    References
+</H2>
+
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+"The database 'xyz' does not exist" You have supplied the name of a
+database with the -database qualifier, but that database does not
+exist as far as EMBOSS is concerned.
+
+<H2>
+    Exit status
+</H2>
+
+
+It always exits with status 0, unless the above diagnostic message is
+displayed.
+
+<H2>
+    Known bugs
+</H2>
+
+
+None noted.
+
+<!--#include file="inc/showdb.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/gwilliam.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/showdb.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/showdb.comment" -->
+
+</BODY>
+</HTML>
+

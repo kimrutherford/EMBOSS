@@ -1,0 +1,44 @@
+<b>Here is a sample session with revseq</b>
+<p>
+To create the reverse complement (reverse sense) of 'tembl:x65923' in the file 'x65923.rev': 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>revseq tembl:x65923 x65923.rev </b>
+Reverse and complement a sequence
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+To create the complement of 'tembl:x65923' in the file 'x65923.rev': 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>revseq tembl:x65923 x65923.rev -norev </b>
+Reverse and complement a sequence
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+To create the reverse of 'tembl:x65923' in the file 'x65923.rev': 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>revseq tembl:x65923 x65923.rev -nocomp </b>
+Reverse and complement a sequence
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.3">Go to the output files for this example</a><p><p>

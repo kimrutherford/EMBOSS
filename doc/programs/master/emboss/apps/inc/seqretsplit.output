@@ -1,0 +1,54 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: m11903.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;M11903 M11903.1 Rattus norvegicus androgen-responsive protein precursor (Svf) gene, exons 1 and 1A, alternatively spliced.
+cctttcaaatagaaactctcgtgaaggctgtctgagaacacaagctcaaggttgtgactg
+atttcagtgatgccgtcttgaagagggataccgtgctagagaatgactcctgatcaaccc
+tgaagacttctgcaagcccgaagtcgtgcttccccactctgaactgacatatgttcagga
+agtagagacgtgcaccgttggatgttctcaaggtaaaaaggaagatttggaagaatgctc
+tagtgttgttgccttggagaggaccagggaacagtacaagactcctactgagcagagaga
+aaggagcctgacatttaccgataagaaaggtcatttgccttccaacctgtaggcaaggcc
+agacaaggaaatatataaaggagaacctcagatcagctctcagtcaagacccttcctgac
+aagatgagtcccaccgggttcttcctccttacggtgctccttgttctggtgacagaagca
+gcctcgagggggccccgaggtgagtggcaattttgtgctatgggaaagatgtttgagaac
+tatgttctcaaaagggagtctgcagaatgctgtgttcccagggcttctccatgaaggaaa
+cttgagtcttttcaagctttaaccatagtcctactgtgagtctctgtgacttgacaagca
+acattgctggtaaggagggctgagggggaatgcgggcaacggcctcgggtaacatcctca
+ttgt
+</pre>
+</td></tr></table><p>
+<p><h3>File: m11904.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;M11904 M11904.1 Rattus norvegicus androgen-responsive protein precursor (Svf) gene, exon 2 and complete cds.
+ggtatctccaaacacagcagctggctctcaacagagagtcctcatgcacaactaatccaa
+gatacagaaagtggatatagagaatgagacattgttttctctcaacagaaaaattctcac
+agtcagctgaagacccttatagtgaaaacatgaatctaaagattctggcgagcgggaggg
+gatcaagttctacctttggggcattcagccgaagtgagaactctcggagtaacttcaaat
+caaaaagtccaagcagtatcaccagggagaaagtgaatgaggaaagcaggagtgaaatga
+gtagtaccagcagccattttggtctcaaaatgagaagatctcatggaggaggagaaatga
+atccctttgaaaccaaagtaaagacccggatcactcgcaaataatgtgttccccggccaa
+ctgaagacttgagcccaataggcaggtaagtgttatcaccaggtgagggcttacaaacta
+ctcgtgcctaatccctaggccattgtaggattgtgcacgcagtaaagttgctataagggg
+aggtatggaaacgacctacaaggcagacaaagatacgagctatactgtgt
+</pre>
+</td></tr></table><p>
+<p><h3>File: m11905.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;M11905 M11905.1 Rattus norvegicus androgen-responsive protein precursor (Svf) gene, exon 3.
+ccgtgcaatctcttcctgtgtccacacagccctgttagaagcaactctctcgttctcaag
+gccctacctgcaagaactacctttctcttcctccgcccaacaaaggaggaatgtttctgc
+ttgtgacccaccagagatgaaatatagcagtgtcctgcagtaaaggggggccccagaggc
+atgggacatacacgcattaatccctccacgtcttccctgtcctacctcacaggttgtcct
+cgttccctgggtgtcactgaactaagagaagtctatgatgtcttcaggatgcaggatccc
+acaggtgccccggaaatagtccgtgcttcttatttcctccttacacttgttttctttaag
+attccggaacctgacaagattcaaatttaaccttttcaataaaaaagatactattctgca
+tcattatctcctgaaatctcttgcttctgcagtacaggggctgggtgggattcctaaact
+tgaccagttctgccgttaaaggaagatcccttctgtgccgtatcagagactatttccaga
+ctctggataga
+</pre>
+</td></tr></table><p>

@@ -1,0 +1,179 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: etandem
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+etandem
+<!--#include file="header2.inc" -->
+<H2>
+    Function
+</H2>
+<!--#include file="inc/etandem.ione" -->
+
+<H2>
+Description
+</H2>
+
+<b>etandem</b> looks for tandem repeats in a sequence. It is normally
+used after equicktandem has been run to identify potential repeat
+sizes.  It calculates a consensus for the repeat region and gives a
+score for how many matches there are to the consensus - the number of
+mismatches.
+
+<p>
+
+Input sequences are converted into ACGT or N (so ambiguity codes are ignored).
+<br>
+The score is +1 for a match, -1 for a mismatch.
+<br>
+The first copy of a repeat is ignored.
+<br>
+The highest score is kept for each start position and repeat size.
+
+<p>
+
+The lowest score to be reported is set by the threshold score.  The
+threshold score can be set on the command-line using the
+<b>-threshold</b> qualifier, the default is 20.  For perfect repeats, the
+score is the length of the repeat (except for the first copy).  Reduce
+the threshold score a little if you wish to to allow mismatches.  Each
+mismatch scores -1 instead of +1 so it scores 2 less than a perfect
+match of the same number of bases. 
+
+<p>
+
+Running with a wide range of repeat sizes is inefficient. That is why
+equicktandem was written - to give a rapid estimate of the major repeat
+sizes.
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/etandem.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/etandem.ihelp" -->
+</pre>
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/etandem.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+
+The input for etandem is a nucleotide sequence USA.
+
+<p>
+<!--#include file="inc/etandem.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/reportformats.ihtml" -->
+<p>
+
+By default <b>etandem</b> writes a 'table' report file.
+
+<p>
+ 
+<!--#include file="inc/etandem.output" -->
+
+<H2>
+    Data files
+</H2>
+
+None
+
+<H2>
+    Notes
+</H2>
+
+Running with a wide range of repeat sizes is inefficient. That is why
+equicktandem was written - to give a rapid estimate of the major repeat
+sizes.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+
+<H2>
+    Diagnostics
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/etandem.isee" -->
+<p>
+
+Running with a wide range of repeat sizes is inefficient. That is why
+equicktandem was written - to give a rapid estimate of the major repeat
+sizes.
+
+
+<H2>
+Authors
+</H2>
+
+This program was originally written by 
+<!--#include file="inc/rdurbin.address" -->
+
+<p>
+
+This application was modified for inclusion in EMBOSS by 
+<!--#include file="inc/price.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/etandem.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/etandem.comment" -->
+
+</BODY>
+</HTML>
+
+

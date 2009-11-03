@@ -1,0 +1,22 @@
+# ACD file for QA testing - missing the application definition
+#
+
+appl: testassoc [ doc: "testing" group: "testing" ]
+
+section: input [ info: "Input section" type: "page" ]
+
+sequence: asequence [ param: Y ]
+
+sequence: bsequence [ param: Y ]
+
+endsection: input
+
+section: output [ info: "Output section" type: "page" ]
+
+string: testa [ standard: Y info: "Asequence end $(asequence.end)" ]
+
+string: testb [ standard: Y info: "Bsequence end $(bsequence.end)" ]
+
+string: testc [ info: "just another test" ]
+
+endsection: output

@@ -1,0 +1,15 @@
+<b>Here is a sample session with nthseq</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>nthseq </b>
+Writes one sequence from a multiple set of sequences
+Input (gapped) sequence(s): <b>@eclac.list</b>
+The number of the sequence to output [1]: <b>2</b>
+output sequence [j01636.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

@@ -1,0 +1,158 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: mwfilter
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+mwfilter
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/mwfilter.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<b>mwfilter</b> is designed to remove unwanted (noisy) data from mass
+spectrometry output in proteomics. Given a list of molecular weights
+this program removes those which are:
+
+<p>
+<ul>
+  <li>Contaminating trypsin or keratin
+  <li>Modified oxy-methionine or oxy-threonine
+  <li>Peaks associated with sodium ions.
+</ul>
+<p>
+ 
+The last two operations can be done as most peaks are reported in
+both modified and unmodified forms. Removal of modified peaks
+aids in database searching for protein identification.
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/mwfilter.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/mwfilter.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/mwfilter.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+<!--#include file="inc/mwfilter.input" -->
+
+<p>
+
+The input file is a simple list of the experimental molecular weights.
+<br>
+There should be one weight per line.
+
+<p>
+
+Comments in the data file start with a '#' character in the first column.
+<br>
+Blank lines are ignored.
+
+
+<H2>
+    Output file format
+</H2>
+
+The output is a list of the molecular weights with the unwanted (noisy)
+data removed. 
+
+<p>
+
+<!--#include file="inc/mwfilter.output" -->
+
+<H2>
+    Data files
+</H2>
+
+The program reads the data file <b>Emwfilter.dat</b> for the molecular
+weights of items to be deleted from the experimental data. 
+
+<p>
+
+<!--#include file="inc/localfiles.ihtml" -->
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/mwfilter.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/ableasby.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/mwfilter.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/mwfilter.comment" -->
+
+
+</BODY>
+</HTML>
+

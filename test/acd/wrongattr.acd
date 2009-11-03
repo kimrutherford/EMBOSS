@@ -1,0 +1,8 @@
+# ACD file for QA testing - missing the application definition
+#
+appl: wrongattr [ doc: "testing" group: "testing" ]
+
+sequence: sequence [ param: Y ]
+
+outfile: outtest [ wanted: Y prompt: "Some text" ]
+

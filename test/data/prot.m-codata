@@ -1,0 +1,27 @@
+ENTRY           CODATAM1 
+TITLE           CODATA format protein sequence C20001
+ACCESSION       C20001
+SEQUENCE        
+                 5        10        15        20        25        30
+      1 A C D E F G H I K L M N P Q R S T V W Y A C D E F G H I K L
+     31 M N P Q R S T V W Y A C D E F G H I K L M N P Q R S T V W Y
+     61 A C D E F G H I K L M N P Q R S T V W Y A C D E F G H I K L
+     91 M N P Q R S T V W Y
+///
+ENTRY           CODATAM2 
+TITLE           CODATA format protein sequence C20002
+ACCESSION       C20002
+SEQUENCE        
+                 5        10        15        20        25        30
+      1 A A C C D D E E F F G G H H I I K K L L M M N N P P Q Q R R
+     31 S S T T V V W W Y Y A A C C D D E E F F G G H H I I K K L L
+     61 M M N N P P Q Q R R S S T T V V W W Y Y
+///
+ENTRY           CODATAM3 
+TITLE           CODATA format protein sequence C20003
+ACCESSION       C20003
+SEQUENCE        
+                 5        10        15        20        25        30
+      1 A A A C C C D D D E E E F F F G G G H H H I I I K K K L L L
+     31 M M M N N N P P P Q Q Q R R R S S S T T T V V V W W W Y Y Y
+///

@@ -1,0 +1,7 @@
+# ACD file for QA testing - bad application name
+#
+appl: run*123 [ doc: "testing" group: "testing" ]
+
+sequence: asequence 
+
+outfile: outtest [ param: Y odirectory: "$(outdir)" ]

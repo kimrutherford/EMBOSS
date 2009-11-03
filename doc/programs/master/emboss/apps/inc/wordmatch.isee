@@ -1,0 +1,29 @@
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="matcher.html">matcher</a></td>
+<td>Finds the best local alignments between two sequences</td>
+</tr>
+
+<tr>
+<td><a href="seqmatchall.html">seqmatchall</a></td>
+<td>All-against-all comparison of a set of sequences</td>
+</tr>
+
+<tr>
+<td><a href="supermatcher.html">supermatcher</a></td>
+<td>Match large sequences against one or more other sequences</td>
+</tr>
+
+<tr>
+<td><a href="water.html">water</a></td>
+<td>Smith-Waterman local alignment</td>
+</tr>
+
+<tr>
+<td><a href="wordfinder.html">wordfinder</a></td>
+<td>Match large sequences against one or more other sequences</td>
+</tr>
+
+</table>

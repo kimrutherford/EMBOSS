@@ -1,0 +1,172 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: textsearch
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+textsearch
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/textsearch.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+
+This is a small utility search for words in the description text of a
+sequence and for each match list the sequence's name and/or
+description.  NB. It only searches the description line of the
+annotation, not the full annotation.
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/textsearch.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/textsearch.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/textsearch.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<b>textsearch</b> reads one or more normal sequence USAs.
+
+<p>
+
+<!--#include file="inc/textsearch.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+
+<!--#include file="inc/textsearch.output" -->
+
+
+<p>
+
+The first column in the name or ID of each sequence.  The remaining
+text is the description line of the sequence.
+
+<p>
+
+When the -html qualifier is specified, then the output will be wrapped
+in HTML tags, ready for inclusion in a Web page.  Note that tags such
+as &lt;HTML&gt;, &lt;BODY&gt;, &lt;/BODY&gt; and &lt;/HTML&gt; are not
+output by this program as the table of databases is expected to form
+only part of the contents of a web page - the rest of the web page
+must be supplier by the user.
+
+<p>
+
+The lines of out information are guaranteed not to have trailing
+white-space at the end. So if '-nodesc' is used, there will not be any
+whitespace after the ID name.
+
+<H2>
+    Data files
+</H2>
+
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+
+This is a rather slow way to search for text in databases.  If you are
+searching for text in public databases, you should consider using
+either Entrez (<a
+href="http://www.ncbi.nlm.nih.gov/Entrez/">http://www.ncbi.nlm.nih.gov/Entrez/</a>)
+or SRS (<a
+href="http://srs.rfcgr.mrc.ac.uk/">http://srs.rfcgr.mrc.ac.uk/</a> or <a
+href="http://www.sanger.ac.uk/srs6/">http://www.sanger.ac.uk/srs6/</a>
+etc.)
+	
+<H2>
+    References
+</H2>
+
+None.
+
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+
+It always exits with status 0
+
+<H2>
+    Known bugs
+</H2>
+
+
+None.
+
+<!--#include file="inc/textsearch.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/gwilliam.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/textsearch.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/textsearch.comment" -->
+
+
+</BODY>
+</HTML>
+

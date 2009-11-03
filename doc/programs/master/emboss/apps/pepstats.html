@@ -1,0 +1,187 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: pepstats
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+pepstats
+<!--#include file="header2.inc" -->
+
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/pepstats.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+
+<b>pepstats</b> outputs a report of simple protein sequence
+information including:
+
+<p>
+<ul>
+
+<li>Molecular weight
+<li>Number of residues
+<li>Average residue weight
+<li>Charge
+<li>Isoelectric point
+<li>For each type of amino acid: number, molar percent, DayhoffStat
+<li>For each physico-chemical class of amino acid: number, molar percent
+<li>Probability of protein expression in E. coli inclusion bodies
+<li>Molar extinction coefficient (A280)
+<li>Extinction coefficient at 1 mg/ml (A280)
+</ul>
+
+<p>
+
+DayhoffStat is the amino acid's molar percentage divided by the Dayhoff
+statistic.  The Dayhoff statistic is the amino acid's relative occurence
+per 1000 aa normalised to 100 by rls@ebi.ac.uk (original work from 1993)
+
+<p>
+
+The probability of expression in inclusion bodies is sometimes
+referred to as a type of solubility measure. If, however, a
+recombinant protein is expressed in Escherichia coli, it can be
+expressed as soluble in the cytosol or insoluble in inclusion bodies. If
+the Harrison model predicts a given protein to be probably expressed
+in includion bodies, this doesn't mean that it is not possible to get
+it soluble in the cytosol. One example: Thermatoga maritima cell
+divison protein FtsA with a C-terminal His-Tag has a 58% Harrison
+probability of being expressed in inclusion bodies. However, there was
+plenty of soluble protein in the E. coli cytosol (F. van den Ent and
+J.  Lowe, EMBO J. 19, 5300-5307 2000). If the protein is expressed in
+inclusion bodies or not is not only dependent on the sequence, but
+also on many other factors, such as E. coli strain, incubation
+temperature, type of expression vector, strength of promoter and
+medium.
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/pepstats.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/pepstats.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/pepstats.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>pepstats</b> reads a normal protein sequence USA.
+
+<p>
+
+<!--#include file="inc/pepstats.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+
+<!--#include file="inc/pepstats.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+
+The Dayhoff statistic is read from the EMBOSS data file 'Edayhoff.freq'. 
+You can inspect and modify this file by copying it into your current
+directory with the command: 'embossdata -fetch'. 
+
+<p>
+<!--#include file="inc/localfiles.ihtml" -->
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+<ol>
+<li>Roger G. Harrison "Expression of soluble heterologous proteins via
+fusion with NusA protein" in inNovations 11, June 2000, p 4 - 7.
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/pepstats.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/ableasby.address" -->
+
+<H2>
+    History
+</H2>
+
+<!--#include file="inc/pepstats.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/pepstats.comment" -->
+
+</BODY>
+</HTML>
+

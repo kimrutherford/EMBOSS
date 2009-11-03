@@ -1,0 +1,65 @@
+ID   D1CS4A_
+XX
+EN   1CS4
+XX
+TY   SCOP
+XX
+SI   53931 CL; 54861 FO; 55073 SF; 55074 FA; 55077 DO; 55078 SO; 39418 DD;
+XX
+CL   Alpha and beta proteins (a+b)
+XX
+FO   Ferredoxin-like
+XX
+SF   Adenylyl and guanylyl cyclase catalytic domain
+XX
+FA   Adenylyl and guanylyl cyclase catalytic domain
+XX
+DO   Adenylyl cyclase VC1, domain C1a
+XX
+OS   Dog (Canis familiaris)
+XX
+SE   EEEEEEE
+XX
+SS   SEQUENCE   189 AA;  24290 MW;  D1929097 CRC32;
+     LLLLLLLEEE EEEEEEEEEE ELHHHHHHHL LHHHHHHHHH HHHHHHHHHH HHHHLLEEEE
+     EELLEEEEEE LLLLLLLHHH HHHHHHHHHH HHHHHHHHHH HHLLLLEEEE EEEEEEEEEL
+     LLLLLLLLEE EHHHHHHHHH HHHHLLLLLE EEEHHHHHLL LLLLLEEELH HHHHHHHHHH
+     HLLLEEEEL
+XX
+NC   1
+XX
+CN   [1]
+XX
+CH   A CHAIN; . START; . END;
+//
+ID   D1II7A_
+XX
+EN   1II7
+XX
+TY   SCOP
+XX
+SI   53931 CL; 56299 FO; 56300 SF; 64427 FA; 64428 DO; 64429 SO; 62415 DD;
+XX
+CL   Alpha and beta proteins (a+b)
+XX
+FO   Metallo-dependent phosphatases
+XX
+SF   Metallo-dependent phosphatases
+XX
+FA   DNA double-strand break repair nuclease
+XX
+DO   Mre11
+XX
+OS   Archaeon Pyrococcus furiosus
+XX
+SE   HEEE
+XX
+SS   SEQUENCE    43 AA;   5411 MW;  61C5458D CRC32;
+     LLLLLLHHHH EEEEEEEEEE EEEEEEEEEE EELLLEEEEE LLL
+XX
+NC   1
+XX
+CN   [1]
+XX
+CH   A CHAIN; . START; . END;
+//

@@ -1,0 +1,712 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: patmatmotifs
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+patmatmotifs
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+    Function
+</H2>
+Search a PROSITE motif database with a protein sequence
+
+<H2>
+    Description
+</H2>
+
+
+<b>patmatmotifs</b> takes a protein sequence and compares it to the
+PROSITE database of motifs. 
+
+<p>
+
+For a description of PROSITE, we can do no better than to quote the
+PROSITE user's documentation:
+
+<i>
+<p>
+   PROSITE is a method of determining what is the function of uncharacterized
+   proteins translated  from genomic  or cDNA  sequences. It  consists  of  a
+   database of biologically significant sites and patterns formulated in such
+   a way  that with  appropriate  computational  tools  it  can  rapidly  and
+   reliably identify  to which  known family  of protein  (if  any)  the  new
+   sequence belongs.
+
+<p>
+   In some  cases the sequence of an unknown protein is too distantly related
+   to any  protein of  known structure  to detect  its resemblance by overall
+   sequence alignment,  but it  can be  identified by  the occurrence  in its
+   sequence of a particular cluster of residue types which is variously known
+   as a pattern, motif, signature, or fingerprint. These motifs arise because
+   of particular  requirements on  the structure  of specific  region(s) of a
+   protein which  may be important, for example, for their binding properties
+   or for  their enzymatic  activity. These  requirements impose  very  tight
+   constraints on  the evolution  of those  limited (in  size) but  important
+   portion(s) of a protein sequence. To paraphrase Orwell, in Animal Farm, we
+   can say  that "some  regions of  a protein  sequence are  more equal  than
+   others" !
+
+<p>
+   The use  of  protein  sequence  patterns  (or  motifs)  to  determine  the
+   function(s) of  proteins is  becoming very  rapidly one  of the  essential
+   tools of  sequence analysis.  This reality  has been  recognized  by  many
+   authors, as it can be illustrated from the following citations from two of
+   the most  well known  experts of protein sequence analysis, R.F. Doolittle
+   and A.M. Lesk:
+
+<pre>
+      "There are  many short  sequences  that  are  often  (but  not  always)
+      diagnostics of certain binding properties or active sites. These can be
+      set into a small subcollection and searched against your sequence (1)".
+
+      "In some  cases, the structure and function of an unknown protein which
+      is too  distantly related  to any  protein of known structure to detect
+      its affinity  by overall  sequence alignment  may be  identified by its
+      possession of  a particular  cluster of  residues types classified as a
+      motifs. The  motifs, or  templates, or  fingerprints, arise  because of
+      particular  requirements  of  binding  sites  that  impose  very  tight
+      constraint on the evolution of portions of a protein sequence (2)."
+</pre>
+</i>
+
+<p>
+The home web page of PROSITE is: <a
+href="http://www.expasy.ch/prosite/">http://www.expasy.ch/prosite/</a>
+
+<p>
+
+It is common to find that a search of the PROSITE database against a
+protein sequence will report many matches to the short motifs that are
+indicative of the post-translational modification sites, such as
+glycolsylation, myristylation and phosphorylation sites.  These reports
+are often unwanted and are not normally reported.  You can turn
+reporting of these short motifs on by giving the '-noprune' option on
+the command-line. 
+
+<p>
+
+Your EMBOSS administrator must have set up the local EMBOSS PROSITE
+database using the utility '<b>prosextract</b>' before this program will run. 
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with patmatmotifs</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>patmatmotifs -full </b>
+Search a PROSITE motif database with a protein sequence
+Input protein sequence: <b>tsw:opsd_human</b>
+Output report [opsd_human.patmatmotifs]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          sequence   Protein sequence filename and optional
+                                  format, or reference (input USA)
+  [-outfile]           report     [*.patmatmotifs] Output report file name
+
+   Additional (Optional) qualifiers:
+   -full               boolean    [N] Provide full documentation for matching
+                                  patterns
+   -[no]prune          boolean    [Y] Ignore simple patterns. If this is true
+                                  then these simple post-translational
+                                  modification sites are not reported:
+                                  myristyl, asn_glycosylation,
+                                  camp_phospho_site, pkc_phospho_site,
+                                  ck2_phospho_site, and tyr_phospho_site.
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Protein sequence filename and optional format, or reference (input USA)</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output report file name</td>
+<td>Report output file</td>
+<td><i>&lt;*&gt;</i>.patmatmotifs</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-full</td>
+<td>Provide full documentation for matching patterns</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]prune</td>
+<td>Ignore simple patterns. If this is true then these simple post-translational modification sites are not reported: myristyl, asn_glycosylation, camp_phospho_site, pkc_phospho_site, ck2_phospho_site, and tyr_phospho_site.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<b>patmatmotifs</b> reads a protein sequence USA.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tsw:opsd_human' is a sequence entry in the example protein database 'tsw'
+<p>
+<p><h3>Database entry: tsw:opsd_human</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   OPSD_HUMAN              Reviewed;         348 AA.
+AC   P08100; Q16414; Q2M249;
+DT   01-AUG-1988, integrated into UniProtKB/Swiss-Prot.
+DT   01-AUG-1988, sequence version 1.
+DT   20-MAR-2007, entry version 91.
+DE   Rhodopsin (Opsin-2).
+GN   Name=RHO; Synonyms=OPN2;
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+OC   Catarrhini; Hominidae; Homo.
+OX   NCBI_TaxID=9606;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RX   MEDLINE=84272729; PubMed=6589631;
+RA   Nathans J., Hogness D.S.;
+RT   "Isolation and nucleotide sequence of the gene encoding human
+RT   rhodopsin.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 81:4851-4855(1984).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RA   Suwa M., Sato T., Okouchi I., Arita M., Futami K., Matsumoto S.,
+RA   Tsutsumi S., Aburatani H., Asai K., Akiyama Y.;
+RT   "Genome-wide discovery and analysis of human seven transmembrane helix
+RT   receptor genes.";
+RL   Submitted (JUL-2001) to the EMBL/GenBank/DDBJ databases.
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA].
+RC   TISSUE=Retina;
+RG   The German cDNA consortium;
+RL   Submitted (JUN-2003) to the EMBL/GenBank/DDBJ databases.
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA].
+RX   PubMed=15489334; DOI=10.1101/gr.2596504;
+RG   The MGC Project Team;
+RT   "The status, quality, and expansion of the NIH full-length cDNA
+RT   project: the Mammalian Gene Collection (MGC).";
+RL   Genome Res. 14:2121-2127(2004).
+RN   [5]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA] OF 1-120.
+RX   PubMed=8566799; DOI=10.1016/0378-1119(95)00688-5;
+RA   Bennett J., Beller B., Sun D., Kariko K.;
+RT   "Sequence analysis of the 5.34-kb 5' flanking region of the human
+RT   rhodopsin-encoding gene.";
+RL   Gene 167:317-320(1995).
+RN   [6]
+RP   REVIEW ON RP4 VARIANTS.
+RX   MEDLINE=94004905; PubMed=8401533;
+RA   Al-Maghtheh M., Gregory C., Inglehearn C., Hardcastle A.,
+RA   Bhattacharya S.;
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT                                /FTId=VAR_004816.
+FT   VARIANT     209    209       V -&gt; M (effect not known).
+FT                                /FTId=VAR_004817.
+FT   VARIANT     211    211       H -&gt; P (in RP4).
+FT                                /FTId=VAR_004818.
+FT   VARIANT     211    211       H -&gt; R (in RP4).
+FT                                /FTId=VAR_004819.
+FT   VARIANT     216    216       M -&gt; K (in RP4).
+FT                                /FTId=VAR_004820.
+FT   VARIANT     220    220       F -&gt; C (in RP4).
+FT                                /FTId=VAR_004821.
+FT   VARIANT     222    222       C -&gt; R (in RP4).
+FT                                /FTId=VAR_004822.
+FT   VARIANT     255    255       Missing (in RP4).
+FT                                /FTId=VAR_004823.
+FT   VARIANT     264    264       Missing (in RP4).
+FT                                /FTId=VAR_004824.
+FT   VARIANT     267    267       P -&gt; L (in RP4).
+FT                                /FTId=VAR_004825.
+FT   VARIANT     267    267       P -&gt; R (in RP4).
+FT                                /FTId=VAR_004826.
+FT   VARIANT     292    292       A -&gt; E (in CSNBAD1).
+FT                                /FTId=VAR_004827.
+FT   VARIANT     296    296       K -&gt; E (in RP4).
+FT                                /FTId=VAR_004828.
+FT   VARIANT     297    297       S -&gt; R (in RP4).
+FT                                /FTId=VAR_004829.
+FT   VARIANT     342    342       T -&gt; M (in RP4).
+FT                                /FTId=VAR_004830.
+FT   VARIANT     345    345       V -&gt; L (in RP4).
+FT                                /FTId=VAR_004831.
+FT   VARIANT     345    345       V -&gt; M (in RP4).
+FT                                /FTId=VAR_004832.
+FT   VARIANT     347    347       P -&gt; A (in RP4).
+FT                                /FTId=VAR_004833.
+FT   VARIANT     347    347       P -&gt; L (in RP4; common variant).
+FT                                /FTId=VAR_004834.
+FT   VARIANT     347    347       P -&gt; Q (in RP4).
+FT                                /FTId=VAR_004835.
+FT   VARIANT     347    347       P -&gt; R (in RP4).
+FT                                /FTId=VAR_004836.
+FT   VARIANT     347    347       P -&gt; S (in RP4).
+FT                                /FTId=VAR_004837.
+SQ   SEQUENCE   348 AA;  38893 MW;  6F4F6FCBA34265B2 CRC64;
+     MNGTEGPNFY VPFSNATGVV RSPFEYPQYY LAEPWQFSML AAYMFLLIVL GFPINFLTLY
+     VTVQHKKLRT PLNYILLNLA VADLFMVLGG FTSTLYTSLH GYFVFGPTGC NLEGFFATLG
+     GEIALWSLVV LAIERYVVVC KPMSNFRFGE NHAIMGVAFT WVMALACAAP PLAGWSRYIP
+     EGLQCSCGID YYTLKPEVNN ESFVIYMFVV HFTIPMIIIF FCYGQLVFTV KEAAAQQQES
+     ATTQKAEKEV TRMVIIMVIA FLICWVPYAS VAFYIFTHQG SNFGPIFMTI PAFFAKSAAI
+     YNPVIYIMMN KQFRNCMLTT ICCGKNPLGD DEASATVSKT ETSQVAPA
+//
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Output file format
+</H2>
+
+
+<p>
+
+The output is a standard EMBOSS report file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: embl,
+genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+feattable, motif, regions, seqtable, simple, srs, table, tagseq
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/ReportFormats.html">
+http://emboss.sf.net/docs/themes/ReportFormats.html</A>
+for further information on report formats.
+
+<p>
+
+<p>
+
+By default <b>patmatmotifs</b> writes a 'dbmotif' report file.
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: opsd_human.patmatmotifs</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: patmatmotifs
+# Rundate: Sun 15 Jul 2007 12:00:00
+# Commandline: patmatmotifs
+#    -full
+#    -sequence tsw:opsd_human
+# Report_format: dbmotif
+# Report_file: opsd_human.patmatmotifs
+########################################
+
+#=======================================
+#
+# Sequence: OPSD_HUMAN     from: 1   to: 348
+# HitCount: 2
+#
+# Full: Yes
+# Prune: Yes
+# Data_file: ../prosextract-keep/PROSITE/prosite.lines
+#
+#=======================================
+
+Length = 17
+Start = position 123 of sequence
+End = position 139 of sequence
+
+Motif = G_PROTEIN_RECEP_F1_1
+
+TLGGEIALWSLVVLAIERYVVVCKPMS
+     |               |
+   123               139
+
+Length = 17
+Start = position 290 of sequence
+End = position 306 of sequence
+
+Motif = OPSIN
+
+PIFMTIPAFFAKSAAIYNPVIYIMMNK
+     |               |
+   290               306
+
+
+#---------------------------------------
+#
+# Motif: G_PROTEIN_RECEP_F1_1
+# Count: 1
+# 
+# *****************************************
+# * G-protein coupled receptors signature *
+# *****************************************
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+# Count: 1
+# 
+# *************************************************
+# * Visual pigments (opsins) retinal binding site *
+# *************************************************
+# 
+# Visual pigments [1,2] are the light-absorbing  molecules that  mediate vision.
+# They consist of  an apoprotein, opsin,  covalently  linked  to the chromophore
+# cis-retinal.  Vision is  effected through  the absorption of a  photon by cis-
+# retinal  which is isomerized to  trans-retinal.  This isomerization leads to a
+# change  of conformation  of the protein. Opsins are integral membrane proteins
+# with  seven transmembrane regions that belong to family 1 of G-protein coupled
+# receptors (see &lt;PDOC00210&gt;).
+# 
+# In vertebrates four different pigments are generally found.   Rod cells, which
+# mediate vision in dim light, contain the pigment rhodopsin.  Cone cells, which
+# function in bright light, are responsible  for  color vision and contain three
+# or more color pigments (for example, in mammals: red, blue and green).
+# 
+# In Drosophila, the  eye   is composed   of 800   facets  or   ommatidia.  Each
+# ommatidium contains eight photoreceptor cells (R1-R8):  the R1 to R6 cells are
+# outer cells,  R7  and R8 inner cells. Each of the three types of cells (R1-R6,
+# R7 and R8) expresses a specific opsin.
+# 
+# Proteins evolutionary related to opsins include squid retinochrome, also known
+# as retinal  photoisomerase, which converts various isomers of retinal into 11-
+# cis retinal and mammalian retinal pigment  epithelium (RPE) RGR [3], a protein
+# that may also act in retinal isomerization.
+# 
+# The attachment  site  for  retinal in the above proteins is a conserved lysine
+# residue in  the  middle  of  the  seventh  transmembrane helix. The pattern we
+# developed includes this residue.
+# 
+# -Consensus pattern: [LIVMWAC]-[PGAC]-x(3)-[SAC]-K-[STALIMR]-[GSACPNV]-[STACP]-
+#                     x(2)-[DENF]-[AP]-x(2)-[IY]
+#                     [K is the retinal binding site]
+# -Sequences known to belong to this class detected by the pattern: ALL.
+# -Other sequence(s) detected in SWISS-PROT: NONE.
+# -Last update: July 1998 / Pattern and text revised.
+# 
+# [ 1] Applebury M.L., Hargrave P.A.
+#      Vision Res. 26:1881-1895(1986).
+# [ 2] Fryxell K.J., Meyerowitz E.M.
+#      J. Mol. Evol. 33:367-378(1991).
+# [ 3] Shen D., Jiang M., Hao W., Tao L., Salazar M., Fong H.K.W.
+#      Biochemistry 33:13117-13125(1994).
+# 
+# ***************
+# 
+#
+#---------------------------------------
+</pre>
+</td></tr></table><p>
+
+
+<H2>
+    Data files
+</H2>
+
+
+Data and documentation from PROSITE files is automatically read. This
+has been generated and formatted by running <b>prosextract</b> before running
+<b>patmatmotifs</b>.
+
+<H2>
+    Notes
+</H2>
+
+
+Program is only useful when <b>prosextract</b> is used beforehand.  
+
+<H2>
+    References
+</H2>
+
+
+If you want to refer to PROSITE in a publication you can do so by citing:
+
+<p>
+      Bairoch A., Bucher P., Hofmann K.
+      The PROSITE datatase, its status in 1997.
+      Nucleic Acids Res. 24:217-221(1997).
+
+<p>
+
+Other references:
+
+<p>
+<ol>
+<li>Bairoch, A., Bucher P. (1994) PROSITE: recent developments. Nucleic 
+Acids Research, Vol 22, No.17 3583-3589.
+
+<li>Bairoch, A., (1992) PROSITE: a dictionary of sites and patterns in 
+proteins. Nucleic Acids Research, Vol 20, Supplement, 2013-2018.
+
+<li>Peek, J., O'Reilly, T., Loukides, M., (1997) Unix Power Tools, 2nd 
+Edition.
+
+<li>Doolittle R.F.  (In) Of URFs and ORFs: a primer on how to analyze
+derived amino acid sequences., University Science Books, Mill Valley,
+California, (1986).
+
+<li>Lesk A.M.  (In) Computational Molecular Biology, Lesk A.M., Ed.,
+pp17-26, Oxford University Press, Oxford (1988).
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+
+Your EMBOSS administrator must have set up the local EMBOSS PROSITE
+database using the utility '<b>prosextract</b>' before this program will run.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+The error message: 
+
+<p>
+
+<pre>
+"Either EMBOSS_DATA undefined or PROSEXTRACT needs running"
+</pre>
+
+<p>
+
+indicates that your local EMBOSS administrator has not yet correctly
+set up the local EMBOSS PROSITE database using the utility <a
+href="prosextract.html">'prosextract'.</a>
+
+<H2>
+    Exit status
+</H2>
+
+
+It always exits with status 0
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="antigenic.html">antigenic</a></td>
+<td>Finds antigenic sites in proteins</td>
+</tr>
+
+<tr>
+<td><a href="digest.html">digest</a></td>
+<td>Protein proteolytic enzyme or reagent cleavage digest</td>
+</tr>
+
+<tr>
+<td><a href="epestfind.html">epestfind</a></td>
+<td>Finds PEST motifs as potential proteolytic cleavage sites</td>
+</tr>
+
+<tr>
+<td><a href="fuzzpro.html">fuzzpro</a></td>
+<td>Protein pattern search</td>
+</tr>
+
+<tr>
+<td><a href="fuzztran.html">fuzztran</a></td>
+<td>Protein pattern search after translation</td>
+</tr>
+
+<tr>
+<td><a href="helixturnhelix.html">helixturnhelix</a></td>
+<td>Report nucleic acid binding motifs</td>
+</tr>
+
+<tr>
+<td><a href="oddcomp.html">oddcomp</a></td>
+<td>Find protein sequence regions with a biased composition</td>
+</tr>
+
+<tr>
+<td><a href="patmatdb.html">patmatdb</a></td>
+<td>Search a protein sequence with a motif</td>
+</tr>
+
+<tr>
+<td><a href="pepcoil.html">pepcoil</a></td>
+<td>Predicts coiled coil regions</td>
+</tr>
+
+<tr>
+<td><a href="preg.html">preg</a></td>
+<td>Regular expression search of a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="pscan.html">pscan</a></td>
+<td>Scans proteins using PRINTS</td>
+</tr>
+
+<tr>
+<td><a href="sigcleave.html">sigcleave</a></td>
+<td>Reports protein signal cleavage sites</td>
+</tr>
+
+</table>
+
+<H2>
+    Author(s)
+</H2>
+
+
+Sinead O'Leary (current e-mail address unknown)
+<br>
+while she was at:
+<br>
+HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+
+
+
+<H2>
+    History
+</H2>
+
+
+Completed May 13 1999.
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+None
+
+</BODY>
+</HTML>
+

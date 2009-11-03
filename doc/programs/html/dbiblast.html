@@ -1,0 +1,550 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: dbiblast
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+dbiblast
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+    Function
+</H2>
+Index a BLAST database
+<H2>
+    Description
+</H2>
+
+<b>dbiblast</b> indexes a blast database created by the NCBI indexing programs
+formatdb, pressdb or setdb, and builds EMBL CD-ROM format index
+files. This format is used by the software on the EMBL database CD-ROM
+distribution and by the Staden package in addition to EMBOSS, and
+appears to be the most generally used and publicly available index
+file format.
+
+<p>
+
+The index files of the blast database format are not useful by
+themselves as they do not hold the entrynames or accession numbers,
+but they are used as pointers to the reference and sequence information
+in the database.
+
+<p>
+
+Because there are two sequence types (nucleic acid and protein) and two
+index formats (blast1 from pressdb or setdb, and blast2 from formatdb)
+with different index file names, <b>dbiblast</b> will ask about the database
+type. If the answer is "unknown" <b>dbiblast</b> will test each possible set
+of file names until one is found.
+
+<p>
+
+Having created the EMBOSS indices for this file, a database can then be
+defined in the file <b>emboss.defaults</b> as something like:
+
+<p>
+
+<pre>
+DB swnew [
+   type: P
+   format: embl
+   method: blast
+   directory: /data/embl
+]  
+</pre>
+
+
+<h3>Fields Indexed</H3>
+
+By default, <b>dbiblast</b> will index the ID name and the accession number (if present).
+
+<br>
+
+If they are present in your database, you may specify that
+<b>dbiblast</b> should index the Sequence Version and GI number and the
+words in the description by using the '-fields' qualifier with the
+appropriate values. 
+
+<h3>Indexing the Blast database</h3>
+
+<b>dbiblast</b> can't use the new style of Blast indices.  You must
+create the old style of Blast indices by adding <b>-A F</b> to the
+formatdb command line. 
+
+<p>
+
+The reason is that NCBI have not documented the new format, so we cannot
+extend dbiblast to read it.
+
+<p>
+
+If you have the original (fasta format) file you can build the previous
+blast database format with:
+
+<p>
+
+<i>formatdb -A F</i>
+
+<p>
+
+This turns off the new "ASN.1" formatting. blastall will still work. 
+
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with dbiblast</b>
+<p>
+This creates EMBOSS indices for the BLAST database 'swnew' 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>dbiblast </b>
+Index a BLAST database
+Database name: <b>swnew</b>
+Database directory [.]: <b>data</b>
+Wildcard database filename [swnew]: <b></b>
+Release number [0.0]: <b></b>
+Index date [00/00/00]: <b></b>
+         N : nucleic
+         P : protein
+         ? : unknown
+Sequence type [unknown]: <b></b>
+         1 : wublast and setdb/pressdb
+         2 : formatdb
+         0 : unknown
+Blast index version [unknown]: <b></b>
+General log output file [outfile.dbiblast]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-dbname]            string     Database name (Any string from 2 to 19
+                                  characters, matching regular expression
+                                  /[A-z][A-z0-9_]+/)
+   -directory          directory  [.] Database directory
+   -filenames          string     [Database name] Wildcard database filename
+                                  (Any string is accepted)
+   -release            string     [0.0] Release number (Any string up to 9
+                                  characters)
+   -date               string     [00/00/00] Index date (Date string dd/mm/yy)
+   -seqtype            menu       [unknown] Sequence type (Values: N
+                                  (nucleic); P (protein); ? (unknown))
+   -blastversion       menu       [unknown] Blast index version (Values: 1
+                                  (wublast and setdb/pressdb); 2 (formatdb); 0
+                                  (unknown))
+   -outfile            outfile    [*.dbiblast] General log output file
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -fields             menu       [acc] Index fields (Values: acc (acnum
+                                  accession number index); sv (seqvn sequence
+                                  version and gi number index); des (des
+                                  description index))
+   -exclude            string     Wildcard filename(s) to exclude (Any string
+                                  is accepted)
+   -sortoptions        string     [-T . -k 1,1] Sort options, typically '-T .'
+                                  to use current directory for work files and
+                                  '-k 1,1' to force GNU sort to use the first
+                                  field (Any string is accepted)
+   -maxindex           integer    [0] Maximum index length (Integer 0 or more)
+   -[no]systemsort     boolean    [Y] Use system sort utility
+   -[no]cleanup        boolean    [Y] Clean up temporary files
+   -sourcefile         boolean    Use FASTA source file
+   -indexoutdir        outdir     [.] Index file output directory
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-dbname]<br>(Parameter 1)</td>
+<td>Database name</td>
+<td>Any string from 2 to 19 characters, matching regular expression /[A-z][A-z0-9_]+/</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-directory</td>
+<td>Database directory</td>
+<td>Directory</td>
+<td>.</td>
+</tr>
+
+<tr>
+<td>-filenames</td>
+<td>Wildcard database filename</td>
+<td>Any string is accepted</td>
+<td>Database name</td>
+</tr>
+
+<tr>
+<td>-release</td>
+<td>Release number</td>
+<td>Any string up to 9 characters</td>
+<td>0.0</td>
+</tr>
+
+<tr>
+<td>-date</td>
+<td>Index date</td>
+<td>Date string dd/mm/yy</td>
+<td>00/00/00</td>
+</tr>
+
+<tr>
+<td>-seqtype</td>
+<td>Sequence type</td>
+<td><table><tr><td>N</td> <td><i>(nucleic)</i></td></tr><tr><td>P</td> <td><i>(protein)</i></td></tr><tr><td>?</td> <td><i>(unknown)</i></td></tr></table></td>
+<td>unknown</td>
+</tr>
+
+<tr>
+<td>-blastversion</td>
+<td>Blast index version</td>
+<td><table><tr><td>1</td> <td><i>(wublast and setdb/pressdb)</i></td></tr><tr><td>2</td> <td><i>(formatdb)</i></td></tr><tr><td>0</td> <td><i>(unknown)</i></td></tr></table></td>
+<td>unknown</td>
+</tr>
+
+<tr>
+<td>-outfile</td>
+<td>General log output file</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.dbiblast</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-fields</td>
+<td>Index fields</td>
+<td><table><tr><td>acc</td> <td><i>(acnum accession number index)</i></td></tr><tr><td>sv</td> <td><i>(seqvn sequence version and gi number index)</i></td></tr><tr><td>des</td> <td><i>(des description index)</i></td></tr></table></td>
+<td>acc</td>
+</tr>
+
+<tr>
+<td>-exclude</td>
+<td>Wildcard filename(s) to exclude</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>-sortoptions</td>
+<td>Sort options, typically '-T .' to use current directory for work files and '-k 1,1' to force GNU sort to use the first field</td>
+<td>Any string is accepted</td>
+<td>-T . -k 1,1</td>
+</tr>
+
+<tr>
+<td>-maxindex</td>
+<td>Maximum index length</td>
+<td>Integer 0 or more</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-[no]systemsort</td>
+<td>Use system sort utility</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]cleanup</td>
+<td>Clean up temporary files</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-sourcefile</td>
+<td>Use FASTA source file</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-indexoutdir</td>
+<td>Index file output directory</td>
+<td>Output directory</td>
+<td>.</td>
+</tr>
+
+</table>
+
+<H2>
+    Input file format
+</H2>
+
+Any BLAST1 or BLAST2 database index files.
+
+<p>
+
+<H2>
+    Output file format
+</H2>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: division.lkp</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: entrynam.idx</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: acnum.hit</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: acnum.trg</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: outfile.dbiblast</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: dbiblast
+# Rundate: Sun 15 Jul 2007 12:00:00
+# Dbname: swnew
+# Release: 0.0
+# Date: 15/07/07
+# CurrentDirectory: /homes/user/test/qa/dbiblast-ex-keep/
+# IndexDirectory: ./
+# IndexDirectoryPath: /homes/user/test/qa/dbiblast-ex-keep/
+# Maxindex: 0
+# Fields: 2
+#   Field 1: id
+#   Field 2: acc
+# Directory: /homes/user/test/data/
+# DirectoryPath: /homes/user/test/data/
+# Filenames: swnew
+# Exclude: 
+# Files: 1
+#   File 1: /homes/user/test/data/swnew
+########################################
+# Commandline: dbiblast
+#    -dbname swnew
+#    -directory ../../data
+########################################
+
+filename: '/homes/user/test/data/swnew'
+    id: 9
+   acc: 9
+
+Index acc: maxlen 6 items 9
+
+Total 1 files 9 entries (0 duplicates)
+</pre>
+</td></tr></table><p>
+<p>
+
+<b>dbiblast</b> creates four index files.  All are binary but with a
+simple format. 
+
+<ul>
+
+<li>division.lkp is the master index file, and has a 300 byte header
+containing the database name and date plus information on the record
+size. This header is followed by one record for each database file,
+giving the full file name for the data file, and optionally a second
+sequence file.
+
+<p>
+
+<li>entryname.idx is the entry name index. It has the same 300 byte
+header, mainly used to store the record size which will depend on the
+size of the longest entryname in the database. Each entry is stored in
+sorted alphanumeric order so that a binary search can be used to
+efficiently find any record. The record also holds the file number
+from division.lkp and the offsets in the data and sequence files for
+that entry.
+
+<li>acnum.trg holds the accession number information. The file has the
+usual 300 byte header, and a sorted list of record by accession number.
+Each accession number record contains the first record number in acnum.hit
+and the total number of records in acnum.hit so that secondary (duplicated)
+accession numbers can be searched.
+
+<li>acnum.hit is a very simple file. After the usual 300 byte header,
+each record simply holds the record number in entryname.idx. An
+accession number search will use acnum.trg to find a start position
+and number of records to read in this file, and will then simply
+read the entryname.idx records for each entry in turn.
+
+</ul>
+
+<H2>
+    Data files
+</H2>
+
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<b>dbiblast</b> can't use the new style of Blast indices.  You must
+create the old style of Blast indices by adding <b>-A F</b> to the
+formatdb command line. 
+
+<H2>
+    References
+</H2>
+
+None.
+
+
+<H2>
+    Warnings
+</H2>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+None.
+
+
+<H2>
+    Known bugs
+</H2>
+
+<b>dbiblast</b> can't use the new style of Blast indices.  You must
+create the old style of Blast indices by adding <b>-A F</b> to the
+formatdb command line. 
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="dbifasta.html">dbifasta</a></td>
+<td>Database indexing for fasta file databases</td>
+</tr>
+
+<tr>
+<td><a href="dbiflat.html">dbiflat</a></td>
+<td>Index a flat file database</td>
+</tr>
+
+<tr>
+<td><a href="dbigcg.html">dbigcg</a></td>
+<td>Index a GCG formatted database</td>
+</tr>
+
+<tr>
+<td><a href="dbxfasta.html">dbxfasta</a></td>
+<td>Database b+tree indexing for fasta file databases</td>
+</tr>
+
+<tr>
+<td><a href="dbxflat.html">dbxflat</a></td>
+<td>Database b+tree indexing for flat file databases</td>
+</tr>
+
+<tr>
+<td><a href="dbxgcg.html">dbxgcg</a></td>
+<td>Database b+tree indexing for GCG formatted databases</td>
+</tr>
+
+</table>
+<H2>
+    Author(s)
+</H2>
+
+Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+<H2>
+    History
+</H2>
+
+Completed December 1999
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by administrators responsible
+for software and database installation and maintenance. 
+
+<H2>
+    Comments
+</H2>
+None
+
+
+
+</BODY>
+</HTML>
+

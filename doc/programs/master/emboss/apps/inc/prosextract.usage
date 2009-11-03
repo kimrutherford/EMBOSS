@@ -1,0 +1,13 @@
+<b>Here is a sample session with prosextract</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>prosextract </b>
+Build the PROSITE motif database for use by patmatmotifs
+PROSITE database directory [.]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>

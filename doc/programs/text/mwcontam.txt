@@ -1,0 +1,191 @@
+
+                                 mwcontam 
+
+
+
+Function
+
+   Shows molwts that match across a set of files
+
+Description
+
+   mwcontam finds molecular weights that are common between a set of mass
+   spectrometry result files. Such molecular weights are usually a form
+   of contamination resulting from autolysis of a protease, degradation
+   of the matrix or presence of keratin from the sample preparer.
+
+   The output of mwcontam, with minimal editing, can be added to the data
+   file for the mwfilter program ('Emwfilter.dat').
+
+Usage
+
+   Here is a sample session with mwcontam
+
+
+% mwcontam 
+Shows molwts that match across a set of files
+Molecular weights file list: ../data/mw2.dat,mw3.dat
+Ppm tolerance [50.0]: 
+Molecular weights output file [outfile.mwcontam]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-files]             filelist   Molecular weights file list
+   -tolerance          float      [50.0] Ppm tolerance (Any numeric value)
+  [-outfile]           outfile    [*.mwcontam] Molecular weights output file
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+  Input files for usage example
+
+  File: mw1.dat
+
+20.0
+33.0
+67.0
+128.0
+415.0
+999.0
+
+  File: mw2.dat
+
+13.0
+41.0
+67.0
+415.0
+846.0
+781.0
+
+  File: mw3.dat
+
+3.0
+18.0
+67.0
+124.0
+197.0
+236.0
+415.0
+587.0
+632.0
+
+   The input is a comma-separated list of files containing simple list of
+   experimental molecular weights.
+
+   There should be one weight per line.
+
+   Comments in the data file start with a '#' character in the first
+   column.
+
+   Blank lines are ignored.
+
+Output file format
+
+   The output is a list of the molecular weights common to all files.
+
+  Output files for usage example
+
+  File: outfile.mwcontam
+
+67.000
+415.000
+
+Data files
+
+   mwcontam uses no data files.
+
+   The output of mwcontam, with minimal editing, can be added to the data
+   file for the mwfilter program ('Emwfilter.dat'). For example you might
+   like to fetch 'Emwfilter.dat' using embossdata (as described in the
+   mwfilter documentation) and edit it to include the lines:
+     _________________________________________________________________
+
+# data produced from the program mwcontam
+mwcontam        67.000
+mwcontam        415.000
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name                         Description
+   backtranambig Back translate a protein sequence to ambiguous codons
+   backtranseq   Back translate a protein sequence
+   charge        Protein charge plot
+   checktrans    Reports STOP codons and ORF statistics of a protein
+   compseq       Count composition of dimer/trimer/etc words in a sequence
+   emowse        Protein identification by mass spectrometry
+   freak         Residue/base frequency table or plot
+   iep           Calculates the isoelectric point of a protein
+   mwfilter      Filter noisy molwts from mass spec output
+   octanol       Displays protein hydropathy
+   pepinfo       Plots simple amino acid properties in parallel
+   pepstats      Protein statistics
+   pepwindow     Displays protein hydropathy
+   pepwindowall  Displays protein hydropathy of a set of sequences
+
+Author(s)
+
+   Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+History
+
+   Written (July 2002) - Alan Bleasby.
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

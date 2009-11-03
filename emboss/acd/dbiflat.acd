@@ -1,0 +1,137 @@
+application: dbiflat [
+  groups: "Utils:Database indexing"
+  documentation: "Index a flat file database"
+  gui: "yes"
+  batch: "yes"
+  cpu: "medium"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  string: dbname [
+    parameter: "Y"
+    maxlength: "19"
+    minlength: "2"
+    information: "Database name"
+    knowntype: "emboss database name"
+    pattern: "[A-z][A-z0-9_]+"
+  ]
+
+  list: idformat [
+    standard: "y"
+    information: "Entry format"
+    values: "EMBL:EMBL; SWISS:Swiss-Prot, SpTrEMBL, TrEMBLnew;
+             GB:Genbank, DDBJ; REFSEQ:Refseq;"
+    maximum: "1"
+    minimum: "1"
+    default: "SWISS"
+  ]
+
+  directory: directory [
+    standard: "Y"
+    default: "."
+    information: "Database directory"
+    knowntype: "emboss database directory"
+  ]
+
+  string: filenames [
+    standard: "Y"
+    default: "*.dat"
+    information: "Wildcard database filename"
+    knowntype: "emboss database wildcard filename"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  string: release [
+    standard: "Y"
+    default: "0.0"
+    maxlength: "9"
+    information: "Release number"
+    knowntype: "emboss database release"
+  ]
+
+  string: date [
+    standard: "Y"
+    default: "00/00/00"
+    valid: "Date string dd/mm/yy"
+    information: "Index date"
+    pattern: "^[0-9][0-9]/[0-9][0-9]/[0-9][0-9]$"
+    knowntype: "date"
+  ]
+
+endsection: required
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  list: fields [
+    information: "Index fields"
+    values: "acc:acnum accession number index;sv:seqvn sequence
+             version and gi number index;des:des description
+             index;key:keyword keywords index;org:taxon taxonomy and organism
+             index"
+    minimum: "0"
+    maximum: "5"
+    default: "acc"
+  ]
+
+  string: exclude [
+    information: "Wildcard filename(s) to exclude"
+    knowntype: "filename wildcard"
+  ]
+
+  integer: maxindex [
+    default: "0"
+    minimum: "0"
+    information: "Maximum index length"
+  ]
+
+  string: sortoptions [
+    default: "-T . -k 1,1"
+    information: "Sort option(s)"
+    help: "Sort options, typically '-T .' to use current directory for
+           work files and '-k 1,1' to force GNU sort to use the first field"
+    knowntype: "sort utility options"
+  ]
+
+  boolean: systemsort [
+    default: "Y"
+    information: "Use system sort utility"
+  ]
+
+  boolean: cleanup [
+    default: "Y"
+    information: "Clean up temporary files"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    standard: "Y"
+    knowntype: "log"
+    information: "General log output file"
+  ]
+
+  outdir: indexoutdir [
+    default: "."
+    information: "Index file output directory"
+    knowntype: "emboss database index"
+  ]
+
+endsection: output

@@ -1,0 +1,222 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+tfm
+<!--#include file="header2.inc" -->
+
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/tfm.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+This program displays the help documentation for an EMBOSS program.
+<P>
+
+The contributors of the EMBOSS programs do attempt to provide an adequate
+description of the programs. This documentation for your current
+release is included as HTML pages in the EMBOSS distribution and
+may be available at your site. The
+latest documentation for the next release is provided by the
+developers at
+<A HREF="/apps/">http://emboss.sourceforge.net/apps/</A>
+
+<P>
+The release documentation is also available however through the program
+<B>tfm</B> as normal text.
+
+<P>
+
+If you have problems understanding the function
+or usage of an EMBOSS program, then you should contact the EMBOSS mailing
+list (emboss@emboss.open-bio.org).
+
+<P>
+
+The unusual name of this program comes from the common computing science
+expression: <b>RTFM</B>. This acronym, as you probably already know, stands for
+<B>Read The Fine* Manual</B>; so this is <B>The Fine* Manual</B>.
+
+<P>
+
+* Insert the expletive of your choice here!
+
+<H3>Paged text output to the screen</H3>
+
+<B>tfm</B> is unusual for an EMBOSS program in that it expects to be used
+interactively and so it displays the documentation text a page at a time,
+pausing after every page for the user to press the <B>SPACE</B> bar on
+their keyboard. (i.e. it uses the UNIX program <B>more</B> to display the
+information). This behaviour can be turned off by using the qualifier
+<b>-nomore</b>.
+
+<P>
+
+The text is paged to the screen using the UNIX program 'more'.  The
+program 'more' is a very standard way for text files to be displayed in
+UNIX.  You might, however, prefer the text to be displayed using other
+programs, for example 'less' (which has more functionality than 'more'
+and is used by many people).  The UNIX environment variable 'PAGER'
+can be set to hold the name of your preferred program.  If you have
+PAGER set, then <b>tfm</b> will use this specified program instead of
+using the default 'more' program.  (If you want <b>tfm</b> to use a
+specified program that is different to the normal 'PAGER' program, then
+'PAGER' can be overriden by setting the environment variable
+'EMBOSS_PAGER' to hold the name of the program that should only be used
+to display text in <b>tfm</b>). 
+
+<p>
+
+'PAGER' can be set in UNIX by a command like:
+<br>
+setenv PAGER less
+
+<p>
+
+To get help on 'more' when using it to display text, press the '?' key.
+<BR>
+To get help on 'less' when using it to display text, press the 'h' key.
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/tfm.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/tfm.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/tfm.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+None.
+
+<p>
+
+<!--#include file="inc/tfm.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+Text documentation is output.
+
+<P>
+
+The table of command line arguments can be a bit difficult to read. This is the
+result of changing HTML Web pages to text.
+
+<p>
+
+You will see a page of documentation on the <b>wossname</B> program.
+To see further pages, you should press the <B>SPACE</B> bar on your keyboard.
+To stop seeing the documentation before you get to the end of the text, you
+can press the key <b>q</b> to quit.
+
+<p>
+
+<!--#include file="inc/tfm.output" -->
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+The original data for the documentation can be found in:
+<A
+HREF="http://emboss.sourceforge.net/apps/">http://emboss.sourceforge.net/apps/</A>
+but please note that this is the documentation for the current
+development version. The documentation for your release should be
+nistalled somewhere on your system.
+
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<b>tfm</b> will warn you if you have supplied the name of a program
+which is not documented yet or which doesn't exist in EMBOSS.
+
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/tfm.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/gwilliam.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/tfm.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/tfm.comment" -->
+
+</BODY>
+</HTML>
+

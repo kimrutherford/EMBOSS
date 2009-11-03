@@ -1,0 +1,241 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: compseq
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+compseq
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/compseq.ione" -->
+
+<H2>
+    Description
+</H2>
+
+This takes a specified length of sequence and counts the number of
+distinct subsequences of that length that there are in the input
+sequence(s).
+
+<p>
+
+It can read in the result of a previous compseq analysis and use this
+to set the expected frequencies of the subsequences.
+
+<p>
+
+Unless you tell 'compseq' otherwise, it expects each word to be equally
+likely.  The 'Expected' frequency therefore of any dimer is 1/16 - this
+is simply the inverse of the number of possible dimers (AA, AC, AG, AT,
+CA, CC, CG, CT, GA, GC, GG, GT, TA, TC, TG, TT). 
+
+<p>
+
+
+Similarly, the 'Expected' frequency of any trimer is 1/64, etc. 
+
+<p>
+
+
+Obviously this is not the case in real sequences - there will be bias in
+favour of some words. 
+
+<p>
+
+
+Compseq cannot otherwise guess what the 'Expected' frequency is.  You
+can, however, tell it what the Expected frequencies are by giving
+compseq the output of the analysis of another set of sequences, produced
+by a previous compseq run. 
+
+<p>
+
+So you take a set of sequences that are representative of the type of
+sequence you expect and you run compseq on it to get your expected
+sequence frequencies. 
+
+<p>
+
+You then take the sequences you wish to investigate, run compseq on them
+giving compseq the expected frequencies that you have established,
+above.  You tell compseq what the file of expected frequencies is by
+specifying it with '-infile filename' on the command-line. 
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/compseq.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/compseq.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/compseq.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+Normal sequence(s) USA.
+
+<p>
+<!--#include file="inc/compseq.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+The output format consists of:
+<p>
+Header information and comments are preceeded by a '#' character
+at the start of the line.
+<p>
+The Word size and the Total count are then given on separate lines,
+<p>
+The headers of the columns of results are preceeded by a '#'
+<p>
+The results columns are: the sub-sequence word, the observed
+frequency, the expected frequency (which will be read from the input
+file if one is given, else it is a simple inverse of the number of words
+of the size specified that can be constructed), the ratio of the
+observed to expected frequency.
+<p>
+After a blank line at the end, the results of 'Other' words is
+given - this is the number of words with a sequence which has
+IUPAC ambiguity codes or other unusual characters in. 
+
+<p>
+<!--#include file="inc/compseq.output" -->
+
+
+
+<H2>
+    Data files
+</H2>
+
+
+The input data file is not required.
+<p>
+The input data file format is exactly the same as the output
+file format. 
+<p>
+It expects to read in a previous output file of this program.
+An error is produced if the word size of the current compseq job
+and that of the output file being read in are different.
+
+<H2>
+    Notes
+</H2>
+
+
+The results are held in an array in memory before being written
+to a file.  For large values of wordsize, you may run out of memory.
+<p>
+You can produce very large output files if you choose large values
+of wordsize.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+If you use large word-sizes (over about 7 for nucleic, 5 for protein)
+you will use huge amounts of memory. 
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<dl>
+<dt>"The word size is too large for the data structure available."
+</dt><dd>You chose a word size that cannot be stored by the program.
+
+<dt>"Insufficient memory - aborting."
+</dt><dd>You do not have enough memory - use a machine with more memory.
+
+<dt>"The word size you are counting (n) is different to the word
+size in the file of expected frequencies (n)."	
+</dt><dd>You chose different word sizes in the run of compseq that produced
+your results file used to display the expected word frequencies
+to the word size used in this run of compseq.
+
+<dt>"The 'Word size' line was not found, instead found:"
+</dt><dd>You appear to be trying to read a corrupted compseq results file
+</dl>
+
+<H2>
+    Exit status
+</H2>
+
+
+It always exits with status 0 unless one of the above error conditions
+is found
+
+<H2>
+    Known bugs
+</H2>
+
+
+This program can use a large amount of memory is you specify a large
+word size (7 or above).  This may impact the behaviour of other programs
+on your machine. 
+
+<p>
+If you run out of memory, you may see the program crash with a generic
+error message that will be specific to your machine's operating system,
+but will probably be a warning about writing to memory that the program
+does not own (eg "Segmentation fault" on a Solaris machine)
+
+<p>
+This is not a bug, it is a feature of the way this program grabs large
+amounts of memory. 
+
+<!--#include file="inc/compseq.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/gwilliam.address" -->
+
+
+<H2>
+    History
+</H2>
+
+<!--#include file="inc/compseq.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/compseq.comment" -->
+
+
+</BODY>
+</HTML>
+

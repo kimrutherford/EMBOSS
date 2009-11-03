@@ -1,0 +1,57 @@
+application: recoder [
+  documentation: "Remove restriction sites but maintain same
+                  translation"
+  groups: "Nucleic:Restriction"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  sequence: sequence [
+    parameter: "Y"
+    type: "DNA"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  string: enzymes [
+    standard: "Y"
+    default: "all"
+    information: "Comma separated enzyme list"
+    knowntype: "enzyme list"
+  ]
+
+endsection: required
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  boolean: sshow [
+    default: "N"
+    information: "Display untranslated sequence"
+  ]
+
+  boolean: tshow [
+    default: "N"
+    information: "Display translated sequence"
+  ]
+
+  report: outfile [
+    parameter: "Y"
+    rformat: "table"
+    taglist: "str:Dir str:enzyme=EnzymeName
+              str:rspattern=RS-Pattern int:baseposn=Base-Posn rstr:aa=AAs
+              rstr:mutation=Mutation"
+    rscoreshow: "N"
+  ]
+
+endsection: output

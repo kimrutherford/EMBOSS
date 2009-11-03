@@ -1,0 +1,42 @@
+The EMBOSS REBASE restriction enzyme data files are stored iin
+directory 'data/REBASE/*' under the EMBOSS installation directory.
+
+<p>
+
+These files must first be set up using the program <a
+href="rebaseextract.html">'<b>rebaseextract</b>'</a>.  Running
+'rebaseextract' may be the job of your system manager.
+
+<p>
+      
+The data files are stored in the REBASE directory of the standard EMBOSS
+data directory. The names are:
+
+<ul>
+<li> embossre.enz     Cleavage information
+<li> embossre.ref     Reference/methylation information
+<li> embossre.sup     Supplier information
+</ul>
+	 
+The column information is described at the top of the data files
+	 
+<p>
+	 
+The reported enzyme from any one group of isoschizomers (the prototype)
+is specified in the REBASE database and the information is held in the
+data file 'embossre.equ'.  You may edit this file to set your own
+preferred prototype, if you wish. 
+	 
+<p>
+	 
+The format of the file "embossre.equ" is
+<br>
+Enzyme-name Prototype-name
+	 
+<p>
+	 
+i.e.  two columns of enzyme names separated by a space.  The first name
+of the pair of enzymes is the name that is not preferred and the second
+is the preferred (prototype) name. 
+	 
+	          

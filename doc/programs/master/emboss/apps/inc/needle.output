@@ -1,0 +1,51 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: hba_human.needle </h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: needle
+# Rundate: Sun 15 Jul 2007 12:00:00
+# Commandline: needle
+#    [-asequence] tsw:hba_human
+#    [-bsequence] tsw:hbb_human
+# Align_format: srspair
+# Report_file: hba_human.needle
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: HBA_HUMAN
+# 2: HBB_HUMAN
+# Matrix: EBLOSUM62
+# Gap_penalty: 10.0
+# Extend_penalty: 0.5
+#
+# Length: 149
+# Identity:      65/149 (43.6%)
+# Similarity:    90/149 (60.4%)
+# Gaps:           9/149 ( 6.0%)
+# Score: 292.5
+# 
+#
+#=======================================
+
+HBA_HUMAN          1 MV-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-D     48
+                     || |:|.:|:.|.|.||||  :..|.|.|||.|:.:.:|.|:.:|..| |
+HBB_HUMAN          1 MVHLTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGD     48
+
+HBA_HUMAN         49 LS-----HGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLR     93
+                     ||     .|:.:||.|||||..|.::.:||:|::....:.||:||..||.
+HBB_HUMAN         49 LSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLH     98
+
+HBA_HUMAN         94 VDPVNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKFLASVSTVLTSKYR    142
+                     |||.||:||.:.|:..||.|...||||.|.|:..|.:|.|:..|..||.
+HBB_HUMAN         99 VDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKYH    147
+
+
+#---------------------------------------
+#---------------------------------------
+</pre>
+</td></tr></table><p>

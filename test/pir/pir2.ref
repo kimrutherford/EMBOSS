@@ -1,0 +1,97 @@
+>P1;S29350
+cytochrome c - yeast (Kluyveromyces marxianus var. lactis)
+C;Species: Kluyveromyces marxianus var. lactis, Candida sphaerica
+C;Date: 18-Jun-1993 #sequence_revision 18-Jun-1993 #text_change 31-Dec-2004
+C;Accession: S29350; S17978
+R;Picos, M.A.F.; Rodriguez Torres, A.M.; Ramil, E.; Cerdan, M.E.; Breunig, K.D.; Hollenberg, C.P.; Zitomer, R.S.
+Yeast 9, 201-204, 1993
+A;Title: Sequence of a cytochrome c gene from Kluyveromyces lactis and its upstream region.
+A;Reference number: S29350; MUID:93220398; PMID:8385407
+A;Accession: S29350
+A;Molecule type: DNA
+A;Residues: 1-110 A;Cross-references: UNIPROT:P32556; UNIPARC:UPI0000128BC1; EMBL:X60834; NID:g288494; PIDN:CAA43224.1; PID:g288495
+R;Clark-Walker, G.D.
+Curr. Genet. 20, 195-198, 1991
+A;Title: Contrasting mutation rates in mitochondrial and nuclear genes of yeasts versus mammals.
+A;Reference number: S17978; MUID:92035085; PMID:1657417
+A;Accession: S17978
+A;Status: preliminary
+A;Molecule type: DNA
+A;Residues: 1-110 A;Cross-references: UNIPARC:UPI0000128BC1; EMBL:X58150; NID:g2815; PIDN:CAA41156.1; PID:g2816
+A;Note: the authors translated the codon GCC for residue 29 as Glu
+C;Genetics:
+A;Gene: CYCK
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: chromoprotein; electron transfer; heme; iron; metalloprotein; methylated amino acid; mitochondrion; oxidative phosphorylation; respiratory chain
+F;11-105/Domain: cytochrome c homology F;21,24/Binding site: heme (Cys) (covalent) #status predicted
+F;25,87/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+F;79/Modified site: N6,N6,N6-trimethyllysine (Lys) #status predicted
+>P1;S11172
+cytochrome c - yeast (Schwanniomyces occidentalis)
+C;Species: Schwanniomyces occidentalis
+C;Date: 30-Jun-1991 #sequence_revision 30-Jun-1991 #text_change 31-Dec-2004
+C;Accession: S11172
+R;Amegadzie, B.Y.; Zitomer, R.S.; Hollenberg, C.P.
+Yeast 6, 429-440, 1990
+A;Title: Characterization of the cytochrome c gene from the starch-fermenting yeast Schwanniomyces occidentalis and its expression in baker's yeast.
+A;Reference number: S11172; MUID:91021493; PMID:2171242
+A;Accession: S11172
+A;Molecule type: DNA
+A;Residues: 1-110 A;Cross-references: UNIPROT:P19681; UNIPARC:UPI0000168FC2; EMBL:X53770; NID:g4884; PIDN:CAA37787.1; PID:g4885
+C;Genetics:
+A;Gene: CYC1
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: chromoprotein; electron transfer; heme; iron; metalloprotein; methylated amino acid; mitochondrion; oxidative phosphorylation; respiratory chain
+F;11-105/Domain: cytochrome c homology F;21,24/Binding site: heme (Cys) (covalent) #status predicted
+F;25,87/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+F;79/Modified site: N6,N6,N6-trimethyllysine (Lys) #status predicted
+>P1;JU0381
+cytochrome c550 - Thiobacillus novellus
+C;Species: Thiobacillus novellus
+C;Date: 10-Sep-1999 #sequence_revision 10-Sep-1999 #text_change 31-Dec-2004
+C;Accession: JU0381
+R;Yamanaka, T.; Nagano, T.; Shouji, K.; Fukumori, Y.
+Viva Origino 19, 72-73, 1991
+A;Title: Cytochrome c of the sulphur oxidizing bacterium, Thiobacillus novellus: structure, function and evolution.
+A;Reference number: JU0381
+A;Accession: JU0381
+A;Molecule type: protein
+A;Residues: 1-109 A;Cross-references: UNIPROT:P23021; UNIPARC:UPI0000171C9B
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: chromoprotein; electron transfer; heme; iron; metalloprotein
+F;4-100/Domain: cytochrome c homology F;13,16/Binding site: heme (Cys) (covalent) #status predicted
+F;17,82/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>P1;S00034
+cytochrome c550 - Aquaspirillum itersonii
+C;Species: Aquaspirillum itersonii
+C;Date: 10-Sep-1999 #sequence_revision 10-Sep-1999 #text_change 31-Dec-2004
+C;Accession: S00034
+R;Woolley, K.J.
+Eur. J. Biochem. 166, 131-137, 1987
+A;Title: The soluble c-type cytochromes from the bacterium Aquaspirillum itersonii: the complete amino acid sequence of the cytochrome c-550.
+A;Reference number: S00034; MUID:87246667; PMID:3036517
+A;Accession: S00034
+A;Molecule type: protein
+A;Residues: 1-111 A;Cross-references: UNIPROT:P12832; UNIPARC:UPI0000126C33
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: chromoprotein; electron transfer; heme; iron; metalloprotein
+F;4-107/Domain: cytochrome c homology F;13,16/Binding site: heme (Cys) (covalent) #status predicted
+F;17,90/Binding site: heme iron (His, Met) (axial ligands) #status predicted
+>F1;A31558
+cytochrome c - Trypanosoma brucei (fragments)
+C;Species: Trypanosoma brucei
+C;Date: 28-Feb-1990 #sequence_revision 28-Feb-1990 #text_change 31-Dec-2004
+C;Accession: B31558; A31558
+R;Torri, A.F.; Hajduk, S.L.
+Mol. Cell. Biol. 8, 4625-4633, 1988
+A;Title: Posttranscriptional regulation of cytochrome c expression during the developmental cycle of Trypanosoma brucei.
+A;Reference number: A31558; MUID:89096831; PMID:2850466
+A;Accession: B31558
+A;Molecule type: protein
+A;Residues: 1-24 A;Cross-references: UNIPROT:P18822; UNIPARC:UPI0000174C76
+A;Accession: A31558
+A;Molecule type: mRNA
+A;Residues: 25-93 A;Cross-references: UNIPARC:UPI000016C08A; GB:M23360; NID:g516642; PIDN:AAA30178.1; PID:g515755
+C;Superfamily: cytochrome c/cytochrome c2; cytochrome c homology
+C;Keywords: chromoprotein; electron transfer; heme; iron; metalloprotein; mitochondrion; oxidative phosphorylation; respiratory chain
+F;13-88/Domain: cytochrome c homology (fragment) F;70/Binding site: heme iron (Met) (axial ligand) #status predicted

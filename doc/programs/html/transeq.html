@@ -1,0 +1,1314 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: transeq
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+transeq
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+    Function
+</H2>
+Translate nucleic acid sequences
+
+<H2>
+    Description
+</H2>
+
+<b>Transeq</b> translates nucleic acid sequences to the corresponding
+peptide sequence.
+<p>
+It can translate in any of the 3 forward or three reverse sense
+frames, or in all three forward or reverse frames, or in all six
+frames.
+<p>
+It can translate specified regions corresponding to the coding
+regions of your sequences. 
+<p>
+It can translate using the standard ('Universal') genetic code
+and also with a selection of non-standard codes. 
+<p>
+Termination (STOP) codons are translated as the character '*'.
+<p>
+The output peptide sequence is always in the standard one-letter
+IUPAC code. 
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with transeq</b>
+<p>
+To translate a sequence in the first frame (starting at the first base and proceeding to the end): 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>transeq tembl:x13776 amir.pep </b>
+Translate nucleic acid sequences
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+To translate a sequence in the second frame: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>transeq tembl:x13776 amir.pep -frame=2 </b>
+Translate nucleic acid sequences
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+To translate a sequence in the first frame in the reverse sense (starting at the last frame 1 codon and proceeding to the start):  
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>transeq tembl:x13776 amir.pep -frame=-1 </b>
+Translate nucleic acid sequences
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.3">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 4</b>
+<p>
+To translate a sequence in all three forward frames: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>transeq tembl:x13776 amir.pep -frame=F </b>
+Translate nucleic acid sequences
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.4">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 5</b>
+<p>
+To translate a sequence in all three reverse frames: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>transeq tembl:x13776 amir.pep -frame=R </b>
+Translate nucleic acid sequences
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.5">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 6</b>
+<p>
+To translate a sequence in all six forward and reverse frames: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>transeq tembl:x13776 amir.pep -frame=6 </b>
+Translate nucleic acid sequences
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.6">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 7</b>
+<p>
+To translate a specific set of regions corresponding to a known set of coding sequences: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>transeq tembl:x13776 amir.pep -reg=2-45,67-201,328-509 </b>
+Translate nucleic acid sequences
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.7">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 8</b>
+<p>
+To translate a mitochondrial sequence using the mammalian mitochondrion genetic code table: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>transeq mito.seq mito.pep -table 2 </b>
+Translate nucleic acid sequences
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.8">Go to the input files for this example</a><br><a href="#output.8">Go to the output files for this example</a><p><p>
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-outseq]            seqoutall  [<sequence>.<format>] Protein sequence
+                                  set(s) filename and optional format (output
+                                  USA)
+
+   Additional (Optional) qualifiers:
+   -frame              menu       [1] Frame(s) to translate (Values: 1 (1); 2
+                                  (2); 3 (3); F (Forward three frames); -1
+                                  (-1); -2 (-2); -3 (-3); R (Reverse three
+                                  frames); 6 (All six frames))
+   -table              menu       [0] Code to use (Values: 0 (Standard); 1
+                                  (Standard (with alternative initiation
+                                  codons)); 2 (Vertebrate Mitochondrial); 3
+                                  (Yeast Mitochondrial); 4 (Mold, Protozoan,
+                                  Coelenterate Mitochondrial and
+                                  Mycoplasma/Spiroplasma); 5 (Invertebrate
+                                  Mitochondrial); 6 (Ciliate Macronuclear and
+                                  Dasycladacean); 9 (Echinoderm
+                                  Mitochondrial); 10 (Euplotid Nuclear); 11
+                                  (Bacterial); 12 (Alternative Yeast Nuclear);
+                                  13 (Ascidian Mitochondrial); 14 (Flatworm
+                                  Mitochondrial); 15 (Blepharisma
+                                  Macronuclear); 16 (Chlorophycean
+                                  Mitochondrial); 21 (Trematode
+                                  Mitochondrial); 22 (Scenedesmus obliquus);
+                                  23 (Thraustochytrium Mitochondrial))
+   -regions            range      [Whole sequence] Regions to translate.
+                                  If this is left blank, then the complete
+                                  sequence is translated.
+                                  A set of regions is specified by a set of
+                                  pairs of positions.
+                                  The positions are integers.
+                                  They are separated by any non-digit,
+                                  non-alpha character.
+                                  Examples of region specifications are:
+                                  24-45, 56-78
+                                  1:45, 67=99;765..888
+                                  1,5,8,10,23,45,57,99
+                                  Note: you should not try to use this option
+                                  with any other frame than the default,
+                                  -frame=1
+   -trim               boolean    [N] This removes all 'X' and '*' characters
+                                  from the right end of the translation. The
+                                  trimming process starts at the end and
+                                  continues until the next character is not a
+                                  'X' or a '*'
+   -clean              boolean    [N] This changes all STOP codon positions
+                                  from the '*' character to 'X' (an unknown
+                                  residue). This is useful because some
+                                  programs will not accept protein sequences
+                                  with '*' characters in them.
+
+   Advanced (Unprompted) qualifiers:
+   -alternative        boolean    [N] The default definition of frame '-1' is
+                                  the reverse-complement of the set of codons
+                                  used in frame 1. (Frame -2 is the set of
+                                  codons used by frame 2, similarly frames -3
+                                  and 3). This is a common standard, used by
+                                  the Staden package and other programs. If
+                                  you prefer to define frame '-1' as using the
+                                  set of codons starting with the last codon
+                                  of the sequence, then set this to be true.
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 2)</td>
+<td>Protein sequence set(s) filename and optional format (output USA)</td>
+<td>Writeable sequence(s)</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-frame</td>
+<td>Frame(s) to translate</td>
+<td><table><tr><td>1</td> <td><i>(1)</i></td></tr><tr><td>2</td> <td><i>(2)</i></td></tr><tr><td>3</td> <td><i>(3)</i></td></tr><tr><td>F</td> <td><i>(Forward three frames)</i></td></tr><tr><td>-1</td> <td><i>(-1)</i></td></tr><tr><td>-2</td> <td><i>(-2)</i></td></tr><tr><td>-3</td> <td><i>(-3)</i></td></tr><tr><td>R</td> <td><i>(Reverse three frames)</i></td></tr><tr><td>6</td> <td><i>(All six frames)</i></td></tr></table></td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-table</td>
+<td>Code to use</td>
+<td><table><tr><td>0</td> <td><i>(Standard)</i></td></tr><tr><td>1</td> <td><i>(Standard (with alternative initiation codons))</i></td></tr><tr><td>2</td> <td><i>(Vertebrate Mitochondrial)</i></td></tr><tr><td>3</td> <td><i>(Yeast Mitochondrial)</i></td></tr><tr><td>4</td> <td><i>(Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma)</i></td></tr><tr><td>5</td> <td><i>(Invertebrate Mitochondrial)</i></td></tr><tr><td>6</td> <td><i>(Ciliate Macronuclear and Dasycladacean)</i></td></tr><tr><td>9</td> <td><i>(Echinoderm Mitochondrial)</i></td></tr><tr><td>10</td> <td><i>(Euplotid Nuclear)</i></td></tr><tr><td>11</td> <td><i>(Bacterial)</i></td></tr><tr><td>12</td> <td><i>(Alternative Yeast Nuclear)</i></td></tr><tr><td>13</td> <td><i>(Ascidian Mitochondrial)</i></td></tr><tr><td>14</td> <td><i>(Flatworm Mitochondrial)</i></td></tr><tr><td>15</td> <td><i>(Blepharisma Macronuclear)</i></td></tr><tr><td>16</td> <td><i>(Chlorophycean Mitochondrial)</i></td></tr><tr><td>21</td> <td><i>(Trematode Mitochondrial)</i></td></tr><tr><td>22</td> <td><i>(Scenedesmus obliquus)</i></td></tr><tr><td>23</td> <td><i>(Thraustochytrium Mitochondrial)</i></td></tr></table></td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-regions</td>
+<td>Regions to translate.
+If this is left blank, then the complete sequence is translated.
+A set of regions is specified by a set of pairs of positions.
+The positions are integers.
+They are separated by any non-digit, non-alpha character.
+Examples of region specifications are:
+24-45, 56-78
+1:45, 67=99;765..888
+1,5,8,10,23,45,57,99
+Note: you should not try to use this option with any other frame than the default, -frame=1</td>
+<td>Sequence range</td>
+<td>Whole sequence</td>
+</tr>
+
+<tr>
+<td>-trim</td>
+<td>This removes all 'X' and '*' characters from the right end of the translation. The trimming process starts at the end and continues until the next character is not a 'X' or a '*'</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-clean</td>
+<td>This changes all STOP codon positions from the '*' character to 'X' (an unknown residue). This is useful because some programs will not accept protein sequences with '*' characters in them.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-alternative</td>
+<td>The default definition of frame '-1' is the reverse-complement of the set of codons used in frame 1. (Frame -2 is the set of codons used by frame 2, similarly frames -3 and 3). This is a common standard, used by the Staden package and other programs. If you prefer to define frame '-1' as using the set of codons starting with the last codon of the sequence, then set this to be true.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+<b>transeq</b> reads one or more nucleic acid sequence USAs.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:x13776' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:x13776</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   X13776; SV 1; linear; genomic DNA; STD; PRO; 2167 BP.
+XX
+AC   X13776; M43175;
+XX
+DT   19-APR-1989 (Rel. 19, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 24)
+XX
+DE   Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+XX
+KW   aliphatic amidase regulator; amiC gene; amiR gene.
+XX
+OS   Pseudomonas aeruginosa
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
+OC   Pseudomonadaceae; Pseudomonas.
+XX
+RN   [1]
+RP   1167-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (16-DEC-1988) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
+XX
+RN   [2]
+RP   1167-2167
+RX   DOI; 10.1016/0014-5793(89)80249-2.
+RX   PUBMED; 2495988.
+RA   Lowe N., Rice P.M., Drew R.E.;
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene of Pseudomonas
+RT   aeruginosa";
+RL   FEBS Lett. 246(1-2):39-43(1989).
+XX
+RN   [3]
+RP   1-1292
+RX   PUBMED; 1907262.
+RA   Wilson S., Drew R.;
+RT   "Cloning and DNA seqence of amiC, a new gene regulating expression of the
+RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
+RT   product.";
+RL   J. Bacteriol. 173(16):4914-4921(1991).
+XX
+RN   [4]
+RP   1-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
+XX
+DR   GOA; Q51417.
+DR   UniProtKB/Swiss-Prot; Q51417; AMIS_PSEAE.
+XX
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT                   /replace=""
+FT                   /note="ClaI fragment deleted in pSW36,  constitutive
+FT                   phenotype"
+FT   misc_feature    1
+FT                   /note="last base of an XhoI site"
+FT   misc_feature    648..653
+FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 causes
+FT                   constitutive expression of amiE"
+FT   conflict        1281
+FT                   /replace="g"
+FT                   /citation=[3]
+XX
+SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
+     ggtaccgctg gccgagcatc tgctcgatca ccaccagccg ggcgacggga actgcacgat        60
+     ctacctggcg agcctggagc acgagcgggt tcgcttcgta cggcgctgag cgacagtcac       120
+     aggagaggaa acggatggga tcgcaccagg agcggccgct gatcggcctg ctgttctccg       180
+     aaaccggcgt caccgccgat atcgagcgct cgcacgcgta tggcgcattg ctcgcggtcg       240
+     agcaactgaa ccgcgagggc ggcgtcggcg gtcgcccgat cgaaacgctg tcccaggacc       300
+     ccggcggcga cccggaccgc tatcggctgt gcgccgagga cttcattcgc aaccgggggg       360
+     tacggttcct cgtgggctgc tacatgtcgc acacgcgcaa ggcggtgatg ccggtggtcg       420
+     agcgcgccga cgcgctgctc tgctacccga ccccctacga gggcttcgag tattcgccga       480
+     acatcgtcta cggcggtccg gcgccgaacc agaacagtgc gccgctggcg gcgtacctga       540
+     ttcgccacta cggcgagcgg gtggtgttca tcggctcgga ctacatctat ccgcgggaaa       600
+     gcaaccatgt gatgcgccac ctgtatcgcc agcacggcgg cacggtgctc gaggaaatct       660
+     acattccgct gtatccctcc gacgacgact tgcagcgcgc cgtcgagcgc atctaccagg       720
+     cgcgcgccga cgtggtcttc tccaccgtgg tgggcaccgg caccgccgag ctgtatcgcg       780
+     ccatcgcccg tcgctacggc gacggcaggc ggccgccgat cgccagcctg accaccagcg       840
+     aggcggaggt ggcgaagatg gagagtgacg tggcagaggg gcaggtggtg gtcgcgcctt       900
+     acttctccag catcgatacg cccgccagcc gggccttcgt ccaggcctgc catggtttct       960
+     tcccggagaa cgcgaccatc accgcctggg ccgaggcggc ctactggcag accttgttgc      1020
+     tcggccgcgc cgcgcaggcc gcaggcaact ggcgggtgga agacgtgcag cggcacctgt      1080
+     acgacatcga catcgacgcg ccacaggggc cggtccgggt ggagcgccag aacaaccaca      1140
+     gccgcctgtc ttcgcgcatc gcggaaatcg atgcgcgcgg cgtgttccag gtccgctggc      1200
+     agtcgcccga accgattcgc cccgaccctt atgtcgtcgt gcataacctc gacgactggt      1260
+     ccgccagcat gggcggggga ccgctcccat gagcgccaac tcgctgctcg gcagcctgcg      1320
+     cgagttgcag gtgctggtcc tcaacccgcc gggggaggtc agcgacgccc tggtcttgca      1380
+     gctgatccgc atcggttgtt cggtgcgcca gtgctggccg ccgccggaag ccttcgacgt      1440
+     gccggtggac gtggtcttca ccagcatttt ccagaatggc caccacgacg agatcgctgc      1500
+     gctgctcgcc gccgggactc cgcgcactac cctggtggcg ctggtggagt acgaaagccc      1560
+     cgcggtgctc tcgcagatca tcgagctgga gtgccacggc gtgatcaccc agccgctcga      1620
+     tgcccaccgg gtgctgcctg tgctggtatc ggcgcggcgc atcagcgagg aaatggcgaa      1680
+     gctgaagcag aagaccgagc agctccagga ccgcatcgcc ggccaggccc ggatcaacca      1740
+     ggccaaggtg ttgctgatgc agcgccatgg ctgggacgag cgcgaggcgc accagcacct      1800
+     gtcgcgggaa gcgatgaagc ggcgcgagcc gatcctgaag atcgctcagg agttgctggg      1860
+     aaacgagccg tccgcctgag cgatccgggc cgaccagaac aataacaaga ggggtatcgt      1920
+     catcatgctg ggactggttc tgctgtacgt tggcgcggtg ctgtttctca atgccgtctg      1980
+     gttgctgggc aagatcagcg gtcgggaggt ggcggtgatc aacttcctgg tcggcgtgct      2040
+     gagcgcctgc gtcgcgttct acctgatctt ttccgcagca gccgggcagg gctcgctgaa      2100
+     ggccggagcg ctgaccctgc tattcgcttt tacctatctg tgggtggccg ccaaccagtt      2160
+     cctcgag                                                                2167
+//
+</pre>
+</td></tr></table><p>
+
+<a name="input.8"></a>
+<h3>Input files for usage example 8</h3>
+<p><h3>File: mito.seq</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+&gt;gi|5819095|ref|NC_001321.1| Balaenoptera physalus mitochondrion, complete genome
+GTTAATTACTAATCAGCCCATGATCATAACATAACTGAGGTTTCATACATTTGGTATTTTTTTATTTTTTTTGGGGGGCT
+TGCACGGACTCCCCTATGACCCTAAAGGGTCTCGTCGCAGTCAGATAAATTGTAGCTGGGCCTGGATGTATTTGTTATTT
+GACTAGCACAACCAACATGTGCAGTTAAATTAATGGTTACAGGACATAGTACTCCACTATTCCCCCCGGGCTCAAAAAAC
+TGTATGTCTTAGAGGACCAAACCCCCCTCCTTCCATACAATACTAACCCTCTGCTTAGATATTCACCACCCCCCTAGACA
+GGCTCGTCCCTAGATTTAAAAGCCATTTTATTTATAAATCAATACTAAATCTGACACAAGCCCAATAATGAAAATACATG
+AACGCCATCCCTATCCAATACGTTGATGTAGCTTAAACACTTACAAAGCAAGACACTGAAAATGTCTAGATGGGTCTAGC
+CAACCCCATTGACATTAAAGGTTTGGTCCCAGCCTTTCTATTAGTTCTTAACAGACTTACACATGCAAGTATCCACATCC
+CAGTGAGAACGCCCTCTAAATCATAAAGATTAAAAGGAGCGGGTATCAAGCACGCTAGCACTAGCAGCTCACAACGCCTC
+GCTTAGCCACGCCCCCACGGGACACAGCAGTGATAAAAATTAAGCTATAAACGAAAGTTCGACTAAGTCATGTTAATTTA
+AGGGTTGGTAAACTTCGTGCCAGCCACCGCGGTCATACGATCGACCCAAATTAATAGAAGCACGGCGTAAAGAGTGTTAA
+GGAGCCACATGAAATAAAGTCAAACCTTAATTAAGCTGTAAAAAGCCCTAATTAAAATTAAGCCAAACTACGAAAGTGAC
+TTTAATATAATCTGATCACACGACAGCTAAGATCCAAACTGGGATTAGATACCCCACTATGCTTAGTCGTAAACCCCAAT
+AGTCACAAAACAAGACTATTCGCCAGAGTACTACTAGCAACAGCCTAAAACTCAAAGGACTTGGCGGTGCCTCATACCCA
+TCTAGAGGAGCCTGTTCTGTAACCGATAAACCCCGATCAACCTCACCAACCCTTGCTACTTCAGTCTATATACCGCCATC
+TTCAGCAAACCCTAAAGGGAGAAAAGTAAGCATAACCATCCTACATAAAAACGTTAGGTCAAGGTGTAACCCATGGGTTG
+GGAAGTAATGGGCTACATTTTCTAAGCTAAGAACATCCCCTATACTCACACGAAAGTTTTTATGAAACTTAAAAACTAAA
+GGAGGATTTAGTAGTAAATCAAGAGCAGAGTGCTTGATTGAATAAGGCCATGAGGGCACGCACACACCGCCCGTCACCCT
+CCTCAAGTACCCCAGCTATAAACCCCAGTTCGTTAACTCAGGCCAAGCAATTATACGAGAGGAGACAAGTCGTAACAAGG
+TAAGCATACCGGAAGGTGTGCTTGGACAAAACAAGATATAGCTTAAACAAAGCATGTAGTTTACACCTAGAAGATTCCAC
+AGCCCGTGTATATCTTGAACTAGCCCTAGCCCACACCCTCCCCACCTCTACTACCACAAATCAATCAAATAAAACATTTA
+CCATCCCTTCAAAGTATAGGAGATAGAAATTTAAATATCAGTGGCGCTATAGAGATAGTACCGTAAGGAAAGATGAAAGA
+AAAACCTAAAAGTAATAAAAAGCAAAGCTTACCACTTGTACCTTTTGCATAATGACTTAACTAGTAATAAATTAGCAAAG
+AGACCTTAAGTTAAATTACCCGAAACCAGACGAGCTACTTATGAGCAGCACCTAGAACGAACTCATCTATGTGGCAAAAT
+AGTGAGAAGACTTATAAGTAGAGGTGAAAAGCCTAACGAGCCTGGTGATAGCTGGTTGTCCCTGAAAAGAATCTCAGTTC
+AACATTAAATAATACTAAAAGCCCATGCCAAGCCTTAACGTATATTTAACTGTTAATCTAAAAAGGTACAGCTTTTTAGA
+AATGGGTACAACCTTGACTAGAGAGTAAAATCAAACATAAACATAGTTGGCCTAAAAGCAGCCATCAATTAAGAAAGCGT
+TCAAGCTCGACAACAAAATAATGTTTTAATTCCAACATTAAGTAAATCAACTCCTAGCCTGACTATTGGACTAATCTATA
+CAAATATAGAAGCAATACTGTTAATATGAGTAACAAGAAATTTTTCTCCTAGCACAAGCTTACACCAGTAACTGATAATA
+TACTGATAATTAACAGCAAATAAATAAAACCCAACACTAAATTATTTATTAAAATACTGTTAACCCAACACAGGCGTGCA
+TTAAGGAAAGATTAAAAAAAGTAAAAGGAACTCGGCAAACACAAACCCCGCCTGTTTACCAAAAACATCACCTCTAGCAT
+AACCAGTATTAGAGCACTGCCTGCCCGGTGACTAATCGTTAAACGGCCGCGGTATCCTGACCGTGCAAAGGTAGCATAAT
+CACTTGTTCTCTAATTAGGGACTTGTATGAATGGCCACACGAGGGTTTTACTGTCTCTTACTTTTAATCAGTGAAATTGA
+CCTCTCCGTGAAGAGGCGGAGATAACAAAATAAGACGAGAAGACCCTATGGAGCTTCAATTAATCAACCCAAAAACCATA
+ACCTTAAACCACCAAGGGATAACAAAACCTTATATGGGCTGACAATTTCGGTTGGGGTGACCTCGGAGTACAAAAAACCC
+TCCGAGTGATTAAAACTTAGGCCCACTAGCCAAAGTACAATATCACTTATTGATCCAATCCTTTGATCAACGGAACAAGT
+TACCCTAGGGATAACAGCGCAATCCTATTCTAGAGTCCATATCGACAATAGGGTTTACGACCTCGATGTTGGATCAGGAC
+ATCCTAATGGTGCAGCTGCTATTAAGGGTTCGTTTGTTCAACGATTAAAGTCCTACGTGATCTGAGTTCAGACCGGAGTA
+ATCCAGGTCGGTTTCTATCTATTACGCATTTCTCCCAGTACGAAAGGACAAGAGAAATAAGGCCAACTTCAAACAAGCGC
+CTTCAAACAATTAATGACCTAGTCTCAACTTAATAATTAAGCGCAAACAAACCTGCCCAAGACCAGGGCCTTGTTGAGGT
+GGCAGAGTTCGGTAATTGCATAAAACTTAAACTTTTACACCCAGAGGTTCAAATCCTCTCCCCAACAAAATGTTTATAAT
+TAACATTCTAACACTCATTCTCCCCATCCTCCTAGCCGTAGCATTCCTAACGCTAGTAGAACGCAAAATTCTAGGCTATA
+TGCAGTTCCGAAAGGGGCCAAACATCGTAGGCCCACATGGCTTACTCCAACCCTTTGCCGATGCAATTAAATTATTCACT
+AAAGAACCCCTACGGCCAGCTACATCCTCAACTACTATGTTTATCATTGCACCAGTACTAGCCCTAACCCTGGCCCTCAC
+TATATGAAGCCCCCTACCCATACCATACCCCCTCATTAACATAAACCTAGGAGTATTATTCATATTAGCAATATCCAGCC
+TAGCCGTCTACTCCATCCTATGATCAGGCTGAGCCTCCAACTCAAAATACGCACTAATTGGAGCCCTACGAGCAGTAGCA
+CAAACAATCTCATATGAGGTAACACTAGCCATTATCCTCCTATCAGTACTCCTAATAAACGGCTCCTACACCTTATCAAC
+ATTAGCCACAACACAAGAACAACTATGATTACTATTCCCATCATGACCCTTAGCCATAATGTGATTCATCTCCACCCTAG
+CAGAAACTAATCGAGCTCCTTTTGATCTAACAGAGGGAGAATCAGAACTCGTATCAGGCTTCAACGTAGAATATGCAGCA
+GGCCCTTTCGCCCTATTCTTCCTGGCAGAATACGCCAACATCATTATAATGAATATACTCACAGCCATTTTATTCCTAGG
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+CATTGTCTTCTGCGCCTTCATCACTAGTCTAGTTCCCGCAATAGTATATCTTCACACAAACCAAGAAACACTCATCTCAA
+ACTGACACTGAATCACAATCCAAACCCTCAAACTAACACTTAGCTTTAAAATAGATTACTTTTCACTTATATTTATACCA
+GTAGCACTATTCATTACATGATCCATCATAGAATTCTCAATATGATATATGCACTCCGACCCCTACATCAACCAATTTTT
+TAAATACTTACTCCTCTTCCTCATCACCATACTAATCCTTGTTACAGCTAACAATCTCTTCCAACTTTTCATCGGATGAG
+AAGGAGTAGGAATTATATCCTTCTTACTAATTGGCTGATGATTCGGACGAACAGATGCAAATACAGCCGCCCTCCAAGCA
+ATCCTATACAATCGTATCGGAGACATTGGACTCCTTGCATCAATAGCATGATTTCTCTCTAATATAAACACATGAGACCT
+AGAACAAATCTTTATACTCAACCAAAACCCCTTAAATTTCCCCCTCATAGGACTCGTACTAGCCGCAGCAGGAAAATCGG
+CTCAATTCGGACTCCACCCTTGACTCCCATCAGCAATAGAAGGTCCTACCCCAGTCTCAGCCCTACTCCACTCAAGCACA
+ATAGTTGTAGCAGGAATCTTCTTGCTTGTCCGCTTCTACCCATTAATAGAAAATAACAAGCTAATCCAAACAGTAACCCT
+CTGCTTAGGCGCTATCACAACTCTATTTACAGCCATCTGTGCCCTCACCCAAAACGACATCAAAAAAATTATTGCTTTCT
+CCACCTCCAGCCAGCTAGGCCTAATAATAGTAACAATCGGCCTTAACCAACCTTACCTAGCATTCCTACACATTTGCACA
+CACGCCTTCTTTAAAGCTATACTATTCCTATGTTCTGGCTCCATCATCCATAACCTAAACAACGAACAAGATATCCGAAA
+AATAGGAGGGCTATTTAAGGCCCTCCCATTCACCACAACCGCCCTTATCATCGGATGTCTTGCACTAACAGGAATGCCAT
+TCCTGACCGGATTCTACTCCAAAGATCCCATTATTGAAGCCGCCACTTCGTCTTATACCAACGCCTGAGCCCTATTACTG
+ACCTTAATCGCCACCTCCCTTACGGCCGTCTATAGCACCCGCATCATTTTCTTTGCACTACTAGGACAACCCCGCTTCCC
+TCCCTCCACAACCATTAACGAAAATAATCCACTGTTAATCAACCCTATCAAACGACTACTCGTCGGAAGTATCTTCGCTG
+GCTTCATCCTATCCAACAGTATTCCCCCAATAACTACACCTTTAATAACCATACCCCTGCACTTAAAATTAACCGCCCTT
+GCAATAACAACCCTAGGCTTCATCATCGCATTCGAAATTAACCTTGACACACAAAATCTAAAGCACAAGCACCCATCAAA
+CTCCTTTAAATTCTCCACCTTACTAGGTTATTTCCCCACAATCATACATCGCCTACCCCCTCACCTTGACCTGTTAATAA
+GCCAAAAACTAGCAACTTCCCTACTAGATCTAACTTGACTAGAAACTATTTTACCAAAAACCACAGCCCTTATCCAACTA
+AAAGCCTCTACACTAACCTCTAACCAACAAGGCCTCATCAAACTCTACTTCTTATCTTTCCTCATCACCATCACCCTCAG
+CATAATCTTATTTAACTACCCCGAGTAATCTCCATAATAATTACAACACTAATAAATAAAGACCAACCCGTAACAATCAC
+CAACCAAACACCATAACTATATAATGCCGCAATCCCTGTAGCCTCCTCACTAAAAACCCCAGAACCCCCAGTATCATAAA
+CAACCCAGTCCCCTAGTCCATCAAACTCAAACATAATCTTCACCTCCCCACTCTTCAAAGCATAAATCACAATTAAAAAC
+TCCACCACCAACCCTAAAACAAATGCTCCTAGTACAACTTTATTAGAAACCCAAACCTCAGGATACTGTTCAGTAGCCAT
+AGCTGTTGTATAACCAAATACTACCAGCATTCCCCCCAAATAAATCAAAAACACCATTAACCCCAAAAACGAACCACCAA
+AACTCAAAATAACTCCACATCCAACACCACCACCCACAATCAACCCTAAACCCCCATAAATAGGTGAAGGCTTTGAAGAA
+ACCCCCACAAAACTAATTACAAAAATAATACTTAAAATGAAAACAATATACATTATCATTATTCTCACATGGACTTCAAC
+CATGACCAATGACATGAAAAATCATCGTTGTTATTCAACTACAAGAACACCAATGACCAACATCCGAAAAACACACCCAC
+TAATAAAAATCGTCAACGACGCATTCGTCGATCTCCCCACCCCATCAAATATCTCTTCATGATGGAACTTCGGCTCCCTA
+CTCGGCCTCTGCTTAATTATACAAATCCTAACAGGCCTATTCCTAGCAATACACTACACACCAGACACAACAACCGCCTT
+CTCATCAGTCACACACATCTGCCGAGACGTGAATTACGGCTGAATTATCCGATACCTACATGCAAATGGGGCTTCTATAT
+TCTTCATCTGCCTCTACGCTCACATAGGACGAGGCCTATACTACGGCTCCTACGCCTTCCGAGAAACATGAAATATTGGA
+GTTATTCTACTATTCACAGTTATAGCCACCGCATTCGTAGGCTACGTCCTGCCCTGAGGACAAATATCATTCTGAGGCGC
+AACTGTAATCACTAACCTCCTATCAGCAATCCCATACATTGGTACCACCCTAGTCGAATGAATCTGAGGCGGTTTCTCTG
+TAGATAAAGCAACACTAACACGCTTTTTTGCCTTTCACTTTATCCTCCCCTTCATCATCCTAGCATTAGCAATTGTCCAC
+CTTATTTTCCTTCACGAAACAGGATCCAACAACCCCACAGGCATCCCATCCGACATAGATAAAATCCCATTCCACCCCTA
+CCACACAATTAAAGACATTCTAGGTGCCCTATTACTAATCCTAATCCTACTAATACTAACCCTATTCGCACCCGACCTAC
+TTGGAGACCCAGACAACTATACCCCAGCAAACCCACTCAGTACCCCAGCACACATTAAACCAGAATGGTATTTTCTATTC
+GCATACGCAATCCTACGATCAATCCCCAACAAACTAGGCGGAGTCTTAGCCCTACTACTCTCAATCCTAATCCTAGCCTT
+CATCCCAATACTCCACACATCCAATCAACGAAGCATAATATTTCGACCCTTTAGCCAGTTCTTGTTCTGAGTCCTAGTCG
+CAGATCTACTAACCCTAACATGGATCGGCGGCCAACCAGTAGAACACCCCTACATAATTGTAGGCCAACTCGCATCCATC
+CTCTATTTCCTCTTAATTCTAGTATTAATACCAGTAACTAGTCTTATCGAGAACAAACTTATAAAATGAAGAGTCTTTGT
+AGTATAATTAAATACCCCGGTTTTGTAAACCGGAAAAGGAGACAAGACACACCTCCCTAAGACTCAAGGAAGAAGTATTA
+CACTCCACCATCAGCACCCAAAGCTGAAGTTCTACATAAACTATTCCCTGAAAAAGTATATTGTACAATAACCACAGGAC
+CACAGTACTATGTCCGTATTGAAAATAACTTGCCTTATTAGATATTATTATGTAACTCGTGCATGCATGTACTTCCACAT
+AATTAATAGCGTCTTTCCATGGGTATGAACAGATATACATGCTATGTATAATTGTGCATTCAATTATTTTCACCACGAGC
+AGTTGAAGCTCGTATTAAATTTTATTAATTTTACATATTACATAATATGTATTAATAGTACAATAGCGCATGTTCTTATG
+CATCCCCAGATCTATTTAAATCAAATGATTCCTATGGCCGCTCCATTAGATCACGAGCTTAGTCAGCATGCCGCGTGAAA
+CCAGCAACCCGCTTGGCAGGGATCCCTCTTCTCGCACCGGGCCCATCACTCGTGGGGGTAGCTATTTAATGATCTTTATA
+AGACATCTGGTTCTTACTTCAGGACCATATTAACTTAAAATCGCCCACTCGTTCCCCTTAAATAAGACATCTCGATGG
+</pre>
+</td></tr></table><p>
+
+
+<H2>
+    Output file format
+</H2>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: amir.pep</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X13776_1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+GTAGRASARSPPAGRRELHDLPGEPGARAGSLRTALSDSHRRGNGWDRTRSGR*SACCSP
+KPASPPISSARTRMAHCSRSSN*TARAASAVARSKRCPRTPAATRTAIGCAPRTSFATGG
+YGSSWAATCRTRARR*CRWSSAPTRCSATRPPTRASSIRRTSSTAVRRRTRTVRRWRRT*
+FATTASGWCSSARTTSIRGKATM*CATCIASTAARCSRKSTFRCIPPTTTCSAPSSASTR
+RAPTWSSPPWWAPAPPSCIAPSPVATATAGGRRSPA*PPARRRWRRWRVTWQRGRWWSRL
+TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTC
+TTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTG
+PPAWAGDRSHERQLAARQPARVAGAGPQPAGGGQRRPGLAADPHRLFGAPVLAAAGSLRR
+AGGRGLHQHFPEWPPRRDRCAARRRDSAHYPGGAGGVRKPRGALADHRAGVPRRDHPAAR
+CPPGAACAGIGAAHQRGNGEAEAEDRAAPGPHRRPGPDQPGQGVADAAPWLGRARGAPAP
+VAGSDEAARADPEDRSGVAGKRAVRLSDPGRPEQ*QEGYRHHAGTGSAVRWRGAVSQCRL
+VAGQDQRSGGGGDQLPGRRAERLRRVLPDLFRSSRAGLAEGRSADPAIRFYLSVGGRQPV
+PRX
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: amir.pep</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X13776_2 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+VPLAEHLLDHHQPGDGNCTIYLASLEHERVRFVRR*ATVTGEETDGIAPGAAADRPAVLR
+NRRHRRYRALARVWRIARGRATEPRGRRRRSPDRNAVPGPRRRPGPLSAVRRGLHSQPGG
+TVPRGLLHVAHAQGGDAGGRARRRAALLPDPLRGLRVFAEHRLRRSGAEPEQCAAGGVPD
+SPLRRAGGVHRLGLHLSAGKQPCDAPPVSPARRHGARGNLHSAVSLRRRLAARRRAHLPG
+ARRRGLLHRGGHRHRRAVSRHRPSLRRRQAAADRQPDHQRGGGGEDGE*RGRGAGGGRAL
+LLQHRYARQPGLRPGLPWFLPGERDHHRLGRGGLLADLVARPRRAGRRQLAGGRRAAAPV
+RHRHRRATGAGPGGAPEQPQPPVFAHRGNRCARRVPGPLAVARTDSPRPLCRRA*PRRLV
+RQHGRGTAPMSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWPPPEAFDV
+PVDVVFTSIFQNGHHDEIAALLAAGTPRTTLVALVEYESPAVLSQIIELECHGVITQPLD
+AHRVLPVLVSARRISEEMAKLKQKTEQLQDRIAGQARINQAKVLLMQRHGWDEREAHQHL
+SREAMKRREPILKIAQELLGNEPSA*AIRADQNNNKRGIVIMLGLVLLYVGAVLFLNAVW
+LLGKISGREVAVINFLVGVLSACVAFYLIFSAAAGQGSLKAGALTLLFAFTYLWVAANQF
+LE
+</pre>
+</td></tr></table><p>
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: amir.pep</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X13776_4 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+SRNWLAATHR*VKANSRVSAPAFSEPCPAAAEKIR*NATQALSTPTRKLITATSRPLILP
+SNQTALRNSTAPTYSRTSPSMMTIPLLLLFWSARIAQADGSFPSNS*AIFRIGSRRFIAS
+RDRCWCASRSSQPWRCISNTLAWLIRAWPAMRSWSCSVFCFSFAISSLMRRADTSTGSTR
+WASSGWVITPWHSSSMICESTAGLSYSTSATRVVRGVPAASSAAISSWWPFWKMLVKTTS
+TGTSKASGGGQHWRTEQPMRISCKTRASLTSPGGLRTSTCNSRRLPSSELALMGAVPRPC
+WRTSRRGYARRHKGRGESVRATASGPGTRRAHRFPRCAKTGGCGCSGAPPGPAPVARRCR
+CRTGAAARLPPASCLRPARRGRATRSASRPPRPRR*WSRSPGRNHGRPGRRPGWRAYRCW
+RSKARPPPAPLPRHSPSSPPPPRWWSGWRSAAACRRRSDGRWRDTARRCRCPPRWRRPRR
+RAPGRCARRRAASRRRRDTAECRFPRAPCRRAGDTGGASHGCFPADRCSPSR*TPPARRS
+GESGTPPAAHCSGSAPDRRRRCSANTRSPRRGSGSRAARRRARPPASPPCACATCSSPRG
+TVPPGCE*SPRRTADSGPGRRRGPGTAFRSGDRRRRPRGSVARPRAMRHTRASARYRR*R
+RFRRTAGRSAAAPGAIPSVSSPVTVAQRRTKRTRSCSRLAR*IVQFPSPGWW*SSRCSAS
+GT
+</pre>
+</td></tr></table><p>
+
+<a name="output.4"></a>
+<h3>Output files for usage example 4</h3>
+<p><h3>File: amir.pep</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X13776_1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+GTAGRASARSPPAGRRELHDLPGEPGARAGSLRTALSDSHRRGNGWDRTRSGR*SACCSP
+KPASPPISSARTRMAHCSRSSN*TARAASAVARSKRCPRTPAATRTAIGCAPRTSFATGG
+YGSSWAATCRTRARR*CRWSSAPTRCSATRPPTRASSIRRTSSTAVRRRTRTVRRWRRT*
+FATTASGWCSSARTTSIRGKATM*CATCIASTAARCSRKSTFRCIPPTTTCSAPSSASTR
+RAPTWSSPPWWAPAPPSCIAPSPVATATAGGRRSPA*PPARRRWRRWRVTWQRGRWWSRL
+TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTC
+TTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTG
+PPAWAGDRSHERQLAARQPARVAGAGPQPAGGGQRRPGLAADPHRLFGAPVLAAAGSLRR
+AGGRGLHQHFPEWPPRRDRCAARRRDSAHYPGGAGGVRKPRGALADHRAGVPRRDHPAAR
+CPPGAACAGIGAAHQRGNGEAEAEDRAAPGPHRRPGPDQPGQGVADAAPWLGRARGAPAP
+VAGSDEAARADPEDRSGVAGKRAVRLSDPGRPEQ*QEGYRHHAGTGSAVRWRGAVSQCRL
+VAGQDQRSGGGGDQLPGRRAERLRRVLPDLFRSSRAGLAEGRSADPAIRFYLSVGGRQPV
+PRX
+&gt;X13776_2 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+VPLAEHLLDHHQPGDGNCTIYLASLEHERVRFVRR*ATVTGEETDGIAPGAAADRPAVLR
+NRRHRRYRALARVWRIARGRATEPRGRRRRSPDRNAVPGPRRRPGPLSAVRRGLHSQPGG
+TVPRGLLHVAHAQGGDAGGRARRRAALLPDPLRGLRVFAEHRLRRSGAEPEQCAAGGVPD
+SPLRRAGGVHRLGLHLSAGKQPCDAPPVSPARRHGARGNLHSAVSLRRRLAARRRAHLPG
+ARRRGLLHRGGHRHRRAVSRHRPSLRRRQAAADRQPDHQRGGGGEDGE*RGRGAGGGRAL
+LLQHRYARQPGLRPGLPWFLPGERDHHRLGRGGLLADLVARPRRAGRRQLAGGRRAAAPV
+RHRHRRATGAGPGGAPEQPQPPVFAHRGNRCARRVPGPLAVARTDSPRPLCRRA*PRRLV
+RQHGRGTAPMSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWPPPEAFDV
+PVDVVFTSIFQNGHHDEIAALLAAGTPRTTLVALVEYESPAVLSQIIELECHGVITQPLD
+AHRVLPVLVSARRISEEMAKLKQKTEQLQDRIAGQARINQAKVLLMQRHGWDEREAHQHL
+SREAMKRREPILKIAQELLGNEPSA*AIRADQNNNKRGIVIMLGLVLLYVGAVLFLNAVW
+LLGKISGREVAVINFLVGVLSACVAFYLIFSAAAGQGSLKAGALTLLFAFTYLWVAANQF
+LE
+&gt;X13776_3 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+YRWPSICSITTSRATGTARSTWRAWSTSGFASYGAERQSQERKRMGSHQERPLIGLLFSE
+TGVTADIERSHAYGALLAVEQLNREGGVGGRPIETLSQDPGGDPDRYRLCAEDFIRNRGV
+RFLVGCYMSHTRKAVMPVVERADALLCYPTPYEGFEYSPNIVYGGPAPNQNSAPLAAYLI
+RHYGERVVFIGSDYIYPRESNHVMRHLYRQHGGTVLEEIYIPLYPSDDDLQRAVERIYQA
+RADVVFSTVVGTGTAELYRAIARRYGDGRRPPIASLTTSEAEVAKMESDVAEGQVVVAPY
+FSSIDTPASRAFVQACHGFFPENATITAWAEAAYWQTLLLGRAAQAAGNWRVEDVQRHLY
+DIDIDAPQGPVRVERQNNHSRLSSRIAEIDARGVFQVRWQSPEPIRPDPYVVVHNLDDWS
+ASMGGGPLP*APTRCSAACASCRCWSSTRRGRSATPWSCS*SASVVRCASAGRRRKPSTC
+RWTWSSPAFSRMATTTRSLRCSPPGLRALPWWRWWSTKAPRCSRRSSSWSATA*SPSRSM
+PTGCCLCWYRRGASARKWRS*SRRPSSSRTASPARPGSTRPRCC*CSAMAGTSARRTSTC
+RGKR*SGASRS*RSLRSCWETSRPPERSGPTRTITRGVSSSCWDWFCCTLARCCFSMPSG
+CWARSAVGRWR*STSWSAC*APASRST*SFPQQPGRAR*RPER*PCYSLLPICGWPPTSS
+SX
+</pre>
+</td></tr></table><p>
+
+<a name="output.5"></a>
+<h3>Output files for usage example 5</h3>
+<p><h3>File: amir.pep</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X13776_4 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+SRNWLAATHR*VKANSRVSAPAFSEPCPAAAEKIR*NATQALSTPTRKLITATSRPLILP
+SNQTALRNSTAPTYSRTSPSMMTIPLLLLFWSARIAQADGSFPSNS*AIFRIGSRRFIAS
+RDRCWCASRSSQPWRCISNTLAWLIRAWPAMRSWSCSVFCFSFAISSLMRRADTSTGSTR
+WASSGWVITPWHSSSMICESTAGLSYSTSATRVVRGVPAASSAAISSWWPFWKMLVKTTS
+TGTSKASGGGQHWRTEQPMRISCKTRASLTSPGGLRTSTCNSRRLPSSELALMGAVPRPC
+WRTSRRGYARRHKGRGESVRATASGPGTRRAHRFPRCAKTGGCGCSGAPPGPAPVARRCR
+CRTGAAARLPPASCLRPARRGRATRSASRPPRPRR*WSRSPGRNHGRPGRRPGWRAYRCW
+RSKARPPPAPLPRHSPSSPPPPRWWSGWRSAAACRRRSDGRWRDTARRCRCPPRWRRPRR
+RAPGRCARRRAASRRRRDTAECRFPRAPCRRAGDTGGASHGCFPADRCSPSR*TPPARRS
+GESGTPPAAHCSGSAPDRRRRCSANTRSPRRGSGSRAARRRARPPASPPCACATCSSPRG
+TVPPGCE*SPRRTADSGPGRRRGPGTAFRSGDRRRRPRGSVARPRAMRHTRASARYRR*R
+RFRRTAGRSAAAPGAIPSVSSPVTVAQRRTKRTRSCSRLAR*IVQFPSPGWW*SSRCSAS
+GT
+&gt;X13776_5 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+LEELVGGHPQIGKSE*QGQRSGLQRALPGCCGKDQVERDAGAQHADQEVDHRHLPTADLA
+QQPDGIEKQHRANVQQNQSQHDDDTPLVIVLVGPDRSGGRLVSQQLLSDLQDRLAPLHRF
+PRQVLVRLALVPAMALHQQHLGLVDPGLAGDAVLELLGLLLQLRHFLADAPRRYQHRQHP
+VGIERLGDHAVALQLDDLREHRGAFVLHQRHQGSARSPGGEQRSDLVVVAILENAGEDHV
+HRHVEGFRRRPALAHRTTDADQLQDQGVADLPRRVEDQHLQLAQAAEQRVGAHGSGPPPM
+LADQSSRLCTTT*GSGRIGSGDCQRTWNTPRASISAMREDRRLWLFWRSTRTGPCGASMS
+MSYRCRCTSSTRQLPAACAARPSNKVCQ*AASAQAVMVAFSGKKPWQAWTKARLAGVSML
+EK*GATTTCPSATSLSIFATSASLVVRLAIGGRLPSP*RRAMARYSSAVPVPTTVEKTTS
+ARAW*MRSTARCKSSSEGYSGM*ISSSTVPPCWRYRWRITWLLSRG*M*SEPMNTTRSP*
+WRIRYAASGALFWFGAGPP*TMFGEYSKPS*GVG*QSSASARSTTGITALRVCDM*QPTR
+NRTPRLRMKSSAHSR*RSGSPPGSWDSVSIGRPPTPPSRFSCSTASNAPYACERSISAVT
+PVSENSRPISGRSWCDPIRFLSCDCRSAPYEANPLVLQARQVDRAVPVARLVVIEQMLGQ
+RYX
+&gt;X13776_6 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+RGTGWRPPTDR*KRIAGSALRPSASPARLLRKRSGRTRRRRSARRPGS*SPPPPDR*SCP
+ATRRH*ETAPRQRTAEPVPA**RYPSCYCSGRPGSLRRTARFPATPERSSGSARAASSLP
+ATGAGAPRARPSHGAASATPWPG*SGPGRRCGPGAARSSASASPFPR*CAAPIPAQAAPG
+GHRAAG*SRRGTPAR*SARAPRGFRTPPAPPG*CAESRRRAAQRSRRGGHSGKCW*RPRP
+PARRRLPAAASTGAPNNRCGSAARPGRR*PPPAG*GPAPATRAGCRAASWRSWERSPAHA
+GGPVVEVMHDDIRVGANRFGRLPADLEHAARIDFRDARRQAAVVVLALHPDRPLWRVDVD
+VVQVPLHVFHPPVACGLRGAAEQQGLPVGRLGPGGDGRVLREETMAGLDEGPAGGRIDAG
+EVRRDHHLPLCHVTLHLRHLRLAGGQAGDRRPPAVAVATGDGAIQLGGAGAHHGGEDHVG
+ARLVDALDGALQVVVGGIQRNVDFLEHRAAVLAIQVAHHMVAFPRIDVVRADEHHPLAVV
+ANQVRRQRRTVLVRRRTAVDDVRRILEALVGGRVAEQRVGALDHRHHRLARVRHVAAHEE
+PYPPVANEVLGAQPIAVRVAAGVLGQRFDRATADAALAVQLLDREQCAIRVRALDIGGDA
+GFGEQQADQRPLLVRSHPFPLL*LSLSAVRSEPARAPGSPGRSCSSRRPAGGDRADARPA
+VP
+</pre>
+</td></tr></table><p>
+
+<a name="output.6"></a>
+<h3>Output files for usage example 6</h3>
+<p><h3>File: amir.pep</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X13776_1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+GTAGRASARSPPAGRRELHDLPGEPGARAGSLRTALSDSHRRGNGWDRTRSGR*SACCSP
+KPASPPISSARTRMAHCSRSSN*TARAASAVARSKRCPRTPAATRTAIGCAPRTSFATGG
+YGSSWAATCRTRARR*CRWSSAPTRCSATRPPTRASSIRRTSSTAVRRRTRTVRRWRRT*
+FATTASGWCSSARTTSIRGKATM*CATCIASTAARCSRKSTFRCIPPTTTCSAPSSASTR
+RAPTWSSPPWWAPAPPSCIAPSPVATATAGGRRSPA*PPARRRWRRWRVTWQRGRWWSRL
+TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTC
+TTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTG
+PPAWAGDRSHERQLAARQPARVAGAGPQPAGGGQRRPGLAADPHRLFGAPVLAAAGSLRR
+AGGRGLHQHFPEWPPRRDRCAARRRDSAHYPGGAGGVRKPRGALADHRAGVPRRDHPAAR
+CPPGAACAGIGAAHQRGNGEAEAEDRAAPGPHRRPGPDQPGQGVADAAPWLGRARGAPAP
+VAGSDEAARADPEDRSGVAGKRAVRLSDPGRPEQ*QEGYRHHAGTGSAVRWRGAVSQCRL
+VAGQDQRSGGGGDQLPGRRAERLRRVLPDLFRSSRAGLAEGRSADPAIRFYLSVGGRQPV
+PRX
+&gt;X13776_2 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+VPLAEHLLDHHQPGDGNCTIYLASLEHERVRFVRR*ATVTGEETDGIAPGAAADRPAVLR
+NRRHRRYRALARVWRIARGRATEPRGRRRRSPDRNAVPGPRRRPGPLSAVRRGLHSQPGG
+TVPRGLLHVAHAQGGDAGGRARRRAALLPDPLRGLRVFAEHRLRRSGAEPEQCAAGGVPD
+SPLRRAGGVHRLGLHLSAGKQPCDAPPVSPARRHGARGNLHSAVSLRRRLAARRRAHLPG
+ARRRGLLHRGGHRHRRAVSRHRPSLRRRQAAADRQPDHQRGGGGEDGE*RGRGAGGGRAL
+LLQHRYARQPGLRPGLPWFLPGERDHHRLGRGGLLADLVARPRRAGRRQLAGGRRAAAPV
+RHRHRRATGAGPGGAPEQPQPPVFAHRGNRCARRVPGPLAVARTDSPRPLCRRA*PRRLV
+RQHGRGTAPMSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWPPPEAFDV
+PVDVVFTSIFQNGHHDEIAALLAAGTPRTTLVALVEYESPAVLSQIIELECHGVITQPLD
+AHRVLPVLVSARRISEEMAKLKQKTEQLQDRIAGQARINQAKVLLMQRHGWDEREAHQHL
+SREAMKRREPILKIAQELLGNEPSA*AIRADQNNNKRGIVIMLGLVLLYVGAVLFLNAVW
+LLGKISGREVAVINFLVGVLSACVAFYLIFSAAAGQGSLKAGALTLLFAFTYLWVAANQF
+LE
+&gt;X13776_3 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+YRWPSICSITTSRATGTARSTWRAWSTSGFASYGAERQSQERKRMGSHQERPLIGLLFSE
+TGVTADIERSHAYGALLAVEQLNREGGVGGRPIETLSQDPGGDPDRYRLCAEDFIRNRGV
+RFLVGCYMSHTRKAVMPVVERADALLCYPTPYEGFEYSPNIVYGGPAPNQNSAPLAAYLI
+RHYGERVVFIGSDYIYPRESNHVMRHLYRQHGGTVLEEIYIPLYPSDDDLQRAVERIYQA
+RADVVFSTVVGTGTAELYRAIARRYGDGRRPPIASLTTSEAEVAKMESDVAEGQVVVAPY
+FSSIDTPASRAFVQACHGFFPENATITAWAEAAYWQTLLLGRAAQAAGNWRVEDVQRHLY
+DIDIDAPQGPVRVERQNNHSRLSSRIAEIDARGVFQVRWQSPEPIRPDPYVVVHNLDDWS
+ASMGGGPLP*APTRCSAACASCRCWSSTRRGRSATPWSCS*SASVVRCASAGRRRKPSTC
+RWTWSSPAFSRMATTTRSLRCSPPGLRALPWWRWWSTKAPRCSRRSSSWSATA*SPSRSM
+PTGCCLCWYRRGASARKWRS*SRRPSSSRTASPARPGSTRPRCC*CSAMAGTSARRTSTC
+RGKR*SGASRS*RSLRSCWETSRPPERSGPTRTITRGVSSSCWDWFCCTLARCCFSMPSG
+CWARSAVGRWR*STSWSAC*APASRST*SFPQQPGRAR*RPER*PCYSLLPICGWPPTSS
+SX
+&gt;X13776_4 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+SRNWLAATHR*VKANSRVSAPAFSEPCPAAAEKIR*NATQALSTPTRKLITATSRPLILP
+SNQTALRNSTAPTYSRTSPSMMTIPLLLLFWSARIAQADGSFPSNS*AIFRIGSRRFIAS
+RDRCWCASRSSQPWRCISNTLAWLIRAWPAMRSWSCSVFCFSFAISSLMRRADTSTGSTR
+WASSGWVITPWHSSSMICESTAGLSYSTSATRVVRGVPAASSAAISSWWPFWKMLVKTTS
+TGTSKASGGGQHWRTEQPMRISCKTRASLTSPGGLRTSTCNSRRLPSSELALMGAVPRPC
+WRTSRRGYARRHKGRGESVRATASGPGTRRAHRFPRCAKTGGCGCSGAPPGPAPVARRCR
+CRTGAAARLPPASCLRPARRGRATRSASRPPRPRR*WSRSPGRNHGRPGRRPGWRAYRCW
+RSKARPPPAPLPRHSPSSPPPPRWWSGWRSAAACRRRSDGRWRDTARRCRCPPRWRRPRR
+RAPGRCARRRAASRRRRDTAECRFPRAPCRRAGDTGGASHGCFPADRCSPSR*TPPARRS
+GESGTPPAAHCSGSAPDRRRRCSANTRSPRRGSGSRAARRRARPPASPPCACATCSSPRG
+TVPPGCE*SPRRTADSGPGRRRGPGTAFRSGDRRRRPRGSVARPRAMRHTRASARYRR*R
+RFRRTAGRSAAAPGAIPSVSSPVTVAQRRTKRTRSCSRLAR*IVQFPSPGWW*SSRCSAS
+GT
+&gt;X13776_5 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+LEELVGGHPQIGKSE*QGQRSGLQRALPGCCGKDQVERDAGAQHADQEVDHRHLPTADLA
+QQPDGIEKQHRANVQQNQSQHDDDTPLVIVLVGPDRSGGRLVSQQLLSDLQDRLAPLHRF
+PRQVLVRLALVPAMALHQQHLGLVDPGLAGDAVLELLGLLLQLRHFLADAPRRYQHRQHP
+VGIERLGDHAVALQLDDLREHRGAFVLHQRHQGSARSPGGEQRSDLVVVAILENAGEDHV
+HRHVEGFRRRPALAHRTTDADQLQDQGVADLPRRVEDQHLQLAQAAEQRVGAHGSGPPPM
+LADQSSRLCTTT*GSGRIGSGDCQRTWNTPRASISAMREDRRLWLFWRSTRTGPCGASMS
+MSYRCRCTSSTRQLPAACAARPSNKVCQ*AASAQAVMVAFSGKKPWQAWTKARLAGVSML
+EK*GATTTCPSATSLSIFATSASLVVRLAIGGRLPSP*RRAMARYSSAVPVPTTVEKTTS
+ARAW*MRSTARCKSSSEGYSGM*ISSSTVPPCWRYRWRITWLLSRG*M*SEPMNTTRSP*
+WRIRYAASGALFWFGAGPP*TMFGEYSKPS*GVG*QSSASARSTTGITALRVCDM*QPTR
+NRTPRLRMKSSAHSR*RSGSPPGSWDSVSIGRPPTPPSRFSCSTASNAPYACERSISAVT
+PVSENSRPISGRSWCDPIRFLSCDCRSAPYEANPLVLQARQVDRAVPVARLVVIEQMLGQ
+RYX
+&gt;X13776_6 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+RGTGWRPPTDR*KRIAGSALRPSASPARLLRKRSGRTRRRRSARRPGS*SPPPPDR*SCP
+ATRRH*ETAPRQRTAEPVPA**RYPSCYCSGRPGSLRRTARFPATPERSSGSARAASSLP
+ATGAGAPRARPSHGAASATPWPG*SGPGRRCGPGAARSSASASPFPR*CAAPIPAQAAPG
+GHRAAG*SRRGTPAR*SARAPRGFRTPPAPPG*CAESRRRAAQRSRRGGHSGKCW*RPRP
+PARRRLPAAASTGAPNNRCGSAARPGRR*PPPAG*GPAPATRAGCRAASWRSWERSPAHA
+GGPVVEVMHDDIRVGANRFGRLPADLEHAARIDFRDARRQAAVVVLALHPDRPLWRVDVD
+VVQVPLHVFHPPVACGLRGAAEQQGLPVGRLGPGGDGRVLREETMAGLDEGPAGGRIDAG
+EVRRDHHLPLCHVTLHLRHLRLAGGQAGDRRPPAVAVATGDGAIQLGGAGAHHGGEDHVG
+ARLVDALDGALQVVVGGIQRNVDFLEHRAAVLAIQVAHHMVAFPRIDVVRADEHHPLAVV
+ANQVRRQRRTVLVRRRTAVDDVRRILEALVGGRVAEQRVGALDHRHHRLARVRHVAAHEE
+PYPPVANEVLGAQPIAVRVAAGVLGQRFDRATADAALAVQLLDREQCAIRVRALDIGGDA
+GFGEQQADQRPLLVRSHPFPLL*LSLSAVRSEPARAPGSPGRSCSSRRPAGGDRADARPA
+VP
+</pre>
+</td></tr></table><p>
+
+<a name="output.7"></a>
+<h3>Output files for usage example 7</h3>
+<p><h3>File: amir.pep</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X13776_1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+VPLAEHLLDHHQPGEASLEHERVRFVRR*ATVTGEETDGIAPGAAADRPAVLRNRRHRRY
+VRRGLHSQPGGTVPRGLLHVAHAQGGDAGGRARRRAALLPDPLRGLRVFAEHRLRRSGAE
+X
+</pre>
+</td></tr></table><p>
+
+<a name="output.8"></a>
+<h3>Output files for usage example 8</h3>
+<p><h3>File: mito.pep</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;NC_001321.1_1 Balaenoptera physalus mitochondrion, complete genome
+VNY*SAHDHNMTEVSYIWYFFIFFGGLARTPLWP**VSSQSDKL*LGLDVFVIWLAQPTC
+AVKLMVTGHSTPLFPPGSKNCMS**TKPPSFHTMLTLCLDIHHPP*QARP*I*KPFYL*I
+NTKSDTSPMMKMHERHPYPMRWCSLNTYKA*HWKCLDGSSQPHWH**FGPSLSISS*QTY
+TCKYPHPSENAL*IMKIK*SGYQAR*H*QLTTPRLATPPRDTAVMKIKL*TKVRLSHVNL
+*VGKLRASHRGHTIDPN**KHGVKSVKEPHEMKSNLN*AVKSPN*N*AKLRKWL*YNLIT
+RQL*SKLGLDTPLCLVVNPNSHKT*LFA*VLLATA*NSKDLAVPHTHLEEPVL*PMNPDQ
+PHQPLLLQSMYRHLQQTLKGEK*A*PSYMKTLGQGVTHGLGSNGLHFLS*EHPLYSHESF
+YET*KLKEDLVVNQEQSAWLNKAM*ARTHRPSPSSSTPAMNPSSLTQAKQLYE**QVVT*
+*AYRKVCLDKT*YSLNKACSLHLEDSTARVYLELALAHTLPTSTTTNQSNKTFTIPSKY*
+**KFKYQWRY*DSTV*KDE*KT*K**KAKLTTCTFCMMT*LVMN*Q*DLKLNYPKPDELL
+MSST*NELIYVAK*WEDL*VEVKSLTSLVMAGCPWKESQFNIK*Y*KPMPSLNVYLTVNL
+K*YSFLEMGTTLT*E*NQT*T*LA*KQPSIKKAFKLDNKMMF*FQH*VNQLLAWLLD*SM
+QM*KQYC*YE*QEIFLLAQAYTSNW*YTDN*QQMNKTQH*IIY*NTVNPTQACIKE*LKK
+VKGTRQTQTPPVYQKHHL*HNQY*STACPVTNR*TAAVSWPCKGSMITCSLI*DLYEWPH
+EGFTVSYF*SVKLTSPW*GGDNKM*REDPMELQLINPKTMTLNHQGMTKPYMGWQFRLGW
+PRSTKNPPSD*NLGPLAKVQYHLLIQSFDQRNKLP*G*QRNPILESMSTMGFTTSMLDQD
+ILMVQLLL*VRLFND*SPTWSEF*PE*S*SVSIYYAFLPVRKDK*NKANFKQAPSNN*WP
+SLNLMIKRKQTCP*PGPCWGG*VR*LHKT*TFTP*GSNPLPNKMFMINILTLILPILLAV
+AFLTLVERKILGYMQFRKGPNIVGPHGLLQPFADAIKLFTKEPLRPATSSTTMFIIAPVL
+ALTLALTMWSPLPMPYPLINMNLGVLFMLAMSSLAVYSILWSGWASNSKYALIGALRAVA
+QTISYEVTLAIILLSVLLMNGSYTLSTLATTQEQLWLLFPSWPLAMMWFISTLAETNRAP
+FDLTEGESELVSGFNVEYAAGPFALFFLAEYANIIMMNMLTAILFLGTFHNPHNPELYTA
+NLIIKTLLLTMSFLWIRASYPRFRYDQLMHLLWKNFLPLTLALCMWHISLPIMTASIPPQ
+T*EMCLMKELLW*SK***PKSSYF*NN*NRTYP*EFKVLRATMLHYNLQ*GQLNKLSGPY
+PENVGSYPSHTNKPINPYYPPDNPYP*YNNGSHQLSLTISLNWLRNEHNSLHPYHNKKSY
+SPGH*SFYQVPPNTSHCFRTPHNSSHH*LNAL*PMNYYKTI*PNSIHTHNSSPSHQTGIS
+PLPLLSS*SNT*YPPNH*PNPINMTKTSSLINPMPNFTIN*PTPNINHILTFHLN**L*W
+TKPNTTSKNHSLLINCPH*MNNGHSTM*SNPNITKSTNLHHNNLHHIYIIYPKLNYHYIV
+TVSNLK*NTRHHNPYHTHFTLD**TPTTIGVYTQMNNYS*TNKKWYTHCTNIHSHYSITQ
+PMLLYTSYLLHSTNTISLHK*YKNKMTIQLHKTNSSPTNSNRNFHYATTPHTNTLNPTMG
+V*VKP*P*AFKALSKYNLLNSCPM*TA*LYLTSIECKSNALIKLNPH*IGGMHLPRIFS*
+QLNTLINWLQSTSPAA*KK*REKSRQDLKLLPWICNSKWSFTTGLGKK*TQPLSLDLQSN
+TYSAILPMFMNRWLFSTNHKDIGTLYLLFGAWAGMVGTGLSLLIRAELGQPGTLIGDDQV
+YNVLVTAHAFVMIFFMVMPIMIGGFGNWLVPLMIGAPDMAFPRMNNMSFWLLPPSFLLLM
+ASSMIEAGAGTGWTVYPPLAGNLAHAGASVDLTIFSLHLAGVSSILGAINFITTIINMKP
+PAMTQYQTPLFVWSVLVTAVLLLLSLPVLAAGITMLLTDRNLNTTFFDPAGGGDPILYQH
+LFWFFGHPEVYILILPGFGMISHIVTYYSGKKEPFGYMGMVWAMVSIGFLGFIVWAHHMF
+TVGMDVDTRAYFTSATMIIAIPTGVKVFSWLATLHGGNIKWSPALMWALGFIFLFTVGGL
+TGIVLANSSLDIVLHDTYYVVAHFHYVLSMGAVFAIMGGFVHWFPLFSGYTLNTTWAKIH
+FMIMFVGVNLTFFPQHFLGLSGMPRRYSDYPDAYTTWNTISSMGSFISLTAVMLMIFIIW
+EAFTSKREVLAVDLTSTNLEWLNGCPPPYHTFEEPAFVNPKWS*KEGIEPSPIGFKPTS*
+LLCLSL*T*Y**NLM*LCQS*VTSENPVYLHGMSIPT*FP*CSITHH**APTLSRSYTNN
+RFSN*LFSSLHYYPNAYNQINTY*YN*RP*S*NCLNYPPSHYLNFNCLAFITDPLHN*RS
+Q*PLPHCKNN*SPMMLKLWVYRLR*PKLRLLYNPNI*PKA**TTII*S**PSCLTY*NNN
+PNISLI**RTPLMGRTLLGPKN*CNP*TPKPNNLNINTT*PILWTML*DLRLKPQFHTNC
+P*TSTP*SLWKMICINTMTSL*S*ISINLLS**L*VYNSP*WYATI*YINMTPYYSINTL
+NPLCIIPIKNLKALLFP*PQTSTYQNTKTTSSLKHHMNENLFAPFMIPVMLGIPITTLII
+ILPSMLFPAPNRLINNRTIAIQQWLTKLTSKQLMNVHSPKGQTWSLMLISLFLFIASTNL
+LGMLPHSFTPTTQLSMNVGMAIPLWAGTVTTGFRNKTKMSLAHLLPQGTPTFLIPMLVII
+ETISLFIQPVAWAVRLTANITAGHLLMHLIGETTLALMNINLFSAFITFTILALLTILEF
+AVALIQAYVFTLLVSLYLHDNT*WPTKPTHTT**TPALDPSPELYQPF**HQA*LYDFTS
+TQYSY*L*ACQQMF*QYTNDGEMSSEKAPSKAIMHQPSK*AYDTE*FYLSSQKSYFSQAS
+SEPSTTQALPLLQN*ADVDHQQASAL*IP*KFPFSTPPYY*PLAYLLPEPTMAW*KETAN
+TYFKHSSSQLH*ASTSPYYKHQSTTKPLSQSQTESTAPPSL*PQAFMGYM*SLDLLSLSS
+VSYVK*NSTSHQTTTLALNVPLDTDIS*TSYDYFFMYLSIDEVPSPFSINKYNWLPIS*F
+RCTPKKNNKPSTNTTNKYNTSPTTRIHRLLTSTTKRMR*KNKPMWMRIWPH*ISPPTLLH
+KILLGGHYFPSLWL*NRSLTPPSLSNSVKQPKHNTHNSLILNLPTSSQPSLWMNS**P*M
+SWMWYLV*DKTSDFDPLDCDQIHNYQMTLIHMNILMAFSMSLMGLLMYRSHLMSALLCLE
+GMMLSLFVLAALTILSSHFTLANMMPIILLVFAACEAAIGLALLVMVSNTYGTDYVQNLN
+LLQC*NLLFLQSY*YP*PDYQKMT*SELTPQPTVY*LASQAFSSSINSTTTALTTH*YSS
+PTPFLPHSWS*QYDSFP*Y**QVNPISSKNHQSEKNSTLRY*SHYKPS*L*HLLPLN*SY
+FMSYLKPH*SLPLSLSLAGATKQNDSMPDYTSYSMH*LDLSHY**H*YIYKMQQDP*TFY
+SYNTELNHYLRPDPTSSYD*PA**PS**KYLSMDYTFDCPKHT*KPPLQAP*SLQPYY*N
+LEAMAYYELHPYSIP*QNT*HTHFLYSLFEE*S*PALSVYVKQT*NH*LHIPQLVT*HSS
+SQLSSSKPPEAM*GPLP**LPTASHPPYYSVWQTRTTNAFMAEP*FCPEAYKSFYH**PV
+DDY*QA*QILHYPQPST*SENYS*SCRSSHDQIPLFS**EQML*LLLSTLYMY*S*HNVA
+NTHTTSMMSPLPSHESMP**PYTLFPSCSYH*TLKSS*ALSTVSMV*K*R*FVKLTMEDQ
+NFLLTEKVLQELLIHAPTPNSCGFFKLLQDSSYPLVLGAKKLVQLQMKVMNLFTSFTLLT
+LLILTTPIMMSHTGSHVNNKYQSYVKNIVFCAFITSLVPAMVYLHTNQETLISNWHWITI
+QTLKLTLSFKMDYFSLMFMPVALFITWSIMEFSMWYMHSDPYINQFFKYLLLFLITMLIL
+VTANNLFQLFIGWEGVGIMSFLLIGWWFGRTDANTAALQAILYNRIGDIGLLASMAWFLS
+NMNTWDLEQIFMLNQNPLNFPLMGLVLAAAGKSAQFGLHPWLPSAMEGPTPVSALLHSST
+MVVAGIFLLVRFYPLMENNKLIQTVTLCLGAITTLFTAICALTQNDIKKIIAFSTSSQLG
+LMMVTIGLNQPYLAFLHICTHAFFKAMLFLCSGSIIHNLNNEQDIRKMGGLFKALPFTTT
+ALIIGCLALTGMPFLTGFYSKDPIIEAATSSYTNAWALLLTLIATSLTAVYSTRIIFFAL
+LGQPRFPPSTTINENNPLLINPIKRLLVGSIFAGFILSNSIPPMTTPLMTMPLHLKLTAL
+AMTTLGFIIAFEINLDTQNLKHKHPSNSFKFSTLLGYFPTIMHRLPPHLDLLMSQKLATS
+LLDLTWLETILPKTTALIQLKASTLTSNQQGLIKLYFLSFLITITLSMILFNYPE*SP**
+LQH**MKTNP*QSPTKHHNYMMPQSL*PPH*KPQNPQYHKQPSPLVHQTQT*SSPPHSSK
+HKSQLKTPPPTLKQMLLVQLY*KPKPQDTVQ*P*LLYNQMLPAFPPNKSKTPLTPKTNHQ
+NSK*LHIQHHHPQSTLNPHK*VKALKKPPQN*LQK*YLKWKQYTLSLFSHGLQPWPMTWK
+IIVVIQLQEHQWPTSEKHTH**KSSTTHSSISPPHQMSLHDGTSAPYSASA*LYKS*QAY
+S*QYTTHQTQQPPSHQSHTSAETWITAELSDTYMQMGLLYSSSASTLT*DEAYTTAPTPS
+EKHEMLELFYYSQL*PPHS*ATSCPEDKYHSEAQL*SLTSYQQSHTLVPP*SNESEAVSL
+*MKQH*HAFLPFTLSSPSSS*H*QLSTLFSFTKQDPTTPQASHPT*MKSHSTPTTQLKTF
+*VPYY*S*SY*Y*PYSHPTYLETQTTMPQQTHSVPQHTLNQNGIFYSHTQSYDQSPTN*A
+ES*PYYSQS*S*PSSQYSTHPINEA*YFDPLASSCSES*SQIY*P*HGSAANQ*NTPT*L
+*ANSHPSSISS*F*Y*YQ*LVLS*TNL*NEESL*YN*MPRFCKPEKET*HTSL*LKEEVL
+HSTISTQSWSST*TIPWKSMLYNNH*TTVLCPYWK*LALLDIIM*LVHACTST*LMASFH
+GYEQMYMLCMIVHSIIFTTSSWSSY*ILLILHIT*YVLMVQ*RMFLCIP*SI*IKWFLWP
+LH*ITSLVSMPRETSNPLG*DPSSRTGPITRGGSYLMIFM*HLVLTSGPY*LKIAHSFPL
+NKTSRW
+</pre>
+</td></tr></table><p>
+
+<p>
+
+One or more peptide sequences are written out.
+
+<p>
+
+The names of the resulting protein sequences are formed from the name of
+the input nucleic acid sequence with '_' and the translation frame
+appended to it.  Thus a nucleic acid sequence with the name 'XYZ'
+franslated in all 6 frame would produce protein sequences with the
+names: 'XYZ_1', 'XYZ_2', 'XYZ_3', 'XYZ_4', 'XYZ_5', 'XYZ_6'. 
+
+<p>
+
+If regions are specified, they are taken to be translated in frame 1 and
+so the output name would be 'XYZ_1'. 
+<p>
+
+
+
+<H2>
+    Data files
+</H2>
+
+
+<p>
+EMBOSS data files are distributed with the application and stored
+in the standard EMBOSS data directory, which is defined
+by the EMBOSS environment variable EMBOSS_DATA.
+
+<p>
+
+To see the available EMBOSS data files, run:
+<p>
+<pre>
+% embossdata -showall
+</pre>
+<p>
+To fetch one of the data files (for example 'Exxx.dat') into your
+current directory for you to inspect or modify, run:
+
+<pre>
+
+% embossdata -fetch -file Exxx.dat
+
+</pre>
+<p>
+
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called
+".embossdata". Files for all EMBOSS runs can be put in the user's home
+directory, or again in a subdirectory called ".embossdata".
+
+<p>
+The directories are searched in the following order:
+
+<ul>
+   <li> . (your current directory)
+   <li> .embossdata (under your current directory)
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+<p>
+<p>
+The EMBOSS REBASE restriction enzyme data files are stored iin
+directory 'data/REBASE/*' under the EMBOSS installation directory.
+
+<p>
+
+These files must first be set up using the program <a
+href="rebaseextract.html">'<b>rebaseextract</b>'</a>.  Running
+'rebaseextract' may be the job of your system manager.
+
+<p>
+      
+The data files are stored in the REBASE directory of the standard EMBOSS
+data directory. The names are:
+
+<ul>
+<li> embossre.enz     Cleavage information
+<li> embossre.ref     Reference/methylation information
+<li> embossre.sup     Supplier information
+</ul>
+	 
+The column information is described at the top of the data files
+	 
+<p>
+	 
+The reported enzyme from any one group of isoschizomers (the prototype)
+is specified in the REBASE database and the information is held in the
+data file 'embossre.equ'.  You may edit this file to set your own
+preferred prototype, if you wish. 
+	 
+<p>
+	 
+The format of the file "embossre.equ" is
+<br>
+Enzyme-name Prototype-name
+	 
+<p>
+	 
+i.e.  two columns of enzyme names separated by a space.  The first name
+of the pair of enzymes is the name that is not preferred and the second
+is the preferred (prototype) name. 
+	 
+	          
+
+
+
+<H2>
+    Notes
+</H2>
+
+The reverse frame '-1' is defined as the translation you get when you
+use the reverse-complement of the sequence with the same codon phase as
+the codon in frame '1'. 
+
+<p>
+
+Thus the sequence ACTGG in frame 1 is the translation of the codons
+ACT,GG; the translation of frame -1 uses these same codons, reverse
+complemented:
+
+<p>
+
+<pre>
+  forward sense          ACT GG
+  reverse sense          TGA CC
+
+  reverse-complement     CC AGT
+  frame -1 translation       S
+</pre>
+
+<p>
+
+Frame -1 is the translation of CCAGT (the reverse complement of ACTGG)
+using the codon 'AGT' (the first bases 'CC' are ignored).  The result is
+the peptide 'S'. 
+
+<p>
+
+Similarly frame -2 is the phase used by frame 2, 'CAG T' (the first base
+'C' is ignored). The last base cannot be successfully translated and is
+output as the unknown residue 'X'. The result is the peptide 'QX'.
+
+<p>
+
+Frame -3 is the phase used by frame 3, 'CCA GT'.  The last two bases
+will translate to 'V' as it does not matter what the next base is. 
+(GTA, GTC, GTG, GTT all code for 'V').  The result is the peptide 'PV'. 
+
+<p>
+
+The alternative way of generating the reverse translation frames used by
+some people is that frame -1 is made by taking the frame '1' of the
+reverse complement.  There is no correspondence between the codons used
+in frame 1 and -1, 2 and -2, 3 and -3; the codons used change with the
+length modulus 3. 
+
+<p>
+
+There does not appear to be a convention on which definition to use.
+<br>
+The Staden package uses the same convention as this program.
+<br>
+The GCG package sneakily avoids the problem by naming the frames using
+letters (a, b, c, d, e, f)
+
+<p>
+
+If you really need to define frame -1 as the frame given when you
+reverse complement the sequence and then start translating at the first
+frame in the resulting sequence, then use the '-alternative' qualifier. 
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+
+<H2>
+    Warnings
+</H2>
+
+
+	When translating using non-standard genetic code table, always
+	check the table carefully for deviations from your particular
+	organism's code.
+
+<p>
+
+When using the '-regions' option, you should always leave the '-frames'
+option at the default of frame '1'.  If you change the frame while
+specifying a region to translate, then the regions will be offset by 1
+or 2 bases, which is not what you want. 
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+	Several warning messages about malformed region specifications:
+<ul>
+        <li>Non-digit found in region ...
+        <li>Unpaired start of a region found in ...
+        <li>Non-digit found in region ...
+        <li>The start of a pair of region positions must be smaller than the
+                end in ... 
+</ul>
+<H2>
+    Exit status
+</H2>
+
+
+	It exits with status 0, unless a region is badly constructed.
+
+<H2>
+    Known bugs
+</H2>
+
+
+When using the '-regions' option, you should always leave the '-frames'
+option at the default of frame '1'.  If you change the frame while
+specifying a region to translate, then the regions will be offset by 1
+or 2 bases, which is not what you want. 
+
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="backtranambig.html">backtranambig</a></td>
+<td>Back translate a protein sequence to ambiguous codons</td>
+</tr>
+
+<tr>
+<td><a href="backtranseq.html">backtranseq</a></td>
+<td>Back translate a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="coderet.html">coderet</a></td>
+<td>Extract CDS, mRNA and translations from feature tables</td>
+</tr>
+
+<tr>
+<td><a href="plotorf.html">plotorf</a></td>
+<td>Plot potential open reading frames</td>
+</tr>
+
+<tr>
+<td><a href="prettyseq.html">prettyseq</a></td>
+<td>Output sequence with translated ranges</td>
+</tr>
+
+<tr>
+<td><a href="remap.html">remap</a></td>
+<td>Display sequence with restriction sites, translation etc</td>
+</tr>
+
+<tr>
+<td><a href="showorf.html">showorf</a></td>
+<td>Pretty output of DNA translations</td>
+</tr>
+
+<tr>
+<td><a href="showseq.html">showseq</a></td>
+<td>Display a sequence with features, translation etc</td>
+</tr>
+
+<tr>
+<td><a href="sixpack.html">sixpack</a></td>
+<td>Display a DNA sequence with 6-frame translation and ORFs</td>
+</tr>
+
+</table>
+
+<H2>
+    Author(s)
+</H2>
+
+
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+
+<H2>
+    History
+</H2>
+
+Written 4 March 1999 - Gary Williams
+<br>
+
+July 2001 - changed definition of reverse frames to use the same codon
+phase as forward frames.  - Gary Williams
+
+<p>
+
+June 2002 - added '-alternative' qualifier - Gary Williams
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+<H2>
+    Comments
+</H2>
+None
+
+</BODY>
+</HTML>
+

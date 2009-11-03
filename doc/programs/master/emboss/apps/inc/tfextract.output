@@ -1,0 +1,36 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: tffungi</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Y$ADH1_02            ACAATATGGACTTCCTCTTTTCTGG R04140 T00322; GCR1;Quality: 2; Species: yeast, Saccharomyces cerevisiae.
+</pre>
+</td></tr></table><p>
+<p><h3>File: tfinsect</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+</pre>
+</td></tr></table><p>
+<p><h3>File: tfvertebrate</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+HS$ALBU_01           tGGTTAGtaattactaa R00077 T01951; HNF-1C;Quality: 1; Species: human, Homo sapiens.
+HS$ALBU_02           TTGGCA R00078 T00599; NF-1/L;Quality: 6; Species: rat, Rattus norvegicus.
+HS$ALBU_03           TGGCA R00079 T00599; NF-1/L;Quality: 6; Species: rat, Rattus norvegicus.
+HS$ALBU_04           TTAATAAT R00080 T00015; AFP1;Quality: 6; Species: human, Homo sapiens.
+HS$ALBU_05           TCTAGTTAATAATCTACAAT R00081 T00369; HNF-1;Quality: 4; Species: rat, Rattus norvegicus.
+MOUSE$FCGR3A_01      GTCTGCTGACC R04412 T00874; USF;Quality: 2; Species: human, Homo sapiens.
+MOUSE$FCGR3A_02      TTCCTC R04413 T00702; PU.1;Quality: 3; Species: mouse, Mus musculus.
+</pre>
+</td></tr></table><p>
+<p><h3>File: tfplant</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+</pre>
+</td></tr></table><p>
+<p><h3>File: tfother</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+</pre>
+</td></tr></table><p>

@@ -1,0 +1,754 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: maskfeat
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+maskfeat
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+
+<H2>
+    Function
+</H2>
+Mask off features of a sequence
+
+<H2>
+    Description
+</H2>
+
+<b>maskfeat</b> reads in a sequence with its associated features.  The
+features can be found in the annotation of the sequence if it is in a
+format such as EMBL or SWISSPROT which includes features in the
+annotation, or they may be supplied explicitly in a GFF file by using
+the command-lin option '-gff filename'.
+
+<p>
+
+The feature table is then searched for features whose type matches the
+specified feature type to be masked.  By default, the type is 'repeat*'
+(i.e.  any type whose name starts with 'repeat').  You can specify the
+name of any other type of feature, or features that you wish to mask. 
+If you wish to specify more than one type of feature, separate their
+names with spaces or commas.  The names of the types of feature to be
+found may be wild-carded with asterisks '*' to find gruops of feature
+types sharing a common part of their names. 
+
+<p>
+
+If you are unsure of the names of feature types in use, please consult
+<A HREF="http://www3.ebi.ac.uk/Services/WebFeat/">
+http://www3.ebi.ac.uk/Services/WebFeat/</A>
+for a list of the EMBL feature types and see Appendix A of the Swissprot
+user manual in 
+<A HREF="http://www.expasy.ch/txt/userman.txt">
+http://www.expasy.ch/txt/userman.txt</A>
+for a list of the Swissprot feature types. 
+
+<p>
+
+If any features matching the specified names of feature types are found,
+then those regions of the sequence will be masked out by replacing that
+part of the sequence by masking characters.  The default masking
+characters are 'X' for a protein sequence and 'N' for a nucleic acid
+sequence, although you can specify your own masking character, if
+required. 
+
+<p>
+
+Some non-EMBOSS programs (for example FASTA) are capable of treating
+lower-case regions as if they are masked.  <b>maskfeat</b> can mask a
+region to lower-case instead of replacing the sequence with 'N's or 'X's
+if you use the qualifier '-tolower' or use a space character as the
+masking character.   
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with maskfeat</b>
+<p>
+Mask out a feature whose type is "repeat_region" from position 2331 to 2356: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>maskfeat tembl:ab000360 </b>
+Mask off features of a sequence.
+output sequence [ab000360.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+Change to lower-case a feature whose type is "repeat_region" from position 2331 to 2356. Note that '-supper' is used to make the whole sequence upper-case before the lower-case masking: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>maskfeat tembl:ab000360 -tolower -supper </b>
+Mask off features of a sequence.
+output sequence [ab000360.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Sequence(s) filename and optional format, or
+                                  reference (input USA)
+  [-outseq]            seqout     [<sequence>.<format>] Sequence filename and
+                                  optional format (output USA)
+
+   Additional (Optional) qualifiers (* if not always prompted):
+   -type               string     [repeat*] By default any feature in the
+                                  feature table with a type starting 'repeat'
+                                  is masked. You can set this to be any
+                                  feature type you wish to mask.
+                                  See http://www3.ebi.ac.uk/Services/WebFeat/
+                                  for a list of the EMBL feature types and see
+                                  Appendix A of the Swissprot user manual in
+                                  http://www.expasy.ch/txt/userman.txt for a
+                                  list of the Swissprot feature types.
+                                  The type may be wildcarded by using '*'.
+                                  If you wish to mask more than one type,
+                                  separate their names with spaces or commas,
+                                  eg:
+                                  *UTR repeat* (Any string is accepted)
+   -tolower            toggle     [N] The region can be 'masked' by converting
+                                  the sequence characters to lower-case, some
+                                  non-EMBOSS programs e.g. fasta can
+                                  interpret this as a masked region. The
+                                  sequence is unchanged apart from the case
+                                  change. You might like to ensure that the
+                                  whole sequence is in upper-case before
+                                  masking the specified regions to lower-case
+                                  by using the '-supper' flag.
+*  -maskchar           string     ['X' for protein, 'N' for nucleic] Character
+                                  to use when masking.
+                                  Default is 'X' for protein sequences, 'N'
+                                  for nucleic sequences.
+                                  If the mask character is set to be the SPACE
+                                  character or a null character, then the
+                                  sequence is 'masked' by changing it to
+                                  lower-case, just as with the '-lowercase'
+                                  flag. (Any string up to 1 characters)
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 2)</td>
+<td>Sequence filename and optional format (output USA)</td>
+<td>Writeable sequence</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-type</td>
+<td>By default any feature in the feature table with a type starting 'repeat' is masked. You can set this to be any feature type you wish to mask.
+See http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www.expasy.ch/txt/userman.txt for a list of the Swissprot feature types.
+The type may be wildcarded by using '*'.
+If you wish to mask more than one type, separate their names with spaces or commas, eg:
+*UTR repeat*</td>
+<td>Any string is accepted</td>
+<td>repeat*</td>
+</tr>
+
+<tr>
+<td>-tolower</td>
+<td>The region can be 'masked' by converting the sequence characters to lower-case, some non-EMBOSS programs e.g. fasta can interpret this as a masked region. The sequence is unchanged apart from the case change. You might like to ensure that the whole sequence is in upper-case before masking the specified regions to lower-case by using the '-supper' flag.</td>
+<td>Toggle value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-maskchar</td>
+<td>Character to use when masking.
+Default is 'X' for protein sequences, 'N' for nucleic sequences.
+If the mask character is set to be the SPACE character or a null character, then the sequence is 'masked' by changing it to lower-case, just as with the '-lowercase' flag.</td>
+<td>Any string up to 1 characters</td>
+<td>'X' for protein, 'N' for nucleic</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>maskfeat</b> reads in a sequence USA.  You can optionally specify a
+GFF feature file to use with the command-line option '-gff filename'. 
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:ab000360' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:ab000360</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   AB000360; SV 1; linear; genomic DNA; STD; HUM; 2582 BP.
+XX
+AC   AB000360;
+XX
+DT   27-OCT-1997 (Rel. 53, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 3)
+XX
+DE   Homo sapiens PIGC gene, complete cds.
+XX
+KW   glycosylphosphatidylinositol-synthesis gene; PIGC.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-2582
+RA   Hong Y.;
+RT   ;
+RL   Submitted (08-JAN-1997) to the EMBL/GenBank/DDBJ databases.
+RL   Yeongjin Hong, Research Institute for Microbial Diseases, Immunoregulation;
+RL   3-1 Yamada-oka, Suita, Osaka 565, Japan
+RL   (E-mail:kohishi@biken.osaka-u.ac.jp, Tel:81-6-879-8329, Fax:81-6-875-5233)
+XX
+RN   [2]
+RX   DOI; 10.1006/geno.1997.4893.
+RX   PUBMED; 9325057.
+RA   Hong Y., Ohishi K., Inoue N., Endo Y., Fujita T., Takeda J., Kinoshita T.;
+RT   "Structures and chromosomal localizations of the
+RT   glycosylphosphatidylinositol synthesis gene PIGC and its pseudogene
+RT   PIGCP1";
+RL   Genomics 44(3):347-349(1997).
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..2582
+FT                   /organism="Homo sapiens"
+FT                   /chromosome="1"
+FT                   /map="1q23-q25"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:9606"
+FT   exon            808..2266
+FT   CDS             1101..1994
+FT                   /codon_start=1
+FT                   /transl_table=1
+FT                   /gene="PIGC"
+FT                   /standard_name="glycosylphosphatidylinositol-synthesis
+FT                   gene"
+FT                   /db_xref="GDB:6045444"
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT   variation       2259
+FT                   /replace="t"
+FT   repeat_region   2331..2356
+FT                   /rpt_unit_seq="gt"
+XX
+SQ   Sequence 2582 BP; 694 A; 494 C; 581 G; 813 T; 0 other;
+     ggatccctgc tgcagagggg gtaacggtgt ctggcttgcc aagcaatatt tgttgtggtc        60
+     tatcatggaa gaaataaagt cgggcaatat gaattttttt tttctcaaat ttgccggatg       120
+     gctgtggtgt ttctgactct tagttttctc attgtgaaaa aggaatgatt atcttcttcg       180
+     atcctctcaa gagtttcctt gttttgagta gattgatagc tctttaaagg atgctaagct       240
+     cagctaatgg aagaagagtc tagtttcttt gaggctttga ttttggttaa actatagagc       300
+     tcataccttt ctgtatggtg cagcttacta ttgtctttgg attggtaact taaaaaatac       360
+     aaataacatg cctttgagaa ccaataaaaa ctatggatat tatccctata aatttacaca       420
+     aatccagata taagcatgca atgtgatata cctaagggat atgtgaacca ctgagttaag       480
+     aactgcttta gagggagata caatgtgaga cacaggcttt gggataagac tttggtttga       540
+     atcctggctc tgctctgtta ccttagggca aagttactta agcatcttga atctcagctt       600
+     ttttaccaaa gcaggactaa tactaactta caaggtggtg aggattaagt gaaagaagat       660
+     acataaggca cttagcacat agtaggtact caataagcga tagctaacag atgtctatta       720
+     ttattcaagg aattataatt ttcaaatctg aaatgcagtt ttaatgtccc ataaggtgac       780
+     taccacatac atttttctca gacttttagt aaactgagtt gatttgactt tatctcagta       840
+     ctactcttga cctttcacaa ctttcgtagg ttcacagtct ctctttttct aggaacttgg       900
+     ctgtgttgtc ctgcctcaga gacaaattca tctattgtag gcctagcccc tgcctttgaa       960
+     aacaaggaaa ggttggtaga acatcaacac agcatggaat ttccagggag gtctcatttc      1020
+     aaaacttcat aaagaacaag aaccacctgg acttctgtga gggcgatgat taaactggcc      1080
+     tgagtttgaa tgaaaggata atgtatgctc aacctgtgac taacaccaag gaggtcaagt      1140
+     ggcagaaggt cttgtatgag cgacagccct ttcctgataa ctatgtggac cggcgattcc      1200
+     tggaagagct ccggaaaaac atccatgctc ggaaatacca atattgggct gtggtatttg      1260
+     agtccagtgt ggtgatccag cagctgtgca gtgtttgtgt ttttgtggtt atctggtggt      1320
+     atatggatga gggtcttctg gccccccatt ggcttttagg gactggcctg gcttcttcac      1380
+     tgattgggta tgttttgttt gatctcattg atggaggtga agggcggaag aagagtgggc      1440
+     agacccggtg ggctgacctg aagagtgccc tagtcttcat tactttcact tatgggtttt      1500
+     caccagtgct gaagaccctt acagagtctg tcagcactga caccatctat gccatgtcag      1560
+     tcttcatgct gttaggccat ctcatctttt ttgactatgg tgccaatgct gccattgtat      1620
+     ccagcacact atccttgaac atggccatct ttgcttctgt atgcttggca tcacgtcttc      1680
+     cccggtccct gcatgccttc atcatggtga catttgccat tcagattttt gccctgtggc      1740
+     ccatgttgca gaagaaacta aaggcatgta ctccccggag ctatgtgggg gtcacactgc      1800
+     tttttgcatt ttcagccgtg ggaggcctac tgtccattag tgctgtggga gccgtactct      1860
+     ttgcccttct gctgatgtct atctcatgtc tgtgttcatt ctacctcatt cgcttgcagc      1920
+     tttttaaaga aaacattcat gggccttggg atgaagctga aatcaaggaa gacttgtcca      1980
+     ggttcctcag ttaaattagg acatccatta cattattaaa gcaagctgat agattagcct      2040
+     cctaactagt atagaactta aagacagagt tccattctgg aagcagcatg tcattgtggt      2100
+     aagagaatag agatcaaaac caaaaaaaat gaaccaaagg cttgggtggt gagggtgctt      2160
+     atcctttctg ttattttgta gatgaaaaaa ctttctgggg acctcttgaa ttacatgctg      2220
+     taacatatga agtgatgtgg tttctattaa aaaaataaca catccatcaa gttgtctcat      2280
+     gatttttcca taaacaggag gcagacagag gggcatgaag agtgaagtaa gtgtgtgtgt      2340
+     gtgtgtgtgt gtgtgtaaag tcacttcttt ctaccctttt caatgtgcta atgctctttt      2400
+     atttatctag ggctcaaatc ttagaacaca gggtgctatg ctcagttttg ttgcccaaga      2460
+     tcacagaatt ggttacttaa ccttgactca gagtttctac cttgttctta gggaagcata      2520
+     tcacaactaa ttgcaaagca gagtgtgatg tgtcacaata agcagaatgc tagggggaat      2580
+     tc                                                                     2582
+//
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Output file format
+</H2>
+
+<b>maskfeat</b> writes out a normal, masked, sequence file.
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: ab000360.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;AB000360 AB000360.1 Homo sapiens PIGC gene, complete cds.
+ggatccctgctgcagagggggtaacggtgtctggcttgccaagcaatatttgttgtggtc
+tatcatggaagaaataaagtcgggcaatatgaattttttttttctcaaatttgccggatg
+gctgtggtgtttctgactcttagttttctcattgtgaaaaaggaatgattatcttcttcg
+atcctctcaagagtttccttgttttgagtagattgatagctctttaaaggatgctaagct
+cagctaatggaagaagagtctagtttctttgaggctttgattttggttaaactatagagc
+tcatacctttctgtatggtgcagcttactattgtctttggattggtaacttaaaaaatac
+aaataacatgcctttgagaaccaataaaaactatggatattatccctataaatttacaca
+aatccagatataagcatgcaatgtgatatacctaagggatatgtgaaccactgagttaag
+aactgctttagagggagatacaatgtgagacacaggctttgggataagactttggtttga
+atcctggctctgctctgttaccttagggcaaagttacttaagcatcttgaatctcagctt
+ttttaccaaagcaggactaatactaacttacaaggtggtgaggattaagtgaaagaagat
+acataaggcacttagcacatagtaggtactcaataagcgatagctaacagatgtctatta
+ttattcaaggaattataattttcaaatctgaaatgcagttttaatgtcccataaggtgac
+taccacatacatttttctcagacttttagtaaactgagttgatttgactttatctcagta
+ctactcttgacctttcacaactttcgtaggttcacagtctctctttttctaggaacttgg
+ctgtgttgtcctgcctcagagacaaattcatctattgtaggcctagcccctgcctttgaa
+aacaaggaaaggttggtagaacatcaacacagcatggaatttccagggaggtctcatttc
+aaaacttcataaagaacaagaaccacctggacttctgtgagggcgatgattaaactggcc
+tgagtttgaatgaaaggataatgtatgctcaacctgtgactaacaccaaggaggtcaagt
+ggcagaaggtcttgtatgagcgacagccctttcctgataactatgtggaccggcgattcc
+tggaagagctccggaaaaacatccatgctcggaaataccaatattgggctgtggtatttg
+agtccagtgtggtgatccagcagctgtgcagtgtttgtgtttttgtggttatctggtggt
+atatggatgagggtcttctggccccccattggcttttagggactggcctggcttcttcac
+tgattgggtatgttttgtttgatctcattgatggaggtgaagggcggaagaagagtgggc
+agacccggtgggctgacctgaagagtgccctagtcttcattactttcacttatgggtttt
+caccagtgctgaagacccttacagagtctgtcagcactgacaccatctatgccatgtcag
+tcttcatgctgttaggccatctcatcttttttgactatggtgccaatgctgccattgtat
+ccagcacactatccttgaacatggccatctttgcttctgtatgcttggcatcacgtcttc
+cccggtccctgcatgccttcatcatggtgacatttgccattcagatttttgccctgtggc
+ccatgttgcagaagaaactaaaggcatgtactccccggagctatgtgggggtcacactgc
+tttttgcattttcagccgtgggaggcctactgtccattagtgctgtgggagccgtactct
+ttgcccttctgctgatgtctatctcatgtctgtgttcattctacctcattcgcttgcagc
+tttttaaagaaaacattcatgggccttgggatgaagctgaaatcaaggaagacttgtcca
+ggttcctcagttaaattaggacatccattacattattaaagcaagctgatagattagcct
+cctaactagtatagaacttaaagacagagttccattctggaagcagcatgtcattgtggt
+aagagaatagagatcaaaaccaaaaaaaatgaaccaaaggcttgggtggtgagggtgctt
+atcctttctgttattttgtagatgaaaaaactttctggggacctcttgaattacatgctg
+taacatatgaagtgatgtggtttctattaaaaaaataacacatccatcaagttgtctcat
+gatttttccataaacaggaggcagacagaggggcatgaagagtgaagtaaNNNNNNNNNN
+NNNNNNNNNNNNNNNNaaagtcacttctttctacccttttcaatgtgctaatgctctttt
+atttatctagggctcaaatcttagaacacagggtgctatgctcagttttgttgcccaaga
+tcacagaattggttacttaaccttgactcagagtttctaccttgttcttagggaagcata
+tcacaactaattgcaaagcagagtgtgatgtgtcacaataagcagaatgctagggggaat
+tc
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: ab000360.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;AB000360 AB000360.1 Homo sapiens PIGC gene, complete cds.
+GGATCCCTGCTGCAGAGGGGGTAACGGTGTCTGGCTTGCCAAGCAATATTTGTTGTGGTC
+TATCATGGAAGAAATAAAGTCGGGCAATATGAATTTTTTTTTTCTCAAATTTGCCGGATG
+GCTGTGGTGTTTCTGACTCTTAGTTTTCTCATTGTGAAAAAGGAATGATTATCTTCTTCG
+ATCCTCTCAAGAGTTTCCTTGTTTTGAGTAGATTGATAGCTCTTTAAAGGATGCTAAGCT
+CAGCTAATGGAAGAAGAGTCTAGTTTCTTTGAGGCTTTGATTTTGGTTAAACTATAGAGC
+TCATACCTTTCTGTATGGTGCAGCTTACTATTGTCTTTGGATTGGTAACTTAAAAAATAC
+AAATAACATGCCTTTGAGAACCAATAAAAACTATGGATATTATCCCTATAAATTTACACA
+AATCCAGATATAAGCATGCAATGTGATATACCTAAGGGATATGTGAACCACTGAGTTAAG
+AACTGCTTTAGAGGGAGATACAATGTGAGACACAGGCTTTGGGATAAGACTTTGGTTTGA
+ATCCTGGCTCTGCTCTGTTACCTTAGGGCAAAGTTACTTAAGCATCTTGAATCTCAGCTT
+TTTTACCAAAGCAGGACTAATACTAACTTACAAGGTGGTGAGGATTAAGTGAAAGAAGAT
+ACATAAGGCACTTAGCACATAGTAGGTACTCAATAAGCGATAGCTAACAGATGTCTATTA
+TTATTCAAGGAATTATAATTTTCAAATCTGAAATGCAGTTTTAATGTCCCATAAGGTGAC
+TACCACATACATTTTTCTCAGACTTTTAGTAAACTGAGTTGATTTGACTTTATCTCAGTA
+CTACTCTTGACCTTTCACAACTTTCGTAGGTTCACAGTCTCTCTTTTTCTAGGAACTTGG
+CTGTGTTGTCCTGCCTCAGAGACAAATTCATCTATTGTAGGCCTAGCCCCTGCCTTTGAA
+AACAAGGAAAGGTTGGTAGAACATCAACACAGCATGGAATTTCCAGGGAGGTCTCATTTC
+AAAACTTCATAAAGAACAAGAACCACCTGGACTTCTGTGAGGGCGATGATTAAACTGGCC
+TGAGTTTGAATGAAAGGATAATGTATGCTCAACCTGTGACTAACACCAAGGAGGTCAAGT
+GGCAGAAGGTCTTGTATGAGCGACAGCCCTTTCCTGATAACTATGTGGACCGGCGATTCC
+TGGAAGAGCTCCGGAAAAACATCCATGCTCGGAAATACCAATATTGGGCTGTGGTATTTG
+AGTCCAGTGTGGTGATCCAGCAGCTGTGCAGTGTTTGTGTTTTTGTGGTTATCTGGTGGT
+ATATGGATGAGGGTCTTCTGGCCCCCCATTGGCTTTTAGGGACTGGCCTGGCTTCTTCAC
+TGATTGGGTATGTTTTGTTTGATCTCATTGATGGAGGTGAAGGGCGGAAGAAGAGTGGGC
+AGACCCGGTGGGCTGACCTGAAGAGTGCCCTAGTCTTCATTACTTTCACTTATGGGTTTT
+CACCAGTGCTGAAGACCCTTACAGAGTCTGTCAGCACTGACACCATCTATGCCATGTCAG
+TCTTCATGCTGTTAGGCCATCTCATCTTTTTTGACTATGGTGCCAATGCTGCCATTGTAT
+CCAGCACACTATCCTTGAACATGGCCATCTTTGCTTCTGTATGCTTGGCATCACGTCTTC
+CCCGGTCCCTGCATGCCTTCATCATGGTGACATTTGCCATTCAGATTTTTGCCCTGTGGC
+CCATGTTGCAGAAGAAACTAAAGGCATGTACTCCCCGGAGCTATGTGGGGGTCACACTGC
+TTTTTGCATTTTCAGCCGTGGGAGGCCTACTGTCCATTAGTGCTGTGGGAGCCGTACTCT
+TTGCCCTTCTGCTGATGTCTATCTCATGTCTGTGTTCATTCTACCTCATTCGCTTGCAGC
+TTTTTAAAGAAAACATTCATGGGCCTTGGGATGAAGCTGAAATCAAGGAAGACTTGTCCA
+GGTTCCTCAGTTAAATTAGGACATCCATTACATTATTAAAGCAAGCTGATAGATTAGCCT
+CCTAACTAGTATAGAACTTAAAGACAGAGTTCCATTCTGGAAGCAGCATGTCATTGTGGT
+AAGAGAATAGAGATCAAAACCAAAAAAAATGAACCAAAGGCTTGGGTGGTGAGGGTGCTT
+ATCCTTTCTGTTATTTTGTAGATGAAAAAACTTTCTGGGGACCTCTTGAATTACATGCTG
+TAACATATGAAGTGATGTGGTTTCTATTAAAAAAATAACACATCCATCAAGTTGTCTCAT
+GATTTTTCCATAAACAGGAGGCAGACAGAGGGGCATGAAGAGTGAAGTAAgtgtgtgtgt
+gtgtgtgtgtgtgtgtAAAGTCACTTCTTTCTACCCTTTTCAATGTGCTAATGCTCTTTT
+ATTTATCTAGGGCTCAAATCTTAGAACACAGGGTGCTATGCTCAGTTTTGTTGCCCAAGA
+TCACAGAATTGGTTACTTAACCTTGACTCAGAGTTTCTACCTTGTTCTTAGGGAAGCATA
+TCACAACTAATTGCAAAGCAGAGTGTGATGTGTCACAATAAGCAGAATGCTAGGGGGAAT
+TC
+</pre>
+</td></tr></table><p>
+
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="biosed.html">biosed</a></td>
+<td>Replace or delete sequence sections</td>
+</tr>
+
+<tr>
+<td><a href="codcopy.html">codcopy</a></td>
+<td>Reads and writes a codon usage table</td>
+</tr>
+
+<tr>
+<td><a href="coderet.html">coderet</a></td>
+<td>Extract CDS, mRNA and translations from feature tables</td>
+</tr>
+
+<tr>
+<td><a href="cutseq.html">cutseq</a></td>
+<td>Removes a specified section from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="degapseq.html">degapseq</a></td>
+<td>Removes gap characters from sequences</td>
+</tr>
+
+<tr>
+<td><a href="descseq.html">descseq</a></td>
+<td>Alter the name or description of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="entret.html">entret</a></td>
+<td>Reads and writes (returns) flatfile entries</td>
+</tr>
+
+<tr>
+<td><a href="extractalign.html">extractalign</a></td>
+<td>Extract regions from a sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="extractfeat.html">extractfeat</a></td>
+<td>Extract features from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="extractseq.html">extractseq</a></td>
+<td>Extract regions from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="listor.html">listor</a></td>
+<td>Write a list file of the logical OR of two sets of sequences</td>
+</tr>
+
+<tr>
+<td><a href="makenucseq.html">makenucseq</a></td>
+<td>Creates random nucleotide sequences</td>
+</tr>
+
+<tr>
+<td><a href="makeprotseq.html">makeprotseq</a></td>
+<td>Creates random protein sequences</td>
+</tr>
+
+<tr>
+<td><a href="maskseq.html">maskseq</a></td>
+<td>Mask off regions of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="newseq.html">newseq</a></td>
+<td>Type in a short new sequence</td>
+</tr>
+
+<tr>
+<td><a href="noreturn.html">noreturn</a></td>
+<td>Removes carriage return from ASCII files</td>
+</tr>
+
+<tr>
+<td><a href="notseq.html">notseq</a></td>
+<td>Exclude a set of sequences and write out the remaining ones</td>
+</tr>
+
+<tr>
+<td><a href="nthseq.html">nthseq</a></td>
+<td>Writes one sequence from a multiple set of sequences</td>
+</tr>
+
+<tr>
+<td><a href="pasteseq.html">pasteseq</a></td>
+<td>Insert one sequence into another</td>
+</tr>
+
+<tr>
+<td><a href="revseq.html">revseq</a></td>
+<td>Reverse and complement a sequence</td>
+</tr>
+
+<tr>
+<td><a href="seqret.html">seqret</a></td>
+<td>Reads and writes (returns) sequences</td>
+</tr>
+
+<tr>
+<td><a href="seqretsplit.html">seqretsplit</a></td>
+<td>Reads and writes (returns) sequences in individual files</td>
+</tr>
+
+<tr>
+<td><a href="showfeat.html">showfeat</a></td>
+<td>Show features of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="skipseq.html">skipseq</a></td>
+<td>Reads and writes (returns) sequences, skipping first few</td>
+</tr>
+
+<tr>
+<td><a href="splitter.html">splitter</a></td>
+<td>Split a sequence into (overlapping) smaller sequences</td>
+</tr>
+
+<tr>
+<td><a href="trimest.html">trimest</a></td>
+<td>Trim poly-A tails off EST sequences</td>
+</tr>
+
+<tr>
+<td><a href="trimseq.html">trimseq</a></td>
+<td>Trim ambiguous bits off the ends of sequences</td>
+</tr>
+
+<tr>
+<td><a href="twofeat.html">twofeat</a></td>
+<td>Finds neighbouring pairs of features in sequences</td>
+</tr>
+
+<tr>
+<td><a href="union.html">union</a></td>
+<td>Reads sequence fragments and builds one sequence</td>
+</tr>
+
+<tr>
+<td><a href="vectorstrip.html">vectorstrip</a></td>
+<td>Strips out DNA between a pair of vector sequences</td>
+</tr>
+
+<tr>
+<td><a href="yank.html">yank</a></td>
+<td>Reads a sequence range, appends the full USA to a list file</td>
+</tr>
+
+</table>
+
+<H2>
+    Author(s)
+</H2>
+
+
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+
+
+<H2>
+    History
+</H2>
+
+Written (2000) - Gary Williams
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+
+<H2>
+    Comments
+</H2>
+None
+
+</BODY>
+</HTML>
+

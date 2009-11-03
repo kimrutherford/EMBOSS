@@ -1,0 +1,73 @@
+application: merger [
+  documentation: "Merge two overlapping sequences"
+  groups: "Alignment:Consensus"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  sequence: asequence [
+    parameter: "Y"
+    type: "any"
+  ]
+
+  sequence: bsequence [
+    parameter: "Y"
+    type: "@($(acdprotein) ? stopprotein : nucleotide)"
+  ]
+
+  matrixf: datafile [
+    additional: "Y"
+    information: "Matrix file"
+    protein: "$(acdprotein)"
+    help: "This is the scoring matrix file used when comparing
+           sequences. By default it is the file 'EBLOSUM62' (for proteins) or
+           the file 'EDNAFULL' (for nucleic sequences). These files are
+           found in the 'data' directory of the EMBOSS installation."
+  ]
+
+endsection: input
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  float: gapopen [
+    additional: "Y"
+    information: "Gap opening penalty"
+    minimum: "0.0"
+    maximum: "100.0"
+    default: "@($(acdprotein)? 50.0 : 50.0 )"
+  ]
+
+  float: gapextend [
+    additional: "Y"
+    information: "Gap extension penalty"
+    minimum: "0.0"
+    maximum: "10.0"
+    default: "@($(acdprotein)? 5.0 : 5.0)"
+  ]
+
+endsection: additional
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  align: outfile [
+    parameter: "Y"
+    aformat: "simple"
+    minseqs: "2"
+    maxseqs: "2"
+    aglobal: "Y"
+  ]
+
+  seqout: outseq [
+    parameter: "Y"
+  ]
+
+endsection: output

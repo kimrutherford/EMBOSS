@@ -1,0 +1,352 @@
+* ------------------------------------------------------------------------- *
+* Introduction                                                              *
+* ------------------------------------------------------------------------- *
+
+The EMBOSS suite is available as a FreeBSD port.  This makes the EMBOSS
+installation almost trivially easy for the experienced user of the FreeBSD
+operating system.  If you are a FreeBSD user and you're not yet familiar with
+the ports system, this document should tell you all you need to know in order
+to install EMBOSS.
+
+The next section ("Installing EMBOSS from the port") tells you how to install
+the FreeBSD EMBOSS port in the simplest case, and is required reading.
+
+The rest of the document give you enough information for you to ensure that
+your ports tree is up to date, and that you are therefore installing the most
+recent version of EMBOSS.  While not required, it is recommended that you
+read the entire document before proceeding.
+
+Parts of this document are somewhat specific to FreeBSD 4.1.1-RELEASE and
+later, while parts also assume that you're installing the latest version of
+the EMBOSS port available at the time of writing.
+
+
+* ------------------------------------------------------------------------- *
+* Installing EMBOSS from the port                                           *
+* ------------------------------------------------------------------------- *
+
+Installing the EMBOSS port on a FreeBSD system can be as simple as issuing a
+single command!
+
+First, log in to your machine as the root user, or use the "su" command to
+become root.  Now, change to the EMBOSS port's directory:
+
+# cd /usr/ports/biology/emboss
+
+Then, still as root, do a "make install":
+
+# make install
+
+That's it!  You will be presented by a graphical screen where you can select
+which optional components you want to install (default: all), and then you
+can sit back and relax while EMBOSS is fetched, patched, compiled and
+installed.
+
+If you want to clean up the temporary files created by the installation of
+the EMBOSS port, follow the "make install"  by a "make clean" (still in the
+"emboss" port directory):
+
+# make clean
+
+Alternatively, you can apply a little Unix shell magic and accomplish all
+three steps with but a single command!
+
+# cd /usr/ports/biology/emboss && make install clean
+
+
+* ------------------------------------------------------------------------- *
+* Configuring the EMBOSS installation                                       *
+* ------------------------------------------------------------------------- *
+
+The configuration of EMBOSS is described in some detail in the EMBOSS
+Administrators Guide[1] and will not be covered here in great detail, except
+for a few details which pertain to the FreeBSD EMBOSS port.
+
+Once EMBOSS has been installed successfully you will need to copy (or move)
+/usr/local/etc/emboss.default.sample to /usr/local/etc/emboss.default.  This
+is the system-wide configuration file for EMBOSS.
+
+At the top of the emboss.default.sample installed by the port, there are
+three variables which may need to be edited to suit a particular site's
+requirements:
+
+- "emboss_data" is set to "/usr/local/share/EMBOSS/data", but is commented
+  out since this is the compiled-in default location.  EMBOSS stores various
+  ancillary databases and data files here.
+
+- "emboss_tempdata" is a convenient variable which is used later in the
+  configuration file and shoult point to a location where a minimal set of
+  sequence databases are stored.  It should be customised for a specific
+  site.
+
+- "emboss_logfile" is set to "/var/log/emboss.log", but is commented out.  If
+  it is required that EMBOSS usage be logged, this variable should be
+  uncommented and the log file must be created and be writable by all EMBOSS
+  users.
+
+A user who wishes to use those programs in the EMBOSS suite which produce
+graphical output may have to set the following environment variable:
+
+- set PLPLOT_LIB to:     "/usr/local/share/EMBOSS"
+
+A file called ".embossrc" in a user's home directory will override settings
+in the system-wide configuration file (/usr/local/etc/emboss.default).
+
+An environment variable called "EMBOSSRC" can be set to the location of an
+alternative EMBOSS configuration file, should the user wish to use neither
+the system-wide default configuration file nor his own ".embossrc".
+
+[1] The Guide may be found at: ftp://ftp.no.embnet.org/pub/EMBOSS-extras/
+
+
+* ------------------------------------------------------------------------- *
+* What does the port installation do?                                       *
+* ------------------------------------------------------------------------- *
+
+Doing a "make install" in the EMBOSS port directory as described above will
+initiate a chain of events:
+
+1. EMBOSS depends on a number of libraries and applications being installed
+   on your system.  The FreeBSD ports system keeps track of such depen-
+   dencies, and will automatically fetch and install these libraries and
+   applications first if required.
+
+2. "EMBASSY" applications are third party programs which have been modified
+   to work with EMBOSS, to the extent of sharing the same "look and feel".
+   During the install process the EMBOSS port will present you with a
+   graphical menu screen where you can choose which EMBASSY applications you
+   want to install.
+
+3. The packages containing the EMBOSS source code and the source code of
+   selected EMBASSY applications will automatically be fetched from a
+   distribution site if they do not already reside on your system.
+
+4. Any patches necessary to allow EMBOSS to work properly on FreeBSD will be
+   applied.
+
+5. The EMBOSS suite (including EMBASSY applications) will be compiled from
+   the source code.  
+
+6. The binary executables, EMBOSS documentation, configuration file, and all
+   other components will be installed to various locations in the filesystem:
+   - the EMBOSS programs are installed in /usr/local/bin
+   - shared and library data is installed in /usr/local/share/EMBOSS
+   - documentation is installed in /usr/local/share/doc/EMBOSS
+   - a sample configuration file is installed as
+     /usr/local/etc/emboss.default.sample
+
+
+* ------------------------------------------------------------------------- *
+* Installing EMBOSS from the package                                        *
+* ------------------------------------------------------------------------- *
+
+Installing EMBOSS from the FreeBSD port is the simplest and arguably the most
+"correct" way of installing the suite on FreeBSD.  However, precompiled
+binary "packages" can also be built from FreeBSD ports and it is possible to
+install EMBOSS from such a package.
+
+You will find a link to the FreeBSD binary package for EMBOSS on this page:
+
+  http://www.freebsd.org/ports/biology.html
+
+Search for the word "emboss" on that page.  The binary package may be
+downloaded by clicking on the "Package" link in the "emboss" section.  It
+will be named something like "emboss-1.0.0.tgz" (the version number will
+vary, of course).  Once you have this package on your local filesystem, you
+can install it (as root):
+
+# pkg_add emboss-1.0.0.tgz
+
+Note that you may also have to download packages for certain libraries and
+applications upon which EMBOSS depends.  You'll find links to these in the
+"emboss" section on the web page given above.  Simply place these additional
+packages in the same directory as the EMBOSS package before executing the
+"pkg_add" command.
+
+
+* ------------------------------------------------------------------------- *
+* A brief primer on the FreeBSD ports tree (and how to update it)           *
+* ------------------------------------------------------------------------- *
+
+The FreeBSD ports tree provides a simple and effective way to install
+applications on your FreeBSD system.  The ports tree is normally rooted at
+the directory /usr/ports in the filesystem.  If /usr/ports does not exist (or
+is empty) on your system, it means you chose not to install the ports tree
+during the installation of the operating system.  (If that is the case, then
+following these instructions on updating the ports tree will also suffice to
+create a new ports tree on your system!)
+
+The ports tree is divided into many categories, each of which appears as a
+subdirectory under /usr/ports.  The EMBOSS port is in the "biology" category
+(and subdirectory).
+
+Before you go to the trouble of installing the EMBOSS port, you may want to
+ensure that the ports tree on your system contains the most recent version of
+it.  To check the version of your EMBOSS port, execute the following commands
+(you do not have to be root):
+
+$ cd /usr/ports
+$ make search key=emboss
+
+The output should be similar to the following:
+
+Port:   emboss-1.0.0
+Path:   /usr/ports/biology/emboss
+Info:   A collection of open source tools for genetic sequence analysis
+Maint:  johann@egenetics.com
+Index:  biology
+B-deps: gd-1.8.3 gettext-0.10.35 gmake-3.79.1 jpeg-6b libtool-1.3.4 png-1.0.8
+R-deps: gd-1.8.3 jpeg-6b png-1.0.8
+
+The "Port:" line indicates the version of EMBOSS in your ports tree.  If it
+lags significantly behind the version of EMBOSS available on the EMBOSS web
+site, you should probably update your ports tree before installing the EMBOSS
+port.
+
+You can find the most recent available version of the EMBOSS port for FreeBSD
+by scanning through this page:
+
+  http://www.freebsd.org/ports/biology.html
+
+If the version given on this page *also* lags well behind the latest release,
+then please email the maintainer of the FreeBSD EMBOSS port, given in the
+"Maint:" line of the output given above.
+
+* Updating the FreeBSD ports tree
+
+Updating the FreeBSD ports tree is quite simple, and is a good thing to learn
+to do... and then do regularly.  The FreeBSD ports tree (and indeed the
+FreeBSD source and documentation trees as well) is available via a protocol
+called CVSup.  Before you can update your ports tree you need to install the
+CVSup client program.  As root:
+
+# cd /usr/ports/net/cvsup-bin && make install clean
+
+Next, you should find a FreeBSD CVSup mirror, preferably one near you.
+FreeBSD CVSup mirrors are usually named:
+
+  cvsup[number][.countrycode].freebsd.org
+
+In the United Kingdom, you may get "cvsup.uk.freebsd.org" and
+"cvsup2.uk.freebsd.org", whereas in the United States you may find
+"cvsup.freebsd.org", "cvsup2.freebsd.org", etc.
+
+If you can't find a mirror near you, you can always fall back on the central
+"cvsup.freebsd.org".
+
+You now need to ensure that the following lines appear in /etc/make.conf on
+your system:
+
+SUP_UPDATE=	yes
+SUP=		/usr/local/bin/cvsup
+SUPFLAGS=	-g -L 2
+SUPHOST=	cvsup.uk.freebsd.org
+PORTSSUPFILE=	/usr/share/examples/cvsup/ports-supfile
+
+"SUPHOST" should refer to the CVSup server you have chosen to use.
+(Note that you can copy these lines into /etc/make.conf from
+/etc/defaults/make.conf, and uncomment them.)
+
+You can now update your ports tree by simply changing to /usr/ports and
+executing, as root:
+
+# make update
+
+After your ports tree has been updated, you can optionally rebuild the ports
+index.  This allows you (amongst other things) to search the ports tree with
+a "make search".  To do so, simply go to /usr/ports and (as root) do a
+
+# make index
+
+*** Note for advanced users no. 1 ***
+
+The update of the ports tree is an ideal candidate process for inclusion in
+the daily housekeeping tasks.  To do so, create the following little shell
+script in "/usr/local/etc/periodic/daily/", naming it "500.portsupdate".
+
+#!/bin/sh
+if [ -x /usr/bin/make -a -f /usr/ports/Makefile ] ; then
+    echo ""
+    echo "Starting CVSup update of /usr/ports:"
+    echo "    (output saved to /var/tmp/portsupdate.out)"
+    cd /usr/ports && make update index > /var/tmp/portsupdate.out 2>&1 &
+fi
+
+*** Note for advanced users no. 2 ***
+
+If your bandwidth is restricted or you have some other reason for not wanting
+to update the entire ports tree, you may use a utility called "porteasy" to
+update only the required parts of the ports tree.  Porteasy itself is
+available as a port in the "misc" category.  Once it is installed, you can
+study its man page for further details.
+
+
+* ------------------------------------------------------------------------- *
+* Updating the EMBOSS port                                                  *
+* ------------------------------------------------------------------------- *
+
+To find out whether your ports tree contains a newer version of EMBOSS than
+you currently have installed, issue the following command:
+
+$ pkg_version -v | grep emboss
+
+If a newer EMBOSS is available, the output will resemble this:
+
+"emboss-1.0.0             <   needs updateing (index has 1.7.0)"
+
+If you simply want to find the version of EMBOSS installed on your system,
+issue this command:
+
+$ pkg_info | grep emboss
+
+The output may look something like this:
+
+"emboss-1.0.0 A collection of open source tools for genetic sequence analysis"
+
+Either command tells you that the installed version of the port is
+"emboss-1.0.0".  You need to deinstall the old version of the port first
+before you can install a later version.
+
+You can update the installed port with the minimum of disruption by following
+the following procedure (as root).  The "pkg_delete" command must be given
+the currently installed version of the EMBOSS port as parameter:
+
+# cd /usr/ports/biology/emboss
+# make build
+# pkg_delete emboss-1.0.0
+# make install clean
+
+Note that this update will NOT overwrite the system-wide EMBOSS configuration
+file, /usr/local/etc/emboss.default.  It will, however, create a new sample
+configuration file, /usr/local/etc/emboss.default.sample.  You may want to
+merge in any changes from the new sample configuration file manually after
+the upgrade.
+
+
+* ------------------------------------------------------------------------- *
+* When in doubt...                                                          *
+* ------------------------------------------------------------------------- *
+
+If you are uncertain about anything, you may always email the current
+maintainer of the FreeBSD port of EMBOSS.  As shown before, you can find out
+who the maintainer is by changing directory to /usr/ports and issuing this
+command:
+
+$ make search key=emboss
+
+At the time of writing, the author of this document maintains the FreeBSD
+EMBOSS port.
+
+There exists a mailing list for FreeBSD users in bioinformatics and other
+biocomputing fields.  The members of this mailing list are aware of the
+EMBOSS port and may also be able to provide some support.  You may subscribe
+to this mailing list by filling in the web form at the following URL:
+
+  http://www.plig.net/mailman/listinfo/freebsd-bio 
+
+
+* ------------------------------------------------------------------------- *
+
+-- Johann Visagie <johann@egenetics.com>
+
+$Id: EMBOSS-FreeBSD-HOWTO.txt,v 1.1 2001/03/15 13:52:37 gwilliam Exp $

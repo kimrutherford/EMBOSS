@@ -1,0 +1,76 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: x65923.diffseq</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: diffseq
+# Rundate: Sun 15 Jul 2007 12:00:00
+# Commandline: diffseq
+#    [-asequence] tembl:x65923
+#    [-bsequence] tembl:ay411291
+# Report_format: diffseq
+# Report_file: x65923.diffseq
+# Additional_files: 2
+# 1: X65923.diffgff (Feature file for first sequence)
+# 2: AY411291.diffgff (Feature file for second sequence)
+########################################
+
+#=======================================
+#
+# Sequence: X65923     from: 1   to: 518
+# HitCount: 1
+#
+# Compare: AY411291     from: 1   to: 402
+# 
+# X65923 overlap starts at 57
+# AY411291 overlap starts at 1
+# 
+#
+#=======================================
+
+
+X65923 284-284 Length: 1
+Feature: CDS 57-458 gene='fau' db_xref='GDB:135476' db_xref='GOA:P35544' db_xref='GOA:P62861' db_xref='HGNC:3597' db_xref='UniProtKB/Swiss-Prot:P35544' db_xref='UniProtKB/Swiss-Prot:P62861' protein_id='CAA46716.1'
+Feature: misc_feature 279-458 note='S30 part'
+Sequence: t
+Sequence: c
+Feature: gene 1-402 gene='FAU' locus_tag='HCM4175'
+AY411291 228-228 Length: 1
+
+#---------------------------------------
+#
+# Overlap_end: 458 in X65923
+# Overlap_end: 402 in AY411291
+# 
+# SNP_count: 1
+# Transitions: 1
+# Transversions: 0
+#
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_hitcount: 1
+#---------------------------------------
+</pre>
+</td></tr></table><p>
+<p><h3>File: AY411291.diffgff</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+##gff-version 2.0
+##date 2006-07-15
+##Type DNA AY411291
+AY411291	diffseq	conflict	228	228	1.000	+	.	Sequence "AY411291.1" ; note "SNP in X65923" ; replace "t"
+</pre>
+</td></tr></table><p>
+<p><h3>File: X65923.diffgff</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+##gff-version 2.0
+##date 2006-07-15
+##Type DNA X65923
+X65923	diffseq	conflict	284	284	1.000	+	.	Sequence "X65923.1" ; note "SNP in AY411291" ; replace "c"
+</pre>
+</td></tr></table><p>

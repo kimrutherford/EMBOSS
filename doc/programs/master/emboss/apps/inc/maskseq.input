@@ -1,0 +1,14 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: prot.fasta</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+&gt;FASTA F00001 FASTA FORMAT PROTEIN SEQUENCE
+ACDEFGHIKLMNPQRSTVWY
+ACDEFGHIKLMNPQRSTVWY
+ACDEFGHIKLMNPQRSTVWY
+ACDEFGHIKLMNPQRSTVWY
+ACDEFGHIKLMNPQRSTVWY
+</pre>
+</td></tr></table><p>

@@ -1,0 +1,57 @@
+application: cutseq [
+  documentation: "Removes a specified section from a
+                  sequence."
+  groups: "Edit"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  sequence: sequence [
+    parameter: "Y"
+    type: "gapany"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: from [
+    standard: "Y"
+    default: "$(sequence.begin)"
+    minimum: "$(sequence.begin)"
+    maximum: "$(sequence.end)"
+    information: "Start of region to delete"
+    help: "This is the start position (inclusive) of the section of
+           the sequence that you wish to remove."
+    expected: "Start of sequence (0)"
+  ]
+
+  integer: to [
+    standard: "Y"
+    default: "$(sequence.end)"
+    maximum: "$(sequence.end)"
+    minimum: "$(from)"
+    information: "End of region to delete"
+    help: "This is the end position (inclusive) of the section of the
+           sequence that you wish to remove."
+    expected: "End of sequence (0)"
+  ]
+
+endsection: required
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  seqout: outseq [
+    parameter: "Y"
+  ]
+
+endsection: output

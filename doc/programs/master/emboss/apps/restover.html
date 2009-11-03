@@ -1,0 +1,164 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: restover
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+restover
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/restover.ione" -->
+
+<H2>
+    Description
+</H2>
+
+The Restriction Enzyme database (REBASE) is a collection of information
+about restriction enzymes and related proteins.  It contains published
+and unpublished references, recognition and cleavage sites,
+isoschizomers, commercial availability, methylation sensitivity, crystal
+and sequence data.  DNA methyltransferases, homing endonucleases,
+nicking enzymes, specificity subunits and control proteins are also
+included.  Most recently, putative DNA methyltransferases and
+restriction enzymes, as predicted from analysis of genomic sequences,
+are also listed. 
+
+<p>
+
+The home page of REBASE is: 
+<A HREF="http://rebase.neb.com/">http://rebase.neb.com/</A>
+
+<p>
+
+<b>restover</b> takes a specified sequence and a short sequence of a
+cut-site overhang and searches the REBASE database for matching enzymes
+that create the desired overhang sequence when they cut the
+input sequence. 
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/restover.usage" -->
+
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/restover.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/restover.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+<b>restover</b> reads in a normal nucleic acid sequence USA.
+
+<p>
+
+<!--#include file="inc/restover.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/restover.output" -->
+
+<p>
+
+The output from <b>restover</b> is a simple text one.  The base number,
+restriction enzyme name, recognition site and cut positions are shown. 
+Note that cuts are always to the right of the residue shown and that 5'
+cuts are referred to by their associated 3' number sequence.  The
+program reports enzymes that cut at two or four sites.
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+<!--#include file="inc/localfiles.ihtml" -->
+
+<p>
+
+<!--#include file="inc/refiles.ihtml" -->
+
+<H2>
+    Notes
+</H2>
+
+The data files must have been created before running this program.  This
+is done by running the <b>rebaseextract</b> program with the "withrefm" file
+from an REBASE release.  You may have to ask your system manager to do
+this. 
+
+<H2>
+    References
+</H2>
+None.
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/restover.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/bjagla.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/restover.history" -->
+
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/restover.comment" -->
+
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,135 @@
+application: msbar [
+  documentation: "Mutate sequence beyond all recognition"
+  groups: "Nucleic:Mutation, Protein:Mutation"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "any"
+  ]
+
+  seqall: othersequence [
+    type: "any"
+    default: "asis:N"
+    information: "Other sequences that the mutated result
+                  should not match"
+    help: "If you require that the resulting mutated sequence should
+           not match a set of other sequences, then you can specify that set
+           of sequences here. For example, if you require that the mutated
+           sequence should not be the same as the input sequence, enter the
+           input sequence here. If you want the result to be different to
+           previous results of this program, specify the previous result
+           sequences here. The program will check that the result does not
+           match the sequences specified here before writing it out. If a
+           match is found, then the mutation is started again with a fresh
+           copy of the input sequence. If, after 10 such retries, there is
+           still a match to the set of sequence given here, then the matching
+           mutated sequence is written with a warning message."
+    nullok: "Y"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: count [
+    standard: "Y"
+    default: "1"
+    minimum: "0"
+    information: "Number of times to perform the mutation
+                  operations"
+  ]
+
+  list: point [
+    standard: "Y"
+    default: "0"
+    minimum: "1"
+    maximum: "4"
+    header: "Point mutation operations"
+    values: "0:None; 1:Any of the following; 2:Insertions;
+             3:Deletions; 4:Changes; 5:Duplications; 6:Moves"
+    delimiter: ";"
+    codedelimiter: ":"
+    information: "Types of point mutations to perform"
+  ]
+
+  list: block [
+    standard: "Y"
+    default: "0"
+    minimum: "1"
+    maximum: "4"
+    header: "Block mutation operations"
+    values: "0:None; 1:Any of the following; 2:Insertions;
+             3:Deletions; 4:Changes; 5:Duplications; 6:Moves"
+    delimiter: ";"
+    codedelimiter: ":"
+    information: "Types of block mutations to perform"
+  ]
+
+  list: codon [
+    standard: "@(!$(acdprotein))"
+    default: "0"
+    minimum: "1"
+    maximum: "4"
+    header: "Codon mutation operations"
+    values: "0:None; 1:Any of the following; 2:Insertions;
+             3:Deletions; 4:Changes; 5:Duplications; 6:Moves"
+    delimiter: ";"
+    codedelimiter: ":"
+    information: "Types of codon mutations to perform"
+    help: "Types of codon mutations to perform. These are only done if
+           the sequence is nucleic."
+  ]
+
+endsection: required
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  boolean: inframe [
+    additional: "@(!$(acdprotein))"
+    default: "N"
+    information: "Do 'codon' and 'block' operations in frame"
+  ]
+
+endsection: additional
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  integer: minimum [
+    default: "1"
+    minimum: "0"
+    information: "Minimum size for a block mutation"
+  ]
+
+  integer: maximum [
+    default: "10"
+    minimum: "$(minimum)"
+    information: "Maximum size for a block mutation"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  seqoutall: outseq [
+    parameter: "Y"
+  ]
+
+endsection: output

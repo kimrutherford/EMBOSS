@@ -1,0 +1,128 @@
+application: transeq [
+  documentation: "Translate nucleic acid sequences"
+  groups: "Nucleic:Translation"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "nucleotide"
+  ]
+
+endsection: input
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  list: frame [
+    additional: "Y"
+    default: "1"
+    minimum: "1"
+    maximum: "6"
+    header: "Translation frames"
+    values: "1:1, 2:2, 3:3, F:Forward three frames, -1:-1, -2:-2,
+             -3:-3, R:Reverse three frames, 6:All six frames"
+    delimiter: ","
+    codedelimiter: ":"
+    information: "Frame(s) to translate"
+  ]
+
+  list: table [
+    additional: "Y"
+    default: "0"
+    minimum: "1"
+    maximum: "1"
+    header: "Genetic codes"
+    values: "0:Standard; 1:Standard (with alternative initiation
+             codons); 2:Vertebrate Mitochondrial; 3:Yeast Mitochondrial;
+             4:Mold, Protozoan, Coelenterate Mitochondrial and
+             Mycoplasma/Spiroplasma; 5:Invertebrate Mitochondrial; 6:Ciliate
+             Macronuclear and Dasycladacean; 9:Echinoderm Mitochondrial;
+             10:Euplotid Nuclear; 11:Bacterial; 12:Alternative Yeast Nuclear;
+             13:Ascidian Mitochondrial; 14:Flatworm Mitochondrial;
+             15:Blepharisma Macronuclear; 16:Chlorophycean Mitochondrial;
+             21:Trematode Mitochondrial; 22:Scenedesmus obliquus;
+             23:Thraustochytrium Mitochondrial"
+    delimiter: ";"
+    codedelimiter: ":"
+    information: "Code to use"
+    knowntype: "genetic code"
+  ]
+
+  range: regions [
+    additional: "Y"
+    default: ""
+    information: "Regions to translate (eg: 4-57,78-94)"
+    help: "Regions to translate. \
+           If this is left blank, then the complete sequence is translated. \
+           A set of regions is specified by a set of pairs of positions. \
+           The positions are integers. \
+           They are separated by any non-digit, non-alpha character. \
+           Examples of region specifications are: \
+           24-45, 56-78 \
+           1:45, 67=99;765..888 \
+           1,5,8,10,23,45,57,99 \
+           Note: you should not try to use this option with any other frame
+           than the default, -frame=1"
+    expected: "Whole sequence"
+  ]
+
+  boolean: trim [
+    additional: "Y"
+    default: "N"
+    information: "Trim trailing X's and *'s"
+    help: "This removes all 'X' and '*' characters from the right end
+           of the translation. The trimming process starts at the end and
+           continues until the next character is not a 'X' or a '*'"
+  ]
+
+  boolean: clean [
+    additional: "Y"
+    default: "N"
+    information: "Change all *'s to X's"
+    help: "This changes all STOP codon positions from the '*'
+           character to 'X' (an unknown residue). This is useful because some
+           programs will not accept protein sequences with '*' characters in
+           them."
+  ]
+
+endsection: additional
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  boolean: alternative [
+    default: "N"
+    information: "Define frame '-1' as starting in the last
+                  codon"
+    help: "The default definition of frame '-1' is the
+           reverse-complement of the set of codons used in frame 1. (Frame -2
+           is the set of codons used by frame 2, similarly frames -3 and 3).
+           This is a common standard, used by the Staden package and other
+           programs. If you prefer to define frame '-1' as using the set of
+           codons starting with the last codon of the sequence, then set this
+           to be true."
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  seqoutall: outseq [
+    parameter: "Y"
+    extension: "pep"
+    type: "stopprotein"
+  ]
+
+endsection: output

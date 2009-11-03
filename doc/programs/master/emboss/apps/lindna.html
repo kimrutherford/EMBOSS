@@ -1,0 +1,254 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: lindna
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+lindna
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/lindna.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+
+The program 'lindna' draws linear maps of DNA constructs.
+
+<p>
+It uses the graphical shapes: ticks, ranges, and blocks to
+represent genetic markers (e.g, genes and ESTs) and places them
+according to their position in a DNA fragment.  The markers can be
+organized in different groups. 
+
+<p>
+The program reads in one input file in which the user specifies the
+names and positions of the genetic markers.  In this file the user also
+enters data for controlling the appearance of the markers. 
+
+<p>
+A refined customization of the drawing can be achieved by running the
+program with '-options' on the command line and changing the values of
+the desired parameters. 
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/lindna.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/lindna.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/lindna.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<!--#include file="inc/lindna.input" -->
+
+
+<p>
+
+Blank lines in the input file are ignored. 
+
+<p>
+
+The file is organized in several fields separated by one or more space
+or TAB characters.
+
+<p>
+
+The first non-blank line gives the start position of the DNA fragment to
+be drawn after the keyword 'Start'.  The end position is on the second
+line following the keyword 'End'. 
+
+<p>
+
+Then, one or more groups (up to a maximum of 20) of genetic markers are
+defined.  Each group begins with a line consisting of the keyword
+'group' and ends with a line consisting of the keyword 'endgroup'. 
+
+<p>
+
+If desired, a group name can be given on the very next line. Spaces 
+and tabulations are allowed but only the first 20 characters of that name 
+(including spaces) will be displayed. 
+
+<p>
+
+Next, the individual markers (up to a maximum of 1000) of the group are
+described.  Each marker begins with a line consisting of the keyword
+'label' and ends with a line consisting of the keyword 'endlabel'.
+
+<p>
+
+Do not start a new marker (by using a 'label' line) before you have
+closed the previous marker (by using an 'endlabel' line).  You must end
+a previous marker specification before starting a new one.  i.e.  do not
+overlap marker specifications in the input file. 
+
+<p>
+
+For each marker, the line following the 'label' line describes the
+marker. Three types of markers can be drawn: ticks, blocks, and ranges. 
+
+<p>
+
+For a tick, the descriptive line begins with the keyword 'Tick',
+followed by the position of the tick in the DNA fragment, and a number
+from 0 to 15 specifying the color in which the tick will be drawn (a
+list of available colors is given below).  If desired, one or more names
+can be written above the tick.  In this case an optional letter H or V
+should be added to the line.  H or V indicate whether the text will be
+horizontal or vertical, respectively.  If no letter is specified, H is
+assumed by default.  A list of one or more names can be given on the
+next lines with one name per line. 
+
+<p>
+
+For a block, the descriptive line begins with the keyword 'Block',
+followed by the start and end positions of the block in the DNA
+fragment, and the number of the block's color.  If desired, one or more
+names can be written above the block.  Names are given on the following
+lines.  An optional letter H or V can be added to the end of the
+descriptive line to specify the orientation of the name(s). 
+
+<p>
+
+For a range, the descriptive line begins with the keyword 'Range',
+followed by the start and end positions of the range in the DNA
+fragment.  Next on the line are the types of boundaries that are to be
+drawn.  The user can choose among '&gt;', '&lt;', '[', ']' and '|' for
+both start and end boundaries.  If none of these types is wanted for a
+given boundary, then a point '.' must be entered.  Next is the color
+number.  If desired, one or more names can be written above the range. 
+Names are given on the following lines.  An optional letter H or V can
+be added to the end of the descriptive line to specify the orientation
+of the name(s). 
+
+<p>
+
+For any type of markers, names will be written in the same color as the
+marker.  Also, try to avoid long names. 
+
+<p>
+
+The colors defined in the PLPLOT graphics library are:
+
+<p>
+
+0 "BLACK", 1 "RED", 2 "YELLOW", 3 "GREEN", 4 "AQUAMARINE",
+5 "PINK", 6 "WHEAT", 7 "GREY", 8 "BROWN", 9 "BLUE", 10 "BLUEVIOLET",
+11 "CYAN", 12 "TURQUOISE", 13 "MAGENTA", 14 "SALMON", and 15 "WHITE".
+
+<p>
+
+This format can also be used for the program <a
+href="cirdna.html">"cirdna". </a>
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+Output is to the specified graphics device.
+
+<p>
+
+<!--#include file="inc/lindna.output" -->
+
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/lindna.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/ntourasse.address" -->
+
+<H2>
+    History
+</H2>
+
+
+<!--#include file="inc/lindna.history" -->
+
+<H2>
+    Target users
+</H2>
+
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/lindna.comment" -->
+
+</BODY>
+</HTML>
+

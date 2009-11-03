@@ -1,0 +1,258 @@
+
+                               extractalign 
+
+
+
+Function
+
+   Extract regions from a sequence alignment
+
+Description
+
+   extractalign allows you to specify one or more regions of a sequence
+   alignment to extract sub-sequences from to build up a resulting
+   sub-sequence alignment. extractakign reads in a sequence alignment and
+   a set of regions of that alignment as specified by pairs of start and
+   end positions (either on the command-line or contained in a file)
+   using gapped alignment positions as the coordinates, and writes out
+   the specified regions of the input sequence in the order in which they
+   have been specified. Thus, if the sequence "AAAGGGTTT" has been input
+   and the regions: "7-9, 3-4" have been specified, then the output
+   sequence will be: "TTTAG".
+
+Usage
+
+   Here is a sample session with extractalign
+
+   Extract the region from position 10 to 20:
+
+
+% extractalign dna.msf result.seq -regions '11-30' 
+Extract regions from a sequence alignment
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqset     (Aligned) sequence set filename and optional
+                                  format, or reference (input USA)
+   -regions            range      [Whole sequence] Regions to extract.
+                                  A set of regions is specified by a set of
+                                  pairs of positions.
+                                  The positions are integers.
+                                  They are separated by any non-digit,
+                                  non-alpha character.
+                                  Examples of region specifications are:
+                                  24-45, 56-78
+                                  1:45, 67=99;765..888
+                                  1,5,8,10,23,45,57,99
+  [-outseq]            seqoutall  [.] Sequence set(s)
+                                  filename and optional format (output USA)
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   extractalign reads a normal sequence USA.
+
+  Input files for usage example
+
+  File: dna.msf
+
+!!NA_MULTIPLE_ALIGNMENT
+
+ dna.msf  MSF: 120  Type: N  January 01, 1776  12:00  Check: 3196 ..
+
+ Name: MSFM1          Len:   120  Check:  8587  Weight:  1.00
+ Name: MSFM2          Len:   120  Check:  6178  Weight:  1.00
+ Name: MSFM3          Len:   120  Check:  8431  Weight:  1.00
+
+//
+
+        MSFM1  ACGTACGTAC GTACGTACGT ACGTACGTAC GTACGTACGT ACGTACGTAC
+        MSFM2  ACGTACGTAC GTACGTACGT ....ACGTAC GTACGTACGT ACGTACGTAC
+        MSFM3  ACGTACGTAC GTACGTACGT ACGTACGTAC GTACGTACGT CGTACGTACG
+
+        MSFM1  GTACGTACGT ACGTACGTAC GTACGTACGT ACGTACGTAC GTACGTACGT
+        MSFM2  GTACGTACGT ACGTACGTAC GTACGTACGT ACGTACGTAC GTACGTACGT
+        MSFM3  TACGTACGTA CGTACGTACG TACGTACGTA ACGTACGTAC GTACGTACGT
+
+        MSFM1  ACGTACGTAC GTACGTACGT
+        MSFM2  ACGTACGTTG CAACGTACGT
+        MSFM3  ACGTACGTAC GTACGTACGT
+
+   You can specifiy a file of ranges to extract by giving the '-regions'
+   qualifier the value '@' followed by the name of the file containing
+   the ranges. (eg: '-regions @myfile').
+
+   The format of the range file is:
+     * Comment lines start with '#' in the first column.
+     * Comment lines and blank lines are ignored.
+     * The line may start with white-space.
+     * There are two positive (integer) numbers per line separated by one
+       or more space or TAB characters.
+     * The second number must be greater or equal to the first number.
+     * There can be optional text after the two numbers to annotate the
+       line.
+     * White-space before or after the text is removed.
+
+   An example range file is:
+
+# this is my set of ranges
+12   23
+ 4   5       this is like 12-23, but smaller
+67   10348   interesting region
+
+Output file format
+
+   The output is a normal sequence file.
+
+  Output files for usage example
+
+  File: result.seq
+
+>MSFM1
+GTACGTACGTACGTACGTAC
+>MSFM2
+GTACGTACGT----ACGTAC
+>MSFM3
+GTACGTACGTACGTACGTAC
+
+   If the option '-separate' is used then each specified region is
+   written to the output file as a separate sequence. The name of the
+   sequence is created from the name of the original sequence with the
+   start and end positions of the range appended with underscore
+   characters between them,
+
+   For example: "XYZ region 2 to 34" is written as: "XYZ_2_34"
+
+Data files
+
+   None.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   Several warning messages about malformed region specifications:
+     * Non-digit found in region ...
+     * Unpaired start of a region found in ...
+     * Non-digit found in region ...
+     * The start of a pair of region positions must be smaller than the
+       end in ...
+
+Exit status
+
+   It exits with status 0, unless a region is badly constructed.
+
+Known bugs
+
+   None noted.
+
+Comments
+
+See also
+
+   Program name                         Description
+   biosed       Replace or delete sequence sections
+   codcopy      Reads and writes a codon usage table
+   cutseq       Removes a specified section from a sequence
+   degapseq     Removes gap characters from sequences
+   descseq      Alter the name or description of a sequence
+   entret       Reads and writes (returns) flatfile entries
+   extractfeat  Extract features from a sequence
+   extractseq   Extract regions from a sequence
+   listor       Write a list file of the logical OR of two sets of sequences
+   makenucseq   Creates random nucleotide sequences
+   makeprotseq  Creates random protein sequences
+   maskfeat     Mask off features of a sequence
+   maskseq      Mask off regions of a sequence
+   newseq       Type in a short new sequence
+   noreturn     Removes carriage return from ASCII files
+   notseq       Exclude a set of sequences and write out the remaining ones
+   nthseq       Writes one sequence from a multiple set of sequences
+   pasteseq     Insert one sequence into another
+   revseq       Reverse and complement a sequence
+   seqret       Reads and writes (returns) sequences
+   seqretsplit  Reads and writes (returns) sequences in individual files
+   skipseq      Reads and writes (returns) sequences, skipping first few
+   splitter     Split a sequence into (overlapping) smaller sequences
+   trimest      Trim poly-A tails off EST sequences
+   trimseq      Trim ambiguous bits off the ends of sequences
+   union        Reads sequence fragments and builds one sequence
+   vectorstrip  Strips out DNA between a pair of vector sequences
+   yank         Reads a sequence range, appends the full USA to a list file
+
+Author(s)
+
+   Peter Rice (pmr © ebi.ac.uk)
+   Informatics Division, European Bioinformatics Institute, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

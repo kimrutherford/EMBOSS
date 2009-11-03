@@ -1,0 +1,583 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: fuzzpro
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+fuzzpro
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+<H2>
+    Function
+</H2>
+Protein pattern search
+<H2>
+    Description
+</H2>
+
+fuzzpro uses PROSITE style patterns to search protein sequences. 
+
+<p>
+Patterns are specifications of a (typically short) length of sequence to
+be found.  They can specify a search for an exact sequence or they can
+allow various ambiguities, matches to variable lengths of sequence and
+repeated subsections of the sequence. 
+
+<p>
+fuzzpro intelligently selects the optimum searching algorithm to use,
+depending on the complexity of the search pattern specified. 
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with fuzzpro</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>fuzzpro </b>
+Protein pattern search
+Input protein sequence(s): <b>tsw:*</b>
+Search pattern: <b>[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G</b>
+Output report [edd1_rat.fuzzpro]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Protein sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -pattern            pattern    The standard IUPAC one-letter codes for the
+                                  amino acids are used.
+                                  The symbol 'x' is used for a position where
+                                  any amino acid is accepted.
+                                  Ambiguities are indicated by listing the
+                                  acceptable amino acids for a given position,
+                                  between square parentheses '[ ]'. For
+                                  example: [ALT] stands for Ala or Leu or Thr.
+                                  Ambiguities are also indicated by listing
+                                  between a pair of curly brackets '{ }' the
+                                  amino acids that are not accepted at a given
+                                  position. For example: {AM} stands for any
+                                  amino acid except Ala and Met.
+                                  Each element in a pattern is separated from
+                                  its neighbor by a '-'. (Optional in
+                                  fuzzpro).
+                                  Repetition of an element of the pattern can
+                                  be indicated by following that element with
+                                  a numerical value or a numerical range
+                                  between parenthesis. Examples: x(3)
+                                  corresponds to x-x-x, x(2,4) corresponds to
+                                  x-x or x-x-x or x-x-x-x.
+                                  When a pattern is restricted to either the
+                                  N- or C-terminal of a sequence, that pattern
+                                  either starts with a '<' symbol or
+                                  respectively ends with a '>' symbol.
+                                  A period ends the pattern. (Optional in
+                                  fuzzpro).
+                                  For example, [DE](2)HS{P}X(2)PX(2,4)C
+  [-outfile]           report     [*.fuzzpro] Output report file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-pattern" associated qualifiers
+   -pformat            string     File format
+   -pmismatch          integer    Pattern mismatch
+   -pname              string     Pattern base name
+
+   "-outfile" associated qualifiers
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Protein sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-pattern</td>
+<td>The standard IUPAC one-letter codes for the amino acids are used.
+The symbol 'x' is used for a position where any amino acid is accepted.
+Ambiguities are indicated by listing the acceptable amino acids for a given position, between square parentheses '[ ]'. For example: [ALT] stands for Ala or Leu or Thr.
+Ambiguities are also indicated by listing between a pair of curly brackets '{ }' the amino acids that are not accepted at a given position. For example: {AM} stands for any amino acid except Ala and Met.
+Each element in a pattern is separated from its neighbor by a '-'. (Optional in fuzzpro).
+Repetition of an element of the pattern can be indicated by following that element with a numerical value or a numerical range between parenthesis. Examples: x(3) corresponds to x-x-x, x(2,4) corresponds to x-x or x-x-x or x-x-x-x.
+When a pattern is restricted to either the N- or C-terminal of a sequence, that pattern either starts with a '&lt;' symbol or respectively ends with a '&gt;' symbol.
+A period ends the pattern. (Optional in fuzzpro).
+For example, [DE](2)HS{P}X(2)PX(2,4)C</td>
+<td>Property value(s)</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output report file name</td>
+<td>Report output file</td>
+<td><i>&lt;*&gt;</i>.fuzzpro</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>fuzzpro</b> reads in normal protein sequence USAs. 
+
+<p>
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tsw:*' is a sequence entry in the example protein database 'tsw'
+<p>
+
+
+<h3>Pattern specification</h3>
+
+Patterns for fuzzpro are based on the format of pattern used in the
+PROSITE database, with the difference that the terminating dot '.' and
+the hyphens, '-', between the characters are optional. 
+
+<p>
+The PROSITE pattern definition from the PROSITE documentation follows. 
+
+<p>
+<ul>
+
+<li>The standard IUPAC one-letter codes for the amino acids are used.
+
+<li>The symbol `x' is used for a position where any amino acid is accepted.
+
+<li>Ambiguities are indicated by listing the acceptable amino acids for a
+given position, between square parentheses `[ ]'.  For example: [ALT]
+stands for Ala or Leu or Thr. 
+
+<li>Ambiguities are also indicated by listing between a pair of curly
+brackets `{ }' the amino acids that are not accepted at a given
+position.  For example: {AM} stands for any amino acid except Ala and
+Met. 
+
+<li>Each element in a pattern is separated from its neighbor by a `-'.
+(Optional in fuzzpro). 
+
+<li>Repetition of an element of the pattern can be indicated by following
+that element with a numerical value or a numerical range between
+parenthesis.  Examples: x(3) corresponds to x-x-x, x(2,4) corresponds to
+x-x or x-x-x or x-x-x-x. 
+
+<li>When a pattern is restricted to either the N- or C-terminal of a
+sequence, that pattern either starts with a `&lt;' symbol or respectively
+ends with a `&gt;' symbol. 
+
+<li>A period ends the pattern.  (Optional in fuzzpro). 
+
+<li>All other characters, including spaces are not allowed.
+
+</ul>
+
+<p>
+For example, in SWISSPROT entry 100K_RAT you can look for the pattern: 
+
+<pre>
+[DE](2)HS{P}X(2)PX(2,4)C
+</pre>
+
+<p>
+This means: Two Asps or Glus in any order followed by His, Ser, any
+residue other then Pro, then two of any residue followed by Pro followed
+by two to four of any residue followed by Cys. 
+
+<p>
+The search is case-independent, so 'AAA' matches 'aaa'. 
+
+<H2>
+    Output file format
+</H2>
+
+<p>
+
+The output is a standard EMBOSS report file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: embl,
+genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+feattable, motif, regions, seqtable, simple, srs, table, tagseq
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/ReportFormats.html">
+http://emboss.sf.net/docs/themes/ReportFormats.html</A>
+for further information on report formats.
+
+<p>
+<p>
+
+By default <b>fuzzpro</b> writes a 'seqtable' report file.
+
+<p>
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: edd1_rat.fuzzpro</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: fuzzpro
+# Rundate: Sun 15 Jul 2007 12:00:00
+# Commandline: fuzzpro
+#    -sequence "tsw:*"
+#    -pattern "[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G"
+# Report_format: seqtable
+# Report_file: edd1_rat.fuzzpro
+########################################
+
+#=======================================
+#
+# Sequence: ACTB1_FUGRU     from: 1   to: 375
+# HitCount: 1
+#
+# Pattern_name Mismatch Pattern
+# pattern1            0 [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
+#
+#=======================================
+
+  Start     End Pattern_name Mismatch Sequence
+     53      63 pattern1            . YVGDEAQSKRG
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: ACTB_OREMO     from: 1   to: 375
+# HitCount: 1
+#
+# Pattern_name Mismatch Pattern
+# pattern1            0 [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
+#
+#=======================================
+
+  Start     End Pattern_name Mismatch Sequence
+     53      63 pattern1            . YVGDEAQSKRG
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: ACTB2_FUGRU     from: 1   to: 375
+# HitCount: 1
+#
+# Pattern_name Mismatch Pattern
+# pattern1            0 [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
+#
+#=======================================
+
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+#---------------------------------------
+#=======================================
+#
+# Sequence: ACTSA_FUGRU     from: 1   to: 377
+# HitCount: 1
+#
+# Pattern_name Mismatch Pattern
+# pattern1            0 [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
+#
+#=======================================
+
+  Start     End Pattern_name Mismatch Sequence
+     55      65 pattern1            . YVGDEAQSKRG
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: ACTS_OREMO     from: 1   to: 377
+# HitCount: 1
+#
+# Pattern_name Mismatch Pattern
+# pattern1            0 [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
+#
+#=======================================
+
+  Start     End Pattern_name Mismatch Sequence
+     55      65 pattern1            . YVGDEAQSKRG
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: ACTSB_FUGRU     from: 1   to: 377
+# HitCount: 1
+#
+# Pattern_name Mismatch Pattern
+# pattern1            0 [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
+#
+#=======================================
+
+  Start     End Pattern_name Mismatch Sequence
+     55      65 pattern1            . YVGDEAQSKRG
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 8
+# Total_hitcount: 8
+#---------------------------------------
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="antigenic.html">antigenic</a></td>
+<td>Finds antigenic sites in proteins</td>
+</tr>
+
+<tr>
+<td><a href="digest.html">digest</a></td>
+<td>Protein proteolytic enzyme or reagent cleavage digest</td>
+</tr>
+
+<tr>
+<td><a href="epestfind.html">epestfind</a></td>
+<td>Finds PEST motifs as potential proteolytic cleavage sites</td>
+</tr>
+
+<tr>
+<td><a href="fuzztran.html">fuzztran</a></td>
+<td>Protein pattern search after translation</td>
+</tr>
+
+<tr>
+<td><a href="helixturnhelix.html">helixturnhelix</a></td>
+<td>Report nucleic acid binding motifs</td>
+</tr>
+
+<tr>
+<td><a href="oddcomp.html">oddcomp</a></td>
+<td>Find protein sequence regions with a biased composition</td>
+</tr>
+
+<tr>
+<td><a href="patmatdb.html">patmatdb</a></td>
+<td>Search a protein sequence with a motif</td>
+</tr>
+
+<tr>
+<td><a href="patmatmotifs.html">patmatmotifs</a></td>
+<td>Search a PROSITE motif database with a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="pepcoil.html">pepcoil</a></td>
+<td>Predicts coiled coil regions</td>
+</tr>
+
+<tr>
+<td><a href="preg.html">preg</a></td>
+<td>Regular expression search of a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="pscan.html">pscan</a></td>
+<td>Scans proteins using PRINTS</td>
+</tr>
+
+<tr>
+<td><a href="sigcleave.html">sigcleave</a></td>
+<td>Reports protein signal cleavage sites</td>
+</tr>
+
+</table>
+
+<p>
+Other EMBOSS programs allow you to search for regular expression
+patterns but may be less easy for the user who has never used regular
+expressions before:
+
+<p>
+
+<ul>
+
+<li><a href="dreg.html">dreg</a> - Regular expression search of a
+nucleotide sequence
+
+<li><a href="preg.html">preg</a> - Regular expression search of a protein
+sequence
+
+</ul>
+
+<H2>
+    Author(s)
+</H2>
+
+Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
+<H2>
+    History
+</H2>
+
+Written (2000) - Alan Bleasby
+<br>
+'-usa' added (13 March 2001) - Gary Williams
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+None
+</BODY>
+</HTML>
+

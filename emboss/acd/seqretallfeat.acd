@@ -1,0 +1,30 @@
+application: seqretallfeat [
+  documentation: "Reads and writes (returns) one or more
+                  sequences"
+  groups: "Test"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    features: "Y"
+    type: "gapany"
+  ]
+
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  seqoutall: outseq [
+    parameter: "Y"
+    features: "Y"
+  ]
+
+endsection: output

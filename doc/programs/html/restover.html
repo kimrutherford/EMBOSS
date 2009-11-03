@@ -1,0 +1,629 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: restover
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+restover
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+    Function
+</H2>
+Find restriction enzymes producing specific overhang
+<H2>
+    Description
+</H2>
+
+The Restriction Enzyme database (REBASE) is a collection of information
+about restriction enzymes and related proteins.  It contains published
+and unpublished references, recognition and cleavage sites,
+isoschizomers, commercial availability, methylation sensitivity, crystal
+and sequence data.  DNA methyltransferases, homing endonucleases,
+nicking enzymes, specificity subunits and control proteins are also
+included.  Most recently, putative DNA methyltransferases and
+restriction enzymes, as predicted from analysis of genomic sequences,
+are also listed. 
+
+<p>
+
+The home page of REBASE is: 
+<A HREF="http://rebase.neb.com/">http://rebase.neb.com/</A>
+
+<p>
+
+<b>restover</b> takes a specified sequence and a short sequence of a
+cut-site overhang and searches the REBASE database for matching enzymes
+that create the desired overhang sequence when they cut the
+input sequence. 
+
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with restover</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>restover </b>
+Find restriction enzymes producing specific overhang
+Input nucleotide sequence(s): <b>tembl:x65923</b>
+Overlap sequence: <b>cg</b>
+Output file [x65923.restover]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-seqcomp]           string     Overlap sequence (Any string is accepted)
+  [-outfile]           outfile    [*.restover] Output file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -datafile           datafile   Restriction enzyme data file (optional)
+   -min                integer    [1] Minimum cuts per RE (Integer from 1 to
+                                  1000)
+   -max                integer    [2000000000] Maximum cuts per RE (Integer up
+                                  to 2000000000)
+   -single             boolean    [N] Force single site only cuts
+   -threeprime         boolean    [N] Use 3' overhang e.g. BamHI has CTAG as a
+                                  5' overhang, and ApaI has CCGG as 3'
+                                  overhang.
+   -[no]blunt          boolean    [Y] Allow blunt end cutters
+   -[no]sticky         boolean    [Y] Allow sticky end cutters
+   -[no]ambiguity      boolean    [Y] Allow ambiguous matches
+   -plasmid            boolean    [N] Allow circular DNA
+   -[no]commercial     boolean    [Y] Only enzymes with suppliers
+   -html               boolean    [N] Create HTML output
+   -[no]limit          boolean    [Y] Limits reports to one isoschizomer
+   -alphabetic         boolean    [N] Sort output alphabetically
+   -fragments          boolean    [N] Show fragment lengths
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory3        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-seqcomp]<br>(Parameter 2)</td>
+<td>Overlap sequence</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 3)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.restover</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-datafile</td>
+<td>Restriction enzyme data file (optional)</td>
+<td>Data file</td>
+<td><i>File in the data file path</i></td>
+</tr>
+
+<tr>
+<td>-min</td>
+<td>Minimum cuts per RE</td>
+<td>Integer from 1 to 1000</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-max</td>
+<td>Maximum cuts per RE</td>
+<td>Integer up to 2000000000</td>
+<td>2000000000</td>
+</tr>
+
+<tr>
+<td>-single</td>
+<td>Force single site only cuts</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-threeprime</td>
+<td>Use 3' overhang e.g. BamHI has CTAG as a 5' overhang, and ApaI has CCGG as 3' overhang.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]blunt</td>
+<td>Allow blunt end cutters</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]sticky</td>
+<td>Allow sticky end cutters</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]ambiguity</td>
+<td>Allow ambiguous matches</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-plasmid</td>
+<td>Allow circular DNA</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]commercial</td>
+<td>Only enzymes with suppliers</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-html</td>
+<td>Create HTML output</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]limit</td>
+<td>Limits reports to one isoschizomer</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-alphabetic</td>
+<td>Sort output alphabetically</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-fragments</td>
+<td>Show fragment lengths</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>
+
+<H2>
+    Input file format
+</H2>
+
+<b>restover</b> reads in a normal nucleic acid sequence USA.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:x65923' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:x65923</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   X65923; SV 1; linear; mRNA; STD; HUM; 518 BP.
+XX
+AC   X65923;
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   18-APR-2005 (Rel. 83, Last updated, Version 11)
+XX
+DE   H.sapiens fau mRNA
+XX
+KW   fau gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-518
+RA   Michiels L.M.R.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
+RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-518
+RX   PUBMED; 8395683.
+RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
+RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
+RL   Oncogene 8(9):2537-2546(1993).
+XX
+DR   H-InvDB; HIT000322806.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..518
+FT                   /organism="Homo sapiens"
+FT                   /chromosome="11q"
+FT                   /map="13"
+FT                   /mol_type="mRNA"
+FT                   /clone_lib="cDNA"
+FT                   /clone="pUIA 631"
+FT                   /tissue_type="placenta"
+FT                   /db_xref="taxon:9606"
+FT   misc_feature    57..278
+FT                   /note="ubiquitin like part"
+FT   CDS             57..458
+FT                   /gene="fau"
+FT                   /db_xref="GDB:135476"
+FT                   /db_xref="GOA:P35544"
+FT                   /db_xref="GOA:P62861"
+FT                   /db_xref="HGNC:3597"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P62861"
+FT                   /protein_id="CAA46716.1"
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   misc_feature    98..102
+FT                   /note="nucleolar localization signal"
+FT   misc_feature    279..458
+FT                   /note="S30 part"
+FT   polyA_signal    484..489
+FT   polyA_site      509
+XX
+SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        60
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       120
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       180
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       240
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       300
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       360
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       420
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       480
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               518
+//
+</pre>
+</td></tr></table><p>
+
+
+<H2>
+    Output file format
+</H2>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: x65923.restover</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+# Restrict of X65923 from 1 to 518
+#
+# Minimum cuts per enzyme: 1
+# Maximum cuts per enzyme: 2000000000
+# Minimum length of recognition site: 2
+# Number of hits with any overlap: 54
+# Base Number	Enzyme		Site		5'	3'	[5'	3']
+	11	TaqI            TCGA            11	13	
+	28	AciI            CCGC            25	27	
+	38	AciI            CCGC            38	40	
+	44	BceAI           ACGGC           25	27	
+	71	AciI            CCGC            71	73	
+	73	Hin6I           GCGC            73	75	
+	94	TaqI            TCGA            94	96	
+	103	HpaII           CCGG            103	105	
+	162	HpaII           CCGG            162	164	
+	190	Hin6I           GCGC            190	192	
+	192	Hin6I           GCGC            192	194	
+	225	BsrI            ACTGG           221	219	
+	229	AciI            CCGC            226	228	
+	263	AciI            CCGC            263	265	
+	380	AciI            CCGC            377	379	
+	383	AciI            CCGC            380	382	
+	395	HpaII           CCGG            395	397	
+	398	Hin6I           GCGC            398	400	
+	408	AclI            AACGTT          409	411	
+	409	MaeII           ACGT            409	411	
+</pre>
+</td></tr></table><p>
+
+<p>
+
+The output from <b>restover</b> is a simple text one.  The base number,
+restriction enzyme name, recognition site and cut positions are shown. 
+Note that cuts are always to the right of the residue shown and that 5'
+cuts are referred to by their associated 3' number sequence.  The
+program reports enzymes that cut at two or four sites.
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+<p>
+EMBOSS data files are distributed with the application and stored
+in the standard EMBOSS data directory, which is defined
+by the EMBOSS environment variable EMBOSS_DATA.
+
+<p>
+
+To see the available EMBOSS data files, run:
+<p>
+<pre>
+% embossdata -showall
+</pre>
+<p>
+To fetch one of the data files (for example 'Exxx.dat') into your
+current directory for you to inspect or modify, run:
+
+<pre>
+
+% embossdata -fetch -file Exxx.dat
+
+</pre>
+<p>
+
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called
+".embossdata". Files for all EMBOSS runs can be put in the user's home
+directory, or again in a subdirectory called ".embossdata".
+
+<p>
+The directories are searched in the following order:
+
+<ul>
+   <li> . (your current directory)
+   <li> .embossdata (under your current directory)
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+<p>
+
+<p>
+
+The EMBOSS REBASE restriction enzyme data files are stored iin
+directory 'data/REBASE/*' under the EMBOSS installation directory.
+
+<p>
+
+These files must first be set up using the program <a
+href="rebaseextract.html">'<b>rebaseextract</b>'</a>.  Running
+'rebaseextract' may be the job of your system manager.
+
+<p>
+      
+The data files are stored in the REBASE directory of the standard EMBOSS
+data directory. The names are:
+
+<ul>
+<li> embossre.enz     Cleavage information
+<li> embossre.ref     Reference/methylation information
+<li> embossre.sup     Supplier information
+</ul>
+	 
+The column information is described at the top of the data files
+	 
+<p>
+	 
+The reported enzyme from any one group of isoschizomers (the prototype)
+is specified in the REBASE database and the information is held in the
+data file 'embossre.equ'.  You may edit this file to set your own
+preferred prototype, if you wish. 
+	 
+<p>
+	 
+The format of the file "embossre.equ" is
+<br>
+Enzyme-name Prototype-name
+	 
+<p>
+	 
+i.e.  two columns of enzyme names separated by a space.  The first name
+of the pair of enzymes is the name that is not preferred and the second
+is the preferred (prototype) name. 
+	 
+	          
+
+<H2>
+    Notes
+</H2>
+
+The data files must have been created before running this program.  This
+is done by running the <b>rebaseextract</b> program with the "withrefm" file
+from an REBASE release.  You may have to ask your system manager to do
+this. 
+
+<H2>
+    References
+</H2>
+None.
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="recoder.html">recoder</a></td>
+<td>Remove restriction sites but maintain same translation</td>
+</tr>
+
+<tr>
+<td><a href="redata.html">redata</a></td>
+<td>Search REBASE for enzyme name, references, suppliers etc</td>
+</tr>
+
+<tr>
+<td><a href="remap.html">remap</a></td>
+<td>Display sequence with restriction sites, translation etc</td>
+</tr>
+
+<tr>
+<td><a href="restrict.html">restrict</a></td>
+<td>Finds restriction enzyme cleavage sites</td>
+</tr>
+
+<tr>
+<td><a href="showseq.html">showseq</a></td>
+<td>Display a sequence with features, translation etc</td>
+</tr>
+
+<tr>
+<td><a href="silent.html">silent</a></td>
+<td>Silent mutation restriction enzyme scan</td>
+</tr>
+
+</table>
+
+<H2>
+    Author(s)
+</H2>
+Bernd Jagla (bernd&nbsp;&copy;&nbsp;golgi.ski.mskcc.org)
+<br>
+Cellular Biochemistry and Biophysics Program, Rockefeller
+Research Laboratories, Memorial Sloan-Kettering Cancer Center, 1275 York
+Avenue, Box 251,New York, NY 10021.
+
+<H2>
+    History
+</H2>
+
+Written (Jan 2001) - Bernd Jagla
+
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+None
+
+
+</BODY>
+</HTML>
+

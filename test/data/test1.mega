@@ -1,0 +1,9 @@
+#mega
+TITLE: Noninterleaved sequence data
+
+#mouse      AATTTTTACCCCGGGGGG
+            AGGGGGGACCCCGGGGGG
+#human      AACCCTTACCCCGGGGGG
+            AGGGGGGACCCCGGGGGG
+#cat        AATTTTTACAAAGGGGGG
+            AGGGGGGACCCCGGGGGG

@@ -1,0 +1,299 @@
+application: showfeat [
+  documentation: "Show features of a sequence."
+  groups: "Display, Feature tables"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "any"
+    features: "Y"
+  ]
+
+endsection: input
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  string: matchsource [
+    additional: "Y"
+    default: "*"
+    information: "Source of feature to display"
+    help: "By default any feature source in the feature table is
+           shown. You can set this to match any feature source you wish to
+           show. \
+           The source name is usually either the name of the program that
+           detected the feature or it is the feature table (eg: EMBL) that
+           the feature came from. \
+           The source may be wildcarded by using '*'. \
+           If you wish to show more than one source, separate their names
+           with the character '|', eg: \
+           gene* | embl"
+    knowntype: "feature source list"
+  ]
+
+  string: matchtype [
+    additional: "Y"
+    default: "*"
+    information: "Type of feature to display"
+    help: "By default any feature type in the feature table is shown.
+           You can set this to match any feature type you wish to show. \
+           See http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL
+           feature types and see Appendix A of the Swissprot user manual in
+           http://www.expasy.ch/txt/userman.txt for a list of the Swissprot
+           feature types. \
+           The type may be wildcarded by using '*'. \
+           If you wish to show more than one type, separate their names with
+           the character '|', eg: \
+           *UTR | intron"
+    knowntype: "feature key list"
+  ]
+
+  string: matchtag [
+    additional: "Y"
+    default: "*"
+    information: "Tag of feature to display"
+    help: "Tags are the types of extra values that a feature may have.
+           For example in the EMBL feature table, a 'CDS' type of feature
+           may have the tags '/codon', '/codon_start', '/db_xref',
+           '/EC_number', '/evidence', '/exception', '/function', '/gene',
+           '/label', '/map', '/note', '/number', '/partial', '/product',
+           '/protein_id', '/pseudo', '/standard_name', '/translation',
+           '/transl_except', '/transl_table', or '/usedin'. Some of these
+           tags also have values, for example '/gene' can have the value of
+           the gene name. \
+           By default any feature tag in the feature table is shown. You can
+           set this to match any feature tag you wish to show. \
+           The tag may be wildcarded by using '*'. \
+           If you wish to show more than one tag, separate their names with
+           the character '|', eg: \
+           gene | label"
+    knowntype: "feature tag list"
+  ]
+
+  string: matchvalue [
+    additional: "Y"
+    default: "*"
+    information: "Value of feature tags to display"
+    help: "Tag values are the values associated with a feature tag.
+           Tags are the types of extra values that a feature may have. For
+           example in the EMBL feature table, a 'CDS' type of feature may
+           have the tags '/codon', '/codon_start', '/db_xref', '/EC_number',
+           '/evidence', '/exception', '/function', '/gene', '/label', '/map',
+           '/note', '/number', '/partial', '/product', '/protein_id',
+           '/pseudo', '/standard_name', '/translation', '/transl_except',
+           '/transl_table', or '/usedin'. Only some of these tags can have
+           values, for example '/gene' can have the value of the gene name.
+           By default any feature tag value in the feature table is shown.
+           You can set this to match any feature tag valueyou wish to show. \
+           The tag value may be wildcarded by using '*'. \
+           If you wish to show more than one tag value, separate their names
+           with the character '|', eg: \
+           pax* | 10"
+    knowntype: "feature tagvalue list"
+  ]
+
+  list: sort [
+    additional: "Y"
+    default: "start"
+    minimum: "1"
+    maximum: "1"
+    header: "Sorting features"
+    values: "source:Sort by Source, start:Sort by Start position,
+             type:Sort by Type, nosort:No sorting done, join:Join coding
+             regions together"
+    delimiter: ","
+    codedelimiter: ":"
+    information: "Sort features by Type, Start or Source,
+                  Nosort (don't sort - use input order) or join coding
+                  regions together and leave other features in the input
+                  order"
+  ]
+
+  range: annotation [
+    additional: "Y"
+    default: ""
+    information: "Regions to mark (eg: 4-57 promoter region
+                  78-94 first exon)"
+    help: "Regions to annotate by marking. \
+           If this is left blank, then no annotation is added. \
+           A set of regions is specified by a set of pairs of positions
+           followed by optional text. \
+           The positions are integers. \
+           They are followed by any text (but not digits when on the
+           command-line). \
+           Examples of region specifications are: \
+           24-45 new domain 56-78 match to Mouse \
+           1-100 First part 120-156 oligo \
+           A file of ranges to annotate (one range per line) can be specified
+           as '@filename'."
+    expected: "If this is left blank, then no annotation is
+               added."
+  ]
+
+endsection: additional
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  boolean: html [
+    default: "N"
+    information: "Use HTML formatting"
+    outputmodifier: "Y"
+  ]
+
+  boolean: id [
+    default: "Y"
+    information: "Show sequence ID"
+    help: "Set this to be false if you do not wish to display the ID
+           name of the sequence."
+  ]
+
+  boolean: description [
+    default: "Y"
+    information: "Show description"
+    help: "Set this to be false if you do not wish to display the
+           description of the sequence."
+  ]
+
+  boolean: scale [
+    default: "Y"
+    information: "Show scale line"
+    help: "Set this to be false if you do not wish to display the
+           scale line."
+  ]
+
+  integer: width [
+    default: "60"
+    minimum: "0"
+    information: "Width of graphics lines"
+    help: "You can expand (or contract) the width of the
+           ASCII-character graphics display of the positions of the features
+           using this value. \
+           For example, a width of 80 characters would cover a standard page
+           width and a width a 10 characters would be nearly unreadable. \
+           If the width is set to less than 4, the graphics lines and the
+           scale line will not be displayed."
+  ]
+
+  boolean: collapse [
+    default: "N"
+    information: "Display features with the same type on one
+                  line"
+    help: "If this is set, then features from the same source and of
+           the same type and sense are all printed on the same line. For
+           instance if there are several features from the EMBL feature table
+           (ie. the same source) which are all of type 'exon' in the same
+           sense, then they will all be displayed on the same line. This
+           makes it hard to distinguish overlapping features. \
+           If this is set to false then each feature is displayed on a
+           separate line making it easier to distinguish where features start
+           and end."
+  ]
+
+  boolean: forward [
+    default: "Y"
+    information: "Display forward sense features"
+    help: "Set this to be false if you do not wish to display forward
+           sense features."
+  ]
+
+  boolean: reverse [
+    default: "Y"
+    information: "Display reverse sense features"
+    help: "Set this to be false if you do not wish to display reverse
+           sense features."
+  ]
+
+  boolean: unknown [
+    default: "Y"
+    information: "Display unknown sense features"
+    help: "Set this to be false if you do not wish to display unknown
+           sense features. (ie. features with no directionality - all protein
+           features are of this type and some nucleic features (for example,
+           CG-rich regions))."
+  ]
+
+  boolean: strand [
+    default: "N"
+    information: "Display strand of features"
+    help: "Set this if you wish to display the strand of the features.
+           Protein features are always directionless (indicated by '0'),
+           forward is indicated by '+' and reverse is '-'."
+  ]
+
+  boolean: source [
+    default: "N"
+    information: "Display source of features"
+    help: "Set this if you wish to display the source of the features.
+           \
+           The source name is usually either the name of the program that
+           detected the feature or it is the name of the feature table (eg:
+           EMBL) that the feature came from."
+  ]
+
+  boolean: position [
+    default: "N"
+    information: "Display position of features"
+    help: "Set this if you wish to display the start and end position
+           of the features. If several features are being displayed on the
+           same line, then the start and end positions will be joined by a
+           comma, for example: '189-189,225-225'."
+  ]
+
+  boolean: type [
+    default: "Y"
+    information: "Display type of features"
+    help: "Set this to be false if you do not wish to display the type
+           of the features."
+  ]
+
+  boolean: tags [
+    default: "N"
+    information: "Display tags of features"
+    help: "Set this to be false if you do not wish to display the tags
+           and values of the features."
+  ]
+
+  boolean: values [
+    default: "Y"
+    information: "Display tag values of features"
+    help: "Set this to be false if you do not wish to display the tag
+           values of the features. If this is set to be false, only the tag
+           names will be displayed. If the tags are not displayed, then the
+           values will not be displayed. The value of the 'translation' tag
+           is never displayed as it is often extremely long."
+  ]
+
+  boolean: stricttags [
+    default: "N"
+    information: "Only display the matching tags"
+    help: "By default if any tag/value pair in a feature matches the
+           specified tag and value, then all the tags/value pairs of that
+           feature will be displayed. If this is set to be true, then only
+           those tag/value pairs in a feature that match the specified tag
+           and value will be displayed."
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    extension: "showfeat"
+    knowntype: "showfeat output"
+  ]
+
+endsection: output

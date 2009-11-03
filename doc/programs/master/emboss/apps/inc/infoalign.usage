@@ -1,0 +1,133 @@
+<b>Here is a sample session with infoalign</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>infoalign globins.msf </b>
+Information on a multiple sequence alignment
+Output file [globins.infoalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+This example doesn't display the USA of the sequence: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>infoalign globins.msf -nousa </b>
+Information on a multiple sequence alignment
+Output file [globins.infoalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+Display only the name and sequence length of a sequence: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>infoalign globins.msf -only -name -seqlength </b>
+Information on a multiple sequence alignment
+Output file [globins.infoalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.3">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 4</b>
+<p>
+Display only the name, number of gap characters and differences to the consensus sequence: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>infoalign globins.msf -only -name -gapcount -diffcount </b>
+Information on a multiple sequence alignment
+Output file [globins.infoalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.4">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 5</b>
+<p>
+Display the name and number of gaps within a sequence: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>infoalign globins.msf -only -name -gaps </b>
+Information on a multiple sequence alignment
+Output file [globins.infoalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.5">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 6</b>
+<p>
+Display information formatted with HTML: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>infoalign globins.msf -html </b>
+Information on a multiple sequence alignment
+Output file [globins.infoalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.6">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 7</b>
+<p>
+Use the first sequence as the reference sequence to compare to: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>infoalign globins.msf -refseq 1 </b>
+Information on a multiple sequence alignment
+Output file [globins.infoalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.7">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 8</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>infoalign -auto @eclac.list -out test.out </b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.8">Go to the input files for this example</a><br><a href="#output.8">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 9</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>infoalign -auto tembl:v00296 -out test.out </b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.9">Go to the input files for this example</a><br><a href="#output.9">Go to the output files for this example</a><p><p>

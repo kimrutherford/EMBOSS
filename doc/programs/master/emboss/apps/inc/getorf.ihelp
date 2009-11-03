@@ -1,0 +1,118 @@
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-outseq]            seqoutall  [<sequence>.<format>] Protein sequence
+                                  set(s) filename and optional format (output
+                                  USA)
+
+   Additional (Optional) qualifiers:
+   -table              menu       [0] Code to use (Values: 0 (Standard); 1
+                                  (Standard (with alternative initiation
+                                  codons)); 2 (Vertebrate Mitochondrial); 3
+                                  (Yeast Mitochondrial); 4 (Mold, Protozoan,
+                                  Coelenterate Mitochondrial and
+                                  Mycoplasma/Spiroplasma); 5 (Invertebrate
+                                  Mitochondrial); 6 (Ciliate Macronuclear and
+                                  Dasycladacean); 9 (Echinoderm
+                                  Mitochondrial); 10 (Euplotid Nuclear); 11
+                                  (Bacterial); 12 (Alternative Yeast Nuclear);
+                                  13 (Ascidian Mitochondrial); 14 (Flatworm
+                                  Mitochondrial); 15 (Blepharisma
+                                  Macronuclear); 16 (Chlorophycean
+                                  Mitochondrial); 21 (Trematode
+                                  Mitochondrial); 22 (Scenedesmus obliquus);
+                                  23 (Thraustochytrium Mitochondrial))
+   -minsize            integer    [30] Minimum nucleotide size of ORF to
+                                  report (Any integer value)
+   -maxsize            integer    [1000000] Maximum nucleotide size of ORF to
+                                  report (Any integer value)
+   -find               menu       [0] This is a small menu of possible output
+                                  options. The first four options are to
+                                  select either the protein translation or the
+                                  original nucleic acid sequence of the open
+                                  reading frame. There are two possible
+                                  definitions of an open reading frame: it can
+                                  either be a region that is free of STOP
+                                  codons or a region that begins with a START
+                                  codon and ends with a STOP codon. The last
+                                  three options are probably only of interest
+                                  to people who wish to investigate the
+                                  statistical properties of the regions around
+                                  potential START or STOP codons. The last
+                                  option assumes that ORF lengths are
+                                  calculated between two STOP codons. (Values:
+                                  0 (Translation of regions between STOP
+                                  codons); 1 (Translation of regions between
+                                  START and STOP codons); 2 (Nucleic sequences
+                                  between STOP codons); 3 (Nucleic sequences
+                                  between START and STOP codons); 4
+                                  (Nucleotides flanking START codons); 5
+                                  (Nucleotides flanking initial STOP codons);
+                                  6 (Nucleotides flanking ending STOP codons))
+
+   Advanced (Unprompted) qualifiers:
+   -[no]methionine     boolean    [Y] START codons at the beginning of protein
+                                  products will usually code for Methionine,
+                                  despite what the codon will code for when it
+                                  is internal to a protein. This qualifier
+                                  sets all such START codons to code for
+                                  Methionine by default.
+   -circular           boolean    [N] Is the sequence circular
+   -[no]reverse        boolean    [Y] Set this to be false if you do not wish
+                                  to find ORFs in the reverse complement of
+                                  the sequence.
+   -flanking           integer    [100] If you have chosen one of the options
+                                  of the type of sequence to find that gives
+                                  the flanking sequence around a STOP or START
+                                  codon, this allows you to set the number of
+                                  nucleotides either side of that codon to
+                                  output. If the region of flanking
+                                  nucleotides crosses the start or end of the
+                                  sequence, no output is given for this codon.
+                                  (Any integer value)
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+

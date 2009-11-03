@@ -1,0 +1,623 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: trimest
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+trimest
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+    Function
+</H2>
+Trim poly-A tails off EST sequences
+<H2>
+    Description
+</H2>
+
+EST and mRNA sequences often have poly-A tails at the end of them.  This
+utility removes those poly-A tails. 
+
+<p>
+
+EST sequences are often the reverse complement of the corresponding
+mRNA's forward sense and have poly-T tails at their 5' end.  By default,
+this program also detects and removes these and writes out the reverse
+complement of the sequence. 
+
+<p>
+
+<b>trimest</b> is not infallible.  There are often repeats of 'A' (or
+'T') in a sequence that just happen by chance to occur at the 3' (or 5')
+end of the EST sequence.  <b>trimest</b> has no way of determining if the
+A's it finds are part of a real poly-A tail or are a part of the
+transcribed genomic sequence.  It removes any apparent poly-A tails that
+match its criteria for a poly-A tail. 
+
+<p>
+
+<b>trimest</b> looks for a repeat of at least '-minlength' A's at the 3'
+end (and, by default, '-minlength' T's at the 5' end).  If there are an
+apparent 5' poly-T tail and a poly-A tail, then it removes whichever is
+the longer of the two. 
+
+<p>
+
+By default, it will allow '-mismatches' non-A (or non-T) bases in the
+tail.  If a mismatch is found, then there has to be at least
+'-minlength' A's (or T's) past the mismatch (working from the end) for
+the mismatch to be considered part of the tail.  If '-mismatches' is
+greater than 1 then that number of contiguous non-A (or non-T) bases
+will be allowed as part of the tail. 
+
+<p>
+
+If a 5' poly-T tail is found, then the sequence will be optionally
+reverse-complemented when it is written out. 
+
+<p>
+
+If a poly-A tail is reomved then '[poly-A tail removed]' is appended to
+the description of the sequence.  If poly-T is removed, then '[poly-T
+tail removed]' is appended and if the sequence is reversed, '[reverse
+complement]' is appended. 
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with trimest</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>trimest tembl:x65923 x65923.seq </b>
+Trim poly-A tails off EST sequences
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-outseq]            seqoutall  [<sequence>.<format>] Sequence set(s)
+                                  filename and optional format (output USA)
+
+   Additional (Optional) qualifiers:
+   -minlength          integer    [4] This is the minimum length that a poly-A
+                                  (or poly-T) tail must have before it is
+                                  removed. If there are mismatches in the tail
+                                  than there must be at least this length of
+                                  poly-A tail before the mismatch for the
+                                  mismatch to be considered part of the tail.
+                                  (Integer 1 or more)
+   -mismatches         integer    [1] If there are this number or fewer
+                                  contiguous non-A bases in a poly-A tail
+                                  then, if there are '-minlength' 'A' bases
+                                  before them, they will be considered part of
+                                  the tail and removed .
+                                  For example the terminal 4 A's of GCAGAAAA
+                                  would be removed with the default values of
+                                  -minlength=4 and -mismatches=1 (There are
+                                  not at least 4 A's before the last 'G' and
+                                  so only the A's after it are considered to
+                                  be part of the tail). The terminal 9 bases
+                                  of GCAAAAGAAAA would be removed; There are
+                                  at least -minlength A's preceeding the last
+                                  'G', so it is part of the tail. (Integer 0
+                                  or more)
+   -[no]reverse        boolean    [Y] When a poly-T region at the 5' end of
+                                  the sequence is found and removed, it is
+                                  likely that the sequence is in the reverse
+                                  sense. This option will change the sequence
+                                  to the forward sense when it is written out.
+                                  If this option is not set, then the sense
+                                  will not be changed.
+   -tolower            toggle     [N] The poly-A region can be 'masked' by
+                                  converting the sequence characters to
+                                  lower-case. Some non-EMBOSS programs e.g.
+                                  fasta can interpret this as a masked region.
+                                  The sequence is unchanged apart from the
+                                  case change. You might like to ensure that
+                                  the whole sequence is in upper-case before
+                                  masking the specified regions to lower-case
+                                  by using the '-supper' sequence qualifier.
+
+   Advanced (Unprompted) qualifiers:
+   -[no]fiveprime      boolean    [Y] If this is set true, then the 5' end of
+                                  teh sequence is inspected for poly-T tails.
+                                  These will be removed if they are longer
+                                  than any 3' poly-A tails. If this is false,
+                                  then the 5' end is ignored.
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 2)</td>
+<td>Sequence set(s) filename and optional format (output USA)</td>
+<td>Writeable sequence(s)</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-minlength</td>
+<td>This is the minimum length that a poly-A (or poly-T) tail must have before it is removed. If there are mismatches in the tail than there must be at least this length of poly-A tail before the mismatch for the mismatch to be considered part of the tail.</td>
+<td>Integer 1 or more</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>-mismatches</td>
+<td>If there are this number or fewer contiguous non-A bases in a poly-A tail then, if there are '-minlength' 'A' bases before them, they will be considered part of the tail and removed .
+For example the terminal 4 A's of GCAGAAAA would be removed with the default values of -minlength=4 and -mismatches=1 (There are not at least 4 A's before the last 'G' and so only the A's after it are considered to be part of the tail). The terminal 9 bases of GCAAAAGAAAA would be removed; There are at least -minlength A's preceeding the last 'G', so it is part of the tail.</td>
+<td>Integer 0 or more</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-[no]reverse</td>
+<td>When a poly-T region at the 5' end of the sequence is found and removed, it is likely that the sequence is in the reverse sense. This option will change the sequence to the forward sense when it is written out. If this option is not set, then the sense will not be changed.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-tolower</td>
+<td>The poly-A region can be 'masked' by converting the sequence characters to lower-case. Some non-EMBOSS programs e.g. fasta can interpret this as a masked region. The sequence is unchanged apart from the case change. You might like to ensure that the whole sequence is in upper-case before masking the specified regions to lower-case by using the '-supper' sequence qualifier.</td>
+<td>Toggle value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-[no]fiveprime</td>
+<td>If this is set true, then the 5' end of teh sequence is inspected for poly-T tails. These will be removed if they are longer than any 3' poly-A tails. If this is false, then the 5' end is ignored.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+</table>
+
+<H2>
+    Input file format
+</H2>
+
+<b>trimest</b> reads the USA of one or more normal nucleic acid sequences.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:x65923' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:x65923</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   X65923; SV 1; linear; mRNA; STD; HUM; 518 BP.
+XX
+AC   X65923;
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   18-APR-2005 (Rel. 83, Last updated, Version 11)
+XX
+DE   H.sapiens fau mRNA
+XX
+KW   fau gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-518
+RA   Michiels L.M.R.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
+RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-518
+RX   PUBMED; 8395683.
+RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
+RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
+RL   Oncogene 8(9):2537-2546(1993).
+XX
+DR   H-InvDB; HIT000322806.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..518
+FT                   /organism="Homo sapiens"
+FT                   /chromosome="11q"
+FT                   /map="13"
+FT                   /mol_type="mRNA"
+FT                   /clone_lib="cDNA"
+FT                   /clone="pUIA 631"
+FT                   /tissue_type="placenta"
+FT                   /db_xref="taxon:9606"
+FT   misc_feature    57..278
+FT                   /note="ubiquitin like part"
+FT   CDS             57..458
+FT                   /gene="fau"
+FT                   /db_xref="GDB:135476"
+FT                   /db_xref="GOA:P35544"
+FT                   /db_xref="GOA:P62861"
+FT                   /db_xref="HGNC:3597"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P62861"
+FT                   /protein_id="CAA46716.1"
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   misc_feature    98..102
+FT                   /note="nucleolar localization signal"
+FT   misc_feature    279..458
+FT                   /note="S30 part"
+FT   polyA_signal    484..489
+FT   polyA_site      509
+XX
+SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        60
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       120
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       180
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       240
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       300
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       360
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       420
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       480
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               518
+//
+</pre>
+</td></tr></table><p>
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: x65923.seq</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;X65923 X65923.1 H.sapiens fau mRNA [poly-A tail removed]
+ttcctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
+agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
+cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
+tcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccc
+tgactaccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggccc
+gtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaaga
+agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
+cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
+tctaataaaaaagccacttagttcagtc
+</pre>
+</td></tr></table><p>
+
+<p>
+
+The output is a set of sequences with the poly-A (or poly-T) tails
+removed.  If a sequence had a 5' poly-T tail then the resulting sequence
+is reverse-complemented by default.  The description line has a comment
+appended about the changes made to the sequence. 
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+It will trim any run of more than -minlength A's or T's at the 3' or 5'
+end, whether or not they are a true poly-A tail. 
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="biosed.html">biosed</a></td>
+<td>Replace or delete sequence sections</td>
+</tr>
+
+<tr>
+<td><a href="codcopy.html">codcopy</a></td>
+<td>Reads and writes a codon usage table</td>
+</tr>
+
+<tr>
+<td><a href="cutseq.html">cutseq</a></td>
+<td>Removes a specified section from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="degapseq.html">degapseq</a></td>
+<td>Removes gap characters from sequences</td>
+</tr>
+
+<tr>
+<td><a href="descseq.html">descseq</a></td>
+<td>Alter the name or description of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="entret.html">entret</a></td>
+<td>Reads and writes (returns) flatfile entries</td>
+</tr>
+
+<tr>
+<td><a href="extractalign.html">extractalign</a></td>
+<td>Extract regions from a sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="extractfeat.html">extractfeat</a></td>
+<td>Extract features from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="extractseq.html">extractseq</a></td>
+<td>Extract regions from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="listor.html">listor</a></td>
+<td>Write a list file of the logical OR of two sets of sequences</td>
+</tr>
+
+<tr>
+<td><a href="makenucseq.html">makenucseq</a></td>
+<td>Creates random nucleotide sequences</td>
+</tr>
+
+<tr>
+<td><a href="makeprotseq.html">makeprotseq</a></td>
+<td>Creates random protein sequences</td>
+</tr>
+
+<tr>
+<td><a href="maskfeat.html">maskfeat</a></td>
+<td>Mask off features of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="maskseq.html">maskseq</a></td>
+<td>Mask off regions of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="newseq.html">newseq</a></td>
+<td>Type in a short new sequence</td>
+</tr>
+
+<tr>
+<td><a href="noreturn.html">noreturn</a></td>
+<td>Removes carriage return from ASCII files</td>
+</tr>
+
+<tr>
+<td><a href="notseq.html">notseq</a></td>
+<td>Exclude a set of sequences and write out the remaining ones</td>
+</tr>
+
+<tr>
+<td><a href="nthseq.html">nthseq</a></td>
+<td>Writes one sequence from a multiple set of sequences</td>
+</tr>
+
+<tr>
+<td><a href="pasteseq.html">pasteseq</a></td>
+<td>Insert one sequence into another</td>
+</tr>
+
+<tr>
+<td><a href="revseq.html">revseq</a></td>
+<td>Reverse and complement a sequence</td>
+</tr>
+
+<tr>
+<td><a href="seqret.html">seqret</a></td>
+<td>Reads and writes (returns) sequences</td>
+</tr>
+
+<tr>
+<td><a href="seqretsplit.html">seqretsplit</a></td>
+<td>Reads and writes (returns) sequences in individual files</td>
+</tr>
+
+<tr>
+<td><a href="skipseq.html">skipseq</a></td>
+<td>Reads and writes (returns) sequences, skipping first few</td>
+</tr>
+
+<tr>
+<td><a href="splitter.html">splitter</a></td>
+<td>Split a sequence into (overlapping) smaller sequences</td>
+</tr>
+
+<tr>
+<td><a href="trimseq.html">trimseq</a></td>
+<td>Trim ambiguous bits off the ends of sequences</td>
+</tr>
+
+<tr>
+<td><a href="union.html">union</a></td>
+<td>Reads sequence fragments and builds one sequence</td>
+</tr>
+
+<tr>
+<td><a href="vectorstrip.html">vectorstrip</a></td>
+<td>Strips out DNA between a pair of vector sequences</td>
+</tr>
+
+<tr>
+<td><a href="yank.html">yank</a></td>
+<td>Reads a sequence range, appends the full USA to a list file</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Author(s)
+</H2>
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+
+
+
+<H2>
+    History
+</H2>
+
+Written (3 Oct 2001) - Gary Williams
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+None
+
+</BODY>
+</HTML>
+

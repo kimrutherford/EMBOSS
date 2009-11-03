@@ -1,0 +1,11 @@
+# Example input file for oddcomp
+Word size       2
+Total count     0
+
+#
+# Word  Obs Count       Obs Frequency   Exp Frequency   Obs/Exp Frequency
+#
+RS      2               0               0               0
+SR      1               0               0               0
+
+Other   0               0               0               0

@@ -1,0 +1,37 @@
+application: yank [
+  documentation: "Reads a sequence range, appends the full
+                  USA to a list file"
+  groups: "Edit"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  sequence: sequence [
+    parameter: "Y"
+    sask: "Y"
+    type: "gapany"
+  ]
+
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  boolean: newfile [
+    default: "N"
+    information: "Overwrite existing output file"
+  ]
+
+  outfile: outfile [
+    parameter: "Y"
+    append: "@(!$(newfile))"
+    knowntype: "USA list"
+    information: "List of USAs output file"
+  ]
+
+endsection: output

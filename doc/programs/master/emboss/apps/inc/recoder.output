@@ -1,0 +1,78 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: x65923.recoder</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: recoder
+# Rundate: Sun 15 Jul 2007 12:00:00
+# Commandline: recoder
+#    -sequence tembl:x65923
+#    -enzymes EcoRII
+# Report_format: table
+# Report_file: x65923.recoder
+########################################
+
+#=======================================
+#
+# Sequence: X65923     from: 1   to: 518
+# HitCount: 34
+#
+# KEY:
+# Dir: Direction (Rev for reverse complement)
+# EnzymeName: Enzyme name
+# RS-Pattern: Restriction enzyme recognition site pattern
+# Base-Posn: Position of base to be mutated
+# AAs: Amino acid. Original sequence(.)After mutation
+# Mutation: The base mutation to perform
+# 
+# Creating silent mutations
+#
+#=======================================
+
+  Start     End Dir    EnzymeName RS-Pattern Base-Posn    AAs Mutation
+     77      81 .      EcoRII     CCWGG             78    P.P     C-&gt;G
+     77      81 .      EcoRII     CCWGG             78    P.P     C-&gt;A
+     77      81 .      EcoRII     CCWGG             78    P.P     C-&gt;T
+     77      81 .      EcoRII     CCWGG             79    R.R     A-&gt;C
+     77      81 .      EcoRII     CCWGG             81    R.R     G-&gt;A
+    107     111 .      EcoRII     CCWGG            108    A.A     C-&gt;G
+    107     111 .      EcoRII     CCWGG            108    A.A     C-&gt;A
+    107     111 .      EcoRII     CCWGG            108    A.A     C-&gt;T
+    107     111 .      EcoRII     CCWGG            109    R.R     A-&gt;C
+    107     111 .      EcoRII     CCWGG            111    R.R     G-&gt;A
+    182     186 .      EcoRII     CCWGG            183    S.S     C-&gt;G
+    182     186 .      EcoRII     CCWGG            183    S.S     C-&gt;A
+    182     186 .      EcoRII     CCWGG            183    S.S     C-&gt;T
+    197     201 .      EcoRII     CCWGG            198    P.P     C-&gt;G
+    197     201 .      EcoRII     CCWGG            198    P.P     C-&gt;A
+    197     201 .      EcoRII     CCWGG            198    P.P     C-&gt;T
+    248     252 .      EcoRII     CCWGG            249    P.P     C-&gt;G
+    248     252 .      EcoRII     CCWGG            249    P.P     C-&gt;A
+    248     252 .      EcoRII     CCWGG            249    P.P     C-&gt;T
+    293     297 .      EcoRII     CCWGG            294    P.P     C-&gt;G
+    293     297 .      EcoRII     CCWGG            294    P.P     C-&gt;A
+    293     297 .      EcoRII     CCWGG            294    P.P     C-&gt;T
+     81      77 Rev    EcoRII     CCWGG             79    P.P     T-&gt;G
+     81      77 Rev    EcoRII     CCWGG             79    P.P     T-&gt;C
+    111     107 Rev    EcoRII     CCWGG            109    P.P     T-&gt;G
+    111     107 Rev    EcoRII     CCWGG            109    P.P     T-&gt;C
+    186     182 Rev    EcoRII     CCWGG            184    P.P     A-&gt;G
+    186     182 Rev    EcoRII     CCWGG            184    P.P     A-&gt;C
+    201     197 Rev    EcoRII     CCWGG            199    P.P     A-&gt;G
+    201     197 Rev    EcoRII     CCWGG            199    P.P     A-&gt;C
+    252     248 Rev    EcoRII     CCWGG            250    P.P     A-&gt;G
+    252     248 Rev    EcoRII     CCWGG            250    P.P     A-&gt;C
+    297     293 Rev    EcoRII     CCWGG            295    P.P     A-&gt;G
+    297     293 Rev    EcoRII     CCWGG            295    P.P     A-&gt;C
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_hitcount: 34
+#---------------------------------------
+</pre>
+</td></tr></table><p>

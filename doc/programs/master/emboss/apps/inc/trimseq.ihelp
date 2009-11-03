@@ -1,0 +1,77 @@
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     (Gapped) sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-outseq]            seqoutall  [<sequence>.<format>] Sequence set(s)
+                                  filename and optional format (output USA)
+
+   Additional (Optional) qualifiers:
+   -window             integer    [1] This determines the size of the region
+                                  that is considered when deciding whether the
+                                  percentage of ambiguity is greater than the
+                                  threshold. A value of 5 means that a region
+                                  of 5 letters in the sequence is shifted
+                                  along the sequence from the ends and
+                                  trimming is done only if there is a greater
+                                  or equal percentage of ambiguity than the
+                                  threshold percentage. (Any integer value)
+   -percent            float      [100.0] This is the threshold of the
+                                  percentage ambiguity in the window required
+                                  in order to trim a sequence. (Any numeric
+                                  value)
+   -strict             boolean    [N] In nucleic sequences, trim off not only
+                                  N's and X's, but also the nucleotide IUPAC
+                                  ambiguity codes M, R, W, S, Y, K, V, H, D
+                                  and B. In protein sequences, trim off not
+                                  only X's but also B and Z.
+   -star               boolean    [N] In protein sequences, trim off not only
+                                  X's, but also the *'s
+
+   Advanced (Unprompted) qualifiers:
+   -[no]left           boolean    [Y] Trim at the start
+   -[no]right          boolean    [Y] Trim at the end
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+

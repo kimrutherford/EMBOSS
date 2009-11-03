@@ -1,0 +1,60 @@
+application: histogramtest [
+  documentation: "Test of graphics"
+  groups: "Test"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  integer: sets [
+    standard: "y"
+    default: "1"
+    minimum: "1"
+    maximum: "10"
+    information: "Number of sets of data"
+  ]
+
+  integer: points [
+    standard: "y"
+    default: "10"
+    minimum: "1"
+    maximum: "200"
+    information: "Number of data points per set"
+  ]
+
+  integer: bins [
+    standard: "y"
+    default: "$(points)"
+    minimum: "1"
+    maximum: "$(points)"
+    information: "Number of bars"
+  ]
+
+  integer: xstart [
+    additional: "y"
+    default: "0"
+    information: "Start value for x axis"
+  ]
+
+  integer: xend [
+    additional: "y"
+    default: "@($(xstart)+$(points))"
+    minimum: "@($(xstart)+1)"
+    information: "End value for x axis"
+    expected: "Start value plus number of data points"
+  ]
+
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  xygraph: graph [
+    standard: "Y"
+  ]
+
+endsection: output

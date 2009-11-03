@@ -1,0 +1,42 @@
+application: nthseq [
+  documentation: "Writes one sequence from a multiple set of
+                  sequences"
+  groups: "Edit"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "gapany"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: number [
+    standard: "Y"
+    minimum: "1"
+    default: "1"
+    information: "The number of the sequence to output"
+  ]
+
+endsection: required
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  seqout: outseq [
+    parameter: "Y"
+  ]
+
+endsection: output

@@ -1,0 +1,151 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: embossversion
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+embossversion
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/embossversion.ione" -->
+
+<H2>
+    Description
+</H2>
+This small utility writes out the current version of the EMBOSS package.
+
+<p>
+
+It is expected that this may have a use in scripts which automatically
+write descriptions of the state of the EMBOSS package that is set up
+locally. 
+
+<p>
+
+It will also be a useful way for people to ascertain what version is
+being run if they are giving user-support to people in another site. 
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/embossversion.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/embossversion.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/embossversion.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+None.
+<p>
+<!--#include file="inc/embossversion.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+<p>
+
+<b>embossversion</b> writes just the version number followed by a
+newline character to end the line. 
+
+<p>
+
+The output is written to the screen by default, but can be written to a
+named file by using the '-outfile' option. 
+
+<p>
+<!--#include file="inc/embossversion.output" -->
+<p>
+
+The version number is in three parts, separated by '.'s.
+<br>
+The first number is the major version number - this only changes when substantial changes have been made to the look-and-feel of EMBOSS.
+<br>
+The second number is the minor version number - this is incremented whenever a version is released.
+<br>
+The third number is usually '0' but if a minor bug fix has been released that does not warrant a minor version number, this will be incremented.
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/embossversion.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/gwilliam.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/embossversion.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/embossversion.comment" -->
+
+</BODY>
+</HTML>
+

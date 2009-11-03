@@ -1,0 +1,15 @@
+!!NA_SEQUENCE 1.0
+
+GCG FORMAT DNA SEQUENCE
+
+GCG  Length: 100  Type: N  Check: 6856 ..
+<
+   a comment on multiple lines
+<
+   1 ACGTAC<note<GTAC GTACGTACGT
+  21 <note at the start<ACGTACGTAC GTACGTACGT
+<a comment<
+  41 ACGTACGTAC GTACGTACGT<note at the end>
+  61 ACGTACG>>TAC GTACGTACGT
+  81 <first note<ACGTA<second note<CGTAC GT>third note>ACGTACGT>fourth note>
+

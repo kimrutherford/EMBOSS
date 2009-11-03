@@ -1,0 +1,116 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tsw:hba_human' is a sequence entry in the example protein database 'tsw'
+<p>
+<p><h3>Database entry: tsw:hba_human</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   HBA_HUMAN               Reviewed;         142 AA.
+AC   P69905; P01922; Q96KF1; Q9NYR7;
+DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
+DT   23-JAN-2007, sequence version 2.
+DT   03-APR-2007, entry version 41.
+DE   Hemoglobin subunit alpha (Hemoglobin alpha chain) (Alpha-globin).
+GN   Name=HBA1;
+GN   and
+GN   Name=HBA2;
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+OC   Catarrhini; Hominidae; Homo.
+OX   NCBI_TaxID=9606;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA] (HBA1).
+RX   MEDLINE=81088339; PubMed=7448866; DOI=10.1016/0092-8674(80)90347-5;
+RA   Michelson A.M., Orkin S.H.;
+RT   "The 3' untranslated regions of the duplicated human alpha-globin
+RT   genes are unexpectedly divergent.";
+RL   Cell 22:371-377(1980).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (HBA2).
+RX   MEDLINE=80137531; PubMed=6244294;
+RA   Wilson J.T., Wilson L.B., Reddy V.B., Cavallesco C., Ghosh P.K.,
+RA   Deriel J.K., Forget B.G., Weissman S.M.;
+RT   "Nucleotide sequence of the coding portion of human alpha globin
+RT   messenger RNA.";
+RL   J. Biol. Chem. 255:2807-2815(1980).
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA] (HBA2).
+RX   MEDLINE=81175088; PubMed=6452630;
+RA   Liebhaber S.A., Goossens M.J., Kan Y.W.;
+RT   "Cloning and complete nucleotide sequence of human 5'-alpha-globin
+RT   gene.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 77:7054-7058(1980).
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RX   PubMed=6946451;
+RA   Orkin S.H., Goff S.C., Hechtman R.L.;
+RT   "Mutation in an intervening sequence splice junction in man.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 78:5041-5045(1981).
+RN   [5]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA], AND VARIANT LYS-32.
+RX   MEDLINE=21303311; PubMed=11410421;
+RA   Zhao Y., Xu X.;
+RT   "Alpha2(CD31 AGG--&gt;AAG, Arg--&gt;Lys) causing non-deletional alpha-
+RT   thalassemia in a Chinese family with HbH disease.";
+RL   Haematologica 86:541-542(2001).
+RN   [6]
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT                                /FTId=VAR_002840.
+FT   VARIANT     131    131       A -&gt; D (in Yuda; O(2) affinity down).
+FT                                /FTId=VAR_002842.
+FT   VARIANT     131    131       A -&gt; P (in Sun Prairie; unstable).
+FT                                /FTId=VAR_002841.
+FT   VARIANT     132    132       S -&gt; P (in Questembert; highly unstable;
+FT                                causes alpha-thalassemia).
+FT                                /FTId=VAR_002843.
+FT   VARIANT     134    134       S -&gt; R (in Val de Marne; O(2) affinity
+FT                                up).
+FT                                /FTId=VAR_002844.
+FT   VARIANT     136    136       V -&gt; E (in Pavie).
+FT                                /FTId=VAR_002845.
+FT   VARIANT     137    137       L -&gt; M (in Chicago).
+FT                                /FTId=VAR_002846.
+FT   VARIANT     137    137       L -&gt; P (in Bibba; unstable; causes alpha-
+FT                                thalassemia).
+FT                                /FTId=VAR_002847.
+FT   VARIANT     139    139       S -&gt; P (in Attleboro; O(2) affinity up).
+FT                                /FTId=VAR_002848.
+FT   VARIANT     140    140       K -&gt; E (in Hanamaki; O(2) affinity up).
+FT                                /FTId=VAR_002849.
+FT   VARIANT     140    140       K -&gt; T (in Tokoname; O(2) affinity up).
+FT                                /FTId=VAR_002850.
+FT   VARIANT     141    141       Y -&gt; H (in Rouen; O(2) affinity up).
+FT                                /FTId=VAR_002851.
+FT   VARIANT     142    142       R -&gt; C (in Nunobiki; O(2) affinity up).
+FT                                /FTId=VAR_002852.
+FT   VARIANT     142    142       R -&gt; H (in Suresnes; O(2) affinity up).
+FT                                /FTId=VAR_002854.
+FT   VARIANT     142    142       R -&gt; L (in Legnano; O(2) affinity up).
+FT                                /FTId=VAR_002853.
+FT   VARIANT     142    142       R -&gt; P (in Singapore).
+FT                                /FTId=VAR_002855.
+FT   HELIX         4     15
+FT   HELIX        16     20
+FT   HELIX        21     35
+FT   HELIX        37     42
+FT   HELIX        53     71
+FT   HELIX        73     75
+FT   HELIX        76     79
+FT   HELIX        81     89
+FT   HELIX        96    112
+FT   TURN        114    116
+FT   HELIX       119    136
+FT   TURN        137    139
+SQ   SEQUENCE   142 AA;  15258 MW;  15E13666573BBBAE CRC64;
+     MVLSPADKTN VKAAWGKVGA HAGEYGAEAL ERMFLSFPTT KTYFPHFDLS HGSAQVKGHG
+     KKVADALTNA VAHVDDMPNA LSALSDLHAH KLRVDPVNFK LLSHCLLVTL AAHLPAEFTP
+     AVHASLDKFL ASVSTVLTSK YR
+//
+</pre>
+</td></tr></table><p>

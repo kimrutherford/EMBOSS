@@ -1,0 +1,292 @@
+
+                                  whichdb 
+
+
+
+Function
+
+   Search all databases for an entry
+
+Description
+
+   whichdb searches all available EMBOSS databases for sequences with a
+   specified ID name or accession number.
+
+   EMBOSS does not allow database entries to be specified by just the ID
+   name or accession number. You must specify both the name of the
+   database and the entry, for example 'embl:hsfau', not just 'hsfau'.
+
+   If you do not know which database(s) contain the entry you are
+   interested in, whichdb will tell you.
+
+   whichdb can also, optionally, write out the sequences it finds to
+   files.
+
+  IDs and Accessions
+
+   An entry in a database must have some way of being uniquely identified
+   in that database. Most sequence databases have two such identifiers
+   for each sequence - an ID name and an Accession number.
+
+   Why are there two such identifiers? The ID name was originally
+   intended to be a human-readable name that had some indication of the
+   function of its sequence. In EMBL and GenBank the first two (or three)
+   letters indicated the species and the rest indicated the function, for
+   example 'hsfau' is the 'Homo Sapiens FAU pseudogene'. This naming
+   scheme started to be a problem when the number of entries added each
+   day was so vast that people could not make up the ID names fast
+   enough. Instead, the Accession numbers were used as the ID name.
+   Therefore you will now find ID names like 'AF061303', the same as the
+   Accession number for that sequence in EMBL.
+
+   ID names are not guaranteed to remain the same between different
+   versions of a database (although in practice they usually do).
+
+   Accession numbers are unique alphanumeric identifiers that are
+   guaranteed to remain with that sequence through the rest of the life
+   of the database. If two sequences are merged into one, then the new
+   sequence will get a new Accession number and the Accession numbers of
+   the merged sequences will be retained as 'secondary' Accession
+   numbers.
+
+   EMBL, GenBank and SwissProt share an Accession numbering scheme - an
+   Accession number uniquely identifies a sequence within these three
+   databases.
+
+Usage
+
+   Here is a sample session with whichdb
+
+
+% whichdb -showall 
+Search all databases for an entry
+ID or Accession number: x65921
+Output file [outfile.whichdb]: 
+
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-entry]             string     ID or Accession number (Any string is
+                                  accepted)
+*  -outfile            outfile    [*.whichdb] Output file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -get                toggle     [N] Retrieve sequences
+   -showall            boolean    [N] Show failed attempts
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   None.
+
+Output file format
+
+  Output files for usage example
+
+  File: outfile.whichdb
+
+# Trying 'qanflatall:x65921'
+qanflatall:x65921
+# Trying 'qangcgall:x65921'
+# Failed 'qangcgall:x65921'
+# Trying 'twp:x65921'
+# Failed 'twp:x65921'
+# Trying 'qapblast:x65921'
+# Failed 'qapblast:x65921'
+# Trying 'tsw:x65921'
+# Failed 'tsw:x65921'
+# Trying 'qanflatinc:x65921'
+# Failed 'qanflatinc:x65921'
+# Trying 'qapblastsplit:x65921'
+# Failed 'qapblastsplit:x65921'
+# Trying 'qangcginc:x65921'
+# Failed 'qangcginc:x65921'
+# Trying 'qanflatexc:x65921'
+qanflatexc:x65921
+# Trying 'qangcgexc:x65921'
+# Failed 'qangcgexc:x65921'
+# Trying 'qapir:x65921'
+# Failed 'qapir:x65921'
+# Trying 'tgenbank:x65921'
+tgenbank:x65921
+# Trying 'qanfasta:x65921'
+# Failed 'qanfasta:x65921'
+# Trying 'qanxflat:x65921'
+# Failed 'qanxflat:x65921'
+# Trying 'qanxgcg:x65921'
+# Failed 'qanxgcg:x65921'
+# Trying 'qapflat:x65921'
+# Failed 'qapflat:x65921'
+# Trying 'qapblastsplitinc:x65921'
+# Failed 'qapblastsplitinc:x65921'
+# Trying 'qapblastsplitexc:x65921'
+# Failed 'qapblastsplitexc:x65921'
+# Trying 'qapflatall:x65921'
+# Failed 'qapflatall:x65921'
+# Trying 'qanxflatall:x65921'
+qanxflatall:x65921
+# Trying 'qanxflatinc:x65921'
+# Failed 'qanxflatinc:x65921'
+# Trying 'qanxflatexc:x65921'
+qanxflatexc:x65921
+# Trying 'testdb:x65921'
+# Failed 'testdb:x65921'
+# Trying 'genbanksrs:x65921'
+genbanksrs:x65921
+# Trying 'tpir:x65921'
+# Failed 'tpir:x65921'
+# Trying 'qasrswww:x65921'
+qasrswww:x65921
+# Trying 'qanxfasta:x65921'
+# Failed 'qanxfasta:x65921'
+# Trying 'qanxgcgall:x65921'
+# Failed 'qanxgcgall:x65921'
+# Trying 'qangcg:x65921'
+# Failed 'qangcg:x65921'
+# Trying 'qanfastaall:x65921'
+# Failed 'qanfastaall:x65921'
+# Trying 'qapirall:x65921'
+# Failed 'qapirall:x65921'
+# Trying 'qanxgcginc:x65921'
+# Failed 'qanxgcginc:x65921'
+# Trying 'qanxgcgexc:x65921'
+# Failed 'qanxgcgexc:x65921'
+# Trying 'qapirinc:x65921'
+# Failed 'qapirinc:x65921'
+# Trying 'qanflat:x65921'
+# Failed 'qanflat:x65921'
+# Trying 'qanxfastaall:x65921'
+# Failed 'qanxfastaall:x65921'
+# Trying 'qapfasta:x65921'
+# Failed 'qapfasta:x65921'
+# Trying 'qawxfasta:x65921'
+# Failed 'qawxfasta:x65921'
+# Trying 'qapirexc:x65921'
+# Failed 'qapirexc:x65921'
+# Trying 'tswnew:x65921'
+# Failed 'tswnew:x65921'
+# Trying 'qaxpirall:x65921'
+# Failed 'qaxpirall:x65921'
+# Trying 'qapxflat:x65921'
+# Failed 'qapxflat:x65921'
+# Trying 'qaxpirinc:x65921'
+# Failed 'qaxpirinc:x65921'
+# Trying 'qapxfasta:x65921'
+# Failed 'qapxfasta:x65921'
+# Trying 'tembl:x65921'
+tembl:x65921
+# Trying 'qaxpirexc:x65921'
+# Failed 'qaxpirexc:x65921'
+# Trying 'qapblastall:x65921'
+# Failed 'qapblastall:x65921'
+# Trying 'tgb:x65921'
+tgb:x65921
+# Trying 'qaxpir:x65921'
+# Failed 'qaxpir:x65921'
+# Trying 'qawfasta:x65921'
+# Failed 'qawfasta:x65921'
+
+   The reported database entries are written out to the specified output
+   file.
+
+   Each database that is defined in the local implementation of EMBOSS
+   which contains an entry called 'hsfau' is reported.
+
+   Note that where a database is defined under several names ('embl',
+   'em'), each definition of that database containing the entry is
+   reported.
+
+   When the '-get' option is used to output the sequences, they are
+   written to separate files. The sequence format they are written in is
+   always 'Fasta' format. The normal command-line qualifiers for changing
+   the output formats etc. will not work in this program.
+
+   The names of the files that the sequences are written to is reported
+   as they are written, for example:
+
+Writing hsfau.embl
+Writing hsfau.human
+Writing hsfau.tembl
+Writing hsfau.em
+Writing hsfau.genbank
+Writing hsfau.gb
+
+Data files
+
+   None.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name                        Description
+   infoalign    Information on a multiple sequence alignment
+   infoseq      Displays some simple information about sequences
+   seealso      Finds programs sharing group names
+   showdb       Displays information on the currently available databases
+   textsearch   Search sequence documentation. Slow, use SRS and Entrez!
+   tfm          Displays a program's help documentation manual
+   wossname     Finds programs by keywords in their one-line documentation
+
+Author(s)
+
+   Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+History
+
+   Written (Jan 2002) - Alan Bleasby.
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

@@ -1,0 +1,185 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: pepwheel
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+pepwheel
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/pepwheel.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+<b>pepwheel</b> displays peptide sequences in a helical representation.
+
+<p>
+
+This gives a view of a helix from a protein sequence looking down the
+axis of the helix. 
+
+<p>
+
+It is useful for highlighting amphipathicity and other properties of
+residues around a helix. 
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/pepwheel.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/pepwheel.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/pepwheel.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>pepwheel</b> reads any protein sequence USA.
+
+<p>
+
+<!--#include file="inc/pepwheel.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+An image is output to the specified graphics device.
+
+<p>
+
+<!--#include file="inc/pepwheel.output" -->
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+
+<H2>
+    Notes
+</H2>
+
+
+The default settings for turn (5) and steps (18) apply to alpha
+helices. For other possible secondary structures, see the following
+table:
+
+<p>
+
+<pre>
+helix       phi   psi  omega  res/turn  transl.  turns  steps
+alpha       -57   -47    180       3.6     1.50      5     18
+3-10        -49   -26    180       3.0     2.00      1      3
+pi          -57   -70    180       4.4     1.15      5     22
+PP I        -83   158      0       3.33    1.9       3     10
+PP II       -78   149    180       3.0     3.12      1      3
+PG II       -80   150    180       3.0     3.1       1      3
+anti Beta  -139   135   -178       2.0     3.4       4      9
+para Beta  -119   113    180       2.0     3.2       4      9
+
+PP is polyproline
+PG II is polyGlycine.
+</pre>
+
+<H2>
+    References
+</H2>
+
+
+<ol>
+
+<li>
+Rachamandran and Sasisekharan, Adv. Protein Chem.
+23:283-437, 1968
+
+<li>
+IUPAC-IUB Commission on biochemical nomenclature,
+Biochemistry 9:3471-3479, 1970
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+
+When you specify the number of turns and steps, be aware that you
+should remove common factors from these two numbers.  For example, if
+you (for some improbable reason) wished to plot a wheel with 8 turns
+in 18 steps (2.25 residues per turn) you should remove the common
+factor (i.e.  2) and specify 4 turns in 9 steps.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+0 upon successful completion.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/pepwheel.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/ableasby.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/pepwheel.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/pepwheel.comment" -->
+
+
+</BODY>
+</HTML>
+

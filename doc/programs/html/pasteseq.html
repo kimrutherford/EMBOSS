@@ -1,0 +1,669 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: pasteseq
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+pasteseq
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+    Function
+</H2>
+Insert one sequence into another
+
+<H2>
+    Description
+</H2>
+
+This simple editing program allows you to insert one sequence into
+another sequence after a specified position and to then write out the
+results to a sequence file.
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with pasteseq</b>
+<p>
+To insert the sequence 'tsw:flav_nossm' after position 67 in sequence 'tsw:amir_pseae' and write the results to the file 'amir_pseae.fasta':  
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>pasteseq tsw:amir_pseae tsw:flav_nossm -pos=67 </b>
+Insert one sequence into another
+output sequence [amir_pseae.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+This does the same thing, but the output qualifier is explicitly used: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>pasteseq tsw:amir_pseae tsw:flav_nossm -out=amirplus.seq -pos=67 </b>
+Insert one sequence into another
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+To insert the sequence 'tsw:flav_nossm' before the start of sequence 'tsw:amir_pseae' use -pos=0: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>pasteseq tsw:amir_pseae tsw:flav_nossm -out=amirplus.seq -pos=0 </b>
+Insert one sequence into another
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.3">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-asequence]         sequence   (Gapped) sequence filename and optional
+                                  format, or reference (input USA)
+  [-bsequence]         sequence   Sequence to insert
+   -pos                integer    [$(asequence.end)] The position in the main
+                                  input sequence to insert after.
+                                  To insert before the start use the position
+                                  0. (Integer 0 or more)
+  [-outseq]            seqout     [<sequence>.<format>] Sequence filename and
+                                  optional format (output USA)
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-asequence" associated qualifiers
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-bsequence" associated qualifiers
+   -sbegin2            integer    Start of the sequence to be used
+   -send2              integer    End of the sequence to be used
+   -sreverse2          boolean    Reverse (if DNA)
+   -sask2              boolean    Ask for begin/end/reverse
+   -snucleotide2       boolean    Sequence is nucleotide
+   -sprotein2          boolean    Sequence is protein
+   -slower2            boolean    Make lower case
+   -supper2            boolean    Make upper case
+   -sformat2           string     Input sequence format
+   -sdbname2           string     Database name
+   -sid2               string     Entryname
+   -ufo2               string     UFO features
+   -fformat2           string     Features format
+   -fopenfile2         string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat3          string     Output seq format
+   -osextension3       string     File name extension
+   -osname3            string     Base file name
+   -osdirectory3       string     Output directory
+   -osdbname3          string     Database name to add
+   -ossingle3          boolean    Separate file for each entry
+   -oufo3              string     UFO features
+   -offormat3          string     Features format
+   -ofname3            string     Features file name
+   -ofdirectory3       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-asequence]<br>(Parameter 1)</td>
+<td>(Gapped) sequence filename and optional format, or reference (input USA)</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-bsequence]<br>(Parameter 2)</td>
+<td>Sequence to insert</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-pos</td>
+<td>The position in the main input sequence to insert after.
+To insert before the start use the position 0.</td>
+<td>Integer 0 or more</td>
+<td>$(asequence.end)</td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 3)</td>
+<td>Sequence filename and optional format (output USA)</td>
+<td>Writeable sequence</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>pasteseq</b> reads 2 normal sequence USAs.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tsw:amir_pseae' is a sequence entry in the example protein database 'tsw'
+<p>
+<p><h3>Database entry: tsw:amir_pseae</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   AMIR_PSEAE              Reviewed;         196 AA.
+AC   P10932;
+DT   01-JUL-1989, integrated into UniProtKB/Swiss-Prot.
+DT   08-DEC-2000, sequence version 2.
+DT   20-MAR-2007, entry version 55.
+DE   Aliphatic amidase regulator.
+GN   Name=amiR; OrderedLocusNames=PA3363;
+OS   Pseudomonas aeruginosa.
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
+OC   Pseudomonadaceae; Pseudomonas.
+OX   NCBI_TaxID=287;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RC   STRAIN=PAC433;
+RX   MEDLINE=89211409; PubMed=2495988; DOI=10.1016/0014-5793(89)80249-2;
+RA   Lowe N., Rice P.M., Drew R.E.;
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene (amiR) of
+RT   Pseudomonas aeruginosa.";
+RL   FEBS Lett. 246:39-43(1989).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RC   STRAIN=ATCC 15692 / PAO1 / 1C / PRS 101 / LMG 12228;
+RX   MEDLINE=20437337; PubMed=10984043; DOI=10.1038/35023079;
+RA   Stover C.K., Pham X.-Q.T., Erwin A.L., Mizoguchi S.D., Warrener P.,
+RA   Hickey M.J., Brinkman F.S.L., Hufnagle W.O., Kowalik D.J., Lagrou M.,
+RA   Garber R.L., Goltry L., Tolentino E., Westbrock-Wadman S., Yuan Y.,
+RA   Brody L.L., Coulter S.N., Folger K.R., Kas A., Larbig K., Lim R.M.,
+RA   Smith K.A., Spencer D.H., Wong G.K.-S., Wu Z., Paulsen I.T.,
+RA   Reizer J., Saier M.H. Jr., Hancock R.E.W., Lory S., Olson M.V.;
+RT   "Complete genome sequence of Pseudomonas aeruginosa PAO1, an
+RT   opportunistic pathogen.";
+RL   Nature 406:959-964(2000).
+RN   [3]
+RP   CHARACTERIZATION.
+RX   MEDLINE=95286483; PubMed=7539417;
+RA   Wilson S.A., Drew R.E.;
+RT   "Transcriptional analysis of the amidase operon from Pseudomonas
+RT   aeruginosa.";
+RL   J. Bacteriol. 177:3052-3057(1995).
+RN   [4]
+RP   X-RAY CRYSTALLOGRAPHY (2.25 ANGSTROMS) OF COMPLEX WITH AMIC.
+RC   STRAIN=PAC1;
+RX   MEDLINE=99437995; PubMed=10508151; DOI=10.1093/emboj/18.19.5175;
+RA   O'Hara B.P., Norman R.A., Wan P.T., Roe S.M., Barrett T.E., Drew R.E.,
+RA   Pearl L.H.;
+RT   "Crystal structure and induction mechanism of AmiC-AmiR: a ligand-
+RT   regulated transcription antitermination complex.";
+RL   EMBO J. 18:5175-5186(1999).
+CC   -!- FUNCTION: Positive controlling element of amiE, the gene for
+CC       aliphatic amidase. Acts as a transcriptional antitermination
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+CC   -!- SIMILARITY: Contains 1 ANTAR domain.
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; X13776; CAA32023.1; -; Genomic_DNA.
+DR   EMBL; AE004091; AAG06751.1; -; Genomic_DNA.
+DR   PIR; B83226; B83226.
+DR   PIR; S03884; S03884.
+DR   PDB; 1QO0; X-ray; D/E=1-196.
+DR   IntAct; P10932; -.
+DR   GenomeReviews; AE004091_GR; PA3363.
+DR   KEGG; pae:PA3363; -.
+DR   BioCyc; PAER287:PA3363-MONOMER; -.
+DR   InterPro; IPR005561; AmiR_NasR_reg.
+DR   InterPro; IPR011006; CheY_like.
+DR   InterPro; IPR008327; Res_reg_antiterm.
+DR   Pfam; PF03861; ANTAR; 1.
+DR   PIRSF; PIRSF036382; RR_antiterm; 1.
+DR   PROSITE; PS50921; ANTAR; 1.
+KW   3D-structure; Complete proteome; Transcription;
+KW   Transcription antitermination; Transcription regulation.
+FT   CHAIN         1    196       Aliphatic amidase regulator.
+FT                                /FTId=PRO_0000064582.
+FT   DOMAIN      129    190       ANTAR.
+FT   CONFLICT     48     48       S -&gt; A (in Ref. 1).
+FT   CONFLICT     64     64       R -&gt; G (in Ref. 1).
+FT   CONFLICT    141    141       E -&gt; D (in Ref. 1).
+FT   CONFLICT    154    154       A -&gt; V (in Ref. 1).
+FT   CONFLICT    170    170       Y -&gt; H (in Ref. 1).
+FT   HELIX         3      8
+FT   HELIX         9     12
+FT   STRAND       14     19
+FT   HELIX        23     35
+FT   STRAND       38     42
+FT   STRAND       54     59
+FT   HELIX        65     75
+FT   STRAND       81     86
+FT   HELIX        91    100
+FT   STRAND      103    109
+FT   HELIX       112    114
+FT   HELIX       115    160
+FT   HELIX       164    175
+FT   TURN        176    179
+FT   HELIX       182    189
+SQ   SEQUENCE   196 AA;  21903 MW;  306A4F30E8E4C6C0 CRC64;
+     MSANSLLGSL RELQVLVLNP PGEVSDALVL QLIRIGCSVR QCWPPPESFD VPVDVVFTSI
+     FQNRHHDEIA ALLAAGTPRT TLVALVEYES PAVLSQIIEL ECHGVITQPL DAHRVLPVLV
+     SARRISEEMA KLKQKTEQLQ ERIAGQARIN QAKALLMQRH GWDEREAHQY LSREAMKRRE
+     PILKIAQELL GNEPSA
+//
+</pre>
+</td></tr></table><p>
+<p><h3>Database entry: tsw:flav_nossm</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   FLAV_NOSSM              Reviewed;          35 AA.
+AC   P35707;
+DT   01-JUN-1994, integrated into UniProtKB/Swiss-Prot.
+DT   01-JUN-1994, sequence version 1.
+DT   31-OCT-2006, entry version 30.
+DE   Flavodoxin (Fragment).
+OS   Nostoc sp. (strain MAC).
+OC   Bacteria; Cyanobacteria; Nostocales; Nostocaceae; Nostoc.
+OX   NCBI_TaxID=35822;
+RN   [1]
+RP   PROTEIN SEQUENCE.
+RA   Takruri I.A.H., Boulter D., Fitzgerald M.P., Hutber G.N., Rogers L.J.;
+RT   "N-terminal amino acid sequences of flavodoxins from Chondrus crispus
+RT   and Nostoc strain MAC.";
+RL   Phytochemistry 25:2113-2115(1986).
+CC   -!- FUNCTION: Low-potential electron donor to a number of redox
+CC       enzymes.
+CC   -!- COFACTOR: FMN.
+CC   -!- SIMILARITY: Belongs to the flavodoxin family.
+CC   -!- SIMILARITY: Contains 1 flavodoxin-like domain.
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   HSSP; P11241; 1RCF.
+DR   InterPro; IPR001226; Flavodoxin.
+DR   InterPro; IPR008254; Flavodoxin_1.
+DR   Pfam; PF00258; Flavodoxin_1; 1.
+DR   PROSITE; PS00201; FLAVODOXIN; 1.
+DR   PROSITE; PS50902; FLAVODOXIN_LIKE; 1.
+KW   Direct protein sequencing; Electron transport; Flavoprotein; FMN;
+KW   Transport.
+FT   CHAIN         1    &gt;35       Flavodoxin.
+FT                                /FTId=PRO_0000171640.
+FT   DOMAIN        4    &gt;35       Flavodoxin-like.
+FT   NON_TER      35     35
+SQ   SEQUENCE   35 AA;  3820 MW;  B6EEB5CA7A45DDA6 CRC64;
+     SKKIGLFYGT ZTGKTESVAE IIDEFGDEVV TLDID
+//
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Output file format
+</H2>
+
+<b>pasteseq</b> writes a normal sequence file.
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: amir_pseae.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;AMIR_PSEAE Aliphatic amidase regulator.
+MSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWPPPESFDVPVDVVFTSI
+FQNRHHDSKKIGLFYGTZTGKTESVAEIIDEFGDEVVTLDIDEIAALLAAGTPRTTLVAL
+VEYESPAVLSQIIELECHGVITQPLDAHRVLPVLVSARRISEEMAKLKQKTEQLQERIAG
+QARINQAKALLMQRHGWDEREAHQYLSREAMKRREPILKIAQELLGNEPSA
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: amirplus.seq</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;AMIR_PSEAE Aliphatic amidase regulator.
+MSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWPPPESFDVPVDVVFTSI
+FQNRHHDSKKIGLFYGTZTGKTESVAEIIDEFGDEVVTLDIDEIAALLAAGTPRTTLVAL
+VEYESPAVLSQIIELECHGVITQPLDAHRVLPVLVSARRISEEMAKLKQKTEQLQERIAG
+QARINQAKALLMQRHGWDEREAHQYLSREAMKRREPILKIAQELLGNEPSA
+</pre>
+</td></tr></table><p>
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: amirplus.seq</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;AMIR_PSEAE Aliphatic amidase regulator.
+SKKIGLFYGTZTGKTESVAEIIDEFGDEVVTLDIDMSANSLLGSLRELQVLVLNPPGEVS
+DALVLQLIRIGCSVRQCWPPPESFDVPVDVVFTSIFQNRHHDEIAALLAAGTPRTTLVAL
+VEYESPAVLSQIIELECHGVITQPLDAHRVLPVLVSARRISEEMAKLKQKTEQLQERIAG
+QARINQAKALLMQRHGWDEREAHQYLSREAMKRREPILKIAQELLGNEPSA
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+
+	This can be used as a simple sequence editor.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+
+	It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+
+	None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="biosed.html">biosed</a></td>
+<td>Replace or delete sequence sections</td>
+</tr>
+
+<tr>
+<td><a href="codcopy.html">codcopy</a></td>
+<td>Reads and writes a codon usage table</td>
+</tr>
+
+<tr>
+<td><a href="cutseq.html">cutseq</a></td>
+<td>Removes a specified section from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="degapseq.html">degapseq</a></td>
+<td>Removes gap characters from sequences</td>
+</tr>
+
+<tr>
+<td><a href="descseq.html">descseq</a></td>
+<td>Alter the name or description of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="entret.html">entret</a></td>
+<td>Reads and writes (returns) flatfile entries</td>
+</tr>
+
+<tr>
+<td><a href="extractalign.html">extractalign</a></td>
+<td>Extract regions from a sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="extractfeat.html">extractfeat</a></td>
+<td>Extract features from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="extractseq.html">extractseq</a></td>
+<td>Extract regions from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="listor.html">listor</a></td>
+<td>Write a list file of the logical OR of two sets of sequences</td>
+</tr>
+
+<tr>
+<td><a href="makenucseq.html">makenucseq</a></td>
+<td>Creates random nucleotide sequences</td>
+</tr>
+
+<tr>
+<td><a href="makeprotseq.html">makeprotseq</a></td>
+<td>Creates random protein sequences</td>
+</tr>
+
+<tr>
+<td><a href="maskfeat.html">maskfeat</a></td>
+<td>Mask off features of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="maskseq.html">maskseq</a></td>
+<td>Mask off regions of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="newseq.html">newseq</a></td>
+<td>Type in a short new sequence</td>
+</tr>
+
+<tr>
+<td><a href="noreturn.html">noreturn</a></td>
+<td>Removes carriage return from ASCII files</td>
+</tr>
+
+<tr>
+<td><a href="notseq.html">notseq</a></td>
+<td>Exclude a set of sequences and write out the remaining ones</td>
+</tr>
+
+<tr>
+<td><a href="nthseq.html">nthseq</a></td>
+<td>Writes one sequence from a multiple set of sequences</td>
+</tr>
+
+<tr>
+<td><a href="revseq.html">revseq</a></td>
+<td>Reverse and complement a sequence</td>
+</tr>
+
+<tr>
+<td><a href="seqret.html">seqret</a></td>
+<td>Reads and writes (returns) sequences</td>
+</tr>
+
+<tr>
+<td><a href="seqretsplit.html">seqretsplit</a></td>
+<td>Reads and writes (returns) sequences in individual files</td>
+</tr>
+
+<tr>
+<td><a href="skipseq.html">skipseq</a></td>
+<td>Reads and writes (returns) sequences, skipping first few</td>
+</tr>
+
+<tr>
+<td><a href="splitter.html">splitter</a></td>
+<td>Split a sequence into (overlapping) smaller sequences</td>
+</tr>
+
+<tr>
+<td><a href="trimest.html">trimest</a></td>
+<td>Trim poly-A tails off EST sequences</td>
+</tr>
+
+<tr>
+<td><a href="trimseq.html">trimseq</a></td>
+<td>Trim ambiguous bits off the ends of sequences</td>
+</tr>
+
+<tr>
+<td><a href="union.html">union</a></td>
+<td>Reads sequence fragments and builds one sequence</td>
+</tr>
+
+<tr>
+<td><a href="vectorstrip.html">vectorstrip</a></td>
+<td>Strips out DNA between a pair of vector sequences</td>
+</tr>
+
+<tr>
+<td><a href="yank.html">yank</a></td>
+<td>Reads a sequence range, appends the full USA to a list file</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+
+
+<H2>
+    History
+</H2>
+
+Completed 26 Jan 1999
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+
+<H2>
+    Comments
+</H2>
+None
+
+</BODY>
+</HTML>
+

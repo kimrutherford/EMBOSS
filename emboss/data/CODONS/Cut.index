@@ -1,0 +1,246 @@
+#EMBOSS codon usage tables
+#
+#Original EMBOSS tables were taken from:
+#
+# Mike Cherry's codonusage database 1992
+#  ftp://ftp.ebi.ac.uk/pub/databases/codonusage
+#
+# Transterm database 1994
+#  ftp://ftp.ebi.ac.uk/pub/databases/transterm
+#
+# and provided by the EMBOSS team for missing taxonomic groups
+#
+#Naming: bacteria are Egss
+#        plants are 3 letter abbreviations etc.
+#        animals are common names etc.
+#        organelles are prefix ch or suffix mt/mit (make standard)
+#
+# Old files are now considered obsolete and are replaced as follows:
+# File name      Species
+# =========      ==================
+
+Eacica.cut       Acinetobacter calcoaceticus
+Eagrtu.cut       Agrobacterium tumefaciens str C58
+Eanasp.cut       Anabaena sp
+Earath.cut       Arabidopsis thaliana
+Eazovi.cut       Azotobacter vinelandii
+Ebacme.cut       Bacillus megaterium
+Ebacst.cut       Geobacillus stearothermophilus
+Ebacsu.cut       Bacillus subtilis
+Ebacsu_high.cut  Bacillus subtilis (high)
+Ebommo.cut       Bombyx mori (silkmoth)
+Ebovin.cut       Bos taurus
+Ebpphx.cut       Bacteriophage phi-X174
+Ebraja.cut       Bradyrhizobium japonicum USDA 110
+Ebrana.cut       Brassica napus (rape)
+Ebrare.cut       Brachydanio rerio (zebrafish)
+Ecaeel.cut       Caenorhabditis elegans (nematode)
+Ecanal.cut       Candida albicans
+Ecanfa.cut       Canis familiaris (dog)
+Ecaucr.cut       Caulobacter crescentus CB15
+Echick.cut       Gallus gallus (chicken)
+Echlre.cut       Chlamydomonas reinhardtii
+Echltr.cut       Chlamydia trachomatis D UW-3 CX
+Ecloab.cut       Clostridium acetobutylicum ATCC 824
+Ecrigr.cut       Cricetulus greseus (hamster)
+Ecyapa.cut       Cyanophora paradoxa
+Edicdi.cut       Dictyostelium discoideum
+Edicdi_high.cut  Dictyostelium discoideum (high)
+Edrome.cut       Drosophila melanogaster
+Edrome_high.cut  Drosophila melanogaster (high)
+Eecoli.cut       Escherichia coli K12
+Eecoli_high.cut  Escherichia coli K12 (high)
+Eemeni.cut       Emericella nidulans
+Eemeni_mit.cut   Emericella nidulans mitochondrion
+Eemeni_high.cut  Emericella nidulans highly expressed
+Eerwct.cut       Erwinia carotovora subsp atroseptica SCRI1043
+Ehaein.cut       Haemophilus influenzae Rd KW20
+Ehalma.cut       Haloarcula marismortui ATCC 43049 (Halobacterium marismortui)
+Ehalsa.cut       Halobacterium salinarum NRC-1 (Halobacterium halobium)
+Ehorvu.cut       Hordeum vulgare subsp  vulgare (Barley)
+Ehuman.cut       Homo sapiens
+Eklepn.cut       Klebsiella pneumoniae
+Eklula.cut       Kluyveromyces lactis NRRL Y-1140
+Elacdl.cut       Lactococcus lactis subsp  lactis Il1403 L. delbrueckii subsp lactis
+Elyces.cut       Lycopersicon esculentum (tomato)
+Emacfa.cut       Macaca fascicularis
+Emaize.cut       Zea mays
+Emaize_chl.cut   Zea mays chloroplast
+Emammal_high.cut Mammalian species (high)
+Emanse.cut       Manduca sexta
+Emarpo_chl.cut   Marchantia polymorpha chloroplast (liverwort)
+Emedsa.cut       Medicago sativa
+Emetth.cut       Methanothermobacter thermautotrophicus str  Delta H
+Emouse.cut       Mus musculus
+Emyctu.cut       Mycobacterium tuberculosis H37Rv
+Eneigo.cut       Neisseria gonorrhoeae
+Eneucr.cut       Neurospora crassa
+Eoncmy.cut       Oncorhynchus mykiss (rainbow trout)
+Eorysa.cut       Oryza sativa (rice)
+Eorysa_chl.cut   Oryza sativa chloroplast (rice)
+Epea.cut         Pisum sativum (pea)
+Epethy.cut       Petunia x hybrida
+Ephavu.cut       Phaseolus vulgaris
+Epig.cut         Sus scrofa (pig)
+Eplafa.cut       Plasmodium falciparum 3D7
+Eprovu.cut       Proteus vulgaris
+Epseae.cut       Pseudomonas aeruginosa PAO1
+Epsepu.cut       Pseudomonas putida KT2440
+Epsesm.cut       Pseudomonas syringae pv  tomato str  DC3000
+Erabit.cut       Oryctolagus cuniculus (rabbit)
+Erat.cut         Rattus norvegicus
+Erhile.cut       Rhizobium leguminosarum
+Erhime.cut       Sinorhizobium meliloti 1021
+Erhoca.cut       Rhodobacter capsulatus
+Erhosh.cut       Rhodobacter sphaeroides
+Esalsa.cut       Salmo salar (Atlantic salmon)
+Esalty.cut       Salmonella typhimurium LT2
+Eschma.cut       Schistosoma mansoni
+Eschpo.cut       Schizosaccharomyces pombe
+Eschpo_cai.cut   Schizosaccharomyces pombe (CAI equivalent)
+Eschpo_high.cut  Schizosaccharomyces pombe (high)
+Eserma.cut       Serratia marcescens
+Esheep.cut       Ovis aries (sheep)
+Esoltu.cut       Solanum tuberosum (potato)
+Esoybn.cut       Glycine max (soybean)
+Espiol.cut       Spinacia oleracea (spinach)
+Estaau.cut       Staphylococcus aureus
+Estrco.cut       Streptomyces coelicolor A3 2
+Estrmu.cut       Streptococcus mutans UA159
+Estrpn.cut       Streptococcus pneumoniae R6
+Estrpu.cut       Strongylocentrotus purpuratus (sea urchin)
+Esv40.cut        Simian Virus 40
+Esynco.cut       Synechococcus sp  WH 8102
+Esyncy.cut       Synechocystis sp  PCC 6803
+Etetpy.cut       Tetrahymena thermophila
+Etheth.cut       Thermus thermophilus HB8
+Etobac.cut       Nicotiana tabacum (tobacco)
+Etobac_chl.cut   Nicotiana tabacum chloroplast (tobacco)
+Etrybr.cut       Trypanosoma brucei
+Etrycr.cut       Trypanosoma cruzi
+Evibch.cut       Vibrio cholerae O1 biovar eltor str  N16961
+Ewheat.cut       Triticum aestivum (wheat)
+Exenla.cut       Xenopus laevis
+Eyeast.cut       Saccharomyces cerevisiae
+Eyeast_cai.cut   Saccharomyces cerevisiae original CAI set
+Eyeast_high.cut  Saccharomyces cerevisiae (high)
+Eyeast_mit.cut   Saccharomyces cerevisiae mitochondrion
+Eyeren.cut       Yersinia enterocolitica
+Eyerpe.cut       Yersinia pestis
+
+
+#Missing species from the large CUTG files:
+#
+#Shigella flexneri (E) - see E.coli O157
+
+
+#Old name       New name
+# Eacc.cut Eacica.cut
+# Eatu.cut Eagrtu.cut
+# Eanasp.cut Eanasp.cut
+# Eath.cut Earath.cut
+# Eazovi.cut Eazovi.cut
+# Ebme.cut Ebacme.cut
+# Ebst.cut Ebacst.cut
+# Ebsu.cut Ebacsu.cut
+# Ebsu_h.cut Ebacsu_high.cut
+# Ebmo.cut Ebommo.cut
+# Ebov.cut Ebovin.cut
+# Ephix174.cut Ebpphx.cut
+# Ebja.cut Ebraja.cut
+# Ebna.cut Ebrana.cut
+# Ezebrafish.cut Ebrare.cut
+# Ecel.cut Ecaeel.cut
+# Ecal.cut Ecanal.cut
+# Edog.cut Ecanfa.cut
+# Eccr.cut Ecaucr.cut
+# Echk.cut Echick.cut
+# Ecre.cut Echlre.cut
+# Ectr.cut Echltr.cut
+# Ecac.cut Ecloab.cut
+# Eham.cut Ecrigr.cut
+# Ecpx.cut Ecyapa.cut
+# Edayhoff.cut Edayhoff.cut
+# Eddi.cut Edicdi.cut
+# Eddi_h.cut Edicdi_high.cut
+# Edro.cut Edrome.cut
+# Edro_h.cut Edrome_high.cut
+# Eeco.cut Eecoli.cut
+# Eeco_h.cut Eecoli_high.cut
+# Eani.cut Eemeni.cut
+# Eanidmit.cut Eemeni_mit.cut
+# Eani_h.cut Eemeni_high.cut
+# Eeca.cut Eerwct.cut
+# Ehin.cut Ehaein.cut
+# Ehma.cut Ehalma.cut
+# Ehha.cut Ehalsa.cut
+# Ebly.cut Ehorvu.cut
+# Ehum.cut Ehuman.cut
+# Ekpn.cut Eklepn.cut
+# Ekla.cut Eklula.cut
+# Ella.cut Elacdl.cut
+# Etom.cut Elyces.cut
+# Emac.cut Emacfa.cut
+# Ezma.cut Emaize.cut
+# Echzm.cut Emaize_chl.cut
+# Emam_h.cut Emammal_high.cut
+# Emse.cut Emanse.cut
+# Echmp.cut Emarpo_chl.cut
+# Emsa.cut Emedsa.cut
+# Emta.cut Emetth.cut
+# Emus.cut Emouse.cut
+# Emtu.cut Emyctu.cut
+# Engo.cut Eneigo.cut
+# Encr.cut Eneucr.cut
+# Eoncsp.cut Eoncmy.cut
+# Eric.cut Eorysa.cut
+# Echos.cut Eorysa_chl.cut
+# Epea.cut Epea.cut
+# Ephy.cut Epethy.cut
+# Ephv.cut Ephavu.cut
+# Epig.cut Epig.cut
+# Epfa.cut Eplafa.cut
+# Epvu.cut Eprovu.cut
+# Epae.cut Epseae.cut
+# Eppu.cut Epsepu.cut
+# Epsy.cut Epsesm.cut
+# Erab.cut Erabit.cut
+# Erat.cut Erat.cut
+# Erle.cut Erhile.cut
+# Erhm.cut Erhime.cut
+# Erca.cut Erhoca.cut
+# Ersp.cut Erhosh.cut
+# Esalsp.cut Esalsa.cut
+# Esty.cut Esalty.cut
+# Esmi.cut Eschma.cut
+# Espo.cut Eschpo.cut
+# Epombecai.cut Eschpo_cai.cut
+# Espo_h.cut Eschpo_high.cut
+# Esma.cut Eserma.cut
+# Eshp.cut Esheep.cut
+# Epot.cut Esoltu.cut
+# Esoy.cut Esoybn.cut
+# Espi.cut Espiol.cut
+# Esau.cut Estaau.cut
+# Esco.cut Estrco.cut
+# Esmu.cut Estrmu.cut
+# Espn.cut Estrpn.cut
+# Espu.cut Estrpu.cut
+# Esv40.cut Esv40.cut
+# Esynsp.cut Esynco.cut
+# Esyhsp.cut Esyncy.cut
+# Etetsp.cut Etetpy.cut
+# Eter.cut Etheth.cut
+# Etob.cut Etobac.cut
+# Echnt.cut Etobac_chl.cut
+# Etbr.cut Etrybr.cut
+# Etcr.cut Etrycr.cut
+# Evco.cut Evibch.cut
+# Ewht.cut Ewheat.cut
+# Exel.cut Exenla.cut
+# Eyeast.cut Eyeast.cut
+# Eyeastcai.cut Eyeast_cai.cut
+# Eysc_h.cut Eyeast_high.cut
+# Eyscmt.cut Eyeast_mit.cut
+# Eyen.cut Eyeren.cut
+# Edayhoff.cut Artificial frequencies - has no stop frequency

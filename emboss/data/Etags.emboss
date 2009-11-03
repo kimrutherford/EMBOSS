@@ -1,0 +1,335 @@
+# === Based on the GFF standard 2.0 ===
+# Note: GFF includes EMBL/Genbank/DDBJ feature keys and tags
+
+# === EMBL/GenBank/DDBJ feature tags ===
+
+# Updated to EMBL/GenBank/DDBJ FTv5.0 by Peter Rice 17th Jan 2003
+# Updated to EMBL/GenBank/DDBJ FTv6.2 by Peter Rice 27th Jan 2005
+
+note QTEXT
+
+# should be identical for all features related to one gene
+# and must differ from /gene
+allele QTEXT
+
+anticodon SPECIAL
+#      (pos:<base_range>,aa:<amino_acid>)
+
+# multiple values allowed for promoter and enhancer features
+# single value for misc_binding, oriT and protein_bind features
+bound_moiety QTEXT
+
+cell_line QTEXT
+
+cell_type QTEXT
+
+chromosome QTEXT
+
+# removed in FTv3.0 Jan 2001
+# chloroplast VOID
+
+# removed in FTv3.0 Jan 2001
+# chromoplast VOID
+
+citation SPECIAL
+# value [number]
+# # brackets are historical from use for multiple citations
+# now represented by multiple /citation qualifiers
+
+clone QTEXT
+
+clone_lib QTEXT
+
+codon SPECIAL
+#       (seq:"ttt",aa:Leu)
+# seq is 3 bases - use join() location for ribosomal slippage
+# use aa:OTHER for amino acids not on approved list
+
+codon_start  LIMITED 1,2,3
+
+# new in FT 6.0
+# multiple occurrences allowed
+# value is accnumber.version with no quotes
+compare SPECIAL
+
+cons_splice SPECIAL
+# (5'site:YES,3'site:NO)
+# ABSENT also allowed if beyond end e.g.  (5'site:NO,3'site:ABSENT)
+
+collected_by QTEXT
+
+collection_date QSPECIAL
+# "DD-Mmm-YYYY", "Mmm-YYYY" or "YYYY"
+
+country QTEXT
+# Value country country:region or country:region,locality
+
+# artificially selected plants or fungi - see also /variety
+cultivar QTEXT
+
+# removed in FTv3.0 Jan 2001
+# cyanelle VOID
+
+db_xref QSPECIAL
+#      "<database>:<identifier>"
+# the complete list of allowed database types is kept by NCBI at
+# http://www.ncbi.nlm.nih.gov/projects/collab/ 
+
+dev_stage QTEXT
+
+direction  LIMITED left,right,both
+# for oriT features BOTH is incorrect
+
+EC_number QTEXT
+# EC number value
+
+ecotype QTEXT
+
+environmental_sample VOID
+# when used expect /isolation_source
+
+estimated_length SPECIAL
+# gap length: unknown or integer
+# unknown gaps are 100 "n"s in the sequence
+# gap size is unlimited
+
+# Removed in FTv6.5, replaced by /experiment and /inference
+evidence LIMITED experimental,not_experimental
+
+exception QTEXT
+
+experiment QTEXT
+
+#source feature of biological interest - defines the translation table
+# and which organism to put in the taxonomy of the entry
+# use for one of multiple source features
+# do not use for transgenic (multiple source) entries
+focus VOID
+
+frequency QTEXT
+# represents fraction of population e.g. ".85"
+
+function QTEXT
+
+gene QTEXT
+
+germline VOID
+
+haplotype QTEXT
+
+# a structured description of non-experimental evidence that supports
+# the feature identification or assignment.
+#
+# TYPE[ (same species)][:EVIDENCE_BASIS]" where TYPE is one of the following:
+#  "non-experimental evidence, no additional details recorded"
+#       "similar to sequence"
+#            "similar to AA sequence"
+#            "similar to DNA sequence"
+#            "similar to RNA sequence"
+#                "similar to RNA sequence, mRNA"
+#                "similar to RNA sequence, EST"
+#                "similar to RNA sequence, other RNA"
+#       "profile"
+#            "nucleotide motif"
+#            "protein motif"
+#            "ab initio prediction"
+#  where the optional text "(same species)" is included when the inference comes 
+#  from the same species as the entry.
+#  where the optional "EVIDENCE_BASIS" is either a reference to a database entry 
+#  (including accession and version) or an algorithm (including version) , eg 
+#  'INSD:AACN010222672.1', 'InterPro:IPR001900', 'ProDom:PD000600', 
+#  'Genscan:2.0', etc.
+
+inference QSPECIAL
+
+# replaced by mobile_element in Dec 2006
+insertion_seq QTEXT
+
+isolate QTEXT
+
+isolation_source QTEXT
+
+# removed in FTv3.0 Jan 2001
+# kinetoplast VOID  
+
+label TEXT
+
+lab_host QTEXT
+
+#degrees latitude and longitude in format "d[d.dd] N|S d[dd.dd] W|E"
+# (see the examples)
+# /lat_lon="47.94 N 28.12 W" /lat_lon="45.01 S 4.12 E" 
+
+lat_lon QSPECIAL
+
+# new in FTv5.0 - to mark features for tracking purposes
+# Use in any features if /gene is valid - must be unique in the entry
+# Only allows a single word from January 2005
+# but old entries may have multiple values
+
+locus_tag QWORD
+
+map QTEXT
+
+macronuclear VOID
+
+# removed in FTv3.0 Jan 2001
+# mitochondrion VOID  
+
+mobile_element QSPECIAL
+
+mod_base TEXT
+# There is a controlled vocabulary in appendix 7.5.2 of
+# http://www.ebi.ac.uk/embl/Documentation/FT_definitions/feature_table.html
+# others should have OTHER with /note="name of base"
+
+# mRNA (incl. EST)
+# other RNA (incl. synthetic)
+# other DNA (incl. synthetic)
+# unassigned DNA (incl. unknown)
+# unassigned RNA (incl. unknown)
+mol_type QLIMITED genomic DNA,genomic RNA,mRNA,tRNA,rRNA,snoRNA,snRNA,scRNA,pre-RNA,other RNA,other DNA,unassigned DNA,unassigned RNA
+# FT 6.2 was pre-mRNA in FT 5.0
+
+#alphanumeric e.g. 4, 6B, XIIb for order of genetic elements
+number TEXT
+
+# Only allows a single word from January 2005
+# but old entries may have multiple values
+# expect to find /locus_tag with the current locus name
+# locus_tag is to mark features for tracking purposes
+old_locus_tag QWORD
+
+operon QTEXT
+
+organelle QLIMITED mitochondrion,nucleomorph,plastid,mitochondrion:kinetoplast,plastid:chloroplast,plastid:apicoplast,plastid:chromoplast,plastid:cyanelle,platid:leucoplast,plastid:proplastid
+# FT 6.2 was plastid:protoplastid in FT5.0
+
+organism QTEXT
+
+# obsolete from 15-Dec-01, but used in old entries
+partial VOID
+
+PCR_conditions QTEXT
+
+# /PCR_primers="[fwd_name: XXX, ]fwd_seq: xxxxx,
+# [rev_name: YYY, ]rev_seq: yyyyy" 
+#
+# Example: /PCR_primers="fwd_name: CO1P1, fwd_seq: ttgattttttggtcayccwgaagt,
+# rev_name: CO1R4, rev_seq: ccwvytardcctarraartgttg" 
+# /PCR_primers="fwd_seq: tgtgtgtgtgactgaca, rev_seq: tagcgatacggtcaatgc" 
+#
+# fwd_seq and rev_seq are both mandatory; fwd_name and rev_name are both
+# optional. Both sequences should be presented in 5'>3' order. The
+# sequences should be given in the IUPAC degenerate-base alphabet.
+
+# New in FTv6.5
+PCR_primers QSPECIAL
+
+phenotype QTEXT
+
+plasmid QTEXT
+
+pop_variant QTEXT
+
+product QTEXT
+
+protein_id QSPECIAL
+#   "AAA12345.1"
+
+proviral VOID
+
+pseudo VOID
+
+rearranged VOID
+
+replace QSPECIAL
+#      "ACGT"
+#      "" for a deletion
+
+rpt_family QTEXT
+
+rpt_type LIMITED TANDEM,INVERTED,FLANKING,TERMINAL,DIRECT,DISPERSED,OTHER
+
+rpt_unit SPECIAL
+#    202..245
+#FT6.2: or "sequence"
+
+rpt_unit_range SPECIAL
+# base range 202..245
+
+rpt_unit_seq QSPECIAL
+# sequence perhaps with repeats /rpt_unit_seq="aagggc" or
+# /rpt_unit_seq="ag(5)tg(8)"
+
+# new in FTv5.0 for viral segments
+segment QTEXT
+
+# obsolete in FT 6.2
+# sequenced_mol QLIMITED cDNA,cDNA to genomic RNA,cDNA to mRNA,cDNA to other RNA,cDNA to rRNA,DNA,mRNA,RNA,rRNA,scRNA,snRNA,tRNA
+
+serotype QTEXT
+
+serovar QTEXT
+
+sex QTEXT
+#       male,female, hermaphrodite, ...
+
+specific_host QTEXT
+
+specimen_voucher QTEXT
+
+standard_name QTEXT
+
+strain QTEXT
+
+sub_clone TEXT
+
+sub_species TEXT
+
+sub_strain TEXT
+
+tissue_lib QTEXT
+
+tissue_type QTEXT
+
+# transgenic is supposed to be only in extra source keys for an entry
+# identifies the recipient source, used in taxonomy
+# entries with /transgenic should not have /focus
+transgenic VOID
+
+translation QSPECIAL
+# X used for exceptions
+# mandatory for CDS unless /pseudo is present
+
+transl_except SPECIAL
+#  (pos:213..215,aa:Trp)
+
+# FTv3.0 has no definition for 17, 18, 19, 20
+# FTv6.2 has no definition for 7, 8
+transl_table LIMITED 1,2,3,4,5,6,9,10,11,12,13,14,15,16,21,22,23
+# 1 is universal genetic code
+
+transposon QTEXT
+
+# indicates that exons from two RNA molecules are ligated in
+# intermolecular reaction to form mature RNA
+
+trans_splicing VOID
+
+usedin TEXT
+
+# plant and fungal varieties only
+variety QTEXT
+
+virion VOID
+
+# === end of EMBL/GenBank/DDBJ features ===
+
+# === Tags from GFF 2.0 standard
+
+Target QTEXT note
+
+Sequence QTEXT note
+
+# === end of GFF tags

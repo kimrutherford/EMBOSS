@@ -1,0 +1,839 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: dan
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+dan
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+    Function
+</H2>
+Calculates DNA RNA/DNA melting temperature
+<H2>
+    Description
+</H2>
+
+Dan calculates the melting temperature (Tm) and the percent G+C of a
+nucleic acid sequence (optionally plotting them).  For the Melting
+temperature profile, free energy values calculated from nearest neighbor
+thermodynamics are used (Breslauer et al.  Proc.  Natl.  Acad.  Sci. 
+USA 83, 3746-3750 and Baldino et al.  Methods in Enzymol.  168,
+761-777). 
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with dan</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>dan </b>
+Calculates DNA RNA/DNA melting temperature
+Input nucleotide sequence(s): <b>tembl:x13776</b>
+Enter window size [20]: <b></b>
+Enter Shift Increment [1]: <b></b>
+Enter DNA concentration (nM) [50.]: <b></b>
+Enter salt concentration (mM) [50.]: <b></b>
+Output report [x13776.dan]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+An example of producing a plot of Tm: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>dan -plot -graph cps </b>
+Calculates DNA RNA/DNA melting temperature
+Input nucleotide sequence(s): <b>tembl:x13776</b>
+Enter window size [20]: <b></b>
+Enter Shift Increment [1]: <b></b>
+Enter DNA concentration (nM) [50.]: <b></b>
+Enter salt concentration (mM) [50.]: <b></b>
+Enter minimum temperature [55.]: <b></b>
+
+Created dan.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -windowsize         integer    [20] The values of melting point and other
+                                  thermodynamic properties of the sequence are
+                                  determined by taking a short length of
+                                  sequence known as a window and determining
+                                  the properties of the sequence in that
+                                  window. The window is incrementally moved
+                                  along the sequence with the properties being
+                                  calculated at each new position. (Integer
+                                  from 1 to 100)
+   -shiftincrement     integer    [1] This is the amount by which the window
+                                  is moved at each increment in order to find
+                                  the melting point and other properties along
+                                  the sequence. (Integer 1 or more)
+   -dnaconc            float      [50.] Enter DNA concentration (nM) (Number
+                                  from 1.000 to 100000.000)
+   -saltconc           float      [50.] Enter salt concentration (mM) (Number
+                                  from 1.000 to 1000.000)
+*  -mintemp            float      [55.] Enter a minimum value for the
+                                  temperature scale (y-axis) of the plot.
+                                  (Number from 0.000 to 150.000)
+*  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png, gif)
+*  -outfile            report     [*.dan] If a plot is not being produced then
+                                  data on the melting point etc. in each
+                                  window along the sequence is output to the
+                                  file.
+
+   Additional (Optional) qualifiers (* if not always prompted):
+   -product            toggle     This prompts for percent formamide, percent
+                                  of mismatches allowed and product length.
+*  -formamide          float      [0.] This specifies the percent formamide to
+                                  be used in calculations (it is ignored
+                                  unless -product is used). (Number from 0.000
+                                  to 100.000)
+*  -mismatch           float      [0.] This specifies the percent mismatch to
+                                  be used in calculations (it is ignored
+                                  unless -product is used). (Number from 0.000
+                                  to 100.000)
+*  -prodlen            integer    [Window size (20)] This specifies the
+                                  product length to be used in calculations
+                                  (it is ignored unless -product is used).
+                                  (Any integer value)
+   -thermo             toggle     Output the DeltaG, DeltaH and DeltaS values
+                                  of the sequence windows to the output data
+                                  file.
+*  -temperature        float      [25.] If -thermo has been specified then
+                                  this specifies the temperature at which to
+                                  calculate the DeltaG, DeltaH and DeltaS
+                                  values. (Number from 0.000 to 100.000)
+
+   Advanced (Unprompted) qualifiers:
+   -rna                boolean    This specifies that the sequence is an RNA
+                                  sequence and not a DNA sequence.
+   -plot               toggle     If this is not specified then the file of
+                                  output data is produced, else a plot of the
+                                  melting point along the sequence is
+                                  produced.
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-graph" associated qualifiers
+   -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
+
+   "-outfile" associated qualifiers
+   -rformat            string     Report format
+   -rname              string     Base file name
+   -rextension         string     File name extension
+   -rdirectory         string     Output directory
+   -raccshow           boolean    Show accession number in the report
+   -rdesshow           boolean    Show description in the report
+   -rscoreshow         boolean    Show the score in the report
+   -rusashow           boolean    Show the full USA in the report
+   -rmaxall            integer    Maximum total hits to report
+   -rmaxseq            integer    Maximum hits to report for one sequence
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-windowsize</td>
+<td>The values of melting point and other thermodynamic properties of the sequence are determined by taking a short length of sequence known as a window and determining the properties of the sequence in that window. The window is incrementally moved along the sequence with the properties being calculated at each new position.</td>
+<td>Integer from 1 to 100</td>
+<td>20</td>
+</tr>
+
+<tr>
+<td>-shiftincrement</td>
+<td>This is the amount by which the window is moved at each increment in order to find the melting point and other properties along the sequence.</td>
+<td>Integer 1 or more</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-dnaconc</td>
+<td>Enter DNA concentration (nM)</td>
+<td>Number from 1.000 to 100000.000</td>
+<td>50.</td>
+</tr>
+
+<tr>
+<td>-saltconc</td>
+<td>Enter salt concentration (mM)</td>
+<td>Number from 1.000 to 1000.000</td>
+<td>50.</td>
+</tr>
+
+<tr>
+<td>-mintemp</td>
+<td>Enter a minimum value for the temperature scale (y-axis) of the plot.</td>
+<td>Number from 0.000 to 150.000</td>
+<td>55.</td>
+</tr>
+
+<tr>
+<td>-graph</td>
+<td>Graph type</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png, gif</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
+</tr>
+
+<tr>
+<td>-outfile</td>
+<td>If a plot is not being produced then data on the melting point etc. in each window along the sequence is output to the file.</td>
+<td>Report output file</td>
+<td><i>&lt;*&gt;</i>.dan</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-product</td>
+<td>This prompts for percent formamide, percent of mismatches allowed and product length.</td>
+<td>Toggle value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-formamide</td>
+<td>This specifies the percent formamide to be used in calculations (it is ignored unless -product is used).</td>
+<td>Number from 0.000 to 100.000</td>
+<td>0.</td>
+</tr>
+
+<tr>
+<td>-mismatch</td>
+<td>This specifies the percent mismatch to be used in calculations (it is ignored unless -product is used).</td>
+<td>Number from 0.000 to 100.000</td>
+<td>0.</td>
+</tr>
+
+<tr>
+<td>-prodlen</td>
+<td>This specifies the product length to be used in calculations (it is ignored unless -product is used).</td>
+<td>Any integer value</td>
+<td>Window size (20)</td>
+</tr>
+
+<tr>
+<td>-thermo</td>
+<td>Output the DeltaG, DeltaH and DeltaS values of the sequence windows to the output data file.</td>
+<td>Toggle value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-temperature</td>
+<td>If -thermo has been specified then this specifies the temperature at which to calculate the DeltaG, DeltaH and DeltaS values.</td>
+<td>Number from 0.000 to 100.000</td>
+<td>25.</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-rna</td>
+<td>This specifies that the sequence is an RNA sequence and not a DNA sequence.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-plot</td>
+<td>If this is not specified then the file of output data is produced, else a plot of the melting point along the sequence is produced.</td>
+<td>Toggle value Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>
+
+<H2>
+    Input file format
+</H2>
+
+Any DNA or RNA sequence USA. 
+
+<p>
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:x13776' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:x13776</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   X13776; SV 1; linear; genomic DNA; STD; PRO; 2167 BP.
+XX
+AC   X13776; M43175;
+XX
+DT   19-APR-1989 (Rel. 19, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 24)
+XX
+DE   Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+XX
+KW   aliphatic amidase regulator; amiC gene; amiR gene.
+XX
+OS   Pseudomonas aeruginosa
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
+OC   Pseudomonadaceae; Pseudomonas.
+XX
+RN   [1]
+RP   1167-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (16-DEC-1988) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
+XX
+RN   [2]
+RP   1167-2167
+RX   DOI; 10.1016/0014-5793(89)80249-2.
+RX   PUBMED; 2495988.
+RA   Lowe N., Rice P.M., Drew R.E.;
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene of Pseudomonas
+RT   aeruginosa";
+RL   FEBS Lett. 246(1-2):39-43(1989).
+XX
+RN   [3]
+RP   1-1292
+RX   PUBMED; 1907262.
+RA   Wilson S., Drew R.;
+RT   "Cloning and DNA seqence of amiC, a new gene regulating expression of the
+RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
+RT   product.";
+RL   J. Bacteriol. 173(16):4914-4921(1991).
+XX
+RN   [4]
+RP   1-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
+XX
+DR   GOA; Q51417.
+DR   UniProtKB/Swiss-Prot; Q51417; AMIS_PSEAE.
+XX
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT                   /replace=""
+FT                   /note="ClaI fragment deleted in pSW36,  constitutive
+FT                   phenotype"
+FT   misc_feature    1
+FT                   /note="last base of an XhoI site"
+FT   misc_feature    648..653
+FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 causes
+FT                   constitutive expression of amiE"
+FT   conflict        1281
+FT                   /replace="g"
+FT                   /citation=[3]
+XX
+SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
+     ggtaccgctg gccgagcatc tgctcgatca ccaccagccg ggcgacggga actgcacgat        60
+     ctacctggcg agcctggagc acgagcgggt tcgcttcgta cggcgctgag cgacagtcac       120
+     aggagaggaa acggatggga tcgcaccagg agcggccgct gatcggcctg ctgttctccg       180
+     aaaccggcgt caccgccgat atcgagcgct cgcacgcgta tggcgcattg ctcgcggtcg       240
+     agcaactgaa ccgcgagggc ggcgtcggcg gtcgcccgat cgaaacgctg tcccaggacc       300
+     ccggcggcga cccggaccgc tatcggctgt gcgccgagga cttcattcgc aaccgggggg       360
+     tacggttcct cgtgggctgc tacatgtcgc acacgcgcaa ggcggtgatg ccggtggtcg       420
+     agcgcgccga cgcgctgctc tgctacccga ccccctacga gggcttcgag tattcgccga       480
+     acatcgtcta cggcggtccg gcgccgaacc agaacagtgc gccgctggcg gcgtacctga       540
+     ttcgccacta cggcgagcgg gtggtgttca tcggctcgga ctacatctat ccgcgggaaa       600
+     gcaaccatgt gatgcgccac ctgtatcgcc agcacggcgg cacggtgctc gaggaaatct       660
+     acattccgct gtatccctcc gacgacgact tgcagcgcgc cgtcgagcgc atctaccagg       720
+     cgcgcgccga cgtggtcttc tccaccgtgg tgggcaccgg caccgccgag ctgtatcgcg       780
+     ccatcgcccg tcgctacggc gacggcaggc ggccgccgat cgccagcctg accaccagcg       840
+     aggcggaggt ggcgaagatg gagagtgacg tggcagaggg gcaggtggtg gtcgcgcctt       900
+     acttctccag catcgatacg cccgccagcc gggccttcgt ccaggcctgc catggtttct       960
+     tcccggagaa cgcgaccatc accgcctggg ccgaggcggc ctactggcag accttgttgc      1020
+     tcggccgcgc cgcgcaggcc gcaggcaact ggcgggtgga agacgtgcag cggcacctgt      1080
+     acgacatcga catcgacgcg ccacaggggc cggtccgggt ggagcgccag aacaaccaca      1140
+     gccgcctgtc ttcgcgcatc gcggaaatcg atgcgcgcgg cgtgttccag gtccgctggc      1200
+     agtcgcccga accgattcgc cccgaccctt atgtcgtcgt gcataacctc gacgactggt      1260
+     ccgccagcat gggcggggga ccgctcccat gagcgccaac tcgctgctcg gcagcctgcg      1320
+     cgagttgcag gtgctggtcc tcaacccgcc gggggaggtc agcgacgccc tggtcttgca      1380
+     gctgatccgc atcggttgtt cggtgcgcca gtgctggccg ccgccggaag ccttcgacgt      1440
+     gccggtggac gtggtcttca ccagcatttt ccagaatggc caccacgacg agatcgctgc      1500
+     gctgctcgcc gccgggactc cgcgcactac cctggtggcg ctggtggagt acgaaagccc      1560
+     cgcggtgctc tcgcagatca tcgagctgga gtgccacggc gtgatcaccc agccgctcga      1620
+     tgcccaccgg gtgctgcctg tgctggtatc ggcgcggcgc atcagcgagg aaatggcgaa      1680
+     gctgaagcag aagaccgagc agctccagga ccgcatcgcc ggccaggccc ggatcaacca      1740
+     ggccaaggtg ttgctgatgc agcgccatgg ctgggacgag cgcgaggcgc accagcacct      1800
+     gtcgcgggaa gcgatgaagc ggcgcgagcc gatcctgaag atcgctcagg agttgctggg      1860
+     aaacgagccg tccgcctgag cgatccgggc cgaccagaac aataacaaga ggggtatcgt      1920
+     catcatgctg ggactggttc tgctgtacgt tggcgcggtg ctgtttctca atgccgtctg      1980
+     gttgctgggc aagatcagcg gtcgggaggt ggcggtgatc aacttcctgg tcggcgtgct      2040
+     gagcgcctgc gtcgcgttct acctgatctt ttccgcagca gccgggcagg gctcgctgaa      2100
+     ggccggagcg ctgaccctgc tattcgcttt tacctatctg tgggtggccg ccaaccagtt      2160
+     cctcgag                                                                2167
+//
+</pre>
+</td></tr></table><p>
+
+
+<H2>
+    Output file format
+</H2>
+
+If a plot is not being produced, dan reports the sequence of each
+oligomer window, its melting temperature under the specified conditions
+and its GC content. 
+
+<p>
+<p>
+
+The output is a standard EMBOSS report file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: embl,
+genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+feattable, motif, regions, seqtable, simple, srs, table, tagseq
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/ReportFormats.html">
+http://emboss.sf.net/docs/themes/ReportFormats.html</A>
+for further information on report formats.
+
+<p>
+<p>
+
+By default <b>dan</b> writes a 'seqtable' report file.
+
+<p>
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: x13776.dan</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: dan
+# Rundate: Sun 15 Jul 2007 12:00:00
+# Commandline: dan
+#    -sequence tembl:x13776
+# Report_format: seqtable
+# Report_file: x13776.dan
+########################################
+
+#=======================================
+#
+# Sequence: X13776     from: 1   to: 2167
+# HitCount: 2148
+#=======================================
+
+  Start     End     Tm     GC DeltaG DeltaH DeltaS TmProd Sequence
+      1      20   64.9   70.0      .      .      .      . ggtaccgctggccgagcatc
+      2      21   63.7   65.0      .      .      .      . gtaccgctggccgagcatct
+      3      22   63.7   65.0      .      .      .      . taccgctggccgagcatctg
+      4      23   66.9   70.0      .      .      .      . accgctggccgagcatctgc
+      5      24   66.7   70.0      .      .      .      . ccgctggccgagcatctgct
+      6      25   65.5   70.0      .      .      .      . cgctggccgagcatctgctc
+      7      26   65.5   70.0      .      .      .      . gctggccgagcatctgctcg
+      8      27   63.7   65.0      .      .      .      . ctggccgagcatctgctcga
+      9      28   62.9   60.0      .      .      .      . tggccgagcatctgctcgat
+     10      29   62.6   65.0      .      .      .      . ggccgagcatctgctcgatc
+     11      30   61.7   60.0      .      .      .      . gccgagcatctgctcgatca
+     12      31   60.2   60.0      .      .      .      . ccgagcatctgctcgatcac
+     13      32   60.2   60.0      .      .      .      . cgagcatctgctcgatcacc
+     14      33   59.0   55.0      .      .      .      . gagcatctgctcgatcacca
+     15      34   59.2   55.0      .      .      .      . agcatctgctcgatcaccac
+     16      35   60.4   60.0      .      .      .      . gcatctgctcgatcaccacc
+     17      36   58.9   55.0      .      .      .      . catctgctcgatcaccacca
+     18      37   58.6   55.0      .      .      .      . atctgctcgatcaccaccag
+     19      38   61.3   60.0      .      .      .      . tctgctcgatcaccaccagc
+     20      39   62.4   65.0      .      .      .      . ctgctcgatcaccaccagcc
+     21      40   63.9   65.0      .      .      .      . tgctcgatcaccaccagccg
+     22      41   64.9   70.0      .      .      .      . gctcgatcaccaccagccgg
+     23      42   64.3   70.0      .      .      .      . ctcgatcaccaccagccggg
+     24      43   66.1   70.0      .      .      .      . tcgatcaccaccagccgggc
+     25      44   67.5   75.0      .      .      .      . cgatcaccaccagccgggcg
+     26      45   66.1   70.0      .      .      .      . gatcaccaccagccgggcga
+     27      46   66.3   70.0      .      .      .      . atcaccaccagccgggcgac
+     28      47   68.6   75.0      .      .      .      . tcaccaccagccgggcgacg
+     29      48   69.8   80.0      .      .      .      . caccaccagccgggcgacgg
+     30      49   70.7   80.0      .      .      .      . accaccagccgggcgacggg
+     31      50   70.5   80.0      .      .      .      . ccaccagccgggcgacggga
+     32      51   68.6   75.0      .      .      .      . caccagccgggcgacgggaa
+     33      52   68.6   75.0      .      .      .      . accagccgggcgacgggaac
+     34      53   68.4   75.0      .      .      .      . ccagccgggcgacgggaact
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+   2101    2120   69.9   80.0      .      .      .      . ggccggagcgctgaccctgc
+   2102    2121   68.7   75.0      .      .      .      . gccggagcgctgaccctgct
+   2103    2122   65.5   70.0      .      .      .      . ccggagcgctgaccctgcta
+   2104    2123   63.5   65.0      .      .      .      . cggagcgctgaccctgctat
+   2105    2124   61.3   60.0      .      .      .      . ggagcgctgaccctgctatt
+   2106    2125   60.1   60.0      .      .      .      . gagcgctgaccctgctattc
+   2107    2126   61.7   60.0      .      .      .      . agcgctgaccctgctattcg
+   2108    2127   63.4   65.0      .      .      .      . gcgctgaccctgctattcgc
+   2109    2128   61.7   60.0      .      .      .      . cgctgaccctgctattcgct
+   2110    2129   59.5   55.0      .      .      .      . gctgaccctgctattcgctt
+   2111    2130   57.1   50.0      .      .      .      . ctgaccctgctattcgcttt
+   2112    2131   56.4   45.0      .      .      .      . tgaccctgctattcgctttt
+   2113    2132   54.7   45.0      .      .      .      . gaccctgctattcgctttta
+   2114    2133   55.0   45.0      .      .      .      . accctgctattcgcttttac
+   2115    2134   55.9   50.0      .      .      .      . ccctgctattcgcttttacc
+   2116    2135   54.7   45.0      .      .      .      . cctgctattcgcttttacct
+   2117    2136   52.0   40.0      .      .      .      . ctgctattcgcttttaccta
+   2118    2137   51.2   35.0      .      .      .      . tgctattcgcttttacctat
+   2119    2138   50.9   40.0      .      .      .      . gctattcgcttttacctatc
+   2120    2139   49.0   35.0      .      .      .      . ctattcgcttttacctatct
+   2121    2140   49.3   35.0      .      .      .      . tattcgcttttacctatctg
+   2122    2141   51.1   35.0      .      .      .      . attcgcttttacctatctgt
+   2123    2142   52.2   40.0      .      .      .      . ttcgcttttacctatctgtg
+   2124    2143   54.0   45.0      .      .      .      . tcgcttttacctatctgtgg
+   2125    2144   55.2   50.0      .      .      .      . cgcttttacctatctgtggg
+   2126    2145   53.9   45.0      .      .      .      . gcttttacctatctgtgggt
+   2127    2146   52.3   45.0      .      .      .      . cttttacctatctgtgggtg
+   2128    2147   53.5   45.0      .      .      .      . ttttacctatctgtgggtgg
+   2129    2148   56.0   50.0      .      .      .      . tttacctatctgtgggtggc
+   2130    2149   57.8   55.0      .      .      .      . ttacctatctgtgggtggcc
+   2131    2150   60.1   60.0      .      .      .      . tacctatctgtgggtggccg
+   2132    2151   63.4   65.0      .      .      .      . acctatctgtgggtggccgc
+   2133    2152   64.3   70.0      .      .      .      . cctatctgtgggtggccgcc
+   2134    2153   63.4   65.0      .      .      .      . ctatctgtgggtggccgcca
+   2135    2154   62.7   60.0      .      .      .      . tatctgtgggtggccgccaa
+   2136    2155   64.5   65.0      .      .      .      . atctgtgggtggccgccaac
+   2137    2156   66.5   70.0      .      .      .      . tctgtgggtggccgccaacc
+   2138    2157   66.8   70.0      .      .      .      . ctgtgggtggccgccaacca
+   2139    2158   66.8   70.0      .      .      .      . tgtgggtggccgccaaccag
+   2140    2159   66.8   70.0      .      .      .      . gtgggtggccgccaaccagt
+   2141    2160   65.9   65.0      .      .      .      . tgggtggccgccaaccagtt
+   2142    2161   65.6   70.0      .      .      .      . gggtggccgccaaccagttc
+   2143    2162   65.6   70.0      .      .      .      . ggtggccgccaaccagttcc
+   2144    2163   64.4   65.0      .      .      .      . gtggccgccaaccagttcct
+   2145    2164   64.1   65.0      .      .      .      . tggccgccaaccagttcctc
+   2146    2165   65.4   70.0      .      .      .      . ggccgccaaccagttcctcg
+   2147    2166   64.2   65.0      .      .      .      . gccgccaaccagttcctcga
+   2148    2167   62.4   65.0      .      .      .      . ccgccaaccagttcctcgag
+
+#---------------------------------------
+#---------------------------------------
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>Graphics File: dan.ps</h3>
+<p><img src="dan.2.dan.gif" alt="[dan results]">
+<p><h3>File: x13776.dan</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+</pre>
+</td></tr></table><p>
+<p>
+
+The header information contains details of the program, date and sequence
+
+<p>
+Subsequent lines contain columns of data for each window into the
+sequence as it is moved along, giving:
+
+<p>
+<ul>
+<li> The start postion of the window
+<li> The end position of the window
+<li> The melting temperature of the window
+<li> The percentage C+G of the window
+<li> The sequence of the window
+</ul>
+
+
+<p>
+
+If the qualifier '-product' is used to make the program prompt for
+percent formamide percent of mismatches allowed and product length, then
+the output includes the melting temperature of the specified product.
+
+<p>
+
+If the qualifier '-thermo' is gived then the DeltaG, DeltaH and DeltaS
+of the sequence in the window is also output. 
+
+<H2>
+    Data files
+</H2>
+
+
+The EMBOSS data files "Edna.melt" and "Erna.melt" are used to read in the
+entropy/enthalpy/energy data for DNA and RNA respectively. 
+
+<p>
+EMBOSS data files are distributed with the application and stored
+in the standard EMBOSS data directory, which is defined
+by the EMBOSS environment variable EMBOSS_DATA.
+
+<p>
+
+To see the available EMBOSS data files, run:
+<p>
+<pre>
+% embossdata -showall
+</pre>
+<p>
+To fetch one of the data files (for example 'Exxx.dat') into your
+current directory for you to inspect or modify, run:
+
+<pre>
+
+% embossdata -fetch -file Exxx.dat
+
+</pre>
+<p>
+
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called
+".embossdata". Files for all EMBOSS runs can be put in the user's home
+directory, or again in a subdirectory called ".embossdata".
+
+<p>
+The directories are searched in the following order:
+
+<ul>
+   <li> . (your current directory)
+   <li> .embossdata (under your current directory)
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+<p>
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+
+<H2>
+    References
+</H2>
+
+<ol>
+
+<li>
+Breslauer, K.J., Frank, R., Blocker, H., and Marky, L.A.  (1986). 
+"Predicting DNA Duplex Stability from the Base Sequence." Proceedings of
+the National Academy of Sciences USA 83, 3746-3750. 
+
+<li>
+Baldino, M., Jr.  (1989).  "High Resolution In Situ Hybridization
+Histochemistry." In Methods in Enzymology, (P.M.  Conn, ed.), 168,
+761-777, Academic Press, San Diego, California, USA. 
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+
+RNA sequences must be submited to this application with the '-rna'
+qualifier on the command line, otherwise the sequence will be assumed to
+be DNA. 
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+
+0 if successful. 
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="banana.html">banana</a></td>
+<td>Bending and curvature plot in B-DNA</td>
+</tr>
+
+<tr>
+<td><a href="btwisted.html">btwisted</a></td>
+<td>Calculates the twisting in a B-DNA sequence</td>
+</tr>
+
+<tr>
+<td><a href="chaos.html">chaos</a></td>
+<td>Create a chaos game representation plot for a sequence</td>
+</tr>
+
+<tr>
+<td><a href="compseq.html">compseq</a></td>
+<td>Count composition of dimer/trimer/etc words in a sequence</td>
+</tr>
+
+<tr>
+<td><a href="freak.html">freak</a></td>
+<td>Residue/base frequency table or plot</td>
+</tr>
+
+<tr>
+<td><a href="isochore.html">isochore</a></td>
+<td>Plots isochores in large DNA sequences</td>
+</tr>
+
+<tr>
+<td><a href="sirna.html">sirna</a></td>
+<td>Finds siRNA duplexes in mRNA</td>
+</tr>
+
+<tr>
+<td><a href="wordcount.html">wordcount</a></td>
+<td>Counts words of a specified size in a DNA sequence</td>
+</tr>
+
+</table>
+
+<H2>
+    Author(s)
+</H2>
+
+This program was originally included in EGCG under the names "MELT"
+and "MELTPLOT", written by 
+Rodrigo Lopez (rls&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
+<p>
+This application was written by 
+Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
+
+<H2>
+    History
+</H2>
+
+
+Written (1999) - Alan Bleasby
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+None
+
+</BODY>
+</HTML>
+

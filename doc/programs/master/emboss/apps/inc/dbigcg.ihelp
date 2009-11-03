@@ -1,0 +1,54 @@
+   Standard (Mandatory) qualifiers:
+  [-dbname]            string     Database name (Any string from 2 to 19
+                                  characters, matching regular expression
+                                  /[A-z][A-z0-9_]+/)
+   -idformat           menu       [EMBL] Entry format (Values: EMBL (EMBL);
+                                  SWISS (Swiss-Prot, SpTrEMBL, TrEMBLnew);
+                                  GENBANK (Genbank, DDBJ); PIR (NBRF))
+   -directory          directory  [.] Database directory
+   -filenames          string     [*.seq] Wildcard database filename (Any
+                                  string is accepted)
+   -release            string     [0.0] Release number (Any string up to 9
+                                  characters)
+   -date               string     [00/00/00] Index date (Date string dd/mm/yy)
+   -outfile            outfile    [*.dbigcg] General log output file
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -fields             menu       [acc] Index fields (Values: acc (acnum
+                                  accession number index); sv (seqvn sequence
+                                  version and gi number index); des (des
+                                  description index); key (keyword keywords
+                                  index); org (taxon taxonomy and organism
+                                  index))
+   -exclude            string     Wildcard filename(s) to exclude (Any string
+                                  is accepted)
+   -maxindex           integer    [0] Maximum index length (Integer 0 or more)
+   -sortoptions        string     [-T . -k 1,1] Sort options, typically '-T .'
+                                  to use current directory for work files and
+                                  '-k 1,1' to force GNU sort to use the first
+                                  field (Any string is accepted)
+   -[no]systemsort     boolean    [Y] Use system sort utility
+   -[no]cleanup        boolean    [Y] Clean up temporary files
+   -indexoutdir        outdir     [.] Index file output directory
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+

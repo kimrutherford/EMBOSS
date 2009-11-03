@@ -1,0 +1,149 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: silent
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+silent
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/silent.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<b>silent</b> does a scan of a nucleic acid sequence for silent mutation
+restriction enzyme sites.
+
+<p>
+
+<b>silent</b> finds positions in a sequence where a point mutation could
+be made to introduce a specified restriction enzyme recognition site
+without changing the translation. 
+
+<p>
+
+Several restriction enzyme can be specified.
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/silent.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/silent.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/silent.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>silent</b> reads a nucleic acid sequence USA.
+
+<p>
+
+<!--#include file="inc/silent.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/silent.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+<!--#include file="inc/localfiles.ihtml" -->
+<p>
+<!--#include file="inc/refiles.ihtml" -->
+
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/silent.isee" -->
+<p>
+
+<b>silent</b> does the opposite to <b>recode</b>.  <b>silent</b> finds
+sites where a restriction enzyme site can be introduced without changing
+the translation in frame 1 of the sequence.  <b>recode</b> finds sites
+where a restriction enzyme site can be removed without changing the
+translation in frame 1 of the sequence.
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/ableasby.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/silent.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/silent.comment" -->
+
+
+</BODY>
+</HTML>
+

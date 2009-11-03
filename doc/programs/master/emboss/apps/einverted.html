@@ -1,0 +1,259 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: einverted
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+einverted
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/einverted.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<b>einverted</b> looks for inverted repeats (stem loops) in a nucleotide
+sequence. 
+
+<p>
+
+It will find inverted repeats that include a proprtion of mismatches and
+gaps (bulges in the stem loop). 
+
+<H2>Algorithm</H2>
+
+It works by finding alignments between the sequence and its reverse
+complement that exceed a threshold score.  Gaps and Mismatches are
+assigned a penalty (negative) score.  Matches are assigned a positive
+score.  The score is calculated by summing the values of each match, the
+penalties of each mismatch and the large penalties of any gaps.  Any
+region whose score exceeds the threshold is reported. 
+
+<p>
+
+<b>einverted</b>  uses dynamic programming and thus is guaranteed to find
+the optimal alignment, but is slower than, for example, a self-by-self BLAST.
+It can find multiple inverted repeats in a sequence.  
+
+<p>
+
+<b>einverted</b> does not report overlapping matches.
+
+<p>
+
+The original "inverted" program was written to annotate the nematode
+genome.  Excluding overlapping repeats saved problems with simple repeat
+sequences in this genome.
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/einverted.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/einverted.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/einverted.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+
+The input for <b>einverted</b> is a nucleotide sequence
+
+<p>
+<!--#include file="inc/einverted.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/einverted.output" -->
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+Sometimes you can find repeats using the program <b>palindrome</b> that
+you can't find with <b>einverted</b> using the default parameters. 
+
+<p>
+
+This is not due to a problem with either program.  It is simply because
+some of the shortest repeats that you find with <b>palindrome</b>'s
+default parameter values are below <b>einverted</b>'s default cutoff
+score - you should decrease the 'Minimum score threshold' to see them. 
+
+<p>
+
+For example, when <b>palindrome</b> is run with 'em:hsfau1', 
+it finds the repeat:
+
+<p>
+<pre>
+64    aaaactaaggc    74
+      |||||||||||
+98    ttttgattccg    88
+</pre>
+<p>
+
+<b>einverted</b> will not report this as its score is 33 (11 bases
+scoring 3 each, no mismatches or gaps) with is below the default score
+cutoff of 50. 
+
+<p>
+
+If  <b>einverted</b> is run as:
+<p>
+
+% einverted em:hsfau1  -threshold 33 
+<p>
+
+then it will find it:
+<p>
+
+<pre>
+Score 33: 11/11 (100%) matches, 0 gaps
+      64 aaaactaaggc 74      
+         |||||||||||
+      98 ttttgattccg 88      
+</pre>
+
+<p>
+
+
+Anything can be considered to be a repeat if you set the score
+threshold low enough!
+
+<p>
+
+<b>einverted</b> does not report overlapping matches.
+
+<p>
+
+The original "inverted" program was written to annotate the nematode
+genome.  Excluding overlapping repeats saved problems with simple repeat
+sequences in this genome.
+
+
+<H2>
+    References
+</H2>
+
+Some useful references on inverted repeats:
+
+<p>
+
+<ol>
+
+<li>
+Pearson CE, Zorbas H, Price GB, Zannis-Hadjopoulos M Inverted repeats,
+stem-loops, and cruciforms: significance for initiation of DNA
+replication.  J Cell Biochem 1996 Oct;63(1):1-22
+
+<li>
+Waldman AS, Tran H, Goldsmith EC, Resnick MA. q Long inverted repeats
+are an at-risk motif for recombination in mammalian cells.
+Genetics. 1999 Dec;153(4):1873-83.  PMID: 10581292; UI: 20050682
+
+<li>
+Jacobsen SE 
+Gene silencing: Maintaining methylation patterns. 
+Curr Biol 1999 Aug 26;9(16):R617-9
+
+<li>
+Lewis S, Akgun E, Jasin M. 
+Palindromic DNA and genome stability. Further studies.
+Ann N Y Acad Sci. 1999 May 18;870:45-57.
+PMID: 10415472; UI: 99343961
+
+<li>
+Dai X, Greizerstein MB, Nadas-Chinni K, Rothman-Denes LB
+Supercoil-induced extrusion of a regulatory DNA hairpin.  Proc Natl
+Acad Sci U S A 1997 Mar 18;94(6):2174-9
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/einverted.isee" -->
+
+<b>palindrome</b> also looks for inverted repeats but is much faster
+and less sensitive, as it looks for near-perfect repeats.
+
+<H2>
+    Author(s)
+</H2>
+
+
+This program was originally written by 
+<!--#include file="inc/rdurbin.address" -->
+
+<p>
+
+This application was modified for inclusion in EMBOSS by 
+<!--#include file="inc/price.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/einverted.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/einverted.comment" -->
+
+</BODY>
+</HTML>
+

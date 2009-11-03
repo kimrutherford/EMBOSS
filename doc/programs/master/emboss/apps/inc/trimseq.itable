@@ -1,0 +1,76 @@
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>(Gapped) sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 2)</td>
+<td>Sequence set(s) filename and optional format (output USA)</td>
+<td>Writeable sequence(s)</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-window</td>
+<td>This determines the size of the region that is considered when deciding whether the percentage of ambiguity is greater than the threshold. A value of 5 means that a region of 5 letters in the sequence is shifted along the sequence from the ends and trimming is done only if there is a greater or equal percentage of ambiguity than the threshold percentage.</td>
+<td>Any integer value</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-percent</td>
+<td>This is the threshold of the percentage ambiguity in the window required in order to trim a sequence.</td>
+<td>Any numeric value</td>
+<td>100.0</td>
+</tr>
+
+<tr>
+<td>-strict</td>
+<td>In nucleic sequences, trim off not only N's and X's, but also the nucleotide IUPAC ambiguity codes M, R, W, S, Y, K, V, H, D and B. In protein sequences, trim off not only X's but also B and Z.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-star</td>
+<td>In protein sequences, trim off not only X's, but also the *'s</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-[no]left</td>
+<td>Trim at the start</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]right</td>
+<td>Trim at the end</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+</table>

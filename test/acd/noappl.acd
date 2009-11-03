@@ -1,0 +1,6 @@
+# ACD file for QA testing - missing the application definition
+#
+
+sequence: asequence [ param: Y features: Y ]
+
+outfile: outtest [ param: Y odirectory: "$(outdir)" ]

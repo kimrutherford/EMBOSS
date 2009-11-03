@@ -1,0 +1,11 @@
+
+install-jemboss-server.sh - install a Jemboss server (uses Apache
+                            Tomcat, SOAP)
+keys.sh                   - create SSL client and server certificate
+                            and keystore
+makeJNLP.sh               - create jnlp and web launch files for Jemboss
+makeFileManagerJNLP.sh    - create jnlp and web launch files for the 
+                            file manager
+makeJar.csh               - create a Jemboss.jar
+makeSourceJar.csh         - create a Jemboss.jar include the source code
+

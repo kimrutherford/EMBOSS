@@ -1,0 +1,168 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: biosed
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+biosed
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/biosed.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<b>biosed</b> is a simple sequence editing utility that searches for a
+target subsequence in one or more input sequences and replaces it with a
+specified second subsequence (or optionally just deletes the found
+target subsequence). 
+
+<p>
+
+<b>biosed</b> was inspired by the useful UNIX utility <b>sed</b> which
+searches for a pattern in text and can replace or delete the found
+pattern. 
+
+<p>
+
+If the target subsequence occurs more than once, then each instance of
+the target is replaced. 
+
+<p>
+
+The target subsequence is not any sort of an ambiguity pattern, it is
+just a short sequence.  A simple string match is done and if it exactly
+matches then the replacement is done.  The matching is independent of
+the case of the sequence or the target - both uppercase and lowercase
+will match. 
+
+
+
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/biosed.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/biosed.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/biosed.itable" -->
+
+<H2>
+    Input file format
+</H2>
+It reads the USA of one or more nucleic acid or protein sequences.
+
+<p>
+<!--#include file="inc/biosed.input" -->
+
+<H2>
+    Output file format
+</H2>
+The edited sequence is output.
+
+<P>
+
+The sequence will be in uppercase.
+
+
+<p>
+<!--#include file="inc/biosed.output" -->
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+The edited sequence will be output in uppercase.
+
+
+<H2>
+    References
+</H2>
+
+
+None.
+
+
+<H2>
+    Warnings
+</H2>
+
+No check is made on the replacement subsequence.  
+<br> 
+Any text can be used as the replacement, including characters only used
+in proteins (e.g.  D, E, F, etc.), characters rarely used in proteins (e.g. 
+U, J, O, etc), digits and punctuation characters. 
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+It always exits with status 0.
+
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/biosed.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/ableasby.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/biosed.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/biosed.comment" -->
+
+</BODY>
+</HTML>
+

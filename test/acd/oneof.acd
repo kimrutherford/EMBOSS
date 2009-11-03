@@ -1,0 +1,19 @@
+# ACD file for QA testing - missing the application definition
+#
+
+appl: oneof [ doc: "testing" group: "testing" ]
+
+section: input [ info: "Input section" type: "page" ]
+
+select: test [
+      standard: Y
+      values: "one;two;three;four;five"
+      info: "select value"
+      max: 1
+]
+
+integer: testnum [ min: 1 info: "Pick a number"
+	 standard: "@($(test) == { one | three | five })"
+    ]
+
+endsection: input

@@ -1,0 +1,49 @@
+   Standard (Mandatory) qualifiers (* if not always prompted):
+   -pepstatsfile       infile     This file should be a pepstats output file.
+                                  Protein sequences will be created with the
+                                  composition in the pepstats output file.
+   -amount             integer    [100] Number of sequences created (Integer 1
+                                  or more)
+   -length             integer    [100] Length of each sequence (Integer 1 or
+                                  more)
+*  -insert             string     String that is inserted into sequence (Any
+                                  string is accepted)
+*  -start              integer    [1] Start point of inserted sequence
+                                  (Integer 1 or more)
+  [-outseq]            seqoutall  [<sequence>.<format>] Protein sequence
+                                  set(s) filename and optional format (output
+                                  USA)
+
+   Additional (Optional) qualifiers:
+   -useinsert          toggle     [N] Do you want to make an insert
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outseq" associated qualifiers
+   -osformat1          string     Output seq format
+   -osextension1       string     File name extension
+   -osname1            string     Base file name
+   -osdirectory1       string     Output directory
+   -osdbname1          string     Database name to add
+   -ossingle1          boolean    Separate file for each entry
+   -oufo1              string     UFO features
+   -offormat1          string     Features format
+   -ofname1            string     Features file name
+   -ofdirectory1       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+

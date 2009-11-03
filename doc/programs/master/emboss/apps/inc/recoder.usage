@@ -1,0 +1,15 @@
+<b>Here is a sample session with recoder</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>recoder </b>
+Remove restriction sites but maintain same translation
+Input nucleotide sequence: <b>tembl:x65923</b>
+Comma separated enzyme list [all]: <b>EcoRII</b>
+Output report [x65923.recoder]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

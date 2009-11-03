@@ -1,0 +1,188 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: seqmatchall
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+seqmatchall
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+
+<!--#include file="inc/seqmatchall.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+
+This takes a set of sequences and does an all-against-all pairwise
+comparison of words (fragments of the sequences of a specified fixed
+size) in the sequences, finding regions of identity between any two
+sequences. 
+
+<p>
+The larger the specified word size, the faster the comparison will
+proceed.  Regions whose stretches of identity are shorter than the word
+size will be missed.  You should therefore choose a word size that is
+small enough to find those regions of similarity you are interested in
+within a reasonable time-frame. 
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/seqmatchall.usage" -->
+
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/seqmatchall.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/seqmatchall.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<b>seqmatchall</b> reads a set of sequence USAs.  
+
+<p>
+
+The sequences must be either all protein or all nucleic acid.
+
+<p>
+
+<!--#include file="inc/seqmatchall.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+
+<!--#include file="inc/seqmatchall.output" -->
+
+
+<p>
+
+ECLAC (the complete E.coli lac operon) matches ECLACI ECLACZ ECLACY
+and ECLACA (the individual genes), and there is a short overlap
+between ECLACY and the flanking genes ECLACZ and ECLACA
+
+<p>
+
+The output is a list of regions of identity in pairs of sequences, each
+consisting of one line with 7 columns of data separated by TABs or space
+characters. 
+
+<p>
+
+The columns of data consist of:
+
+<p>
+
+<ul>
+<li>The length of the region of identity.
+<li>The start position in sequence 1.
+<li>The end position in sequence 1.
+<li>The name of sequence 1.
+<li>The start position in sequence 2.
+<li>The end position in sequence 2.
+<li>The name of sequence 2.
+</ul>
+
+<H2>
+    Data files
+</H2>
+
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+
+The larger the word size, the faster the comparisons will proceed, but
+regions of identitly smaller than the word size will not be reported.
+
+<H2>
+    References
+</H2>
+
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+
+It exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+
+None.
+
+<!--#include file="inc/seqmatchall.isee" -->
+
+<P>
+<a href="polydot.html">polydot</A> will give a graphical view of the
+same matches.
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/ilongden.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/seqmatchall.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/seqmatchall.comment" -->
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,123 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: x13776.dan</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: dan
+# Rundate: Sun 15 Jul 2007 12:00:00
+# Commandline: dan
+#    -sequence tembl:x13776
+# Report_format: seqtable
+# Report_file: x13776.dan
+########################################
+
+#=======================================
+#
+# Sequence: X13776     from: 1   to: 2167
+# HitCount: 2148
+#=======================================
+
+  Start     End     Tm     GC DeltaG DeltaH DeltaS TmProd Sequence
+      1      20   64.9   70.0      .      .      .      . ggtaccgctggccgagcatc
+      2      21   63.7   65.0      .      .      .      . gtaccgctggccgagcatct
+      3      22   63.7   65.0      .      .      .      . taccgctggccgagcatctg
+      4      23   66.9   70.0      .      .      .      . accgctggccgagcatctgc
+      5      24   66.7   70.0      .      .      .      . ccgctggccgagcatctgct
+      6      25   65.5   70.0      .      .      .      . cgctggccgagcatctgctc
+      7      26   65.5   70.0      .      .      .      . gctggccgagcatctgctcg
+      8      27   63.7   65.0      .      .      .      . ctggccgagcatctgctcga
+      9      28   62.9   60.0      .      .      .      . tggccgagcatctgctcgat
+     10      29   62.6   65.0      .      .      .      . ggccgagcatctgctcgatc
+     11      30   61.7   60.0      .      .      .      . gccgagcatctgctcgatca
+     12      31   60.2   60.0      .      .      .      . ccgagcatctgctcgatcac
+     13      32   60.2   60.0      .      .      .      . cgagcatctgctcgatcacc
+     14      33   59.0   55.0      .      .      .      . gagcatctgctcgatcacca
+     15      34   59.2   55.0      .      .      .      . agcatctgctcgatcaccac
+     16      35   60.4   60.0      .      .      .      . gcatctgctcgatcaccacc
+     17      36   58.9   55.0      .      .      .      . catctgctcgatcaccacca
+     18      37   58.6   55.0      .      .      .      . atctgctcgatcaccaccag
+     19      38   61.3   60.0      .      .      .      . tctgctcgatcaccaccagc
+     20      39   62.4   65.0      .      .      .      . ctgctcgatcaccaccagcc
+     21      40   63.9   65.0      .      .      .      . tgctcgatcaccaccagccg
+     22      41   64.9   70.0      .      .      .      . gctcgatcaccaccagccgg
+     23      42   64.3   70.0      .      .      .      . ctcgatcaccaccagccggg
+     24      43   66.1   70.0      .      .      .      . tcgatcaccaccagccgggc
+     25      44   67.5   75.0      .      .      .      . cgatcaccaccagccgggcg
+     26      45   66.1   70.0      .      .      .      . gatcaccaccagccgggcga
+     27      46   66.3   70.0      .      .      .      . atcaccaccagccgggcgac
+     28      47   68.6   75.0      .      .      .      . tcaccaccagccgggcgacg
+     29      48   69.8   80.0      .      .      .      . caccaccagccgggcgacgg
+     30      49   70.7   80.0      .      .      .      . accaccagccgggcgacggg
+     31      50   70.5   80.0      .      .      .      . ccaccagccgggcgacggga
+     32      51   68.6   75.0      .      .      .      . caccagccgggcgacgggaa
+     33      52   68.6   75.0      .      .      .      . accagccgggcgacgggaac
+     34      53   68.4   75.0      .      .      .      . ccagccgggcgacgggaact
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+   2101    2120   69.9   80.0      .      .      .      . ggccggagcgctgaccctgc
+   2102    2121   68.7   75.0      .      .      .      . gccggagcgctgaccctgct
+   2103    2122   65.5   70.0      .      .      .      . ccggagcgctgaccctgcta
+   2104    2123   63.5   65.0      .      .      .      . cggagcgctgaccctgctat
+   2105    2124   61.3   60.0      .      .      .      . ggagcgctgaccctgctatt
+   2106    2125   60.1   60.0      .      .      .      . gagcgctgaccctgctattc
+   2107    2126   61.7   60.0      .      .      .      . agcgctgaccctgctattcg
+   2108    2127   63.4   65.0      .      .      .      . gcgctgaccctgctattcgc
+   2109    2128   61.7   60.0      .      .      .      . cgctgaccctgctattcgct
+   2110    2129   59.5   55.0      .      .      .      . gctgaccctgctattcgctt
+   2111    2130   57.1   50.0      .      .      .      . ctgaccctgctattcgcttt
+   2112    2131   56.4   45.0      .      .      .      . tgaccctgctattcgctttt
+   2113    2132   54.7   45.0      .      .      .      . gaccctgctattcgctttta
+   2114    2133   55.0   45.0      .      .      .      . accctgctattcgcttttac
+   2115    2134   55.9   50.0      .      .      .      . ccctgctattcgcttttacc
+   2116    2135   54.7   45.0      .      .      .      . cctgctattcgcttttacct
+   2117    2136   52.0   40.0      .      .      .      . ctgctattcgcttttaccta
+   2118    2137   51.2   35.0      .      .      .      . tgctattcgcttttacctat
+   2119    2138   50.9   40.0      .      .      .      . gctattcgcttttacctatc
+   2120    2139   49.0   35.0      .      .      .      . ctattcgcttttacctatct
+   2121    2140   49.3   35.0      .      .      .      . tattcgcttttacctatctg
+   2122    2141   51.1   35.0      .      .      .      . attcgcttttacctatctgt
+   2123    2142   52.2   40.0      .      .      .      . ttcgcttttacctatctgtg
+   2124    2143   54.0   45.0      .      .      .      . tcgcttttacctatctgtgg
+   2125    2144   55.2   50.0      .      .      .      . cgcttttacctatctgtggg
+   2126    2145   53.9   45.0      .      .      .      . gcttttacctatctgtgggt
+   2127    2146   52.3   45.0      .      .      .      . cttttacctatctgtgggtg
+   2128    2147   53.5   45.0      .      .      .      . ttttacctatctgtgggtgg
+   2129    2148   56.0   50.0      .      .      .      . tttacctatctgtgggtggc
+   2130    2149   57.8   55.0      .      .      .      . ttacctatctgtgggtggcc
+   2131    2150   60.1   60.0      .      .      .      . tacctatctgtgggtggccg
+   2132    2151   63.4   65.0      .      .      .      . acctatctgtgggtggccgc
+   2133    2152   64.3   70.0      .      .      .      . cctatctgtgggtggccgcc
+   2134    2153   63.4   65.0      .      .      .      . ctatctgtgggtggccgcca
+   2135    2154   62.7   60.0      .      .      .      . tatctgtgggtggccgccaa
+   2136    2155   64.5   65.0      .      .      .      . atctgtgggtggccgccaac
+   2137    2156   66.5   70.0      .      .      .      . tctgtgggtggccgccaacc
+   2138    2157   66.8   70.0      .      .      .      . ctgtgggtggccgccaacca
+   2139    2158   66.8   70.0      .      .      .      . tgtgggtggccgccaaccag
+   2140    2159   66.8   70.0      .      .      .      . gtgggtggccgccaaccagt
+   2141    2160   65.9   65.0      .      .      .      . tgggtggccgccaaccagtt
+   2142    2161   65.6   70.0      .      .      .      . gggtggccgccaaccagttc
+   2143    2162   65.6   70.0      .      .      .      . ggtggccgccaaccagttcc
+   2144    2163   64.4   65.0      .      .      .      . gtggccgccaaccagttcct
+   2145    2164   64.1   65.0      .      .      .      . tggccgccaaccagttcctc
+   2146    2165   65.4   70.0      .      .      .      . ggccgccaaccagttcctcg
+   2147    2166   64.2   65.0      .      .      .      . gccgccaaccagttcctcga
+   2148    2167   62.4   65.0      .      .      .      . ccgccaaccagttcctcgag
+
+#---------------------------------------
+#---------------------------------------
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>Graphics File: dan.ps</h3>
+<p><img src="dan.2.dan.gif" alt="[dan results]">
+<p><h3>File: x13776.dan</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+</pre>
+</td></tr></table><p>

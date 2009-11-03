@@ -1,0 +1,33 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: l46634.qtan</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: equicktandem
+# Rundate: Sun 15 Jul 2007 12:00:00
+# Commandline: equicktandem
+#    -noorigfile
+#    -sequence tembl:L46634
+# Report_format: table
+# Report_file: l46634.qtan
+########################################
+
+#=======================================
+#
+# Sequence: L46634     from: 1   to: 1272
+# HitCount: 1
+#
+# Threshold: 20
+# Maxrepeat: 600
+#
+#=======================================
+
+  Start     End   Score   Size  Count
+    191     935     339      6    124
+
+#---------------------------------------
+#---------------------------------------
+</pre>
+</td></tr></table><p>

@@ -1,0 +1,202 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: listor
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+listor
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/listor.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+<b>listor</b> reads in two sets of sequences and writes out a list file
+(file of file names) that result from the logical union of these two
+sets of sequences.  It is a simple way of manipulating and editing lists
+or sets of sequences to produce a list file.
+
+<p>
+
+When comparing sequences to see if they are the same between two sets of
+sequences, no use is made of the ID name or accession number of the
+sequences.  Only the sequences themselves are compared.  The comparison
+of the sequences is case-independent. 
+
+<p>
+
+
+The logical union is an OR operation by default.  Other available
+operations are: AND, XOR and NOT. 
+
+<p>
+
+The (default) logical OR of the two sets of sequences is simply the
+result of merging the two sets of sequences, (without listing any
+shared sequences twice). 
+
+<p>
+
+A logical AND simply lists those sequences that occur in both sets of
+sequences. 
+
+<p>
+
+A logical XOR lists those sequences that ONLY occur in the first set or
+only occur in the second set - sequences occuring in both sets are
+ignored (the opposite of an AND). 
+
+<p>
+
+A logical NOT lists all those sequences in the first set except for
+those that also occur in the second set. 
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/listor.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/listor.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/listor.itable" -->
+
+
+
+<H2>
+    Input file format
+</H2>
+
+The input sets of sequences can be of any valid USAs.  The program was
+written to perform logical operations on list files, but in practice,
+wildcarded database entries and file names are also perfectly legal
+specifications of the input sequences. 
+
+<p>
+
+<!--#include file="inc/listor.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+The ouput is simply a list of the USAs (format and sequence
+specification) resulting from the required logical union of the two sets
+of input sequence. 
+
+<p>
+
+The order that the USAs are written out is not necessarily the same as
+the order of either of the input sets of sequences. 
+
+<p>
+
+The results of the four types of logical union follows.  Note that the
+duplicated sequences in these two files have been given the same name. 
+This is not necessary for the operation of <b>listor</b> as it compares
+the sequences themselves, not the ID names of the sequences. 
+
+<p>
+
+<!--#include file="inc/listor.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+The program stores all of the input sequences in memory while it is
+working out the logical unions of the two sets of sequences.  This means
+that it is restricted by the available memory.  Doing logical unions
+involving all of the sequences in large databases, such as EMBL, is
+probably impractical unless you are lucky enough to have extraordinary
+amounts of memory on your machine. 
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+If you try to do a logical union with all of the sequences in EMBL and
+another sequence set, this program will attempt to read all of the EMBL
+sequences into memory at once. This will probably not succeed.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/listor.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/gwilliam.address" -->
+
+<H2>
+    History
+</H2>
+
+<!--#include file="inc/listor.history" -->
+
+
+<H2>
+    Target users
+</H2>
+
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+
+
+<!--#include file="inc/listor.comment" -->
+
+</BODY>
+</HTML>
+

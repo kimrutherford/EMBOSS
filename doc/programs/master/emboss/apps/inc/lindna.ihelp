@@ -1,0 +1,80 @@
+   Standard (Mandatory) qualifiers:
+  [-infile]            infile     [inputfile] Commands to the lindna drawing
+                                  program file
+   -[no]ruler          boolean    [Y] Draw a ruler
+   -blocktype          menu       [Filled] Type of blocks (Values: Open (Open
+                                  blocks); Filled (Filled blocks); Outline
+                                  (Black border))
+   -graphout           graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png, gif)
+
+   Additional (Optional) qualifiers:
+   -maxgroups          integer    [20] Maximum number of groups (Integer 1 or
+                                  more)
+   -maxlabels          integer    [10000] Maximum number of labels (Integer 1
+                                  or more)
+   -intersymbol        selection  [Straight] Type of junctions between blocks
+   -intercolour        integer    [1] Colour of junctions between blocks
+                                  (enter a colour number) (Integer from 0 to
+                                  15)
+   -interticks         boolean    [N] Horizontal junctions between ticks
+   -gapsize            integer    [500] Interval between ticks in the ruler
+                                  (Integer 0 or more)
+   -ticklines          boolean    [N] Vertical lines at the ruler's ticks
+   -textheight         float      [1.0] Height of text. Enter a number <1.0 or
+                                  >1.0 to decrease or increase the size,
+                                  respectively (Number 0.000 or more)
+   -textlength         float      [1.0] Length of text. Enter a number <1.0 or
+                                  >1.0 to decrease or increase the size,
+                                  respectively (Number 0.000 or more)
+   -margin             float      [1.0] Width of left margin. This is the
+                                  region left to the groups where the names of
+                                  the groups are displayed. Enter a number
+                                  <1.0 or >1.0 to decrease or increase the
+                                  size, respectively (Number 0.000 or more)
+   -tickheight         float      [1.0] Height of ticks. Enter a number <1.0
+                                  or >1.0 to decrease or increase the size,
+                                  respectively (Number 0.000 or more)
+   -blockheight        float      [1] Height of blocks. Enter a number <1.0 or
+                                  >1.0 to decrease or increase the size,
+                                  respectively (Number 0.000 or more)
+   -rangeheight        float      [1.0] Height of range ends. Enter a number
+                                  <1.0 or >1.0 to decrease or increase the
+                                  size, respectively (Number 0.000 or more)
+   -gapgroup           float      [1.0] Space between groups. Enter a number
+                                  <1.0 or >1.0 to decrease or increase the
+                                  size, respectively (Number 0.000 or more)
+   -postext            float      [1.0] Space between text and ticks, blocks,
+                                  and ranges. Enter a number <1.0 or >1.0 to
+                                  decrease or increase the size, respectively
+                                  (Number 0.000 or more)
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-graphout" associated qualifiers
+   -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+

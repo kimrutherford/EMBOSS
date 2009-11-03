@@ -1,0 +1,197 @@
+
+                                 splitter 
+
+
+
+Function
+
+   Split a sequence into (overlapping) smaller sequences
+
+Description
+
+   This simple editing program allows you to split a long sequence into
+   smaller, optionally overlapping, subsequences.
+
+   There should be little requirement to split sequences into smaller
+   sub-sequences in EMBOSS, but there may be circumstances where memory
+   usage becomes restrictive when dealing with truly large sequences. In
+   this case, memory usage may be reduced by repeating the analysis
+   several times on split sub-sequences.
+
+   If you need to split a large sequence into smaller subsequences so
+   that a non-EMBOSS program can analyse the smaller sequence, it may
+   also be useful to write the sub-sequences into separate files instead
+   of the default EMBOSS behaviour of concatenating them together into
+   one file.
+
+   To write the output sequences to separate files, use the command-line
+   switch '-ossingle'.
+
+Usage
+
+   Here is a sample session with splitter
+
+   Split a sequence into sub-sequences of 10,000 bases (the default size)
+   with no overlap between the sub-sequences:
+
+
+% splitter tembl:BA000025 ba000025.split 
+Split a sequence into (overlapping) smaller sequences
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+   Example 2
+
+   Split a sequence into sub-sequences of 50,000 bases with an overlap of
+   3,000 bases on each sub-sequence:
+
+
+% splitter tembl:BA000025 ba000025.split -size=50000 -over=3000 
+Split a sequence into (overlapping) smaller sequences
+
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Sequence(s) filename and optional format, or
+                                  reference (input USA)
+  [-outseq]            seqoutall  [.] Sequence set(s)
+                                  filename and optional format (output USA)
+
+   Additional (Optional) qualifiers:
+   -size               integer    [10000] Size to split at (Integer 1 or more)
+   -overlap            integer    [0] Overlap between split sequences (Integer
+                                  0 or more)
+   -source             boolean    [N] Split using source features with /origid
+                                  qualifiers
+   -multifile          boolean    [N] Split sequence into multiple files
+
+   Advanced (Unprompted) qualifiers:
+   -feature            boolean    [N] Use feature information
+   -addoverlap         boolean    [N] Add overlap to size
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Data files
+
+   None.
+
+Notes
+
+   There should be little requirement to split sequences into smaller
+   sub-sequences in EMBOSS, but there may be circumstances where memory
+   usage becomes restrictive when dealing with truly large sequences.
+
+References
+
+   None
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name                         Description
+   biosed       Replace or delete sequence sections
+   codcopy      Reads and writes a codon usage table
+   cutseq       Removes a specified section from a sequence
+   degapseq     Removes gap characters from sequences
+   descseq      Alter the name or description of a sequence
+   entret       Reads and writes (returns) flatfile entries
+   extractalign Extract regions from a sequence alignment
+   extractfeat  Extract features from a sequence
+   extractseq   Extract regions from a sequence
+   listor       Write a list file of the logical OR of two sets of sequences
+   makenucseq   Creates random nucleotide sequences
+   makeprotseq  Creates random protein sequences
+   maskfeat     Mask off features of a sequence
+   maskseq      Mask off regions of a sequence
+   newseq       Type in a short new sequence
+   noreturn     Removes carriage return from ASCII files
+   notseq       Exclude a set of sequences and write out the remaining ones
+   nthseq       Writes one sequence from a multiple set of sequences
+   pasteseq     Insert one sequence into another
+   revseq       Reverse and complement a sequence
+   seqret       Reads and writes (returns) sequences
+   seqretsplit  Reads and writes (returns) sequences in individual files
+   skipseq      Reads and writes (returns) sequences, skipping first few
+   trimest      Trim poly-A tails off EST sequences
+   trimseq      Trim ambiguous bits off the ends of sequences
+   union        Reads sequence fragments and builds one sequence
+   vectorstrip  Strips out DNA between a pair of vector sequences
+   yank         Reads a sequence range, appends the full USA to a list file
+
+Author(s)
+
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+History
+
+   Completed 22 March 1999
+
+Target users This program is intended to be used by everyone and everything,
+from naive users to embedded scripts.
+
+Comments
+
+   None

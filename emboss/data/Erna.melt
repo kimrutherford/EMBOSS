@@ -1,0 +1,22 @@
+# Breslauer et al (1986), PNAS 83:3746-3750
+# Freier et al. (1986), PNAS 83:9373-9377
+#
+# 25 C
+#
+#             deltaH       deltaS     deltaG
+#             kcal/mol   kcal/K/mol  kcal/mol  
+#Bases        Enthalpy    Entropy     Energy
+#
+AA TT           6.6        18.4       1.1    
+AC GT          10.2        26.2       2.4    
+AG CT           7.6        19.2       1.9
+AT AT           5.7        15.5       1.1  
+#
+CA TG          10.5        27.8       2.2  
+CC GG          12.2        29.7       3.3    
+CG CG           8.0        19.4       2.2   
+#
+GA TC          13.3        35.5       2.7    
+GC GC          14.2        34.9       3.8    
+#
+TA TA           8.1        16.9       1.4

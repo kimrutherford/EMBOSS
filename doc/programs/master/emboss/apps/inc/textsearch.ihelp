@@ -1,0 +1,65 @@
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     (Gapped) sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-pattern]           string     The search pattern is a regular expression.
+                                  Use a | to indicate OR.
+                                  For example:
+                                  human|mouse
+                                  will find text with either 'human' OR
+                                  'mouse' in the text (Any string is accepted)
+  [-outfile]           outfile    [*.textsearch] Output file name
+
+   Additional (Optional) qualifiers:
+   -casesensitive      boolean    [N] Do a case-sensitive search
+   -html               boolean    [N] Format output as an HTML table
+
+   Advanced (Unprompted) qualifiers:
+   -only               boolean    [N] This is a way of shortening the command
+                                  line if you only want a few things to be
+                                  displayed. Instead of specifying:
+                                  '-nohead -noname -nousa -noacc -nodesc'
+                                  to get only the name output, you can specify
+                                  '-only -name'
+   -heading            boolean    [@(!$(only))] Display column headings
+   -usa                boolean    [@(!$(only))] Display the USA of the
+                                  sequence
+   -accession          boolean    [@(!$(only))] Display 'accession' column
+   -name               boolean    [@(!$(only))] Display 'name' column
+   -description        boolean    [@(!$(only))] Display 'description' column
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory3        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+

@@ -1,0 +1,5 @@
+application: acdpretty [
+  documentation: "ACD pretty printing utility"
+  gui: "no"
+  groups: "Acd"
+]

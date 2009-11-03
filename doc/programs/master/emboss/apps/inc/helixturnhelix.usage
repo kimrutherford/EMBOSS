@@ -1,0 +1,14 @@
+<b>Here is a sample session with helixturnhelix</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>helixturnhelix </b>
+Report nucleic acid binding motifs
+Input protein sequence(s): <b>tsw:laci_ecoli</b>
+Output report [laci_ecoli.hth]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

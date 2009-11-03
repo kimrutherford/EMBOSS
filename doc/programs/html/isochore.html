@@ -1,0 +1,584 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: isochore
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+isochore
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+<H2>
+    Function
+</H2>
+Plots isochores in large DNA sequences
+
+<H2>
+    Description
+</H2>
+
+
+The nuclear genomes of vertebrates are mosaics of isochores, very long
+stretches (&gt;300kb) of DNA that are homogeneous in base composition and
+are compositionally correlated with the coding sequences that they
+embed.  Isochores can be partitioned in a small number of families that
+cover a range of GC levels (GC is the molar ratio of guanine+cytosine in
+DNA), which is narrow in cold-blooded vertebrates, but broad in
+warm-blooded vertebrates. 
+
+<p>
+This application plots GC content over a sequence.  It is intended for
+large sequences such as complete chromosomes or large genomic contigs,
+although interesting results can also be obtained from shorter
+sequences. 
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with isochore</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>isochore tembl:AF129756  -graph cps </b>
+Plots isochores in large DNA sequences
+Output file [af129756.iso]: <b></b>
+
+Created isochore.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          sequence   Nucleotide sequence filename and optional
+                                  format, or reference (input USA)
+  [-outfile]           outfile    [*.isochore] Output file name
+   -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png, gif)
+
+   Additional (Optional) qualifiers:
+   -window             integer    [1000] Window size (Integer 1 or more)
+   -shift              integer    [100] Shift increment (Integer 1 or more)
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   "-graph" associated qualifiers
+   -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Nucleotide sequence filename and optional format, or reference (input USA)</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.isochore</td>
+</tr>
+
+<tr>
+<td>-graph</td>
+<td>Graph type</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png, gif</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-window</td>
+<td>Window size</td>
+<td>Integer 1 or more</td>
+<td>1000</td>
+</tr>
+
+<tr>
+<td>-shift</td>
+<td>Shift increment</td>
+<td>Integer 1 or more</td>
+<td>100</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>isochore</b> reads a normal nucleic acid USA.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:AF129756' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:AF129756</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   AF129756; SV 1; linear; genomic DNA; STD; HUM; 184666 BP.
+XX
+AC   AF129756;
+XX
+DT   12-MAR-1999 (Rel. 59, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 5)
+XX
+DE   Homo sapiens MSH55 gene, partial cds; and CLIC1, DDAH, G6b, G6c, G5b, G6d,
+DE   G6e, G6f, BAT5, G5b, CSK2B, BAT4, G4, Apo M, BAT3, BAT2, AIF-1, 1C7, LST-1,
+DE   LTB, TNF, and LTA genes, complete cds.
+XX
+KW   .
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-184666
+RX   DOI; 10.1101/gr.1736803.
+RX   PUBMED; 14656967.
+RA   Xie T., Rowen L., Aguado B., Ahearn M.E., Madan A., Qin S., Campbell R.D.,
+RA   Hood L.;
+RT   "Analysis of the gene-dense major histocompatibility complex class III
+RT   region and its comparison to mouse";
+RL   Genome Res. 13(12):2621-2636(2003).
+XX
+RN   [2]
+RP   1-184666
+RA   Rowen L., Madan A., Qin S., Shaffer T., James R., Ratcliffe A., Abbasi N.,
+RA   Dickhoff R., Loretz C., Madan A., Dors M., Young J., Lasky S., Hood L.;
+RT   "Sequence of the human major histocompatibility complex class III region";
+RL   Unpublished.
+XX
+RN   [3]
+RP   1-184666
+RA   Rowen L.;
+RT   ;
+RL   Submitted (22-FEB-1999) to the EMBL/GenBank/DDBJ databases.
+RL   Department of Molecular Biotechnology, Box 357730 University of Washington,
+RL   Seattle, WA 98195, USA
+XX
+RN   [4]
+RP   1-184666
+RA   Rowen L.;
+RT   ;
+RL   Submitted (28-OCT-1999) to the EMBL/GenBank/DDBJ databases.
+RL   Multimegabase Sequencing Center, University of Washington, PO Box 357730,
+RL   Seattle, WA 98195, USA
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+     aaaccagttt accaccactc ctaacactaa acttaaatct gactctaaat gtaagtccaa    181740
+     tctgagccac aagcctaaag ttgaacttta tcctgcttta tgaattattc atccattcct    181800
+     ccatttagtg agtatctgcg tgcctaacac atgctgggca ttgtcctaag gcaggaggga    181860
+     catggaggca aagggatcag agaaggtacc agcacctgtg gagcttgtat tccagtgagg    181920
+     ccagacggaa aagaaagaaa ctgaagaaga aattggtact atgagaaaat aagacaggct    181980
+     gatgttgtaa gagtggcagg gagctacttt taaatacagt agtcagcaaa atcctctttg    182040
+     agtgtttggg tggcactgga gctgagaccc aaatgacaaa aaatagtgac caggtaaaag    182100
+     tttgggagca aagcatttca ggtaaaggga gcagctactg caaaggctgg aaggcggaac    182160
+     caagctgggg gtgttgacga caaacagaag gccagtgtgg ctggagcaga gagagagact    182220
+     gggaggcggg tgggagatga ggtcagagag gagggcaggg gccaggtcat gcagggccat    182280
+     gcaagaaggg taaagcctct agatttcatc cagccacagg aagcctttaa aggtcgtcag    182340
+     agtgtgtggt gcgtgcgtgt gtgtgtgtgt gtgtgtgtgt gttgcagggg agagaggggg    182400
+     agggagagag agagagagag agagaagagg gaggtgagca gaggtgattg gatttttttt    182460
+     tcttttgaca tggtgtcttg ctctgtggcc taggctggag tgcagtggca ccatcatagc    182520
+     ccactgcaac ctcaaaacca tgggctcaag tcatccttcc acctcagctt cccaagtatc    182580
+     taggactaca ggtgtgtgcc actgtgcctg gctaatttta aaaaatattt taaaattttt    182640
+     gttgagacag ggtctatgct gctcaggctg gtctcgaact cctggtttca agtgatctgc    182700
+     ccatcttggc ctcccaaagt ttttttttgt tagtttgaga ggcggtttcg ctcgttgccc    182760
+     aggctggagt gcaatgactg atctcatctc actgcaacct ctgcctcctg ggttcaagcg    182820
+     attctcctgc ttcagcctcc caagtagctg ggattacagg tgcatgccac cattcccggc    182880
+     taattttttg tatttagtag agatggggtt tcaccatgtt agtcaggctg atctcaaact    182940
+     cctgacctca ggtgatccgc ctgcctcagc ctcccaaagt tttgggatta caggtgtgag    183000
+     ccaccatgct gggccagcct cccaaagttt tgggattaca ggcatgagtc accacactgg    183060
+     ccctggattt tttttctttc ttttttttgg agacggagtc tcactctgtt gcccaggctg    183120
+     gagtgcaatg gcgtaatctc agctcactgc aacctctgct gcccgggttc aaacgattct    183180
+     cctgtcttag cctcctgagt agctgggatt ataggtgcat gccaccatgc ctggctaatt    183240
+     tttgtacttt tagtagagaa agtacaccat cttggccagg ctggtctcga actcctgacc    183300
+     tcaggtgatc cacttgcgtc ggcctcccaa agtgctggga ttacaggcgt gagacaccgc    183360
+     acccagcctt tttttttttt tttcttttaa gacagaatcg ctctgtcacc caggctggag    183420
+     tgcagtggca caatctcggc tcactgcaac ctctgcctcc caggtttaag caatccacct    183480
+     atgtcagtct cccaagtagc tgggattata ggtgcatgtc accatgcctg gctaattttt    183540
+     gtacttttag tatagaaagt acaccatgtt ggccaggctg gtcttgaact cctgacctca    183600
+     agtgatccgc ctgcctcagc ctcccgaagt gctggaatta cagacatgtg ccactgcacc    183660
+     cggcctggtt ttttttttct aagagatgga gtctcacttt tctgcccagg ttggagtgca    183720
+     atggcaccat catagctcac tgcagccttc aactcttggc ctcaggcaat ccttgcacct    183780
+     tagcctcgca gtgttgggat tacaggcatg agccactgag ccttgcctgg actttttttt    183840
+     ttttttgaga tggcgtctcg ctctgttgcc caggttggag tgctacggca tgatcttggc    183900
+     tcactgcaac ttccacctcc caggttcaag cgattctctt gcctcggccc cccgagtagc    183960
+     tgggattaca ggcatgcgcc accgtgcctg gctaattttg gtatttttag tagagatagg    184020
+     gtttcatcat gttgggcagg ctggtcttga actcctgacc tcgtgatcca cccacctcgg    184080
+     cctcccaaag tgctgggatt ataggcatag ccaacgcgcc cagcctggac ttgtttttaa    184140
+     aagatcactg tggctcctgt gtttaggctg gctggtagga gacaggtggc agtggcattg    184200
+     atggtgaaga gaaaatagtg gcagccatgg agatggagag aagtagacaa gtttgggata    184260
+     tattatacat tccaggggta gaaacaacag gactagatga tggattgatg ggtgggagat    184320
+     gtagatactg ggagagaagc aggattctga tggatggaaa aactaaaaaa ttctattttg    184380
+     ggtgtggtaa gtctaagtct attagacatg caagtagaga tgtcactggg cagatacaca    184440
+     tctggatttc aggggcaagg tccaagctag agaaagaaac ctgggcatgg tcagcatgag    184500
+     gatggtgttt aaagccatgg aacttatctt gtgcatccct ataagacccc tttgaggcac    184560
+     ttgtttcccc tcacaatgga tgcagtgcat cttccattct gaattccaga ggcaacaacc    184620
+     tcctgctcct agaagctaaa ctctccagac ttagtcttct gaattc                   184666
+//
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Output file format
+</H2>
+
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: af129756.iso</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Position	Percent G+C 1 .. 184666
+500	0.471
+600	0.485
+700	0.482
+800	0.482
+900	0.475
+1000	0.489
+1100	0.496
+1200	0.499
+1300	0.479
+1400	0.477
+1500	0.466
+1600	0.442
+1700	0.451
+1800	0.455
+1900	0.470
+2000	0.455
+2100	0.443
+2200	0.440
+2300	0.458
+2400	0.467
+2500	0.480
+2600	0.493
+2700	0.501
+2800	0.498
+2900	0.501
+3000	0.508
+3100	0.522
+3200	0.514
+3300	0.518
+3400	0.515
+3500	0.517
+3600	0.530
+3700	0.517
+3800	0.527
+3900	0.509
+4000	0.500
+4100	0.490
+4200	0.496
+4300	0.492
+4400	0.479
+4500	0.470
+4600	0.464
+4700	0.463
+4800	0.460
+4900	0.467
+5000	0.476
+5100	0.477
+5200	0.479
+5300	0.476
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+179100	0.406
+179200	0.422
+179300	0.412
+179400	0.402
+179500	0.397
+179600	0.397
+179700	0.398
+179800	0.402
+179900	0.436
+180000	0.456
+180100	0.472
+180200	0.456
+180300	0.458
+180400	0.462
+180500	0.487
+180600	0.477
+180700	0.471
+180800	0.479
+180900	0.477
+181000	0.463
+181100	0.454
+181200	0.448
+181300	0.436
+181400	0.444
+181500	0.425
+181600	0.435
+181700	0.446
+181800	0.459
+181900	0.460
+182000	0.471
+182100	0.485
+182200	0.483
+182300	0.498
+182400	0.495
+182500	0.505
+182600	0.513
+182700	0.514
+182800	0.500
+182900	0.493
+183000	0.500
+183100	0.491
+183200	0.502
+183300	0.508
+183400	0.509
+183500	0.515
+183600	0.517
+183700	0.515
+183800	0.508
+183900	0.500
+184000	0.492
+184100	0.493
+</pre>
+</td></tr></table><p>
+<p><h3>Graphics File: isochore.ps</h3>
+<p><img src="isochore.1.isochore.gif" alt="[isochore results]">
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+
+<H2>
+    References
+</H2>
+
+
+<ol>
+
+<li>
+Bernardi G 
+Isochores and the evolutionary genomics of vertebrates. 
+Gene 2000 Jan 4;241(1):3-17
+
+<li>
+Pesole G, Bernardi G, Saccone C 
+Isochore specificity of AUG initiator context of human genes. 
+FEBS Lett 1999 Dec 24;464(1-2):60-2
+<li>
+
+Bernardi G 
+The human genome: organization and evolutionary history.
+Annu Rev Genet 1995;29:445-76
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="banana.html">banana</a></td>
+<td>Bending and curvature plot in B-DNA</td>
+</tr>
+
+<tr>
+<td><a href="btwisted.html">btwisted</a></td>
+<td>Calculates the twisting in a B-DNA sequence</td>
+</tr>
+
+<tr>
+<td><a href="chaos.html">chaos</a></td>
+<td>Create a chaos game representation plot for a sequence</td>
+</tr>
+
+<tr>
+<td><a href="compseq.html">compseq</a></td>
+<td>Count composition of dimer/trimer/etc words in a sequence</td>
+</tr>
+
+<tr>
+<td><a href="dan.html">dan</a></td>
+<td>Calculates DNA RNA/DNA melting temperature</td>
+</tr>
+
+<tr>
+<td><a href="freak.html">freak</a></td>
+<td>Residue/base frequency table or plot</td>
+</tr>
+
+<tr>
+<td><a href="sirna.html">sirna</a></td>
+<td>Finds siRNA duplexes in mRNA</td>
+</tr>
+
+<tr>
+<td><a href="wordcount.html">wordcount</a></td>
+<td>Counts words of a specified size in a DNA sequence</td>
+</tr>
+
+</table>
+
+<H2>
+    Author(s)
+</H2>
+
+
+Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
+<H2>
+    History
+</H2>
+
+
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+
+<H2>
+    Comments
+</H2>
+None
+
+</BODY>
+</HTML>
+

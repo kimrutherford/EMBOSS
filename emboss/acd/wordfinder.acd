@@ -1,0 +1,132 @@
+application: wordfinder [
+  documentation: "Match large sequences against one or more
+                  other sequences"
+  groups: "Alignment:Local"
+  gui: "yes"
+  batch: "yes"
+  cpu: "medium"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqset: asequence [
+    parameter: "Y"
+    type: "any"
+    aligned: "N"
+  ]
+
+  seqall: bsequence [
+    parameter: "Y"
+    type: "@($(acdprotein) ? stopprotein : nucleotide)"
+  ]
+
+  matrixf: datafile [
+    additional: "Y"
+    information: "Matrix file"
+    protein: "$(acdprotein)"
+    help: "This is the scoring matrix file used when comparing
+           sequences. By default it is the file 'EBLOSUM62' (for proteins) or
+           the file 'EDNAFULL' (for nucleic sequences). These files are
+           found in the 'data' directory of the EMBOSS installation."
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  float: gapopen [
+    standard: "Y"
+    information: "Gap opening penalty"
+    minimum: "0.0"
+    maximum: "1000.0"
+    default: "@($(acdprotein)? 30.0 : 30.0)"
+    expected: "10.0 for any sequence type"
+  ]
+
+  float: gapextend [
+    standard: "Y"
+    information: "Gap extension penalty"
+    minimum: "0.0"
+    maximum: "10.0"
+    default: "@($(acdprotein)? 1.5 : 1.5)"
+    expected: "0.5 for any sequence type"
+  ]
+
+endsection: required
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  integer: width [
+    additional: "Y"
+    default: "16"
+    minimum: "1"
+    information: "Alignment width"
+  ]
+
+  integer: wordlen [
+    additional: "Y"
+    default: "6"
+    minimum: "3"
+    information: "Word length for initial matching"
+  ]
+
+  integer: limitmatch [
+    additional: "Y"
+    default: "0"
+    minimum: "0"
+    information: "Limiting match score (zero for no limit)"
+  ]
+
+  integer: limitalign [
+    additional: "Y"
+    default: "0"
+    minimum: "0"
+    information: "Limiting alignment length (zero for no limit)"
+  ]
+
+  integer: lowmatch [
+    additional: "Y"
+    default: "0"
+    minimum: "0"
+    information: "Limiting match score (zero for no limit)"
+  ]
+
+  integer: lowalign [
+    additional: "Y"
+    default: "0"
+    minimum: "0"
+    information: "Limiting alignment length (zero for no limit)"
+  ]
+
+endsection: additional
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  align: outfile [
+    parameter: "Y"
+    aformat: "simple"
+    minseqs: "2"
+    maxseqs: "2"
+  ]
+
+  outfile: errorfile [
+    additional: "Y"
+    default: "wordfinder.error"
+    help: "Error file to be written to"
+    knowntype: "wordfinder error"
+    information: "Program wordfinder errors output file"
+  ]
+
+endsection: output

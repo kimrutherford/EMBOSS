@@ -1,0 +1,354 @@
+
+                               newcpgreport 
+
+
+
+Function
+
+   Report CpG rich areas
+
+Description
+
+   This application is used in the production of the CpG Island database
+   'CPGISLE'. It produces CPGISLE database entry format reports for a
+   potential CpG island.
+
+   See the FTP site: ftp://ftp.ebi.ac.uk/pub/databases/cpgisle/ for the
+   finished database.
+
+   CpG refers to a C nucleotide immediately followed by a G. The 'p' in
+   'CpG' refers to the phosphate group linking the two bases.
+
+   Detection of regions of genomic sequences that are rich in the CpG
+   pattern is important because such regions are resistant to methylation
+   and tend to be associated with genes which are frequently switched on.
+   Regions rich in the CpG pattern are known as CpG islands.
+
+   It has been estimated that about half of all mammalian genes have a
+   CpG-rich region around their 5' end. It is said that all mammalian
+   house-keeping genes have a CpG island!
+
+   Non-mammalian vertebrates have some CpG islands that are associated
+   with genes, but the association gets equivocal in the farther
+   taxonomic groups.
+
+   Finding a CpG island upstream of predicted exons or genes is good
+   contributory evidence for that gene's existance.
+
+   By default, this program defines a CpG island as a region where, over
+   an average of 10 windows, the calculated % composition is over 50% and
+   the calculated Obs/Exp ratio is over 0.6 and the conditions hold for a
+   minimum of 200 bases. These conditions can be modified by setting the
+   values of the appropriate parameters.
+
+   The Expected number of CpG patterns in a window is calculated as the
+   number of 'C's in the window multiplied by the number of 'G's in the
+   window, divided by the window length.
+
+   This program reads in one or more sequences and finds regions where
+   there is a high absolute frequency of CpG dimers as well as a high
+   proportion of CpG compared to GpC.
+
+Usage
+
+   Here is a sample session with newcpgreport
+
+
+% newcpgreport 
+Report CpG rich areas
+Input nucleotide sequence(s): tembl:u68037
+Window size [100]: 
+Shift increment [1]: 
+Minimum Length [200]: 
+Minimum observed/expected [0.6]: 
+Minimum percentage [50.]: 
+Output file [u68037.newcpgreport]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -window             integer    [100] Window size (Integer 1 or more)
+   -shift              integer    [1] Shift increment (Integer 1 or more)
+   -minlen             integer    [200] Minimum Length (Integer 1 or more)
+   -minoe              float      [0.6] Minimum observed/expected (Number from
+                                  0.000 to 10.000)
+   -minpc              float      [50.] Minimum percentage (Number from 0.000
+                                  to 100.000)
+  [-outfile]           outfile    [*.newcpgreport] Output file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   newcpgreport reads one or more nucleic acid sequences.
+
+  Input files for usage example
+
+   'tembl:u68037' is a sequence entry in the example nucleic acid
+   database 'tembl'
+
+  Database entry: tembl:u68037
+
+ID   U68037; SV 1; linear; mRNA; STD; ROD; 1218 BP.
+XX
+AC   U68037;
+XX
+DT   23-SEP-1996 (Rel. 49, Created)
+DT   04-MAR-2000 (Rel. 63, Last updated, Version 2)
+XX
+DE   Rattus norvegicus EP1 prostanoid receptor mRNA, complete cds.
+XX
+KW   .
+XX
+OS   Rattus norvegicus (Norway rat)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea;
+OC   Muridae; Murinae; Rattus.
+XX
+RN   [1]
+RP   1-1218
+RA   Abramovitz M., Boie Y.;
+RT   "Cloning of the rat EP1 prostanoid receptor";
+RL   Unpublished.
+XX
+RN   [2]
+RP   1-1218
+RA   Abramovitz M., Boie Y.;
+RT   ;
+RL   Submitted (26-AUG-1996) to the EMBL/GenBank/DDBJ databases.
+RL   Biochemistry & Molecular Biology, Merck Frosst Center for Therapeutic
+RL   Research, P. O. Box 1005, Pointe Claire - Dorval, Quebec H9R 4P8, Canada
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1218
+FT                   /organism="Rattus norvegicus"
+FT                   /strain="Sprague-Dawley"
+FT                   /mol_type="mRNA"
+FT                   /db_xref="taxon:10116"
+FT   CDS             1..1218
+FT                   /codon_start=1
+FT                   /product="EP1 prostanoid receptor"
+FT                   /note="family 1 G-protein coupled receptor"
+FT                   /db_xref="GOA:P70597"
+FT                   /db_xref="InterPro:IPR000276"
+FT                   /db_xref="InterPro:IPR000708"
+FT                   /db_xref="InterPro:IPR001244"
+FT                   /db_xref="InterPro:IPR008365"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P70597"
+FT                   /protein_id="AAB07735.1"
+FT                   /translation="MSPYGLNLSLVDEATTCVTPRVPNTSVVLPTGGNGTSPALPIFS
+M
+FT                   TLGAVSNVLALALLAQVAGRLRRRRSTATFLLFVASLLAIDLAGHVIPGALVLRLYTA
+G
+FT                   RAPAGGACHFLGGCMVFFGLCPLLLGCGMAVERCVGVTQPLIHAARVSVARARLALAL
+L
+FT                   AAMALAVALLPLVHVGHYELQYPGTWCFISLGPPGGWRQALLAGLFAGLGLAALLAAL
+V
+FT                   CNTLSGLALLRARWRRRRSRRFRENAGPDDRRRWGSRGLRLASASSASSITSTTAALR
+S
+FT                   SRGGGSARRVHAHDVEMVGQLVGIMVVSCICWSPLLVLVVLAIGGWNSNSLQRPLFLA
+V
+FT                   RLASWNQILDPWVYILLRQAMLRQLLRLLPLRVSAKGGPTELSLTKSAWEASSLRSSR
+H
+FT                   SGFSHL"
+XX
+SQ   Sequence 1218 BP; 162 A; 397 C; 387 G; 272 T; 0 other;
+     atgagcccct acgggcttaa cctgagccta gtggatgagg caacaacgtg tgtaacaccc        6
+0
+     agggtcccca atacatctgt ggtgctgcca acaggcggta acggcacatc accagcgctg       12
+0
+     cctatcttct ccatgacgct gggtgctgtg tccaacgtgc tggcgctggc gctgctggcc       18
+0
+     caggttgcag gcagactgcg gcgccgccgc tcgactgcca ccttcctgtt gttcgtcgcc       24
+0
+     agcctgcttg ccatcgacct agcaggccat gtgatcccgg gcgccttggt gcttcgcctg       30
+0
+     tatactgcag gacgtgcgcc cgctggcggg gcctgtcatt tcctgggcgg ctgtatggtc       36
+0
+     ttctttggcc tgtgcccact tttgcttggc tgtggcatgg ccgtggagcg ctgcgtgggt       42
+0
+     gtcacgcagc cgctgatcca cgcggcgcgc gtgtccgtag cccgcgcacg cctggcacta       48
+0
+     gccctgctgg ccgccatggc tttggcagtg gcgctgctgc cactagtgca cgtgggtcac       54
+0
+     tacgagctac agtaccctgg cacttggtgt ttcattagcc ttgggcctcc tggaggttgg       60
+0
+     cgccaggcgt tgcttgcggg cctcttcgcc ggccttggcc tggctgcgct ccttgccgca       66
+0
+     ctagtgtgta atacgctcag cggcctggcg ctccttcgtg cccgctggag gcggcgtcgc       72
+0
+     tctcgacgtt tccgagagaa cgcaggtccc gatgatcgcc ggcgctgggg gtcccgtgga       78
+0
+     ctccgcttgg cctccgcctc gtctgcgtca tccatcactt caaccacagc tgccctccgc       84
+0
+     agctctcggg gaggcggctc cgcgcgcagg gttcacgcac acgacgtgga aatggtgggc       90
+0
+     cagctcgtgg gcatcatggt ggtgtcgtgc atctgctgga gccccctgct ggtattggtg       96
+0
+     gtgttggcca tcgggggctg gaactctaac tccctgcagc ggccgctctt tctggctgta      102
+0
+     cgcctcgcgt cgtggaacca gatcctggac ccatgggtgt acatcctgct gcgccaggct      108
+0
+     atgctgcgcc aacttcttcg cctcctaccc ctgagggtta gtgccaaggg tggtccaacg      114
+0
+     gagctgagcc taaccaagag tgcctgggag gccagttcac tgcgtagctc ccggcacagt      120
+0
+     ggcttcagcc acttgtga                                                    121
+8
+//
+
+Output file format
+
+  Output files for usage example
+
+  File: u68037.newcpgreport
+
+ID   U68037  1218 BP.
+XX
+DE   CpG Island report.
+XX
+CC   Obs/Exp ratio > 0.60.
+CC   % C + % G > 50.00.
+CC   Length > 200.
+XX
+FH   Key              Location/Qualifiers
+FT   CpG island       104..509
+FT                    /size=406
+FT                    /Sum C+G=269
+FT                    /Percent CG=66.26
+FT                    /ObsExp=0.81
+FT   CpG island       596..924
+FT                    /size=329
+FT                    /Sum C+G=223
+FT                    /Percent CG=67.78
+FT                    /ObsExp=1.01
+FT   numislands       2
+//
+
+Data files
+
+   None.
+
+Notes
+
+   None.
+
+References
+
+    1. Larsen F., Gundersen, G., Lopez L., Prydz H. "CpG island as Gene
+       Markers in the Human Genome" Genomics 13:1095-1107 (1992)
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with a status of 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name                        Description
+   cpgplot      Plot CpG rich areas
+   cpgreport    Reports all CpG rich regions
+   geecee       Calculates fractional GC content of nucleic acid sequences
+   newcpgseek   Reports CpG rich regions
+
+   As there is no official definition of what is a cpg island is, and
+   worst where they begin and end, we have to live with 2 definitions and
+   thus two methods. These are:
+
+   1. newcpgseek and cpgreport - both declare a putative island if the
+   score is higher than a threshold (17 at the moment). They now also
+   display the actual CpG count, the % CG and the observed/expected
+   ration in the region where the score is above the threshold. This
+   scoring method based on sum/frequencies overpredicts islands but finds
+   the smaller ones around primary exons. newcpgseek uses the same method
+   as cpgreport but the output is different and more readable.
+
+   2. newcpgreport and cpgplot use the method which mentioned in the
+   Description section above. The important thing to note in this method
+   is that an island, in order to be reported, is defined as a region
+   that satisfies the following contraints:
+
+   Obs/Exp ratio > 0.6
+   % C + % G > 50%
+   Length > 200.
+
+   For all practical purposes you should probably use newcpgreport. It is
+   actually used to produce the human cpgisland database you can find on
+   the EBI's ftp server as well as on the EBI's SRS server.
+
+   geecee measures CG content in the entire input sequence and is not to
+   be used to detect CpG islands. It can be useful for detecting
+   sequences that MIGHT contain an island.
+
+Author(s)
+
+   Rodrigo Lopez (rls © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+History
+
+   Written (1999) - Rodrigo Lopez.
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

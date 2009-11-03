@@ -1,0 +1,253 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: fuzztran
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+fuzztran
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/fuzztran.ione" -->
+
+<H2>
+    Description
+</H2>
+
+fuzztran uses PROSITE style protein patterns to search nucleic acid
+sequences translated in the specified frame(s). 
+
+<p>
+Patterns are specifications of a (typically short) length of sequence to
+be found.  They can specify a search for an exact sequence or they can
+allow various ambiguities, matches to variable lengths of sequence and
+repeated subsections of the sequence. 
+
+<p>
+fuzztran intelligently selects the optimum searching algorithm to use,
+depending on the complexity of the search pattern specified. 
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/fuzztran.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/fuzztran.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/fuzztran.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+<b>fuzztran</b> reads in normal nucleic acid sequence USAs. 
+
+<p>
+<!--#include file="inc/fuzztran.input" -->
+
+
+<h3>Pattern specification</h3>
+
+Patterns for fuzztran are based on the format of pattern used in the PROSITE
+database, with the difference that the terminating dot '.' and the hyphens, '-',
+between the characters are optional. 
+
+<p>
+The PROSITE pattern definition from the PROSITE documentation follows. 
+
+<ul>
+
+<li>
+      The standard IUPAC one-letter codes for the amino acids are
+      used.
+
+<li>
+      The symbol `x' is used for a position where any amino acid is accepted. 
+
+<li>
+      Ambiguities are indicated by listing the acceptable amino acids
+      for a given position, between square parentheses `[ ]'. For
+      example: [ALT] stands for Ala or Leu or Thr.
+
+<li>
+      Ambiguities are also indicated by listing between a pair of
+      curly brackets `{ }' the amino acids that are not accepted at a
+      given position. For example: {AM} stands for any amino acid
+      except Ala and Met.
+
+<li>
+      Each element in a pattern is separated from its neighbor by a
+      `-'.  (Optional in fuzztran).
+
+<li>
+      Repetition of an element of the pattern can be indicated by
+      following that element with a numerical value or a numerical
+      range between parenthesis. Examples: x(3) corresponds to x-x-x,
+      x(2,4) corresponds to x-x or x-x-x or x-x-x-x.
+
+<li>
+      When a pattern is restricted to either the N- or C-terminal of a
+      sequence, that pattern either starts with a `&lt;' symbol or
+      respectively ends with a `&gt;' symbol.
+
+<li>
+      A period ends the pattern. (Optional in fuzztran).
+
+<li>All other characters, including spaces are not allowed.
+
+</ul>
+
+<p>
+For example, you can look for the pattern: 
+
+<pre>
+
+[DE](2)HS{P}X(2)PX(2,4)C
+
+</pre>
+
+<p>
+This means: Two Asps or Glus in any order followed by His, Ser, any
+residue other then Pro, then two of any residue followed by Pro
+followed by two to four of any residue followed by Cys.
+
+<p>
+The search is case-independent, so 'AAA' matches 'aaa'. 
+
+<H2>
+    Output file format
+</H2>
+
+
+<!--#include file="inc/reportformats.ihtml" -->
+<p>
+
+By default <b>fuzztran</b> writes a 'table' report file.
+
+<p>
+ <!--#include file="inc/fuzztran.output" -->
+   
+<p>
+
+The columns of data are as follows:
+
+<p>
+
+<ol>
+
+<li>Start - the start position of the pattern in the nucleic acids sequence.
+<li>End - the end position of the pattern in the nucleic acids sequence.
+<li>Score - the score of the match.
+<li>Mismatch - the number of mismatches .
+<li>Frame - the translation frame that the pattern match occurs in.
+<li>PStart - the start position of the match in the resulting protein sequence.
+<li>PEnd - the end position of the match in the resulting protein sequence.
+<li>Translation - the protein sequence that is matched.
+
+</ol>
+
+
+<H2>
+    Data files
+</H2>
+
+
+<!--#include file="inc/localfiles.ihtml" -->
+<p>
+<!--#include file="inc/gcfiles.ihtml" -->
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+
+When translating using non-standard genetic code table, always check the
+table carefully for deviations from your particular organism's code. 
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/fuzztran.isee" -->
+<p>
+Other EMBOSS programs allow you to search for regular expression
+patterns but may be less easy for the user who has never used regular
+expressions before:
+
+<p>
+
+<ul>
+
+<li><a href="dreg.html">dreg</a> - Regular expression search of a
+nucleotide sequence
+
+<li><a href="preg.html">preg</a> - Regular expression search of a protein
+sequence
+
+</ul>
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/ableasby.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/fuzztran.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/fuzztran.comment" -->
+
+</BODY>
+</HTML>
+

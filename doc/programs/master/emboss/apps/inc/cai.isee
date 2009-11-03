@@ -1,0 +1,24 @@
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="chips.html">chips</a></td>
+<td>Codon usage statistics</td>
+</tr>
+
+<tr>
+<td><a href="codcmp.html">codcmp</a></td>
+<td>Codon usage table comparison</td>
+</tr>
+
+<tr>
+<td><a href="cusp.html">cusp</a></td>
+<td>Create a codon usage table</td>
+</tr>
+
+<tr>
+<td><a href="syco.html">syco</a></td>
+<td>Synonymous codon usage Gribskov statistic plot</td>
+</tr>
+
+</table>

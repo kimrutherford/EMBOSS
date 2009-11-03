@@ -1,0 +1,34 @@
+application: rebaseextract [
+  documentation: "Extract data from REBASE"
+  groups: "Utils:Database creation"
+  gui: "yes"
+  batch: "yes"
+  cpu: "medium"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  infile: infile [
+    parameter: "Y"
+    information: "REBASE database withrefm file"
+    knowntype: "rebase withrefm"
+  ]
+
+  infile: protofile [
+    parameter: "Y"
+    information: "REBASE database proto file"
+    knowntype: "rebase proto"
+  ]
+
+  boolean: equivalences [
+    additional: "Y"
+    default: "Y"
+    information: "Create prototype equivalence file"
+    help: "This option calculates an embossre.equ file using
+           restriction enzyme prototypes in the withrefm file."
+  ]
+
+endsection: input

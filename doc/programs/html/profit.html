@@ -1,0 +1,401 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: profit
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+profit
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+
+<H2>
+    Function
+</H2>
+Scan a sequence or database with a matrix or profile
+
+<H2>
+    Description
+</H2>
+
+<b>profit</b> takes a simple frequency matrix produced by
+<b>prophecy</b> and searches with this to find matches in the input
+sequence(s) you are searching. 
+
+<p>
+
+Scores for the matches are calculated from the simple frequency matrix. 
+It is the sum of scores at each position of the matrix.
+
+<p>
+
+A 'simple frequency matrix' is simply a count of the number of times any
+particular amino acid occurs at each position in the alignment used to
+create it.  Simple frequency matrices are created using the program
+<b>prophecy</b> with the option '-type F' to create the correct type of
+matrix. The alignment should not have gaps in it.
+
+<p>
+
+The resulting matrix is moved to each position in the sequence(s) you
+are searching.  At each position in the sequence, the frequencies of the
+amino acids or bases covered by the length of the matrix is read from
+the matrix.  The sum of these frequencies at each position of the matrix
+is the score for that position of the sequence.  If this score is above
+the threshold percentage of the maximum possible score for that matrix,
+then a hit is reported. 
+
+
+<H2>
+    Usage
+</H2>
+
+
+Before running the example, we need to make a simple frequency matrix
+using <b>prophecy</b>
+
+<p>
+
+This is the ungapped aligned set of sequences used to make the matrix:
+
+<p>
+
+<pre>
+% more m.seq
+>one
+DEVGGEALGRLLVVYPWTQR
+>two
+DEVGREALGRLLVVYPWTQR
+>three
+DEVGGEALGRILVVYPWTQR
+>four
+DEVGGEAAGRVLVVYPWTQR
+
+<p>
+
+% prophecy
+Creates matrices/profiles from multiple alignments
+Input sequence set: m.seq
+Profile type
+         F : Frequency
+         G : Gribskov
+         H : Henikoff
+Select type [F]: 
+Enter a name for the profile [mymatrix]: 
+Enter threshold reporting percentage [75]: 
+Output file [outfile.prophecy]: 
+</pre>
+
+<p>
+
+<b>Here is a sample session with profit</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>profit </b>
+Scan a sequence or database with a matrix or profile
+Profile or weight matrix file: <b>outfile.prophecy</b>
+Input sequence(s): <b>tsw:*</b>
+Output file [outfile.profit]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-infile]            infile     Profile or weight matrix file
+  [-sequence]          seqall     Sequence(s) filename and optional format, or
+                                  reference (input USA)
+  [-outfile]           outfile    [*.profit] Output file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin2            integer    Start of each sequence to be used
+   -send2              integer    End of each sequence to be used
+   -sreverse2          boolean    Reverse (if DNA)
+   -sask2              boolean    Ask for begin/end/reverse
+   -snucleotide2       boolean    Sequence is nucleotide
+   -sprotein2          boolean    Sequence is protein
+   -slower2            boolean    Make lower case
+   -supper2            boolean    Make upper case
+   -sformat2           string     Input sequence format
+   -sdbname2           string     Database name
+   -sid2               string     Entryname
+   -ufo2               string     UFO features
+   -fformat2           string     Features format
+   -fopenfile2         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory3        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-infile]<br>(Parameter 1)</td>
+<td>Profile or weight matrix file</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 2)</td>
+<td>Sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 3)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.profit</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>profit</b> reads a simple frequency matrix produced by
+<b>prophecy</b> and uses it to search searches one or more protein or
+nucleic acid sequence USAs. 
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tsw:*' is a sequence entry in the example protein database 'tsw'
+<p>
+<p><h3>File: outfile.prophecy</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+# Pure Frequency Matrix
+# Columns are amino acid counts A-&gt;Z
+# Rows are alignment positions 1-&gt;n
+Simple
+Name		mymatrix
+Length		20
+Maximum score	76
+Thresh		75
+Consensus	DEVGGEALGRLLVVYPWTQR
+0  0  0  4  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  
+0  0  0  0  4  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0  0  
+0  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  
+0  0  0  0  0  0  3  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  
+0  0  0  0  4  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  
+4  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  
+1  0  0  0  0  0  0  0  0  0  0  3  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  
+0  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  
+0  0  0  0  0  0  0  0  1  0  0  2  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  
+0  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0  0  
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0  0  
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  4  0  0  
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  0  0  
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0  
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0  0  0  0  
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  0  
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Output file format
+</H2>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: outfile.profit</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+# PROF scan using simple frequency matrix mymatrix
+# Scores &gt;= threshold 75 (max score 76)
+#
+HBB_HUMAN 22 Percentage: 100
+HBB_PANPA 22 Percentage: 100
+HBB_PANTR 22 Percentage: 100
+</pre>
+</td></tr></table><p>
+
+<p>
+
+The ouput is a list of three columns.
+
+<p>
+
+The first column is the name of the matching sequence found.
+<br>
+The second is the start position in the sequence of the match.
+<br>
+The third column (after the word 'Percentage:') is the percentage of the
+maximum possible score  (sum of the highest value at each
+position in the frequency matrix). 
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+The aligned set of sequences used to make the simple frquency matrix
+should not have gaps in it.  <b>profit</b> will let you use a matrix
+made from a gapped alignment, but the results will probably not be
+sensible. 
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="prophecy.html">prophecy</a></td>
+<td>Creates matrices/profiles from multiple alignments</td>
+</tr>
+
+<tr>
+<td><a href="prophet.html">prophet</a></td>
+<td>Gapped alignment for profiles</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
+
+<H2>
+    History
+</H2>
+
+Written (1999) - Alan Bleasby
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+None
+
+</BODY>
+</HTML>
+

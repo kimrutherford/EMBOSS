@@ -1,0 +1,678 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: msbar
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+msbar
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+    Function
+</H2>
+Mutate sequence beyond all recognition
+
+<H2>
+    Description
+</H2>
+
+
+This program changes a sequence a lot or a little, attempting to emulate
+various forms of mutation.  You can set the number and types of mutations.
+
+<p>
+It can act on the following sizes of sequence:
+
+<ul>
+<li>Point (single base or residue change)
+<li>Codon (not applicable in proteins)
+<li>Block of sequence (of a specified minimum and maximum random size)
+</ul>
+
+<p>
+If the sequence is nucleic, the codon and block-sized operations can
+optionally be done in-frame.  This causes the minimum block size to be
+set to 3 and the randomly chosen positions to be multiples of 3. 
+
+<p>
+For each of the above size of sequence it can produce the effects of any
+of the following types of mutation at a randomly chosen position:
+
+<ul>
+<li>Insertion of a randomly generated sequence
+<li>Deletion
+<li>Change (deletion then insertion of a random sequence of the same size)
+<li>Duplication at an adjacent position
+<li>Move region from one position to another (without deletion of the original)
+<li>Any of the above, chosen at random.
+<li>None of the above
+</ul>
+
+<p>
+The input and output sequences may not differ if only a few changes are
+chosen as (for example) one in four nucleic acid point substitutions
+will not change the sequence. 
+
+<p>
+N.B.  There is no selection of the types of mutation to produce viable
+sequence as there would be in a real organism.  In particular, there is
+no attempt to bias mutations of nucleic acid sequences to conform to the
+C+G ratio in the sequence or to bias the codons in the direction of the
+frequencies used in the organism.  This program emulates mutation, not
+selection. 
+
+<p>
+This program was named from the acronym of "Mutate Sequence Beyond All
+Recognition", by analogy with the acronym "fubar" commonly used in the
+US and UK armed forces. 
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with msbar</b>
+<p>
+This asks for 5 mutations, with point mutations as changes (substitutions), and the codon and block mutations ignored. 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>msbar </b>
+Mutate sequence beyond all recognition
+Input sequence(s): <b>tembl:j01636</b>
+Number of times to perform the mutation operations [1]: <b>5</b>
+Point mutation operations
+         0 : None
+         1 : Any of the following
+         2 : Insertions
+         3 : Deletions
+         4 : Changes
+         5 : Duplications
+         6 : Moves
+Types of point mutations to perform [0]: <b>4</b>
+Block mutation operations
+         0 : None
+         1 : Any of the following
+         2 : Insertions
+         3 : Deletions
+         4 : Changes
+         5 : Duplications
+         6 : Moves
+Types of block mutations to perform [0]: <b></b>
+Codon mutation operations
+         0 : None
+         1 : Any of the following
+         2 : Insertions
+         3 : Deletions
+         4 : Changes
+         5 : Duplications
+         6 : Moves
+Types of codon mutations to perform [0]: <b></b>
+output sequence(s) [j01636.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-sequence]          seqall     Sequence(s) filename and optional format, or
+                                  reference (input USA)
+   -count              integer    [1] Number of times to perform the mutation
+                                  operations (Integer 0 or more)
+   -point              menu       [0] Types of point mutations to perform
+                                  (Values: 0 (None); 1 (Any of the following);
+                                  2 (Insertions); 3 (Deletions); 4 (Changes);
+                                  5 (Duplications); 6 (Moves))
+   -block              menu       [0] Types of block mutations to perform
+                                  (Values: 0 (None); 1 (Any of the following);
+                                  2 (Insertions); 3 (Deletions); 4 (Changes);
+                                  5 (Duplications); 6 (Moves))
+*  -codon              menu       [0] Types of codon mutations to perform.
+                                  These are only done if the sequence is
+                                  nucleic. (Values: 0 (None); 1 (Any of the
+                                  following); 2 (Insertions); 3 (Deletions); 4
+                                  (Changes); 5 (Duplications); 6 (Moves))
+  [-outseq]            seqoutall  [<sequence>.<format>] Sequence set(s)
+                                  filename and optional format (output USA)
+
+   Additional (Optional) qualifiers (* if not always prompted):
+*  -inframe            boolean    [N] Do 'codon' and 'block' operations in
+                                  frame
+
+   Advanced (Unprompted) qualifiers:
+   -othersequence      seqall     [asis:N] If you require that the resulting
+                                  mutated sequence should not match a set of
+                                  other sequences, then you can specify that
+                                  set of sequences here. For example, if you
+                                  require that the mutated sequence should not
+                                  be the same as the input sequence, enter
+                                  the input sequence here. If you want the
+                                  result to be different to previous results
+                                  of this program, specify the previous result
+                                  sequences here. The program will check that
+                                  the result does not match the sequences
+                                  specified here before writing it out. If a
+                                  match is found, then the mutation is started
+                                  again with a fresh copy of the input
+                                  sequence. If, after 10 such retries, there
+                                  is still a match to the set of sequence
+                                  given here, then the matching mutated
+                                  sequence is written with a warning message.
+   -minimum            integer    [1] Minimum size for a block mutation
+                                  (Integer 0 or more)
+   -maximum            integer    [10] Maximum size for a block mutation (Any
+                                  integer value)
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-othersequence" associated qualifiers
+   -sbegin             integer    Start of each sequence to be used
+   -send               integer    End of each sequence to be used
+   -sreverse           boolean    Reverse (if DNA)
+   -sask               boolean    Ask for begin/end/reverse
+   -snucleotide        boolean    Sequence is nucleotide
+   -sprotein           boolean    Sequence is protein
+   -slower             boolean    Make lower case
+   -supper             boolean    Make upper case
+   -sformat            string     Input sequence format
+   -sdbname            string     Database name
+   -sid                string     Entryname
+   -ufo                string     UFO features
+   -fformat            string     Features format
+   -fopenfile          string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-count</td>
+<td>Number of times to perform the mutation operations</td>
+<td>Integer 0 or more</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-point</td>
+<td>Types of point mutations to perform</td>
+<td><table><tr><td>0</td> <td><i>(None)</i></td></tr><tr><td>1</td> <td><i>(Any of the following)</i></td></tr><tr><td>2</td> <td><i>(Insertions)</i></td></tr><tr><td>3</td> <td><i>(Deletions)</i></td></tr><tr><td>4</td> <td><i>(Changes)</i></td></tr><tr><td>5</td> <td><i>(Duplications)</i></td></tr><tr><td>6</td> <td><i>(Moves)</i></td></tr></table></td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-block</td>
+<td>Types of block mutations to perform</td>
+<td><table><tr><td>0</td> <td><i>(None)</i></td></tr><tr><td>1</td> <td><i>(Any of the following)</i></td></tr><tr><td>2</td> <td><i>(Insertions)</i></td></tr><tr><td>3</td> <td><i>(Deletions)</i></td></tr><tr><td>4</td> <td><i>(Changes)</i></td></tr><tr><td>5</td> <td><i>(Duplications)</i></td></tr><tr><td>6</td> <td><i>(Moves)</i></td></tr></table></td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-codon</td>
+<td>Types of codon mutations to perform. These are only done if the sequence is nucleic.</td>
+<td><table><tr><td>0</td> <td><i>(None)</i></td></tr><tr><td>1</td> <td><i>(Any of the following)</i></td></tr><tr><td>2</td> <td><i>(Insertions)</i></td></tr><tr><td>3</td> <td><i>(Deletions)</i></td></tr><tr><td>4</td> <td><i>(Changes)</i></td></tr><tr><td>5</td> <td><i>(Duplications)</i></td></tr><tr><td>6</td> <td><i>(Moves)</i></td></tr></table></td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 2)</td>
+<td>Sequence set(s) filename and optional format (output USA)</td>
+<td>Writeable sequence(s)</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-inframe</td>
+<td>Do 'codon' and 'block' operations in frame</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-othersequence</td>
+<td>If you require that the resulting mutated sequence should not match a set of other sequences, then you can specify that set of sequences here. For example, if you require that the mutated sequence should not be the same as the input sequence, enter the input sequence here. If you want the result to be different to previous results of this program, specify the previous result sequences here. The program will check that the result does not match the sequences specified here before writing it out. If a match is found, then the mutation is started again with a fresh copy of the input sequence. If, after 10 such retries, there is still a match to the set of sequence given here, then the matching mutated sequence is written with a warning message.</td>
+<td>Readable sequence(s)</td>
+<td>asis:N</td>
+</tr>
+
+<tr>
+<td>-minimum</td>
+<td>Minimum size for a block mutation</td>
+<td>Integer 0 or more</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-maximum</td>
+<td>Maximum size for a block mutation</td>
+<td>Any integer value</td>
+<td>10</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>msbar</b> reads any sequence USA.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:j01636' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:j01636</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   J01636; SV 1; linear; genomic DNA; STD; PRO; 7477 BP.
+XX
+AC   J01636; J01637; K01483; K01793;
+XX
+DT   30-NOV-1990 (Rel. 26, Created)
+DT   09-SEP-2004 (Rel. 81, Last updated, Version 8)
+XX
+DE   E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
+XX
+KW   acetyltransferase; beta-D-galactosidase; galactosidase; lac operon;
+KW   lac repressor protein; lacA gene; lacI gene; lactose permease; lacY gene;
+KW   lacZ gene; mutagenesis; palindrome; promoter region;
+KW   thiogalactoside acetyltransferase.
+XX
+OS   Escherichia coli
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Escherichia.
+XX
+RN   [1]
+RP   1243-1266
+RX   PUBMED; 4587255.
+RA   Gilbert W., Maxam A.;
+RT   "The nucleotide sequence of the lac operator";
+RL   Proc. Natl. Acad. Sci. U.S.A. 70(12):3581-3584(1973).
+XX
+RN   [2]
+RP   1246-1308
+RX   PUBMED; 4587256.
+RA   Maizels N.M.;
+RT   "The nucleotide sequence of the lactose messenger ribonucleic acid
+RT   transcribed from the UV5 promoter mutant of Escherichia coli";
+RL   Proc. Natl. Acad. Sci. U.S.A. 70(12):3585-3589(1973).
+XX
+RN   [3]
+RX   PUBMED; 4598642.
+RA   Gilbert W., Maizels N., Maxam A.;
+RT   "Sequences of controlling regions of the lactose operon";
+RL   Cold Spring Harb. Symp. Quant. Biol. 38:845-855(1974).
+XX
+RN   [4]
+RA   Gilbert W., Gralla J., Majors A.J., Maxam A.;
+RT   "Lactose operator sequences and the action of lac repressor";
+RL   (in) Sund H., Blauer G. (Eds.);
+RL   PROTEIN-LIGAND INTERACTIONS:193-207;
+RL   Walter de Gruyter, New York (1975)
+XX
+RN   [5]
+RP   1146-1282
+RX   PUBMED; 1088926.
+RA   Dickson R.C., Abelson J.N., Barnes W.M., Reznikoff W.S.;
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+     cgatttggct acatgacatc aaccatatca gcaaaagtga tacgggtatt atttttgccg      4560
+     ctatttctct gttctcgcta ttattccaac cgctgtttgg tctgctttct gacaaactcg      4620
+     ggctgcgcaa atacctgctg tggattatta ccggcatgtt agtgatgttt gcgccgttct      4680
+     ttatttttat cttcgggcca ctgttacaat acaacatttt agtaggatcg attgttggtg      4740
+     gtatttatct aggcttttgt tttaacgccg gtgcgccagc agtagaggca tttattgaga      4800
+     aagtcagccg tcgcagtaat ttcgaatttg gtcgcgcgcg gatgtttggc tgtgttggct      4860
+     gggcgctgtg tgcctcgatt gtcggcatca tgttcaccat caataatcag tttgttttct      4920
+     ggctgggctc tggctgtgca ctcatcctcg ccgttttact ctttttcgcc aaaacggatg      4980
+     cgccctcttc tgccacggtt gccaatgcgg taggtgccaa ccattcggca tttagcctta      5040
+     agctggcact ggaactgttc agacagccaa aactgtggtt tttgtcactg tatgttattg      5100
+     gcgtttcctg cacctacgat gtttttgacc aacagtttgc taatttcttt acttcgttct      5160
+     ttgctaccgg tgaacagggt acgcgggtat ttggctacgt aacgacaatg ggcgaattac      5220
+     ttaacgcctc gattatgttc tttgcgccac tgatcattaa tcgcatcggt gggaaaaacg      5280
+     ccctgctgct ggctggcact attatgtctg tacgtattat tggctcatcg ttcgccacct      5340
+     cagcgctgga agtggttatt ctgaaaacgc tgcatatgtt tgaagtaccg ttcctgctgg      5400
+     tgggctgctt taaatatatt accagccagt ttgaagtgcg tttttcagcg acgatttatc      5460
+     tggtctgttt ctgcttcttt aagcaactgg cgatgatttt tatgtctgta ctggcgggca      5520
+     atatgtatga aagcatcggt ttccagggcg cttatctggt gctgggtctg gtggcgctgg      5580
+     gcttcacctt aatttccgtg ttcacgctta gcggccccgg cccgctttcc ctgctgcgtc      5640
+     gtcaggtgaa tgaagtcgct taagcaatca atgtcggatg cggcgcgacg cttatccgac      5700
+     caacatatca taacggagtg atcgcattga acatgccaat gaccgaaaga ataagagcag      5760
+     gcaagctatt taccgatatg tgcgaaggct taccggaaaa aagacttcgt gggaaaacgt      5820
+     taatgtatga gtttaatcac tcgcatccat cagaagttga aaaaagagaa agcctgatta      5880
+     aagaaatgtt tgccacggta ggggaaaacg cctgggtaga accgcctgtc tatttctctt      5940
+     acggttccaa catccatata ggccgcaatt tttatgcaaa tttcaattta accattgtcg      6000
+     atgactacac ggtaacaatc ggtgataacg tactgattgc acccaacgtt actctttccg      6060
+     ttacgggaca ccctgtacac catgaattga gaaaaaacgg cgagatgtac tcttttccga      6120
+     taacgattgg caataacgtc tggatcggaa gtcatgtggt tattaatcca ggcgtcacca      6180
+     tcggggataa ttctgttatt ggcgcgggta gtatcgtcac aaaagacatt ccaccaaacg      6240
+     tcgtggcggc tggcgttcct tgtcgggtta ttcgcgaaat aaacgaccgg gataagcact      6300
+     attatttcaa agattataaa gttgaatcgt cagtttaaat tataaaaatt gcctgatacg      6360
+     ctgcgcttat caggcctaca agttcagcga tctacattag ccgcatccgg catgaacaaa      6420
+     gcgcaggaac aagcgtcgca tcatgcctct ttgacccaca gctgcggaaa acgtactggt      6480
+     gcaaaacgca gggttatgat catcagccca acgacgcaca gcgcatgaaa tgcccagtcc      6540
+     atcaggtaat tgccgctgat actacgcagc acgccagaaa accacggggc aagcccggcg      6600
+     atgataaaac cgattccctg cataaacgcc accagcttgc cagcaatagc cggttgcaca      6660
+     gagtgatcga gcgccagcag caaacagagc ggaaacgcgc cgcccagacc taacccacac      6720
+     accatcgccc acaataccgg caattgcatc ggcagccaga taaagccgca gaaccccacc      6780
+     agttgtaaca ccagcgccag cattaacagt ttgcgccgat cctgatggcg agccatagca      6840
+     ggcatcagca aagctcctgc ggcttgccca agcgtcatca atgccagtaa ggaaccgctg      6900
+     tactgcgcgc tggcaccaat ctcaatatag aaagcgggta accaggcaat caggctggcg      6960
+     taaccgccgt taatcagacc gaagtaaaca cccagcgtcc acgcgcgggg agtgaatacc      7020
+     acgcgaaccg gagtggttgt tgtcttgtgg gaagaggcga cctcgcgggc gctttgccac      7080
+     caccaggcaa agagcgcaac aacggcaggc agcgccacca ggcgagtgtt tgataccagg      7140
+     tttcgctatg ttgaactaac cagggcgtta tggcggcacc aagcccaccg ccgcccatca      7200
+     gagccgcgga ccacagcccc atcaccagtg gcgtgcgctg ctgaaaccgc cgtttaatca      7260
+     ccgaagcatc accgcctgaa tgatgccgat ccccacccca ccaagcagtg cgctgctaag      7320
+     cagcagcgca ctttgcgggt aaagctcacg catcaatgca ccgacggcaa tcagcaacag      7380
+     actgatggcg acactgcgac gttcgctgac atgctgatga agccagcttc cggccagcgc      7440
+     cagcccgccc atggtaacca ccggcagagc ggtcgac                               7477
+//
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Output file format
+</H2>
+
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: j01636.fasta </h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;J01636 J01636.1 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
+gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgcccggaagagagt
+caattcagggtggtgaatgtgaaaccagtaacgttatacgatgtcgcagagtatgccggt
+gtctcttatcagaccgtttcccgcgtggtgaaccaggccagccacgtttctgcgaaaacg
+cgggaaaaagtggaagcggcgatggcggagctgaattacattcccaaccgcgtggcacaa
+caactggcgggcaaacagtcgttgctgattggcgttgccacctccagtctggccctgcac
+gcgccgtcgcaaattgtcgcggcgattaaatctcgcgccgatcaactgggtgccagcgtg
+gtggtgtcgatggtagaacgaagcggcgtcgaagcctgtaaagcggcggtgcacaatctt
+ctcgcgcaacgcgtcagtgggctgatcattaactatccgctggatgaccaggatgccatt
+gctgtggaagctgcctgcactaatgttccggcgttatttcttgatgtctctgaccagaca
+cccatcaacagtattattttctcccatgaagacggtacgcgactgggcgtggagcatctg
+gtcgcattgggtcaccagcaaatcgcgctgttagcgggcccattaagttctgtctcggcg
+cgtctgcgtctggctggctggcataaatTtctcactcgcaatcaaattcagccgatagcg
+gaacgggaaggcgactggagtgccatgtccggttttcaacaaaccatgcaaatgctgaat
+gagggcatcgttcccactgcgatgctggttgccaacgatcagatggcgctgggcgcaatg
+cgcgccattaccgagtccgggctgcgcgttggtgcggatatctcggtagtgggatacgac
+gataccgaagacagctcatgttatatcccgccgtcaaccaccatcaaacaggattttcgc
+ctgctggggcaaaccagcgtggaccgcttgctgcaactctctcagggccaggcggtgaag
+ggcaatcagctgttgcccgtctcactggtgaaaagaaaaaccaccctggcgcccaatacg
+caaaccgcctctccccgcgcgttggccgattcattaatgcagctggcacgacaggtttcc
+cgactggaaagcgggcagtgagcgcaacgcaattaatgtgagttagctcactcattaggc
+accccaggctttacactttatgcttccggctcgtatgttgtgtggaattgtgagcggata
+acaatttcacacaggaaacagctatgaccatgattacggattcactggccgtcgttttac
+aacgtcgtgactgggaaaaccctggcgttacccaacttaatcgccttgcagcacatcccc
+ctttcgccagctggcgtaatagcgaagaggcccgcaccgatcgcccttcccaacagttgc
+gcagcctgaatggcgaatggcgctttgcctggtttccggcaccagaagcggtgccggaaa
+gctggctggagtgcgatcttcctgaggccgatactgtcgtcgtcccctcaaactggcaga
+tgcacggttacgatgcgcccatctacaccaacgtaacctatcccattacggtcaatccgc
+cgtttgttcccacggagaatccgacgggttgttactcgctcacatttaatgttgatgaaa
+gctggctacaggaaggccagacgcgaattatttttgatggcgttaactcggcgtttcatc
+tgtggtgcaacgggcgctgggtcggttacggccaggacagtcgtttgccgtctgaatttg
+acctgagcgcatttttacgcgccggagaaaaccgcctcgcggtgatggtgctgcgttgga
+gtgacggcagttatctggaagatcaggatatgtggcggatgagcggcattttccgtgacg
+tctcgttgctgcataaaccgactacacaaatcagcgatttccatgttgccactcgcttta
+atgatgatttcagccgcgctgtactggaggctgaagttcagatgtgcggcgagttgcgtg
+actacctacgggtaacagtttctttatggcagggtgaaacgcaggtcgccagcggcaccg
+cgcctttcggcggtgaaattatcgatgagcgtggtggttatgccgatcgcgtcacactac
+gtctgaacgtcgaaaacccgaaactgtggagcgccgaaatcccgaatctctatcgtgcgg
+tggttgaactgcacaccgccgacggcacgctgattgaagcagaagcctgcgatgtcggtt
+tccgcgaggtgcggattgaaaatggtctgctgctgctgaacggcaagccgttgctgattc
+gaggcgttaaccgtcacgagcatcatcctctgcatggtcaggtcatggatgagcagacga
+tggtgcaggatatcctgctgatgaagcagaacaactttaacgccgtgcgctgttcgcatt
+atccgaaccatccgctgtggtacacgctgtgcgaccgctacggcctgtatgtggtggatg
+aagccaatattgaaacccacggcatggtgccaatgaatcgtctgaccgatgatccgcgct
+ggctaccggcgatgagcgaacgcgtaacgcgaatggtgcagcgcgatcgtaatcacccga
+gtgtgatcatctggtcgctggggaatgaatcaggccacggcgctaatcacgacgcgctgt
+atcgctggatcaaatctgtcgatccttcccgcccggtgcagtatgaaggcggcggagccg
+acaccacggccaccgatattatttgcccgatgtacgcgcgcgtggatgaagaccagccct
+tcccggctgtgccgaaatggtccatcaaaaaatggctttcgctacctggagagacgcgcc
+cgctgatcctttgcgaatacgcccacgcgatgggtaacagtcttggcggtttcgctaaat
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+tgttcggtttattctttttcttttacttttttatcatgggagcctacttcccgtttttcc
+cgatttggctacatgacatcaaccatatcagcaaaagtgatacgggtattatttttgccg
+ctatttctctgttctcgctattattccaaccgctgtttggtctgctttctgacaaactcg
+ggctgcgcaaatacctgctgtggattattaccggcatgttagtgatgtttgcgccgttct
+ttatttttatcttcgggccactgttacaatacaacattttagtaggatcgattgttggtg
+gtatttatctaggcttttgttttaacgccggtgcgccagcagtagaggcatttattgaga
+aagtcagccgtcgcagtaatttcgaatttggtcgcgcgcggatgtttggctgtgttggct
+gggcgctgtgtgccTcgattgtcggcatcatgttcaccatcaataatcagtttgttttct
+ggctgggctctggctgtgcactcatcctcgccgttttactctttttcgccaaaacggatg
+cgccctcttctgccacggttgccaatgcggtaggtgccaaccattcggcatttagcctta
+agctggcactggaactgttcagacagccaaaactgtggtttttgtcactgtatgttattg
+gcgtttcctgcacctacgatgtttttgaccaacagtttgctaatttctttacttcgttct
+ttgctaccggtgaacagggtacgcgggtatttggctacgtaacgacaatgggcgaattac
+ttaacgcctcgattatgttctttgcgccactgatcattaatcgcatcggtgggaaaaacg
+ccctgctgctggctggcactattatgtctgtacgtattattggctcatcgttcgccacct
+cagcgctggaagtggttattctgaaaacgctgcatatgtttgaagtaccgttcctgctgg
+tgggctgctttaaatatattaccagccagtttgaagtgcgtttttcagcgacgatttatc
+tggtctgtttctgcttctttaagcaactggcgatgatttttatgtctgtactggcgggca
+atatgtatgaaagcatcggtttccagggcgcttatctggtgctgggtctggtggcgctgg
+gcttcaccttaatttccgtgttcacgcttagcggccccggcccgctttccctgctgcgtc
+gtcaggtgaatgaagtcgcttaagcaatcaatgtcggatgcggcgcgacgcttatccgac
+caacatatcataacggagtgatcgcattgaacatgccaatgaccgaaagaataagagcag
+gcaagctatttaccgatatgtgcgaaggcttaccggaaaaaagacttcgtgggaaaacgt
+taatgtatgagtCtaatcactcgcatccatcagaagttgaaaaaagagaaagcctgatta
+aagaaatgtttgccacggtaggggaaaacgcctgggCagaaccgcctgtctatttctctt
+acggttccaacatccatataggccgcaatttttatgcaaatttcaatttaaccattgtcg
+atgactacacggtaacaatcggtgataacgtactgattgcacccaacgttactctttccg
+ttacgggacaccctgtacaccatgaattgagaaaaaacggcgagatgtactcttttccga
+taacgattggcaataacgtctggatcggaagtcatgtggttattaatccaggcgtcacca
+tcggggataattctgttattggcgcgggtagtatcgtcacaaaagacattccaccaaacg
+tcgtggcggctggcgttccttgtcgggttattcgcgaaataaacgaccgggataagcact
+attatttcaaagattataaagttgaatcgtcagtttaaattataaaaattgcctgatacg
+ctgcgcttatcaggcctacaagttcagcgatctacattagccgcatccggcatgaacaaa
+gcgcaggaacaagcgtcgcatcatgcctctttgacccacagctgcggaaaacgtactggt
+gcaaaacgcagggttatgatcatcagcccaacgacgcacagcgcatgaaatgcccagtcc
+atcaggtaattgccgctgatactacgcagcacgccagaaaaccacggggcaagcccggcg
+atgataaaaccgattccctgcataaacgccaccagcttgccagcaatagccggttgcaca
+gagtgatcgagcgccagcagcaaacagagcggaaacgcgccgcccagacctaacccacac
+accatcgcccacaataccggcaattgcatcggcagccagataaagccgcagaaccccacc
+agttgtaacaccagcgccagcattaacagtttgcgccgatcctgatggcgagccatagca
+ggcatcagcaaagctcctgcggcttgcccaagcgtcatcaatgccagtaaggaaccgctg
+tactgcgcgctggcaccaatctcaatatagaaagcgggtaaccaggcaatcaggctggcg
+taaccgccgttaatcagaccgaagtaaacacccagcgtccacgcgcggggagtgaatacc
+acgcgaaccggagtggttgttgtcttgtgggaagaggcgacctcgcgggcgctttgccac
+caccaggcaaagagcgcaacaacggcaggcagcgccaccaggcgagtgtttgataccagg
+tttcgctatgttgaactaaccagggcgttatggcggcaccaagcccaccgccgcccatca
+gagccgcggaccacagccccatcaccagtggcgtgcgctgctgaaaccgccgtttaatca
+ccgaagcatcaccgcctgaatgatgccgatccccaccccaccaagcagtgcgctgctaag
+cagcagcgcactttgcgggtaaagctcacgcatcaatgcaccgacggcaatcagcaacag
+actgatggcgacactgcgacgttcgctgacatgctgatgaagccagcttccggccagcgc
+cagcccgcccatggtaaccaccggcagagcggtcgac
+</pre>
+</td></tr></table><p>
+
+<p>
+
+The output is a sequence file with 5 substitutions relative to the
+original sequence.
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="shuffleseq.html">shuffleseq</a></td>
+<td>Shuffles a set of sequences maintaining composition</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+
+
+<H2>
+    History
+</H2>
+
+Written (1999) - Gary Williams
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+<H2>
+    Comments
+</H2>
+None
+
+
+</BODY>
+</HTML>
+

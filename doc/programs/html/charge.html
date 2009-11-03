@@ -1,0 +1,643 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: charge
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+charge
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+    Function
+</H2>
+Protein charge plot
+<H2>
+    Description
+</H2>
+
+<b>charge</b> reads a protein sequence and writes a file (or plots a
+graph) of the charges of the amino acids within a window of specified
+length as the window is moved along the sequence. 
+
+
+<H2>
+   Algorithm
+</H2>
+
+
+<b>charge</b> uses the column "charge" from the datafile
+<i>Eamino.dat</i>.  It gives the residues 'D' and 'E' a charge of -1,
+'K' and 'R' a charge of +1, and the residue 'H' a charge of +0.5.  Then
+it calculates the mean charge across -window (default is 5). 
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with charge</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>charge tsw:hbb_human </b>
+Protein charge plot
+Output file [hbb_human.charge]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-seqall]            seqall     Protein sequence(s) filename and optional
+                                  format, or reference (input USA)
+*  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png, gif)
+*  -outfile            outfile    [*.charge] Output file name
+
+   Additional (Optional) qualifiers:
+   -window             integer    [5] Window length (Integer 1 or more)
+
+   Advanced (Unprompted) qualifiers:
+   -aadata             datafile   [Eamino.dat] Amino acids properties and
+                                  molecular weight data file
+   -plot               toggle     [N] Produce graphic
+
+   Associated qualifiers:
+
+   "-seqall" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-graph" associated qualifiers
+   -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-seqall]<br>(Parameter 1)</td>
+<td>Protein sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-graph</td>
+<td>Graph type</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png, gif</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
+</tr>
+
+<tr>
+<td>-outfile</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.charge</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-window</td>
+<td>Window length</td>
+<td>Integer 1 or more</td>
+<td>5</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-aadata</td>
+<td>Amino acids properties and molecular weight data file</td>
+<td>Data file</td>
+<td>Eamino.dat</td>
+</tr>
+
+<tr>
+<td>-plot</td>
+<td>Produce graphic</td>
+<td>Toggle value Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>
+
+<H2>
+    Input file format
+</H2>
+
+<b>charge</b> reads in a protein sequence.
+
+<p>
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tsw:hbb_human' is a sequence entry in the example protein database 'tsw'
+<p>
+<p><h3>Database entry: tsw:hbb_human</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   HBB_HUMAN               Reviewed;         147 AA.
+AC   P68871; P02023; Q13852; Q14481; Q14510; Q45KT0; Q6FI08; Q8IZI1;
+AC   Q9BX96; Q9UCP8; Q9UCP9;
+DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
+DT   23-JAN-2007, sequence version 2.
+DT   20-MAR-2007, entry version 43.
+DE   Hemoglobin subunit beta (Hemoglobin beta chain) (Beta-globin).
+GN   Name=HBB;
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+OC   Catarrhini; Hominidae; Homo.
+OX   NCBI_TaxID=9606;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE.
+RX   MEDLINE=81064667; PubMed=6254664; DOI=10.1016/0092-8674(80)90428-6;
+RA   Lawn R.M., Efstratiadis A., O'Connell C., Maniatis T.;
+RT   "The nucleotide sequence of the human beta-globin gene.";
+RL   Cell 21:647-651(1980).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE.
+RX   MEDLINE=77126403; PubMed=1019344;
+RA   Marotta C., Forget B., Cohen-Solal M., Weissman S.M.;
+RT   "Nucleotide sequence analysis of coding and noncoding regions of human
+RT   beta-globin mRNA.";
+RL   Prog. Nucleic Acid Res. Mol. Biol. 19:165-175(1976).
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE.
+RA   Lu L., Hu Z.H., Du C.S., Fu Y.S.;
+RT   "DNA sequence of the human beta-globin gene isolated from a healthy
+RT   Chinese.";
+RL   Submitted (JUN-1997) to the EMBL/GenBank/DDBJ databases.
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE, AND VARIANT DURHAM-N.C. PRO-115.
+RC   TISSUE=Blood;
+RA   Kutlar F., Abboud M., Leithner C., Holley L., Brisco J., Kutlar A.;
+RT   "Electrophoretically silent, very unstable, thalassemic mutation at
+RT   codon 114 of beta globin (hemoglobin Durham-N.C.) detected by cDNA
+RT   sequencing of mRNA, from a Russian women.";
+RL   Submitted (AUG-1999) to the EMBL/GenBank/DDBJ databases.
+RN   [5]
+RP   NUCLEOTIDE SEQUENCE, AND VARIANT LOUISVILLE LEU-43.
+RC   TISSUE=Blood;
+RA   Kutlar F., Harbin J., Brisco J., Kutlar A.;
+RT   "Rapid detection of electrophoretically silent, unstable human
+RT   hemoglobin 'Louisville', (Beta; Phe 42 Leu/TTT to CTT) by cDNA
+RT   sequencing of mRNA.";
+RL   Submitted (JAN-1999) to the EMBL/GenBank/DDBJ databases.
+RN   [6]
+RP   NUCLEOTIDE SEQUENCE, AND VARIANT TY GARD GLN-125.
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT   VARIANT     141    141       A -&gt; T (in St Jacques: O(2) affinity up).
+FT                                /FTId=VAR_003081.
+FT   VARIANT     141    141       A -&gt; V (in Puttelange; polycythemia; O(2)
+FT                                affinity up).
+FT                                /FTId=VAR_003082.
+FT   VARIANT     142    142       L -&gt; R (in Olmsted; unstable).
+FT                                /FTId=VAR_003083.
+FT   VARIANT     143    143       A -&gt; D (in Ohio; O(2) affinity up).
+FT                                /FTId=VAR_003084.
+FT   VARIANT     144    144       H -&gt; D (in Rancho Mirage).
+FT                                /FTId=VAR_003085.
+FT   VARIANT     144    144       H -&gt; P (in Syracuse; O(2) affinity up).
+FT                                /FTId=VAR_003087.
+FT   VARIANT     144    144       H -&gt; Q (in Little Rock; O(2) affinity
+FT                                up).
+FT                                /FTId=VAR_003086.
+FT   VARIANT     144    144       H -&gt; R (in Abruzzo; O(2) affinity up).
+FT                                /FTId=VAR_003088.
+FT   VARIANT     145    145       K -&gt; E (in Mito; O(2) affinity up).
+FT                                /FTId=VAR_003089.
+FT   VARIANT     146    146       Y -&gt; C (in Rainier; O(2) affinity up).
+FT                                /FTId=VAR_003090.
+FT   VARIANT     146    146       Y -&gt; H (in Bethesda; O(2) affinity up).
+FT                                /FTId=VAR_003091.
+FT   VARIANT     147    147       H -&gt; D (in Hiroshima; O(2) affinity up).
+FT                                /FTId=VAR_003092.
+FT   VARIANT     147    147       H -&gt; L (in Cowtown; O(2) affinity up).
+FT                                /FTId=VAR_003093.
+FT   VARIANT     147    147       H -&gt; P (in York; O(2) affinity up).
+FT                                /FTId=VAR_003094.
+FT   VARIANT     147    147       H -&gt; Q (in Kodaira; O(2) affinity up).
+FT                                /FTId=VAR_003095.
+FT   HELIX         5     15
+FT   TURN         20     22
+FT   HELIX        23     34
+FT   HELIX        36     41
+FT   HELIX        43     45
+FT   HELIX        51     56
+FT   HELIX        58     76
+FT   TURN         77     79
+FT   HELIX        81     93
+FT   TURN         94     96
+FT   HELIX       101    118
+FT   HELIX       119    121
+FT   HELIX       124    141
+FT   HELIX       143    145
+SQ   SEQUENCE   147 AA;  15998 MW;  A31F6D621C6556A1 CRC64;
+     MVHLTPEEKS AVTALWGKVN VDEVGGEALG RLLVVYPWTQ RFFESFGDLS TPDAVMGNPK
+     VKAHGKKVLG AFSDGLAHLD NLKGTFATLS ELHCDKLHVD PENFRLLGNV LVCVLAHHFG
+     KEFTPPVQAA YQKVVAGVAN ALAHKYH
+//
+</pre>
+</td></tr></table><p>
+
+
+<H2>
+    Output file format
+</H2>
+
+If the option '-plot' is specified then <b>charge</b> displays a graph
+of the charge along the sequence otherwise it writes out a file
+containing the charges within a window starting at each position along
+the sequence. 
+
+<p>
+
+The output file contains two columns separated by space or TAB
+characters.  The first column is the position of the start of the
+window.  The second column is the charge of the amino acids within that
+window. 
+
+<p>
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: hbb_human.charge</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+CHARGE of HBB_HUMAN from 1 to 147: window 5
+
+Position	Residue	Charge
+1		M	0.100
+2		V	0.100
+3		H	-0.100
+4		L	-0.400
+5		T	-0.200
+6		P	-0.200
+7		E	-0.200
+8		E	0.000
+9		K	0.200
+10		S	0.000
+11		A	0.000
+12		V	0.000
+13		T	0.000
+14		A	0.200
+15		L	0.200
+16		W	0.200
+17		G	0.200
+18		K	0.000
+19		V	-0.400
+20		N	-0.400
+21		V	-0.400
+22		D	-0.400
+23		E	-0.400
+24		V	-0.200
+25		G	-0.200
+26		G	-0.200
+27		E	0.000
+28		A	0.200
+29		L	0.200
+30		G	0.200
+31		R	0.200
+32		L	0.000
+33		L	0.000
+34		V	0.000
+35		V	0.000
+36		Y	0.000
+37		P	0.200
+38		W	0.200
+39		T	0.200
+40		Q	0.000
+41		R	0.000
+42		F	-0.200
+43		F	-0.200
+44		E	-0.400
+45		S	-0.200
+46		F	-0.200
+47		G	-0.200
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+93		H	0.100
+94		C	0.100
+95		D	0.100
+96		K	0.100
+97		L	-0.100
+98		H	-0.300
+99		V	-0.400
+100		D	-0.400
+101		P	0.000
+102		E	0.000
+103		N	0.200
+104		F	0.200
+105		R	0.200
+106		L	0.000
+107		L	0.000
+108		G	0.000
+109		N	0.000
+110		V	0.000
+111		L	0.000
+112		V	0.000
+113		C	0.100
+114		V	0.200
+115		L	0.200
+116		A	0.200
+117		H	0.400
+118		H	0.100
+119		F	0.000
+120		G	0.000
+121		K	0.000
+122		E	-0.200
+123		F	0.000
+124		T	0.000
+125		P	0.000
+126		P	0.000
+127		V	0.000
+128		Q	0.000
+129		A	0.200
+130		A	0.200
+131		Y	0.200
+132		Q	0.200
+133		K	0.200
+134		V	0.000
+135		V	0.000
+136		A	0.000
+137		G	0.000
+138		V	0.000
+139		A	0.000
+140		N	0.100
+141		A	0.300
+142		L	0.300
+143		A	0.400
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Data files
+</H2>
+
+<b>charge</b> reads the data file 'Eamino.dat' to find the charge of
+the amino acids in the protein.
+
+<p>
+<p>
+EMBOSS data files are distributed with the application and stored
+in the standard EMBOSS data directory, which is defined
+by the EMBOSS environment variable EMBOSS_DATA.
+
+<p>
+
+To see the available EMBOSS data files, run:
+<p>
+<pre>
+% embossdata -showall
+</pre>
+<p>
+To fetch one of the data files (for example 'Exxx.dat') into your
+current directory for you to inspect or modify, run:
+
+<pre>
+
+% embossdata -fetch -file Exxx.dat
+
+</pre>
+<p>
+
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called
+".embossdata". Files for all EMBOSS runs can be put in the user's home
+directory, or again in a subdirectory called ".embossdata".
+
+<p>
+The directories are searched in the following order:
+
+<ul>
+   <li> . (your current directory)
+   <li> .embossdata (under your current directory)
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+<p>
+
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="backtranambig.html">backtranambig</a></td>
+<td>Back translate a protein sequence to ambiguous codons</td>
+</tr>
+
+<tr>
+<td><a href="backtranseq.html">backtranseq</a></td>
+<td>Back translate a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="checktrans.html">checktrans</a></td>
+<td>Reports STOP codons and ORF statistics of a protein</td>
+</tr>
+
+<tr>
+<td><a href="compseq.html">compseq</a></td>
+<td>Count composition of dimer/trimer/etc words in a sequence</td>
+</tr>
+
+<tr>
+<td><a href="emowse.html">emowse</a></td>
+<td>Protein identification by mass spectrometry</td>
+</tr>
+
+<tr>
+<td><a href="freak.html">freak</a></td>
+<td>Residue/base frequency table or plot</td>
+</tr>
+
+<tr>
+<td><a href="iep.html">iep</a></td>
+<td>Calculates the isoelectric point of a protein</td>
+</tr>
+
+<tr>
+<td><a href="mwcontam.html">mwcontam</a></td>
+<td>Shows molwts that match across a set of files</td>
+</tr>
+
+<tr>
+<td><a href="mwfilter.html">mwfilter</a></td>
+<td>Filter noisy molwts from mass spec output</td>
+</tr>
+
+<tr>
+<td><a href="octanol.html">octanol</a></td>
+<td>Displays protein hydropathy</td>
+</tr>
+
+<tr>
+<td><a href="pepinfo.html">pepinfo</a></td>
+<td>Plots simple amino acid properties in parallel</td>
+</tr>
+
+<tr>
+<td><a href="pepstats.html">pepstats</a></td>
+<td>Protein statistics</td>
+</tr>
+
+<tr>
+<td><a href="pepwindow.html">pepwindow</a></td>
+<td>Displays protein hydropathy</td>
+</tr>
+
+<tr>
+<td><a href="pepwindowall.html">pepwindowall</a></td>
+<td>Displays protein hydropathy of a set of sequences</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Author(s)
+</H2>
+Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
+
+<H2>
+    History
+</H2>
+
+
+Written (March 2001) - Alan Bleasby.
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+None
+
+</BODY>
+</HTML>
+

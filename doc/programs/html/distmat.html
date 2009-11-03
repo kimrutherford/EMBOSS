@@ -1,0 +1,721 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: distmat
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+distmat
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+    Function
+</H2>
+Creates a distance matrix from multiple alignments
+<H2>
+    Description
+</H2>
+
+<b>distmat</b> calculates the evolutionary distances between every pair of
+sequences in a multiple alignment. The sequences need to be aligned
+before running this program. The quality of the alignment is of
+paramount importance in obtaining meaningful information from this
+analysis. This application calculates a distance matrix for the set of
+sequences in the alignment. The distances are expressed in terms of the
+number of substitutions per 100 bases or amino acids.
+
+<p>
+
+   As sequence diverge so does the probability of there being multiple
+substitutions at any one site in the alignment increase. The distance
+will then be an underestimate of the true evolutionary distance between
+the sequences. Therefore, there are a number of methods for correcting
+the observed substitution rate for the occurence of multiple
+substutions.
+
+<p>
+
+  For nucleotides, the "-position" flag allows the user to choose base
+positions to analyse in each codon, i.e. 123 (all bases), 12 (the first
+two bases), 1, 2, or 3 individual bases.
+
+<h3>Uncorrected distances</h3>
+
+This method does not make any corrections for multiple substitutions.
+Therefore, the score will be an underestimate of the distance between
+the sequences. This will not be less significant for highly similar sets
+of sequences.
+
+<p>
+
+<pre>
+S = m/(npos + gaps*gap_penalty)                                  (1)
+
+m 	    - score of matches (1 for an exact match, a fraction for partial
+	      matches and 0 for no match)
+npos	    - number of positions included in m
+gaps        - number of gaps in the sequences
+gap_penalty - the score given to a gapped position
+</pre>
+
+<p>
+
+<pre>
+D = uncorrected distance = p-distance = 1-S          (2)
+</pre>
+
+<p>
+
+The score of match includes all exact matches. For nucleotides, if the
+flag "-ambiguous" is used then partial matches are included in the
+score. For example, a match of M (A or C) with A will increment m by 0.5
+(0.5*1.0). Gaps are not included in the calculation unless a non zero
+value is given with "-gapweight". It should be noted that end gaps and
+internal gaps will be weighted by the same amount. So it is recommended
+that this be used with "-sbegin"and "-send" to specify the start and end
+of the region to calculate the distance from.
+
+
+<h2>Multiple Substitution correction algorithms</h2>
+
+
+<h3>Jukes-Cantor</h3>
+
+
+This can be used for nucleotide and protein sequences.
+
+<p>
+
+<pre>
+distance = -b ln (1-D/b)
+
+D - uncorrected distance
+b - constant. b= 3/4 for nucleotides and 19/20 for proteins.
+</pre>
+
+<p>
+
+Partial matches and gap  positions can be taken into account in the
+calculation of D, by setting the "-ambiguous" and "-gapweight" flags
+(see "uncorrected distance" method).
+
+<p>
+
+
+Reference: 
+<br>
+"Phylogenetic Inference", Swofford, Olsen, Waddell, and
+Hillis, in Molecular Systematics, 2nd ed., Sinauer Ass., Inc., 1996, Ch. 11. 
+
+
+<h3>Tajima-Nei</h3>
+
+This method is only for nucleotide sequences. It uses the same equation
+as Jukes-Cantor, but the b-parameter is not constant. Also, only exact
+matches are considered in the calculation of the match score and gap
+positions are ignored.
+
+<p>
+
+<pre>
+A = 1, T = 2, C = 3, G = 4
+
+b = 0.5(1.- Sum(i=A,G)(fraction[i]^2  + D^2/h)
+
+h = Sum(i=A,C)Sum(k=T,G) (0.5 * pair_frequency[i,k]^2/(fraction[i]*fraction[k]))
+
+distance = -b ln(1.-D/b)
+
+pair_frequency[i,k]   - frequency of the i and k base pair at sites in
+			the alignement of the pair of sequences.
+fraction[i]           - average content of the base i in both sequences
+</pre>
+
+<p>
+
+Reference: 
+<br>
+F. Tajima and M. Nei, Mol. Biol. Evol. 1984, 1, 269.
+
+
+<h3>Kimura Two-Parameter distance</h3>
+
+This method is only for nucleotide sequences. This uses the principle
+that transition substitutions (purine-purine and pyrimidine-purine) are
+more likely than transversion substitutions (purine-pyprimidine). Purine
+being the nucleic acid constituent of A and G, and pyrimidine being the
+nucleic acid derivative of the bases C, T and U. Gaps are ignored and
+abiguous symbols other than R (purine) and Y (pyrimidine) are ingnored.
+
+<p>
+
+<pre>
+P = transitions/npos
+Q = transversions/npos
+
+npos - number of positions scored
+
+distance = -0.5 ln[ (1-2P-Q)*sqrt(1-2Q)]
+</pre>
+
+<p>
+
+Reference: 
+<br>
+M. kimura, J. Mol. Evol. 1980, 16, 111.
+
+
+<h3>Tamura</h3>
+
+
+This method is only for nucleotide sequences.  This method uses
+transition and transversion rates and takes into account the deviation
+of GC content from the expected value of 50 %. Gap and ambiguous
+positions are ignored.
+
+<p>
+
+<pre>
+P = transitions/npos
+Q = transversions/npos
+
+npos - number of positions scored
+
+GC1 = GC fraction in sequence 1
+GC2 = GC fraction in sequence 2
+C = GC1 + GC2 - 2*GC1*GC2
+
+distance = -C ln(1-P/C-Q) - 0.5(1-C) ln(1-2Q)
+</pre>
+
+<p>
+
+Reference:
+<br>
+K. Tamura, Mol. Biol. Evol. 1992, 9, 678.
+
+
+<h3>Jin-Nei Gamma distance</h3>
+
+This method applies to nucleotides only. This again uses transition and
+transversion rates. As with the Kimura two parameter method, gaps and
+ambiguous symbols other than R and Y are not oncluded in the score. The
+shape parameter, i.e. "a", is the square of the inverse of the
+coefficient of variation of the average substitution,
+
+<p>
+
+<pre>
+L = average substituition = transition_rate + 2 * transversion_rate
+a = (average L)^2/(variance of L)
+
+P = transitions/npos
+Q = transversions/npos
+
+npos - number of positions scored
+
+distance = 0.5 * a ((1-2P-Q)^(-1/a) + 0.5 (1-2Q)^(-1/a) -3/2)
+</pre>
+
+<p>
+
+It is suggested [Jin et al.], in general, that the distance be
+calculated with an a-value of 1. However, the user can specify their own
+value, using the "-parametera" option, or calculate for each pair of
+sequence, using "-calculatea".
+
+<p>
+
+Reference:
+<br>
+L. Jin and M. Nei, Mol. Biol. Evol. 1990, 7, 82.
+
+
+<h3>Kimura Protein distance</h3>
+
+This method is used for proteins only. Gaps are ignored and only exact
+matches and ambiguity codes contribute to the match score.
+
+<p>
+
+<pre>
+S = m/npos
+
+m  - exact match
+npos - number of positions scored
+
+D = 1-S
+distance = -ln(1 - D - 0.2D^2)
+</pre>
+
+<p>
+
+Reference:
+<br>
+M. Kimura, The Neutral Theory of Molecular Evolution, Camb. Uni. Press,
+Camb., 1983.
+
+
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with distmat</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>distmat pax.align </b>
+Creates a distance matrix from multiple alignments
+Multiple substitution correction methods for proteins
+         0 : Uncorrected
+         1 : Jukes-Cantor
+         2 : Kimura Protein
+Method to use [0]: <b>2</b>
+Phylip distance matrix output file [pax.distmat]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-sequence]          seqset     File containing a sequence alignment.
+*  -nucmethod          menu       [0] Multiple substitution correction methods
+                                  for nucleotides. (Values: 0 (Uncorrected);
+                                  1 (Jukes-Cantor); 2 (Kimura); 3 (Tamura); 4
+                                  (Tajima-Nei); 5 (Jin-Nei Gamma))
+*  -protmethod         menu       [0] Multiple substitution correction methods
+                                  for proteins. (Values: 0 (Uncorrected); 1
+                                  (Jukes-Cantor); 2 (Kimura Protein))
+  [-outfile]           outfile    [*.distmat] Phylip distance matrix output
+                                  file
+
+   Additional (Optional) qualifiers (* if not always prompted):
+*  -ambiguous          boolean    [N] Option to use the ambiguous codes in the
+                                  calculation of the Jukes-Cantor method or
+                                  if the sequences are proteins.
+*  -gapweight          float      [0.] Option to weight gaps in the
+                                  uncorrected (nucleotide) and Jukes-Cantor
+                                  distance methods. (Any numeric value)
+*  -position           integer    [123] Choose base positions to analyse in
+                                  each codon i.e. 123 (all bases), 12 (the
+                                  first two bases), 1, 2, or 3 individual
+                                  bases. (Any integer value)
+*  -calculatea         boolean    [N] This will force the calculation of
+                                  parameter 'a' in the Jin-Nei Gamma distance
+                                  calculation, otherwise the default is 1.0
+                                  (see -parametera option).
+*  -parametera         float      [1.0] User defined parameter 'a' to be use
+                                  in the Jin-Nei Gamma distance calculation.
+                                  The suggested value to be used is 1.0 (Jin
+                                  et al.) and this is the default. (Any
+                                  numeric value)
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>File containing a sequence alignment.</td>
+<td>Readable set of sequences</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-nucmethod</td>
+<td>Multiple substitution correction methods for nucleotides.</td>
+<td><table><tr><td>0</td> <td><i>(Uncorrected)</i></td></tr><tr><td>1</td> <td><i>(Jukes-Cantor)</i></td></tr><tr><td>2</td> <td><i>(Kimura)</i></td></tr><tr><td>3</td> <td><i>(Tamura)</i></td></tr><tr><td>4</td> <td><i>(Tajima-Nei)</i></td></tr><tr><td>5</td> <td><i>(Jin-Nei Gamma)</i></td></tr></table></td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-protmethod</td>
+<td>Multiple substitution correction methods for proteins.</td>
+<td><table><tr><td>0</td> <td><i>(Uncorrected)</i></td></tr><tr><td>1</td> <td><i>(Jukes-Cantor)</i></td></tr><tr><td>2</td> <td><i>(Kimura Protein)</i></td></tr></table></td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Phylip distance matrix output file</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.distmat</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-ambiguous</td>
+<td>Option to use the ambiguous codes in the calculation of the Jukes-Cantor method or if the sequences are proteins.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-gapweight</td>
+<td>Option to weight gaps in the uncorrected (nucleotide) and Jukes-Cantor distance methods.</td>
+<td>Any numeric value</td>
+<td>0.</td>
+</tr>
+
+<tr>
+<td>-position</td>
+<td>Choose base positions to analyse in each codon i.e. 123 (all bases), 12 (the first two bases), 1, 2, or 3 individual bases.</td>
+<td>Any integer value</td>
+<td>123</td>
+</tr>
+
+<tr>
+<td>-calculatea</td>
+<td>This will force the calculation of parameter 'a' in the Jin-Nei Gamma distance calculation, otherwise the default is 1.0 (see -parametera option).</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-parametera</td>
+<td>User defined parameter 'a' to be use in the Jin-Nei Gamma distance calculation. The suggested value to be used is 1.0 (Jin et al.) and this is the default.</td>
+<td>Any numeric value</td>
+<td>1.0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+<H2>
+    Input file format
+</H2>
+
+It reads in a normal multiple sequence alignment file.
+
+<p>
+
+The quality of the alignment is of paramount importance in obtaining
+meaningful information from this analysis. 
+
+<p>
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: pax.align</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+PileUp
+
+
+
+   MSF:  603  Type: P    Check:  9004   .. 
+
+ Name: PAX4_HUMAN oo  Len:  603  Check:  6594  Weight:  11.2
+ Name: PAX6_HUMAN oo  Len:  603  Check:  7176  Weight:  9.1
+ Name: PAX3_HUMAN oo  Len:  603  Check:  7760  Weight:  9.5
+ Name: PAX7_HUMAN oo  Len:  603  Check:  4677  Weight:  13.7
+ Name: PAX1_HUMAN oo  Len:  603  Check:  9671  Weight:  8.7
+ Name: PAX9_HUMAN oo  Len:  603  Check:   565  Weight:  12.0
+ Name: PAX2_HUMAN oo  Len:  603  Check:  9553  Weight:  8.7
+ Name: PAX5_HUMAN oo  Len:  603  Check:   448  Weight:  11.2
+ Name: PX8A_HUMAN oo  Len:  603  Check:  6763  Weight:  7.5
+ Name: PX8D_HUMAN oo  Len:  603  Check:  5797  Weight:  7.9
+
+//
+
+
+
+PAX4_HUMAN      .......... .......... .........M HQDGISSMNQ LGGLFVNGRP 
+PAX6_HUMAN      .......... .......... .......... MQNSHSGVNQ LGGVFVNGRP 
+PAX3_HUMAN      MTTLAGAVPR MMRPGPGQNY PRSGFPLEVS TPLGQGRVNQ LGGVFINGRP 
+PAX7_HUMAN      MAALPGTVPR MMRPAPGQNY PRTGFPLEVS TPLGQGRVNQ LGGVFINGRP 
+PAX1_HUMAN      .......... .......... .......... MEQTYGEVNQ LGGVFVNGRP 
+PAX9_HUMAN      .......... .......... .......... MEPAFGEVNQ LGGVFVNGRP 
+PAX2_HUMAN      .......... ........MD MHCKADPFSA MHPGHGGVNQ LGGVFVNGRP 
+PAX5_HUMAN      .......... ........MD LEKNYPTPRT SRTGHGGVNQ LGGVFVNGRP 
+PX8A_HUMAN      .......... .......... .....MPHNS IRSGHGGLNQ LGGAFVNGRP 
+PX8D_HUMAN      .......... .......... .....MPHNS IRSGHGGLNQ LGGAFVNGRP 
+
+
+PAX4_HUMAN      LPLDTRQQIV RLAVSGMRPC DISRILKVSN GCVSKILGRY YRTGVLEPKG 
+PAX6_HUMAN      LPDSTRQKIV ELAHSGARPC DISRILQVSN GCVSKILGRY YETGSIRPRA 
+PAX3_HUMAN      LPNHIRHKIV EMAHHGIRPC VISRQLRVSH GCVSKILCRY QETGSIRPGA 
+PAX7_HUMAN      LPNHIRHKIV EMAHHGIRPC VISRQLRVSH GCVSKILCRY QETGSIRPGA 
+PAX1_HUMAN      LPNAIRLRIV ELAQLGIRPC DISRQLRVSH GCVSKILARY NETGSILPGA 
+PAX9_HUMAN      LPNAIRLRIV ELAQLGIRPC DISRQLRVSH GCVSKILARY NETGSILPGA 
+PAX2_HUMAN      LPDVVRQRIV ELAHQGVRPC DISRQLRVSH GCVSKILGRY YETGSIKPGV 
+PAX5_HUMAN      LPDVVRQRIV ELAHQGVRPC DISRQLRVSH GCVSKILGRY YETGSIKPGV 
+PX8A_HUMAN      LPEVVRQRIV DLAHQGVRPC DISRQLRVSH GCVSKILGRY YETGSIRPGV 
+PX8D_HUMAN      LPEVVRQRIV DLAHQGVRPC DISRQLRVSH GCVSKILGRY YETGSIRPGV 
+
+
+PAX4_HUMAN      IGGSKPR.LA TPPVVARIAQ LKGECPALFA WEIQRQLCAE GLCTQDKTPS 
+PAX6_HUMAN      IGGSKPR.VA TPEVVSKIAQ YKRECPSIFA WEIRDRLLSE GVCTNDNIPS 
+PAX3_HUMAN      IGGSKPKQVT TPDVEKKIEE YKRENPGMFS WEIRDKLLKD AVCDRNTVPS 
+PAX7_HUMAN      IGGSKPRQVA TPDVEKKIEE YKRENPGMFS WEIRDRLLKD GHCDRSTVPS 
+PAX1_HUMAN      IGGSKPR.VT TPNVVKHIRD YKQGDPGIFA WEIRDRLLAD GVCDKYNVPS 
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+PX8A_HUMAN      VSSSSSTPSS LSSSAFLDLQ QVGSGVPPFN AFPHAASVYG QFTGQALLSG 
+PX8D_HUMAN      ....KSAPGS RPS....... .....MP... .FPMLPPCTG SSRARPSSQG 
+
+
+PAX4_HUMAN      .......... .......... .....ERCLS DTPPKACLKP CWDCGSFLLP 
+PAX6_HUMAN      .......... .......... .SFTMANNLP MQPPVPSQTS SYSCMLPTSP 
+PAX3_HUMAN      NGL.SPQVM. .......... GLLTNHGGVP HQPQTDYALS PLTGGLEPTT 
+PAX7_HUMAN      NGL.SPQVM. .......... SILGNPSAVP PQPQADFSIS PLHGGLDSAT 
+PAX1_HUMAN      .......... .......... GAGVAVHGGE LAAAMTFKHR EGTDRKPP.. 
+PAX9_HUMAN      .......... .......... ......HNCD IPASLAFKGM QAARE..... 
+PAX2_HUMAN      .......... .......... GSYPTSTLAG MVPGSEFSGN PYSHPQYTAY 
+PAX5_HUMAN      .......... .......... GSYSAPTLTG MVPGSEFSGS PYSHPQYSSY 
+PX8A_HUMAN      REMVGPTLPG YPPHIPTSGQ GSYASSAIAG MVAGSEYSGN AYGHTPYSSY 
+PX8D_HUMAN      ERWWGPRCP. .......... DTHPTSPPAD RAAMPPLPSQ AWWQEVN... 
+
+
+PAX4_HUMAN      VIAPSCVDVA WP.CLDASLA HHLIGGAGKA TPTHFS.... .......... 
+PAX6_HUMAN      SVNGRSYDTY TPPHMQTHMN SQPMGTSGTT STGLISPGVS VPVQVPGSEP 
+PAX3_HUMAN      TVSASCSQRL DHMKSLDSLP TSQSYCPPTY STTGYSMDPV TGYQYGQYGQ 
+PAX7_HUMAN      SISASCSQRA DSIKPGDSLP TSQAYCPPTY STTGYSVDPV AGYQYGQYGQ 
+PAX1_HUMAN      ..SSGSKAPD ALSSLH.... ....GLPIPA STS....... .......... 
+PAX9_HUMAN      ..GSHSVTAS AL........ .......... .......... .......... 
+PAX2_HUMAN      NEAWRFSNPA LLSSPYYYSA APR.SAPAAR AAAYDRH... .......... 
+PAX5_HUMAN      NDSWRFPNPG LLGSPYYYSA AARGAAPPAA ATAYDRH... .......... 
+PX8A_HUMAN      SEAWGFPNSS LLSSPYYYSS TSRPSAPPTT ATAFDHL... .......... 
+PX8D_HUMAN      ..TLAMPMAT PPTPP..... TARPGASPTP AC........ .......... 
+
+
+PAX4_HUMAN      .....HWP.. .......... .......... .......... .......... 
+PAX6_HUMAN      DMS.QYWPRL Q......... .......... .......... .......... 
+PAX3_HUMAN      S...KPWTF. .......... .......... .......... .......... 
+PAX7_HUMAN      SECLVPWASP VPIPSPTPRA SCLFMESYKV VSGWGMSISQ MEKLKSSQME 
+PAX1_HUMAN      .......... .......... .......... .......... .......... 
+PAX9_HUMAN      .......... .......... .......... .......... .......... 
+PAX2_HUMAN      .......... .......... .......... .......... .......... 
+PAX5_HUMAN      .......... .......... .......... .......... .......... 
+PX8A_HUMAN      .......... .......... .......... .......... .......... 
+PX8D_HUMAN      .......... .......... .......... .......... .......... 
+
+
+PAX4_HUMAN      ...
+PAX6_HUMAN      ...
+PAX3_HUMAN      ...
+PAX7_HUMAN      QFT
+PAX1_HUMAN      ...
+PAX9_HUMAN      ...
+PAX2_HUMAN      ...
+PAX5_HUMAN      ...
+PX8A_HUMAN      ...
+PX8D_HUMAN      ...
+
+</pre>
+</td></tr></table><p>
+
+
+<H2>
+    Output file format
+</H2>
+
+The output from the program is a file containing a matrix of the
+calculated distances between each of the input aligned sequences.  The
+distances are expressed in terms of the number of substitutions per 100
+bases or amino acids. 
+
+<p>
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: pax.distmat</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Distance Matrix
+---------------
+
+Using the Kimura correction method
+Gap weighting is 0.000000
+
+	    1	    2	    3	    4	    5	    6	    7	    8	    9	    10
+	  0.00	 96.15	137.48	128.72	161.14	160.37	157.55	154.23	164.32	152.68		PAX4_HUMAN 1
+		  0.00	111.86	109.96	156.25	149.70	143.75	135.71	150.60	146.87		PAX6_HUMAN 2
+			  0.00	 26.21	131.54	143.54	162.95	151.39	163.56	159.78		PAX3_HUMAN 3
+				  0.00	145.45	138.76	158.79	149.96	167.26	161.82		PAX7_HUMAN 4
+					  0.00	 44.29	120.84	123.00	131.69	130.22		PAX1_HUMAN 5
+						  0.00	123.56	130.21	131.64	130.17		PAX9_HUMAN 6
+							  0.00	 36.43	 53.12	 64.32		PAX2_HUMAN 7
+								  0.00	 60.88	 73.82		PAX5_HUMAN 8
+									  0.00	 20.37		PX8A_HUMAN 9
+										  0.00		PX8D_HUMAN 10
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+See the following for details of the methods used:
+
+<p>
+
+<ol>
+
+<li>"Phylogenetic Inference", Swofford, Olsen, Waddell, and Hillis, in
+Molecular Systematics, 2nd ed., Sinauer Ass., Inc., 1996, Ch. 11.
+
+<li>F. Tajima and M. Nei, Mol. Biol. Evol. 1984, 1, 269.
+
+<li>M. Kimura, J. Mol. Evol. 1980, 16, 111.
+
+<li>K. Tamura, Mol. Biol. Evol. 1992, 9, 678.
+
+<li>L. Jin and M. Nei, Mol. Biol. Evol. 1990, 7, 82.
+
+<li>M. Kimura, The Neutral Theory of Molecular Evolution,
+Camb. Uni. Press, Camb., 1983.
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+The quality of the alignment is of paramount importance in obtaining
+meaningful information from this analysis. 
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+</table>
+
+<H2>
+    Author(s)
+</H2>
+
+Tim Carver (tcarver&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+<H2>
+    History
+</H2>
+
+Written (March 2001) - Tim Carver
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+None
+
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,88 @@
+application: einverted [
+  documentation: "Finds DNA inverted repeats"
+  groups: "Nucleic:Repeats, Nucleic:2D structure"
+  gui: "yes"
+  batch: "yes"
+  cpu: "medium"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "dna"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: gap [
+    default: "12"
+    standard: "Y"
+    information: "Gap penalty"
+  ]
+
+  integer: threshold [
+    default: "50"
+    standard: "Y"
+    information: "Minimum score threshold"
+  ]
+
+  integer: match [
+    default: "3"
+    standard: "Y"
+    information: "Match score"
+  ]
+
+  integer: mismatch [
+    default: "-4"
+    standard: "Y"
+    information: "Mismatch score"
+  ]
+
+endsection: required
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  integer: maxrepeat [
+    additional: "Y"
+    default: "2000"
+    information: "Maximum extent of repeats"
+    help: "Maximum separation between the start of repeat and the end
+           of the inverted repeat (the default is 2000 bases)."
+  ]
+
+endsection: additional
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    extension: "inv"
+    knowntype: "inverted output"
+    information: "Sanger Centre program inverted output file"
+  ]
+
+  seqout: outseq [
+    parameter: "Y"
+    nullok: "Y"
+    information: "File for sequence of regions of inverted
+                  repeats."
+    help: "The sequence of the inverted repeat regions without gap
+           characters."
+  ]
+
+endsection: output

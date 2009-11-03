@@ -1,0 +1,80 @@
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-gap</td>
+<td>Gap penalty</td>
+<td>Any integer value</td>
+<td>12</td>
+</tr>
+
+<tr>
+<td>-threshold</td>
+<td>Minimum score threshold</td>
+<td>Any integer value</td>
+<td>50</td>
+</tr>
+
+<tr>
+<td>-match</td>
+<td>Match score</td>
+<td>Any integer value</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>-mismatch</td>
+<td>Mismatch score</td>
+<td>Any integer value</td>
+<td>-4</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Sanger Centre program inverted output file</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.einverted</td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 3)</td>
+<td>The sequence of the inverted repeat regions without gap characters.</td>
+<td>Writeable sequence</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-maxrepeat</td>
+<td>Maximum separation between the start of repeat and the end of the inverted repeat (the default is 2000 bases).</td>
+<td>Any integer value</td>
+<td>2000</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>

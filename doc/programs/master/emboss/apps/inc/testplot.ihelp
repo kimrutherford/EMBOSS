@@ -1,0 +1,7 @@
+   Mandatory qualifiers:
+   -points             integer    Number of degrees to plot
+   -[no]overlap        bool       Overlap the graphs
+   -graph              xygraph    Graph type
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)

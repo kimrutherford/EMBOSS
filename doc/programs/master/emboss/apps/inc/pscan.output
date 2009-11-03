@@ -1,0 +1,45 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: opsd_human.pscan </h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+
+
+CLASS 1
+Fingerprints with all elements in order
+
+Fingerprint GPCRRHODOPSN Elements 7
+    Accession number PR00237
+    Rhodopsin-like GPCR superfamily signature
+  Element 1 Threshold 54% Score 64%
+             Start position 39 Length 25
+  Element 2 Threshold 49% Score 75%
+             Start position 72 Length 22
+  Element 3 Threshold 48% Score 56%
+             Start position 117 Length 23
+  Element 4 Threshold 50% Score 69%
+             Start position 152 Length 22
+  Element 5 Threshold 51% Score 74%
+             Start position 204 Length 24
+  Element 6 Threshold 42% Score 75%
+             Start position 250 Length 25
+  Element 7 Threshold 46% Score 67%
+             Start position 288 Length 27
+
+
+CLASS 2
+All elements match but not all in the correct order
+
+
+
+CLASS 3
+Not all elements match but those that do are in order
+
+
+
+CLASS 4
+Remaining partial matches
+
+</pre>
+</td></tr></table><p>

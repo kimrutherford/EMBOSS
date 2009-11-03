@@ -1,0 +1,73 @@
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-asequence]<br>(Parameter 1)</td>
+<td>Sequence filename and optional format, or reference (input USA)</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-bsequence]<br>(Parameter 2)</td>
+<td>Sequence filename and optional format, or reference (input USA)</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-wordsize</td>
+<td>The similar regions between the two sequences are found by creating a hash table of 'wordsize'd subsequences. 10 is a reasonable default. Making this value larger (20?) may speed up the program slightly, but will mean that any two differences within 'wordsize' of each other will be grouped as a single region of difference. This value may be made smaller (4?) to improve the resolution of nearby differences, but the program will go much slower.</td>
+<td>Integer 2 or more</td>
+<td>10</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 3)</td>
+<td>Output report file name</td>
+<td>Report output file</td>
+<td><i>&lt;*&gt;</i>.diffseq</td>
+</tr>
+
+<tr>
+<td>[-aoutfeat]<br>(Parameter 4)</td>
+<td>File for output of first sequence's features</td>
+<td>Writeable feature table</td>
+<td>$(asequence.name).diffgff</td>
+</tr>
+
+<tr>
+<td>[-boutfeat]<br>(Parameter 5)</td>
+<td>File for output of second sequence's features</td>
+<td>Writeable feature table</td>
+<td>$(bsequence.name).diffgff</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-globaldifferences</td>
+<td>Normally this program will find regions of identity that are the length of the specified word-size or greater and will then report the regions of difference between these matching regions. This works well and is what most people want if they are working with long overlapping nucleic acid sequences. You are usually not interested in the non-overlapping ends of these sequences. If you have protein sequences or short RNA sequences however, you will be interested in differences at the very ends . It this option is set to be true then the differences at the ends will also be reported.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>

@@ -1,0 +1,532 @@
+
+                                  getorf 
+
+
+
+Function
+
+   Finds and extracts open reading frames (ORFs)
+
+Description
+
+   This program finds and outputs the sequences of open reading frames
+   (ORFs).
+
+   The ORFs can be defined as regions of a specified minimum size between
+   STOP codons or between START and STOP codons.
+
+   The ORFs can be output as the nucleotide sequence or as the
+   translation.
+
+   The program can also output the region around the START or the initial
+   STOP codon or the ending STOP codons of an ORF for those doing
+   analysis of the properties of these regions.
+
+   The START and STOP codons are defined in the Genetic Code tables. A
+   suitable Genetic Code table can be selected for the organism you are
+   investigating.
+
+Usage
+
+   Here is a sample session with getorf
+
+
+% getorf -minsize 300 
+Finds and extracts open reading frames (ORFs)
+Input nucleotide sequence(s): tembl:v00294
+protein output sequence(s) [v00294.orf]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-outseq]            seqoutall  [.] Protein sequence
+                                  set(s) filename and optional format (output
+                                  USA)
+
+   Additional (Optional) qualifiers:
+   -table              menu       [0] Code to use (Values: 0 (Standard); 1
+                                  (Standard (with alternative initiation
+                                  codons)); 2 (Vertebrate Mitochondrial); 3
+                                  (Yeast Mitochondrial); 4 (Mold, Protozoan,
+                                  Coelenterate Mitochondrial and
+                                  Mycoplasma/Spiroplasma); 5 (Invertebrate
+                                  Mitochondrial); 6 (Ciliate Macronuclear and
+                                  Dasycladacean); 9 (Echinoderm
+                                  Mitochondrial); 10 (Euplotid Nuclear); 11
+                                  (Bacterial); 12 (Alternative Yeast Nuclear);
+                                  13 (Ascidian Mitochondrial); 14 (Flatworm
+                                  Mitochondrial); 15 (Blepharisma
+                                  Macronuclear); 16 (Chlorophycean
+                                  Mitochondrial); 21 (Trematode
+                                  Mitochondrial); 22 (Scenedesmus obliquus);
+                                  23 (Thraustochytrium Mitochondrial))
+   -minsize            integer    [30] Minimum nucleotide size of ORF to
+                                  report (Any integer value)
+   -maxsize            integer    [1000000] Maximum nucleotide size of ORF to
+                                  report (Any integer value)
+   -find               menu       [0] This is a small menu of possible output
+                                  options. The first four options are to
+                                  select either the protein translation or the
+                                  original nucleic acid sequence of the open
+                                  reading frame. There are two possible
+                                  definitions of an open reading frame: it can
+                                  either be a region that is free of STOP
+                                  codons or a region that begins with a START
+                                  codon and ends with a STOP codon. The last
+                                  three options are probably only of interest
+                                  to people who wish to investigate the
+                                  statistical properties of the regions around
+                                  potential START or STOP codons. The last
+                                  option assumes that ORF lengths are
+                                  calculated between two STOP codons. (Values:
+                                  0 (Translation of regions between STOP
+                                  codons); 1 (Translation of regions between
+                                  START and STOP codons); 2 (Nucleic sequences
+                                  between STOP codons); 3 (Nucleic sequences
+                                  between START and STOP codons); 4
+                                  (Nucleotides flanking START codons); 5
+                                  (Nucleotides flanking initial STOP codons);
+                                  6 (Nucleotides flanking ending STOP codons))
+
+   Advanced (Unprompted) qualifiers:
+   -[no]methionine     boolean    [Y] START codons at the beginning of protein
+                                  products will usually code for Methionine,
+                                  despite what the codon will code for when it
+                                  is internal to a protein. This qualifier
+                                  sets all such START codons to code for
+                                  Methionine by default.
+   -circular           boolean    [N] Is the sequence circular
+   -[no]reverse        boolean    [Y] Set this to be false if you do not wish
+                                  to find ORFs in the reverse complement of
+                                  the sequence.
+   -flanking           integer    [100] If you have chosen one of the options
+                                  of the type of sequence to find that gives
+                                  the flanking sequence around a STOP or START
+                                  codon, this allows you to set the number of
+                                  nucleotides either side of that codon to
+                                  output. If the region of flanking
+                                  nucleotides crosses the start or end of the
+                                  sequence, no output is given for this codon.
+                                  (Any integer value)
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   getorf reads any nucleic acid sequence USA.
+
+  Input files for usage example
+
+   'tembl:v00294' is a sequence entry in the example nucleic acid
+   database 'tembl'
+
+  Database entry: tembl:v00294
+
+ID   V00294; SV 1; linear; genomic DNA; STD; PRO; 1113 BP.
+XX
+AC   V00294;
+XX
+DT   09-JUN-1982 (Rel. 01, Created)
+DT   10-FEB-1999 (Rel. 58, Last updated, Version 2)
+XX
+DE   E. coli laci gene (codes for the lac repressor).
+XX
+KW   DNA binding protein; repressor.
+XX
+OS   Escherichia coli
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Escherichia.
+XX
+RN   [1]
+RP   1-1113
+RX   DOI; 10.1038/274765a0.
+RX   PUBMED; 355891.
+RA   Farabaugh P.J.;
+RT   "Sequence of the lacI gene";
+RL   Nature 274(5673):765-769(1978).
+XX
+CC   KST ECO.LACI
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1113
+FT                   /organism="Escherichia coli"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:562"
+FT   CDS             31..1113
+FT                   /transl_table=11
+FT                   /note="reading frame"
+FT                   /db_xref="GOA:P03023"
+FT                   /db_xref="PDB:1CJG"
+FT                   /db_xref="PDB:1EFA"
+FT                   /db_xref="PDB:1JWL"
+FT                   /db_xref="PDB:1JYE"
+FT                   /db_xref="PDB:1JYF"
+FT                   /db_xref="PDB:1L1M"
+FT                   /db_xref="PDB:1LBG"
+FT                   /db_xref="PDB:1LBH"
+FT                   /db_xref="PDB:1LBI"
+FT                   /db_xref="PDB:1LCC"
+FT                   /db_xref="PDB:1LCD"
+FT                   /db_xref="PDB:1LQC"
+FT                   /db_xref="PDB:1LTP"
+FT                   /db_xref="PDB:1TLF"
+FT                   /db_xref="PDB:2BJC"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P03023"
+FT                   /protein_id="CAA23569.1"
+FT                   /translation="MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAE
+L
+FT                   NYIPNRVAQQLAGKQSLLIGVATSSLALHAPSQIVAAIKSRADQLGASVVVSMVERSG
+V
+FT                   EACKAAVHNLLAQRVSGLIINYPLDDQDAIAVEAACTNVPALFLDVSDQTPINSIIFS
+H
+FT                   EDGTRLGVEHLVALGHQQIALLAGPLSSVSARLRLAGWHKYLTRNQIQPIAEREGDWS
+A
+FT                   MSGFQQTMQMLNEGIVPTAMLVANDQMALGAMRAITESGLRVGADISVVGYDDTEDSS
+C
+FT                   YIPPSTTIKQDFRLLGQTSVDRLLQLSQGQAVKGNQLLPVSLVKRKTTLAPNTQTASP
+R
+FT                   ALADSLMQLARQVSRLESGQ"
+XX
+SQ   Sequence 1113 BP; 249 A; 304 C; 322 G; 238 T; 0 other;
+     ccggaagaga gtcaattcag ggtggtgaat gtgaaaccag taacgttata cgatgtcgca        6
+0
+     gagtatgccg gtgtctctta tcagaccgtt tcccgcgtgg tgaaccaggc cagccacgtt       12
+0
+     tctgcgaaaa cgcgggaaaa agtggaagcg gcgatggcgg agctgaatta cattcccaac       18
+0
+     cgcgtggcac aacaactggc gggcaaacag tcgttgctga ttggcgttgc cacctccagt       24
+0
+     ctggccctgc acgcgccgtc gcaaattgtc gcggcgatta aatctcgcgc cgatcaactg       30
+0
+     ggtgccagcg tggtggtgtc gatggtagaa cgaagcggcg tcgaagcctg taaagcggcg       36
+0
+     gtgcacaatc ttctcgcgca acgcgtcagt gggctgatca ttaactatcc gctggatgac       42
+0
+     caggatgcca ttgctgtgga agctgcctgc actaatgttc cggcgttatt tcttgatgtc       48
+0
+     tctgaccaga cacccatcaa cagtattatt ttctcccatg aagacggtac gcgactgggc       54
+0
+     gtggagcatc tggtcgcatt gggtcaccag caaatcgcgc tgttagcggg cccattaagt       60
+0
+     tctgtctcgg cgcgtctgcg tctggctggc tggcataaat atctcactcg caatcaaatt       66
+0
+     cagccgatag cggaacggga aggcgactgg agtgccatgt ccggttttca acaaaccatg       72
+0
+     caaatgctga atgagggcat cgttcccact gcgatgctgg ttgccaacga tcagatggcg       78
+0
+     ctgggcgcaa tgcgcgccat taccgagtcc gggctgcgcg ttggtgcgga tatctcggta       84
+0
+     gtgggatacg acgataccga agacagctca tgttatatcc cgccgtcaac caccatcaaa       90
+0
+     caggattttc gcctgctggg gcaaaccagc gtggaccgct tgctgcaact ctctcagggc       96
+0
+     caggcggtga agggcaatca gctgttgccc gtctcactgg tgaaaagaaa aaccaccctg      102
+0
+     gcgcccaata cgcaaaccgc ctctccccgc gcgttggccg attcattaat gcagctggca      108
+0
+     cgacaggttt cccgactgga aagcgggcag tga                                   111
+3
+//
+
+Output file format
+
+   The output is a sequence file containing predicted open reading frames
+   longer than the minimum size, which defaults to 30 bases (i.e. 10
+   amino acids).
+
+  Output files for usage example
+
+  File: v00294.orf
+
+>V00294_1 [735 - 1112] E. coli laci gene (codes for the lac repressor).
+GHRSHCDAGCQRSDGAGRNARHYRVRAARWCGYLGSGIRRYRRQLMLYPAVNHHQTGFSP
+AGANQRGPLAATLSGPGGEGQSAVARLTGEKKNHPGAQYANRLSPRVGRFINAAGTTGFP
+TGKRAV
+>V00294_2 [1 - 1110] E. coli laci gene (codes for the lac repressor).
+PEESQFRVVNVKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPN
+RVAQQLAGKQSLLIGVATSSLALHAPSQIVAAIKSRADQLGASVVVSMVERSGVEACKAA
+VHNLLAQRVSGLIINYPLDDQDAIAVEAACTNVPALFLDVSDQTPINSIIFSHEDGTRLG
+VEHLVALGHQQIALLAGPLSSVSARLRLAGWHKYLTRNQIQPIAEREGDWSAMSGFQQTM
+QMLNEGIVPTAMLVANDQMALGAMRAITESGLRVGADISVVGYDDTEDSSCYIPPSTTIK
+QDFRLLGQTSVDRLLQLSQGQAVKGNQLLPVSLVKRKTTLAPNTQTASPRALADSLMQLA
+RQVSRLESGQ*
+>V00294_3 [465 - 49] (REVERSE SENSE) E. coli laci gene (codes for the lac repre
+ssor).
+RRNISAGSFHSNGILVIQRIVNDQPTDALREKIVHRRFTGFDAASFYHRHHHAGTQLIGA
+RFNRRDNLRRRVQGQTGGGNANQQRLFARQLLCHAVGNVIQLRHRRFHFFPRFRRNVAGL
+VHHAGNGLIRDTGILCDIV
+
+   The name of the ORF sequences is constructed from the name of the
+   input sequence with an underscore character ('_') and a unique ordinal
+   number of the ORF found appended. The description of the output ORF
+   sequence is constructed from the description of the input sequence
+   with the start and end positions of the ORF prepended.
+
+   The unique number appended to the name is simply used to create new
+   unique sequence names, it does not imply any further information
+   indicating any order, positioning or sense-strand of the ORFs.
+
+   If the ORF has been found in the reverse sense, then the start
+   position will be smaller than the end position. The numbering uses the
+   forward-sense positions, but read in the reverse sense. For example,
+   >ECLACI_3 [465 - 49] in the output above is a reverse-sense ORF
+   running from position 465 to 49. The description will also contain
+   '(REVERSE SENSE)'.
+
+   If the sequence has been specified as a circular genome (using the
+   command-line switch '-circular'), then ORFs can potentially continue
+   past the 'end' of the input sequence (the breakpoint of the circular
+   genome) and into the 'start' of the sequence again. This is dealt with
+   by appending the sequence to itself three times and reporting long
+   ORFs that are found in this extended sequence. Any ORF that is longer
+   that three times the sequence length (i.e one that continues without
+   hitting a STOP at any point in the genome) will be reported as being a
+   maximum of three times the length of the input sequence. Note that the
+   end position of an ORF in circular genomes can be apparently longer
+   than the input sequence if the ORF crosses the breakpoint. If the ORF
+   crosses the breakpoint, then the text '(ORF crosses the breakpoint)'
+   will be added to the description of the output sequence.
+
+Data files
+
+   The START and STOP codons used by getorf are defined in the Genetic
+   Code data files. By default, Genetic Code file EGC.0 is used.
+
+   The default file EGC.0 is the 'Standard Code' with the rarely used
+   alternate START codons omitted, it only has the normal 'AUG' START
+   codon. The 'Standard Code' with the rarely used alternate START codons
+   included is Genetic Code file EGC.1.
+
+   It is expected that user will sometimes wish to customise a Genetic
+   Code file. To do this, use the program embossdata.
+
+   EMBOSS data files are distributed with the application and stored in
+   the standard EMBOSS data directory, which is defined by the EMBOSS
+   environment variable EMBOSS_DATA.
+
+   To see the available EMBOSS data files, run:
+
+% embossdata -showall
+
+   To fetch one of the data files (for example 'Exxx.dat') into your
+   current directory for you to inspect or modify, run:
+
+% embossdata -fetch -file Exxx.dat
+
+   Users can provide their own data files in their own directories.
+   Project specific files can be put in the current directory, or for
+   tidier directory listings in a subdirectory called ".embossdata".
+   Files for all EMBOSS runs can be put in the user's home directory, or
+   again in a subdirectory called ".embossdata".
+
+   The directories are searched in the following order:
+     * . (your current directory)
+     * .embossdata (under your current directory)
+     * ~/ (your home directory)
+     * ~/.embossdata
+
+   The Genetic Code data files are based on the NCBI genetic code tables.
+   Their names and descriptions are:
+
+   EGC.0
+          Standard (Differs from GC.1 in that it only has initiation site
+          'AUG')
+
+   EGC.1
+          Standard
+
+   EGC.2
+          Vertebrate Mitochodrial
+
+   EGC.3
+          Yeast Mitochondrial
+
+   EGC.4
+          Mold, Protozoan, Coelenterate Mitochondrial and
+          Mycoplasma/Spiroplasma
+
+   EGC.5
+          Invertebrate Mitochondrial
+
+   EGC.6
+          Ciliate Macronuclear and Dasycladacean
+
+   EGC.9
+          Echinoderm Mitochondrial
+
+   EGC.10
+          Euplotid Nuclear
+
+   EGC.11
+          Bacterial
+
+   EGC.12
+          Alternative Yeast Nuclear
+
+   EGC.13
+          Ascidian Mitochondrial
+
+   EGC.14
+          Flatworm Mitochondrial
+
+   EGC.15
+          Blepharisma Macronuclear
+
+   EGC.16
+          Chlorophycean Mitochondrial
+
+   EGC.21
+          Trematode Mitochondrial
+
+   EGC.22
+          Scenedesmus obliquus
+
+   EGC.23
+          Thraustochytrium Mitochondrial
+
+   The format of these files is very simple.
+
+   It consists of several lines of optional comments, each starting with
+   a '#' character.
+
+   These are followed the line: 'Genetic Code [n]', where 'n' is the
+   number of the genetic code file.
+
+   This is followed by the description of the code and then by four lines
+   giving the IUPAC one-letter code of the translated amino acid, the
+   start codons (indicdated by an 'M') and the three bases of the codon,
+   lined up one on top of the other.
+
+   For example:
+
+------------------------------------------------------------------------------
+# Genetic Code Table
+#
+# Obtained from: http://www.ncbi.nlm.nih.gov/collab/FT/genetic_codes.html
+# and: http://www3.ncbi.nlm.nih.gov/htbin-post/Taxonomy/wprintgc?mode=c
+#
+# Differs from Genetic Code [1] only in that the initiation sites have been
+# changed to only 'AUG'
+
+Genetic Code [0]
+Standard
+
+AAs  =   FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG
+Starts = -----------------------------------M----------------------------
+Base1  = TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG
+Base2  = TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG
+Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
+------------------------------------------------------------------------------
+
+Notes
+
+   If you have selected one of the options to report a regions around a
+   START or STOP codon, then note that any such region that crosses the
+   beginning or end of the sequence will not be reported.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   '-sbegin' and -send' do not work with this program.
+
+See also
+
+   Program name                        Description
+   marscan      Finds MAR/SAR sites in nucleic sequences
+   plotorf      Plot potential open reading frames
+   showorf      Pretty output of DNA translations
+   sixpack      Display a DNA sequence with 6-frame translation and ORFs
+   syco         Synonymous codon usage Gribskov statistic plot
+   tcode        Fickett TESTCODE statistic to identify protein-coding DNA
+   wobble       Wobble base plot
+
+     * checktrans - Reports STOP codons and ORF statistics of a protein
+       sequence
+
+Author(s)
+
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+History
+
+   2000 - written - Gary Williams
+
+   November 2002 - added indication of reverse sense ORFs
+
+   November 2002 - added indication of ORFs that cross the breakpoint at
+   position 1 in circular genomes.
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

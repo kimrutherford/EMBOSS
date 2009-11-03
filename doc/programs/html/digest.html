@@ -1,0 +1,640 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: digest
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+digest
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+    Function
+</H2>
+Protein proteolytic enzyme or reagent cleavage digest
+<H2>
+    Description
+</H2>
+
+<b>digest</b> finds the positions where a specified proteolytic enzyme
+or reagent might cut a peptide sequence. 
+
+<p>
+
+This programs allows you to input a protein sequence and to specify one
+proteolytic agent from a list.  It will then output a file containing
+the positions where the agent cuts, together with the peptides produced. 
+
+<p>
+
+Trypsin will not normally cut after a K if it is followed by (e.g.)
+another K or a P.  Specifying the qualifier <b>-unfavoured</b> shows
+those cuts.  as well as the favoured ones. 
+
+<p>
+
+If you wish to emulate a partial digestion, then using the
+<b>-overlap</b> qualifier will display the results from a digest in
+which all cut sites are used and in which one site at a time is not cut. 
+Thus the resulting peptide fragments from the cut sites numbered 1, 2,
+3, 4 etc.  are shown, plus the fragments produced by cutting at the
+sites 1..3, 2..4, etc. 
+
+<p>
+
+i.e. fragments containing one potential cut site are also shown.
+
+<p>
+
+If you wish to emulate a <b>very</b> partial digestion (!) then using
+the <b>-allpartials</b> qualifier will do what <b>-overlap</b> did, but
+also show all possible fragments from using all possible combinations of
+cut sites.  For example, fragments from the cut sites numbered 1, 2, 3,
+4, 5 and from the fragments produced by cutting between sites 1..3,
+1..4, 1..5, 2..4, 2..5, 3..5, etc. 
+
+<p>
+
+i.e. fragments containing one or more potential cut site are also shown.
+
+
+<p>
+
+If the boolean -ragging is specified then terminal break-up
+fragments are also shown; this can be useful for mass spectrometry.
+Ragging is further controlled by the -termini
+option which allows you to select removal of residues from
+the N and/or C termini.
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with digest</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>digest </b>
+Protein proteolytic enzyme or reagent cleavage digest
+Input protein sequence(s): <b>tsw:opsd_human</b>
+Enzymes and Reagents
+         1 : Trypsin
+         2 : Lys-C
+         3 : Arg-C
+         4 : Asp-N
+         5 : V8-bicarb
+         6 : V8-phosph
+         7 : Chymotrypsin
+         8 : CNBr
+Select number [1]: <b></b>
+Output report [opsd_human.digest]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-seqall]            seqall     Protein sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -menu               menu       [1] Select number (Values: 1 (Trypsin); 2
+                                  (Lys-C); 3 (Arg-C); 4 (Asp-N); 5
+                                  (V8-bicarb); 6 (V8-phosph); 7
+                                  (Chymotrypsin); 8 (CNBr))
+  [-outfile]           report     [*.digest] Output report file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -aadata             datafile   [Eamino.dat] Molecular weight data for amino
+                                  acids
+   -unfavoured         boolean    Trypsin will not normally cut after a K if
+                                  it is followed by (e.g.) another K or a P.
+                                  Specifying this shows those cuts. as well as
+                                  the favoured ones.
+   -ragging            boolean    Allows semi-specific and non-specific
+                                  digestion. This option is particularly
+                                  useful for generating lists of peptide
+                                  sequences for protein identification using
+                                  mass-spectrometry.
+   -termini            menu       [1] Select number (Values: 1 (none); 2
+                                  (nterm); 3 (cterm); 4 (nterm OR cterm))
+   -overlap            boolean    Used for partial digestion. Shows all cuts
+                                  from favoured cut sites plus 1..3, 2..4,
+                                  3..5 etc but not (e.g.) 2..5. Overlaps are
+                                  therefore fragments with exactly one
+                                  potential cut site within it.
+   -allpartials        boolean    As for overlap but fragments containing more
+                                  than one potential cut site are included.
+
+   Associated qualifiers:
+
+   "-seqall" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-seqall]<br>(Parameter 1)</td>
+<td>Protein sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-menu</td>
+<td>Select number</td>
+<td><table><tr><td>1</td> <td><i>(Trypsin)</i></td></tr><tr><td>2</td> <td><i>(Lys-C)</i></td></tr><tr><td>3</td> <td><i>(Arg-C)</i></td></tr><tr><td>4</td> <td><i>(Asp-N)</i></td></tr><tr><td>5</td> <td><i>(V8-bicarb)</i></td></tr><tr><td>6</td> <td><i>(V8-phosph)</i></td></tr><tr><td>7</td> <td><i>(Chymotrypsin)</i></td></tr><tr><td>8</td> <td><i>(CNBr)</i></td></tr></table></td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output report file name</td>
+<td>Report output file</td>
+<td><i>&lt;*&gt;</i>.digest</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-aadata</td>
+<td>Molecular weight data for amino acids</td>
+<td>Data file</td>
+<td>Eamino.dat</td>
+</tr>
+
+<tr>
+<td>-unfavoured</td>
+<td>Trypsin will not normally cut after a K if it is followed by (e.g.) another K or a P. Specifying this shows those cuts. as well as the favoured ones.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-ragging</td>
+<td>Allows semi-specific and non-specific digestion. This option is particularly useful for generating lists of peptide sequences for protein identification using mass-spectrometry.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-termini</td>
+<td>Select number</td>
+<td><table><tr><td>1</td> <td><i>(none)</i></td></tr><tr><td>2</td> <td><i>(nterm)</i></td></tr><tr><td>3</td> <td><i>(cterm)</i></td></tr><tr><td>4</td> <td><i>(nterm OR cterm)</i></td></tr></table></td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-overlap</td>
+<td>Used for partial digestion. Shows all cuts from favoured cut sites plus 1..3, 2..4, 3..5 etc but not (e.g.) 2..5. Overlaps are therefore fragments with exactly one potential cut site within it.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-allpartials</td>
+<td>As for overlap but fragments containing more than one potential cut site are included.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>
+
+<H2>
+    Input file format
+</H2>
+
+Any protein sequence.
+
+<p>
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tsw:opsd_human' is a sequence entry in the example protein database 'tsw'
+<p>
+<p><h3>Database entry: tsw:opsd_human</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   OPSD_HUMAN              Reviewed;         348 AA.
+AC   P08100; Q16414; Q2M249;
+DT   01-AUG-1988, integrated into UniProtKB/Swiss-Prot.
+DT   01-AUG-1988, sequence version 1.
+DT   20-MAR-2007, entry version 91.
+DE   Rhodopsin (Opsin-2).
+GN   Name=RHO; Synonyms=OPN2;
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+OC   Catarrhini; Hominidae; Homo.
+OX   NCBI_TaxID=9606;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RX   MEDLINE=84272729; PubMed=6589631;
+RA   Nathans J., Hogness D.S.;
+RT   "Isolation and nucleotide sequence of the gene encoding human
+RT   rhodopsin.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 81:4851-4855(1984).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RA   Suwa M., Sato T., Okouchi I., Arita M., Futami K., Matsumoto S.,
+RA   Tsutsumi S., Aburatani H., Asai K., Akiyama Y.;
+RT   "Genome-wide discovery and analysis of human seven transmembrane helix
+RT   receptor genes.";
+RL   Submitted (JUL-2001) to the EMBL/GenBank/DDBJ databases.
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA].
+RC   TISSUE=Retina;
+RG   The German cDNA consortium;
+RL   Submitted (JUN-2003) to the EMBL/GenBank/DDBJ databases.
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA].
+RX   PubMed=15489334; DOI=10.1101/gr.2596504;
+RG   The MGC Project Team;
+RT   "The status, quality, and expansion of the NIH full-length cDNA
+RT   project: the Mammalian Gene Collection (MGC).";
+RL   Genome Res. 14:2121-2127(2004).
+RN   [5]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA] OF 1-120.
+RX   PubMed=8566799; DOI=10.1016/0378-1119(95)00688-5;
+RA   Bennett J., Beller B., Sun D., Kariko K.;
+RT   "Sequence analysis of the 5.34-kb 5' flanking region of the human
+RT   rhodopsin-encoding gene.";
+RL   Gene 167:317-320(1995).
+RN   [6]
+RP   REVIEW ON RP4 VARIANTS.
+RX   MEDLINE=94004905; PubMed=8401533;
+RA   Al-Maghtheh M., Gregory C., Inglehearn C., Hardcastle A.,
+RA   Bhattacharya S.;
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT                                /FTId=VAR_004816.
+FT   VARIANT     209    209       V -&gt; M (effect not known).
+FT                                /FTId=VAR_004817.
+FT   VARIANT     211    211       H -&gt; P (in RP4).
+FT                                /FTId=VAR_004818.
+FT   VARIANT     211    211       H -&gt; R (in RP4).
+FT                                /FTId=VAR_004819.
+FT   VARIANT     216    216       M -&gt; K (in RP4).
+FT                                /FTId=VAR_004820.
+FT   VARIANT     220    220       F -&gt; C (in RP4).
+FT                                /FTId=VAR_004821.
+FT   VARIANT     222    222       C -&gt; R (in RP4).
+FT                                /FTId=VAR_004822.
+FT   VARIANT     255    255       Missing (in RP4).
+FT                                /FTId=VAR_004823.
+FT   VARIANT     264    264       Missing (in RP4).
+FT                                /FTId=VAR_004824.
+FT   VARIANT     267    267       P -&gt; L (in RP4).
+FT                                /FTId=VAR_004825.
+FT   VARIANT     267    267       P -&gt; R (in RP4).
+FT                                /FTId=VAR_004826.
+FT   VARIANT     292    292       A -&gt; E (in CSNBAD1).
+FT                                /FTId=VAR_004827.
+FT   VARIANT     296    296       K -&gt; E (in RP4).
+FT                                /FTId=VAR_004828.
+FT   VARIANT     297    297       S -&gt; R (in RP4).
+FT                                /FTId=VAR_004829.
+FT   VARIANT     342    342       T -&gt; M (in RP4).
+FT                                /FTId=VAR_004830.
+FT   VARIANT     345    345       V -&gt; L (in RP4).
+FT                                /FTId=VAR_004831.
+FT   VARIANT     345    345       V -&gt; M (in RP4).
+FT                                /FTId=VAR_004832.
+FT   VARIANT     347    347       P -&gt; A (in RP4).
+FT                                /FTId=VAR_004833.
+FT   VARIANT     347    347       P -&gt; L (in RP4; common variant).
+FT                                /FTId=VAR_004834.
+FT   VARIANT     347    347       P -&gt; Q (in RP4).
+FT                                /FTId=VAR_004835.
+FT   VARIANT     347    347       P -&gt; R (in RP4).
+FT                                /FTId=VAR_004836.
+FT   VARIANT     347    347       P -&gt; S (in RP4).
+FT                                /FTId=VAR_004837.
+SQ   SEQUENCE   348 AA;  38893 MW;  6F4F6FCBA34265B2 CRC64;
+     MNGTEGPNFY VPFSNATGVV RSPFEYPQYY LAEPWQFSML AAYMFLLIVL GFPINFLTLY
+     VTVQHKKLRT PLNYILLNLA VADLFMVLGG FTSTLYTSLH GYFVFGPTGC NLEGFFATLG
+     GEIALWSLVV LAIERYVVVC KPMSNFRFGE NHAIMGVAFT WVMALACAAP PLAGWSRYIP
+     EGLQCSCGID YYTLKPEVNN ESFVIYMFVV HFTIPMIIIF FCYGQLVFTV KEAAAQQQES
+     ATTQKAEKEV TRMVIIMVIA FLICWVPYAS VAFYIFTHQG SNFGPIFMTI PAFFAKSAAI
+     YNPVIYIMMN KQFRNCMLTT ICCGKNPLGD DEASATVSKT ETSQVAPA
+//
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Output file format
+</H2>
+<p>
+
+The output is a standard EMBOSS report file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: embl,
+genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+feattable, motif, regions, seqtable, simple, srs, table, tagseq
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/ReportFormats.html">
+http://emboss.sf.net/docs/themes/ReportFormats.html</A>
+for further information on report formats.
+
+<p>
+
+By default <b>digest</b> writes a 'seqtable' report file.
+
+
+<p>
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: opsd_human.digest</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: digest
+# Rundate: Sun 15 Jul 2007 12:00:00
+# Commandline: digest
+#    -seqall tsw:opsd_human
+# Report_format: seqtable
+# Report_file: opsd_human.digest
+########################################
+
+#=======================================
+#
+# Sequence: OPSD_HUMAN     from: 1   to: 348
+# HitCount: 14
+#
+# Complete digestion with Trypsin yields 14 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight Cterm  Nterm  Sequence
+     70     135   7129.319 R      Y      TPLNYILLNLAVADLFMVLGGFTSTLYTSLHGYFVFGPTGCNLEGFFATLGGEIALWSLVVLAIER
+    178     231   6335.495 R      E      YIPEGLQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIPMIIIFFCYGQLVFTVK
+     22      69   5788.873 R      T      SPFEYPQYYLAEPWQFSMLAAYMFLLIVLGFPINFLTLYVTVQHKKLR
+    253     296   5004.085 R      S      MVIIMVIAFLICWVPYASVAFYIFTHQGSNFGPIFMTIPAFFAK
+    136     177   4600.460 R      Y      YVVVCKPMSNFRFGENHAIMGVAFTWVMALACAAPPLAGWSR
+      1      21   2257.495 .      S      MNGTEGPNFYVPFSNATGVVR
+    297     311   1728.089 K      Q      SAAIYNPVIYIMMNK
+    232     245   1490.538 K      A      EAAAQQQESATTQK
+    326     339   1403.457 K      T      NPLGDDEASATVSK
+    315     325   1186.476 R      N      NCMLTTICCGK
+    340     348    902.950 K      .      TETSQVAPA
+    249     252    503.550 K      M      EVTR
+    312     314    449.504 K      N      QFR
+    246     248    346.378 K      E      AEK
+
+#---------------------------------------
+#---------------------------------------
+</pre>
+</td></tr></table><p>
+
+<p>
+
+The header information contains the program name, date of run, name of
+the reagent used to digest the protein and the number of fragments
+reported.  The header will report if complete or partial digestion was
+chosen.  
+
+<p>
+The rest of the file consists of columns holding the following data:
+
+<ul>
+<li> The start position of the fragment
+<li> The end position of the fragment
+<li> The molecular weight of the fragment
+<li> The residue before the cut site ('.' if start of sequence)
+<li> The residue after the second cut site ('.' if end of sequence)
+<li> The sequence of the fragment. 
+</ul>
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="antigenic.html">antigenic</a></td>
+<td>Finds antigenic sites in proteins</td>
+</tr>
+
+<tr>
+<td><a href="epestfind.html">epestfind</a></td>
+<td>Finds PEST motifs as potential proteolytic cleavage sites</td>
+</tr>
+
+<tr>
+<td><a href="fuzzpro.html">fuzzpro</a></td>
+<td>Protein pattern search</td>
+</tr>
+
+<tr>
+<td><a href="fuzztran.html">fuzztran</a></td>
+<td>Protein pattern search after translation</td>
+</tr>
+
+<tr>
+<td><a href="helixturnhelix.html">helixturnhelix</a></td>
+<td>Report nucleic acid binding motifs</td>
+</tr>
+
+<tr>
+<td><a href="oddcomp.html">oddcomp</a></td>
+<td>Find protein sequence regions with a biased composition</td>
+</tr>
+
+<tr>
+<td><a href="patmatdb.html">patmatdb</a></td>
+<td>Search a protein sequence with a motif</td>
+</tr>
+
+<tr>
+<td><a href="patmatmotifs.html">patmatmotifs</a></td>
+<td>Search a PROSITE motif database with a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="pepcoil.html">pepcoil</a></td>
+<td>Predicts coiled coil regions</td>
+</tr>
+
+<tr>
+<td><a href="preg.html">preg</a></td>
+<td>Regular expression search of a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="pscan.html">pscan</a></td>
+<td>Scans proteins using PRINTS</td>
+</tr>
+
+<tr>
+<td><a href="sigcleave.html">sigcleave</a></td>
+<td>Reports protein signal cleavage sites</td>
+</tr>
+
+</table>
+
+<H2>
+    Author(s)
+</H2>
+
+Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
+<H2>
+    History
+</H2>
+
+Written (1999) - Alan Bleasby
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+None
+
+</BODY>
+</HTML>
+

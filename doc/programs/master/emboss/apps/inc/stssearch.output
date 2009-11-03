@@ -1,0 +1,26 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: j01636.stssearch</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+J01636: PrimA PrimerA matched at 532
+J01636: (rev) PrimA PrimerB matched at 689
+J01636: PrimB PrimerA matched at 5743
+J01636: (rev) PrimB PrimerB matched at 5942
+J01636: PrimC PrimerA matched at 2954
+J01636: (rev) PrimC PrimerB matched at 3069
+J01636: PrimD PrimerA matched at 1074
+J01636: (rev) PrimD PrimerB matched at 1261
+J01636: PrimE PrimerA matched at 1074
+X51872: PrimB PrimerA matched at 98
+X51872: (rev) PrimB PrimerB matched at 297
+V00294: PrimA PrimerA matched at 484
+V00294: (rev) PrimA PrimerB matched at 641
+V00294: PrimD PrimerA matched at 1026
+V00294: PrimE PrimerA matched at 1026
+V00295: PrimB PrimerA matched at 1439
+V00296: PrimC PrimerA matched at 1668
+V00296: (rev) PrimC PrimerB matched at 1783
+</pre>
+</td></tr></table><p>

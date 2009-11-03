@@ -1,0 +1,66 @@
+   Standard (Mandatory) qualifiers:
+  [-infile]            infile     ABI sequencing trace file
+  [-outseq]            seqout     [<sequence>.<format>] Nucleotide sequence
+                                  filename and optional format (output USA)
+   -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png, gif)
+
+   Additional (Optional) qualifiers:
+   -startbase          integer    [0] First base to report or display (Integer
+                                  0 or more)
+   -endbase            integer    [0] Last sequence base to report or display.
+                                  If the default is set to zero then the
+                                  value of this is taken as the maximum number
+                                  of bases. (Any integer value)
+   -yticks             boolean    [N] Display y-axis ticks
+   -[no]sequence       boolean    [Y] Display the sequence on the graph
+   -window             integer    [40] Sequence display window size (Any
+                                  integer value)
+   -bases              string     [GATC] Base graphs to be displayed (Any
+                                  string is accepted, matching regular
+                                  expression /[GATC]+/)
+
+   Advanced (Unprompted) qualifiers:
+   -separate           boolean    [N] Separate the trace graphs for the 4
+                                  bases
+
+   Associated qualifiers:
+
+   "-outseq" associated qualifiers
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   "-graph" associated qualifiers
+   -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+

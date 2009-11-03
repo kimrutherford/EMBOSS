@@ -1,0 +1,37 @@
+# Mass modifications for mass spectroscopy
+#
+# Columns are:
+# Modification number
+# Type of modification (spaces must be replaced by underscores)
+# Residues affected ^=N-term  $=C-term
+# Monoisotopic mass difference
+# Average isotopic mass difference
+#
+1	Acetylation		^,K	42.01057	42.037
+2	Amidation		$	-0.98402	-0.985
+3	Biotinylation		^,K	226.07760	226.293
+4	Carbamidomethyl		C	57.02147	57.052
+5	Carbamyl		^,K	43.00581	43.025
+6	Carboxymethyl		C	58.00548	58.037
+7	Deamidation		N,Q	0.98402		0.985
+8	Formylation		^	27.99492	28.010
+9	Homoserine		M	-29.99281	-30.087
+10	Guanidilisation		K	183.98		0
+11	Homoserine_Lactone	M	-48.00337	-48.103
+12	ICAT_d0_(ABI)		C	442.225		442.572
+13	ICAT_d8_(ABI)		C	450.27522	450.622
+14	Methyl_ester		$,D,E	14.01565	14.027
+15	NIPCAM			C	99.06842	99.132
+16	O18_label		$	2.00424		2.000
+17	Oxidation		H,M,W	15.99492	15.999
+18	PEO_Biotin		C	414.19370	414.519
+19	Phosphorylation		S,T,Y	79.96633	79.980
+20	Propionamide		C	71.03712	71.079
+21	Pyro-cys		^C	-17.02655	-17.030
+22	Pyro-gln		^Q	-17.02655	-17.030
+23	Pyro-glu		^E	-18.01057	-18.015
+24	S-pyridylethyl		C	105.05785	105.139
+25	SMA			^,K	127.06333	127.143
+26	Sodiation		$,D,E	21.98194	21.982
+27	Sulphone		M	31.98983	31.999
+

@@ -1,0 +1,586 @@
+
+                               rebaseextract 
+
+
+
+Function
+
+   Extract data from REBASE
+
+Description
+
+   The Restriction Enzyme database (REBASE) is a collection of
+   information about restriction enzymes and related proteins. It
+   contains published and unpublished references, recognition and
+   cleavage sites, isoschizomers, commercial availability, methylation
+   sensitivity, crystal and sequence data. DNA methyltransferases, homing
+   endonucleases, nicking enzymes, specificity subunits and control
+   proteins are also included. Most recently, putative DNA
+   methyltransferases and restriction enzymes, as predicted from analysis
+   of genomic sequences, are also listed.
+
+   The home page of REBASE is: http://rebase.neb.com/
+
+   This program derives recognition site and cleavage information from
+   the "withrefm" file of an REBASE distribution. It creates three files
+   in the EMBOSS data subdirectory REBASE. A pattern file, a reference
+   file and a supplier file.
+
+   It will also (by default) produce an 'embossre.equ' file. This can be
+   turned off by setting the -equivalences option to be false. This
+   option calculates an 'embossre.equ' file using restriction enzyme
+   prototypes in the "withrefm" file. The 'embossre.equ' file is a file
+   of preferred isoschizomers. You may edit it to contain your available
+   restriction enzymes.
+
+   The EMBOSS programs that find restriction cutting sites use the data
+   files produced by this program and will not work without them.
+
+   Running this program may be the job of your system manager.
+
+Usage
+
+   Here is a sample session with rebaseextract
+
+
+% rebaseextract 
+Extract data from REBASE
+REBASE database withrefm file: withrefm
+REBASE database proto file: proto
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-infile]            infile     REBASE database withrefm file
+  [-protofile]         infile     REBASE database proto file
+
+   Additional (Optional) qualifiers:
+   -[no]equivalences   boolean    [Y] This option calculates an embossre.equ
+                                  file using restriction enzyme prototypes in
+                                  the withrefm file.
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers: (none)
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   The input file must be the "withrefm" file of a REBASE distribution.
+
+   For example, the withrefm file for REBASE version 005 is at:
+   ftp://ftp.neb.com/pub/rebase/withrefm.005
+
+  Input files for usage example
+
+  File: withrefm
+
+
+REBASE version 106                                              withrefm.106
+
+    =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    REBASE, The Restriction Enzyme Database   http://rebase.neb.com
+    Copyright (c)  Dr. Richard J. Roberts, 2001.   All rights reserved.
+    =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+Rich Roberts                                                    May 31 2001
+
+
+<ENZYME NAME>   Restriction enzyme name.
+<ISOSCHIZOMERS> Other enzymes with this specificity.
+<RECOGNITION SEQUENCE>
+                These are written from 5' to 3', only one strand being given.
+                If the point of cleavage has been determined, the precise site
+                is marked with ^.  For enzymes such as HgaI, MboII etc., which
+                cleave away from their recognition sequence the cleavage sites
+                are indicated in parentheses.
+
+                For example HgaI GACGC (5/10) indicates cleavage as follows:
+                                5' GACGCNNNNN^      3'
+                                3' CTGCGNNNNNNNNNN^ 5'
+
+                In all cases the recognition sequences are oriented so that
+                the cleavage sites lie on their 3' side.
+
+                REBASE Recognition sequences representations use the standard
+                abbreviations (Eur. J. Biochem. 150: 1-5, 1985) to represent
+                ambiguity.
+                                R = G or A
+                                Y = C or T
+                                M = A or C
+                                K = G or T
+                                S = G or C
+                                W = A or T
+                                B = not A (C or G or T)
+                                D = not C (A or G or T)
+                                H = not G (A or C or T)
+                                V = not T (A or C or G)
+                                N = A or C or G or T
+
+
+
+                ENZYMES WITH UNUSUAL CLEAVAGE PROPERTIES:
+
+                Enzymes that cut on both sides of their recognition sequences,
+                such as BcgI, Bsp24I, CjeI and CjePI, have 4 cleavage sites
+                each instead of 2.
+
+
+
+  [Part of this file has been deleted for brevity]
+
+<5>Klebsiella pneumoniae OK8
+<6>ATCC 49790
+<7>ABCDEFGHIJKLMNOQRSTU
+<8>Kiss, A., Finta, C., Venetianer, P., (1991) Nucleic Acids Res., vol. 19, pp.
+ 3460.
+Smith, D.I., Blattner, F.R., Davies, J., (1976) Nucleic Acids Res., vol. 3, pp.
+ 343-353.
+Tomassini, J., Roychoudhury, R., Wu, R., Roberts, R.J., (1978) Nucleic Acids Re
+s., vol. 5, pp. 4055-4064.
+
+<1>Ksp632I
+<2>Bco5I,Bco116I,BcoKI,BcoSI,BcrAI,BseZI,BsrEI,Bst6I,Bst158I,Bsu6I,Eam1104I,Ear
+I,TdeII,Uba1192I,Uba1276I,VpaKutEI,VpaKutFI,VpaO5I
+<3>CTCTTC(1/4)
+<4>
+<5>Kluyvera species 632
+<6>DSM 4196
+<7>M
+<8>Bolton, B.J., Schmitz, G.G., Jarsch, M., Comer, M.J., Kessler, C., (1988) Ge
+ne, vol. 66, pp. 31-43.
+Tsukahara, S., Yamakawa, H., Takai, K., Takaku, H., (1994) Nucleosides & Nucleo
+tides, vol. 13, pp. 1617-1626.
+
+<1>MaeII
+<2>HpyCH4IV,HpyF13III,HpyF35II,HpyF74II,TaiI,TscI,Tsp49I,TspIDSI,TspWAM8AI,TtmI
+<3>A^CGT
+<4>
+<5>Methanococcus aeolicus PL-15/H
+<6>K.O. Stetter
+<7>M
+<8>Schmid, K., Thomm, M., Laminet, A., Laue, F.G., Kessler, C., Stetter, K.O.,
+Schmitt, R., (1984) Nucleic Acids Res., vol. 12, pp. 2619-2628.
+
+<1>NotI
+<2>CciNI,CspBI,MchAI
+<3>GC^GGCCGC
+<4>?(4)
+<5>Nocardia otitidis-caviarum
+<6>ATCC 14630
+<7>ABCDEFGHJKLMNOQRSTU
+<8>Borsetti, R., Wise, D., Qiang, B.-Q., Schildkraut, I., Unpublished observati
+ons.
+Morgan, R.D., Unpublished observations.
+Morgan, R.D., Benner, J.S., Claus, T.E., US Patent Office, 1994.
+Qiang, B.-Q., Schildkraut, I., (1987) Methods Enzymol., vol. 155, pp. 15-21.
+
+<1>TaqI
+<2>CviSIII,EsaBC3I,HpyV,Hpy26II,HpyF14III,HpyF16I,HpyF23I,HpyF24I,HpyF26III,Hpy
+F30I,HpyF35I,HpyF40II,HpyF42IV,HpyF45I,HpyF49I,HpyF52I,HpyF59III,HpyF62II,HpyF6
+4I,HpyF65II,HpyF66IV,HpyF71I,HpyF73II,HpyJP26II,PpaAII,Taq20I,Tbr51I,TfiA3I,Tfi
+Tok4A2I,TfiTok6A1I,TflI,Tsc4aI,Tsp32I,Tsp32II,Tsp358I,Tsp505I,Tsp510I,TspAK13D2
+1I,TspAK16D24I,TspNI,TspVi4AI,TspVil3I,Tth24I,TthHB8I,TthRQI
+<3>T^CGA
+<4>4(6)
+<5>Thermus aquaticus YTI
+<6>J.I. Harris
+<7>ABCDEFGIJLMNOQRSTU
+<8>Anton, B.P., Brooks, J.E., Unpublished observations.
+Fomenkov, A., Xiao, J.-P., Dila, D., Raleigh, E., Xu, S.-Y., (1994) Nucleic Aci
+ds Res., vol. 22, pp. 2399-2403.
+McClelland, M., (1981) Nucleic Acids Res., vol. 9, pp. 6795-6804.
+Sato, S., Hutchison, C.A. III, Harris, J.I., (1977) Proc. Natl. Acad. Sci. U. S
+. A., vol. 74, pp. 542-546.
+Zebala, J.A., (1993) Diss. Abstr., vol. 54, pp. 1394-1398.
+
+  File: proto
+
+
+REBASE version 305                                              proto.305
+
+    =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    REBASE, The Restriction Enzyme Database   http://rebase.neb.com
+    Copyright (c)  Dr. Richard J. Roberts, 2003.   All rights reserved.
+    =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+Rich Roberts                                                    Apr 30 2003
+
+
+
+
+            TYPE II ENZYMES
+            ---------------
+
+BseYI                          CCCAGC (-5/-1)
+BsiYI                          CCNNNNN^NNGG
+BsrI                           ACTGG (1/-1)
+HaeIII                         GG^CC
+HpaII                          C^CGG
+Ksp632I                        CTCTTC (1/4)
+MaeII                          A^CGT
+
+
+
+            TYPE I ENZYMES
+            ---------------
+
+EcoAI                          GAGNNNNNNNGTCA
+EcoBI                          TGANNNNNNNNTGCT
+EcoDI                          TTANNNNNNNGTCY
+EcoDR2                         TCANNNNNNGTCG
+EcoDR3                         TCANNNNNNNATCG
+EcoDXXI                        TCANNNNNNNRTTC
+EcoEI                          GAGNNNNNNNATGC
+EcoKI                          AACNNNNNNGTGC
+
+
+
+            TYPE III ENZYMES
+            ---------------
+
+EcoPI                          AGACC
+EcoP15I                        CAGCAG (25/27)
+HinfIII                        CGAAT
+StyLTI                         CAGAG
+
+Output file format
+
+  Output files for usage example
+
+  Directory: REBASE
+
+   This directory contains output files, for example embossre.enz
+   embossre.equ embossre.ref and embossre.sup.
+
+  File: REBASE/embossre.enz
+
+# REBASE enzyme patterns for EMBOSS
+#
+# Format:
+# name<ws>pattern<ws>len<ws>ncuts<ws>blunt<ws>c1<ws>c2<ws>c3<ws>c4
+#
+# Where:
+# name = name of enzyme
+# pattern = recognition site
+# len = length of pattern
+# ncuts = number of cuts made by enzyme
+#         Zero represents unknown
+# blunt = true if blunt end cut, false if sticky
+# c1 = First 5' cut
+# c2 = First 3' cut
+# c3 = Second 5' cut
+# c4 = Second 3' cut
+#
+# Examples:
+# AAC^TGG -> 6 2 1 3 3 0 0
+# A^ACTGG -> 6 2 0 1 5 0 0
+# AACTGG  -> 6 0 0 0 0 0 0
+# AACTGG(-5/-1) -> 6 2 0 1 5 0 0
+# (8/13)GACNNNNNNTCA(12/7) -> 12 4 0 -9 -14 24 19
+#
+# i.e. cuts are always to the right of the given
+# residue and sequences are always with reference to
+# the 5' strand.
+# Sequences are numbered ... -3 -2 -1 1 2 3 ... with
+# the first residue of the pattern at base number 1.
+#
+AaeI    ggatcc  6       0       0       0       0       0       0
+AciI    CCGC    4       2       0       1       3       0       0
+AclI    AACGTT  6       2       0       2       4       0       0
+BamHI   GGATCC  6       2       0       1       5       0       0
+BceAI   ACGGC   5       2       0       17      19      0       0
+Bsc4I   CCNNNNNNNGG     11      2       0       7       4       0       0
+Bse1I   ACTGG   5       2       0       6       4       0       0
+BseYI   CCCAGC  6       2       0       1       5       0       0
+BshI    GGCC    4       2       1       2       2       0       0
+BsiSI   CCGG    4       2       0       1       3       0       0
+BsiYI   CCNNNNNNNGG     11      2       0       7       4       0       0
+BssKI   CCNGG   5       2       0       -1      5       0       0
+BsrI    ACTGG   5       2       0       6       4       0       0
+Bsu6I   CTCTTC  6       2       0       7       10      0       0
+ClaI    ATCGAT  6       2       0       2       4       0       0
+EcoRI   GAATTC  6       2       0       1       5       0       0
+EcoRII  CCWGG   5       2       0       -1      5       0       0
+HaeIII  GGCC    4       2       1       2       2       0       0
+HhaI    GCGC    4       2       0       3       1       0       0
+Hin4I   GAYNNNNNVTC     11      4       0       -9      -14     24      19
+Hin6I   GCGC    4       2       0       1       3       0       0
+HinP1I  GCGC    4       2       0       1       3       0       0
+HindI   cac     3       0       0       0       0       0       0
+HindII  GTYRAC  6       2       1       3       3       0       0
+HindIII AAGCTT  6       2       0       1       5       0       0
+HpaII   CCGG    4       2       0       1       3       0       0
+HpyCH4IV        ACGT    4       2       0       1       3       0       0
+HspAI   GCGC    4       2       0       1       3       0       0
+KpnI    GGTACC  6       2       0       5       1       0       0
+Ksp632I CTCTTC  6       2       0       7       10      0       0
+MaeII   ACGT    4       2       0       1       3       0       0
+NotI    GCGGCCGC        8       2       0       2       6       0       0
+TaqI    TCGA    4       2       0       1       3       0       0
+
+  File: REBASE/embossre.equ
+
+Bsc4I BsiYI
+Bse1I BsrI
+BshI HaeIII
+BsiSI HpaII
+Bsu6I Ksp632I
+HpyCH4IV MaeII
+
+  File: REBASE/embossre.ref
+
+# REBASE enzyme information for EMBOSS
+#
+# Format:
+# Line 1: Name of Enzyme
+# Line 2: Organism
+# Line 3: Isoschizomers
+# Line 4: Methylation
+# Line 5: Source
+# Line 6: Suppliers
+# Line 7: Number of following references
+# Lines 8..n: References
+# // (end of entry marker)
+#
+AaeI
+Acetobacter aceti sub. liquefaciens
+BamHI,AacI,AcaII,AccEBI,AinII,AliI,Ali12257I,Ali12258I,ApaCI,AsiI,AspTII,Atu1II
+,BamFI,BamKI,BamNI,Bca1259I,Bce751I,Bco10278I,BnaI,BsaDI,Bsp30I,Bsp46I,Bsp90II,
+Bsp98I,Bsp130I,Bsp131I,Bsp144I,Bsp4009I,BspAAIII,BstI,Bst1126I,Bst2464I,Bst2902
+I,BstQI,Bsu90I,Bsu8565I,Bsu8646I,BsuB519I,BsuB763I,CelI,DdsI,GdoI,GinI,GoxI,Gse
+III,MleI,Mlu23I,NasBI,Nsp29132II,NspSAIV,OkrAI,Pac1110I,Pae177I,Pfl8I,Psp56I,Rh
+sI,Rlu4I,RspLKII,SolI,SpvI,SurI,Uba19I,Uba31I,Uba38I,Uba51I,Uba88I,Uba1098I,Uba
+1163I,Uba1167I,Uba1172I,Uba1173I,Uba1205I,Uba1224I,Uba1242I,Uba1250I,Uba1258I,U
+ba1297I,Uba1302I,Uba1324I,Uba1325I,Uba1334I,Uba1339I,Uba1346I,Uba1383I,Uba1398I
+,Uba1402I,Uba1414I
+
+M. Van Montagu
+
+1
+Seurinck, J., van Montagu, M., Unpublished observations.
+//
+AciI
+Arthrobacter citreus
+
+?(5),-2(5)
+NEB 577
+N
+2
+Lunnen, K.D., Heiter, D., Wilson, G.G., Unpublished observations.
+Polisson, C., Morgan, R.D., (1990) Nucleic Acids Res., vol. 18, pp. 5911.
+//
+AclI
+Acinetobacter calcoaceticus M4
+Psp1406I
+3(5)
+S.K. Degtyarev
+IN
+2
+Degtyarev, S.K., Abdurashitov, M.A., Kolyhalov, A.A., Rechkunova, N.I., (1992)
+Nucleic Acids Res., vol. 20, pp. 3787.
+Lunnen, K.D., Wilson, G.G., Unpublished observations.
+//
+BamHI
+Bacillus amyloliquefaciens H
+AacI,AaeI,AcaII,AccEBI,AinII,AliI,Ali12257I,Ali12258I,ApaCI,AsiI,AspTII,Atu1II,
+BamFI,BamKI,BamNI,Bca1259I,Bce751I,Bco10278I,BnaI,BsaDI,Bsp30I,Bsp46I,Bsp90II,B
+sp98I,Bsp130I,Bsp131I,Bsp144I,Bsp4009I,BspAAIII,BstI,Bst1126I,Bst2464I,Bst2902I
+,BstQI,Bsu90I,Bsu8565I,Bsu8646I,BsuB519I,BsuB763I,CelI,DdsI,GdoI,GinI,GoxI,GseI
+II,MleI,Mlu23I,NasBI,Nsp29132II,NspSAIV,OkrAI,Pac1110I,Pae177I,Pfl8I,Psp56I,Rhs
+I,Rlu4I,RspLKII,SolI,SpvI,SurI,Uba19I,Uba31I,Uba38I,Uba51I,Uba88I,Uba1098I,Uba1
+163I,Uba1167I,Uba1172I,Uba1173I,Uba1205I,Uba1224I,Uba1242I,Uba1250I,Uba1258I,Ub
+a1297I,Uba1302I,Uba1324I,Uba1325I,Uba1334I,Uba1339I,Uba1346I,Uba1383I,Uba1398I,
+Uba1402I,Uba1414I
+5(4)
+ATCC 49763
+ABCDEFGHIJKLMNOQRSTUV
+10
+Brooks, J.E., Howard, K.A., US Patent Office, 1994.
+
+
+  [Part of this file has been deleted for brevity]
+
+ATCC 49790
+ABCDEFGHIJKLMNOQRSTU
+3
+Kiss, A., Finta, C., Venetianer, P., (1991) Nucleic Acids Res., vol. 19, pp. 34
+60.
+Smith, D.I., Blattner, F.R., Davies, J., (1976) Nucleic Acids Res., vol. 3, pp.
+ 343-353.
+Tomassini, J., Roychoudhury, R., Wu, R., Roberts, R.J., (1978) Nucleic Acids Re
+s., vol. 5, pp. 4055-4064.
+//
+Ksp632I
+Kluyvera species 632
+Bco5I,Bco116I,BcoKI,BcoSI,BcrAI,BseZI,BsrEI,Bst6I,Bst158I,Bsu6I,Eam1104I,EarI,T
+deII,Uba1192I,Uba1276I,VpaKutEI,VpaKutFI,VpaO5I
+
+DSM 4196
+M
+2
+Bolton, B.J., Schmitz, G.G., Jarsch, M., Comer, M.J., Kessler, C., (1988) Gene,
+ vol. 66, pp. 31-43.
+Tsukahara, S., Yamakawa, H., Takai, K., Takaku, H., (1994) Nucleosides & Nucleo
+tides, vol. 13, pp. 1617-1626.
+//
+MaeII
+Methanococcus aeolicus PL-15/H
+HpyCH4IV,HpyF13III,HpyF35II,HpyF74II,TaiI,TscI,Tsp49I,TspIDSI,TspWAM8AI,TtmI
+
+K.O. Stetter
+M
+1
+Schmid, K., Thomm, M., Laminet, A., Laue, F.G., Kessler, C., Stetter, K.O., Sch
+mitt, R., (1984) Nucleic Acids Res., vol. 12, pp. 2619-2628.
+//
+NotI
+Nocardia otitidis-caviarum
+CciNI,CspBI,MchAI
+?(4)
+ATCC 14630
+ABCDEFGHJKLMNOQRSTU
+4
+Borsetti, R., Wise, D., Qiang, B.-Q., Schildkraut, I., Unpublished observations
+.
+Morgan, R.D., Unpublished observations.
+Morgan, R.D., Benner, J.S., Claus, T.E., US Patent Office, 1994.
+Qiang, B.-Q., Schildkraut, I., (1987) Methods Enzymol., vol. 155, pp. 15-21.
+//
+TaqI
+Thermus aquaticus YTI
+CviSIII,EsaBC3I,HpyV,Hpy26II,HpyF14III,HpyF16I,HpyF23I,HpyF24I,HpyF26III,HpyF30
+I,HpyF35I,HpyF40II,HpyF42IV,HpyF45I,HpyF49I,HpyF52I,HpyF59III,HpyF62II,HpyF64I,
+HpyF65II,HpyF66IV,HpyF71I,HpyF73II,HpyJP26II,PpaAII,Taq20I,Tbr51I,TfiA3I,TfiTok
+4A2I,TfiTok6A1I,TflI,Tsc4aI,Tsp32I,Tsp32II,Tsp358I,Tsp505I,Tsp510I,TspAK13D21I,
+TspAK16D24I,TspNI,TspVi4AI,TspVil3I,Tth24I,TthHB8I,TthRQI
+4(6)
+J.I. Harris
+ABCDEFGIJLMNOQRSTU
+5
+Anton, B.P., Brooks, J.E., Unpublished observations.
+Fomenkov, A., Xiao, J.-P., Dila, D., Raleigh, E., Xu, S.-Y., (1994) Nucleic Aci
+ds Res., vol. 22, pp. 2399-2403.
+McClelland, M., (1981) Nucleic Acids Res., vol. 9, pp. 6795-6804.
+Sato, S., Hutchison, C.A. III, Harris, J.I., (1977) Proc. Natl. Acad. Sci. U. S
+. A., vol. 74, pp. 542-546.
+Zebala, J.A., (1993) Diss. Abstr., vol. 54, pp. 1394-1398.
+//
+
+  File: REBASE/embossre.sup
+
+# REBASE Supplier information for EMBOSS
+#
+# Format:
+# Code of Supplier<ws>Supplier name
+#
+A Amersham Pharmacia Biotech (1/01)
+B Life Technologies Inc. (1/98)
+C Minotech, Molecular Biology Products (12/00)
+D HYBAID GmbH (12/00)
+E Stratagene (11/00)
+F Fermentas AB (5/01)
+G Q-BIOgene (1/01)
+H American Allied Biochemical, Inc. (10/98)
+I SibEnzyme Ltd. (1/01)
+J Nippon Gene Co., Ltd. (6/00)
+K Takara Shuzo Co. Ltd. (2/01)
+L Transgenomic Ltd. (1/01)
+M Roche Molecular Biochemicals (1/01)
+N New England BioLabs (12/00)
+O Toyobo Biochemicals (11/98)
+P Megabase Research Products (5/99)
+Q CHIMERx (10/97)
+R Promega Corporation (6/99)
+S Sigma Chemical Corporation (11/98)
+T Advanced Biotechnologies Ltd. (3/98)
+U Bangalore Genei (2/01)
+V MRC-Holland (3/01)
+
+   The output files are held in the REBASE subdirectory of the EMBOSS
+   data directory. There are three:
+     * embossre.enz Enzyme pattern file
+     * embossre.ref Enzyme references
+     * embossre.sup Enzyme suppliers
+
+   rebaseextract will also (by default) produce an 'embossre.equ' file in
+   the EMBOSS data directory. This can be turned off by setting the
+   -equivalences option to be false. This option calculates an
+   'embossre.equ' file using restriction enzyme prototypes in the
+   "withrefm" file. The 'embossre.equ' file is a file of preferred
+   isoschizomers. You may edit it to contain your available restriction
+   enzymes.
+
+Data files
+
+   The "withrefm" file of an REBASE distribution is the input file for
+   this program.
+
+Notes
+
+   The home page of REBASE is: http://rebase.neb.com/
+
+   Running this program may be the job of your system manager.
+
+   The ready-made files produced by this program may already be available
+   at the REBASE web site: http://rebase.neb.com/rebase/rebase.files.html
+   or http://rebase.neb.com/rebase/rebase.f37.html
+
+References
+
+    1. Nucleic Acids Research 27: 312-313 (1999).
+
+Warnings
+
+   The program will warn you if the input file is incorrectly formatted.
+
+Diagnostic Error Messages
+
+Exit status
+
+   It exits with status 0 unless an error is reported.
+
+Known bugs
+
+See also
+
+    Program name                        Description
+   aaindexextract Extract data from AAINDEX
+   cutgextract    Extract data from CUTG
+   printsextract  Extract data from PRINTS
+   prosextract    Build the PROSITE motif database for use by patmatmotifs
+   tfextract      Extract data from TRANSFAC
+
+Author(s)
+
+   Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+History
+
+   Completed 12th April 1999
+
+Target users
+
+   This program is intended to be used by administrators responsible for
+   software and database installation and maintenance.
+
+Comments
+
+   None

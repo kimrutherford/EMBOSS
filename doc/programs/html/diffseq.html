@@ -1,0 +1,722 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+diffseq
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+    Function
+</H2>
+Find differences between nearly identical sequences
+<H2>
+    Description
+</H2>
+
+<b>diffseq</b> takes two overlapping, nearly identical sequences and
+reports the differences between them, together with any features that
+overlap with these regions. GFF files of the differences in each
+sequence are also produced.
+
+<p>
+
+<b>diffseq</b> finds the region of overlap of the input sequences and
+then reports differences within this region, like a local alignment.
+
+<p>
+
+The start and end positions of the overlap are reported.
+
+<p>
+
+<b>diffseq</b> should be of value when looking for SNPs, differences
+between strains of an organism and anything else that requires the
+differences between sequences to be highlighted.
+
+<p>  
+
+The sequences can be very long. The program does a match of all
+sequence words of size 10 (by default). It then reduces this to the
+minimum set of overlapping matches by sorting the matches in order of
+size (largest size first) and then for each such match it removes any
+smaller matches that overlap. The result is a set of the longest
+ungapped alignments between the two sequences that do not overlap with
+each other. The mismatched regions between these matches are reported.
+
+<p>   
+
+It should be possible to find differences between sequences that are Mega-bases
+long.
+
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with diffseq</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>diffseq tembl:x65923 tembl:ay411291 </b>
+Find differences between nearly identical sequences
+Word size [10]: <b></b>
+Output report [x65923.diffseq]: <b></b>
+Features output [X65923.diffgff]: <b></b>
+Second features output [AY411291.diffgff]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-asequence]         sequence   Sequence filename and optional format, or
+                                  reference (input USA)
+  [-bsequence]         sequence   Sequence filename and optional format, or
+                                  reference (input USA)
+   -wordsize           integer    [10] The similar regions between the two
+                                  sequences are found by creating a hash table
+                                  of 'wordsize'd subsequences. 10 is a
+                                  reasonable default. Making this value larger
+                                  (20?) may speed up the program slightly,
+                                  but will mean that any two differences
+                                  within 'wordsize' of each other will be
+                                  grouped as a single region of difference.
+                                  This value may be made smaller (4?) to
+                                  improve the resolution of nearby
+                                  differences, but the program will go much
+                                  slower. (Integer 2 or more)
+  [-outfile]           report     [*.diffseq] Output report file name
+  [-aoutfeat]          featout    [$(asequence.name).diffgff] File for output
+                                  of first sequence's features
+  [-boutfeat]          featout    [$(bsequence.name).diffgff] File for output
+                                  of second sequence's features
+
+   Additional (Optional) qualifiers:
+   -globaldifferences  boolean    [N] Normally this program will find regions
+                                  of identity that are the length of the
+                                  specified word-size or greater and will then
+                                  report the regions of difference between
+                                  these matching regions. This works well and
+                                  is what most people want if they are working
+                                  with long overlapping nucleic acid
+                                  sequences. You are usually not interested in
+                                  the non-overlapping ends of these
+                                  sequences. If you have protein sequences or
+                                  short RNA sequences however, you will be
+                                  interested in differences at the very ends .
+                                  It this option is set to be true then the
+                                  differences at the ends will also be
+                                  reported.
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-asequence" associated qualifiers
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-bsequence" associated qualifiers
+   -sbegin2            integer    Start of the sequence to be used
+   -send2              integer    End of the sequence to be used
+   -sreverse2          boolean    Reverse (if DNA)
+   -sask2              boolean    Ask for begin/end/reverse
+   -snucleotide2       boolean    Sequence is nucleotide
+   -sprotein2          boolean    Sequence is protein
+   -slower2            boolean    Make lower case
+   -supper2            boolean    Make upper case
+   -sformat2           string     Input sequence format
+   -sdbname2           string     Database name
+   -sid2               string     Entryname
+   -ufo2               string     UFO features
+   -fformat2           string     Features format
+   -fopenfile2         string     Features file name
+
+   "-outfile" associated qualifiers
+   -rformat3           string     Report format
+   -rname3             string     Base file name
+   -rextension3        string     File name extension
+   -rdirectory3        string     Output directory
+   -raccshow3          boolean    Show accession number in the report
+   -rdesshow3          boolean    Show description in the report
+   -rscoreshow3        boolean    Show the score in the report
+   -rusashow3          boolean    Show the full USA in the report
+   -rmaxall3           integer    Maximum total hits to report
+   -rmaxseq3           integer    Maximum hits to report for one sequence
+
+   "-aoutfeat" associated qualifiers
+   -offormat4          string     Output feature format
+   -ofopenfile4        string     Features file name
+   -ofextension4       string     File name extension
+   -ofdirectory4       string     Output directory
+   -ofname4            string     Base file name
+   -ofsingle4          boolean    Separate file for each entry
+
+   "-boutfeat" associated qualifiers
+   -offormat5          string     Output feature format
+   -ofopenfile5        string     Features file name
+   -ofextension5       string     File name extension
+   -ofdirectory5       string     Output directory
+   -ofname5            string     Base file name
+   -ofsingle5          boolean    Separate file for each entry
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-asequence]<br>(Parameter 1)</td>
+<td>Sequence filename and optional format, or reference (input USA)</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-bsequence]<br>(Parameter 2)</td>
+<td>Sequence filename and optional format, or reference (input USA)</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-wordsize</td>
+<td>The similar regions between the two sequences are found by creating a hash table of 'wordsize'd subsequences. 10 is a reasonable default. Making this value larger (20?) may speed up the program slightly, but will mean that any two differences within 'wordsize' of each other will be grouped as a single region of difference. This value may be made smaller (4?) to improve the resolution of nearby differences, but the program will go much slower.</td>
+<td>Integer 2 or more</td>
+<td>10</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 3)</td>
+<td>Output report file name</td>
+<td>Report output file</td>
+<td><i>&lt;*&gt;</i>.diffseq</td>
+</tr>
+
+<tr>
+<td>[-aoutfeat]<br>(Parameter 4)</td>
+<td>File for output of first sequence's features</td>
+<td>Writeable feature table</td>
+<td>$(asequence.name).diffgff</td>
+</tr>
+
+<tr>
+<td>[-boutfeat]<br>(Parameter 5)</td>
+<td>File for output of second sequence's features</td>
+<td>Writeable feature table</td>
+<td>$(bsequence.name).diffgff</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-globaldifferences</td>
+<td>Normally this program will find regions of identity that are the length of the specified word-size or greater and will then report the regions of difference between these matching regions. This works well and is what most people want if they are working with long overlapping nucleic acid sequences. You are usually not interested in the non-overlapping ends of these sequences. If you have protein sequences or short RNA sequences however, you will be interested in differences at the very ends . It this option is set to be true then the differences at the ends will also be reported.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+<H2>
+    Input file format
+</H2>
+This program reads in two nucleic acid sequence USAs or two protein
+sequence USAs. 
+
+<p>
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:x65923' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:x65923</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   X65923; SV 1; linear; mRNA; STD; HUM; 518 BP.
+XX
+AC   X65923;
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   18-APR-2005 (Rel. 83, Last updated, Version 11)
+XX
+DE   H.sapiens fau mRNA
+XX
+KW   fau gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-518
+RA   Michiels L.M.R.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
+RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-518
+RX   PUBMED; 8395683.
+RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
+RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
+RL   Oncogene 8(9):2537-2546(1993).
+XX
+DR   H-InvDB; HIT000322806.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..518
+FT                   /organism="Homo sapiens"
+FT                   /chromosome="11q"
+FT                   /map="13"
+FT                   /mol_type="mRNA"
+FT                   /clone_lib="cDNA"
+FT                   /clone="pUIA 631"
+FT                   /tissue_type="placenta"
+FT                   /db_xref="taxon:9606"
+FT   misc_feature    57..278
+FT                   /note="ubiquitin like part"
+FT   CDS             57..458
+FT                   /gene="fau"
+FT                   /db_xref="GDB:135476"
+FT                   /db_xref="GOA:P35544"
+FT                   /db_xref="GOA:P62861"
+FT                   /db_xref="HGNC:3597"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P62861"
+FT                   /protein_id="CAA46716.1"
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   misc_feature    98..102
+FT                   /note="nucleolar localization signal"
+FT   misc_feature    279..458
+FT                   /note="S30 part"
+FT   polyA_signal    484..489
+FT   polyA_site      509
+XX
+SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        60
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       120
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       180
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       240
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       300
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       360
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       420
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       480
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               518
+//
+</pre>
+</td></tr></table><p>
+<p><h3>Database entry: tembl:ay411291</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   AY411291; SV 1; linear; genomic DNA; GSS; HUM; 402 BP.
+XX
+AC   AY411291;
+XX
+DT   13-DEC-2003 (Rel. 78, Created)
+DT   17-DEC-2003 (Rel. 78, Last updated, Version 2)
+XX
+DE   Homo sapiens FAU gene, VIRTUAL TRANSCRIPT, partial sequence, genomic survey
+DE   sequence.
+XX
+KW   GSS.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-402
+RX   DOI; 10.1126/science.1088821.
+RX   PUBMED; 14671302.
+RA   Clark A.G., Glanowski S., Nielson R., Thomas P., Kejariwal A., Todd M.A.,
+RA   Tanenbaum D.M., Civello D.R., Lu F., Murphy B., Ferriera S., Wang G.,
+RA   Zheng X.H., White T.J., Sninsky J.J., Adams M.D., Cargill M.;
+RT   "Inferring nonneutral evolution from human-chimp-mouse orthologous gene
+RT   trios";
+RL   Science 302(5652):1960-1963(2003).
+XX
+RN   [2]
+RP   1-402
+RA   Clark A.G., Glanowski S., Nielson R., Thomas P., Kejariwal A., Todd M.A.,
+RA   Tanenbaum D.M., Civello D.R., Lu F., Murphy B., Ferriera S., Wang G.,
+RA   Zheng X.H., White T.J., Sninsky J.J., Adams M.D., Cargill M.;
+RT   ;
+RL   Submitted (16-NOV-2003) to the EMBL/GenBank/DDBJ databases.
+RL   Celera Genomics, 45 West Gude Drive, Rockville, MD 20850, USA
+XX
+CC   This sequence was made by sequencing genomic exons and ordering
+CC   them based on alignment.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..402
+FT                   /organism="Homo sapiens"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:9606"
+FT   gene            &lt;1..&gt;402
+FT                   /gene="FAU"
+FT                   /locus_tag="HCM4175"
+XX
+SQ   Sequence 402 BP; 95 A; 110 C; 129 G; 68 T; 0 other;
+     atgcagctct ttgtccgcgc ccaggagcta cacaccttcg aggtgaccgg ccaggaaacg        60
+     gtcgcccaga tcaaggctca tgtagcctca ctggagggca ttgccccgga agatcaagtc       120
+     gtgctcctgg caggcgcgcc cctggaggat gaggccactc tgggccagtg cggggtggag       180
+     gccctgacta ccctggaagt agcaggccgc atgcttggag gtaaagtcca tggttccctg       240
+     gcccgtgctg gaaaagtgag aggtcagact cctaaggtgg ccaaacagga gaagaagaag       300
+     aagaagacag gtcgggctaa gcggcggatg cagtacaacc ggcgctttgt caacgttgtg       360
+     cccacctttg gcaagaagaa gggccccaat gccaactctt aa                          402
+//
+</pre>
+</td></tr></table><p>
+
+
+<H2>
+    Output file format
+</H2>
+
+<p>
+
+The output is a standard EMBOSS report file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: embl,
+genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+feattable, motif, regions, seqtable, simple, srs, table, tagseq
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/ReportFormats.html">
+http://emboss.sf.net/docs/themes/ReportFormats.html</A>
+for further information on report formats.
+
+<p>
+<p>
+
+By default <b>diffseq</b> writes a 'diffseq' report file.
+
+<p>
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: x65923.diffseq</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: diffseq
+# Rundate: Sun 15 Jul 2007 12:00:00
+# Commandline: diffseq
+#    [-asequence] tembl:x65923
+#    [-bsequence] tembl:ay411291
+# Report_format: diffseq
+# Report_file: x65923.diffseq
+# Additional_files: 2
+# 1: X65923.diffgff (Feature file for first sequence)
+# 2: AY411291.diffgff (Feature file for second sequence)
+########################################
+
+#=======================================
+#
+# Sequence: X65923     from: 1   to: 518
+# HitCount: 1
+#
+# Compare: AY411291     from: 1   to: 402
+# 
+# X65923 overlap starts at 57
+# AY411291 overlap starts at 1
+# 
+#
+#=======================================
+
+
+X65923 284-284 Length: 1
+Feature: CDS 57-458 gene='fau' db_xref='GDB:135476' db_xref='GOA:P35544' db_xref='GOA:P62861' db_xref='HGNC:3597' db_xref='UniProtKB/Swiss-Prot:P35544' db_xref='UniProtKB/Swiss-Prot:P62861' protein_id='CAA46716.1'
+Feature: misc_feature 279-458 note='S30 part'
+Sequence: t
+Sequence: c
+Feature: gene 1-402 gene='FAU' locus_tag='HCM4175'
+AY411291 228-228 Length: 1
+
+#---------------------------------------
+#
+# Overlap_end: 458 in X65923
+# Overlap_end: 402 in AY411291
+# 
+# SNP_count: 1
+# Transitions: 1
+# Transversions: 0
+#
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_hitcount: 1
+#---------------------------------------
+</pre>
+</td></tr></table><p>
+<p><h3>File: AY411291.diffgff</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+##gff-version 2.0
+##date 2006-07-15
+##Type DNA AY411291
+AY411291	diffseq	conflict	228	228	1.000	+	.	Sequence "AY411291.1" ; note "SNP in X65923" ; replace "t"
+</pre>
+</td></tr></table><p>
+<p><h3>File: X65923.diffgff</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+##gff-version 2.0
+##date 2006-07-15
+##Type DNA X65923
+X65923	diffseq	conflict	284	284	1.000	+	.	Sequence "X65923.1" ; note "SNP in AY411291" ; replace "c"
+</pre>
+</td></tr></table><p>
+
+<p>
+
+The first line is the title giving the names of the sequences used.
+<p>
+The next two non-blank lines state the positions in each sequence
+where the detected overlap between them starts.
+<p>
+There then follows a set of reports of the mismatches between the sequences.
+<br>
+Each report consists of 4 or more lines.
+<br>
+<ul>
+
+<li>The first line has the name of the first sequence followed by the
+start and end positions of the mismatched region in that sequence,
+followed by the length of the mismatched region. If the mismatched
+region is of zero length in this sequence, then only the position of
+the last matching base before the mismatch is given.</li>
+
+<li>If a feature of the first sequence overlaps with this mismatch
+region, then one or more lines starting with 'Feature:' comes next
+with the type, position and tag field of the feature.</li>
+
+<li>Next is a line starting "Sequence:" giving the sequence of the
+mismatch in the first sequence.</li> </ul>
+
+<p>
+
+This is followed by the equivalent information for the second
+sequence, but in the reverse order, namely 'Sequence:' line,
+'Feature:' lines and line giving the position of the mismatch in the
+second sequence.
+<p>
+
+At the end of the report are two non-blank lines giving the positions in each
+sequence where the detected
+overlap between them ends.
+<p>
+
+The last three lines of the report gives the counts of SNPs (defined
+as a change of one nucleotide to one other nucleotide, no deletions or
+insertions are counted, no multi-base changes are counted).
+<p>
+
+If the input sequences are nucleic acid, The counts of transitions
+(Pyrimide to Pyrimidine or Purine to Purine) and transversions
+(Pyrimidine to Purine) are also given. 
+
+<p>
+
+It should be noted that not all features are reported.
+
+<p>
+
+The 'source' feature found in all EMBL/Genbank feature table entries is
+not reported as this covers all of the sequence and so overlaps with any
+difference found in that sequence and so is uninformative and
+irritating.  It has therefore been removed from the output report. 
+
+<p>
+
+The translation information of CDS features is often extremely long and
+does not add useful information to the report.  It has therefore been
+removed from the output report. 
+
+<H2>
+    Data files
+</H2>
+
+None
+
+<H2>
+    Notes
+</H2>
+
+It should be noted that not all features are reported.
+
+<p>
+
+The 'source' feature found in all EMBL/Genbank feature table entries is
+not reported as this covers all of the sequence and so overlaps with any
+difference found in that sequence and so is uninformative and
+irritating.  It has therefore been removed from the output report. 
+
+<p>
+
+The translation information of CDS features is often extremely long and
+does not add useful information to the report.  It has therefore been
+removed from the output report. 
+
+<p>
+
+If you run out of memory, use a larger word size.
+
+<p>
+
+Using a larger word size increases the length between mismatches that
+will be reported as one event.  Thus a word size of 50 will report two
+single-base differences that are with 50 bases of each other as one mismatch. 
+
+   
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+</table>
+
+<H2>
+    Author(s)
+</H2>
+
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+
+<H2>
+    History
+</H2>
+
+Written 15th Aug 2000 - Gary Williams.
+<p>
+18th Aug 2000 - Added writing out GFF files of the mismatched regions
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+None
+
+
+</BODY>
+</HTML>
+

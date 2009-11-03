@@ -1,0 +1,28 @@
+<b>Here is a sample session with dbiblast</b>
+<p>
+This creates EMBOSS indices for the BLAST database 'swnew' 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>dbiblast </b>
+Index a BLAST database
+Database name: <b>swnew</b>
+Database directory [.]: <b>data</b>
+Wildcard database filename [swnew]: <b></b>
+Release number [0.0]: <b></b>
+Index date [00/00/00]: <b></b>
+         N : nucleic
+         P : protein
+         ? : unknown
+Sequence type [unknown]: <b></b>
+         1 : wublast and setdb/pressdb
+         2 : formatdb
+         0 : unknown
+Blast index version [unknown]: <b></b>
+General log output file [outfile.dbiblast]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>

@@ -1,0 +1,56 @@
+application: plotcon [
+  documentation: "Plot quality of conservation of a sequence
+                  alignment"
+  groups: "Alignment:Multiple"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqset: sequences [
+    parameter: "Y"
+    type: "gapany"
+    aligned: "Y"
+    help: "File containing a sequence alignment"
+  ]
+
+  matrix: scorefile [
+    additional: "Y"
+    information: "Comparison matrix file"
+    protein: "$(acdprotein)"
+    help: "This is the scoring matrix file used when comparing
+           sequences. By default it is the file 'EBLOSUM62' (for proteins) or
+           the file 'EDNAFULL' (for nucleic sequences). These files are
+           found in the 'data' directory of the EMBOSS installation."
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: winsize [
+    standard: "Y"
+    information: "Window size"
+    help: "Number of columns to average alignment quality over. The
+           larger this value is, the smoother the plot will be."
+    default: "4"
+  ]
+
+endsection: required
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  xygraph: graph [
+    standard: "Y"
+    gxtitle: "Relative Residue Position"
+  ]
+
+endsection: output

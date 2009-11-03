@@ -1,0 +1,26 @@
+<b>Here is a sample session with cirdna</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>cirdna -graph cps </b>
+Draws circular maps of DNA constructs
+Commands to the lindna drawing program file [inputfile]: <b>data.cirp</b>
+Draw a ruler [Y]: <b></b>
+      Open : Open blocks
+    Filled : Filled blocks
+   Outline : Black border
+Type of blocks [Filled]: <b></b>
+      1 : In
+      2 : Out
+Ticks inside or outside the circle [Out]: <b></b>
+      1 : In
+      2 : Out
+Text inside or outside the blocks [In]: <b></b>
+
+Created cirdna.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

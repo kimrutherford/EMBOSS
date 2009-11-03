@@ -1,0 +1,15 @@
+<b>Here is a sample session with est2genome</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>est2genome </b>
+Align EST and genomic DNA sequences
+Spliced EST nucleotide sequence(s): <b>tembl:h45989</b>
+Unspliced genomic nucleotide sequence: <b>tembl:z69719</b>
+Output file [h45989.est2genome]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

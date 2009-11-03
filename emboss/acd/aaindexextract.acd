@@ -1,0 +1,20 @@
+application: aaindexextract [
+  documentation: "Extract data from AAINDEX"
+  groups: "Utils:Database creation"
+  gui: "yes"
+  batch: "yes"
+  cpu: "medium"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  infile: infile [
+    information: "AAINDEX database file"
+    parameter: "Y"
+    knowntype: "aaindex database"
+  ]
+
+endsection: input

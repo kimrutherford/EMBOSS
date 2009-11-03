@@ -1,0 +1,200 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: aaindexextract
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+
+<!--#include file="header1.inc" -->
+aaindexextract
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/aaindexextract.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<b>aaextractindex</b> extracts information from the AAINDEX database for use by
+<a href="pepwindow.html">pepwindow</a>
+and
+<a href="pepwindowall.html">pepwindowall</a>
+
+<p>
+
+AAINDEX is a database of properties of amino acids. See references [1] [2] [3].
+
+<p>
+
+The programs 
+<a href="pepwindow.html">pepwindow</a>
+and
+<a href="pepwindowall.html">pepwindowall</a>
+normally use the standard EMBOSS data file 'Enakai.dat' by default, but
+you can set their '-data' qualifier to use any of the files produced by
+<b>aaextractindex</b> from the AAINDEX database. 
+
+<p>
+
+
+The AAINDEX database file 'aaindex1' can be downloaded from the AAINDEX
+site: 
+<a href="ftp://ftp.genome.ad.jp/pub/db/genomenet/aaindex/aaindex1">ftp://ftp.genome.ad.jp/pub/db/genomenet/aaindex/aaindex1</a>
+
+<H2>
+    Usage
+</H2>
+
+<!--#include file="inc/aaindexextract.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/aaindexextract.ihelp" -->
+</pre>
+</td></tr></table>
+</table>
+<!--#include file="inc/aaindexextract.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+The AAINDEX database file 'aaindex1' can be downloaded from the AAINDEX
+site: 
+<a href="ftp://ftp.genome.ad.jp/pub/db/genomenet/aaindex/aaindex1">ftp://ftp.genome.ad.jp/pub/db/genomenet/aaindex/</a>
+
+<p>
+
+<!--#include file="inc/aaindexextract.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+One file for every entry in the AAINDEX database is created in the
+EMBOSS standard 'data/AAINDEX' directory.  For example, the file
+'kytj820101':
+
+<p>
+
+<!--#include file="inc/aaindexextract.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+If <b>aaindexextract</b> tries to write the data to an unexpected
+location you can explicitly set the location of the EMBOSS data
+directory by putting the line:
+
+<p>
+
+ENV EMBOSS_DATA /path/to/the/EMBOSS/data/directory
+<br>
+in the EMBOSS <b>emboss.default</b> file.
+
+<p>
+
+(Where '/path/to/the/EMBOSS/data/directory' is the location of your
+EMBOSS data as unpacked from the distribution file.)
+
+<H2>
+    References
+</H2>
+
+<ol>
+
+<li>Nakai, K., Kidera, A., and Kanehisa, M.; Cluster analysis of amino
+acid indices for prediction of protein structure and function. Protein
+Eng. 2, 93-100 (1988). [UI:<A
+href="http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?db=m&form=6&dopt=r&uid=3244698">89221001</a>]
+
+<li>Tomii, K. and Kanehisa, M.; Analysis of amino acid indices and
+mutation matrices for sequence comparison and structure prediction of
+proteins. Protein Eng. 9, 27-36 (1996). [UI:<a
+href="http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?db=m&form=6&dopt=r&uid=9053899">96272030</a>]
+
+<li>Kawashima, S., Ogata, H., and Kanehisa, M.; AAindex: amino acid
+index database. Nucleic Acids Res. 27, 368-369 (1999). [UI:<a
+href="http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?db=m&form=6&dopt=r&uid=9847231">99063742</a>]
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+
+None.
+
+<!--#include file="inc/aaindexextract.isee" -->
+
+<p>
+The programs 
+<a href="pepwindow.html">pepwindow</a>
+and
+<a href="pepwindowall.html">pepwindowall</a>
+normally use the standard EMBOSS data file 'Enakai.dat' by default, but
+you can set their '-data' qualifier to use any of the files produced by
+<b>aaextractindex</b>. 
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/price.address" -->
+
+<H2>
+    History
+</H2>
+
+<!--#include file="inc/aaindexextract.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/targetadmin.itxt" -->
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/aaindexextract.comment" -->
+
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,191 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: sixpack
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+
+
+<!--#include file="header1.inc" -->
+sixpack
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/sixpack.ione" -->
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<!-- 
+	This is the main part of the document.
+        This is what the user looks at to find out if this program will do what he wants. 
+        Long description.
+        Why it is useful.
+        When it should/shouldn't be used.
+  -->
+
+<b>sixpack</b> takes a nucleic acid sequence and writes out the forward
+and reverse senses of the sequence with the 3 forward and three reverse
+translations in a pretty display format. 
+
+<p>
+
+It also writes a file containing the open reading frames that are larger
+than the specified minimum size (default 1 base, showing all possible
+open reading frames).  These open reading frames are written as protein
+sequences in the default output sequence format. 
+
+<p>
+
+An open reading frame is defined in this program as any possible
+translation between two STOP codons. 
+
+<H2>
+    Algorithm
+</H2>
+
+The nucleic acid sequence is read in.
+<br>
+The required genetic code is read in from the EGC* data files.
+<br>
+The three forward and three reverse translations are created.
+<br>
+The name and description are written to the ouput display file.
+<br>
+Any required regions to be changed to upper case are changed.
+<br>
+Any required regions to be highlighted in HTML colour tags are changed.
+<br>
+The reverse sense sequence is placed below the forward sequence.
+<br>
+The forward translations are placed above the sequences.
+<br>
+The reverse translation are placed below the sequences.
+<br>
+The display is written out, split at the ends of lines.
+<br>
+Any ORFs that are longer than the specified minimum size are written to
+the output sequence file. 
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/sixpack.usage" -->
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/sixpack.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/sixpack.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+<b>sixpack</b> reads any normal sequence USAs.
+
+<p>
+
+<!--#include file="inc/sixpack.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/sixpack.output" -->
+
+<H2>
+    Data files
+</H2>
+
+<!--#include file="inc/localfiles.ihtml" -->
+
+<p>
+<!--#include file="inc/gcfiles.ihtml" -->
+
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/sixpack.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/tlaurent.address" -->
+
+<H2>
+    History
+</H2>
+
+<!--#include file="inc/sixpack.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/sixpack.comment" -->
+
+</BODY>
+</HTML>
+

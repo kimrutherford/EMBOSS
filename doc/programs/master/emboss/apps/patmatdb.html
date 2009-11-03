@@ -1,0 +1,228 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: patmatdb
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+patmatdb
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/patmatdb.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+
+Takes a protein motif and compares it to a set of protein sequences. 
+
+<p>
+
+It returns the number of matches there were between the motif and each
+matched sequence, length of match, start and end positions of match, and
+writes out an alignment. 
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/patmatdb.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/patmatdb.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/patmatdb.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>patmatdb</b> reads in one or more protein sequence USAs.
+
+<p>
+
+<!--#include file="inc/patmatdb.input" -->
+
+<p>
+
+<h3>Pattern specification</h3>
+
+Patterns for patmatdb are based on the format of pattern used in the
+PROSITE database, with the difference that the terminating dot '.' and
+the hyphens, '-', between the characters are optional.
+
+<p>
+
+The PROSITE pattern definition from the PROSITE documentation follows. 
+
+<ul>
+<li> The standard IUPAC one-letter codes for the amino acids are used.
+
+<li> The symbol `x' is used for a position where any amino acid is
+accepted.
+
+<li> Ambiguities are indicated by listing the acceptable amino acids
+      for a given position, between square parentheses `[ ]'. For
+      example: [ALT] stands for Ala or Leu or Thr.
+
+<li> Ambiguities are also indicated by listing between a pair of curly
+      brackets `{ }' the amino acids that are not accepted at a given
+      position. For example: {AM} stands for any amino acid except Ala
+      and Met.
+
+<li> Each element in a pattern is separated from its neighbor by a
+      `-'.  (Optional in patmatdb).
+
+<li> Repetition of an element of the pattern can be indicated by
+      following that element with a numerical value or a numerical
+      range between parenthesis. Examples: x(3) corresponds to x-x-x,
+      x(2,4) corresponds to x-x or x-x-x or x-x-x-x.
+
+<li> When a pattern is restricted to either the N- or C-terminal of a
+      sequence, that pattern either starts with a `&lt;' symbol or
+      respectively ends with a `&gt;' symbol.
+
+<li> A period ends the pattern. (Optional in patmatdb).
+
+</ul>
+
+<p>
+
+For example, in SWISSPROT entry 100K_RAT you can look for the pattern: 
+
+<p>
+
+<pre>
+[DE](2)HS{P}X(2)PX(2,4)C
+</pre>
+
+<p>
+
+This means: Two Asps or Glus in any order followed by His, Ser, any residue
+other then Pro, then two of any residue followed by Pro followed by two to four
+of any residue followed by Cys. 
+
+<p>
+
+The search is case-independent, so 'AAA' matches 'aaa'. 
+
+<H2>
+    Output file format
+</H2>
+
+
+<!--#include file="inc/reportformats.ihtml" -->
+
+<p>
+
+By default <b>patmatdb</b> writes a 'dbmotif' report file.
+
+<p>
+
+<!--#include file="inc/patmatdb.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+
+<ol>
+<li>Bairoch, A., Bucher P. (1994) PROSITE: recent developments. Nucleic 
+Acids Research, Vol 22, No.17 3583-3589.
+
+<li>Bairoch, A., (1992) PROSITE: a dictionary of sites and patterns in 
+proteins. Nucleic Acids Research, Vol 20, Supplement, 2013-2018.
+
+<li>Peek, J., O'Reilly, T., Loukides, M., (1997) Unix Power Tools, 2nd 
+Edition.
+
+<li>Gusfield, D., (1997) Algorithms on strings, Trees and Sequences.
+
+<li>Sedgewick, R,. (1990) Algorithms in C.
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+None.
+ 
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+None.
+        
+<H2>
+    Exit status
+</H2>
+
+
+It always exits with status 0
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/patmatdb.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/soleary.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/patmatdb.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/patmatdb.comment" -->
+
+</BODY>
+</HTML>
+

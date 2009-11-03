@@ -1,0 +1,61 @@
+application: union [
+  documentation: "Reads sequence fragments and builds one
+                  sequence"
+  groups: "Edit"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  boolean: feature [
+    default: "N"
+    information: "Use feature information"
+  ]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "gapany"
+    features: "$(feature)"
+  ]
+
+endsection: input
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  boolean: source [
+    default: "N"
+    information: "Create source features"
+  ]
+
+  boolean: findoverlap [
+    default: "N"
+    information: "Look for overlaps when joining"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  seqout: outseq [
+    parameter: "Y"
+    features: "$(feature)"
+  ]
+
+  outfile: overlapfile [
+    additional: "Y"
+    information: "Sequence overlaps output file (optional)"
+    knowntype: "sequence overlap"
+    extension: "overlaps"
+    nullok: "Y"
+    nulldefault: "Y"
+  ]
+
+endsection: output

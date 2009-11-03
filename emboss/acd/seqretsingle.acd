@@ -1,0 +1,34 @@
+application: seqretsingle [
+  documentation: "Reads and writes (returns) a single
+                  sequence"
+  groups: "Test"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  boolean: feature [
+    information: "Use feature information"
+  ]
+
+  sequence: sequence [
+    parameter: "Y"
+    features: "$(feature)"
+    type: "gapany"
+  ]
+
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  seqout: outseq [
+    parameter: "Y"
+    features: "$(feature)"
+  ]
+
+endsection: output

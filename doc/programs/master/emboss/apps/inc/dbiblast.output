@@ -1,0 +1,48 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: division.lkp</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: entrynam.idx</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: acnum.hit</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: acnum.trg</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: outfile.dbiblast</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: dbiblast
+# Rundate: Sun 15 Jul 2007 12:00:00
+# Dbname: swnew
+# Release: 0.0
+# Date: 15/07/07
+# CurrentDirectory: /homes/user/test/qa/dbiblast-ex-keep/
+# IndexDirectory: ./
+# IndexDirectoryPath: /homes/user/test/qa/dbiblast-ex-keep/
+# Maxindex: 0
+# Fields: 2
+#   Field 1: id
+#   Field 2: acc
+# Directory: /homes/user/test/data/
+# DirectoryPath: /homes/user/test/data/
+# Filenames: swnew
+# Exclude: 
+# Files: 1
+#   File 1: /homes/user/test/data/swnew
+########################################
+# Commandline: dbiblast
+#    -dbname swnew
+#    -directory ../../data
+########################################
+
+filename: '/homes/user/test/data/swnew'
+    id: 9
+   acc: 9
+
+Index acc: maxlen 6 items 9
+
+Total 1 files 9 entries (0 duplicates)
+</pre>
+</td></tr></table><p>

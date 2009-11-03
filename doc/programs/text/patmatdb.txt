@@ -1,0 +1,309 @@
+
+                                 patmatdb 
+
+
+
+Function
+
+   Search a protein sequence with a motif
+
+Description
+
+   Takes a protein motif and compares it to a set of protein sequences.
+
+   It returns the number of matches there were between the motif and each
+   matched sequence, length of match, start and end positions of match,
+   and writes out an alignment.
+
+Usage
+
+   Here is a sample session with patmatdb
+
+
+% patmatdb 
+Search a protein sequence with a motif
+Input protein sequence(s): tsw:*
+Protein motif to search for: st[ty]s
+Output report [edd1_rat.patmatdb]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Protein sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-motif]             string     Patterns for patmatdb are based on the
+                                  format of pattern used in the PROSITE
+                                  database. For example:
+                                  '[DE](2)HS{P}X(2)PX(2,4)C' means two Asps or
+                                  Glus in any order followed by His, Ser, any
+                                  residue other then Pro, then two of any
+                                  residue followed by Pro followed by two to
+                                  four of any residue followed by Cys. The
+                                  search is case-independent, so 'AAA' matches
+                                  'aaa'. (Any string of at least 2
+                                  characters)
+  [-outfile]           report     [*.patmatdb] Output report file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -rformat3           string     Report format
+   -rname3             string     Base file name
+   -rextension3        string     File name extension
+   -rdirectory3        string     Output directory
+   -raccshow3          boolean    Show accession number in the report
+   -rdesshow3          boolean    Show description in the report
+   -rscoreshow3        boolean    Show the score in the report
+   -rusashow3          boolean    Show the full USA in the report
+   -rmaxall3           integer    Maximum total hits to report
+   -rmaxseq3           integer    Maximum hits to report for one sequence
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   patmatdb reads in one or more protein sequence USAs.
+
+  Input files for usage example
+
+   'tsw:*' is a sequence entry in the example protein database 'tsw'
+
+  Pattern specification
+
+   Patterns for patmatdb are based on the format of pattern used in the
+   PROSITE database, with the difference that the terminating dot '.' and
+   the hyphens, '-', between the characters are optional.
+
+   The PROSITE pattern definition from the PROSITE documentation follows.
+     * The standard IUPAC one-letter codes for the amino acids are used.
+     * The symbol `x' is used for a position where any amino acid is
+       accepted.
+     * Ambiguities are indicated by listing the acceptable amino acids
+       for a given position, between square parentheses `[ ]'. For
+       example: [ALT] stands for Ala or Leu or Thr.
+     * Ambiguities are also indicated by listing between a pair of curly
+       brackets `{ }' the amino acids that are not accepted at a given
+       position. For example: {AM} stands for any amino acid except Ala
+       and Met.
+     * Each element in a pattern is separated from its neighbor by a `-'.
+       (Optional in patmatdb).
+     * Repetition of an element of the pattern can be indicated by
+       following that element with a numerical value or a numerical range
+       between parenthesis. Examples: x(3) corresponds to x-x-x, x(2,4)
+       corresponds to x-x or x-x-x or x-x-x-x.
+     * When a pattern is restricted to either the N- or C-terminal of a
+       sequence, that pattern either starts with a `<' symbol or
+       respectively ends with a `>' symbol.
+     * A period ends the pattern. (Optional in patmatdb).
+
+   For example, in SWISSPROT entry 100K_RAT you can look for the pattern:
+
+[DE](2)HS{P}X(2)PX(2,4)C
+
+   This means: Two Asps or Glus in any order followed by His, Ser, any
+   residue other then Pro, then two of any residue followed by Pro
+   followed by two to four of any residue followed by Cys.
+
+   The search is case-independent, so 'AAA' matches 'aaa'.
+
+Output file format
+
+   The output is a standard EMBOSS report file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -rformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: embl,
+   genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+   feattable, motif, regions, seqtable, simple, srs, table, tagseq
+
+   See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
+   information on report formats.
+
+   By default patmatdb writes a 'dbmotif' report file.
+
+  Output files for usage example
+
+  File: edd1_rat.patmatdb
+
+########################################
+# Program: patmatdb
+# Rundate: Sun 15 Jul 2007 12:00:00
+# Commandline: patmatdb
+#    -sequence "tsw:*"
+#    -motif "st[ty]s"
+# Report_format: dbmotif
+# Report_file: edd1_rat.patmatdb
+########################################
+
+#=======================================
+#
+# Sequence: HD_FUGRU     from: 1   to: 3148
+# HitCount: 1
+#
+# Motif: ST[TY]S
+#
+#=======================================
+
+Length = 4
+Start = position 1038 of sequence
+End = position 1041 of sequence
+
+
+STPASSTTSSAVDP
+     |  |
+  1038  1041
+
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GCN4_YEAST     from: 1   to: 281
+# HitCount: 1
+#
+# Motif: ST[TY]S
+#
+#=======================================
+
+Length = 4
+Start = position 158 of sequence
+End = position 161 of sequence
+
+
+SNLEVSTTSFLPTP
+     |  |
+   158  161
+
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: PAXI_HUMAN     from: 1   to: 591
+# HitCount: 1
+#
+# Motif: ST[TY]S
+#
+#=======================================
+
+Length = 4
+Start = position 13 of sequence
+End = position 16 of sequence
+
+
+LADLESTTSHISKR
+     |  |
+    13  16
+
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 3
+# Total_hitcount: 3
+#---------------------------------------
+
+Data files
+
+   None.
+
+Notes
+
+   None.
+
+References
+
+    1. Bairoch, A., Bucher P. (1994) PROSITE: recent developments.
+       Nucleic Acids Research, Vol 22, No.17 3583-3589.
+    2. Bairoch, A., (1992) PROSITE: a dictionary of sites and patterns in
+       proteins. Nucleic Acids Research, Vol 20, Supplement, 2013-2018.
+    3. Peek, J., O'Reilly, T., Loukides, M., (1997) Unix Power Tools, 2nd
+       Edition.
+    4. Gusfield, D., (1997) Algorithms on strings, Trees and Sequences.
+    5. Sedgewick, R,. (1990) Algorithms in C.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0
+
+Known bugs
+
+   None.
+
+See also
+
+    Program name                         Description
+   antigenic      Finds antigenic sites in proteins
+   digest         Protein proteolytic enzyme or reagent cleavage digest
+   epestfind      Finds PEST motifs as potential proteolytic cleavage sites
+   fuzzpro        Protein pattern search
+   fuzztran       Protein pattern search after translation
+   helixturnhelix Report nucleic acid binding motifs
+   oddcomp        Find protein sequence regions with a biased composition
+   patmatmotifs   Search a PROSITE motif database with a protein sequence
+   pepcoil        Predicts coiled coil regions
+   preg           Regular expression search of a protein sequence
+   pscan          Scans proteins using PRINTS
+   sigcleave      Reports protein signal cleavage sites
+
+Author(s)
+
+   Sinead O'Leary (current e-mail address unknown)
+   while she was at:
+   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+
+History
+
+   Completed April 30 1999.
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

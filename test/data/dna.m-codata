@@ -1,0 +1,30 @@
+ENTRY           CODATAM1 
+TITLE           CODATA FORMAT DNA SEQUENCE C30001, 120 bases
+ACCESSION       C30001
+SEQUENCE        
+                 5        10        15        20        25        30
+      1 A C G T A C G T A C G T A C G T A C G T A C G T A C G T A C
+     31 G T A C G T A C G T A C G T A C G T A C G T A C G T A C G T
+     61 A C G T A C G T A C G T A C G T A C G T A C G T A C G T A C
+     91 G T A C G T A C G T A C G T A C G T A C G T A C G T A C G T
+///
+ENTRY           CODATAM2 
+TITLE           CODATA FORMAT DNA SEQUENCE C30002, 120 bases
+ACCESSION       C30002
+SEQUENCE        
+                 5        10        15        20        25        30
+      1 A C G T A C G T A C G T A C G T A C G T . . . . A C G T A C
+     31 G T A C G T A C G T A C G T A C G T A C G T A C G T A C G T
+     61 A C G T A C G T A C G T A C G T A C G T A C G T A C G T A C
+     91 G T A C G T A C G T A C G T A C G T T G C A A C G T A C G T
+///
+ENTRY           CODATAM3 
+TITLE           CODATA FORMAT DNA SEQUENCE C30003, 120 bases
+ACCESSION       C30003
+SEQUENCE        
+                 5        10        15        20        25        30
+      1 A C G T A C G T A C G T A C G T A C G T A C G T A C G T A C
+     31 G T A C G T A C G T C G T A C G T A C G T A C G T A C G T A
+     61 C G T A C G T A C G T A C G T A C G T A A C G T A C G T A C
+     91 G T A C G T A C G T A C G T A C G T A C G T A C G T A C G T
+///

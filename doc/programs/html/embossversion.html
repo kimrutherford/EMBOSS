@@ -1,0 +1,250 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: embossversion
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+embossversion
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+    Function
+</H2>
+Writes the current EMBOSS version number
+<H2>
+    Description
+</H2>
+This small utility writes out the current version of the EMBOSS package.
+
+<p>
+
+It is expected that this may have a use in scripts which automatically
+write descriptions of the state of the EMBOSS package that is set up
+locally. 
+
+<p>
+
+It will also be a useful way for people to ascertain what version is
+being run if they are giving user-support to people in another site. 
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with embossversion</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>embossversion </b>
+Writes the current EMBOSS version number
+
+4.1.0
+
+</pre></td></tr></table><p>
+<p>
+<p>
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers: (none)
+   Additional (Optional) qualifiers:
+   -full               boolean    Show all EMBOSS version information fields
+   -outfile            outfile    [stdout] Output file name
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-full</td>
+<td>Show all EMBOSS version information fields</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-outfile</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td>stdout</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+<H2>
+    Input file format
+</H2>
+
+None.
+<p>
+
+<H2>
+    Output file format
+</H2>
+
+<p>
+
+<b>embossversion</b> writes just the version number followed by a
+newline character to end the line. 
+
+<p>
+
+The output is written to the screen by default, but can be written to a
+named file by using the '-outfile' option. 
+
+<p>
+<p>
+
+The version number is in three parts, separated by '.'s.
+<br>
+The first number is the major version number - this only changes when substantial changes have been made to the look-and-feel of EMBOSS.
+<br>
+The second number is the minor version number - this is incremented whenever a version is released.
+<br>
+The third number is usually '0' but if a minor bug fix has been released that does not warrant a minor version number, this will be incremented.
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="embossdata.html">embossdata</a></td>
+<td>Finds or fetches data files read by EMBOSS programs</td>
+</tr>
+
+</table>
+
+<H2>
+    Author(s)
+</H2>
+
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+
+<H2>
+    History
+</H2>
+
+Written (23 May 2001) - Gary Williams.
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+None
+
+</BODY>
+</HTML>
+

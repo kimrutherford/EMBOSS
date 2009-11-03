@@ -1,0 +1,49 @@
+application: primersearch [
+  documentation: "Searches DNA sequences for matches with
+                  primer pairs"
+  groups: "Nucleic:Primers"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: seqall [
+    parameter: "Y"
+    type: "dna"
+  ]
+
+  infile: infile [
+    parameter: "Y"
+    information: "Primer pairs file"
+    knowntype: "primer pairs"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: mismatchpercent [
+    parameter: "Y"
+    default: "0"
+    information: "Allowed percent mismatch"
+  ]
+
+endsection: required
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    knowntype: "primer3 output"
+    information: "Whitehead primer3_core program output file"
+  ]
+
+endsection: output

@@ -1,0 +1,218 @@
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -enzymes            string     [all] The name 'all' reads in all enzyme
+                                  names from the REBASE database. You can
+                                  specify enzymes by giving their names with
+                                  commas between then, such as:
+                                  'HincII,hinfI,ppiI,hindiii'.
+                                  The case of the names is not important. You
+                                  can specify a file of enzyme names to read
+                                  in by giving the name of the file holding
+                                  the enzyme names with a '@' character in
+                                  front of it, for example, '@enz.list'.
+                                  Blank lines and lines starting with a hash
+                                  character or '!' are ignored and all other
+                                  lines are concatenated together with a comma
+                                  character ',' and then treated as the list
+                                  of enzymes to search for.
+                                  An example of a file of enzyme names is:
+                                  ! my enzymes
+                                  HincII, ppiII
+                                  ! other enzymes
+                                  hindiii
+                                  HinfI
+                                  PpiI (Any string is accepted)
+   -sitelen            integer    [4] This sets the minimum length of the
+                                  restriction enzyme recognition site. Any
+                                  enzymes with sites shorter than this will be
+                                  ignored. (Integer from 2 to 20)
+  [-outfile]           outfile    [*.remap] Output file name
+
+   Additional (Optional) qualifiers:
+   -mincuts            integer    [1] This sets the minimum number of cuts for
+                                  any restriction enzyme that will be
+                                  considered. Any enzymes that cut fewer times
+                                  than this will be ignored. (Integer from 1
+                                  to 1000)
+   -maxcuts            integer    [2000000000] This sets the maximum number of
+                                  cuts for any restriction enzyme that will
+                                  be considered. Any enzymes that cut more
+                                  times than this will be ignored. (Integer up
+                                  to 2000000000)
+   -single             boolean    [N] If this is set then this forces the
+                                  values of the mincuts and maxcuts qualifiers
+                                  to both be 1. Any other value you may have
+                                  set them to will be ignored.
+   -[no]blunt          boolean    [Y] This allows those enzymes which cut at
+                                  the same position on the forward and reverse
+                                  strands to be considered.
+   -[no]sticky         boolean    [Y] This allows those enzymes which cut at
+                                  different positions on the forward and
+                                  reverse strands, leaving an overhang, to be
+                                  considered.
+   -[no]ambiguity      boolean    [Y] This allows those enzymes which have one
+                                  or more 'N' ambiguity codes in their
+                                  pattern to be considered
+   -plasmid            boolean    [N] If this is set then this allows searches
+                                  for restriction enzyme recognition site and
+                                  cut postions that span the end of the
+                                  sequence to be considered.
+   -[no]commercial     boolean    [Y] If this is set, then only those enzymes
+                                  with a commercial supplier will be searched
+                                  for. This qualifier is ignored if you have
+                                  specified an explicit list of enzymes to
+                                  search for, rather than searching through
+                                  'all' the enzymes in the REBASE database. It
+                                  is assumed that, if you are asking for an
+                                  explicit enzyme, then you probably know
+                                  where to get it from and so all enzymes
+                                  names that you have asked to be searched
+                                  for, and which cut, will be reported whether
+                                  or not they have a commercial supplier.
+   -table              menu       [0] Genetic code to use (Values: 0
+                                  (Standard); 1 (Standard (with alternative
+                                  initiation codons)); 2 (Vertebrate
+                                  Mitochondrial); 3 (Yeast Mitochondrial); 4
+                                  (Mold, Protozoan, Coelenterate Mitochondrial
+                                  and Mycoplasma/Spiroplasma); 5
+                                  (Invertebrate Mitochondrial); 6 (Ciliate
+                                  Macronuclear and Dasycladacean); 9
+                                  (Echinoderm Mitochondrial); 10 (Euplotid
+                                  Nuclear); 11 (Bacterial); 12 (Alternative
+                                  Yeast Nuclear); 13 (Ascidian Mitochondrial);
+                                  14 (Flatworm Mitochondrial); 15
+                                  (Blepharisma Macronuclear); 16
+                                  (Chlorophycean Mitochondrial); 21 (Trematode
+                                  Mitochondrial); 22 (Scenedesmus obliquus);
+                                  23 (Thraustochytrium Mitochondrial))
+   -frame              menu       [6] This allows you to specify the frames
+                                  that are translated. If you are not
+                                  displaying cut sites on the reverse sense,
+                                  then the reverse sense translations will not
+                                  be displayed even if you have requested
+                                  frames 4, 5 or 6. By default, all six frames
+                                  will be displayed. (Values: 1 (1); 2 (2); 3
+                                  (3); F (Forward three frames); -1 (-1); -2
+                                  (-2); -3 (-3); R (Reverse three frames); 6
+                                  (All six frames))
+   -[no]cutlist        boolean    [Y] This produces lists in the output of the
+                                  enzymes that cut, those that cut but are
+                                  excluded because that cut fewer times than
+                                  mincut or more times than maxcut and those
+                                  enzymes that do not cut.
+   -flatreformat       boolean    [N] This changes the output format to one
+                                  where the recognition site is indicated by a
+                                  row of '===' characters and the cut site is
+                                  pointed to by a '>' character in the
+                                  forward sense, or a '<' in the reverse sense
+                                  strand.
+   -[no]limit          boolean    [Y] This limits the reporting of enzymes to
+                                  just one enzyme from each group of
+                                  isoschizomers. The enzyme chosen to
+                                  represent an isoschizomer group is the
+                                  prototype indicated in the data file
+                                  'embossre.equ', which is created by the
+                                  program 'rebaseextract'. If you prefer
+                                  different prototypes to be used, make a copy
+                                  of embossre.equ in your home directory and
+                                  edit it. If this value is set to be false
+                                  then all of the input enzymes will be
+                                  reported. You might like to set this to
+                                  false if you are supplying an explicit set
+                                  of enzymes rather than searching 'all' of
+                                  them.
+
+   Advanced (Unprompted) qualifiers:
+   -[no]translation    boolean    [Y] This displays the 6-frame translations
+                                  of the sequence in the output.
+   -[no]reverse        boolean    [Y] This displays the cut sites and
+                                  translation of the reverse sense.
+   -orfminsize         integer    [If this value is left as 0 then all of the
+                                  translation is shown.] This sets the minimum
+                                  size of Open Reading Frames (ORFs) to
+                                  display in the translations. All other
+                                  translation regions are masked by changing
+                                  the amino acids to '-' characters. (Integer
+                                  0 or more)
+   -uppercase          range      [If this is left blank, then the sequence
+                                  case is left alone.] Regions to put in
+                                  uppercase.
+                                  If this is left blank, then the sequence
+                                  case is left alone.
+                                  A set of regions is specified by a set of
+                                  pairs of positions.
+                                  The positions are integers.
+                                  They are separated by any non-digit,
+                                  non-alpha character.
+                                  Examples of region specifications are:
+                                  24-45, 56-78
+                                  1:45, 67=99;765..888
+                                  1,5,8,10,23,45,57,99
+   -highlight          range      [(full sequence)] Regions to colour if
+                                  formatting for HTML.
+                                  If this is left blank, then the sequence is
+                                  left alone.
+                                  A set of regions is specified by a set of
+                                  pairs of positions.
+                                  The positions are integers.
+                                  They are followed by any valid HTML font
+                                  colour.
+                                  Examples of region specifications are:
+                                  24-45 blue 56-78 orange
+                                  1-100 green 120-156 red
+                                  A file of ranges to colour (one range per
+                                  line) can be specifed as '@filename'.
+   -threeletter        boolean    [N] Display protein sequences in
+                                  three-letter code
+   -number             boolean    [N] Number the sequences
+   -width              integer    [60] Width of sequence to display (Integer 1
+                                  or more)
+   -length             integer    [0] Line length of page (0 for indefinite)
+                                  (Integer 0 or more)
+   -margin             integer    [10] Margin around sequence for numbering
+                                  (Integer 0 or more)
+   -[no]name           boolean    [Y] Set this to be false if you do not wish
+                                  to display the ID name of the sequence
+   -[no]description    boolean    [Y] Set this to be false if you do not wish
+                                  to display the description of the sequence
+   -offset             integer    [1] Offset to start numbering the sequence
+                                  from (Any integer value)
+   -html               boolean    [N] Use HTML formatting
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+

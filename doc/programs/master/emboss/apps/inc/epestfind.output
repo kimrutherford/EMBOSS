@@ -1,0 +1,101 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: exu2_drops.epestfind</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+PEST-find: Finds PEST motifs as potential proteolytic cleavage sites.
+
+    14 PEST motifs were identified in EXU2_DROPS
+       from positions 1 to 477 and sorted by score.
+
+Potential PEST motif with 34 amino acids between position 238 and 273.
+   238 KMVYEMALQLIESESTESPESFESPESSESSEAEVK 273
+       DEPST: 54.46 % (w/w)
+       Hydrophobicity index: 38.31
+       PEST score: 10.80  
+
+Potential PEST motif with 14 amino acids between position 206 and 221.
+   206 HENPEGNSSITDNSGH 221
+       DEPST: 36.04 % (w/w)
+       Hydrophobicity index: 27.16
+       PEST score: 6.25  
+
+Poor PEST motif with 18 amino acids between position 363 and 382.
+   363 KTEETAELLDLLDSYYDPSK 382
+       PEST score: 2.93  
+
+Poor PEST motif with 17 amino acids between position 409 and 427.
+   409 KNGAIGAGGDNSVPDSATK 427
+       PEST score: -9.71  
+
+Poor PEST motif with 19 amino acids between position 22 and 42.
+    22 KEELPAGNYILVAVEIDTTGR 42
+       PEST score: -11.01  
+
+Poor PEST motif with 10 amino acids between position 440 and 451.
+   440 RNNILGPQNTEK 451
+       PEST score: -15.94  
+
+Poor PEST motif with 13 amino acids between position 279 and 293.
+   279 RPFSQLLSSTILELK 293
+       PEST score: -16.72  
+
+Poor PEST motif with 13 amino acids between position 349 and 363.
+   349 KPGLELVLTAIDSLK 363
+       PEST score: -19.94  
+
+Invalid PEST motif with 20 amino acids between position 1 and 22.
+     1 MVSAISEDSASATASGQCEVVK 22
+
+Invalid PEST motif with 13 amino acids between position 43 and 57.
+    43 RLIDEIVQLAGYTSK 57
+
+Invalid PEST motif with 17 amino acids between position 57 and 75.
+    57 KGNFQQYIMPYMNLNQAAR 75
+
+Invalid PEST motif with 18 amino acids between position 103 and 122.
+   103 KSEVAALMDFLNWLETLLAK 122
+
+Invalid PEST motif with 10 amino acids between position 138 and 149.
+   138 KFIPYMILEALK 149
+
+Invalid PEST motif with 10 amino acids between position 225 and 236.
+   225 KQGAFEGSANVR 236
+
+
+       ---------+---------+---------+---------+---------+---------+
+
+     1 MVSAISEDSASATASGQCEVVKEELPAGNYILVAVEIDTTGRRLIDEIVQLAGYTSKGNF 60
+        -------------------- OOOOOOOOOOOOOOOOOOO  ------------- ---
+
+    61 QQYIMPYMNLNQAARQRHQIRVISIGFYRMLKSMQTYKIIKSKSEVAALMDFLNWLETLL 120
+       --------------                             -----------------
+
+   121 AKQPNKEGIVMLYHDDRKFIPYMILEALKKYSLIDRFNRSVKAFANTCPMAKTFLGKHGI 180
+       -                 ----------                                
+
+   181 KNCGLRKLSMLLAKSKDGNSTKEDEHENPEGNSSITDNSGHKNQKQGAFEGSANVRAKMV 240
+                                 ++++++++++++++     ----------   ++
+
+   241 YEMALQLIESESTESPESFESPESSESSEAEVKLLNAVRPFSQLLSSTILELKDQNHSLG 300
+       ++++++++++++++++++++++++++++++++       OOOOOOOOOOOOO        
+
+   301 RQNSFRPVFLNYFRTTLNYRVRAVKYRIGLAEHGFTLKSLKAIWSDKRKPGLELVLTAID 360
+                                                        OOOOOOOOOOO
+
+   361 SLKTEETAELLDLLDSYYDPSKTTIKPRCKRSGNGTRRRNRAKGAASSKNGAIGAGGDNS 420
+       OO OOOOOOOOOOOOOOOOOO                            OOOOOOOOOOO
+
+   421 VPDSATKPGGRPRRKRNNIRNNILGPQNTEKGSPKAEMKTSTPKSMSIKPPSEFADI 477
+       OOOOOO              OOOOOOOOOO                           
+
+       Symbols   PEST motifs
+       +++++++   potential
+       OOOOOOO   poor     
+       -------   invalid  
+
+</pre>
+</td></tr></table><p>
+<p><h3>Graphics File: epestfind.ps</h3>
+<p><img src="epestfind.1.epestfind.gif" alt="[epestfind results]">

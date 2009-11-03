@@ -1,0 +1,16 @@
+# ACD file for QA testing - missing the application definition
+#
+
+appl: ambigassoc [ doc: "testing" group: "testing" ]
+
+section: input [ info: "Input section" type: "page" ]
+
+sequence: asequence [ param: Y features: Y f: "gff"]
+
+endsection: input
+
+section: output [ info: "Output section" type: "page" ]
+
+outfile: outtest [ param: Y odirectory: "$(outdir)" ]
+
+endsection: output

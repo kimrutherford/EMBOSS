@@ -1,0 +1,10 @@
+' Four Anthropoidea ' 
+(Homo_sapiens)        AGUCGAGUC---GCAGAAACGCAUGAC-GAC 
+(Pan_paniscus)        AGUCGCGUCG--GCAGAAACGCAUGACGGAC 
+(Gorilla_gorilla)     AGUCGCGUCG--GCAGAUACGCAUCACGGAC 
+(Pongo_pigmaeus)      AGUCGCGUCGAAGCAGA--CGCAUGACGGAC 
+(Homo_sapiens)        CACAUUUU-CCUUGCAAAG 
+(Pan_paniscus)        CACAUCAU-CCUUGCAAAG 
+(Gorilla_gorilla)     -ACAUCAUCCCUCGCAGAG 
+(Pongo_pigmaeus)      CACAUCAUCCCUUGCAGAG 
+; 

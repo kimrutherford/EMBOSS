@@ -1,0 +1,93 @@
+application: vectorstrip [
+  documentation: "Strips out DNA between a pair of vector
+                  sequences"
+  groups: "Edit"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "dna"
+  ]
+
+  section: vectorfilesection [
+    information: "Vector input options"
+    type: "frame"
+  ]
+
+    toggle: vectorfile [
+      parameter: "Y"
+      default: "Y"
+      information: "Are your vector sequences in a file?"
+    ]
+
+    infile: vectorsfile [
+      standard: "$(vectorfile)"
+      nullok: "Y"
+      default: ""
+      information: "Cloning vector definition file (optional)"
+      knowntype: "vector"
+    ]
+
+  endsection: vectorfilesection
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: mismatch [
+    standard: "Y"
+    default: "10"
+    information: "Max allowed % mismatch"
+  ]
+
+  boolean: besthits [
+    standard: "Y"
+    default: "Y"
+    information: "Show only the best hits (minimise
+                  mismatches)?"
+  ]
+
+  string: linkera [
+    standard: "@(!$(vectorfile))"
+    information: "The 5' sequence"
+    knowntype: "nucleotide sequence"
+  ]
+
+  string: linkerb [
+    standard: "@(!$(vectorfile))"
+    information: "The 3' sequence"
+    knowntype: "nucleotide sequence"
+  ]
+
+endsection: required
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  boolean: allsequences [
+    additional: "Y"
+    information: "Show all sequences in output"
+    default: "N"
+    outputmodifier: "Y"
+  ]
+
+  outfile: outfile [
+    parameter: "Y"
+    knowntype: "vectorstrip output"
+  ]
+
+  seqoutall: outseq [
+    parameter: "Y"
+  ]
+
+endsection: output

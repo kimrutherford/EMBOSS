@@ -1,0 +1,237 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: marscan
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+marscan
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/marscan.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+Matrix/scaffold attachment regions (MARs/SARs) are genomic elements
+thought to delineate the structural and functional organisation of the
+eukaryotic genome.  Originally, MARs and SARs were identified through
+their ability to bind to the nuclear matrix or scaffold.  Binding cannot
+be assigned to a unique sequence element, but is dispersed over a region
+of several hundred base pairs.  These elements are found flanking a gene
+or a small cluster of genes and are located often in the vicinity of
+cis-regulatory sequences.  This has led to the suggestion that they
+contribute to higher order regulation of transcription by defining
+boundaries of independently controlled chromatin domains.  There is
+indirect evidence to support this notion.  In transgenic experiments
+MARs/SARs dampen position effects by shielding the transgene from the
+effects of the chromatin structure at the site of integration. 
+Furthermore, they may act as boundary elements for enhancers,
+restricting their long range effect to only the promoters that are
+located in the same chromatin domain. 
+
+<p>
+
+<b>marscan</b> finds a bipartite sequence element that is unique for a
+large group of eukaryotic MARs/SARs.  This MAR/SAR recognition signature
+(<b>MRS</b>) comprises two individual sequence elements that are <200 bp
+apart and may be aligned on positioned nucleosomes in MARs.  The MRS can
+be used to correctly predict the position of MARs/SARs in plants and
+animals, based on genomic DNA sequence information alone.  Experimental
+evidence from the analysis of >300 kb of sequence data from several
+eukaryotic organisms show that wherever a MRS is observed in the DNA
+sequence, the corresponding genomic fragment is a biochemically
+identifiable SAR. 
+
+<p>
+
+The MRS is a bipartite sequence element that consists of two individual
+sequences of 8 (AATAAYAA) and 16 bp (AWWRTAANNWWGNNNC) within a 200 bp
+distance from each other.  One mismatch is allowed in the 16 bp pattern. 
+The patterns can occur on either strand of the DNA with respect to each
+other. The 8 bp and the 16 bp sites can overlap.
+
+<p>
+
+Where there are many possible MRS sites caused by many 8 bp and/or 16 bp
+pattern sites located within 200 bp of each other, then only the 8 bp
+site and the 16 bp site that occur closest to each other are reported. 
+
+<p>
+
+Once a MRS has been reported, no more sites will be looked for within
+200 bp of that site.  This reduces (but maybe will not totally
+eliminate) over-reporting of the clusters of MRS's that tend to occur
+within a MAR/SAR. 
+
+
+<p>
+
+Not all SARs contain a MRS.  Analysis of >300 kb of genomic sequence
+from a variety of eukaryotic organisms shows that the MRS faithfully
+predicts 80% of MARs and SARs, suggesting that at least one other type
+of MAR/SAR may exist which does not contain a MRS. 
+
+<p>
+
+It it still not at all clear whether MAR/SARs are real biological phenomena
+or just experimental artefacts.
+
+<p>
+
+The problem of how to define and find MARs is still being actively
+invetsigated.  For a recent evaluation of this method and others, see
+reference 3. 
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/marscan.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/marscan.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/marscan.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>marscan</b> reads a normal genomic DNA USA.
+
+<p>
+
+<!--#include file="inc/marscan.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/reportformats.ihtml" -->
+
+<p>
+
+By default <b>marscan</b> writes a GFF (Gene Feature Format) report file.
+
+<p>
+
+<!--#include file="inc/marscan.output" -->
+
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+It does not check whether the DNA input sequence is genomic or not.
+
+<H2>
+    References
+</H2>
+
+<ol>
+
+<li>
+The method for finding the MAR/SAR sites is described in:
+<p>
+
+van Drunen CM., Sewalt RGAB., Oosterling RW., Weisbeek PJ., Smeekens
+SCM. and van Driel R.  "A bipartite sequence element associated with
+matrix/scaffold attachment regions" Nucleic Acids Research.  1999.  Vol
+27, No.  14, pp.  2924-2930
+
+<li>
+The original paper on MARs/SARs is:
+
+<p>
+
+Mirkovitch J., Mirault M-E. and Laemmli UK. Cell. 1984. Vol. 39 pp. 223-232.
+
+
+<li>
+
+A recent evaluation of methods to find MARs/SARs:
+
+<p>
+
+I. Liebich, J. Bode, I. Reuter and E. Wingender
+"Evaluation of sequence motifs found in scaffold/matrix-attached regions (S/MARs)"
+Nucleic Acids Research 2002, Vol. 30, No. 15 3433-3442
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+None
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/marscan.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/gwilliam.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/marscan.history" -->
+
+
+<H2>
+    Target users
+</H2>
+
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+
+<!--#include file="inc/marscan.comment" -->
+
+</BODY>
+</HTML>
+

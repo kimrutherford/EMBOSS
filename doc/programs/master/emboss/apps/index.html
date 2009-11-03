@@ -1,0 +1,1396 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>EMBOSS Applications</title> 
+    <meta name="keywords" lang="en-uk" content="EMBOSS, European
+    Molecular Biology Open Source Software Suite, bioinformatics, 
+    EBI, European Bioinformatics Institute, Molecular Biology, 
+    Computational Biology, Open Source, Software, Database" />
+  </head>
+
+<body bgcolor="#ffffff" style="background-color=#ffffff; body-background-color=#ffffff">
+
+<!-- BEGIN PAGE HEADING -->
+<div id="container">
+<div id="header">  <a href="http://emboss.sourceforge.net/"> <img border="0" src="emboss.jpg" > </a> </div>
+<!--#include virtual="headertop.inc" -->
+<!-- END PAGE HEADING -->
+    
+<!--BEGIN MAIN CONTENT -->
+<h1>EMBOSS Applications</h1>
+
+
+
+
+
+
+<H1>Contents</H1>
+
+<ul>
+<li><a href="#intro">Introduction</a>
+<li><a href="#list">EMBOSS applications</a>
+<li><a href="#embassy">EMBASSY applications</a>
+<UL>
+<li><a href="#phylip">PHYLIP  </a>
+<li><a href="#phylipnew">PHYLIPNEW  </a>
+<li><a href="#domainatrix">DOMAINATRIX  </a>
+<li><a href="#domalign">DOMALIGN  </a>
+<li><a href="#domsearch">DOMSEARCH  </a>
+<li><a href="#signature">SIGNATURE  </a>
+<li><a href="#structure">STRUCTURE  </a>
+<li><a href="#hmmer">HMMER  </a>
+<li><a href="#others">OTHERS </a>
+</UL>
+<li><a href="#groups">Application groups</a>
+<li><a href="#proposed">Proposed new applications</a>
+</ul>
+
+
+<hr>
+<H1><a name="intro">Introduction</a></H1>
+
+
+
+<p>
+The applications are listed in alphabetical order in the tables below.
+They are also organised into <a href="groups.html">groups</a> of
+related functionality.  There is also a table of <a
+href="proposed.html">areas requiring software development </a> which
+includes proposed new applications.  Please send suggestions for new
+applications to <a
+href="mailto:emboss@emboss.open-bio.org">emboss@emboss.open-bio.org</a>.
+
+<hr>
+<h1><A NAME="list">EMBOSS applications</A></h1>
+
+<p>
+Please send bug reports to <a
+href="mailto:emboss-bug@emboss.open-bio.org">
+emboss-bug@emboss.open-bio.org</a>.
+<p>
+
+
+<table border cellpadding=4 bgcolor="#FFFFF0">
+
+<tr><th>Program name</th><th>Description</th></tr>
+
+<tr><td><a href="aaindexextract.html">aaindexextract</a></td><td>
+Extract data from AAINDEX
+</td></tr>
+
+<tr><td><a href="abiview.html">abiview</a></td><td>
+Reads ABI file and display the trace
+</td></tr>
+
+<tr><td><a href="acdc.html">acdc</a></td><td>
+Tests definition files for any EMBOSS application.
+</td></tr>
+
+<tr><td><a href="antigenic.html">antigenic</a></td><td>
+Finds antigenic sites in proteins
+</td></tr>
+
+<tr><td><a href="backtranambig.html">backtranambig</a></td><td>
+Back translate a protein sequence to ambiguous codons
+</td></tr>
+
+<tr><td><a href="backtranseq.html">backtranseq</a></td><td>
+Back translate a protein sequence
+</td></tr>
+
+<tr><td><a href="banana.html">banana</a></td><td>
+Bending and Curvature Plot in B-DNA
+</td></tr>
+
+<tr><td><a href="biosed.html">biosed</a></td><td>
+Replace or delete sequence sections
+</td></tr>
+
+<tr><td><a href="btwisted.html">btwisted</a></td><td>
+Calculates the twisting in a B-DNA sequence
+</td></tr>
+
+<tr><td><a href="cai.html">cai</a></td><td>
+CAI codon usage statistic
+</td></tr>
+
+<tr><td><a href="chaos.html">chaos</a></td><td>
+Create a chaos plot for a sequence.
+</td></tr>
+
+<tr><td><a href="charge.html">charge</a></td><td>
+Protein charge plot
+</td></tr>
+
+<tr><td><a href="checktrans.html">checktrans</a></td><td>
+ORF property statistics
+</td></tr>
+
+<tr><td><a href="chips.html">chips</a></td><td>
+Codon usage statistics
+</td></tr>
+
+<tr><td><a href="cirdna.html">cirdna</a></td><td>
+Draws circular maps of DNA constructs
+</td></tr>
+
+<tr><td><a href="codcmp.html">codcmp</a></td><td>
+Codon usage table comparison
+</td></tr>
+
+<tr><td><a href="coderet.html">coderet</a></td><td>
+Extract CDS, mRNA and translations from feature tables
+</td></tr>
+
+<tr><td><a href="compseq.html">compseq</a></td><td>
+Counts the composition of dimer/trimer/etc words in a sequence
+</td></tr>
+
+<tr><td><a href="cons.html">cons</a></td><td>
+Creates a consensus from multiple alignments
+</td></tr>
+
+<tr><td><a href="cpgplot.html">cpgplot</a></td><td>
+Plot CpG rich areas
+</td></tr>
+
+<tr><td><a href="cpgreport.html">cpgreport</a></td><td>
+Reports CpG rich regions
+</td></tr>
+
+<tr><td><a href="cusp.html">cusp</a></td><td>
+Create a codon usage table
+</td></tr>
+
+<tr><td><a href="cutgextract.html">cutgextract</a></td><td>
+Extract data from CUTG
+</td></tr>
+
+<tr><td><a href="cutseq.html">cutseq</a></td><td>
+Removes a specified section from a sequence.
+</td></tr>
+
+<tr><td><a href="dan.html">dan</a></td><td>
+Plot melting temperatures for DNA.
+</td></tr>
+
+<tr><td><a href="dbiblast.html">dbiblast</a></td><td>
+Database indexing for BLAST 1 and 2 indexed databases
+</td></tr>
+
+<tr><td><a href="dbifasta.html">dbifasta</a></td><td>
+Index a fasta database
+</td></tr>
+
+<tr><td><a href="dbiflat.html">dbiflat</a></td><td>
+Database indexing for flat file databases
+</td></tr>
+
+<tr><td><a href="dbigcg.html">dbigcg</a></td><td>
+Database indexing for GCG formatted databases
+</td></tr>
+
+<tr><td><a href="dbxfasta.html">dbxfasta</a></td><td>
+Database b+tree indexing for fasta file databases
+</td></tr>
+
+<tr><td><a href="dbxflat.html">dbxflat</a></td><td>
+Database b+tree indexing for flat file databases
+</td></tr>
+
+<tr><td><a href="dbxgcg.html">dbxgcg</a></td><td>
+Database b+tree indexing for GCG formatted databases
+</td></tr>
+
+<tr><td><a href="degapseq.html">degapseq</a></td><td>
+Removes gap characters from sequences
+</td></tr>
+
+<tr><td><a href="descseq.html">descseq</a></td><td>
+Alter the name or description of a sequence.
+</td></tr>
+
+<tr><td><a href="diffseq.html">diffseq</a></td><td>
+Find differences between nearly identical sequences
+</td></tr>
+
+<tr><td><a href="digest.html">digest</a></td><td>
+Protein proteolytic enzyme or reagent cleavage digest
+</td></tr>
+
+<tr><td><a href="distmat.html">distmat</a></td><td>
+Creates a distance matrix from multiple alignments
+</td></tr>
+
+<tr><td><a href="dotmatcher.html">dotmatcher</a></td><td>
+Produces a dotplot of two sequences.
+</td></tr>
+
+<tr><td><a href="dotpath.html">dotpath</a></td><td>
+Displays a non-overlapping wordmatch dotplot of two sequences
+</td></tr>
+
+<tr><td><a href="dottup.html">dottup</a></td><td>
+DNA sequence dot plot
+</td></tr>
+
+<tr><td><a href="dreg.html">dreg</a></td><td>
+Regular expression search of a nucleotide sequence
+</td></tr>
+
+<tr><td><a href="einverted.html">einverted</a></td><td>
+Finds DNA inverted repeats
+</td></tr>
+
+<tr><td><a href="embossdata.html">embossdata</a></td><td>
+Finds or fetches the data files read in by the EMBOSS programs
+</td></tr>
+
+<tr><td><a href="embossversion.html">embossversion</a></td><td>
+Writes the current EMBOSS version number
+</td></tr>
+
+<tr><td><a href="emowse.html">emowse</a></td><td>
+Protein identification by mass spectrometry
+</td></tr>
+
+<tr><td><a href="emma.html">emma</a></td><td>
+Multiple alignment program
+</td></tr>
+
+<tr><td><a href="entret.html">entret</a></td><td>
+Reads and writes (returns) flatfile entries
+</td></tr>
+
+<tr><td><a href="epestfind.html">epestfind</a></td><td>
+Finds PEST motifs as potential proteolytic cleavage sites
+</td></tr>
+
+<tr><td><a href="eprimer3.html">eprimer3</a></td><td>
+Picks PCR primers and hybridization oligos
+</td></tr>
+
+<tr><td><a href="equicktandem.html">equicktandem</a></td><td>
+Finds tandem repeats
+</td></tr>
+
+<tr><td><a href="est2genome.html">est2genome</a></td><td>
+Align EST and genomic DNA sequences
+</td></tr>
+
+<tr><td><a href="etandem.html">etandem</a></td><td>
+Looks for tandem repeats in a nucleotide sequence.
+</td></tr>
+
+<tr><td><a href="extractfeat.html">extractfeat</a></td><td>
+Extract features from a sequence
+</td></tr>
+
+<tr><td><a href="extractseq.html">extractseq</a></td><td>
+Extract regions from a sequence.
+</td></tr>
+
+<tr><td><a href="findkm.html">findkm</a></td><td>
+Calculates Km and Vmax for an enzyme reaction
+</td></tr>
+
+<tr><td><a href="freak.html">freak</a></td><td>
+Residue/base frequency table or plot
+</td></tr>
+
+<tr><td><a href="fuzznuc.html">fuzznuc</a></td><td>
+Nucleic acid pattern search
+</td></tr>
+
+<tr><td><a href="fuzzpro.html">fuzzpro</a></td><td>
+Protein pattern search
+</td></tr>
+
+<tr><td><a href="fuzztran.html">fuzztran</a></td><td>
+Protein pattern search after translation
+</td></tr>
+
+<tr><td><a href="garnier.html">garnier</a></td><td>
+Predicts protein secondary structure
+</td></tr>
+
+<tr><td><a href="geecee.html">geecee</a></td><td>
+Calculates the fractional GC content of nucleic acid sequences
+</td></tr>
+
+<tr><td><a href="getorf.html">getorf</a></td><td>
+Finds and extracts open reading frames (ORFs)
+</td></tr>
+
+<tr><td><a href="helixturnhelix.html">helixturnhelix</a></td><td>
+Finds nucleic acid binding domains.
+</td></tr>
+
+<tr><td><a href="hmoment.html">hmoment</a></td><td>
+Hydrophobic moment calculation
+</td></tr>
+
+<tr><td><a href="iep.html">iep</a></td><td>
+Calculates the isoelectric point of a protein
+</td></tr>
+
+<tr><td><a href="infoalign.html">infoalign</a></td><td>
+Information on a multiple sequence alignment
+</td></tr>
+
+<tr><td><a href="infoseq.html">infoseq</a></td><td>
+Displays some simple information about sequences
+</td></tr>
+
+<tr><td><a href="isochore.html">isochore</a></td><td>
+Plots isochores in large DNA sequences
+</td></tr>
+
+<tr><td><a href="jembossctl.html">jembossctl</a></td><td>
+Jemboss Authentication Control
+</td></tr>
+
+<tr><td><a href="lindna.html">lindna</a></td><td>
+Draws linear maps of DNA constructs
+</td></tr>
+
+<tr><td><a href="listor.html">listor</a></td><td>
+Writes a list file of the logical OR of two sets of sequences
+</td></tr>
+
+<tr><td><a href="marscan.html">marscan</a></td><td>
+Finds MAR/SAR sites in nucleic sequences
+</td></tr>
+
+<tr><td><a href="maskfeat.html">maskfeat</a></td><td>
+Mask off features of a sequence
+</td></tr>
+
+<tr><td><a href="maskseq.html">maskseq</a></td><td>
+Mask off regions of a sequence.
+</td></tr>
+
+<tr><td><a href="matcher.html">matcher</a></td><td>
+Local alignment of two sequences
+</td></tr>
+
+<tr><td><a href="megamerger.html">megamerger</a></td><td>
+Merge two large overlapping nucleic acid sequences
+</td></tr>
+
+<tr><td><a href="merger.html">merger</a></td><td>
+Merge two overlapping sequences
+</td></tr>
+
+<tr><td><a href="msbar.html">msbar</a></td><td>
+Mutate sequence beyond all recognition
+</td></tr>
+
+<tr><td><a href="mwcontam.html">mwcontam</a></td><td>
+Shows molwts that match across a set of files
+</td></tr>
+
+<tr><td><a href="mwfilter.html">mwfilter</a></td><td>
+Filter noisy molwts from mass spec output
+</td></tr>
+
+<tr><td><a href="needle.html">needle</a></td><td>
+Needleman-Wunsch global alignment.
+</td></tr>
+
+<tr><td><a href="newcpgreport.html">newcpgreport</a></td><td>
+Report CpG rich areas
+</td></tr>
+
+<tr><td><a href="newcpgseek.html">newcpgseek</a></td><td>
+Reports CpG rich regions
+</td></tr>
+
+<tr><td><a href="newseq.html">newseq</a></td><td>
+Type in a short new sequence.
+</td></tr>
+
+<tr><td><a href="noreturn.html">noreturn</a></td><td>
+Removes carriage return from ASCII files
+</td></tr>
+
+<tr><td><a href="notseq.html">notseq</a></td><td>
+Excludes a set of sequences and writes out the remaining ones
+</td></tr>
+
+<tr><td><a href="nthseq.html">nthseq</a></td><td>
+Writes one sequence from a multiple set of sequences
+</td></tr>
+
+<tr><td><a href="octanol.html">octanol</a></td><td>
+Displays protein hydropathy
+</td></tr>
+
+<tr><td><a href="oddcomp.html">oddcomp</a></td><td>
+Finds protein sequence regions with a biased composition.
+</td></tr>
+
+<tr><td><a href="palindrome.html">palindrome</a></td><td>
+Looks for inverted repeats in a nucleotide sequence.
+</td></tr>
+
+<tr><td><a href="pasteseq.html">pasteseq</a></td><td>
+Insert one sequence into another.
+</td></tr>
+
+<tr><td><a href="patmatdb.html">patmatdb</a></td><td>
+Matching a Prosite motif against a Protein Sequence Database.
+</td></tr>
+
+<tr><td><a href="patmatmotifs.html">patmatmotifs</a></td><td>
+Compares a protein sequence to the PROSITE motif database.
+</td></tr>
+
+<tr><td><a href="pepcoil.html">pepcoil</a></td><td>
+Predicts coiled coil regions
+</td></tr>
+
+<tr><td><a href="pepinfo.html">pepinfo</a></td><td>
+Plots simple amino acid properties in parallel
+</td></tr>
+
+<tr><td><a href="pepnet.html">pepnet</a></td><td>
+Protein helical net plot
+</td></tr>
+
+<tr><td><a href="pepstats.html">pepstats</a></td><td>
+Protein statistics
+</td></tr>
+
+<tr><td><a href="pepwheel.html">pepwheel</a></td><td>
+Shows protein sequences as helices
+</td></tr>
+
+<tr><td><a href="pepwindow.html">pepwindow</a></td><td>
+Displays protein hydropathy
+</td></tr>
+
+<tr><td><a href="pepwindowall.html">pepwindowall</a></td><td>
+Displays protein hydropathy of a set of sequences
+</td></tr>
+
+<tr><td><a href="plotcon.html">plotcon</a></td><td>
+Plots the quality of conservation of a sequence alignment
+</td></tr>
+
+<tr><td><a href="plotorf.html">plotorf</a></td><td>
+Plot potential open reading frames
+</td></tr>
+
+<tr><td><a href="polydot.html">polydot</a></td><td>
+Multiple dotplot
+</td></tr>
+
+<tr><td><a href="preg.html">preg</a></td><td>
+Regular expression search of a protein sequence
+</td></tr>
+
+<tr><td><a href="prettyplot.html">prettyplot</a></td><td>
+Displays aligned sequences, with colouring and boxing.
+</td></tr>
+
+<tr><td><a href="prettyseq.html">prettyseq</a></td><td>
+Output sequence with translated ranges
+</td></tr>
+
+<tr><td><a href="primersearch.html">primersearch</a></td><td>
+Searches DNA sequences for matches with primer pairs
+</td></tr>
+
+<tr><td><a href="printsextract.html">printsextract</a></td><td>
+Preprocesses the PRINTS database for use with the program PSCAN
+</td></tr>
+
+<tr><td><a href="profit.html">profit</a></td><td>
+Scan a sequence or database with a matrix or profile
+</td></tr>
+
+<tr><td><a href="prophecy.html">prophecy</a></td><td>
+Creates matrices/profiles from multiple alignments
+</td></tr>
+
+<tr><td><a href="prophet.html">prophet</a></td><td>
+Gapped alignment for profiles
+</td></tr>
+
+<tr><td><a href="prosextract.html">prosextract</a></td><td>
+Extracts ID, AC, and PA lines from the PROSITE motif database.
+</td></tr>
+
+<tr><td><a href="pscan.html">pscan</a></td><td>
+Locates fingerprints (multiple motif features) in a protein sequence.
+</td></tr>
+
+<tr><td><a href="psiphi.html">psiphi</a></td><td>
+Calculates phi and psi torsion angles from cleaned EMBOSS-style protein co-ordinate file
+</td></tr>
+
+<tr><td><a href="rebaseextract.html">rebaseextract</a></td><td>
+Extract data from REBASE
+</td></tr>
+
+<tr><td><a href="recoder.html">recoder</a></td><td>
+Find and remove restriction sites but maintain the same translation
+</td></tr>
+
+<tr><td><a href="redata.html">redata</a></td><td>
+Isoschizomers, references and Suppliers for Restriction Enzymes
+</td></tr>
+
+<tr><td><a href="remap.html">remap</a></td><td>
+Display a sequence with restriction cut sites, translation etc..
+</td></tr>
+
+<tr><td><a href="restover.html">restover</a></td><td>
+Finds restriction enzymes that produce a specific overhang
+</td></tr>
+
+<tr><td><a href="restrict.html">restrict</a></td><td>
+Finds Restriction Enzyme Cleavage Sites
+</td></tr>
+
+<tr><td><a href="revseq.html">revseq</a></td><td>
+Reverse and complement a sequence.
+</td></tr>
+
+<tr><td><a href="seealso.html">seealso</a></td><td>
+Finds programs sharing group names
+</td></tr>
+
+<tr><td><a href="seqmatchall.html">seqmatchall</a></td><td>
+Does an all-against-all comparison of a set of sequences
+</td></tr>
+
+<tr><td><a href="seqret.html">seqret</a></td><td>
+Reads and writes (returns) a sequence.
+</td></tr>
+
+<tr><td><a href="seqretsplit.html">seqretsplit</a></td><td>
+Reads and writes (returns) sequences in individual files
+</td></tr>
+
+<tr><td><a href="showdb.html">showdb</a></td><td>
+Displays information on the currently available databases
+</td></tr>
+
+<tr><td><a href="showalign.html">showalign</a></td><td>
+Display a multiple sequence alignment
+</td></tr>
+
+<tr><td><a href="showfeat.html">showfeat</a></td><td>
+Show features of a sequence.
+</td></tr>
+
+<tr><td><a href="showorf.html">showorf</a></td><td>
+Pretty output of DNA translations
+</td></tr>
+
+<tr><td><a href="showseq.html">showseq</a></td><td>
+Display a sequence with features, translation etc
+</td></tr>
+
+<tr><td><a href="shuffleseq.html">shuffleseq</a></td><td>
+Shuffles a set of sequences maintaining composition
+</td></tr>
+
+<tr><td><a href="sigcleave.html">sigcleave</a></td><td>
+Predicts signal peptide cleavage sites
+</td></tr>
+
+<tr><td><a href="silent.html">silent</a></td><td>
+Silent mutation restriction enzyme scan
+</td></tr>
+
+<tr><td><a href="sirna.html">sirna</a></td><td>
+Finds siRNA duplexes in mRNA
+</td></tr>
+
+<tr><td><a href="sixpack.html">sixpack</a></td><td>
+Display a DNA sequence with 6-frame translation and ORFs
+</td></tr>
+
+<tr><td><a href="skipseq.html">skipseq</a></td><td>
+Reads and writes (returns) sequences, skipping the first few
+</td></tr>
+
+<tr><td><a href="splitter.html">splitter</a></td><td>
+Split a sequence into (overlapping) smaller sequences.
+</td></tr>
+
+<tr><td><a href="stretcher.html">stretcher</a></td><td>
+Global alignment of two sequences.
+</td></tr>
+
+<tr><td><a href="stssearch.html">stssearch</a></td><td>
+Searches a DNA database for matches with a set of STS primers
+</td></tr>
+
+<tr><td><a href="supermatcher.html">supermatcher</a></td><td>
+Finds a match of a large sequence against one or more sequences
+</td></tr>
+
+<tr><td><a href="syco.html">syco</a></td><td>
+Synonymous codon usage Gribskov statistic plot
+</td></tr>
+
+<tr><td><a href="tcode.html">tcode</a></td><td>
+Fickett TESTCODE statistic to identify protein-coding DNA
+</td></tr>
+
+<tr><td><a href="textsearch.html">textsearch</a></td><td>
+Search sequence documentation text. SRS and Entrez are faster!
+</td></tr>
+
+<tr><td><a href="tfextract.html">tfextract</a></td><td>
+Extract data from TRANSFAC
+</td></tr>
+
+<tr><td><a href="tfm.html">tfm</a></td><td>
+Displays a program's help documentation manual
+</td></tr>
+
+<tr><td><a href="tfscan.html">tfscan</a></td><td>
+Scans DNA sequences for transcription factors.
+</td></tr>
+
+<tr><td><a href="tmap.html">tmap</a></td><td>
+Predict transmembrane proteins
+</td></tr>
+
+<tr><td><a href="tranalign.html">tranalign</a></td><td>
+Align nucleic coding regions given the aligned proteins
+</td></tr>
+
+<tr><td><a href="transeq.html">transeq</a></td><td>
+Translates nucleic acid sequences.
+</td></tr>
+
+<tr><td><a href="trimest.html">trimest</a></td><td>
+Trim poly-A tails off EST sequences
+</td></tr>
+
+<tr><td><a href="trimseq.html">trimseq</a></td><td>
+Trim ambiguous bits off the ends of sequences
+</td></tr>
+
+<tr><td><a href="twofeat.html">twofeat</a></td><td>
+Finds neighbouring pairs of features in sequences
+</td></tr>
+
+<tr><td><a href="union.html">union</a></td><td>
+Reads sequence fragments and builds one sequence
+</td></tr>
+
+<tr><td><a href="vectorstrip.html">vectorstrip</a></td><td>
+Strips out DNA between a pair of vector sequences
+</td></tr>
+
+<tr><td><a href="water.html">water</a></td><td>
+Smith-Waterman local alignment.
+</td></tr>
+
+<tr><td><a href="whichdb.html">whichdb</a></td><td>
+Search all databases for an entry
+</td></tr>
+
+<tr><td><a href="wobble.html">wobble</a></td><td>
+Wobble base plot
+</td></tr>
+
+<tr><td><a href="wordcount.html">wordcount</a></td><td>
+Counts words of a specified size in a DNA sequence.
+</td></tr>
+
+<tr><td><a href="wordmatch.html">wordmatch</a></td><td>
+Finds all exact matches of a given size between 2 sequences
+</td></tr>
+
+<tr><td><a href="wossname.html">wossname</a></td><td>
+Finds programs by keywords in their one-line documentation.
+</td></tr>
+
+<tr><td><a href="yank.html">yank</a></td><td>
+Reads a range from a sequence, appends the full USA to a list file
+</td></tr>
+
+</table>
+
+
+
+
+
+
+
+
+<hr>
+<h1><a name="embassy">EMBASSY applications</a></h1>
+
+<p>
+The EMBASSY grouping includes applications and packages for
+specialised sequence analysis and non-sequence based analysis, as well
+as software included from third parties who have their own licencing
+terms.  EMBOSS is GPL licensed. The libraries are under the Lesser GPL
+(LGPL). This allows the EMBOSS libraries to link to other software and
+only requires that software to have an LGPL-compatible
+licence. Phylip, for example, fits this model. EMBASSY applications
+have the same look and feel as EMBOSS aplications.
+
+
+
+
+
+<h2><a name="phylip"></a>EMBASSY - PHYLIP</h2>
+
+<p>
+The <a href="../embassy/phylip/">PHYLIP</a> programs in this EMBASSY
+package were ported from release 3.572.
+
+<p>
+
+PHYLIP 3.61 has been converted as PHYLIPNEW and was released with
+EMBOSS 3.0.0 as a beta version.
+
+<p>
+
+
+
+<h2><a name="phylipnew"></a>EMBASSY - PHYLIPNEW</h2>
+
+<p>
+The <a href="../embassy/phylipnew/">PHYLIPNEW</a> programs are EMBOSS
+conversions of the programs in Joe Felsenstein's PHYLIP package,
+version 3.61 (August 2004).
+
+<p>
+The PHYLIPNEW versions of these programs all have the prefix "f" to
+distinguish them from the original programs. 
+
+<p>
+
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="../embassy/phylipnew/fclique.html">fclique</a></td><td> 
+Largest clique program
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/fconsense.html">fconsense</a></td><td>
+Majority-rule and strict consensus tree
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/fcontml.html">fcontml</a></td><td> 
+Continuous character Maximum Likelihood method
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/fcontrast.html">fcontrast</a></td><td>
+Continuous character Contrasts
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/fdiscboot.html">fdiscboot</a></td><td>
+Bootstrapped discrete sites algorithm
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/fdnacomp.html">fdnacomp</a></td><td> 
+DNA compatibility algorithm
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/fdnadist.html">fdnadist</a></td><td> 
+Nucleic acid sequence Distance Matrix program
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/fdnainvar.html">fdnainvar</a></td><td>
+Nucleic acid sequence Invariants method
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/fdnaml.html">fdnaml</a></td><td> 
+Estimates phylogenies from nucleic acid sequence Maximum Likelihood
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/fdnamlk.html">fdnamlk</a></td><td> 
+Estimates phylogenies from nucleic acid sequence Maximum Likelihood with
+molecular clock
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/fdnamove.html">fdnamove</a></td><td> 
+Interactive DNA parsimony
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/fdnapars.html">fdnapars</a></td><td> 
+DNA parsimony algorithm
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/fdnapenny.html">fdnapenny</a></td><td>
+Penny algorithm for DNA
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/fdollop.html">fdollop</a></td><td> 
+Dollo and polymorphism parsimony algorithm
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/fdolmove.html">fdolmove</a></td><td> 
+Interactive Dollo and Polymorphism Parsimony
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/fdolpenny.html">fdolpenny</a></td><td>
+Penny algorithm Dollo or polymorphism
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/fdrawgram.html">fdrawgram</a></td><td>
+Plots a cladogram- or phenogram-like rooted tree diagram
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/fdrawtree.html">fdrawtree</a></td><td>
+Plots an unrooted tree diagram
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/ffactor.html">ffactor</a></td><td> 
+Multistate to binary recoding program
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/ffitch.html">ffitch</a></td><td> 
+Fitch-Margoliash and Least-Squares Distance Methods
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/ffreqboot.html">ffreqboot</a></td><td>
+Bootstrapped sequences algorithm
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/fgendist.html">fgendist</a></td><td> 
+Compute genetic distances from gene frequencies
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/fkitsch.html">fkitsch</a></td><td> 
+Fitch-Margoliash method with contemporary tips
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/fmix.html">fmix</a></td><td> 
+Mixed parsimony algorithm
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/fmove.html">fmove</a></td><td> 
+Interactive mixed method parsimony
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/fneighbor.html">fneighbor</a></td><td>
+Phylogenies from distance matrix by N-J or UPGMA method
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/fpars.html">fpars</a></td><td> 
+Discrete character parsimony
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/fpenny.html">fpenny</a></td><td> 
+Penny algorithm, branch-and-bound to find all most parsimonious trees
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/fproml.html">fproml</a></td><td> 
+Protein maximum Likelihood program
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/fpromlk.html">fpromlk</a></td><td> 
+Protein maximum Likelihood program with molecular clock
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/fprotdist.html">fprotdist</a></td><td>
+Protein distance algorithm
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/fprotpars.html">fprotpars</a></td><td>
+Protein parsimony algorithm
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/frestboot.html">frestboot</a></td><td>
+Bootstrapped sequences algorithm
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/frestdist.html">frestdist</a></td><td>
+compute distance matrix from restriction sites or fragments
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/frestml.html">frestml</a></td><td> 
+Restriction site maximum Likelihood method
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/fretree.html">fretree</a></td><td> 
+Interactive tree rearrangement
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/fseqboot.html">fseqboot</a></td><td> 
+Bootstrapped sequences algorithm
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/fseqbootall.html">fseqbootall</a></td><td>
+Bootstrapped sequences algorithm
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/ftreedist.html">ftreedist</a></td><td>
+Distances between trees
+</td></tr>
+
+<tr><td><a href="../embassy/phylipnew/ftreedistpair.html">ftreedistpair</a></td><td>
+Distances between trees
+</td></tr>
+
+
+</table>
+
+<h2><a name="domainatrix"></a>EMBASSY - DOMAINATRIX</h2>
+<p>
+The <a href="../embassy/domainatrix/">DOMAINATRIX</a> programs were developed by Jon Ison and colleagues 
+for their protein domain research. They are included as an
+EMBASSY package as a beta version.
+<p>
+
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="../embassy/domainatrix/cathparse.html">cathparse</a></td><td>
+Reads raw CATH classification files and writes a DCF file.
+
+<tr><td><a href="../embassy/domainatrix/domainreso.html">domainreso</a></td><td>
+Removes low resolution domains from a DCF file.
+
+<tr><td><a href="../embassy/domainatrix/domainseqs.html">domainseqs</a></td><td>
+Adds sequence records to a DCF file.
+
+<tr><td><a href="../embassy/domainatrix/domainnr.html">domainnr</a></td><td>
+Removes redundant domains from a DCF file. 
+The file must contain domain sequence information which can be added by 
+using DOMAINSEQS. 
+
+<tr><td><a href="../embassy/domainatrix/domainsse.html">domainsse</a></td><td>
+Adds secondary structure records to a DCF file.
+
+<tr><td><a href="../embassy/domainatrix/scopparse.html">scopparse</a></td><td>
+Reads raw SCOP classification files and writes a DCF file.
+
+<tr><td><a href="../embassy/domainatrix/ssematch.html">ssematch</a></td><td>
+Searches a DCF file  for secondary structure matches.
+The file must contain domain secondary structure information which can 
+be added by using DOMAINSEQS.
+
+</table>
+
+
+
+<h2><a name="domalign"></a>EMBASSY - DOMALIGN</h2>
+<p>
+The <a href="../embassy/domalign/">DOMALIGN</a> programs were developed by Jon Ison and colleagues
+for their protein domain research. They are included as an
+EMBASSY package as a beta version.
+<p>
+
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="../embassy/domalign/allversusall.html">allversusall</a></td><td>
+Does an all-versus-all global alignment for each set of sequences in an 
+input directory and writes files of sequence similarity values. 
+
+<tr><td><a href="../embassy/domalign/domainrep.html">domainrep</a></td><td>
+Reorder DCF file so that the representative structure of each user-specified 
+node is given first.
+
+<tr><td><a href="../embassy/domalign/domainalign.html">domainalign</a></td><td>
+Generates structure-based sequence alignments for nodes in a DCF file.
+
+<tr><td><a href="../embassy/domalign/seqalign.html">seqalign</a></td><td>
+Reads a DAF file and a DHF and writes a DAF file extended with the hits.
+
+</table>
+
+
+
+<h2><a name="domsearch"></a>EMBASSY - DOMSEARCH</h2>
+<p>
+The <a href="../embassy/domsearch/">DOMSEARCH</a> programs were developed by Jon Ison and colleagues 
+for their protein domain research. They are included as an
+EMBASSY package as a beta version.
+<p>
+
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="../embassy/domsearch/seqsearch.html">seqsearch</a></td><td>
+Generate DHF files of database hits (sequences) from a DAF file (or 
+other file of sequences) by using PSI-BLAST.
+
+<tr><td><a href="../embassy/domsearch/seqfraggle.html">seqfraggle</a></td><td>
+Removes fragments from DHF files (or other files of sequences).
+
+<tr><td><a href="../embassy/domsearch/seqsort.html">seqsort</a></td><td>
+Reads DHF files of database hits (sequences) and removes hits of ambiguous 
+classification.
+
+<tr><td><a href="../embassy/domsearch/seqnr.html">seqnr</a></td><td>
+Removes redundancy from DHF files (or other files of sequences).
+
+<tr><td><a href="../embassy/domsearch/seqwords.html">seqwords</a></td><td>
+Generates DHF files of database hits (sequences) from Swissprot matching 
+keywords from a keywords file.
+                                                
+</table>
+
+
+
+<h2><a name="signature"></a>EMBASSY - SIGNATURE</h2>
+<p>
+The <a href="../embassy/signature/">SIGNATURE</a> programs were developed by Jon Ison and colleagues
+for their protein domain research. They are included as an
+EMBASSY package as a beta version.
+<p>
+
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="../embassy/signature/libgen.html">libgen</a></td><td>
+Generates various type of discriminator for each alignment in a directory.
+
+<tr><td><a href="../embassy/signature/libscan.html"><font color=red>libscan</font></a></td><td>
+<font color=red>Generates hits (sequences in a domain hits file) from 
+searches of various types of discriminator (HMMs, profiles etc) against a 
+sequence database.  Or generates hits from screening sequences against a 
+library of such discriminators.</font>
+
+<tr><td><a href="../embassy/signature/matgen3d.html">matgen3d</a></td><td>
+Generates a 3D-1D scoring matrix from CCF files (clean coordinate files).
+
+<tr><td><a href="../embassy/signature/rocon.html">rocon</a></td><td>
+Reads a DHF file of hits (sequences of unknown structural classification) 
+and a DHF file of validation sequences (known classification) and writes 
+a "hits file" for the hits, which are classified and rank-ordered on the 
+basis of score.
+
+<tr><td><a href="../embassy/signature/rocplot.html">rocplot</a></td><td>
+A generic and flexible tool for interpretation and graphical display of 
+the performance of predictive methods using receiver Operator Characteristic 
+(ROC) analysis.
+
+<tr><td><a href="../embassy/signature/siggen.html">siggen</a></td><td>
+Generates a sparse protein signature from an alignment and residue contact 
+data.
+
+<tr><td><a href="../embassy/signature/siggenlig.html">siggenlig</a></td><td>
+Generates ligand-binding signatures from a CON file (contacts file) of 
+residue-ligand contacts.
+
+<tr><td><a href="../embassy/signature/sigscan.html">sigscan</a></td><td>
+Generates a DHF of hits (sequences) from scanning a signature against a 
+sequence database.
+
+<tr><td><a href="../embassy/signature/sigscanlig.html">sigscanlig</a></td><td>
+Generates a LHF (ligand hits file) of hits (sequences) from scanning a 
+sequence against a library of ligand-binding signatures
+
+</table>
+
+
+<h2><a name="structure"></a>EMBASSY - STRUCTURE</h2>
+<p>
+The <a href="../embassy/structure/">STRUCTURE</a> programs were developed by Jon Ison and colleagues
+for their protein domain research. They are included as an
+EMBASSY package as a beta version.
+<p>
+
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+
+<tr><td><a href="../embassy/structure/contacts.html">contacts</a></td><td>
+Reads CCF files and writes CON files of intra-chain residue-residue 
+contact data.
+
+<tr><td><a href="../embassy/structure/domainer.html">domainer</a></td><td>
+Reads CCF files for proteins and writes CCF files for domains in a DCF file.
+
+<tr><td><a href="../embassy/structure/hetparse.html">hetparse</a></td><td>
+Converts raw dictionary of heterogen groups to EMBL-like format.  
+
+<tr><td><a href="../embassy/structure/interface.html">interface</a></td><td>
+Reads protein CCF files and writes CON files  of inter-chain residue-residue 
+contact data.
+
+<tr><td><a href="../embassy/structure/pdbparse.html">pdbparse</a></td><td>
+Parses PDB files and writes CCF files for proteins.
+
+<tr><td><a href="../embassy/structure/pdbplus.html">pdbplus</a></td><td>
+Add records for residue solvent accessibility and secondary structure to 
+a CCF file.
+
+<tr><td><a href="../embassy/structure/pdbtosp.html">pdbtosp</a></td><td>
+Convert raw swissprot:PDB equivalence file to EMBL-like format.
+
+<tr><td><a href="../embassy/structure/sites.html">sites</a></td><td>
+Reads CCF files and writes CON files of residue-ligand contact data for 
+domains in a DCF file.
+
+</table>
+
+
+
+<h2><a name="hmmer"></a>EMBASSY - HMMEROLD</h2>
+
+<p>
+The <a href="../embassy/hmmerold/">HMMEROLD</a> programs are EMBOSS
+conversions of the programs in Sean Eddy's HMMER package, version
+2.1.1.
+
+<p>
+The HMMER versions of these programs all have the prefix "e" to
+distinguish them from the original programs. 
+
+<p>
+
+<table border cellpadding=4 bgcolor="#FFFFF0">
+
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="../embassy/hmmerold/ealistat.html">oalistat</a></td><td> 
+Statistics for multiple alignment files
+</td></tr>
+
+<tr><td><a href="../embassy/hmmerold/ohmmalign.html">ohmmalign</a></td><td> 
+Align sequences with an HMM
+</td></tr>
+
+<tr><td><a href="../embassy/hmmerold/ohmmbuild.html">ohmmbuild</a></td><td> 
+Build HMM
+</td></tr>
+
+<tr><td><a href="../embassy/hmmerold/ohmmcalibrate.html">ohmmcalibrate</a></td><td> 
+Calibrate a hidden Markov model
+</td></tr>
+
+<tr><td><a href="../embassy/hmmerold/ohmmconvert.html">ohmmconvert</a></td><td> 
+Convert between HMM formats
+</td></tr>
+
+<tr><td><a href="../embassy/hmmerold/ohmmemit.html">ohmmemit</a></td><td> 
+Extract HMM sequences
+</td></tr>
+
+<tr><td><a href="../embassy/hmmerold/ohmmfetch.html">ohmmfetch</a></td><td> 
+Extract HMM from a database
+</td></tr>
+
+<tr><td><a href="../embassy/hmmerold/ohmmindex.html">ohmmindex</a></td><td> 
+Index an HMM database
+</td></tr>
+
+<tr><td><a href="../embassy/hmmerold/ohmmpfam.html">ohmmpfam</a></td><td> 
+Align single sequence with an HMM
+</td></tr>
+
+<tr><td><a href="../embassy/hmmerold/ohmmsearch.html">ohmmsearch</a></td><td> 
+Search sequence database with an HMM
+</td></tr>
+
+</table>
+
+
+
+<h2><a name="hmmer"></a>EMBASSY - HMMERNew</h2>
+
+<p>
+The <a href="../embassy/hmmer/">HMMER</a> programs are EMBOSS
+conversions of the programs in Sean Eddy's HMMER package, version
+2.3.2.
+
+<p>
+The HMMER versions of these programs all have the prefix "e" to
+distinguish them from the original programs. 
+
+<p>
+
+<table border cellpadding=4 bgcolor="#FFFFF0">
+
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="../embassy/hmmer/ealistat.html">ealistat</a></td><td> 
+Statistics for multiple alignment files
+</td></tr>
+
+<tr><td><a href="../embassy/hmmer/ehmmalign.html">ehmmalign</a></td><td> 
+Align sequences with an HMM
+</td></tr>
+
+<tr><td><a href="../embassy/hmmer/ehmmbuild.html">ehmmbuild</a></td><td> 
+Build HMM
+</td></tr>
+
+<tr><td><a href="../embassy/hmmer/ehmmcalibrate.html">ehmmcalibrate</a></td><td> 
+Calibrate a hidden Markov model
+</td></tr>
+
+<tr><td><a href="../embassy/hmmer/ehmmconvert.html">ehmmconvert</a></td><td> 
+ Convert between HMM formats
+</td></tr>
+
+<tr><td><a href="../embassy/hmmer/ehmmemit.html">ehmmemit</a></td><td> 
+Extract HMM sequences
+</td></tr>
+
+<tr><td><a href="../embassy/hmmer/ehmmfetch.html">ehmmfetch</a></td><td> 
+Extract HMM from a database
+</td></tr>
+
+<tr><td><a href="../embassy/hmmer/ehmmindex.html">ehmmindex</a></td><td> 
+Index an HMM database
+</td></tr>
+
+<tr><td><a href="../embassy/hmmer/ehmmpfam.html">ehmmpfam</a></td><td> 
+Align single sequence with an HMM
+</td></tr>
+
+<tr><td><a href="../embassy/hmmer/ehmmsearch.html">ehmmsearch</a></td><td> 
+Search sequence database with an HMM
+</td></tr>
+
+</table>
+
+
+
+<h3>EMBASSY - <a href="../embassy/vienna/">VIENNA</a></h3>
+<p>
+These programs are adapted from the VIENNA RNA package.
+<p>
+
+This is currently under development, and is available only from the
+CVS
+server. We hope to make a beta release in the near future, but there
+is much work to be done on sequence formats and testing.
+
+The programs are listed in alphabetical order:
+
+<p>
+
+
+<table border cellpadding=4 bgcolor="#FFFFF0">
+
+<tr><th>Program name</th><th>Author(s)</th><th>
+Description
+</th></tr>
+
+
+
+<tr><td><a href="../embassy/vienna/vrnaalifold.html">vrnaalifold</a></td><td>Ivo Hofacker</td><td>
+RNA alignment folding
+</td></tr>
+
+<tr><td><a href="../embassy/vienna/vrnaalifoldpf.html">vrnaalifoldpf</a></td><td>Ivo Hofacker</td><td>
+RNA alignment folding with partition
+</td></tr>
+
+<tr><td><a href="../embassy/vienna/vrnacofold.html">vrnacofold</a></td><td>Ivo Hofacker</td><td>
+RNA cofolding
+</td></tr>
+
+<tr><td><a href="../embassy/vienna/vrnacofoldconc.html">vrnacofoldconc</a></td><td>Ivo Hofacker</td><td>
+RNA cofolding with concentrations
+</td></tr>
+
+<tr><td><a href="../embassy/vienna/vrnacofoldpf.html">vrnacofoldpf</a></td><td>Ivo Hofacker</td><td>
+RNA cofolding with partitioning
+</td></tr>
+
+<tr><td><a href="../embassy/vienna/vrnadistance.html">vrnadistance</a></td><td>Ivo Hofacker</td><td>
+RNA distances
+</td></tr>
+
+<tr><td><a href="../embassy/vienna/vrnaduplex.html">vrnaduplex</a></td><td>Ivo Hofacker</td><td>
+RNA duplex calculation
+</td></tr>
+
+<tr><td><a href="../embassy/vienna/vrnaeval.html">vrnaeval</a></td><td>Ivo Hofacker</td><td>
+RNA eval
+</td></tr>
+
+<tr><td><a href="../embassy/vienna/vrnaevalpair.html">vrnaevalpair</a></td><td>Ivo Hofacker</td><td>
+RNA eval with cofold
+</td></tr>
+
+<tr><td><a href="../embassy/vienna/vrnafold.html">vrnafold</a></td><td>Ivo Hofacker</td><td>
+Calculate secondary structures of RNAs
+</td></tr>
+
+<tr><td><a href="../embassy/vienna/vrnafoldpf.html">vrnafoldpf</a></td><td>Ivo Hofacker</td><td>
+Secondary structures of RNAs with partition
+</td></tr>
+
+<tr><td><a href="../embassy/vienna/vrnaheat.html">vrnaheat</a></td><td>Ivo Hofacker</td><td>
+RNA melting
+</td></tr>
+
+<tr><td><a href="../embassy/vienna/vrnainverse.html">vrnainverse</a></td><td>Ivo Hofacker</td><td>
+RNA sequences matching a structure
+</td></tr>
+
+<tr><td><a href="../embassy/vienna/vrnalfold.html">vrnalfold</a></td><td>Ivo Hofacker</td><td>
+Calculate locally stable secondary structures of RNAs
+</td></tr>
+
+<tr><td><a href="../embassy/vienna/vrnapaln.html">vrnapaln</a></td><td>Ivo Hofacker</td><td>
+RNA alignment
+</td></tr>
+
+<tr><td><a href="../embassy/vienna/vrnaplot.html">vrnaplot</a></td><td>Ivo Hofacker</td><td>
+Plot vrnafold output
+</td></tr>
+
+<tr><td><a href="../embassy/vienna/vrnasubopt.html">vrnasubopt</a></td><td>Ivo Hofacker</td><td>
+Calculate RNA suboptimals
+</td></tr>
+
+</table>
+
+
+
+</TD></TR></TABLE>
+
+
+
+<h2><a name="others"></a>EMBASSY - OTHERS</h2>
+
+<p>
+Other EMBASSY packages with single applications. These are contributed
+single programs, or conversions of single programs.
+
+<p>
+
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="../embassy/emnu/emnu.html">emnu</a></td><td>Simple menu of EMBOSS applications</td></tr>
+<tr><td><a href="../embassy/esim4/esim4.html">esim4</a></td><td> 
+Align an mRNA to a genomic DNA sequence
+</td></tr>
+<tr><td><a href="../embassy/meme/meme.html">meme</a></td><td> 
+Motif detection
+</td></tr>
+<tr><td><a href="../embassy/mse/mse.html">mse</a></td><td>Conversion of Will Gilbert's MSE editor</td></tr>
+<tr><td><a href="../embassy/topo/topo.html">topo</a></td><td>Conversion of Susan Jean Johns' TOPO</td></tr>
+<tr><td><a href="../embassy/appendixd/crystalball.html">crystalball</a></td><td>Answers every drug discovery question you have about this sequence</td></tr>
+</table>
+
+
+
+<hr>
+<h1><a name="groups" </a>Application groups</h1>
+
+<p>
+  The EMBOSS applications are organized into logical groups according to their function.
+See the <a href="groups.html">Application Groups Documentation</a> for more information.
+
+
+
+
+
+<hr>
+<a name="proposed"></a> <H1>Proposed new applications</H1>
+<p>
+This is a <a href="proposed.html">list of areas requiring software development</a> including putative new applications. 
+
+
+<hr>
+</DIV>
+</BODY>
+</HTML>

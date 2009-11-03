@@ -1,0 +1,177 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: degapseq
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+degapseq
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/degapseq.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<b>degapseq</b> reads in one or more sequences and writes them out again
+minus any gap characters.  In effect it removes gaps from aligned
+sequences. 
+
+<p>
+
+In fact, if does more than just this as it removes <b>ANY</b>
+non-alphabetic character from the input sequence, so as well as removing
+the gap-characters, it will remove such things as the '*' in protein
+sequences that indicates the position of a 'translated' STOP codon. 
+
+<p>
+
+There are many different formats for storing sequences in files.  Some
+sequence formats allow you to store aligned sequences, including the
+information on where gaps have been introduced to make the sequence
+align properly.  This is indicated by using a special character to
+indicate that there is a gap at that position.  Different sequence
+formats use different characters to indicate gaps.  Some formats may use
+more than one type of character to indicate different types of gaps
+(e.g.  gaps at the ends of the sequences, internal gaps, gaps introduced
+by a program or by a person editing the alignment, etc.) Some typicate
+characters used to indicate where gaps are may be: '.', '-' and '~'. 
+
+<p>
+
+When EMBOSS programs read in a sequence that has gap-characters in, all
+gap characters are internally changed to '-' characters.  i.e.  EMBOSS
+only has one type of gap character.  Thus any distinguishing characters
+for different gap types are reduced to a '-'.  There is only one type of
+gap in EMBOSS. 
+
+<p>
+
+<b>degapseq</b> removes any non-alphabetic character in the sequence, in
+effect this means that gaps and '*' characters are removed.  The
+sequence is then written out. 
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/degapseq.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/degapseq.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/degapseq.itable" -->
+
+<H2>
+    Input file format
+</H2>
+Any valid input sequence USA is allowed.
+
+<p>
+
+The input sequence can be nucleic or protein.
+
+<p>
+
+The input sequence can be gapped or ungapped.
+
+<p>
+<!--#include file="inc/degapseq.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+The output is a sequence with no gaps.
+
+<p>
+<!--#include file="inc/degapseq.output" -->
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+It will remove '*' characters from protein sequences as well as removing
+the gap characters. 
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+
+<!--#include file="inc/degapseq.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/gwilliam.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/degapseq.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/degapseq.comment" -->
+
+
+</BODY>
+</HTML>
+

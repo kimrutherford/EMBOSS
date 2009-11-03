@@ -1,0 +1,7 @@
+# SET with no variable
+
+set 123 fred
+
+env fred jim
+
+env novalue

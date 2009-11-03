@@ -1,0 +1,251 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: sigcleave
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+sigcleave
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/sigcleave.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+Signal peptides mediate translocation across the ER membrane in 
+eukaryotes. In prokaryotes signal peptides mediate translocation across 
+the inner and outer membranes.
+
+<p>
+
+<b>sigcleave</b> predicts the site of cleavage between a signal sequence
+and the mature exported protein.  The predictive accuracy is estimated
+to be around 75-80% for both prokaryotic and eukaryotic proteins. 
+
+<p>
+
+<b>sigcleave</b> uses the method of von Heijne as modified by von Heijne in
+his later book where treatment of positions -1 and -3 in the matrix is
+slightly altered (see references).
+
+
+<H3>
+   Why isn't there a cutoff to eliminate internal sites?
+</H3>
+
+The program predicts cleavage sites inside the whole protein.  Apart
+from the N-terminal sites, the other sites are not biologically relevant. 
+Why isn't there a cutoff to eliminate internal sites?
+
+<p>
+
+The answer is partly because these sites can be relevant in some
+biological cases (additional pre-processing for example), but mostly
+because ... 
+
+<p>
+
+There is one thing in bioinformatics you can not be certain of ... the 
+start of a protein sequence.  The end is easy to predict. The start 
+depends on promoters, transcriptional controls, splicing, etc.
+
+<p>
+
+Most importantly, sigcleave is not perfect - you should check the 
+results and decide whether you like the prediction.
+
+<p>
+
+Also, remember you can put <b>-send 50</b> on the command line to make
+sure it only checks the first 50 residues. 
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/sigcleave.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/sigcleave.ihelp" -->
+</pre>
+</td></tr></table>
+<!--#include file="inc/sigcleave.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<b>sigcleave</b> reads one or more protein sequence USAs.
+
+<p>
+
+<!--#include file="inc/sigcleave.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+
+<!--#include file="inc/reportformats.ihtml" -->
+
+<p>
+
+By default <b>sigcleave</b> writes a 'motif' report file.
+
+<p>
+
+<!--#include file="inc/sigcleave.output" -->
+
+<H2>
+    Data files
+</H2>
+
+
+<!--#include file="inc/localfiles.ihtml" -->
+
+<p>
+Here is the default file for eukaryotic signals:
+
+<p>
+
+<pre>
+# Amino acid counts for 161 Eukaryotic Signal Peptides,
+# from von Heijne (1986), Nucl. Acids. Res. 14:4683-4690
+#
+# The cleavage site is between +1 and -1
+#
+Sample: 161 aligned sequences
+#
+# R -13 -12 -11 -10  -9  -8  -7  -6  -5  -4  -3  -2  -1  +1  +2 Expect
+# - --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ------
+  A  16  13  14  15  20  18  18  17  25  15  47   6  80  18   6  14.5
+  C   3   6   9   7   9  14   6   8   5   6  19   3   9   8   3   4.5
+  D   0   0   0   0   0   0   0   0   5   3   0   5   0  10  11   8.9
+  E   0   0   0   1   0   0   0   0   3   7   0   7   0  13  14  10.0
+  F  13   9  11  11   6   7  18  13   4   5   0  13   0   6   4   5.6
+  G   4   4   3   6   3  13   3   2  19  34   5   7  39  10   7  12.1
+  H   0   0   0   0   0   1   1   0   5   0   0   6   0   4   2   3.4
+  I  15  15   8   6  11   5   4   8   5   1  10   5   0   8   7   7.4
+  K   0   0   0   1   0   0   1   0   0   4   0   2   0  11   9  11.3
+  L  71  68  72  79  78  45  64  49  10  23   8  20   1   8   4  12.1
+  M   0   3   7   4   1   6   2   2   0   0   0   1   0   1   2   2.7
+  N   0   1   0   1   1   0   0   0   3   3   0  10   0   4   7   7.1
+  P   2   0   2   0   0   4   1   8  20  14   0   1   3   0  22   7.4
+  Q   0   0   0   1   0   6   1   0  10   8   0  18   3  19  10   6.3
+  R   2   0   0   0   0   1   0   0   7   4   0  15   0  12   9   7.6
+  S   9   3   8   6  13  10  15  16  26  11  23  17  20  15  10  11.4
+  T   2  10   5   4   5  13   7   7  12   6  17   8   6   3  10   9.7
+  V  20  25  15  18  13  15  11  27   0  12  32   3   0   8  17  11.1
+  W   4   3   3   1   1   2   6   3   1   3   0   9   0   2   0   1.8
+  Y   0   1   4   0   0   1   3   1   1   2   0   5   0   1   7   5.6
+</pre>
+
+<H2>
+    Notes
+</H2>
+
+
+The value of minweight should be at least 3.5. At this level,
+the method should correctly identify 95% of signal peptides, and
+reject 95% of non-signal peptides. The cleavage site should be
+correctly predicted in 75-80% of cases.
+<p>
+
+If you use matrix tables with a different number of residues before or
+after the cleavage site, you must also set the advanced parameters nval
+and pval. 
+
+
+<H2>
+    References
+</H2>
+
+<ol>
+
+<li> von Heijne, G.  "A new method for predicting signal sequence
+cleavage sites" Nucleic Acids Res.: 14:4683 (1986)
+
+
+<li>
+von Heijne, G. "Sequence Analysis in Molecular Biology: Treasure Trove or
+  Trivial Pursuit" (Acad. Press, (1987), 113-117)
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+
+The program will warn you if a nucleic acid sequence is given or if the
+data file is not mathematically accurate.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+It exits with status 0 unless an error is reported.
+
+<H2>
+    Known bugs
+</H2>
+
+
+None.
+
+<!--#include file="inc/sigcleave.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/ableasby.address" -->
+
+
+<p>
+Original program "SIGCLEAVE" (EGCG 1989) by
+<!--#include file="inc/price.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/sigcleave.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/sigcleave.comment" -->
+
+</BODY>
+</HTML>
+

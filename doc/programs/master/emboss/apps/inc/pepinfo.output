@@ -1,0 +1,115 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: opsd_human.pepinfo </h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Printing out Tiny residues in OPSD_HUMAN from position 1 to 348
+
+Position  Residue			Result
+       1       M                               0
+       2       N                               0
+       3       G                               1
+       4       T                               1
+       5       E                               0
+       6       G                               1
+       7       P                               0
+       8       N                               0
+       9       F                               0
+      10       Y                               0
+      11       V                               0
+      12       P                               0
+      13       F                               0
+      14       S                               1
+      15       N                               0
+      16       A                               1
+      17       T                               1
+      18       G                               1
+      19       V                               0
+      20       V                               0
+      21       R                               0
+      22       S                               1
+      23       P                               0
+      24       F                               0
+      25       E                               0
+      26       Y                               0
+      27       P                               0
+      28       Q                               0
+      29       Y                               0
+      30       Y                               0
+      31       L                               0
+      32       A                               1
+      33       E                               0
+      34       P                               0
+      35       W                               0
+      36       Q                               0
+      37       F                               0
+      38       S                               1
+      39       M                               0
+      40       L                               0
+      41       A                               1
+      42       A                               1
+      43       Y                               0
+      44       M                               0
+      45       F                               0
+      46       L                               0
+      47       L                               0
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+  301       Y                           0.500
+  302       N                           0.549
+  303       P                           0.633
+  304       V                           0.636
+  305       I                           0.553
+  306       Y                           0.438
+  307       I                           0.358
+  308       M                           0.250
+  309       M                           0.262
+  310       N                          -0.172
+  311       K                          -0.288
+  312       Q                          -0.409
+  313       F                          -0.409
+  314       R                          -0.362
+  315       N                          -0.281
+  316       C                          -0.120
+  317       M                           0.128
+  318       L                           0.028
+  319       T                           0.341
+  320       T                           0.481
+  321       I                           0.282
+  322       C                           0.124
+  323       C                           0.020
+  324       G                           0.143
+  325       K                           0.202
+  326       N                          -0.051
+  327       P                          -0.183
+  328       L                          -0.298
+  329       G                          -0.282
+  330       D                          -0.136
+  331       D                           0.020
+  332       E                           0.001
+  333       A                           0.003
+  334       S                          -0.070
+  335       A                          -0.137
+  336       T                          -0.042
+  337       V                          -0.042
+  338       S                          -0.117
+  339       K                          -0.117
+  340       T                          -0.280
+  341       E                          -0.154
+  342       T                          -0.206
+  343       S                          -0.172
+  344       Q                           0.063
+  345       V                           0.000
+  346       A                           0.000
+  347       P                           0.000
+  348       A                           0.000
+
+
+
+</pre>
+</td></tr></table><p>
+<p><h3>Graphics File: pepinfo.ps</h3>
+<p><img src="pepinfo.1.pepinfo.gif" alt="[pepinfo results]">

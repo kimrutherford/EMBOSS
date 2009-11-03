@@ -1,0 +1,531 @@
+
+                                  dotpath 
+
+
+
+Function
+
+   Non-overlapping wordmatch dotplot of two sequences
+
+Description
+
+   A dotplot is a graphical representation of the regions of similarity
+   between two sequences.
+
+   The two sequences are placed on the axes of a rectangular image and
+   wherever there is a similarity between the sequences a dot is placed
+   on the image.
+
+   Where the two sequences have substantial regions of similarity, many
+   dots align to form diagonal lines. It is therefore possible to see at
+   a glance where there are local regions of similarity.
+
+   dotpath is very similar to the program dottup which looks for places
+   where words (tuples) of a specified length have an exact match in both
+   sequences and draws a diagonal line over the position of these words.
+
+   Using a longer word size thus displays less random noise, runs
+   extremely quickly, but is less sensitive.
+
+   dotpath finds all matches of size -wordsize or greater between two
+   sequences. It then reduces the matches found to the minimal set of
+   long matches that do not overlap. This is a way of finding the
+   (nearly) optimal path aligning two sequences. It is not the true
+   optimal path as produced by the algorithms used in water or needle,
+   but for very closely related sequences it will produce the same result
+   and will work well with very long sequences.
+
+   If you wish to compare the path found by dotpath to the set of all
+   matches found then the qualifier -overlaps will show all matches in
+   red except for the matches in the minimal path which are shown in
+   black, as normal.
+
+Usage
+
+   Here is a sample session with dotpath
+
+
+% dotpath tembl:AF129756 tembl:BA000025 -word 20 -graph cps -overlaps 
+Non-overlapping wordmatch dotplot of two sequences
+
+Created dotpath.ps
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-asequence]         sequence   Sequence filename and optional format, or
+                                  reference (input USA)
+  [-bsequence]         sequence   Sequence filename and optional format, or
+                                  reference (input USA)
+   -wordsize           integer    [4] Word size (Integer 2 or more)
+   -graph              graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png, gif)
+
+   Additional (Optional) qualifiers:
+   -overlaps           boolean    [N] Displays the overlapping matches (in
+                                  red) as well as the minimal set of
+                                  non-overlapping matches
+   -[no]boxit          boolean    [Y] Draw a box around dotplot
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-asequence" associated qualifiers
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-bsequence" associated qualifiers
+   -sbegin2            integer    Start of the sequence to be used
+   -send2              integer    End of the sequence to be used
+   -sreverse2          boolean    Reverse (if DNA)
+   -sask2              boolean    Ask for begin/end/reverse
+   -snucleotide2       boolean    Sequence is nucleotide
+   -sprotein2          boolean    Sequence is protein
+   -slower2            boolean    Make lower case
+   -supper2            boolean    Make upper case
+   -sformat2           string     Input sequence format
+   -sdbname2           string     Database name
+   -sid2               string     Entryname
+   -ufo2               string     UFO features
+   -fformat2           string     Features format
+   -fopenfile2         string     Features file name
+
+   "-graph" associated qualifiers
+   -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+  Input files for usage example
+
+   'tembl:AF129756' is a sequence entry in the example nucleic acid
+   database 'tembl'
+
+  Database entry: tembl:AF129756
+
+ID   AF129756; SV 1; linear; genomic DNA; STD; HUM; 184666 BP.
+XX
+AC   AF129756;
+XX
+DT   12-MAR-1999 (Rel. 59, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 5)
+XX
+DE   Homo sapiens MSH55 gene, partial cds; and CLIC1, DDAH, G6b, G6c, G5b, G6d,
+DE   G6e, G6f, BAT5, G5b, CSK2B, BAT4, G4, Apo M, BAT3, BAT2, AIF-1, 1C7, LST-1
+,
+DE   LTB, TNF, and LTA genes, complete cds.
+XX
+KW   .
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-184666
+RX   DOI; 10.1101/gr.1736803.
+RX   PUBMED; 14656967.
+RA   Xie T., Rowen L., Aguado B., Ahearn M.E., Madan A., Qin S., Campbell R.D.,
+RA   Hood L.;
+RT   "Analysis of the gene-dense major histocompatibility complex class III
+RT   region and its comparison to mouse";
+RL   Genome Res. 13(12):2621-2636(2003).
+XX
+RN   [2]
+RP   1-184666
+RA   Rowen L., Madan A., Qin S., Shaffer T., James R., Ratcliffe A., Abbasi N.,
+RA   Dickhoff R., Loretz C., Madan A., Dors M., Young J., Lasky S., Hood L.;
+RT   "Sequence of the human major histocompatibility complex class III region";
+RL   Unpublished.
+XX
+RN   [3]
+RP   1-184666
+RA   Rowen L.;
+RT   ;
+RL   Submitted (22-FEB-1999) to the EMBL/GenBank/DDBJ databases.
+RL   Department of Molecular Biotechnology, Box 357730 University of Washington
+,
+RL   Seattle, WA 98195, USA
+XX
+RN   [4]
+RP   1-184666
+RA   Rowen L.;
+RT   ;
+RL   Submitted (28-OCT-1999) to the EMBL/GenBank/DDBJ databases.
+RL   Multimegabase Sequencing Center, University of Washington, PO Box 357730,
+RL   Seattle, WA 98195, USA
+
+
+  [Part of this file has been deleted for brevity]
+
+     aaaccagttt accaccactc ctaacactaa acttaaatct gactctaaat gtaagtccaa    18174
+0
+     tctgagccac aagcctaaag ttgaacttta tcctgcttta tgaattattc atccattcct    18180
+0
+     ccatttagtg agtatctgcg tgcctaacac atgctgggca ttgtcctaag gcaggaggga    18186
+0
+     catggaggca aagggatcag agaaggtacc agcacctgtg gagcttgtat tccagtgagg    18192
+0
+     ccagacggaa aagaaagaaa ctgaagaaga aattggtact atgagaaaat aagacaggct    18198
+0
+     gatgttgtaa gagtggcagg gagctacttt taaatacagt agtcagcaaa atcctctttg    18204
+0
+     agtgtttggg tggcactgga gctgagaccc aaatgacaaa aaatagtgac caggtaaaag    18210
+0
+     tttgggagca aagcatttca ggtaaaggga gcagctactg caaaggctgg aaggcggaac    18216
+0
+     caagctgggg gtgttgacga caaacagaag gccagtgtgg ctggagcaga gagagagact    18222
+0
+     gggaggcggg tgggagatga ggtcagagag gagggcaggg gccaggtcat gcagggccat    18228
+0
+     gcaagaaggg taaagcctct agatttcatc cagccacagg aagcctttaa aggtcgtcag    18234
+0
+     agtgtgtggt gcgtgcgtgt gtgtgtgtgt gtgtgtgtgt gttgcagggg agagaggggg    18240
+0
+     agggagagag agagagagag agagaagagg gaggtgagca gaggtgattg gatttttttt    18246
+0
+     tcttttgaca tggtgtcttg ctctgtggcc taggctggag tgcagtggca ccatcatagc    18252
+0
+     ccactgcaac ctcaaaacca tgggctcaag tcatccttcc acctcagctt cccaagtatc    18258
+0
+     taggactaca ggtgtgtgcc actgtgcctg gctaatttta aaaaatattt taaaattttt    18264
+0
+     gttgagacag ggtctatgct gctcaggctg gtctcgaact cctggtttca agtgatctgc    18270
+0
+     ccatcttggc ctcccaaagt ttttttttgt tagtttgaga ggcggtttcg ctcgttgccc    18276
+0
+     aggctggagt gcaatgactg atctcatctc actgcaacct ctgcctcctg ggttcaagcg    18282
+0
+     attctcctgc ttcagcctcc caagtagctg ggattacagg tgcatgccac cattcccggc    18288
+0
+     taattttttg tatttagtag agatggggtt tcaccatgtt agtcaggctg atctcaaact    18294
+0
+     cctgacctca ggtgatccgc ctgcctcagc ctcccaaagt tttgggatta caggtgtgag    18300
+0
+     ccaccatgct gggccagcct cccaaagttt tgggattaca ggcatgagtc accacactgg    18306
+0
+     ccctggattt tttttctttc ttttttttgg agacggagtc tcactctgtt gcccaggctg    18312
+0
+     gagtgcaatg gcgtaatctc agctcactgc aacctctgct gcccgggttc aaacgattct    18318
+0
+     cctgtcttag cctcctgagt agctgggatt ataggtgcat gccaccatgc ctggctaatt    18324
+0
+     tttgtacttt tagtagagaa agtacaccat cttggccagg ctggtctcga actcctgacc    18330
+0
+     tcaggtgatc cacttgcgtc ggcctcccaa agtgctggga ttacaggcgt gagacaccgc    18336
+0
+     acccagcctt tttttttttt tttcttttaa gacagaatcg ctctgtcacc caggctggag    18342
+0
+     tgcagtggca caatctcggc tcactgcaac ctctgcctcc caggtttaag caatccacct    18348
+0
+     atgtcagtct cccaagtagc tgggattata ggtgcatgtc accatgcctg gctaattttt    18354
+0
+     gtacttttag tatagaaagt acaccatgtt ggccaggctg gtcttgaact cctgacctca    18360
+0
+     agtgatccgc ctgcctcagc ctcccgaagt gctggaatta cagacatgtg ccactgcacc    18366
+0
+     cggcctggtt ttttttttct aagagatgga gtctcacttt tctgcccagg ttggagtgca    18372
+0
+     atggcaccat catagctcac tgcagccttc aactcttggc ctcaggcaat ccttgcacct    18378
+0
+     tagcctcgca gtgttgggat tacaggcatg agccactgag ccttgcctgg actttttttt    18384
+0
+     ttttttgaga tggcgtctcg ctctgttgcc caggttggag tgctacggca tgatcttggc    18390
+0
+     tcactgcaac ttccacctcc caggttcaag cgattctctt gcctcggccc cccgagtagc    18396
+0
+     tgggattaca ggcatgcgcc accgtgcctg gctaattttg gtatttttag tagagatagg    18402
+0
+     gtttcatcat gttgggcagg ctggtcttga actcctgacc tcgtgatcca cccacctcgg    18408
+0
+     cctcccaaag tgctgggatt ataggcatag ccaacgcgcc cagcctggac ttgtttttaa    18414
+0
+     aagatcactg tggctcctgt gtttaggctg gctggtagga gacaggtggc agtggcattg    18420
+0
+     atggtgaaga gaaaatagtg gcagccatgg agatggagag aagtagacaa gtttgggata    18426
+0
+     tattatacat tccaggggta gaaacaacag gactagatga tggattgatg ggtgggagat    18432
+0
+     gtagatactg ggagagaagc aggattctga tggatggaaa aactaaaaaa ttctattttg    18438
+0
+     ggtgtggtaa gtctaagtct attagacatg caagtagaga tgtcactggg cagatacaca    18444
+0
+     tctggatttc aggggcaagg tccaagctag agaaagaaac ctgggcatgg tcagcatgag    18450
+0
+     gatggtgttt aaagccatgg aacttatctt gtgcatccct ataagacccc tttgaggcac    18456
+0
+     ttgtttcccc tcacaatgga tgcagtgcat cttccattct gaattccaga ggcaacaacc    18462
+0
+     tcctgctcct agaagctaaa ctctccagac ttagtcttct gaattc                   18466
+6
+//
+
+  Database entry: tembl:BA000025
+
+ID   BA000025; SV 2; linear; genomic DNA; STD; HUM; 2229817 BP.
+XX
+AC   BA000025; AP000502-AP000521;
+XX
+DT   09-DEC-2004 (Rel. 82, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 4)
+XX
+DE   Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
+XX
+KW   .
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-2229817
+RA   Hirakawa M., Yamaguchi H., Imai K., Shimada J.;
+RT   ;
+RL   Submitted (21-AUG-2001) to the EMBL/GenBank/DDBJ databases.
+RL   Mika Hirakawa, Japan Science and Technology Corporation (JST), Advanced
+RL   Databases Department; 5-3, Yonbancho, Chiyoda-ku, Tokyo 102-0081, Japan
+RL   (E-mail:mika@tokyo.jst.go.jp, URL:http://www-alis.tokyo.jst.go.jp/,
+RL   Tel:81-3-5214-8491, Fax:81-3-5214-8470)
+XX
+RN   [2]
+RA   Shiina S., Tamiya G., Oka A., Inoko H.;
+RT   "Homo sapiens 2,229,817bp genomic DNA of 6p21.3 HLA class I region";
+RL   Unpublished.
+XX
+DR   EPD; EP11158; HS_TNF.
+DR   EPD; EP11159; HS_LTA.
+DR   EPD; EP73522; HS_HLA-B.
+DR   EPD; EP73908; HS_GTF2H4.
+DR   EPD; EP73940; HS_NEU1.
+DR   EPD; EP74013; HS_VARS2.
+DR   EPD; EP74203; HS_MRPS18B.
+DR   EPD; EP74346; HS_HLA-E.
+DR   EPD; EP74389; HS_BAT1.
+DR   EPD; EP74485; HS_IER3.
+DR   GDB; 11515913.
+DR   GOA; P59942.
+DR   IMGT/HLA; HLA02629; J*01010102.
+DR   RFAM; RF00017.
+DR   RFAM; RF00019.
+DR   RFAM; RF00026.
+DR   RFAM; RF00100.
+DR   RFAM; RF00137.
+DR   RFAM; RF00276.
+
+
+  [Part of this file has been deleted for brevity]
+
+     ttggccccac cccagcatgt ctccaggttc ctctcagccc tggttccttt tggccctgca   222690
+0
+     gtcacaatgg gcaacactgt gacgcaccct gtcctgtgtc acagtgtcat acactcaggc   222696
+0
+     tcacattgcc cctaggccac ttgccagcca agggacatgg ccacattttg tgtcttctgc   222702
+0
+     acctcagcct tgctttcaag tgcaggtgat gatggcaccc acgcagaaca aatgttattt   222708
+0
+     gctatcttcg tcgagtttag tcatccaatt ttccaaccct cactgggcaa ggaagagtgt   222714
+0
+     ggtttccacc aagaaggcag gatgtcagca gtcacagggg caaccaacag ggaaagccgc   222720
+0
+     cggaaaatag accccacagg aagcacaggt gtccagtgga gatgggaacc ctgcagattt   222726
+0
+     gaccgtcttt aagcagatta gagagattac cgttactaac aacttagcca taaaagttta   222732
+0
+     ttagctattt tcaaaaagca taaaattatg taatataatt ttttttaaat ttccatcaat   222738
+0
+     acaaaactaa tctgggcact gcaacttccg gtgggcaact gggataggcg gcatcatcag   222744
+0
+     gaaggcgagc cctgccgtgc cccatgtgcc agtgccccag atggcggcag cctccccaga   222750
+0
+     agcaccttgt atctcccctg cacagggcca gggtcccagc ttcccataca ccttctcctg   222756
+0
+     ctttttcttt tctgtccttt cctttttcaa taaaccacct gcaaaaaggg aaaaccattc   222762
+0
+     tgaggacaag aaacatgtca atgggaaata cacagttgcc agagggtaaa aggccctgtt   222768
+0
+     cattctcatt gaaaagctca ggtatttctg ttaaagtctc tccttttact ttaggatgct   222774
+0
+     gactcctgcg tccatctcaa cctgggcatc gtgccaccac cttcaagaag agaaaaacta   222780
+0
+     agtagtgctt tgcaaagggg cagcagcatt tctcatttct gaccatgtca ggcacatggc   222786
+0
+     catgcagatg agcaggtggg ggacacaggt gagtctccag acctgctctc ctcccacagt   222792
+0
+     acattcttga gtctttttaa acagttgtga aaatgccaca gatgcaagca cctgtgggcc   222798
+0
+     actcccatgg ggaccgttgc acaaggcagt gccactcatt ctcagaacct cctaccatgg   222804
+0
+     gctatgctta gtgacccgag gccaagccaa ggaagacgcc agccacaggg tgccatcctc   222810
+0
+     aggggcatgc tgccagcagg ggcaaagtta tccctagcaa caagatacag aaagaaagaa   222816
+0
+     aaaaggaagg aaatgtagcc aatgggccgg ttcaggttct tgactttgcc acacaaaaga   222822
+0
+     atttgagagc aagtccaaag taaaagtcag caagagaatt tattgcaaag tgaaagtaca   222828
+0
+     ctctgacagc tgatcagagc agctgctcaa aagagagaca gtaccctccc ctcacgggag   222834
+0
+     tcttacatga ttattcatga ataggtggga aggggtattg ttttaagcat gttctgtggt   222840
+0
+     ctcttgaacg tgcatgcact gtggttgtac atatcagcac acacatctta cgtctcatta   222846
+0
+     gcatcttaac ttccctctca gagttgtgtt tgctactatt gtaatgagca taggtcagcc   222852
+0
+     caaggacact attcatgggt ttctgggctt cctcagatgt ggggatgcct cccttggctc   222858
+0
+     ttctacctct ttgctgcagg atgttctaac cacaagccca ggatatggtt tgcgcactgt   222864
+0
+     cgaacagctt gttctctcca tcaacctgac aagtctcttg tttcctttca agggaggctg   222870
+0
+     tgaacaccct atctcactga cctcagaagg acagtacagc agtagccacc atgaccaaaa   222876
+0
+     agatgattcc agaagtgcag gacaactccc tacccagagg ctgtggctgt gcagtaacac   222882
+0
+     accaagaggg gagtccagct ggctctcagg gtgctcacta ccctcatctg ggggcctgga   222888
+0
+     ggacgtcaat tcctgagaac gccacgttct agtgagtaga atgaactgag agatacacag   222894
+0
+     caaagctcca catacttttc cttttctttg tgcccgcagt gttcttcatc agtgtgctct   222900
+0
+     cgcttttcag ctactactgt tggctggctg gaaaaaatag aacaatagta aaaattagag   222906
+0
+     accagtcttt ggtgatgaag agaaatattg gctacttcca gtattttcta gctttggtta   222912
+0
+     tggttgcagt tttccagctc accttgtggg gatgaattca gaaaaaagtt acaaattgaa   222918
+0
+     atgaacatgc cagaagtatt ggctcaaatc aacgttgtcc tattaagcca cttagtgaat   222924
+0
+     caaaagaccg cttgttggac tgttaatctc ggtggccaga gaaaggagct gaagaaggtg   222930
+0
+     ttgccagatc aggaacaaat aattacagcg gcaatagaaa atggaagacc acttgttcat   222936
+0
+     aaccatttga ataagggcaa ggtgtatgga aacacattat gaactgatat tttcagtttt   222942
+0
+     gtttgcaaga aaatgattaa taaggtgaaa taattgaagt atcacggaag atacattaaa   222948
+0
+     aaaaaaaaaa gcctttgtac agtttgctgg agccacagat gtcctactcc agagcagaac   222954
+0
+     aatgcctgaa tcttcagggt ccatttctgc cgcattcact agcaaccaca aatgtgactt   222960
+0
+     aattttactt tggaaataat gcttacccat tgtgagatgc tgtaatatga accatcatta   222966
+0
+     catgttaaca tggcacatgg aattttgagt gtctaagtta catttttaga gttgtttctt   222972
+0
+     agtagccatg tgagtttcca ctccaaaaac acaagctaaa aacttgtttt gagtgaagga   222978
+0
+     catctagggc aaatggtggc tgaaagtgaa tgagatc                            222981
+7
+//
+
+Output file format
+
+   In normal operation, a dotplot image is displayed.
+
+   With the -data qualifier a file of the positions of the matches in the
+   minimal non-overlapping set of matches is output.
+
+  Output files for usage example
+
+  Graphics File: dotpath.ps
+
+   [dotpath results]
+
+Notes
+
+   None
+
+References
+
+   None
+
+Warnings
+
+   If you give a small word size with a very large sequence you will run
+   out of memory. If this happens, try again with a larger word size.
+
+Diagnostic Error Messages
+
+   None
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None
+
+See also
+
+   Program name                       Description
+   dotmatcher   Displays a thresholded dotplot of two sequences
+   dottup       Displays a wordmatch dotplot of two sequences
+   polydot      Displays all-against-all dotplots of a set of sequences
+
+   This program is closely based on dottup with the addition of by
+   default displaying only the minimal set of non-overlapping matches.
+
+   This program uses the same algorithm as diffseq for finding a minimal
+   set of very good matches between two sequences. diffseq may be more
+   convenient if you are looking at the differences between two nearly
+   identical sequences.
+
+Author(s)
+
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+History
+
+   Written 14 Aug 2000.
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

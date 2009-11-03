@@ -1,0 +1,379 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: polydot
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+polydot
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+    Function
+</H2>
+Displays all-against-all dotplots of a set of sequences
+
+<H2>
+    Description
+</H2>
+
+
+A dotplot is a graphical representation of the regions of similarity
+between two sequences. 
+
+<p>
+The two sequences are placed on the axes of a rectangular image and
+(subject to threshold conditions) wherever there is a similarity between
+the sequences a dot is placed on the image. 
+
+<p>
+Where the two sequences have substantial regions of similarity, many
+dots align to form diagonal lines.  It is therefore possible to see at a
+glance where there are local regions of similarity. 
+
+<p>
+polydot compares all sequences in a set of sequences, draws a dotplot
+for each pair of sequences by marking where words (tuples) of a
+specified length have an exact match in both sequences and optionally
+reports all identical matches to feature files. 
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with polydot</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>polydot globins.fasta -gtitle="Polydot of globins.fasta" -graph cps </b>
+Displays all-against-all dotplots of a set of sequences
+Word size [6]: <b></b>
+
+Created polydot.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-sequences]         seqset     File containing a sequence alignment
+   -wordsize           integer    [6] Word size (Integer 2 or more)
+*  -outfeat            featout    [unknown.gff] Output features UFO
+   -graph              graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png, gif)
+
+   Additional (Optional) qualifiers:
+   -[no]boxit          boolean    [Y] Draw a box around each dotplot
+   -dumpfeat           toggle     [N] Dump all matches as feature files
+
+   Advanced (Unprompted) qualifiers:
+   -gap                integer    [10] This specifies the size of the gap that
+                                  is used to separate the individual dotplots
+                                  in the display. The size is measured in
+                                  residues, as displayed in the output.
+                                  (Integer 0 or more)
+
+   Associated qualifiers:
+
+   "-sequences" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfeat" associated qualifiers
+   -offormat           string     Output feature format
+   -ofopenfile         string     Features file name
+   -ofextension        string     File name extension
+   -ofdirectory        string     Output directory
+   -ofname             string     Base file name
+   -ofsingle           boolean    Separate file for each entry
+
+   "-graph" associated qualifiers
+   -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequences]<br>(Parameter 1)</td>
+<td>File containing a sequence alignment</td>
+<td>Readable set of sequences</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-wordsize</td>
+<td>Word size</td>
+<td>Integer 2 or more</td>
+<td>6</td>
+</tr>
+
+<tr>
+<td>-outfeat</td>
+<td>Output features UFO</td>
+<td>Writeable feature table</td>
+<td><i>unknown.gff</i></td>
+</tr>
+
+<tr>
+<td>-graph</td>
+<td>Graph type</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png, gif</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-[no]boxit</td>
+<td>Draw a box around each dotplot</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-dumpfeat</td>
+<td>Dump all matches as feature files</td>
+<td>Toggle value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-gap</td>
+<td>This specifies the size of the gap that is used to separate the individual dotplots in the display. The size is measured in residues, as displayed in the output.</td>
+<td>Integer 0 or more</td>
+<td>10</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>polydot</b> reads in a set of nucleic or protein sequences.
+
+<p>
+
+The sequences may or may not be aligned.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: globins.fasta</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+&gt;HBB_HUMAN Sw:Hbb_Human =&gt; HBB_HUMAN
+VHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKV
+KAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGK
+EFTPPVQAAYQKVVAGVANALAHKYH
+&gt;HBB_HORSE Sw:Hbb_Horse =&gt; HBB_HORSE
+VQLSGEEKAAVLALWDKVNEEEVGGEALGRLLVVYPWTQRFFDSFGDLSNPGAVMGNPKV
+KAHGKKVLHSFGEGVHHLDNLKGTFAALSELHCDKLHVDPENFRLLGNVLVVVLARHFGK
+DFTPELQASYQKVVAGVANALAHKYH
+&gt;HBA_HUMAN Sw:Hba_Human =&gt; HBA_HUMAN
+VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHGSAQVKGHGK
+KVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTPA
+VHASLDKFLASVSTVLTSKYR
+&gt;HBA_HORSE Sw:Hba_Horse =&gt; HBA_HORSE
+VLSAADKTNVKAAWSKVGGHAGEYGAEALERMFLGFPTTKTYFPHFDLSHGSAQVKAHGK
+KVGDALTLAVGHLDDLPGALSNLSDLHAHKLRVDPVNFKLLSHCLLSTLAVHLPNDFTPA
+VHASLDKFLSSVSTVLTSKYR
+&gt;MYG_PHYCA Sw:Myg_Phyca =&gt; MYG_PHYCA
+VLSEGEWQLVLHVWAKVEADVAGHGQDILIRLFKSHPETLEKFDRFKHLKTEAEMKASED
+LKKHGVTVLTALGAILKKKGHHEAELKPLAQSHATKHKIPIKYLEFISEAIIHVLHSRHP
+GDFGADAQGAMNKALELFRKDIAAKYKELGYQG
+&gt;GLB5_PETMA Sw:Glb5_Petma =&gt; GLB5_PETMA
+PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQEFFPKFKGLTT
+ADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRDLSGKHAKSFQVDPQYFKVLA
+AVIADTVAAGDAGFEKLMSMICILLRSAY
+&gt;LGB2_LUPLU Sw:Lgb2_Luplu =&gt; LGB2_LUPLU
+GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKDLFSFLKGTSEVPQNNPEL
+QAHAGKVFKLVYEAAIQLQVTGVVVTDATLKNLGSVHVSKGVADAHFPVVKEAILKTIKE
+VVGAKWSEELNSAWTIAYDELAIVIKKEMNDAA
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Output file format
+</H2>
+
+A graphical image is displayed on the specified graphics device.
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>Graphics File: polydot.ps</h3>
+<p><img src="polydot.1.polydot.gif" alt="[polydot results]">
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+0 if successful.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="dotmatcher.html">dotmatcher</a></td>
+<td>Displays a thresholded dotplot of two sequences</td>
+</tr>
+
+<tr>
+<td><a href="dotpath.html">dotpath</a></td>
+<td>Non-overlapping wordmatch dotplot of two sequences</td>
+</tr>
+
+<tr>
+<td><a href="dottup.html">dottup</a></td>
+<td>Displays a wordmatch dotplot of two sequences</td>
+</tr>
+
+</table>
+
+<H2>
+    Author(s)
+</H2>
+
+
+Ian Longden (il&nbsp;&copy;&nbsp;sanger.ac.uk)
+<br>
+Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.                      
+
+
+<H2>
+    History
+</H2>
+
+Completed 2nd June 1999.
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+<H2>
+    Comments
+</H2>
+None
+
+</BODY>
+</HTML>
+

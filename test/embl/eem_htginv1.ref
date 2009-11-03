@@ -1,0 +1,293 @@
+>>>>Z95399_0
+ 
+WP Sequence split into 4 fragments  LOCUS Z95399 Accession Z95399
+WP     Fragment Name      Begin     End
+WP     Z95399_0                1    110000
+WP     Z95399_1           100001    210000
+WP     Z95399_2           200001    310000
+WP     Z95399_3           300001    356870
+ID   Z95399     standard; DNA; HTG; 356870 BP.
+XX
+AC   Z95399;
+XX
+SV   Z95399.9
+XX
+DT   15-MAY-1997 (Rel. 51, Created)
+DT   08-NOV-1999 (Rel. 61, Last updated, Version 107)
+XX
+DE   Caenorhabditis elegans DNA *** SEQUENCING IN PROGRESS *** from clone Y39B6
+XX
+KW   HTG; HTGS_PHASE1.
+XX
+OS   Caenorhabditis elegans
+OC   Eukaryota; Metazoa; Nematoda; Chromadorea; Rhabditida; Rhabditoidea;
+OC   Rhabditidae; Peloderinae; Caenorhabditis.
+XX
+RN   [1]
+RP   1-356870
+RA   McMurray A.;
+RT   ;
+RL   Submitted (08-NOV-1999) to the EMBL/GenBank/DDBJ databases.
+RL   Nematode Sequencing Project, Sanger Centre, Hinxton, Cambridge CB10 1RQ, UK
+RL   and Department of Genetics, Washington University, St. Louis, MO 63110,
+RL   USA. E-mail: jes@sanger.ac.uk or rw@nematode.wustl.edu
+XX
+CC   Order of segments is not known; 800 n's separate segments.
+XX
+CC   IMPORTANT: This sequence is unfinished and does not necessarily
+CC   represent the correct sequence. Work on the sequence is in progress and
+CC   the release of this data is based on the understanding that the
+CC   sequence may change as work continues. The sequence may be contaminated
+CC   with foreign sequence from E.coli, yeast, vector, phage etc.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .356870
+FT                   /chromosome="V"
+FT                   /db_xref="taxon:6239"
+FT                   /organism="Caenorhabditis elegans"
+FT                   /clone="Y39B6"
+XX
+SQ   Sequence 356870 BP; 110719 A; 61595 C; 61133 G; 113802 T; 9621 other;
+>>>>Z95399_1
+ 
+Continuation (2 of 4) of Z95399 from base 100001 (Caenorhabditis elegans DNA *** SEQUENCING IN PROGRESS *** from clone Y39B6 )
+WP Sequence split into 4 fragments  LOCUS Z95399 Accession Z95399
+WP     Fragment Name      Begin     End
+WP     Z95399_0                1    110000
+WP     Z95399_1           100001    210000
+WP     Z95399_2           200001    310000
+WP     Z95399_3           300001    356870
+>>>>Z95399_2
+ 
+Continuation (3 of 4) of Z95399 from base 200001 (Caenorhabditis elegans DNA *** SEQUENCING IN PROGRESS *** from clone Y39B6 )
+WP Sequence split into 4 fragments  LOCUS Z95399 Accession Z95399
+WP     Fragment Name      Begin     End
+WP     Z95399_0                1    110000
+WP     Z95399_1           100001    210000
+WP     Z95399_2           200001    310000
+WP     Z95399_3           300001    356870
+>>>>Z95399_3
+ 
+Continuation (4 of 4) of Z95399 from base 300001 (Caenorhabditis elegans DNA *** SEQUENCING IN PROGRESS *** from clone Y39B6 )
+WP Sequence split into 4 fragments  LOCUS Z95399 Accession Z95399
+WP     Fragment Name      Begin     End
+WP     Z95399_0                1    110000
+WP     Z95399_1           100001    210000
+WP     Z95399_2           200001    310000
+WP     Z95399_3           300001    356870
+>>>>AC017364
+ 
+ID   AC017364   standard; DNA; HTG; 3651 BP.
+XX
+AC   AC017364;
+XX
+SV   AC017364.1
+XX
+DT   14-DEC-1999 (Rel. 62, Created)
+DT   14-DEC-1999 (Rel. 62, Last updated, Version 1)
+XX
+DE   Drosophila melanogaster, WORKING DRAFT SEQUENCE, in ordered pieces.
+XX
+KW   HTG; HTGS_PHASE2.
+XX
+OS   Drosophila melanogaster (fruit fly)
+OC   Eukaryota; Metazoa; Arthropoda; Tracheata; Hexapoda; Insecta; Pterygota;
+OC   Neoptera; Endopterygota; Diptera; Brachycera; Muscomorpha; Ephydroidea;
+OC   Drosophilidae; Drosophila.
+XX
+RN   [1]
+RP   1-3651
+RA   Adams M., Venter J.C.;
+RT   ;
+RL   Submitted (09-DEC-1999) to the EMBL/GenBank/DDBJ databases.
+RL   Celera Genomics, 45 West Gude Drive, Rockville, MD, USA
+XX
+CC   This sequence was identified as CDM:10210434 by the submitter.
+CC   For more information on this record e-mail to fly@celera.com.
+CC   * NOTE: This is a 'working draft' sequence.
+CC   * This sequence will be replaced
+CC   * by the finished sequence as soon as it is available and
+CC   * the accession number will be preserved.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .3651
+FT                   /db_xref="taxon:7227"
+FT                   /organism="Drosophila melanogaster"
+XX
+SQ   Sequence 3651 BP; 1194 A; 679 C; 618 G; 1160 T; 0 other;
+>>>>AL034557_0
+ 
+WP Sequence split into 4 fragments  LOCUS AL034557 Accession Al034557
+WP     Fragment Name      Begin     End
+WP     AL034557_0              1    110000
+WP     AL034557_1         100001    210000
+WP     AL034557_2         200001    310000
+WP     AL034557_3         300001    392633
+ID   AL034557   standard; DNA; HTG; 392633 BP.
+XX
+AC   AL034557;
+XX
+SV   AL034557.7
+XX
+DT   17-DEC-1998 (Rel. 58, Created)
+DT   11-AUG-1999 (Rel. 60, Last updated, Version 9)
+XX
+DE   Plasmodium falciparum DNA *** SEQUENCING IN PROGRESS *** from MAL4P1
+XX
+KW   HTG; HTGS_PHASE1.
+XX
+OS   Plasmodium falciparum (malaria parasite P. falciparum)
+OC   Eukaryota; Alveolata; Apicomplexa; Haemosporida; Plasmodium.
+XX
+RN   [1]
+RA   Bowman S., Churcher C., Harris B., Harris D., Lawson D., Quail M.,
+RA   Barrell B.;
+RT   ;
+RL   Submitted (17-DEC-1998) to the EMBL/GenBank/DDBJ databases.
+RL   P.falciparum Genome Sequencing Consortium, The Sanger Centre, Wellcome
+RL   Trust Genome Campus, Hinxton, Cambridge CB10 1SA, UK
+XX
+CC   For more information about this sequence or the Malaria Project,
+CC   see http://www.sanger.ac.uk/Projects/P_falciparum.
+XX
+CC   IMPORTANT: This sequence is unfinished and does not necessarily
+CC   represent the correct sequence. Work on the sequence is in progress
+CC   and the release of this data is based on the understanding that the
+CC   sequence may change as work continues. The sequence may be
+CC   contaminated with foreign sequence from E.coli, yeast, vector,
+CC   phage etc.
+XX
+CC   Order of segments is not known; 800 n's separate segments.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .392633
+FT                   /chromosome="4"
+FT                   /db_xref="taxon:5833"
+FT                   /organism="Plasmodium falciparum"
+FT                   /strain="3D7"
+XX
+SQ   Sequence 392633 BP; 146453 A; 41490 C; 42490 G; 138992 T; 23208 other;
+>>>>AL034557_1
+ 
+Continuation (2 of 4) of AL034557 from base 100001 (Plasmodium falciparum DNA *** SEQUENCING IN PROGRESS *** from MAL4P1 )
+WP Sequence split into 4 fragments  LOCUS AL034557 Accession Al034557
+WP     Fragment Name      Begin     End
+WP     AL034557_0              1    110000
+WP     AL034557_1         100001    210000
+WP     AL034557_2         200001    310000
+WP     AL034557_3         300001    392633
+>>>>AL034557_2
+ 
+Continuation (3 of 4) of AL034557 from base 200001 (Plasmodium falciparum DNA *** SEQUENCING IN PROGRESS *** from MAL4P1 )
+WP Sequence split into 4 fragments  LOCUS AL034557 Accession Al034557
+WP     Fragment Name      Begin     End
+WP     AL034557_0              1    110000
+WP     AL034557_1         100001    210000
+WP     AL034557_2         200001    310000
+WP     AL034557_3         300001    392633
+>>>>AL034557_3
+ 
+Continuation (4 of 4) of AL034557 from base 300001 (Plasmodium falciparum DNA *** SEQUENCING IN PROGRESS *** from MAL4P1 )
+WP Sequence split into 4 fragments  LOCUS AL034557 Accession Al034557
+WP     Fragment Name      Begin     End
+WP     AL034557_0              1    110000
+WP     AL034557_1         100001    210000
+WP     AL034557_2         200001    310000
+WP     AL034557_3         300001    392633
+>>>>AL035476
+ 
+ID   AL035476   standard; DNA; HTG; 321003 BP.
+XX
+AC   AL035476;
+XX
+SV   AL035476.6
+XX
+DT   24-FEB-1999 (Rel. 59, Created)
+DT   19-AUG-1999 (Rel. 60, Last updated, Version 9)
+XX
+DE   Plasmodium falciparum DNA *** SEQUENCING IN PROGRESS *** from MAL4P3
+XX
+KW   HTG; HTGS_PHASE1.
+XX
+OS   Plasmodium falciparum (malaria parasite P. falciparum)
+OC   Eukaryota; Alveolata; Apicomplexa; Haemosporida; Plasmodium.
+XX
+RN   [1]
+RA   Bowman S., Churcher C., Harris B., Harris D., Lawson D., Quail M.,
+RA   Barrell B.;
+RT   ;
+RL   Submitted (24-FEB-1999) to the EMBL/GenBank/DDBJ databases.
+RL   P.falciparum Genome Sequencing Consortium, The Sanger Centre, Wellcome
+RL   Trust Genome Campus, Hinxton, Cambridge CB10 1SA, UK
+XX
+CC   For more information about this sequence or the Malaria Project,
+CC   see http://www.sanger.ac.uk/Projects/P_falciparum.
+XX
+CC   IMPORTANT: This sequence is unfinished and does not necessarily
+CC   represent the correct sequence. Work on the sequence is in progress
+CC   and the release of this data is based on the understanding that the
+CC   sequence may change as work continues. The sequence may be
+CC   contaminated with foreign sequence from E.coli, yeast, vector,
+CC   phage etc.
+XX
+CC   Order of segments is not known; 800 n's separate segments.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .321003
+FT                   /chromosome="4"
+FT                   /db_xref="taxon:5833"
+FT                   /organism="Plasmodium falciparum"
+FT                   /strain="3D7"
+XX
+SQ   Sequence 321003 BP; 127214 A; 30738 C; 31419 G; 123572 T; 8060 other;
+>>>>AL035477
+ 
+ID   AL035477   standard; DNA; HTG; 224448 BP.
+XX
+AC   AL035477;
+XX
+SV   AL035477.5
+XX
+DT   24-FEB-1999 (Rel. 59, Created)
+DT   11-AUG-1999 (Rel. 60, Last updated, Version 8)
+XX
+DE   Plasmodium falciparum DNA *** SEQUENCING IN PROGRESS *** from MAL4P4
+XX
+KW   HTG; HTGS_PHASE1.
+XX
+OS   Plasmodium falciparum (malaria parasite P. falciparum)
+OC   Eukaryota; Alveolata; Apicomplexa; Haemosporida; Plasmodium.
+XX
+RN   [1]
+RA   Bowman S., Churcher C., Harris B., Harris D., Lawson D., Quail M.,
+RA   Barrell B.;
+RT   ;
+RL   Submitted (24-FEB-1999) to the EMBL/GenBank/DDBJ databases.
+RL   P.falciparum Genome Sequencing Consortium, The Sanger Centre, Wellcome
+RL   Trust Genome Campus, Hinxton, Cambridge CB10 1SA, UK
+XX
+CC   For more information about this sequence or the Malaria Project,
+CC   see http://www.sanger.ac.uk/Projects/P_falciparum.
+XX
+CC   IMPORTANT: This sequence is unfinished and does not necessarily
+CC   represent the correct sequence. Work on the sequence is in progress
+CC   and the release of this data is based on the understanding that the
+CC   sequence may change as work continues. The sequence may be
+CC   contaminated with foreign sequence from E.coli, yeast, vector,
+CC   phage etc.
+XX
+CC   Order of segments is not known; 800 n's separate segments.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .224448
+FT                   /chromosome="4"
+FT                   /db_xref="taxon:5833"
+FT                   /organism="Plasmodium falciparum"
+FT                   /strain="3D7"
+XX
+SQ   Sequence 224448 BP; 80792 A; 23258 C; 21957 G; 75240 T; 23201 other;

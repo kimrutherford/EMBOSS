@@ -1,0 +1,41 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: l46634.tan</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: etandem
+# Rundate: Sun 15 Jul 2007 12:00:00
+# Commandline: etandem
+#    -noorigfile
+#    -sequence tembl:L46634
+#    -minrepeat 6
+# Report_format: table
+# Report_file: l46634.tan
+########################################
+
+#=======================================
+#
+# Sequence: L46634     from: 1   to: 1272
+# HitCount: 5
+#
+# Threshold: 20
+# Minrepeat: 6
+# Maxrepeat: 6
+# Mismatch: No
+# Uniform: No
+#
+#=======================================
+
+  Start     End   Score   Size  Count Identity Consensus
+    793     936     120      6     24     93.8 acccta   
+    283     420      90      6     23     84.8 taaccc   
+    432     485      38      6      9     90.7 ccctaa   
+    494     529      26      6      6     94.4 ccctaa   
+    568     597      24      6      5    100.0 aaccct   
+
+#---------------------------------------
+#---------------------------------------
+</pre>
+</td></tr></table><p>

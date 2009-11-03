@@ -1,0 +1,39 @@
+<b>Here is a sample session with twofeat</b>
+<p>
+Without the -twoout option the output report contains just one feature for every pair of features found. 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>twofeat tembl:x65923 </b>
+Finds neighbouring pairs of features in sequences
+Type of first feature [*]: <b>polyA_signal</b>
+Type of second feature [*]: <b>polyA_site</b>
+The minimum distance between the features [0]: <b>10</b>
+The maximum distance between the features [0]: <b>50</b>
+Output report [x65923.twofeat]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+The -twoout option makes the output report give the pairs of features found. The output report format type has been changed to display the full original pairs of features in GFF format. 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>twofeat -twoout -rformat gff tembl:x65923 </b>
+Finds neighbouring pairs of features in sequences
+Type of first feature [*]: <b>polyA_signal</b>
+Type of second feature [*]: <b>polyA_site</b>
+The minimum distance between the features [0]: <b>10</b>
+The maximum distance between the features [0]: <b>50</b>
+Output report [x65923.twofeat]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>

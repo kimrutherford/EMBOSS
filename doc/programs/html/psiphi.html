@@ -1,0 +1,609 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: psiphi
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+psiphi
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+    Function
+</H2>
+Phi and psi torsion angles from protein coordinates
+
+<H2>
+    Description
+</H2>
+
+Calculates the psi and phi torsion angles around the alpha carbons (CA)
+in (a specified stretch of) a specified chain of a protein structure
+from the co-ordinates of the mainchain atoms in the two planes around it
+
+<H2>
+    Algorithm
+</H2>
+
+<!-- 
+        Algorithms
+	  Pseudocode/Vague description/Handwaving/web links to useful pages
+  -->
+
+
+<H2>
+    Usage
+</H2>
+
+<b>Here is a sample session with psiphi</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>psiphi 1hmp_a.ccf -chainnumber=1 -startresiduenumber=5 -finishresiduenumber=85 </b>
+Phi and psi torsion angles from protein coordinates
+Output report [1hmp_a.psiphi]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-infile]            infile     Clean protein structure coordinates file
+   -chainnumber        integer    [1] Number of the chain for which torsion
+                                  angles should be calculated (Integer 1 or
+                                  more)
+   -startresiduenumber integer    [1] First residue in chain for which torsion
+                                  angles should be calculated (Integer 1 or
+                                  more)
+   -finishresiduenumber integer    [1] Last residue in chain for which torsion
+                                  angles should be calculated (1 = last
+                                  residue) (Any integer value)
+  [-outfile]           report     [*.psiphi] Output report file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-infile]<br>(Parameter 1)</td>
+<td>Clean protein structure coordinates file</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-chainnumber</td>
+<td>Number of the chain for which torsion angles should be calculated</td>
+<td>Integer 1 or more</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-startresiduenumber</td>
+<td>First residue in chain for which torsion angles should be calculated</td>
+<td>Integer 1 or more</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-finishresiduenumber</td>
+<td>Last residue in chain for which torsion angles should be calculated (1 = last residue)</td>
+<td>Any integer value</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output report file name</td>
+<td>Report output file</td>
+<td><i>&lt;*&gt;</i>.psiphi</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+<H2>
+    Input file format
+</H2>
+
+<b>psiphi</b> reads ...
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: 1hmp_a.ccf</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   1hmp_a
+XX
+DE   .
+XX
+OS   .
+XX
+EX   METHOD xray; RESO 2.50; NMOD 1; NCHN 1; NGRP 0;
+XX
+CN   [1]
+XX
+IN   ID A; NR 214; NL 0; NH 0; NE 0;
+XX
+SQ   SEQUENCE   214 AA;  24120 MW;  8D6FB467 CRC32;
+     SPGVVISDDE PGYDLDLFCI PNHYAEDLER VFIPHGLIMD RTERLARDVM KEMGGHHIVA
+     LCVLKGGYKF FADLLDYIKA LNRNSDRSIP MTVDFIRLKS YCNDQSTGDI KVIGGDDLST
+     LTGKNVLIVE DIIDTGKTMQ TLLSLVRQYN PKMVKVASLL VKRTPRSVGY KPDFVGFEIP
+     DKFVVGYALD YNEYFRDLNH VCVISETGKA KYKA
+XX
+CO   1    1    .    P    1     1     .    .    .    .    .    .    S    SER    N     51.993   53.717   25.698    1.00   37.54    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    1     1     .    .    .    .    .    .    S    SER    CA    52.814   53.824   24.502    1.00   41.16    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    1     1     .    .    .    .    .    .    S    SER    C     51.997   54.081   23.227    1.00   34.87    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    1     1     .    .    .    .    .    .    S    SER    O     50.959   53.486   23.008    1.00   33.66    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    1     1     .    .    .    .    .    .    S    SER    CB    53.743   52.616   24.334    1.00   49.66    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    1     1     .    .    .    .    .    .    S    SER    OG    54.029   52.378   22.957    1.00   53.87    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    2     2     .    .    .    .    .    .    P    PRO    N     52.447   55.004   22.388    1.00   33.37    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    2     2     .    .    .    .    .    .    P    PRO    CA    51.763   55.264   21.128    1.00   33.39    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    2     2     .    .    .    .    .    .    P    PRO    C     52.425   54.401   20.066    1.00   27.66    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    2     2     .    .    .    .    .    .    P    PRO    O     52.291   54.590   18.851    1.00   28.29    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    2     2     .    .    .    .    .    .    P    PRO    CB    52.034   56.746   20.799    1.00   35.05    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    2     2     .    .    .    .    .    .    P    PRO    CG    53.162   57.218   21.727    1.00   34.02    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    2     2     .    .    .    .    .    .    P    PRO    CD    53.218   56.209   22.865    1.00   33.44    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    3     3     .    .    .    .    .    .    G    GLY    N     53.208   53.487   20.565    1.00   20.99    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    3     3     .    .    .    .    .    .    G    GLY    CA    53.980   52.705   19.675    1.00   22.46    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    3     3     .    .    .    .    .    .    G    GLY    C     54.958   53.659   19.030    1.00   16.09    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    3     3     .    .    .    .    .    .    G    GLY    O     55.205   54.766   19.512    1.00   20.19    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    4     4     .    .    .    .    .    .    V    VAL    N     55.506   53.240   17.948    1.00   10.04    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    4     4     .    .    .    .    .    .    V    VAL    CA    56.416   54.088   17.282    1.00   15.89    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    4     4     .    .    .    .    .    .    V    VAL    C     55.625   55.088   16.453    1.00   17.74    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    4     4     .    .    .    .    .    .    V    VAL    O     54.828   54.675   15.629    1.00   15.36    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    4     4     .    .    .    .    .    .    V    VAL    CB    57.332   53.194   16.451    1.00   18.65    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    4     4     .    .    .    .    .    .    V    VAL    CG1   58.444   53.988   15.754    1.00   18.67    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    4     4     .    .    .    .    .    .    V    VAL    CG2   57.922   52.084   17.346    1.00   13.73    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    5     5     .    .    .    .    .    .    V    VAL    N     55.799   56.415   16.693    1.00   25.51    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    5     5     .    .    .    .    .    .    V    VAL    CA    55.049   57.431   15.929    1.00   20.42    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    5     5     .    .    .    .    .    .    V    VAL    C     55.655   57.849   14.605    1.00   21.66    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    5     5     .    .    .    .    .    .    V    VAL    O     56.846   58.112   14.504    1.00   31.38    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    5     5     .    .    .    .    .    .    V    VAL    CB    54.697   58.659   16.709    1.00   16.90    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    5     5     .    .    .    .    .    .    V    VAL    CG1   54.131   59.664   15.699    1.00   19.06    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    5     5     .    .    .    .    .    .    V    VAL    CG2   53.640   58.304   17.738    1.00   14.10    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    6     6     .    .    .    .    .    .    I    ILE    N     54.810   57.974   13.593    1.00   20.18    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+CO   1    1    .    P    209   209   .    .    .    .    .    .    K    LYS    N     46.988   51.534   -7.357    1.00   39.61    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    209   209   .    .    .    .    .    .    K    LYS    CA    45.791   51.590   -6.554    1.00   41.75    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    209   209   .    .    .    .    .    .    K    LYS    C     44.610   51.650   -7.444    1.00   44.10    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    209   209   .    .    .    .    .    .    K    LYS    O     43.570   51.024   -7.222    1.00   47.08    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    209   209   .    .    .    .    .    .    K    LYS    CB    45.764   52.773   -5.656    1.00   41.31    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    209   209   .    .    .    .    .    .    K    LYS    CG    44.785   52.588   -4.531    1.00   40.21    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    209   209   .    .    .    .    .    .    K    LYS    CD    43.819   53.733   -4.515    1.00   44.44    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    209   209   .    .    .    .    .    .    K    LYS    CE    44.335   54.889   -5.365    1.00   49.29    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    209   209   .    .    .    .    .    .    K    LYS    NZ    44.965   55.969   -4.577    1.00   50.32    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    210   210   .    .    .    .    .    .    A    ALA    N     44.813   52.416   -8.475    1.00   43.71    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    210   210   .    .    .    .    .    .    A    ALA    CA    43.787   52.546   -9.446    1.00   41.88    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    210   210   .    .    .    .    .    .    A    ALA    C     43.831   51.390  -10.416    1.00   39.92    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    210   210   .    .    .    .    .    .    A    ALA    O     42.865   51.153  -11.085    1.00   48.09    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    210   210   .    .    .    .    .    .    A    ALA    CB    43.842   53.898  -10.151    1.00   40.52    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    211   211   .    .    .    .    .    .    K    LYS    N     44.935   50.644  -10.479    1.00   36.47    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    211   211   .    .    .    .    .    .    K    LYS    CA    45.123   49.543  -11.471    1.00   40.27    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    211   211   .    .    .    .    .    .    K    LYS    C     44.659   48.140  -11.033    1.00   41.97    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    211   211   .    .    .    .    .    .    K    LYS    O     44.458   47.243  -11.847    1.00   40.79    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    211   211   .    .    .    .    .    .    K    LYS    CB    46.560   49.545  -12.092    1.00   37.63    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    211   211   .    .    .    .    .    .    K    LYS    CG    47.140   48.161  -12.390    1.00   33.69    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    211   211   .    .    .    .    .    .    K    LYS    CD    48.551   47.914  -11.838    1.00   29.45    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    211   211   .    .    .    .    .    .    K    LYS    CE    49.678   48.306  -12.772    1.00   25.87    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    211   211   .    .    .    .    .    .    K    LYS    NZ    50.909   47.533  -12.545    1.00   26.93    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    212   212   .    .    .    .    .    .    Y    TYR    N     44.581   47.951   -9.718    1.00   44.88    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    212   212   .    .    .    .    .    .    Y    TYR    CA    44.160   46.704   -9.076    1.00   42.88    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    212   212   .    .    .    .    .    .    Y    TYR    C     42.720   46.902   -8.639    1.00   46.06    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    212   212   .    .    .    .    .    .    Y    TYR    O     42.495   47.283   -7.493    1.00   49.33    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    212   212   .    .    .    .    .    .    Y    TYR    CB    45.026   46.454   -7.772    1.00   35.96    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    212   212   .    .    .    .    .    .    Y    TYR    CG    46.478   46.111   -8.046    1.00   26.75    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    212   212   .    .    .    .    .    .    Y    TYR    CD1   46.745   45.100   -8.965    1.00   27.47    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    212   212   .    .    .    .    .    .    Y    TYR    CD2   47.556   46.816   -7.509    1.00   18.91    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    212   212   .    .    .    .    .    .    Y    TYR    CE1   48.037   44.766   -9.366    1.00   24.84    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    212   212   .    .    .    .    .    .    Y    TYR    CE2   48.858   46.511   -7.909    1.00   22.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    212   212   .    .    .    .    .    .    Y    TYR    CZ    49.103   45.446   -8.787    1.00   25.50    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    212   212   .    .    .    .    .    .    Y    TYR    OH    50.377   45.086   -9.149    1.00   23.28    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    213   213   .    .    .    .    .    .    K    LYS    N     41.703   46.726   -9.463    1.00   48.75    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    213   213   .    .    .    .    .    .    K    LYS    CA    40.474   47.096   -8.795    1.00   60.15    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    213   213   .    .    .    .    .    .    K    LYS    C     39.248   46.226   -8.710    1.00   61.60    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    213   213   .    .    .    .    .    .    K    LYS    O     39.218   45.071   -9.141    1.00   68.05    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    213   213   .    .    .    .    .    .    K    LYS    CB    40.203   48.573   -8.682    1.00   73.04    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    213   213   .    .    .    .    .    .    K    LYS    CG    39.555   49.149   -9.926    1.00   82.29    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    213   213   .    .    .    .    .    .    K    LYS    CD    40.446   49.096  -11.156    1.00   88.26    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    213   213   .    .    .    .    .    .    K    LYS    CE    39.662   49.334  -12.441    1.00   93.01    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    213   213   .    .    .    .    .    .    K    LYS    NZ    40.403   50.145  -13.447    1.00   95.26    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    214   214   .    .    .    .    .    .    A    ALA    N     38.248   46.846   -8.067    1.00   57.39    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    214   214   .    .    .    .    .    .    A    ALA    CA    36.910   46.306   -7.804    1.00   53.48    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    214   214   .    .    .    .    .    .    A    ALA    C     35.963   46.427   -8.990    1.00   54.67    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    214   214   .    .    .    .    .    .    A    ALA    O     36.467   46.591  -10.145    1.00   53.03    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    214   214   .    .    .    .    .    .    A    ALA    CB    36.263   46.991   -6.605    1.00   49.58    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    214   214   .    .    .    .    .    .    A    ALA    OXT   34.731   46.398   -8.724    1.00   56.06    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+//
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<b>psiphi</b> 
+outputs ...
+
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: 1hmp_a.psiphi </h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: psiphi
+# Rundate: Sun 15 Jul 2007 12:00:00
+# Commandline: psiphi
+#    [-infile] ../../data/1hmp_a.ccf
+#    -chainnumber 1
+#    -startresiduenumber 5
+#    -finishresiduenumber 85
+# Report_format: table
+# Report_file: 1hmp_a.psiphi
+########################################
+
+#=======================================
+#
+# Sequence: 1hmp_a     from: 1   to: 214
+# HitCount: 81
+#
+# Chain: 1
+#
+#=======================================
+
+  Start     End   Score    phi    psi
+      5       5     0.0   -85.52   137.17
+      6       6     0.0  -124.99    85.24
+      7       7     0.0   -43.12   147.11
+      8       8     0.0   -48.31   -29.94
+      9       9     0.0   -88.16    -2.35
+     10      10     0.0   -52.85   130.05
+     11      11     0.0   -93.40    -4.97
+     12      12     0.0    79.02  -136.70
+     13      13     0.0  -149.38   150.69
+     14      14     0.0   -84.79   150.76
+     15      15     0.0   -46.26   -29.65
+     16      16     0.0   -58.90   -26.97
+     17      17     0.0   -93.04   -13.65
+     18      18     0.0  -121.01   177.67
+     19      19     0.0   -90.34   123.35
+     20      20     0.0  -137.24   150.01
+     21      21     0.0   -60.85   141.25
+     22      22     0.0   -68.94   -27.08
+     23      23     0.0   -71.26    -5.87
+     24      24     0.0  -124.07    13.09
+     25      25     0.0   -79.54    22.76
+     26      26     0.0  -145.15   -13.78
+     27      27     0.0   -95.38     4.02
+     28      28     0.0  -129.20   149.61
+     29      29     0.0   -90.42   -47.84
+     30      30     0.0  -162.69   160.59
+     31      31     0.0   -75.67   128.31
+     32      32     0.0   -96.18   -51.71
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+     38      38     0.0   -48.48   -63.46
+     39      39     0.0   -38.67   -55.32
+     40      40     0.0   -62.06   -37.43
+     41      41     0.0   -66.93   -47.14
+     42      42     0.0   -55.67   -36.42
+     43      43     0.0   -63.04   -44.39
+     44      44     0.0   -53.57   -57.37
+     45      45     0.0   -44.65   -49.45
+     46      46     0.0   -51.29   -42.54
+     47      47     0.0   -66.60   -39.52
+     48      48     0.0   -63.88   -48.01
+     49      49     0.0   -56.50   -52.92
+     50      50     0.0   -62.39   -18.62
+     51      51     0.0   -56.19   -46.58
+     52      52     0.0   -86.42   -51.81
+     53      53     0.0   -88.19   -25.17
+     54      54     0.0   -56.43   151.52
+     55      55     0.0    85.66     9.25
+     56      56     0.0  -139.15   162.01
+     57      57     0.0   -65.45   110.45
+     58      58     0.0  -101.25   138.36
+     59      59     0.0  -105.46   112.70
+     60      60     0.0   -93.70   115.62
+     61      61     0.0  -108.38   131.59
+     62      62     0.0  -109.96   130.63
+     63      63     0.0   -94.00   109.57
+     64      64     0.0   -93.72    67.41
+     65      65     0.0   -65.62  -102.57
+     66      66     0.0  -109.14    11.70
+     67      67     0.0  -170.15   178.49
+     68      68     0.0  -125.12   -30.99
+     69      69     0.0   -36.99   -53.96
+     70      70     0.0   -62.26   -46.94
+     71      71     0.0   -50.46   -58.23
+     72      72     0.0   -51.09   -52.57
+     73      73     0.0   -56.83   -50.75
+     74      74     0.0   -55.14   -51.03
+     75      75     0.0   -54.01   -32.78
+     76      76     0.0   -64.26   -33.38
+     77      77     0.0   -73.24   -38.25
+     78      78     0.0   -67.12   -50.61
+     79      79     0.0   -47.17   -56.48
+     80      80     0.0   -49.34   -24.22
+     81      81     0.0   -90.53   -27.37
+     82      82     0.0   -79.04     3.07
+     83      83     0.0   -72.14   -34.64
+     84      84     0.0   -78.17    -5.83
+     85      85     0.0   -70.69   142.19
+
+#---------------------------------------
+#---------------------------------------
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+<ol>
+
+<li>
+
+</ol>
+
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+</table>
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+Damian Counsell (d.counsell&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+
+
+
+
+<H2>
+    History
+</H2>
+<!--
+        Date written and what changes have been made go in this file.
+   -->
+
+
+
+
+<H2>
+    Target users
+</H2>
+<!--
+        For general users, use this text
+   -->
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+<!--
+        User/developer/other comments go in this file.
+   -->
+None
+
+
+</BODY>
+</HTML>
+

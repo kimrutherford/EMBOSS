@@ -1,0 +1,396 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: mwcontam
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+mwcontam
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+    Function
+</H2>
+Shows molwts that match across a set of files
+<H2>
+    Description
+</H2>
+
+<b>mwcontam</b> finds molecular weights that are common between a set of
+mass spectrometry result files.  Such molecular weights are usually a form of
+contamination resulting from autolysis of a protease, degradation of the
+matrix or presence of keratin from the sample preparer. 
+
+<p>
+
+The output of <b>mwcontam</b>, with minimal editing, can be added to the
+data file for the <a href="mwfilter.html"><b>mwfilter</b></a> program
+('Emwfilter.dat').
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with mwcontam</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>mwcontam </b>
+Shows molwts that match across a set of files
+Molecular weights file list: <b>../data/mw2.dat,mw3.dat</b>
+Ppm tolerance [50.0]: <b></b>
+Molecular weights output file [outfile.mwcontam]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-files]             filelist   Molecular weights file list
+   -tolerance          float      [50.0] Ppm tolerance (Any numeric value)
+  [-outfile]           outfile    [*.mwcontam] Molecular weights output file
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-files]<br>(Parameter 1)</td>
+<td>Molecular weights file list</td>
+<td>Comma-separated file list</td>
+<td><i>comma-separated file list</i></td>
+</tr>
+
+<tr>
+<td>-tolerance</td>
+<td>Ppm tolerance</td>
+<td>Any numeric value</td>
+<td>50.0</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Molecular weights output file</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.mwcontam</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: mw1.dat</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+20.0
+33.0
+67.0
+128.0
+415.0
+999.0
+</pre>
+</td></tr></table><p>
+<p><h3>File: mw2.dat</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+13.0
+41.0
+67.0
+415.0
+846.0
+781.0
+</pre>
+</td></tr></table><p>
+<p><h3>File: mw3.dat</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+3.0
+18.0
+67.0
+124.0
+197.0
+236.0
+415.0
+587.0
+632.0
+</pre>
+</td></tr></table><p>
+
+<p>
+
+The input is a comma-separated list of files containing simple list of
+experimental molecular weights. 
+
+<p>
+
+There should be one weight per line.
+   
+<p>
+
+Comments in the data file start with a '#' character in the first
+column. 
+
+<p>
+
+Blank lines are ignored.
+   
+
+
+<H2>
+    Output file format
+</H2>
+
+The output is a list of the molecular weights common to all files.
+   
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: outfile.mwcontam</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+67.000
+415.000
+</pre>
+</td></tr></table><p>
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+<b>mwcontam</b> uses no data files.
+
+<p>
+
+The output of <b>mwcontam</b>, with minimal editing, can be added to the
+data file for the <a href="mwfilter.html"><b>mwfilter</b></a> program
+('Emwfilter.dat').  For example you might like to fetch 'Emwfilter.dat'
+using <b>embossdata</b> (as described in the <b>mwfilter</b>
+documentation) and edit it to include the lines:
+
+<p>
+
+<hr>
+<pre>
+# data produced from the program mwcontam
+mwcontam	67.000
+mwcontam	415.000 
+</pre>
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="backtranambig.html">backtranambig</a></td>
+<td>Back translate a protein sequence to ambiguous codons</td>
+</tr>
+
+<tr>
+<td><a href="backtranseq.html">backtranseq</a></td>
+<td>Back translate a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="charge.html">charge</a></td>
+<td>Protein charge plot</td>
+</tr>
+
+<tr>
+<td><a href="checktrans.html">checktrans</a></td>
+<td>Reports STOP codons and ORF statistics of a protein</td>
+</tr>
+
+<tr>
+<td><a href="compseq.html">compseq</a></td>
+<td>Count composition of dimer/trimer/etc words in a sequence</td>
+</tr>
+
+<tr>
+<td><a href="emowse.html">emowse</a></td>
+<td>Protein identification by mass spectrometry</td>
+</tr>
+
+<tr>
+<td><a href="freak.html">freak</a></td>
+<td>Residue/base frequency table or plot</td>
+</tr>
+
+<tr>
+<td><a href="iep.html">iep</a></td>
+<td>Calculates the isoelectric point of a protein</td>
+</tr>
+
+<tr>
+<td><a href="mwfilter.html">mwfilter</a></td>
+<td>Filter noisy molwts from mass spec output</td>
+</tr>
+
+<tr>
+<td><a href="octanol.html">octanol</a></td>
+<td>Displays protein hydropathy</td>
+</tr>
+
+<tr>
+<td><a href="pepinfo.html">pepinfo</a></td>
+<td>Plots simple amino acid properties in parallel</td>
+</tr>
+
+<tr>
+<td><a href="pepstats.html">pepstats</a></td>
+<td>Protein statistics</td>
+</tr>
+
+<tr>
+<td><a href="pepwindow.html">pepwindow</a></td>
+<td>Displays protein hydropathy</td>
+</tr>
+
+<tr>
+<td><a href="pepwindowall.html">pepwindowall</a></td>
+<td>Displays protein hydropathy of a set of sequences</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Author(s)
+</H2>
+Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
+
+<H2>
+    History
+</H2>
+
+
+Written (July 2002) - Alan Bleasby.
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+None
+
+</BODY>
+</HTML>
+

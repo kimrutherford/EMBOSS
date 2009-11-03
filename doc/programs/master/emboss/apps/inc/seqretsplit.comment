@@ -1,0 +1,7 @@
+The specification of the output file is not used when the output file
+names are generated automatically..
+<p>
+
+At some point this ought to change and you will not be prompted for the
+output file at all. 
+

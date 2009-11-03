@@ -1,0 +1,19 @@
+<b>Here is a sample session with yank</b>
+<p>
+This is an example of adding an entry for the part of tembl:x65921 between positions 1913 and 1915 to the existing list file 'cds.list': 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>yank </b>
+Reads a sequence range, appends the full USA to a list file
+Input (gapped) sequence: <b>tembl:x65921</b>
+     Begin at position [start]: <b>1913</b>
+       End at position [end]: <b>1915</b>
+        Reverse strand [N]: <b></b>
+List of USAs output file [x65921.yank]: <b>cds.list</b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

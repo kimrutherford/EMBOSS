@@ -1,0 +1,14 @@
+<b>Here is a sample session with chaos</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>chaos tembl:j01636 -graph cps </b>
+Create a chaos game representation plot for a sequence
+
+Created chaos.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

@@ -1,0 +1,178 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:x65923' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:x65923</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   X65923; SV 1; linear; mRNA; STD; HUM; 518 BP.
+XX
+AC   X65923;
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   18-APR-2005 (Rel. 83, Last updated, Version 11)
+XX
+DE   H.sapiens fau mRNA
+XX
+KW   fau gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-518
+RA   Michiels L.M.R.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
+RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-518
+RX   PUBMED; 8395683.
+RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
+RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
+RL   Oncogene 8(9):2537-2546(1993).
+XX
+DR   H-InvDB; HIT000322806.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..518
+FT                   /organism="Homo sapiens"
+FT                   /chromosome="11q"
+FT                   /map="13"
+FT                   /mol_type="mRNA"
+FT                   /clone_lib="cDNA"
+FT                   /clone="pUIA 631"
+FT                   /tissue_type="placenta"
+FT                   /db_xref="taxon:9606"
+FT   misc_feature    57..278
+FT                   /note="ubiquitin like part"
+FT   CDS             57..458
+FT                   /gene="fau"
+FT                   /db_xref="GDB:135476"
+FT                   /db_xref="GOA:P35544"
+FT                   /db_xref="GOA:P62861"
+FT                   /db_xref="HGNC:3597"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P62861"
+FT                   /protein_id="CAA46716.1"
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   misc_feature    98..102
+FT                   /note="nucleolar localization signal"
+FT   misc_feature    279..458
+FT                   /note="S30 part"
+FT   polyA_signal    484..489
+FT   polyA_site      509
+XX
+SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        60
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       120
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       180
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       240
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       300
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       360
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       420
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       480
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               518
+//
+</pre>
+</td></tr></table><p>
+
+<a name="input.3"></a>
+<h3>Input files for usage example 3</h3>
+<p><h3>File: prev.comp</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+#
+# Output from 'compseq'
+#
+# The Expected frequencies are calculated on the (false) assumption that every
+# word has equal frequency.
+#
+# The input sequences are:
+#	HSFAU
+
+
+Word size	3
+Total count	516
+
+#
+# Word	Obs Count	Obs Frequency	Exp Frequency	Obs/Exp Frequency
+#
+AAA	17		0.0329457	0.0156250	2.1085271
+AAC	5		0.0096899	0.0156250	0.6201550
+AAG	18		0.0348837	0.0156250	2.2325581
+AAT	4		0.0077519	0.0156250	0.4961240
+ACA	5		0.0096899	0.0156250	0.6201550
+ACC	6		0.0116279	0.0156250	0.7441860
+ACG	2		0.0038760	0.0156250	0.2480620
+ACT	7		0.0135659	0.0156250	0.8682171
+AGA	12		0.0232558	0.0156250	1.4883721
+AGC	7		0.0135659	0.0156250	0.8682171
+AGG	16		0.0310078	0.0156250	1.9844961
+AGT	10		0.0193798	0.0156250	1.2403101
+ATA	2		0.0038760	0.0156250	0.2480620
+ATC	3		0.0058140	0.0156250	0.3720930
+ATG	7		0.0135659	0.0156250	0.8682171
+ATT	2		0.0038760	0.0156250	0.2480620
+CAA	10		0.0193798	0.0156250	1.2403101
+CAC	6		0.0116279	0.0156250	0.7441860
+CAG	13		0.0251938	0.0156250	1.6124031
+CAT	5		0.0096899	0.0156250	0.6201550
+CCA	12		0.0232558	0.0156250	1.4883721
+CCC	13		0.0251938	0.0156250	1.6124031
+CCG	8		0.0155039	0.0156250	0.9922481
+CCT	10		0.0193798	0.0156250	1.2403101
+CGA	2		0.0038760	0.0156250	0.2480620
+CGC	10		0.0193798	0.0156250	1.2403101
+CGG	9		0.0174419	0.0156250	1.1162791
+CGT	4		0.0077519	0.0156250	0.4961240
+CTA	5		0.0096899	0.0156250	0.6201550
+CTC	11		0.0213178	0.0156250	1.3643411
+CTG	10		0.0193798	0.0156250	1.2403101
+CTT	11		0.0213178	0.0156250	1.3643411
+GAA	11		0.0213178	0.0156250	1.3643411
+GAC	6		0.0116279	0.0156250	0.7441860
+GAG	10		0.0193798	0.0156250	1.2403101
+GAT	4		0.0077519	0.0156250	0.4961240
+GCA	7		0.0135659	0.0156250	0.8682171
+GCC	18		0.0348837	0.0156250	2.2325581
+GCG	8		0.0155039	0.0156250	0.9922481
+GCT	10		0.0193798	0.0156250	1.2403101
+GGA	13		0.0251938	0.0156250	1.6124031
+GGC	17		0.0329457	0.0156250	2.1085271
+GGG	7		0.0135659	0.0156250	0.8682171
+GGT	9		0.0174419	0.0156250	1.1162791
+GTA	6		0.0116279	0.0156250	0.7441860
+GTC	9		0.0174419	0.0156250	1.1162791
+GTG	8		0.0155039	0.0156250	0.9922481
+GTT	5		0.0096899	0.0156250	0.6201550
+TAA	7		0.0135659	0.0156250	0.8682171
+TAC	3		0.0058140	0.0156250	0.3720930
+TAG	4		0.0077519	0.0156250	0.4961240
+TAT	1		0.0019380	0.0156250	0.1240310
+TCA	10		0.0193798	0.0156250	1.2403101
+TCC	6		0.0116279	0.0156250	0.7441860
+TCG	7		0.0135659	0.0156250	0.8682171
+TCT	10		0.0193798	0.0156250	1.2403101
+TGA	4		0.0077519	0.0156250	0.4961240
+TGC	9		0.0174419	0.0156250	1.1162791
+TGG	14		0.0271318	0.0156250	1.7364341
+TGT	5		0.0096899	0.0156250	0.6201550
+TTA	2		0.0038760	0.0156250	0.2480620
+TTC	10		0.0193798	0.0156250	1.2403101
+TTG	7		0.0135659	0.0156250	0.8682171
+TTT	7		0.0135659	0.0156250	0.8682171
+
+Other	0		0.0000000	0.0000000	10000000000.0000000
+</pre>
+</td></tr></table><p>

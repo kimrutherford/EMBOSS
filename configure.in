@@ -1,0 +1,560 @@
+dnl Configure template for the EMBOSS package.
+dnl Process this file with autoconf to produce a configure script.
+
+#if you want to force configure to use the default C compiler cc
+## then uncomment the following line.
+#CC=cc
+
+AC_INIT(ajax/ajacd.c)
+AM_INIT_AUTOMAKE(EMBOSS, 5.0.0)
+
+
+AC_PROG_AWK
+dnl Make sure CFLAGS is defined to stop AC_PROC_CC adding -g
+CFLAGS="$CFLAGS "
+AC_PROG_CC
+AC_PROG_CPP
+
+
+dnl Test whether --with-sgiabi given for IRIX (n32m3 n32m4 64m3 64m4)
+if test "`uname`" = "IRIX" || test "`uname`" = "IRIX64" ; then
+if test "$CC" != "gcc"; then
+  CFLAGS="$CFLAGS"
+  CHECK_SGI
+fi
+fi
+
+
+dnl Test if --enable-64 is given
+if test "${enable_64+set}" != set; then
+enable_64=no
+fi
+
+
+AC_ARG_ENABLE(64,
+[  --enable-64             64 bit systems])
+if test "${enable_64}" = "yes" ; then
+AC_MSG_CHECKING(for 64bit compilation support)
+
+dnl Test for Linux 64 bit
+if test "`uname`" = "Linux"; then
+CPPFLAGS="-DAJ_Linux64 $CPPFLAGS"
+fi
+
+dnl Test for FreeBSD 64 bit
+if test "`uname`" = "FreeBSD"; then
+CPPFLAGS="-DAJ_FreeBSD64 $CPPFLAGS"
+fi
+
+dnl Test for Solaris 64 bit. This is done in the optimisation section...
+dnl Another Solaris feature is that -fast implies -xarch=v8 and
+dnl therefore switches off -xarch=v9 if it is given first.
+
+
+dnl Test for OSF1 64 bit (its always this anyway)
+if test "`uname`" = "OSF1"; then
+CPPFLAGS="-DAJ_OSF164 $CPPFLAGS"
+fi
+
+dnl Test for SGI 64 bit
+if test "`uname`" = "IRIX" || test "`uname`" = "IRIX64"; then
+CPPFLAGS="-DAJ_IRIX64 $CPPFLAGS"
+fi
+
+dnl Test for AIX 64 bit
+if test "`uname`" = "AIX"; then
+CPPFLAGS="-DAJ_AIX64 $CPPFLAGS"
+if test "$CC" != "gcc"; then
+CC="$CC -q64"
+fi
+NM="nm -B -X 64"
+AR="ar -X 64"
+fi
+
+dnl Test for HP-UX 64 bit
+if test "`uname`" = "HP-UX"; then
+if test "$CC" != "gcc"; then
+CC="$CC +DD64"
+fi
+CPPFLAGS="-DAJ_HPUX64 $CPPFLAGS"
+fi
+
+AC_MSG_RESULT(done)
+fi
+
+
+
+
+
+
+
+dnl Set optimisation flags
+if test "$CC" != "gcc"; then
+
+dnl Test for AIX optimisation
+if test "`uname`" = "AIX"; then
+CFLAGS="$CFLAGS -O3 -qstrict -qarch=auto -qtune=auto"
+fi
+
+dnl test for SGI optimisation
+if test "`uname`" = "IRIX" || test "`uname`" = "IRIX64" ; then
+LD="/usr/bin/ld -IPA"
+CFLAGS="$CFLAGS -O3"
+fi
+
+dnl Test for HP-UX optimisation
+if test "`uname`" = "HP-UX"; then
+CFLAGS="$CFLAGS -fast"
+fi
+
+dnl Test for OSF1 optimisation
+if test "`uname`" = "OSF1"; then
+CFLAGS="$CFLAGS -fast -U_FASTMATH"
+fi
+
+dnl test for Solaris optimisation
+if test "`uname`" = "SunOS"; then
+CFLAGS="$CFLAGS -O"
+dnl test for 64 bit ptr here (see Solaris 64bit above)
+if test "${enable_64}" = "yes" ; then
+CFLAGS="$CFLAGS -xtarget=ultra -xarch=v9"
+fi
+fi
+
+dnl Test for Linux optimisation
+if test "`uname`" = "Linux"; then
+CFLAGS="$CFLAGS -O2"
+fi
+
+dnl Test for FreeBSD optimisation
+if test "`uname`" = "FreeBSD"; then
+CFLAGS="$CFLAGS -O2"
+fi
+
+
+
+else
+
+dnl Intel MacOSX requires reduced optimisation for PCRE code
+if test "`uname -a | grep Darwin`"; then
+  if test "`uname -a | grep i386`"; then
+    CFLAGS="$CFLAGS -O1"
+  else
+    CFLAGS="$CFLAGS -O2"
+  fi
+else
+CFLAGS="$CFLAGS -O2"
+fi
+
+fi
+dnl End of Optimisation tests
+
+
+
+
+
+dnl Add extensions to Solaris for some reentrant functions
+if test "`uname`" = "SunOS"; then
+CFLAGS="$CFLAGS -D__EXTENSIONS__"
+fi
+
+
+dnl Use libtool to make a shared library.
+AC_PROG_LIBTOOL
+
+dnl endian test for indexing system
+AC_C_BIGENDIAN(CPPFLAGS="$CPPFLAGS -DBENDIAN",CPPFLAGS="$CPPFLAGS -DLENDIAN")
+
+dnl PCRE library definitions - see the MAJOR and MINOR values
+dnl to see which version's configure.in these lines come from
+
+dnl Provide the current PCRE version information. Do not use numbers
+dnl with leading zeros for the minor version, as they end up in a C
+dnl macro, and may be treated as octal constants. Stick to single
+dnl digits for minor numbers less than 10. There are unlikely to be
+dnl that many releases anyway.
+
+PCRE_MAJOR=4
+PCRE_MINOR=3
+PCRE_DATE=21-May-2003
+PCRE_VERSION=${PCRE_MAJOR}.${PCRE_MINOR}
+
+dnl Default values for miscellaneous macros
+
+POSIX_MALLOC_THRESHOLD=-DPOSIX_MALLOC_THRESHOLD=10
+
+dnl Provide versioning information for libtool shared libraries that
+dnl are built by default on Unix systems.
+
+PCRE_LIB_VERSION=0:1:0
+PCRE_POSIXLIB_VERSION=0:0:0
+
+
+dnl Define where the EMBOSS package is located
+AC_SUBST(AJAX_FIXED_ROOT)
+AJAX_FIXED_ROOT="\\\"`pwd`/emboss\\\""
+AC_SUBST(EMBOSS_TOP)
+EMBOSS_TOP=`pwd`
+
+dnl Program checks
+#AC_PROG_CXX
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_PROG_MAKE_SET
+AC_PROG_RANLIB
+
+dnl Check for header files
+AC_PATH_XTRA
+AC_HEADER_DIRENT
+AC_HEADER_STDC
+
+AC_CHECK_HEADERS(unistd.h)
+
+dnl Check for typedefs, structures and compiler characteristics
+AC_C_CONST
+AC_TYPE_PID_T
+AC_TYPE_SIZE_T
+AC_STRUCT_TM
+
+dnl Check for library functions
+AC_FUNC_GETPGRP
+AC_FUNC_STRFTIME
+AC_FUNC_VFORK
+AC_FUNC_VPRINTF
+
+AC_CHECK_FUNCS(memmove)
+
+if test "${with_x}" != "no" ; then
+LF_EMBOSS_PATH_XLIB
+fi
+
+dnl Library checks
+AC_CHECK_LIB(c, gethostbyname, LIBS="$LIBS", LIBS="$LIBS -lnsl")
+AC_CHECK_LIB(c, socket, LIBS="$LIBS" , LIBS="$LIBS -lsocket")
+AC_CHECK_LIB(m, main)
+
+dnl GD for FreeBSD requires libiconv
+if test "`uname`" = "FreeBSD" && ${with_pngdriver} != "no"; then
+AC_CHECK_LIB(iconv, main, LIBS="$LIBS", LIBS="-liconv $LIBS")
+fi
+
+AM_CONDITIONAL(AMPNG, false)
+
+CHECK_GENERAL
+CHECK_JAVA
+CHECK_JAVAOS
+CHECK_PNGDRIVER
+CHECK_AUTH
+CHECK_GROUT
+CHECK_AMD64
+
+dnl "Export" these variables for PCRE
+
+AC_SUBST(HAVE_MEMMOVE)
+AC_SUBST(HAVE_STRERROR)
+AC_SUBST(PCRE_MAJOR)
+AC_SUBST(PCRE_MINOR)
+AC_SUBST(PCRE_DATE)
+AC_SUBST(PCRE_VERSION)
+AC_SUBST(PCRE_LIB_VERSION)
+AC_SUBST(PCRE_POSIXLIB_VERSION)
+AC_SUBST(POSIX_MALLOC_THRESHOLD)
+
+#dnl Test if --enable-corba is given
+#AC_ARG_ENABLE(corba,
+#[  --enable-corba	   corba (need glib and orbit)])
+#if test "${enable_corba}" = "yes" ; then
+#AC_MSG_CHECKING(for ORBit and glib)
+#CPPFLAGS="$CPPFLAGS -I/usr/lib/glib/include -I/usr/local/lib/glib/include"
+#
+#AC_CHECK_HEADERS(glib.h)
+#AC_CHECK_HEADERS(orb/orbit.h)
+#AC_CHECK_LIB(glib, main)
+#
+#AC_CHECK_LIB(ORBitutil, main)
+#AC_CHECK_LIB(IIOP, main)
+#AC_CHECK_LIB(ORBit, main)
+#fi
+
+dnl Test if --enable-debug given
+AC_ARG_ENABLE(debug,
+[  --enable-debug          debug (-g option on compiler)])
+if test "${enable_debug}" = "yes" ; then
+  CFLAGS="$CFLAGS -g"
+fi          
+
+
+dnl Turn off irritating linker warnings in IRIX
+if test "`uname`" = "IRIX" || test "`uname`" = "IRIX64"; then
+CFLAGS="-Wl,-LD_MSG:off=85:off=84:off=16:off=134 $CFLAGS"
+fi
+
+
+
+
+dnl Test if --enable-large is given
+if test "${enable_large+set}" != set; then
+enable_large=yes
+fi
+
+
+AC_ARG_ENABLE(large,
+[  --enable-large          large file support (over 2Gbyte)])
+if test "${enable_large}" = "yes" ; then
+AC_MSG_CHECKING(for large file support)
+
+dnl Test for Linux large file support
+if test "`uname`" = "Linux"; then
+CPPFLAGS="-DAJ_LinuxLF -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE $CPPFLAGS"
+fi
+
+dnl Test for FreeBSD large file support
+if test "`uname`" = "FreeBSD"; then
+CPPFLAGS="-DAJ_FreeBSDLF $CPPFLAGS"
+fi
+
+dnl Test for Solaris large file support
+if test "`uname`" = "SunOS"; then
+CPPFLAGS="-DAJ_SolarisLF -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE $CPPFLAGS"
+fi
+
+dnl Test for OSF1 large file support (its always this anyway)
+if test "`uname`" = "OSF1"; then
+CPPFLAGS="-DAJ_OSF1LF $CPPFLAGS"
+fi
+
+dnl Test for SGI large file support
+dnl CPPFLAGS="-DAJ_IRIXLF -D_LARGEFILE64_SOURCE $CPPFLAGS"
+if test "`uname`" = "IRIX" || test "`uname`" = "IRIX64"; then
+CPPFLAGS="-DAJ_IRIXLF -D_LARGEFILE64_SOURCE $CPPFLAGS"
+fi
+
+dnl Test for AIX large file support
+dnl CPPFLAGS="-DAJ_AIXLF $CPPFLAGS"
+if test "`uname`" = "AIX"; then
+CPPFLAGS="-DAJ_AIXLF -D_LARGE_FILES $CPPFLAGS"
+fi
+
+dnl Test for HP-UX large file support
+dnl CPPFLAGS="-DAJ_HPUXLF -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 $CPPFLAGS"
+if test "`uname`" = "HP-UX"; then
+CPPFLAGS="-DAJ_HPUXLF -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 $CPPFLAGS"
+fi
+
+dnl Test for MacOSX large file support off_t and fpos_t are always 64-bit
+dnl CPPFLAGS="-DAJ_MACOSXLF
+if test "`uname`" = "Darwin"; then
+CPPFLAGS="-DAJ_MACOSXLF $CPPFLAGS"
+fi
+
+AC_MSG_RESULT(done)
+fi
+
+
+
+
+
+
+
+
+
+
+
+
+
+dnl Test if purify exists and if --enable-purify given if so
+dnl set "-g"
+
+AC_MSG_CHECKING(for purify)
+dnl if(purify -version) < /dev/null > /dev/null 2>&1; then
+   AC_ARG_ENABLE(purify,
+   [  --enable-purify         purify ])
+if test "${enable_purify}" = "yes" ; then
+     CC="purify --chain-length="20" -best-effort -windows=yes gcc -g"
+     LIBTOOL="$LIBTOOL --tag=CC"
+     AC_MSG_RESULT(yes)
+else
+   AC_MSG_RESULT(no)
+fi          
+dnl fi
+
+
+dnl Test if --enable-gccprofile given if so
+dnl set "-pg"
+
+if test "${with_gccprofile}" = "yes" ; then
+     CFLAGS="$CFLAGS -pg"
+     LDFLAGS="$LDFLAGS -pg"
+fi          
+
+
+
+dnl Test if --enable-warnings given
+AC_ARG_ENABLE(warnings,
+[  --enable-warnings       warnings (-Wall option on gcc compiler)])
+if test "${enable_warnings}" = "yes" ; then
+if test "$CC" = "gcc"; then
+  CFLAGS="$CFLAGS -Wall -fno-strict-aliasing"
+fi
+fi          
+
+dnl Set extra needed compiler flags
+if test "$CC" = "cc"; then
+  case "$host" in
+    alpha*-dec-osf*) CFLAGS="$CFLAGS -ieee";;
+  esac
+fi
+AM_CONDITIONAL(PURIFY, test "${enable_purify}" = "yes")
+
+dnl Test if --enable-devwarnings given
+AC_ARG_ENABLE(devwarnings,
+[  --enable-devwarnings    strict warnings (gcc compiler only) for developers])
+if test "${enable_devwarnings}" = "yes" ; then
+if test "$CC" = "gcc"; then
+
+dnl more warnings beyond what -Wall provides
+  CFLAGS="$CFLAGS -Wextra"
+
+dnl prototype warnings. prototypes required for all functions
+  CFLAGS="$CFLAGS -Wstrict-prototypes -Wmissing-prototypes"
+  CFLAGS="$CFLAGS -Wold-style-definition -Wmissing-declarations"
+
+  CFLAGS="$CFLAGS -Wwrite-strings"
+
+dnl catches things like index as a variable name
+  CFLAGS="$CFLAGS -Wshadow"
+
+  CFLAGS="$CFLAGS -Wdeclaration-after-statement -Wundef"
+  CFLAGS="$CFLAGS -Wpointer-arith"
+  CFLAGS="$CFLAGS -Wcast-qual -Wcast-align"
+
+dnl casts of function results that can lose data e.g. double to int
+  CFLAGS="$CFLAGS -Wbad-function-cast"
+
+dnl comparing signed and unsigned values
+  CFLAGS="$CFLAGS -Wsign-compare"
+
+  CFLAGS="$CFLAGS -Wmissing-field-initializers"
+  CFLAGS="$CFLAGS -Wmissing-noreturn -Wnested-externs"
+dnl useful messages
+  CFLAGS="$CFLAGS -Wredundant-decls"
+dnl -Wpadded means moving char to end of structs - but also flags end of struct
+dnl  so need to add padding at end
+  CFLAGS="$CFLAGS -Wpadded"
+
+dnl -Wunsafe-loop-optimizations objects to loops with increments more than 1
+dnl because if the end is at INT_MAX it could run forever ... rarely
+dnl  CFLAGS="$CFLAGS -Wunsafe-loop-optimizations"
+
+dnl -Wconversion is brain-damaged - complains about char arguments every time
+dnl  CFLAGS="$CFLAGS -Wconversion"
+
+dnl -Wtraditional gives #elif and #error msgs
+dnl  CFLAGS="$CFLAGS -Wtraditional"
+
+dnl -Wwrite-strings upsets struct initialisation
+dnl  CFLAGS="$CFLAGS -Wwrite-strings"
+
+dnl -Wfloat-equal will not allow tests for values still 0.0
+dnl CFLAGS="$CFLAGS -Wfloat-equal"
+fi
+fi          
+
+dnl Test for cygwin to set AM_LDFLAGS in library & apps Makefile.ams
+dnl Replaces original version which used 'expr' and so wasn't entirely
+dnl portable.
+platform_cygwin='no'
+AC_MSG_CHECKING([for cygwin])
+case "$host" in
+  *-*-mingw*|*-*-cygwin*)
+    platform_cygwin='yes'
+    ;;
+  *)
+    platform_cygwin='no'
+    ;;
+esac
+AC_MSG_RESULT([$platform_cygwin])
+AM_CONDITIONAL(ISCYGWIN, test "$platform_cygwin" = "yes")
+AC_SUBST(ISCYGWIN)
+
+dnl Tests for AIX
+dnl If shared needs -Wl,-G in plplot,ajax,nucleus, -lX11 in plplot,
+dnl and -Wl,brtl -Wl,-bdynamic in emboss
+dnl We therefore need a static test as well
+needajax=no
+AM_CONDITIONAL(ISAIXIA64, test "`uname`" = "AIX")
+AM_CONDITIONAL(ISSHARED, test "${enable_shared}" = "yes")
+AC_SUBST(ISAIXIA64)
+
+if test "`uname`" = "AIX"; then
+if test -d ajax/.libs ; then
+	echo AIX ajax/.libs exists
+else
+	mkdir ajax/.libs
+fi
+
+#if test "$host_os" = "aix5.1.0.0"; then
+#	echo $host_os
+#	exit 0
+#fi
+case $host_os in
+	aix5*) needajax=no ;;
+	aix4.3.3*) needajax=yes ;;
+	*) needajax=no ;;
+esac
+fi
+AM_CONDITIONAL(NEEDAJAX,test "$needajax" = "yes")
+AC_SUBST(NEEDAJAX)
+
+
+dnl HP-UX needs -lsec for shadow passwords
+if test "`uname`" = "HP-UX"; then
+LDFLAGS="$LDFLAGS -lsec"
+fi
+
+
+dnl check and set compilation flags for Jemboss auth server code
+CHECK_THREADS
+
+
+AC_OUTPUT(plplot/Makefile plplot/lib/Makefile nucleus/Makefile ajax/Makefile
+emboss/Makefile emboss/acd/Makefile test/Makefile test/data/Makefile
+test/embl/Makefile test/genbank/Makefile test/gb/Makefile
+test/pir/Makefile test/swiss/Makefile
+test/swnew/Makefile test/testdb/Makefile
+test/wormpep/Makefile emboss/data/Makefile
+emboss/data/AAINDEX/Makefile
+emboss/data/CODONS/Makefile emboss/data/REBASE/Makefile 
+emboss/data/PRINTS/Makefile emboss/data/PROSITE/Makefile
+doc/Makefile doc/manuals/Makefile doc/tutorials/Makefile
+doc/programs/Makefile doc/programs/html/Makefile doc/programs/text/Makefile
+jemboss/Makefile jemboss/api/Makefile jemboss/api/org/Makefile
+jemboss/api/org/emboss/Makefile jemboss/api/org/emboss/jemboss/Makefile
+jemboss/api/org/emboss/jemboss/gui/Makefile
+jemboss/api/org/emboss/jemboss/gui/filetree/Makefile
+jemboss/api/org/emboss/jemboss/gui/form/Makefile
+jemboss/api/org/emboss/jemboss/gui/sequenceChooser/Makefile
+jemboss/api/org/emboss/jemboss/gui/startup/Makefile
+jemboss/api/org/emboss/jemboss/parser/Makefile
+jemboss/api/org/emboss/jemboss/parser/acd/Makefile
+jemboss/api/org/emboss/jemboss/programs/Makefile
+jemboss/api/org/emboss/jemboss/soap/Makefile
+jemboss/images/Makefile
+jemboss/lib/Makefile jemboss/lib/axis/Makefile
+jemboss/org/Makefile jemboss/org/emboss/Makefile
+jemboss/org/emboss/jemboss/Makefile 
+jemboss/org/emboss/jemboss/graphics/Makefile
+jemboss/org/emboss/jemboss/gui/Makefile
+jemboss/org/emboss/jemboss/gui/filetree/Makefile
+jemboss/org/emboss/jemboss/gui/form/Makefile
+jemboss/org/emboss/jemboss/gui/startup/Makefile
+jemboss/org/emboss/jemboss/gui/sequenceChooser/Makefile
+jemboss/org/emboss/jemboss/parser/Makefile
+jemboss/org/emboss/jemboss/parser/acd/Makefile
+jemboss/org/emboss/jemboss/programs/Makefile
+jemboss/org/emboss/jemboss/server/Makefile
+jemboss/org/emboss/jemboss/soap/Makefile
+jemboss/org/emboss/jemboss/editor/Makefile
+jemboss/org/emboss/jemboss/draw/Makefile
+jemboss/resources/Makefile jemboss/utils/Makefile
+Makefile)

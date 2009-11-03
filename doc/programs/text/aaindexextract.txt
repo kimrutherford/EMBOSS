@@ -1,0 +1,299 @@
+
+                              aaindexextract 
+
+
+
+Function
+
+   Extract data from AAINDEX
+
+Description
+
+   aaextractindex extracts information from the AAINDEX database for use
+   by pepwindow and pepwindowall
+
+   AAINDEX is a database of properties of amino acids. See references [1]
+   [2] [3].
+
+   The programs pepwindow and pepwindowall normally use the standard
+   EMBOSS data file 'Enakai.dat' by default, but you can set their
+   '-data' qualifier to use any of the files produced by aaextractindex
+   from the AAINDEX database.
+
+   The AAINDEX database file 'aaindex1' can be downloaded from the
+   AAINDEX site: ftp://ftp.genome.ad.jp/pub/db/genomenet/aaindex/aaindex1
+
+Usage
+
+   Here is a sample session with aaindexextract
+
+
+% aaindexextract 
+Extract data from AAINDEX
+AAINDEX database file: aaindex1.test
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-infile]            infile     AAINDEX database file
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers: (none)
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+                 Standard (Mandatory) qualifiers  Allowed values Default
+   [-infile]
+   (Parameter 1) AAINDEX database file Input file Required
+                 Additional (Optional) qualifiers Allowed values Default
+                 (none)
+                 Advanced (Unprompted) qualifiers Allowed values Default
+                 (none)
+
+Input file format
+
+   The AAINDEX database file 'aaindex1' can be downloaded from the
+   AAINDEX site: ftp://ftp.genome.ad.jp/pub/db/genomenet/aaindex/
+
+  Input files for usage example
+
+  File: aaindex1.test
+
+H CHOP780101
+D Normalized frequency of beta-turn (Chou-Fasman, 1978a)
+R LIT:2004003a PMID:354496
+A Chou, P.Y. and Fasman, G.D.
+T Empirical predictions of protein conformation
+J Ann. Rev. Biochem. 47, 251-276 (1978)
+C PALJ810106    0.977  TANS770110    0.956  CHAM830101    0.946
+  CHOP780203    0.940  CHOP780216    0.929  CHOP780210    0.921
+  ROBB760113    0.907  GEIM800108    0.899  QIAN880133    0.897
+  QIAN880132    0.896  LEVM780103    0.893  PRAM900104    0.891
+  LEVM780106    0.890  ROBB760108    0.887  BEGF750103    0.885
+  ISOY800103    0.885  CRAJ730103    0.882  GEIM800111    0.878
+  PALJ810105    0.868  ROBB760110    0.863  NAGK730103    0.827
+  QIAN880131    0.824  AURR980114   -0.803  BEGF750101   -0.803
+  QIAN880107   -0.809  KANM800103   -0.824  AURR980109   -0.837
+  SUEM840101   -0.845
+I   A/L    R/K    N/M    D/F    C/P    Q/S    E/T    G/W    H/Y    I/V
+    0.66   0.95   1.56   1.46   1.19   0.98   0.74   1.56   0.95   0.47
+    0.59   1.01   0.60   0.60   1.52   1.43   0.96   0.96   1.14   0.50
+//
+H CHOP780201
+D Normalized frequency of alpha-helix (Chou-Fasman, 1978b)
+R PMID:364941
+A Chou, P.Y. and Fasman, G.D.
+T Prediction of the secondary structure of proteins from their amino
+  acid sequence
+J Adv. Enzymol. 47, 45-148 (1978)
+C PALJ810102    0.981  ROBB760101    0.969  ISOY800101    0.959
+  KANM800101    0.956  MAXF760101    0.956  TANS770101    0.947
+  BURA740101    0.917  GEIM800101    0.912  KANM800103    0.912
+  LEVM780104    0.886  NAGK730101    0.886  PALJ810101    0.881
+  QIAN880106    0.874  LEVM780101    0.873  PRAM900102    0.873
+  GEIM800104    0.868  RACS820108    0.868  AURR980108    0.867
+  AURR980109    0.859  AURR980112    0.856  CRAJ730101    0.851
+  QIAN880107    0.843  BEGF750101    0.841  QIAN880105    0.835
+  AURR980114    0.828  AURR980115    0.816  AURR980110    0.814
+  PALJ810109    0.814  AURR980111    0.813  ROBB760103    0.806
+  MUNV940101   -0.802  CRAJ730103   -0.808  ROBB760113   -0.811
+  MUNV940102   -0.812  CHAM830101   -0.828  NAGK730103   -0.837
+I   A/L    R/K    N/M    D/F    C/P    Q/S    E/T    G/W    H/Y    I/V
+    1.42   0.98   0.67   1.01   0.70   1.11   1.51   0.57   1.00   1.08
+    1.21   1.16   1.45   1.13   0.57   0.77   0.83   1.08   0.69   1.06
+//
+H CHOP780202
+D Normalized frequency of beta-sheet (Chou-Fasman, 1978b)
+R PMID:364941
+A Chou, P.Y. and Fasman, G.D.
+T Prediction of the secondary structure of proteins from their amino
+  acid sequence
+J Adv. Enzymol. 47, 45-148 (1978)
+
+
+  [Part of this file has been deleted for brevity]
+
+C ROBB760111    0.825
+I   A/L    R/K    N/M    D/F    C/P    Q/S    E/T    G/W    H/Y    I/V
+    0.058  0.085  0.091  0.081  0.128  0.098  0.064  0.152  0.054  0.056
+    0.070  0.095  0.055  0.065  0.068  0.106  0.079  0.167  0.125  0.053
+//
+H CHOP780216
+D Normalized frequency of the 2nd and 3rd residues in turn (Chou-Fasman, 1978b)
+R PMID:364941
+A Chou, P.Y. and Fasman, G.D.
+T Prediction of the secondary structure of proteins from their amino
+  acid sequence
+J Adv. Enzymol. 47, 45-148 (1978)
+C CHOP780203    0.979  GEIM800111    0.955  LEVM780106    0.953
+  LEVM780103    0.952  PRAM900104    0.951  CHAM830101    0.942
+  GEIM800108    0.942  QIAN880133    0.939  QIAN880132    0.931
+  TANS770110    0.930  CHOP780101    0.929  ISOY800103    0.921
+  PALJ810106    0.904  QIAN880134    0.900  CHOP780210    0.896
+  QIAN880135    0.884  PALJ810105    0.881  QIAN880131    0.873
+  NAGK730103    0.819  QIAN880120   -0.800  FAUJ880102   -0.807
+  KANM800103   -0.808  QIAN880107   -0.808  ROBB760103   -0.841
+  PTIO830101   -0.855  SUEM840101   -0.874
+I   A/L    R/K    N/M    D/F    C/P    Q/S    E/T    G/W    H/Y    I/V
+    0.64   1.05   1.56   1.61   0.92   0.84   0.80   1.63   0.77   0.29
+    0.36   1.13   0.51   0.62   2.04   1.52   0.98   0.48   1.08   0.43
+//
+H KYTJ820101
+D Hydropathy index (Kyte-Doolittle, 1982)
+R LIT:0807099 PMID:7108955
+A Kyte, J. and Doolittle, R.F.
+T A simple method for displaying the hydropathic character of a protein
+J J. Mol. Biol. 157, 105-132 (1982)
+C CHOC760103    0.964  JANJ780102    0.922  DESM900102    0.898
+  EISD860103    0.897  CHOC760104    0.889  WOLR810101    0.885
+  RADA880101    0.884  MANP780101    0.881  EISD840101    0.878
+  PONP800103    0.870  NAKH920108    0.868  JANJ790101    0.867
+  JANJ790102    0.866  PONP800102    0.861  MEIH800103    0.856
+  PONP800101    0.851  PONP800108    0.850  WARP780101    0.845
+  RADA880108    0.842  ROSG850102    0.841  DESM900101    0.837
+  BIOV880101    0.829  RADA880107    0.828  CIDH920104    0.824
+  KANM800104    0.824  LIFS790102    0.824  MIYS850101    0.821
+  RADA880104    0.819  NAKH900111    0.817  NISK800101    0.812
+  FAUJ830101    0.811  ARGP820103    0.806  ARGP820102    0.803
+  NAKH920105    0.803  KRIW790101   -0.805  CHOC760102   -0.838
+  MONM990101   -0.842  GUYH850101   -0.843  RACS770102   -0.844
+  JANJ780103   -0.845  ROSM880101   -0.845  PRAM900101   -0.850
+  JANJ780101   -0.852  GRAR740102   -0.859  MEIH800102   -0.871
+  ROSM880102   -0.878  OOBM770101   -0.899
+I   A/L    R/K    N/M    D/F    C/P    Q/S    E/T    G/W    H/Y    I/V
+    1.8   -4.5   -3.5   -3.5    2.5   -3.5   -3.5   -0.4   -3.2    4.5
+    3.8   -3.9    1.9    2.8   -1.6   -0.8   -0.7   -0.9   -1.3    4.2
+//
+
+Output file format
+
+   One file for every entry in the AAINDEX database is created in the
+   EMBOSS standard 'data/AAINDEX' directory. For example, the file
+   'kytj820101':
+
+  Output files for usage example
+
+  Directory: AAINDEX
+
+   This directory contains output files, for example kytj820101.
+
+  File: AAINDEX/kytj820101
+
+H KYTJ820101
+D Hydropathy index (Kyte-Doolittle, 1982)
+R LIT:0807099 PMID:7108955
+A Kyte, J. and Doolittle, R.F.
+T A simple method for displaying the hydropathic character of a protein
+J J. Mol. Biol. 157, 105-132 (1982)
+C CHOC760103    0.964  JANJ780102    0.922  DESM900102    0.898
+  EISD860103    0.897  CHOC760104    0.889  WOLR810101    0.885
+  RADA880101    0.884  MANP780101    0.881  EISD840101    0.878
+  PONP800103    0.870  NAKH920108    0.868  JANJ790101    0.867
+  JANJ790102    0.866  PONP800102    0.861  MEIH800103    0.856
+  PONP800101    0.851  PONP800108    0.850  WARP780101    0.845
+  RADA880108    0.842  ROSG850102    0.841  DESM900101    0.837
+  BIOV880101    0.829  RADA880107    0.828  CIDH920104    0.824
+  KANM800104    0.824  LIFS790102    0.824  MIYS850101    0.821
+  RADA880104    0.819  NAKH900111    0.817  NISK800101    0.812
+  FAUJ830101    0.811  ARGP820103    0.806  ARGP820102    0.803
+  NAKH920105    0.803  KRIW790101   -0.805  CHOC760102   -0.838
+  MONM990101   -0.842  GUYH850101   -0.843  RACS770102   -0.844
+  JANJ780103   -0.845  ROSM880101   -0.845  PRAM900101   -0.850
+  JANJ780101   -0.852  GRAR740102   -0.859  MEIH800102   -0.871
+  ROSM880102   -0.878  OOBM770101   -0.899
+I   A/L    R/K    N/M    D/F    C/P    Q/S    E/T    G/W    H/Y    I/V
+    1.8   -4.5   -3.5   -3.5    2.5   -3.5   -3.5   -0.4   -3.2    4.5
+    3.8   -3.9    1.9    2.8   -1.6   -0.8   -0.7   -0.9   -1.3    4.2
+//
+
+Data files
+
+   None.
+
+Notes
+
+   If aaindexextract tries to write the data to an unexpected location
+   you can explicitly set the location of the EMBOSS data directory by
+   putting the line:
+
+   ENV EMBOSS_DATA /path/to/the/EMBOSS/data/directory
+   in the EMBOSS emboss.default file.
+
+   (Where '/path/to/the/EMBOSS/data/directory' is the location of your
+   EMBOSS data as unpacked from the distribution file.)
+
+References
+
+    1. Nakai, K., Kidera, A., and Kanehisa, M.; Cluster analysis of amino
+       acid indices for prediction of protein structure and function.
+       Protein Eng. 2, 93-100 (1988). [UI:89221001]
+    2. Tomii, K. and Kanehisa, M.; Analysis of amino acid indices and
+       mutation matrices for sequence comparison and structure prediction
+       of proteins. Protein Eng. 9, 27-36 (1996). [UI:96272030]
+    3. Kawashima, S., Ogata, H., and Kanehisa, M.; AAindex: amino acid
+       index database. Nucleic Acids Res. 27, 368-369 (1999).
+       [UI:99063742]
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name                        Description
+   cutgextract   Extract data from CUTG
+   printsextract Extract data from PRINTS
+   prosextract   Build the PROSITE motif database for use by patmatmotifs
+   rebaseextract Extract data from REBASE
+   tfextract     Extract data from TRANSFAC
+
+   The programs pepwindow and pepwindowall normally use the standard
+   EMBOSS data file 'Enakai.dat' by default, but you can set their
+   '-data' qualifier to use any of the files produced by aaextractindex.
+
+Author(s)
+
+   Peter Rice (pmr © ebi.ac.uk)
+   Informatics Division, European Bioinformatics Institute, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+History
+
+   Written (25 June 2002) - Peter Rice
+
+Target users
+
+   This program is intended to be used by administrators responsible for
+   software and database installation and maintenance.
+
+Comments
+
+   None

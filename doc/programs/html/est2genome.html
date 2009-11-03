@@ -1,0 +1,959 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: est2genome
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+est2genome
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+<H2>
+    Function
+</H2>
+Align EST and genomic DNA sequences
+<H2>
+    Description
+</H2>
+
+<b>est2genome</b> is a software tool to aid the prediction of genes by
+sequence homology. The program will align a set of spliced nucleotide
+sequences (ESTs cDNAs or mRNAs) to an unspliced genomic DNA sequence,
+inserting introns of arbitrary length when needed. In addition, where
+feasible introns start and stop at the splice consensus dinucleotides
+GT and AG.
+
+<p>
+Unless instructed otherwise, the program makes three alignments: First
+it compares both stands of the spliced sequence against the forward
+strand of the genomic, assuming the splice consensus GT/AG (ie in the
+forward gene direction). The maximum-scoring orientation is then
+realigned assuming the splice consensus CT/AC (ie in the reversed gene
+direction). Only the overall maximum-scoring alignment is reported.
+
+
+<p>
+The program outputs a list of the exons and introns it has found. The
+format is like that of MSPcrunch, ie a list of matching segments. This
+format is easy to parse into other software. The program also
+indicates, based on the splice site information, the gene's predicted
+direction of transcription. Optionally the full sequence alignment is
+printed as well (see the example).
+
+<H2>
+    Algorithm
+</H2>
+    
+The program uses a linear-space divide-and-conquer strategy (Myers and 
+Miller, 1988; Huang, 1994) to limit memory use:
+
+<p>
+
+1. A first pass Smith-Waterman local alignment scan is done to find the 
+start and end of the maximally scoring segments.
+
+<p>
+
+2. Subsequences corresponding to these segments are extracted
+
+<p>
+
+3a. If the product of the subsequences' lengths is less than a 
+user-defined threshold (i.e. they will fit in memory) the segments are 
+realigned using the Needleman-Wunsch global alignment algorithm, which 
+will give the same result as the Smith-Waterman since the subsequences 
+are guaranteed to align end-to-end.
+
+<p>
+
+3b. If the product of the lengths exceeds the threshold (a full 
+alignment will not fit in memory) the alignment is made recursively by 
+splitting the spliced (EST) sequence in half and finding the genome 
+sequence position which aligns with the mid-point. The process is 
+repeated until the product of gthe lengths is less than the threshold. 
+The divided sequences are aligned separately and then merged.
+
+<p>
+
+4. The genome sequence is searched against the forward and reverse 
+strands of the spliced (EST) sequence, assuming a forward gene splicing 
+direction (i.e. GT/AG consensus).
+
+<p>
+
+5. Then the best-scoring orientation is realigned assuming reverse 
+splicing (CT/AC consensus). The overall best alignment is reported.
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with est2genome</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>est2genome </b>
+Align EST and genomic DNA sequences
+Spliced EST nucleotide sequence(s): <b>tembl:h45989</b>
+Unspliced genomic nucleotide sequence: <b>tembl:z69719</b>
+Output file [h45989.est2genome]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-estsequence]       seqall     Spliced EST nucleotide sequence(s)
+  [-genomesequence]    sequence   Unspliced genomic nucleotide sequence
+  [-outfile]           outfile    [*.est2genome] Output file name
+
+   Additional (Optional) qualifiers:
+   -match              integer    [1] Score for matching two bases (Any
+                                  integer value)
+   -mismatch           integer    [1] Cost for mismatching two bases (Any
+                                  integer value)
+   -gappenalty         integer    [2] Cost for deleting a single base in
+                                  either sequence, excluding introns (Any
+                                  integer value)
+   -intronpenalty      integer    [40] Cost for an intron, independent of
+                                  length. (Any integer value)
+   -splicepenalty      integer    [20] Cost for an intron, independent of
+                                  length and starting/ending on donor-acceptor
+                                  sites (Any integer value)
+   -minscore           integer    [30] Exclude alignments with scores below
+                                  this threshold score. (Any integer value)
+
+   Advanced (Unprompted) qualifiers:
+   -reverse            boolean    Reverse the orientation of the EST sequence
+   -[no]splice         boolean    [Y] Use donor and acceptor splice sites. If
+                                  you want to ignore donor-acceptor sites then
+                                  set this to be false.
+   -mode               menu       [both] This determines the comparion mode.
+                                  The default value is 'both', in which case
+                                  both strands of the est are compared
+                                  assuming a forward gene direction (ie GT/AG
+                                  splice sites), and the best comparsion
+                                  redone assuming a reversed (CT/AC) gene
+                                  splicing direction. The other allowed modes
+                                  are 'forward', when just the forward strand
+                                  is searched, and 'reverse', ditto for the
+                                  reverse strand. (Values: both (Both
+                                  strands); forward (Forward strand only);
+                                  reverse (Reverse strand only))
+   -[no]best           boolean    [Y] You can print out all comparisons
+                                  instead of just the best one by setting this
+                                  to be false.
+   -space              float      [10.0] For linear-space recursion. If
+                                  product of sequence lengths divided by 4
+                                  exceeds this then a divide-and-conquer
+                                  strategy is used to control the memory
+                                  requirements. In this way very long
+                                  sequences can be aligned.
+                                  If you have a machine with plenty of memory
+                                  you can raise this parameter (but do not
+                                  exceed the machine's physical RAM) (Any
+                                  numeric value)
+   -shuffle            integer    [0] Shuffle (Any integer value)
+   -seed               integer    [20825] Random number seed (Any integer
+                                  value)
+   -align              boolean    Show the alignment. The alignment includes
+                                  the first and last 5 bases of each intron,
+                                  together with the intron width. The
+                                  direction of splicing is indicated by angle
+                                  brackets (forward or reverse) or ????
+                                  (unknown).
+   -width              integer    [50] Alignment width (Any integer value)
+
+   Associated qualifiers:
+
+   "-estsequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-genomesequence" associated qualifiers
+   -sbegin2            integer    Start of the sequence to be used
+   -send2              integer    End of the sequence to be used
+   -sreverse2          boolean    Reverse (if DNA)
+   -sask2              boolean    Ask for begin/end/reverse
+   -snucleotide2       boolean    Sequence is nucleotide
+   -sprotein2          boolean    Sequence is protein
+   -slower2            boolean    Make lower case
+   -supper2            boolean    Make upper case
+   -sformat2           string     Input sequence format
+   -sdbname2           string     Database name
+   -sid2               string     Entryname
+   -ufo2               string     UFO features
+   -fformat2           string     Features format
+   -fopenfile2         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory3        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-estsequence]<br>(Parameter 1)</td>
+<td>Spliced EST nucleotide sequence(s)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-genomesequence]<br>(Parameter 2)</td>
+<td>Unspliced genomic nucleotide sequence</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 3)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.est2genome</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-match</td>
+<td>Score for matching two bases</td>
+<td>Any integer value</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-mismatch</td>
+<td>Cost for mismatching two bases</td>
+<td>Any integer value</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-gappenalty</td>
+<td>Cost for deleting a single base in either sequence, excluding introns</td>
+<td>Any integer value</td>
+<td>2</td>
+</tr>
+
+<tr>
+<td>-intronpenalty</td>
+<td>Cost for an intron, independent of length.</td>
+<td>Any integer value</td>
+<td>40</td>
+</tr>
+
+<tr>
+<td>-splicepenalty</td>
+<td>Cost for an intron, independent of length and starting/ending on donor-acceptor sites</td>
+<td>Any integer value</td>
+<td>20</td>
+</tr>
+
+<tr>
+<td>-minscore</td>
+<td>Exclude alignments with scores below this threshold score.</td>
+<td>Any integer value</td>
+<td>30</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-reverse</td>
+<td>Reverse the orientation of the EST sequence</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]splice</td>
+<td>Use donor and acceptor splice sites. If you want to ignore donor-acceptor sites then set this to be false.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-mode</td>
+<td>This determines the comparion mode. The default value is 'both', in which case both strands of the est are compared assuming a forward gene direction (ie GT/AG splice sites), and the best comparsion redone assuming a reversed (CT/AC) gene splicing direction. The other allowed modes are 'forward', when just the forward strand is searched, and 'reverse', ditto for the reverse strand.</td>
+<td><table><tr><td>both</td> <td><i>(Both strands)</i></td></tr><tr><td>forward</td> <td><i>(Forward strand only)</i></td></tr><tr><td>reverse</td> <td><i>(Reverse strand only)</i></td></tr></table></td>
+<td>both</td>
+</tr>
+
+<tr>
+<td>-[no]best</td>
+<td>You can print out all comparisons instead of just the best one by setting this to be false.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-space</td>
+<td>For linear-space recursion. If product of sequence lengths divided by 4 exceeds this then a divide-and-conquer strategy is used to control the memory requirements. In this way very long sequences can be aligned.
+If you have a machine with plenty of memory you can raise this parameter (but do not exceed the machine's physical RAM)</td>
+<td>Any numeric value</td>
+<td>10.0</td>
+</tr>
+
+<tr>
+<td>-shuffle</td>
+<td>Shuffle</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-seed</td>
+<td>Random number seed</td>
+<td>Any integer value</td>
+<td>20825</td>
+</tr>
+
+<tr>
+<td>-align</td>
+<td>Show the alignment. The alignment includes the first and last 5 bases of each intron, together with the intron width. The direction of splicing is indicated by angle brackets (forward or reverse) or ???? (unknown).</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-width</td>
+<td>Alignment width</td>
+<td>Any integer value</td>
+<td>50</td>
+</tr>
+
+</table>
+
+<H2>
+    Input file format
+</H2>
+
+
+<b>est2genome</b> reads two nucleotide sequences. The first is an EST
+sequence (a single read or a finished cDNA). The second is a genomic
+finished sequence.
+
+<p>
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:h45989' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:h45989</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   H45989; SV 1; linear; mRNA; EST; HUM; 495 BP.
+XX
+AC   H45989;
+XX
+DT   18-NOV-1995 (Rel. 45, Created)
+DT   04-MAR-2000 (Rel. 63, Last updated, Version 2)
+XX
+DE   yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone
+DE   IMAGE:177794 3', mRNA sequence.
+XX
+KW   EST.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-495
+RA   Hillier L., Clark N., Dubuque T., Elliston K., Hawkins M., Holman M.,
+RA   Hultman M., Kucaba T., Le M., Lennon G., Marra M., Parsons J., Rifkin L.,
+RA   Rohlfing T., Soares M., Tan F., Trevaskis E., Waterston R., Williamson A.,
+RA   Wohldmann P., Wilson R.;
+RT   "The WashU-Merck EST Project";
+RL   Unpublished.
+XX
+DR   GDB; 3839990.
+DR   GDB; 4193257.
+DR   RZPD; IMAGp998F03326.
+DR   UNILIB; 555; 300.
+XX
+CC   On May 8, 1995 this sequence version replaced gi:800819.
+CC   Contact: Wilson RK
+CC   Washington University School of Medicine
+CC   4444 Forest Park Parkway, Box 8501, St. Louis, MO 63108
+CC   Tel: 314 286 1800
+CC   Fax: 314 286 1810
+CC   Email: est@watson.wustl.edu
+CC   Insert Size: 544
+CC   High quality sequence stops: 265
+CC   Source: IMAGE Consortium, LLNL
+CC   This clone is available royalty-free through LLNL ; contact the
+CC   IMAGE Consortium (info@image.llnl.gov) for further information.
+CC   Possible reversed clone: polyT not found
+CC   Insert Length: 544   Std Error: 0.00
+CC   Seq primer: SP6
+CC   High quality sequence stop: 265.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..495
+FT                   /organism="Homo sapiens"
+FT                   /lab_host="DH10B (ampicillin resistant)"
+FT                   /mol_type="mRNA"
+FT                   /sex="Male"
+FT                   /dev_stage="55-year old"
+FT                   /clone_lib="Soares adult brain N2b5HB55Y"
+FT                   /clone="IMAGE:177794"
+FT                   /note="Organ: brain; Vector: pT7T3D (Pharmacia) with a
+FT                   modified polylinker; Site_1: Not I; Site_2: Eco RI; 1st
+FT                   strand cDNA was primed with a Not I - oligo(dT) primer [5'
+FT                   TGTTACCAATCTGAAGTGGGAGCGGCCGCGCTTTTTTTTTTTTTTTTTTT 3'],
+FT                   double-stranded cDNA was size selected, ligated to Eco RI
+FT                   adapters (Pharmacia), digested with Not I and cloned into
+FT                   the Not I and Eco RI sites of a modified pT7T3 vector
+FT                   (Pharmacia). Library went through one round of
+FT                   normalization to a Cot = 53. Library constructed by Bento
+FT                   Soares and M.Fatima Bonaldo. The adult brain RNA was
+FT                   provided by Dr. Donald H. Gilden. Tissue was acquired 17-18
+FT                   hours after death which occurred in consequence of a
+FT                   ruptured aortic aneurysm. RNA was prepared from a pool of
+FT                   tissues representing the following areas of the brain:
+FT                   frontal, parietal, temporal and occipital cortex from the
+FT                   left and right hemispheres, subcortical white matter, basal
+FT                   ganglia, thalamus, cerebellum, midbrain, pons and medulla."
+FT                   /db_xref="taxon:9606"
+FT                   /db_xref="RZPD:IMAGp998F03326"
+FT                   /db_xref="UNILIB:555"
+XX
+SQ   Sequence 495 BP; 73 A; 135 C; 169 G; 104 T; 14 other;
+     ccggnaagct cancttggac caccgactct cgantgnntc gccgcgggag ccggntggan        60
+     aacctgagcg ggactggnag aaggagcaga gggaggcagc acccggcgtg acggnagtgt       120
+     gtggggcact caggccttcc gcagtgtcat ctgccacacg gaaggcacgg ccacgggcag       180
+     gggggtctat gatcttctgc atgcccagct ggcatggccc cacgtagagt ggnntggcgt       240
+     ctcggtgctg gtcagcgaca cgttgtcctg gctgggcagg tccagctccc ggaggacctg       300
+     gggcttcagc ttcccgtagc gctggctgca gtgacggatg ctcttgcgct gccatttctg       360
+     ggtgctgtca ctgtccttgc tcactccaaa ccagttcggc ggtccccctg cggatggtct       420
+     gtgttgatgg acgtttgggc tttgcagcac cggccgccga gttcatggtn gggtnaagag       480
+     atttgggttt tttcn                                                        495
+//
+</pre>
+</td></tr></table><p>
+<p><h3>Database entry: tembl:z69719</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   Z69719; SV 1; linear; genomic DNA; STD; HUM; 33760 BP.
+XX
+AC   Z69719;
+XX
+DT   26-FEB-1996 (Rel. 46, Created)
+DT   18-JAN-2007 (Rel. 90, Last updated, Version 6)
+XX
+DE   Human DNA sequence from clone XX-CNFG9 on chromosome 16
+XX
+KW   C16orf33; HTG; POLR3K; RHBDF1.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-33760
+RA   Kershaw J.;
+RT   ;
+RL   Submitted (16-JAN-2007) to the EMBL/GenBank/DDBJ databases.
+RL   Wellcome Trust Sanger Institute, Hinxton, Cambridgeshire, CB10 1SA, UK.
+RL   E-mail enquiries: vega@sanger.ac.uk Clone requests:
+RL   clonerequest@sanger.ac.uk
+XX
+DR   EMBL-JOIN; Z69720.
+DR   GDB; 11502921.
+XX
+CC   -------------- Genome Center
+CC   Center: Wellcome Trust Sanger Institute
+CC   Center code: SC
+CC   Web site: http://www.sanger.ac.uk
+CC   Contact: vega@sanger.ac.uk
+CC   --------------
+CC   
+CC   This sequence was finished as follows unless otherwise noted: all regions
+CC   were either double-stranded or sequenced with an alternate chemistry or
+CC   covered by high quality data (i.e., phred quality &gt;= 30); an attempt was
+CC   made to resolve all sequencing problems, such as compressions and repeats;
+CC   all regions were covered by at least one subclone; and the assembly was
+CC   confirmed by restriction digest, except on the rare occasion of the clone
+CC   being a YAC.
+CC   
+CC   The following abbreviations are used to associate primary accession
+CC   numbers given in the feature table with their source databases:
+CC   Em:, EMBL; Sw:, SWISSPROT; Tr:, TREMBL; Wp:, WORMPEP;
+CC   Information on the WORMPEP database can be found at
+CC   http://www.sanger.ac.uk/Projects/C_elegans/wormpep
+XX
+FH   Key             Location/Qualifiers
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+     gagacagcag agtgctcagc tcatgaagga ggcaccagcc gccatgcctc tacatccagg     30840
+     tctcctgggg ttcccacctc cacaaaaacc cccactgcta ggagtgcagg caggagggga     30900
+     cctgagaacc gacagttata ggtcctgcgg gtgggcagtg ctgggtgttc tggtctgccc     30960
+     cacccctgtg tgcctagatc cccatctggg cctcaagtgg gtgggattcc aaaggaagag     31020
+     ccggagtagg cgtggggagg ggcaggccca ggctggacaa agagtctggc cagggagcgg     31080
+     cacattgccc tcccagagac agtggctcag tgtccaggcc ttccccaggc gcacagtggg     31140
+     ctcttgttcc cagaaagccc ctcgggggga tccaaacagt gtctccccca ccccgctgac     31200
+     ccctcagtgt atggggaaac cgtggcccac ggaaggcctc actgcctggg gtcacacagc     31260
+     atctgagtca ctgcagcagc ctcacagctg ccagcccagg cccagcccca tcaggagaca     31320
+     cccaaagcca cagtgcatcc caggaccagc tgggggggct gcgggcagga ctctcgatga     31380
+     ggctgaggga cgaggagggt caagggagcc actggcgcca tgcatgctga cgtcccctct     31440
+     ggctgcctgc agagcctggt gtggaagggc tgagtggggg atggtggaga gtcctgttaa     31500
+     ctcaggtttc tgctctgggg atgtctgggc acccatcaag ctggccgcgt gcacaggtgc     31560
+     agggagagcc agaaagcagg agccgatgca gggaggccac tggggacagc ccaggctgat     31620
+     gcttgggccc catgtgtctc caccacctac aaccctaagc aagcctcagc tttcccatct     31680
+     ggaaatcagg ggtcacagca gtgcctggca cagtagcagc ggctgactcc atcacagggt     31740
+     ggtgtagcct gtgggtactt ggcactctct gaggggcagg agctgggggg tgaaaggacc     31800
+     ctagagcata tgcaacaaga gggcagccct ggggacacct ggggacagaa ccctccaaag     31860
+     gtgtcgagtt tgggaagaga ctagagagaa gctctggcca gtccaggcat agacagtggc     31920
+     cacagccagt ggagagctgc atcctcaggt gtgagcagca accacctctg tactcaggcc     31980
+     tgccctgcac actcacagga ccatgctggc agggacaact ggcggcggag ttgactgcca     32040
+     accccggggc cagaaccatc aagcctgggc tctgctccgc ccaaggaact gcctgctgcc     32100
+     gaggtcagct ggagcaaggg gcctcacccc gggacacctt cccagacgtg tcctcagctc     32160
+     acatgagcct catcccaggg ggatgtggct cctccagcat ccccacccac acgctgctct     32220
+     ctgaccctca gtcttctgtt tgactcctaa tctgaagctc aatcctagat ctcccttgag     32280
+     aagggggtca ccagctgtct ggcagcccag cctccaggtc ttctggatta atgaagggaa     32340
+     agtcacctgg cctctctgcc ttgtctatta atggcatcat gctgagaatg atatttgcta     32400
+     ggccctttgc aaaccccaaa gtgctcttca accctcccag tgaagcctct tcttttctgt     32460
+     ggaagaaatg aggttcaggg tggagcaggg caggcctgag acctttgcag ggttctctcc     32520
+     aggtccccag caggacagac tggcaccctg cctcccctca tcaccctaga caaggagaca     32580
+     gaacaagagg ttccctgcta caggccatct gtgagggaag ccgccctagg gcctgtagac     32640
+     acaggaatcc ctgaggacct gacctgtgag ggtagtgcac aaaggggcca gcacttggca     32700
+     ggaggggggg gggcactgcc ccaaggctca gctagcaaat gtggcacagg ggtcaccaga     32760
+     gctaaacccc tgactcagtt gggtctgaca ggggctgaca tggcagacac acccaggaat     32820
+     caggggacac caagtgcagc tcagggcacc tgtccaggcc acacagtcag aaaggggatg     32880
+     gcagcaagga cttagctaca ctagattctg ggggtaaact gcctggtatg ctggtcactg     32940
+     ctagtcccca gtctggagtc tagctgggtc tcaggagtta ggcgaaaaca ccctccccag     33000
+     gctgcaggtg ggagaggccc acatcccctg cacacgtctg gccagaggac agatgggcag     33060
+     cccagtcacc agtcagagcc ctccagaggt gtccctgact gaccctacac acatgcaccc     33120
+     aggtgcccag gcacccttgg gctcagcaac cctgcaaccc cctcccagga cccaccagaa     33180
+     gcaggatagg actagagagg ccacaggagg gaaaccaagt cagagcagaa atggcttcgg     33240
+     tcctcagcag cctggctcag cttcctcaaa ccagatcctg actgatcaca ctggtctgtc     33300
+     taacccctgg gaggggtcct ctgtatccat cttacagata aggaaactga ggctcagaga     33360
+     agcccatcac tgcctaaggt cccagggcct ataagggagc tcaaagcctt gggccaggtc     33420
+     tgcccaggag ctgcagtgga agggaccctg tctgcagacc cccagaagac aaggcagacc     33480
+     acctgggttc ttcagccttg tggctgtgga cggctgtcag acccttctaa gaccccttgc     33540
+     cacctgctcc atcaggggca tctcagttga agaaggaagg actcaccccc aaaatcgtcc     33600
+     aactcagaaa aaaaggcaga agccaaggaa tccaatcact gggcaaaatg tgatcctggc     33660
+     acagacactg aggtggggga actggagccg gtgtggcgga ggccctcaca gccaagagca     33720
+     actgggggtg ccctgggcag ggactgtagc tgggaagatc                           33760
+//
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Output file format
+</H2>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: h45989.est2genome</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Note Best alignment is between forward est and forward genome, but splice sites imply REVERSED GENE
+Exon       163  91.8 25685 25874 Z69719           1   193 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+-Intron    -20   0.0 25875 26278 Z69719      
+Exon       207  98.1 26279 26492 Z69719         194   407 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+-Intron    -20   0.0 26493 27390 Z69719      
+Exon        63  86.4 27391 27476 Z69719         408   494 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+
+Span       393  93.6 25685 27476 Z69719           1   494 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+
+Segment     14  83.3 25685 25702 Z69719           1    18 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     28  85.7 25703 25737 Z69719          20    54 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment      4 100.0 25738 25741 Z69719          56    59 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     13 100.0 25742 25754 Z69719          61    73 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment      4 100.0 25756 25759 Z69719          74    77 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment    110  97.4 25760 25874 Z69719          79   193 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     37 100.0 26279 26315 Z69719         194   230 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment    162  98.8 26317 26480 Z69719         231   394 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     12 100.0 26481 26492 Z69719         396   407 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     16 100.0 27391 27406 Z69719         408   423 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     10  91.7 27407 27418 Z69719         425   436 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     19  95.2 27419 27439 Z69719         438   458 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     24  80.6 27441 27476 Z69719         459   494 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+</pre>
+</td></tr></table><p>
+<p>
+
+<h3>MSP type segments</h3>
+
+There are four types of segment,
+
+<ol> 
+<li>each gapped <b>Exon</b>
+<li>each <b>Intron</b> (marked with a ? if it does not start GT and end AG)
+<li>the complete alignment <b>Span</b>
+<li>individual ungapped matching <b>Segments</b>.
+</ol>
+
+
+<p>
+
+The score for <b>Exon</b> segments is the alignment score excluding
+flanking intron penalties. The <b>Span</b> score is the total
+including the intron costs.
+
+<p>
+
+The coordinates of the genomic sequence always refer to the positive
+strand, but are swapped if the est has been reversed. The splice
+direction of Introns are indicated as <b>+Intron</b> (forward, splice
+sites GT/AG) or <b>-Intron</b> (reverse, splice sites CT/AC), or
+<b>?Intron</b> (unknown direction). <b>Segment</b> entries give the
+alignment as a series of ungapped matching segments.
+
+
+<h3>Full alignment</h3>
+
+You get the alignment if the -align switch is set.  The alignment
+includes the first and last 5 bases of each intron, together with the
+intron width. The direction of splicing is indicated by
+&gt;&gt;&gt;&gt; (forward) or &lt;&lt;&lt;&lt; (reverse) or ????
+(unknown)
+
+<!--
+
+<pre>
+
+HSNFG9 vs HS989235:
+
+  HSNFG9  25685 cccggaagctcatcttgg-ccaccgactctcgcttgcgccgccgcgggag  25733
+                || | ||||||| ||||| |||||||||||||  ||   |||||||||||
+HS989235      1 ccggnaagctcancttggaccaccgactctcgantgnntcgccgcgggag     50
+
+  HSNFG9  25734 ccgg-tgga-aacctgagcgggagctgg-agaaggagcagagggaggcag  25780
+                |||| |||| ||||||||||||| |||| |||||||||||||||||||||
+HS989235     51 ccggntgganaacctgagcggga-ctggnagaaggagcagagggaggcag     99
+
+  HSNFG9  25781 cacccggcgtgacgggagtgtgtggggcactcaggccttccgcagtgtca  25830
+                ||||||||||||||| ||||||||||||||||||||||||||||||||||
+HS989235    100 cacccggcgtgacggnagtgtgtggggcactcaggccttccgcagtgtca    149
+
+  HSNFG9  25831 tctgccacacggaaggcacggccacgggccagggggtctatgatctgga.  25874
+                |||||||||||||||||||||||||||||  |||||||||||||&lt;&lt;&lt;&lt;&lt; 
+HS989235    150 tctgccacacggaaggcacggccacgggcaggggggtctatgat......    193
+
+  HSNFG9  25874 ....cataccttctgcatgcccagctggcatggccccacgtagagtgggg  26319
+                404 &lt;&lt;&lt;&lt;&lt;||||||||||||||||||||||||||||||||||||| || 
+HS989235    193 .........cttctgcatgcccagctggcatggccccacgtagagt-ggn    233
+
+  HSNFG9  26320 gtggcgtctcggtgctggtcagcgacacgttgtcctggctgggcaggtcc  26369
+                 |||||||||||||||||||||||||||||||||||||||||||||||||
+HS989235    234 ntggcgtctcggtgctggtcagcgacacgttgtcctggctgggcaggtcc    283
+
+  HSNFG9  26370 agctcccggaggacctggggcttcagcttcccgtagcgctggctgcagtg  26419
+                ||||||||||||||||||||||||||||||||||||||||||||||||||
+HS989235    284 agctcccggaggacctggggcttcagcttcccgtagcgctggctgcagtg    333
+
+  HSNFG9  26420 acggatgctcttgcgctgccatttctgggtgctgtcactgtccttgctca  26469
+                ||||||||||||||||||||||||||||||||||||||||||||||||||
+HS989235    334 acggatgctcttgcgctgccatttctgggtgctgtcactgtccttgctca    383
+
+  HSNFG9  26470 ctccaaaccag-tcggcggtccccctggc.....ggtacctgcggatggt  27401
+                ||||||||||| ||||||||||||&lt;&lt;&lt;&lt;&lt; 898 &lt;&lt;&lt;&lt;&lt;|||||||||||
+HS989235    384 ctccaaaccagttcggcggtcccc...............ctgcggatggt    418
+
+  HSNFG9  27402 ctgtg-tgatggacgtct-ggcgttgcagcaccggccgccggagctcatg  27449
+                ||||| |||||||||| | ||| ||||||||||||||||| ||| |||||
+HS989235    419 ctgtgttgatggacgtttgggctttgcagcaccggccgcc-gagttcatg    467
+
+  HSNFG9  27450 gtggggtgaagagatgtgggctgtctc  27476
+                || |||| ||||||| |||| | | ||
+HS989235    468 gtngggtnaagagatttgggttttttc    494
+
+
+Alignment Score: 393
+
+</pre>
+In this example there are two reverse introns, of lengths 404 and 898 bp.
+-->
+
+
+<H2>
+    Data files
+</H2>
+
+
+None
+
+<H2>
+    Notes
+</H2>
+
+
+<b>est2genome</b> uses a linear-space dynamic-programming 
+algorithm. It has the following parameters:
+
+<pre>
+parameter               default         description
+
+match                   1               score for matching two bases
+mismatch                1               cost for mismatching two bases
+gap_penalty             2               cost for deleting a single base in
+                                        either sequence, 
+                                        excluding introns
+intron_penalty          40              cost for an intron, independent of
+                                        length.
+splice_penalty          20              cost for an intron, independent of
+                                        length and starting/ending on
+                                        donor-acceptor sites.
+
+space                   10              Space threshold (in  megabytes) 
+                                        for linear-space recursion. If the
+                                        product of the two sequence 
+                                        lengths divided by 4 exceeds this then
+                                        a divide-and-conquer strategy is used 
+                                        to control the memory requirements. 
+                                        In this way very long sequences can
+                                        be aligned. 
+                                        If you have a machine with plenty of
+                                        memory you can raise this parameter
+                                        (but do not exceed the machine's
+                                        physical RAM)
+                                        However, normally you should not need
+                                        to change this parameter.
+</pre>
+
+There is no gap initiation cost for short gaps, just a penalty
+proportional to the length of the gap.  Thus the cost of inserting a
+gap of length L in the EST is <pre> L*gap_penalty </pre> and the cost
+in the genome is 
+
+<pre> 
+min { L*gap_penalty, intron_penalty } or
+min { L*gap_penalty, splice_penalty } if the gap starts with GT and ends with AG
+                                     (or CT/AC if splice direction reversed)
+</pre>
+
+Introns are not allowed in the EST.  The difference between the
+intron_penalty and splice_penalty allows for some slack in marking the
+intron end-points. It is often the case that the best intron
+boundaries, from the point of view of minimising mismatches, will not
+coincide exactly with the splice consensus, so provided the difference
+between the intron/splice penalties outweighs the extra mismatch/indel
+costs the alignment will respect the proper boundaries. If the
+alignment still prefers boundaries which don't start and end with the
+splice consensus then this may indicate errors in the sequences.
+
+
+<p> The default parameters work well, except for very short exons
+(length less than the splice_penalty, approx) which may be
+skipped. The intron penalties should not be set to less that the
+maximum expected random match between the sequences (typically 10-15
+bp) in order to avoid spurious matches.
+
+The algorithm has the following steps:
+
+<ol>
+<li> A first-pass Smith-Waterman scan is done to locate the score, start
+and end of the maximal scoring segment (including introns of
+course). No other alignment information is retained.
+
+<li> Subsequences corresponding to the maximal-scoring segments are
+extracted.  If the product of these subsequences' lengths is less than
+the area parameter then the segments are re-aligned using the
+Needleman-Wunsch algorithm, which in this instance will give the same
+result as the Smith-Waterman since they are guaranteed to align
+end-to-end.
+
+<li> If the product of lengths exceeds the area threshold then the
+alignment is recursively broken down by splitting the EST in half and
+finding the genome position which aligns with the EST mid-point. The
+problem then reduces to aligning the left-hand and right-hand portions
+of the sequences separately and merging the result. 
+</ol>
+
+The worst-case run-time for the algorithm is about 3 times as long as
+would be taken to align using a quadratic-space program. In practice
+the maximal-scoring segment is often much shorter than the full genome
+length so the program runs only about 1.5 times slower.
+
+
+<H2>
+    References
+</H2>
+
+<ol>
+
+<li>Mott R. (1997) EST_GENOME: a program to align spliced DNA sequences to 
+unspliced genomic DNA.  Comput. Applic. 13:477-478
+
+<li>Huang X (1994) On global sequence alignment. Comput. Applic. Biosci. 
+10:227-235.
+
+<li>Myers, EW and Miller, W (1988) Optimal alignments in linear space. 
+Comput. Applic. Biosci. 4:11-17
+
+<li>Smith, TE and Waterman, MS (1981) Identification of common molecular 
+subsequences. J. Mol. Biol. 147:195-197
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It returns 0 unless an error occurs. 
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="needle.html">needle</a></td>
+<td>Needleman-Wunsch global alignment</td>
+</tr>
+
+<tr>
+<td><a href="stretcher.html">stretcher</a></td>
+<td>Finds the best global alignment between two sequences</td>
+</tr>
+
+</table>
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was modified for inclusion in EMBOSS by 
+Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
+<p>
+The original program was est_genome, written by Richard Mott at the Sanger
+Centre.  The original version is available from <a
+href="ftp://ftp.sanger.ac.uk/pub/pmr/est_genome.4.tar.Z">
+ftp://ftp.sanger.ac.uk/pub/pmr/est_genome.4.tar.Z</a>
+
+<H2>
+    History
+</H2>
+
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+
+<h3>Thu, 29 Mar 2001</h3>
+
+I found est2genome having problems finding very short exons with the
+default parameters.
+
+<p>
+
+With the folowing changes it detects also a 14bp exon correctly:
+<p>
+
+<pre>
+mismatch 1 -> 3
+intronpenalty 40 -> 20
+splicepenalty 20 -> 10
+minscore 30 -> 10
+</pre>
+
+<pre>
+Dr. David Bauer
+GenProfile AG, Max-Delbrueck-Center, Erwin-Negelein-Haus 
+Robert-Roessle-Str. 10, D-13125 Berlin, Germany
+bauer@genprofile.com, Tel:49-30-94892165, FAX:49-30-94892151
+</pre>
+
+
+
+</BODY>
+</HTML>
+

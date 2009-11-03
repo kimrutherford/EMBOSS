@@ -1,0 +1,358 @@
+
+                                  notseq 
+
+
+
+Function
+
+   Exclude a set of sequences and write out the remaining ones
+
+Description
+
+   When you have a set of sequences (a file of multiple sequences?) and
+   you wish to remove one or more of them from the set, then use notseq.
+
+   This program was written for the case where a file containing several
+   sequences is being used as a small database, but some of the sequences
+   are no longer required and must be deleted from the file.
+
+   notseq splits the input sequences into those that you wish to keep and
+   those you wish to exclude.
+
+   notseq takes a set of sequences as input together with a list of
+   sequence names or accession numbers. It also takes the name of a new
+   file to write the files that you want to keep into, and optionally the
+   name of a file that will contain the files that you want excluded from
+   the set.
+
+   notseq then reads in the input sequences. It outputs the ones that
+   match one of the sequence names or acession numbers to the file of
+   excluded sequences, and those that don't match are output to the file
+   of sequences to be kept.
+
+   Note that the names of the sequences to be excluded are not standard
+   EMBOSS USAs. Only the name or accession number shoudl be specified,
+   not the database or file that these entries may occur in. These
+   excluded sequence names will be matched against the names of the input
+   sequences to see if there is a match. Wildcarded names may be
+   specified by using '*'s. Any specified names of sequences to be
+   excluded that are not found are simply ignored.
+
+Usage
+
+   Here is a sample session with notseq
+
+   In this case the excluded sequences (myg_phyca and lgb2_luplu) are not
+   saved to any file:
+
+
+% notseq 
+Exclude a set of sequences and write out the remaining ones
+Input (gapped) sequence(s): globins.fasta
+Sequence names to exclude: myg_phyca,lgb2_luplu
+output sequence(s) [hbb_human.fasta]: mydata.seq
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+   Example 2
+
+   Here is an example where the sequences to be excluded are saved to
+   another file:
+
+
+% notseq -junkout hb.seq 
+Exclude a set of sequences and write out the remaining ones
+Input (gapped) sequence(s): globins.fasta
+Sequence names to exclude: hb*
+output sequence(s) [hbb_human.fasta]: mydata.seq
+
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     (Gapped) sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-exclude]           string     Enter a list of sequence names or accession
+                                  numbers to exclude from the sequences read
+                                  in. The excluded sequences will be written
+                                  to the file specified in the 'junkout'
+                                  parameter. The remainder will be written out
+                                  to the file specified in the 'outseq'
+                                  parameter.
+                                  The list of sequence names can be separated
+                                  by either spaces or commas.
+                                  The sequence names can be wildcarded.
+                                  The sequence names are case independent.
+                                  An example of a list of sequences to be
+                                  excluded is:
+                                  myseq, hs*, one two three
+                                  a file containing a list of sequence names
+                                  can be specified by giving the file name
+                                  preceeded by a '@', eg: '@names.dat' (Any
+                                  string is accepted)
+  [-outseq]            seqoutall  [.] Sequence set(s)
+                                  filename and optional format (output USA)
+
+   Additional (Optional) qualifiers:
+   -junkoutseq         seqoutall  [/dev/null] This file collects the sequences
+                                  which you have excluded from the main
+                                  output file of sequences.
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat3          string     Output seq format
+   -osextension3       string     File name extension
+   -osname3            string     Base file name
+   -osdirectory3       string     Output directory
+   -osdbname3          string     Database name to add
+   -ossingle3          boolean    Separate file for each entry
+   -oufo3              string     UFO features
+   -offormat3          string     Features format
+   -ofname3            string     Features file name
+   -ofdirectory3       string     Output directory
+
+   "-junkoutseq" associated qualifiers
+   -osformat           string     Output seq format
+   -osextension        string     File name extension
+   -osname             string     Base file name
+   -osdirectory        string     Output directory
+   -osdbname           string     Database name to add
+   -ossingle           boolean    Separate file for each entry
+   -oufo               string     UFO features
+   -offormat           string     Features format
+   -ofname             string     Features file name
+   -ofdirectory        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   notseq reads normal sequence USAs.
+
+  Input files for usage example
+
+  File: globins.fasta
+
+>HBB_HUMAN Sw:Hbb_Human => HBB_HUMAN
+VHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKV
+KAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGK
+EFTPPVQAAYQKVVAGVANALAHKYH
+>HBB_HORSE Sw:Hbb_Horse => HBB_HORSE
+VQLSGEEKAAVLALWDKVNEEEVGGEALGRLLVVYPWTQRFFDSFGDLSNPGAVMGNPKV
+KAHGKKVLHSFGEGVHHLDNLKGTFAALSELHCDKLHVDPENFRLLGNVLVVVLARHFGK
+DFTPELQASYQKVVAGVANALAHKYH
+>HBA_HUMAN Sw:Hba_Human => HBA_HUMAN
+VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHGSAQVKGHGK
+KVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTPA
+VHASLDKFLASVSTVLTSKYR
+>HBA_HORSE Sw:Hba_Horse => HBA_HORSE
+VLSAADKTNVKAAWSKVGGHAGEYGAEALERMFLGFPTTKTYFPHFDLSHGSAQVKAHGK
+KVGDALTLAVGHLDDLPGALSNLSDLHAHKLRVDPVNFKLLSHCLLSTLAVHLPNDFTPA
+VHASLDKFLSSVSTVLTSKYR
+>MYG_PHYCA Sw:Myg_Phyca => MYG_PHYCA
+VLSEGEWQLVLHVWAKVEADVAGHGQDILIRLFKSHPETLEKFDRFKHLKTEAEMKASED
+LKKHGVTVLTALGAILKKKGHHEAELKPLAQSHATKHKIPIKYLEFISEAIIHVLHSRHP
+GDFGADAQGAMNKALELFRKDIAAKYKELGYQG
+>GLB5_PETMA Sw:Glb5_Petma => GLB5_PETMA
+PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQEFFPKFKGLTT
+ADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRDLSGKHAKSFQVDPQYFKVLA
+AVIADTVAAGDAGFEKLMSMICILLRSAY
+>LGB2_LUPLU Sw:Lgb2_Luplu => LGB2_LUPLU
+GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKDLFSFLKGTSEVPQNNPEL
+QAHAGKVFKLVYEAAIQLQVTGVVVTDATLKNLGSVHVSKGVADAHFPVVKEAILKTIKE
+VVGAKWSEELNSAWTIAYDELAIVIKKEMNDAA
+
+   The names (or accession numbers) of the sequences to be excluded can
+   be entered as a file of such names by specifying an '@' followed by
+   the name of the file containing the sequence names. For example:
+   '@names.dat'.
+
+   The names or accession numbers of the sequences to be excluded are not
+   standard EMBOSS USAs. Only the ID name or accession number can be
+   specified, you cannot specify the sequences as 'database:ID',
+   'file:accession', 'format::file', etc.
+
+Output file format
+
+   notseq writes normal a sequence file.
+
+  Output files for usage example
+
+  File: mydata.seq
+
+>HBB_HUMAN Sw:Hbb_Human => HBB_HUMAN
+VHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKV
+KAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGK
+EFTPPVQAAYQKVVAGVANALAHKYH
+>HBB_HORSE Sw:Hbb_Horse => HBB_HORSE
+VQLSGEEKAAVLALWDKVNEEEVGGEALGRLLVVYPWTQRFFDSFGDLSNPGAVMGNPKV
+KAHGKKVLHSFGEGVHHLDNLKGTFAALSELHCDKLHVDPENFRLLGNVLVVVLARHFGK
+DFTPELQASYQKVVAGVANALAHKYH
+>HBA_HUMAN Sw:Hba_Human => HBA_HUMAN
+VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHGSAQVKGHGK
+KVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTPA
+VHASLDKFLASVSTVLTSKYR
+>HBA_HORSE Sw:Hba_Horse => HBA_HORSE
+VLSAADKTNVKAAWSKVGGHAGEYGAEALERMFLGFPTTKTYFPHFDLSHGSAQVKAHGK
+KVGDALTLAVGHLDDLPGALSNLSDLHAHKLRVDPVNFKLLSHCLLSTLAVHLPNDFTPA
+VHASLDKFLSSVSTVLTSKYR
+>GLB5_PETMA Sw:Glb5_Petma => GLB5_PETMA
+PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQEFFPKFKGLTT
+ADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRDLSGKHAKSFQVDPQYFKVLA
+AVIADTVAAGDAGFEKLMSMICILLRSAY
+
+  Output files for usage example 2
+
+  File: mydata.seq
+
+>MYG_PHYCA Sw:Myg_Phyca => MYG_PHYCA
+VLSEGEWQLVLHVWAKVEADVAGHGQDILIRLFKSHPETLEKFDRFKHLKTEAEMKASED
+LKKHGVTVLTALGAILKKKGHHEAELKPLAQSHATKHKIPIKYLEFISEAIIHVLHSRHP
+GDFGADAQGAMNKALELFRKDIAAKYKELGYQG
+>GLB5_PETMA Sw:Glb5_Petma => GLB5_PETMA
+PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQEFFPKFKGLTT
+ADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRDLSGKHAKSFQVDPQYFKVLA
+AVIADTVAAGDAGFEKLMSMICILLRSAY
+>LGB2_LUPLU Sw:Lgb2_Luplu => LGB2_LUPLU
+GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKDLFSFLKGTSEVPQNNPEL
+QAHAGKVFKLVYEAAIQLQVTGVVVTDATLKNLGSVHVSKGVADAHFPVVKEAILKTIKE
+VVGAKWSEELNSAWTIAYDELAIVIKKEMNDAA
+
+  File: hb.seq
+
+>HBB_HUMAN Sw:Hbb_Human => HBB_HUMAN
+VHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKV
+KAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGK
+EFTPPVQAAYQKVVAGVANALAHKYH
+>HBB_HORSE Sw:Hbb_Horse => HBB_HORSE
+VQLSGEEKAAVLALWDKVNEEEVGGEALGRLLVVYPWTQRFFDSFGDLSNPGAVMGNPKV
+KAHGKKVLHSFGEGVHHLDNLKGTFAALSELHCDKLHVDPENFRLLGNVLVVVLARHFGK
+DFTPELQASYQKVVAGVANALAHKYH
+>HBA_HUMAN Sw:Hba_Human => HBA_HUMAN
+VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHGSAQVKGHGK
+KVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTPA
+VHASLDKFLASVSTVLTSKYR
+>HBA_HORSE Sw:Hba_Horse => HBA_HORSE
+VLSAADKTNVKAAWSKVGGHAGEYGAEALERMFLGFPTTKTYFPHFDLSHGSAQVKAHGK
+KVGDALTLAVGHLDDLPGALSNLSDLHAHKLRVDPVNFKLLSHCLLSTLAVHLPNDFTPA
+VHASLDKFLSSVSTVLTSKYR
+
+Data files
+
+   None.
+
+Notes
+
+   Note that the names or accession numbers of the sequences to be
+   excluded are not standard EMBOSS USAs. Only the ID name or accession
+   number can be specified, you cannot specify the sequences as
+   'database:ID', 'file:accession', 'format::file', etc.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   If no matches are found to any of the specified sequence names, the
+   message "This is a warning: No matches found." is displayed.
+
+Exit status
+
+   It exits with a status of 0 unless no matches are found to any of the
+   input sequences name, in which case it exits with a status of -1.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name                         Description
+   biosed       Replace or delete sequence sections
+   codcopy      Reads and writes a codon usage table
+   cutseq       Removes a specified section from a sequence
+   degapseq     Removes gap characters from sequences
+   descseq      Alter the name or description of a sequence
+   entret       Reads and writes (returns) flatfile entries
+   extractalign Extract regions from a sequence alignment
+   extractfeat  Extract features from a sequence
+   extractseq   Extract regions from a sequence
+   listor       Write a list file of the logical OR of two sets of sequences
+   makenucseq   Creates random nucleotide sequences
+   makeprotseq  Creates random protein sequences
+   maskfeat     Mask off features of a sequence
+   maskseq      Mask off regions of a sequence
+   newseq       Type in a short new sequence
+   noreturn     Removes carriage return from ASCII files
+   nthseq       Writes one sequence from a multiple set of sequences
+   pasteseq     Insert one sequence into another
+   revseq       Reverse and complement a sequence
+   seqret       Reads and writes (returns) sequences
+   seqretsplit  Reads and writes (returns) sequences in individual files
+   skipseq      Reads and writes (returns) sequences, skipping first few
+   splitter     Split a sequence into (overlapping) smaller sequences
+   trimest      Trim poly-A tails off EST sequences
+   trimseq      Trim ambiguous bits off the ends of sequences
+   union        Reads sequence fragments and builds one sequence
+   vectorstrip  Strips out DNA between a pair of vector sequences
+   yank         Reads a sequence range, appends the full USA to a list file
+
+Author(s)
+
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+History
+
+   Written (9 Jan 2001) - Gary Williams
+
+   Added ability to specify names to exclude as a list file (June 2002) -
+   Gary Williams
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

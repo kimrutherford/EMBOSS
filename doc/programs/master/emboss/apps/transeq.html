@@ -1,0 +1,256 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: transeq
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+transeq
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/transeq.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+<b>Transeq</b> translates nucleic acid sequences to the corresponding
+peptide sequence.
+<p>
+It can translate in any of the 3 forward or three reverse sense
+frames, or in all three forward or reverse frames, or in all six
+frames.
+<p>
+It can translate specified regions corresponding to the coding
+regions of your sequences. 
+<p>
+It can translate using the standard ('Universal') genetic code
+and also with a selection of non-standard codes. 
+<p>
+Termination (STOP) codons are translated as the character '*'.
+<p>
+The output peptide sequence is always in the standard one-letter
+IUPAC code. 
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/transeq.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/transeq.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/transeq.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+<b>transeq</b> reads one or more nucleic acid sequence USAs.
+
+<p>
+
+<!--#include file="inc/transeq.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/transeq.output" -->
+
+<p>
+
+One or more peptide sequences are written out.
+
+<p>
+
+The names of the resulting protein sequences are formed from the name of
+the input nucleic acid sequence with '_' and the translation frame
+appended to it.  Thus a nucleic acid sequence with the name 'XYZ'
+franslated in all 6 frame would produce protein sequences with the
+names: 'XYZ_1', 'XYZ_2', 'XYZ_3', 'XYZ_4', 'XYZ_5', 'XYZ_6'. 
+
+<p>
+
+If regions are specified, they are taken to be translated in frame 1 and
+so the output name would be 'XYZ_1'. 
+<p>
+
+
+
+<H2>
+    Data files
+</H2>
+
+
+<!--#include file="inc/localfiles.ihtml" -->
+<p>
+<!--#include file="inc/refiles.ihtml" -->
+
+
+
+<H2>
+    Notes
+</H2>
+
+The reverse frame '-1' is defined as the translation you get when you
+use the reverse-complement of the sequence with the same codon phase as
+the codon in frame '1'. 
+
+<p>
+
+Thus the sequence ACTGG in frame 1 is the translation of the codons
+ACT,GG; the translation of frame -1 uses these same codons, reverse
+complemented:
+
+<p>
+
+<pre>
+  forward sense          ACT GG
+  reverse sense          TGA CC
+
+  reverse-complement     CC AGT
+  frame -1 translation       S
+</pre>
+
+<p>
+
+Frame -1 is the translation of CCAGT (the reverse complement of ACTGG)
+using the codon 'AGT' (the first bases 'CC' are ignored).  The result is
+the peptide 'S'. 
+
+<p>
+
+Similarly frame -2 is the phase used by frame 2, 'CAG T' (the first base
+'C' is ignored). The last base cannot be successfully translated and is
+output as the unknown residue 'X'. The result is the peptide 'QX'.
+
+<p>
+
+Frame -3 is the phase used by frame 3, 'CCA GT'.  The last two bases
+will translate to 'V' as it does not matter what the next base is. 
+(GTA, GTC, GTG, GTT all code for 'V').  The result is the peptide 'PV'. 
+
+<p>
+
+The alternative way of generating the reverse translation frames used by
+some people is that frame -1 is made by taking the frame '1' of the
+reverse complement.  There is no correspondence between the codons used
+in frame 1 and -1, 2 and -2, 3 and -3; the codons used change with the
+length modulus 3. 
+
+<p>
+
+There does not appear to be a convention on which definition to use.
+<br>
+The Staden package uses the same convention as this program.
+<br>
+The GCG package sneakily avoids the problem by naming the frames using
+letters (a, b, c, d, e, f)
+
+<p>
+
+If you really need to define frame -1 as the frame given when you
+reverse complement the sequence and then start translating at the first
+frame in the resulting sequence, then use the '-alternative' qualifier. 
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+
+<H2>
+    Warnings
+</H2>
+
+
+	When translating using non-standard genetic code table, always
+	check the table carefully for deviations from your particular
+	organism's code.
+
+<p>
+
+When using the '-regions' option, you should always leave the '-frames'
+option at the default of frame '1'.  If you change the frame while
+specifying a region to translate, then the regions will be offset by 1
+or 2 bases, which is not what you want. 
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+	Several warning messages about malformed region specifications:
+<ul>
+        <li>Non-digit found in region ...
+        <li>Unpaired start of a region found in ...
+        <li>Non-digit found in region ...
+        <li>The start of a pair of region positions must be smaller than the
+                end in ... 
+</ul>
+<H2>
+    Exit status
+</H2>
+
+
+	It exits with status 0, unless a region is badly constructed.
+
+<H2>
+    Known bugs
+</H2>
+
+
+When using the '-regions' option, you should always leave the '-frames'
+option at the default of frame '1'.  If you change the frame while
+specifying a region to translate, then the regions will be offset by 1
+or 2 bases, which is not what you want. 
+
+
+<!--#include file="inc/transeq.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/gwilliam.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/transeq.history" -->
+
+<H2>
+    Target users
+</H2>
+
+
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/transeq.comment" -->
+
+</BODY>
+</HTML>
+

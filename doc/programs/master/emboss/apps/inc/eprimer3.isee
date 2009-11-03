@@ -1,0 +1,14 @@
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="primersearch.html">primersearch</a></td>
+<td>Searches DNA sequences for matches with primer pairs</td>
+</tr>
+
+<tr>
+<td><a href="stssearch.html">stssearch</a></td>
+<td>Search a DNA database for matches with a set of STS primers</td>
+</tr>
+
+</table>

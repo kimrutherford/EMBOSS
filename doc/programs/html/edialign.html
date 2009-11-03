@@ -1,0 +1,910 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: edialign
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+edialign
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+    Function
+</H2>
+Local multiple alignment of sequences
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<b>edialign</b> is an EMBOSS version of the program DIALIGN2 by B.
+Morgenstern. It takes as input nucleic acid or protein sequences and
+produces as output a multiple sequence alignment. The sequences need
+not be similar over their complete length, since the program
+constructs alignments from gapfree pairs of similar segments of the
+sequences. Such segment pairs are referred to as "diagonals". If
+(possibly) coding nucleic acid sequences are to be aligned, <b>edialign</b>
+can optionally translate the compared "nucleic acid segments" to
+"peptide segments", or even perform comparisons at both nucleic acid
+and protein levels, so as to increase the sensitivity of the
+comparison.
+
+
+
+<H2>
+    Algorithm
+</H2>
+
+For a complete explanation of the algorithm, see the references. In short :
+
+<p>
+As described in our papers, the program DIALIGN constructs alignments
+from gapfree pairs of similar segments of the sequences. Such segment
+pairs are referred to as "diagonals".  Every possible diagonal is
+given a so-called weight reflecting the degree of similarity among the
+two segments involved. The overall score of an alignment is then
+defined as the sum of weights of the diagonals it consists of and the
+program tries to find an alignment with maximum score -- in other
+words : the program tries to find a consistent collection of diagonals
+with maximum sum of weights. This novel scoring scheme for alignments
+is the basic difference between DIALIGN and other global or local
+alignment methods. Note that DIALIGN does not employ any kind of gap
+penalty.
+
+<p>
+It is possible to use a threshold T for the quality of the
+diagonals. In this case, a diagonal is considered for alignment only
+if its "weight" exceeds this threshold. Regions of lower similarity
+are ignored.  In the first version of the program (DIALIGN 1), this
+threshold was in many situations absolutely necessary to obtain
+meaningful alignments. By contrast, DIALIGN 2 should produce
+reasonable alignments without a threshold, i.e. with T = 0. This is
+the most important difference between DIALIGN 2 and the first version
+of the program. Nevertheless, it is still possible to use a positive
+threshold T to filter out regions of lower significance and to include
+only high scoring diagonals into the alignment.
+
+<p>
+The use of overlap weights improves the sensitivity of the program if
+multiple sequences are aligned but it also increases the running time,
+especially if large numbers of sequences are aligned. By default,
+"overlap weights" are used if up to 35 sequences are aligned but
+switched off for larger data sets.
+
+<p>
+If (possibly) coding nucleic acid sequences are to be aligned, DIALIGN
+optionally translates the compared "nucleic acid segments" to "peptide
+segments" according to the genetic code -- without presupposing any of
+the three possible reading frames, so all combinations of reading
+frames get checked for significant similarity. If this option is used,
+the similarity among segments will be assessed on the "peptide level"
+rather than on the "nucleic acid level".
+
+<p>
+For the levels of sequence similarity, release 2.2 of DIALIGN has two
+additional options:
+
+<ul>
+<li>
+It can  measure the similarity among  segment pairs at  both levels of
+similarity (nucleotide-level and  peptide-level similarity). The score
+of  a fragment  is  based on  whatever  similarity is  stronger. As  a
+result, the program can now produce mixed alignments that contain both
+types  of  fragments.  Fragments   with  stronger  similarity  at  the
+"nucleotide level"  are referred  to as N-fragments  whereas fragments
+with stronger similarity a the peptide level are called P-fragments.
+
+<li>
+If the translation or mixed alignment option is used, it is possible
+to consider the reverse complements of segments, too. In this case,
+both the original segments and their reverse complements are
+translated and both pairs of implied "peptide segments" are
+compared. This option is useful if DNA sequences contain coding
+regions not only on the "Watson strand" but also on the "Crick
+strand".
+
+</ul>
+
+The score that DIALIGN assigns to a fragment is based on the
+probability to find a fragment of the same respective length and
+number of matches (or BLOSUM values, if the translation option is
+used) in random sequences of the same length as the input
+sequences. If long genomic sequences are aligned, an iterative
+procedure can be applied where the program first looks for fragments
+with strong similarity. In subsequent steps, regions between these
+fragments are realigned. Here, the score of a fragment is based on
+random occurrence in these regions between the previously aligned
+segment pairs.
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+<b>Here is a sample session with edialign</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>edialign </b>
+Local multiple alignment of sequences
+Input sequence set: <b>vtest.seq</b>
+Output file [vtest.edialign]: <b></b>
+(gapped) output sequence(s) [vtest.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequences]         seqset     Sequence set filename and optional format,
+                                  or reference (input USA)
+  [-outfile]           outfile    [*.edialign] Output file name
+  [-outseq]            seqoutall  [<sequence>.<format>] (Aligned) sequence
+                                  set(s) filename and optional format (output
+                                  USA)
+
+   Additional (Optional) qualifiers (* if not always prompted):
+*  -nucmode            menu       [n] Nucleic acid sequence alignment mode
+                                  (simple, translated or mixed) (Values: n
+                                  (simple); nt (translation); ma (mixed
+                                  alignments))
+*  -revcomp            boolean    [N] Also consider the reverse complement
+   -overlapw           selection  [default (when Nseq =< 35)] By default
+                                  overlap weights are used when Nseq =<35 but
+                                  you can set this to 'yes' or 'no'
+   -linkage            menu       [UPGMA] Clustering method to construct
+                                  sequence tree (UPGMA, minimum linkage or
+                                  maximum linkage) (Values: UPGMA (UPGMA); max
+                                  (maximum linkage); min (minimum linkage))
+   -maxfragl           integer    [40] Maximum fragment length (Integer 0 or
+                                  more)
+*  -fragmat            boolean    [N] Consider only N-fragment pairs that
+                                  start with two matches
+*  -fragsim            integer    [4] Consider only P-fragment pairs if first
+                                  amino acid or codon pair has similarity
+                                  score of at least n (Integer 0 or more)
+   -itscore            boolean    [N] Use iterative score
+   -threshold          float      [0.0] Threshold for considering diagonal for
+                                  alignment (Number 0.000 or more)
+
+   Advanced (Unprompted) qualifiers:
+   -mask               boolean    [N] Replace unaligned characters by stars
+                                  '*' rather then putting them in lowercase
+   -dostars            boolean    [N] Activate writing of stars instead of
+                                  numbers
+   -starnum            integer    [4] Put up to n stars '*' instead of digits
+                                  0-9 to indicate level of conservation
+                                  (Integer 0 or more)
+
+   Associated qualifiers:
+
+   "-sequences" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   "-outseq" associated qualifiers
+   -osformat3          string     Output seq format
+   -osextension3       string     File name extension
+   -osname3            string     Base file name
+   -osdirectory3       string     Output directory
+   -osdbname3          string     Database name to add
+   -ossingle3          boolean    Separate file for each entry
+   -oufo3              string     UFO features
+   -offormat3          string     Features format
+   -ofname3            string     Features file name
+   -ofdirectory3       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequences]<br>(Parameter 1)</td>
+<td>Sequence set filename and optional format, or reference (input USA)</td>
+<td>Readable set of sequences</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.edialign</td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 3)</td>
+<td>(Aligned) sequence set(s) filename and optional format (output USA)</td>
+<td>Writeable sequence(s)</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-nucmode</td>
+<td>Nucleic acid sequence alignment mode (simple, translated or mixed)</td>
+<td><table><tr><td>n</td> <td><i>(simple)</i></td></tr><tr><td>nt</td> <td><i>(translation)</i></td></tr><tr><td>ma</td> <td><i>(mixed alignments)</i></td></tr></table></td>
+<td>n</td>
+</tr>
+
+<tr>
+<td>-revcomp</td>
+<td>Also consider the reverse complement</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-overlapw</td>
+<td>By default overlap weights are used when Nseq =&lt;35 but you can set this to 'yes' or 'no'</td>
+<td>Choose from selection list of values</td>
+<td>default (when Nseq =< 35)</td>
+</tr>
+
+<tr>
+<td>-linkage</td>
+<td>Clustering method to construct sequence tree (UPGMA, minimum linkage or maximum linkage)</td>
+<td><table><tr><td>UPGMA</td> <td><i>(UPGMA)</i></td></tr><tr><td>max</td> <td><i>(maximum linkage)</i></td></tr><tr><td>min</td> <td><i>(minimum linkage)</i></td></tr></table></td>
+<td>UPGMA</td>
+</tr>
+
+<tr>
+<td>-maxfragl</td>
+<td>Maximum fragment length</td>
+<td>Integer 0 or more</td>
+<td>40</td>
+</tr>
+
+<tr>
+<td>-fragmat</td>
+<td>Consider only N-fragment pairs that start with two matches</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-fragsim</td>
+<td>Consider only P-fragment pairs if first amino acid or codon pair has similarity score of at least n</td>
+<td>Integer 0 or more</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>-itscore</td>
+<td>Use iterative score</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-threshold</td>
+<td>Threshold for considering diagonal for alignment</td>
+<td>Number 0.000 or more</td>
+<td>0.0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-mask</td>
+<td>Replace unaligned characters by stars '*' rather then putting them in lowercase</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-dostars</td>
+<td>Activate writing of stars instead of numbers</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-starnum</td>
+<td>Put up to n stars '*' instead of digits 0-9 to indicate level of conservation</td>
+<td>Integer 0 or more</td>
+<td>4</td>
+</tr>
+
+</table>
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+<b>edialign</b> reads any normal sequence USAs.  You must give as
+input at least two sequences. You can use proteins as well as nucleic
+acids, but you can't mix them.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: vtest.seq</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+&gt;HTL2  
+LDTAPCLFSDGSPQKAAYVLWDQTILQQDITPLPSHETHSAQKGELLALICGLRAAKPWP
+SLNIFLDSKY
+&gt;MMLV   
+GKKLNVYTDSRYAFATAHIHGEIYRRRGLLTSEGKEIKNKDEILALLKALFLPKRLSIIH
+CPGHQKGHSAEARGNRMADQAARKAAITETPDTSTLL
+&gt;HEPB 
+RPGLCQVFADATPTGWGLVMGHQRMRGTFSAPLPIHTAELLAACFARSRSGANIIGTDNS
+GRTSLYADSPSVPSHLPDRVH
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!-- 
+        This includes example output file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
+
+        If you wish to include the standard description of the avalable
+	report formats, use:
+        #include file="inc/reportformats.ihtml"
+   -->
+
+<b>edialign</b> produces two output files with a multiple sequence
+alignment. The first one is a file in DIALIGN format and the second
+one is a sequence file in any format you choose (by default
+fastA). Capital letters denote aligned residues, i.e. residues
+involved in at least one of the "diagonals" in the
+alignment. Lower-case letters denote residues not belonging to any of
+these selected "diagonals". They are not considered to be aligned by
+DIALIGN. Thus, if a lower-case letter is standing in the same column
+with other letters, this is pure chance ; these residues are not
+considered to be homologous.
+
+<p>
+Numbers below the alignment reflect the degree of local similarity
+among sequences. More precisely, they represent the sum of weights of
+fragments connecting residues at the respective position. These
+numbers are normalized such that regions of maximum similarity always
+get a score of 9 - no matter how strong this maximum simliarity is. In
+previous verions of the program, '*' characters were used instead of
+numbers ; with the -stars=n option, '*' characters can be used as
+previously.
+
+<p>
+At the bottom of the file you can find the "guide tree" used to make
+the alignment, written in "nested parentheses" format.
+
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: vtest.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;HTL2        
+ldtapC-LFSDGSPQKAAYVLWDQTILQQDITPLPSHethsaqkgELLAliCglraAKPW
+PSLNIFLDSKY-------------------------------------------------
+-----------------------------------------
+&gt;MMLV        
+gkk---------------------------------------------------------
+--LNVYTDSRYafatahihgeiyrrrglltsegkeiknkdeilallkalflpkrlsiihc
+pghqkghsaeargnrmADQAARKAAITETPDTSTLL-----
+&gt;HEPB        
+rpgl-CqVFADATPTGWGLVMGHQRMRGTFSAPLPIHta------ELLAa-Cf---ARSR
+SGANIIg-----------------------------------------------------
+----------------TDNSGRTSLYADSPSVPSHLpdrvh
+</pre>
+</td></tr></table><p>
+<p><h3>File: vtest.edialign</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+ 
+                           DIALIGN 2.2.1 
+                           *************
+ 
+          Program code written by Burkhard Morgenstern and Said Abdeddaim 
+             e-mail contact: dialign (at) gobics (dot) de 
+ 
+          Published research assisted by DIALIGN 2 should cite:  
+ 
+             Burkhard Morgenstern (1999).
+             DIALIGN 2: improvement of the segment-to-segment
+             approach to multiple sequence alignment.
+             Bioinformatics 15, 211 - 218. 
+
+          For more information, please visit the DIALIGN home page at 
+
+             http://bibiserv.techfak.uni-bielefeld.de/dialign/ 
+ 
+         ************************************************************
+ 
+
+
+   program call:  edialign  
+
+ 
+   Aligned sequences:          length:
+   ==================          =======
+ 
+   1) HTL2                        70
+   2) MMLV                        97
+   3) HEPB                        81
+
+   Average seq. length:           82.7 
+
+
+   Please note that only upper-case letters are considered to be aligned. 
+
+
+   Alignment (DIALIGN format):
+   ===========================
+ 
+HTL2               1   ldtapC-LFS DGSPQKAAYV LWDQTILQQD ITPLPSHeth saqkgELLAl 
+MMLV               1   gkk------- ---------- ---------- ---------- ---------- 
+HEPB               1   rpgl-CqVFA DATPTGWGLV MGHQRMRGTF SAPLPIHta- -----ELLAa 
+                                                                 
+                       0000000999 9999999999 9999999999 9999999000 0000000000 
+ 
+HTL2              50   iCglraAKPW PSLNIFLDSK Y--------- ---------- ---------- 
+MMLV               4   ---------- --LNVYTDSR Yafatahihg eiyrrrgllt segkeiknkd 
+HEPB              44   -Cf---ARSR SGANIIg--- ---------- ---------- ---------- 
+                                                                 
+                       0000000000 0077777777 7000000000 0000000000 0000000000 
+ 
+HTL2              71   ---------- ---------- ---------- ---------- ---------- 
+MMLV              42   eilallkalf lpkrlsiihc pghqkghsae argnrmADQA ARKAAITETP 
+HEPB              57   ---------- ---------- ---------- ------TDNS GRTSLYADSP 
+                                                                 
+                       0000000000 0000000000 0000000000 0000001111 1111111111 
+ 
+HTL2              71   ---------- - 
+MMLV              92   DTSTLL---- - 
+HEPB              71   SVPSHLpdrv h 
+                       
+                       1111110000 0 
+ 
+
+ 
+ 
+   Sequence tree:
+   ==============
+
+Tree constructed using UPGMA based on DIALIGN fragment weight scores
+ 
+((HTL2        :0.145587HEPB        :0.145587):0.108531MMLV        :0.254117);
+ 
+ 
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+
+The scoring schemes are hard coded in the program and cannot be
+changed. For proteins <b>edialign</b> always uses the BLOSUM62 table.
+
+
+<H2>
+    Notes
+</H2>
+
+We strongly recommend to use the "translation" option if nucleic acid
+sequences are expected to contain protein coding regions, as it will
+significantly increase the sensitivity of the alignment procedure in
+such cases.
+
+<p>
+If you want to compare long genomic sequences it is recommended to
+speed up the algorithm by:
+
+<p>
+<ul>
+<li>
+   setting "Nucleic acid sequence alignment mode" to "mixed alignment"
+   (-nucmode=ma)
+<li>
+   setting "Maximum fragment length" to 30 (-lmax=30)
+<li>
+   setting "Consider only N-fragment pairs that start with two matches" to yes
+   (-fragmat) and setting the similarity score threshold for considering
+   P-fragment pairs to 8 (-fragsim=8) (which actually implies that you consider
+   only fragments that start with a match).
+<li>
+   setting the "Threshold" T to 2.0 (-threshold=2.0)
+</ul>
+
+<p>
+It is also recommended to increase the chance of finding coding exons
+by setting "Nucleic acid sequence alignment mode" to "mixed alignment"
+(-nucmode=ma) and setting "Also consider the reverse complement"
+(-revcomp).
+
+
+<H2>
+    References
+</H2>
+
+<ol>
+
+<li>
+B. Morgenstern, A. Dress, T. Werner. Multiple DNA and protein sequence
+alignment based on segment-to-segment
+comparison. Proc. Natl. Acad. Sci.  USA 93, 12098 - 12103 (1996)
+
+<li>
+B. Morgenstern. DIALIGN 2: improvement of the segment-to-segment
+approach to multiple sequence alignment. Bioinformatics 15, 211 - 218
+(1999).
+
+<li>
+B. Morgenstern, O. Rinner, S. Abdeddaim, D. Haase, K. F. X. Mayer,
+A. W.  M. Dress H.-W. Mewes. Exon discovery by genomic sequence
+alignment.  Bioinformatics 18, 777 - 787 (2002)
+
+</ol>
+
+
+
+<H2>
+    Warnings
+</H2>
+
+Remember that lowercase characters represent parts of the sequence
+that are not aligned. You should not use the dialign output as such
+for sequence family or phylogeny studies, but take only part of the
+alignment and/or remove the lowercase characters using a multiple
+sequence editor. The current version of the program has no provision
+for doing this automatically.
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="emma.html">emma</a></td>
+<td>Multiple alignment program - interface to ClustalW program</td>
+</tr>
+
+<tr>
+<td><a href="infoalign.html">infoalign</a></td>
+<td>Information on a multiple sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="plotcon.html">plotcon</a></td>
+<td>Plot quality of conservation of a sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="prettyplot.html">prettyplot</a></td>
+<td>Displays aligned sequences, with colouring and boxing</td>
+</tr>
+
+<tr>
+<td><a href="showalign.html">showalign</a></td>
+<td>Displays a multiple sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="tranalign.html">tranalign</a></td>
+<td>Align nucleic coding regions given the aligned proteins</td>
+</tr>
+
+</table>
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+<!--
+        Who has worked on the program in the past.
+e.g. one of:
+Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+Bernd Jagla (bernd&nbsp;&copy;&nbsp;golgi.ski.mskcc.org)
+<br>
+Cellular Biochemistry and Biophysics Program, Rockefeller
+Research Laboratories, Memorial Sloan-Kettering Cancer Center, 1275 York
+Avenue, Box 251,New York, NY 10021.
+David Martin (dmartin&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+<br>
+Gos Micklem (gos&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+Ian Longden (il&nbsp;&copy;&nbsp;sanger.ac.uk)
+<br>
+Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.                      
+Mark Faller (current e-mail address unknown)
+<br>
+while he was with:
+<br>
+HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+Michael K. Schuster and Martin Grabner (martin.grabner&nbsp;&copy;&nbsp;univie.ac.at)
+<br>
+from the Austrian National EMBnet node.
+
+Michael Schmitz (mschmitz&nbsp;&copy;&nbsp;lbl.gov)
+<br>
+Lawrence Berkeley Labs, USA
+Nicolas Tourasse (nicolas.tourasse&nbsp;&copy;&nbsp;biotek.uio.no)
+<br>
+Biotechnology Center of Oslo
+Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+Richard Durbin (rd&nbsp;&copy;&nbsp;sanger.ac.uk)
+<br>
+Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.                      
+Richard Bruskiewich (r.bruskiewich@cgiar.org)
+<br>
+while he was at:
+<br>
+Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.                      
+Rodrigo Lopez (rls&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+Sinead O'Leary (current e-mail address unknown)
+<br>
+while she was at:
+<br>
+HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+
+Tim Carver (tcarver&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+Thomas Laurent (thomas.laurent&nbsp;&copy;&nbsp;uk.lionbioscience.com)
+<br>
+Lion Bioscience Ltd,
+     Compass House,
+     80-82 Newmarket Road,
+     Cambridge,
+     CB5 8DZ,
+     UK
+Val Curwen (vac&nbsp;&copy;&nbsp;sanger.ac.uk)
+<br>
+Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK. 
+
+   -->
+
+The EMBOSS direct port was done by
+Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+based on ACD written by Guy Bottu (gbottu@ben.vub.ac.be) for a
+wrapper written at BEN, ULB, Brussels, Belgium
+
+<p>
+The program DIALIGN itself was written by Burkhard Morgenstern, Said
+Abdeddaim, Klaus Hahn, Thomas Werner, Kornelie Frech and Andreas
+Dress.  Universitaet Bielefeld (FSPM and International Graduate School
+in Bioinformatics and Genome Research) - GSF Research Center (ISG,
+IBB, MIPS/IBI) - North Carolina State University - Universite de Rouen
+- MPI fuer Biochemie (Martinsried) - University of Goettingen,
+Institute of Microbiology and Genetics - Rhone-Poulenc Rorer
+
+<p>
+For help on the original DIALIGN2, contact: dialign@gobics.de
+
+<H2>
+    History
+</H2>
+<!--
+        Date written and what changes have been made go in this file.
+   -->
+First committed on 5th December 2006.
+
+
+<H2>
+    Target users
+</H2>
+<!--
+        For general users, use this text
+   -->
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+<!--
+        User/developer/other comments go in this file.
+   -->
+None
+
+
+</BODY>
+</HTML>
+

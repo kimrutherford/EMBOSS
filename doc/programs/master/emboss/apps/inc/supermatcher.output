@@ -1,0 +1,118 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: supermatcher.error</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+</pre>
+</td></tr></table><p>
+<p><h3>File: j01636.supermatcher</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: supermatcher
+# Rundate: Sun 15 Jul 2007 12:00:00
+# Commandline: supermatcher
+#    [-asequence] @../../data/eclac.list
+#    [-bsequence] tembl:j01636
+#    -wordlen 50
+#    -gapextend 3.0
+# Align_format: simple
+# Report_file: j01636.supermatcher
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: J01636
+# 2: J01636
+# Matrix: EDNAFULL
+# Gap_penalty: 10.0
+# Extend_penalty: 3.0
+#
+# Length: 7477
+# Identity:    7477/7477 (100.0%)
+# Similarity:  7477/7477 (100.0%)
+# Gaps:           0/7477 ( 0.0%)
+# Score: 37385.0
+# 
+#
+#=======================================
+
+J01636             1 gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgccc     50
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+J01636             1 gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgccc     50
+
+J01636            51 ggaagagagtcaattcagggtggtgaatgtgaaaccagtaacgttatacg    100
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+J01636            51 ggaagagagtcaattcagggtggtgaatgtgaaaccagtaacgttatacg    100
+
+J01636           101 atgtcgcagagtatgccggtgtctcttatcagaccgtttcccgcgtggtg    150
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+J01636           101 atgtcgcagagtatgccggtgtctcttatcagaccgtttcccgcgtggtg    150
+
+J01636           151 aaccaggccagccacgtttctgcgaaaacgcgggaaaaagtggaagcggc    200
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+J01636           151 aaccaggccagccacgtttctgcgaaaacgcgggaaaaagtggaagcggc    200
+
+J01636           201 gatggcggagctgaattacattcccaaccgcgtggcacaacaactggcgg    250
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+J01636           201 gatggcggagctgaattacattcccaaccgcgtggcacaacaactggcgg    250
+
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+V00296          2501 tgctgattacgaccgctcacgcgtggcagcatcaggggaaaaccttattt   2550
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+J01636          3787 tgctgattacgaccgctcacgcgtggcagcatcaggggaaaaccttattt   3836
+
+V00296          2551 atcagccggaaaacctaccggattgatggtagtggtcaaatggcgattac   2600
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+J01636          3837 atcagccggaaaacctaccggattgatggtagtggtcaaatggcgattac   3886
+
+V00296          2601 cgttgatgttgaagtggcgagcgatacaccgcatccggcgcggattggcc   2650
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+J01636          3887 cgttgatgttgaagtggcgagcgatacaccgcatccggcgcggattggcc   3936
+
+V00296          2651 tgaactgccagctggcgcaggtagcagagcgggtaaactggctcggatta   2700
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+J01636          3937 tgaactgccagctggcgcaggtagcagagcgggtaaactggctcggatta   3986
+
+V00296          2701 gggccgcaagaaaactatcccgaccgccttactgccgcctgttttgaccg   2750
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+J01636          3987 gggccgcaagaaaactatcccgaccgccttactgccgcctgttttgaccg   4036
+
+V00296          2751 ctgggatctgccattgtcagacatgtataccccgtacgtcttcccgagcg   2800
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+J01636          4037 ctgggatctgccattgtcagacatgtataccccgtacgtcttcccgagcg   4086
+
+V00296          2801 aaaacggtctgcgctgcgggacgcgcgaattgaattatggcccacaccag   2850
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+J01636          4087 aaaacggtctgcgctgcgggacgcgcgaattgaattatggcccacaccag   4136
+
+V00296          2851 tggcgcggcgacttccagttcaacatcagccgctacagtcaacagcaact   2900
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+J01636          4137 tggcgcggcgacttccagttcaacatcagccgctacagtcaacagcaact   4186
+
+V00296          2901 gatggaaaccagccatcgccatctgctgcacgcggaagaaggcacatggc   2950
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+J01636          4187 gatggaaaccagccatcgccatctgctgcacgcggaagaaggcacatggc   4236
+
+V00296          2951 tgaatatcgacggtttccatatggggattggtggcgacgactcctggagc   3000
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+J01636          4237 tgaatatcgacggtttccatatggggattggtggcgacgactcctggagc   4286
+
+V00296          3001 ccgtcagtatcggcggaattccagctgagcgccggtcgctaccattacca   3050
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+J01636          4287 ccgtcagtatcggcggaattccagctgagcgccggtcgctaccattacca   4336
+
+V00296          3051 gttggtctggtgtcaaaaataataataa   3078
+                     ||||||||||||||||||||||||||||
+J01636          4337 gttggtctggtgtcaaaaataataataa   4364
+
+
+#---------------------------------------
+#---------------------------------------
+</pre>
+</td></tr></table><p>

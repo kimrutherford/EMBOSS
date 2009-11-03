@@ -1,0 +1,116 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:BA000025' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:BA000025</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   BA000025; SV 2; linear; genomic DNA; STD; HUM; 2229817 BP.
+XX
+AC   BA000025; AP000502-AP000521;
+XX
+DT   09-DEC-2004 (Rel. 82, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 4)
+XX
+DE   Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
+XX
+KW   .
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-2229817
+RA   Hirakawa M., Yamaguchi H., Imai K., Shimada J.;
+RT   ;
+RL   Submitted (21-AUG-2001) to the EMBL/GenBank/DDBJ databases.
+RL   Mika Hirakawa, Japan Science and Technology Corporation (JST), Advanced
+RL   Databases Department; 5-3, Yonbancho, Chiyoda-ku, Tokyo 102-0081, Japan
+RL   (E-mail:mika@tokyo.jst.go.jp, URL:http://www-alis.tokyo.jst.go.jp/,
+RL   Tel:81-3-5214-8491, Fax:81-3-5214-8470)
+XX
+RN   [2]
+RA   Shiina S., Tamiya G., Oka A., Inoko H.;
+RT   "Homo sapiens 2,229,817bp genomic DNA of 6p21.3 HLA class I region";
+RL   Unpublished.
+XX
+DR   EPD; EP11158; HS_TNF.
+DR   EPD; EP11159; HS_LTA.
+DR   EPD; EP73522; HS_HLA-B.
+DR   EPD; EP73908; HS_GTF2H4.
+DR   EPD; EP73940; HS_NEU1.
+DR   EPD; EP74013; HS_VARS2.
+DR   EPD; EP74203; HS_MRPS18B.
+DR   EPD; EP74346; HS_HLA-E.
+DR   EPD; EP74389; HS_BAT1.
+DR   EPD; EP74485; HS_IER3.
+DR   GDB; 11515913.
+DR   GOA; P59942.
+DR   IMGT/HLA; HLA02629; J*01010102.
+DR   RFAM; RF00017.
+DR   RFAM; RF00019.
+DR   RFAM; RF00026.
+DR   RFAM; RF00100.
+DR   RFAM; RF00137.
+DR   RFAM; RF00276.
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+     ttggccccac cccagcatgt ctccaggttc ctctcagccc tggttccttt tggccctgca   2226900
+     gtcacaatgg gcaacactgt gacgcaccct gtcctgtgtc acagtgtcat acactcaggc   2226960
+     tcacattgcc cctaggccac ttgccagcca agggacatgg ccacattttg tgtcttctgc   2227020
+     acctcagcct tgctttcaag tgcaggtgat gatggcaccc acgcagaaca aatgttattt   2227080
+     gctatcttcg tcgagtttag tcatccaatt ttccaaccct cactgggcaa ggaagagtgt   2227140
+     ggtttccacc aagaaggcag gatgtcagca gtcacagggg caaccaacag ggaaagccgc   2227200
+     cggaaaatag accccacagg aagcacaggt gtccagtgga gatgggaacc ctgcagattt   2227260
+     gaccgtcttt aagcagatta gagagattac cgttactaac aacttagcca taaaagttta   2227320
+     ttagctattt tcaaaaagca taaaattatg taatataatt ttttttaaat ttccatcaat   2227380
+     acaaaactaa tctgggcact gcaacttccg gtgggcaact gggataggcg gcatcatcag   2227440
+     gaaggcgagc cctgccgtgc cccatgtgcc agtgccccag atggcggcag cctccccaga   2227500
+     agcaccttgt atctcccctg cacagggcca gggtcccagc ttcccataca ccttctcctg   2227560
+     ctttttcttt tctgtccttt cctttttcaa taaaccacct gcaaaaaggg aaaaccattc   2227620
+     tgaggacaag aaacatgtca atgggaaata cacagttgcc agagggtaaa aggccctgtt   2227680
+     cattctcatt gaaaagctca ggtatttctg ttaaagtctc tccttttact ttaggatgct   2227740
+     gactcctgcg tccatctcaa cctgggcatc gtgccaccac cttcaagaag agaaaaacta   2227800
+     agtagtgctt tgcaaagggg cagcagcatt tctcatttct gaccatgtca ggcacatggc   2227860
+     catgcagatg agcaggtggg ggacacaggt gagtctccag acctgctctc ctcccacagt   2227920
+     acattcttga gtctttttaa acagttgtga aaatgccaca gatgcaagca cctgtgggcc   2227980
+     actcccatgg ggaccgttgc acaaggcagt gccactcatt ctcagaacct cctaccatgg   2228040
+     gctatgctta gtgacccgag gccaagccaa ggaagacgcc agccacaggg tgccatcctc   2228100
+     aggggcatgc tgccagcagg ggcaaagtta tccctagcaa caagatacag aaagaaagaa   2228160
+     aaaaggaagg aaatgtagcc aatgggccgg ttcaggttct tgactttgcc acacaaaaga   2228220
+     atttgagagc aagtccaaag taaaagtcag caagagaatt tattgcaaag tgaaagtaca   2228280
+     ctctgacagc tgatcagagc agctgctcaa aagagagaca gtaccctccc ctcacgggag   2228340
+     tcttacatga ttattcatga ataggtggga aggggtattg ttttaagcat gttctgtggt   2228400
+     ctcttgaacg tgcatgcact gtggttgtac atatcagcac acacatctta cgtctcatta   2228460
+     gcatcttaac ttccctctca gagttgtgtt tgctactatt gtaatgagca taggtcagcc   2228520
+     caaggacact attcatgggt ttctgggctt cctcagatgt ggggatgcct cccttggctc   2228580
+     ttctacctct ttgctgcagg atgttctaac cacaagccca ggatatggtt tgcgcactgt   2228640
+     cgaacagctt gttctctcca tcaacctgac aagtctcttg tttcctttca agggaggctg   2228700
+     tgaacaccct atctcactga cctcagaagg acagtacagc agtagccacc atgaccaaaa   2228760
+     agatgattcc agaagtgcag gacaactccc tacccagagg ctgtggctgt gcagtaacac   2228820
+     accaagaggg gagtccagct ggctctcagg gtgctcacta ccctcatctg ggggcctgga   2228880
+     ggacgtcaat tcctgagaac gccacgttct agtgagtaga atgaactgag agatacacag   2228940
+     caaagctcca catacttttc cttttctttg tgcccgcagt gttcttcatc agtgtgctct   2229000
+     cgcttttcag ctactactgt tggctggctg gaaaaaatag aacaatagta aaaattagag   2229060
+     accagtcttt ggtgatgaag agaaatattg gctacttcca gtattttcta gctttggtta   2229120
+     tggttgcagt tttccagctc accttgtggg gatgaattca gaaaaaagtt acaaattgaa   2229180
+     atgaacatgc cagaagtatt ggctcaaatc aacgttgtcc tattaagcca cttagtgaat   2229240
+     caaaagaccg cttgttggac tgttaatctc ggtggccaga gaaaggagct gaagaaggtg   2229300
+     ttgccagatc aggaacaaat aattacagcg gcaatagaaa atggaagacc acttgttcat   2229360
+     aaccatttga ataagggcaa ggtgtatgga aacacattat gaactgatat tttcagtttt   2229420
+     gtttgcaaga aaatgattaa taaggtgaaa taattgaagt atcacggaag atacattaaa   2229480
+     aaaaaaaaaa gcctttgtac agtttgctgg agccacagat gtcctactcc agagcagaac   2229540
+     aatgcctgaa tcttcagggt ccatttctgc cgcattcact agcaaccaca aatgtgactt   2229600
+     aattttactt tggaaataat gcttacccat tgtgagatgc tgtaatatga accatcatta   2229660
+     catgttaaca tggcacatgg aattttgagt gtctaagtta catttttaga gttgtttctt   2229720
+     agtagccatg tgagtttcca ctccaaaaac acaagctaaa aacttgtttt gagtgaagga   2229780
+     catctagggc aaatggtggc tgaaagtgaa tgagatc                            2229817
+//
+</pre>
+</td></tr></table><p>

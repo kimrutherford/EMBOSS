@@ -1,0 +1,261 @@
+
+                                checktrans 
+
+
+
+Function
+
+   Reports STOP codons and ORF statistics of a protein
+
+Description
+
+   Reads in a protein sequence containing stops, and writes a report of
+   any open reading frames (continuous protein sequence with no stops)
+   that are greater than a minimum size. The default minimum ORF size is
+   100 residues. It writes out any ORF sequences.
+
+   The input sequence might typically have been produced by transeq.
+
+   Note that if you have only translated a nucleic sequence in one frame,
+   checktrans will miss possible ORFs in other frames. You have to give
+   checktrans translations in all three (six?) frames in order for it to
+   be effective at finding all possible ORFs.
+
+Usage
+
+   Here is a sample session with checktrans
+
+
+% checktrans 
+Reports STOP codons and ORF statistics of a protein
+Input protein sequence(s): paamir.pep
+Minimum ORF Length to report [100]: 
+Output file [paamir_1.checktrans]: 
+output sequence(s) [paamir_1.fasta]: 
+Features output [paamir_1.gff]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Protein sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -orfml              integer    [100] Minimum ORF Length to report (Integer
+                                  1 or more)
+  [-outfile]           outfile    [*.checktrans] Output file name
+  [-outseq]            seqoutall  [.] Sequence file to hold
+                                  output ORF sequences
+  [-outfeat]           featout    [unknown.gff] File for output features
+
+   Additional (Optional) qualifiers:
+   -[no]addlast        boolean    [Y] An asterisk in the protein sequence
+                                  indicates the position of a STOP codon.
+                                  Checktrans assumes that all ORFs end in a
+                                  STOP codon. Forcing the sequence to end with
+                                  an asterisk, if there is not one there
+                                  already, makes checktrans treat the end as a
+                                  potential ORF. If an asterisk is added, it
+                                  is not included in the reported count of
+                                  STOPs.
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   "-outseq" associated qualifiers
+   -osformat3          string     Output seq format
+   -osextension3       string     File name extension
+   -osname3            string     Base file name
+   -osdirectory3       string     Output directory
+   -osdbname3          string     Database name to add
+   -ossingle3          boolean    Separate file for each entry
+   -oufo3              string     UFO features
+   -offormat3          string     Features format
+   -ofname3            string     Features file name
+   -ofdirectory3       string     Output directory
+
+   "-outfeat" associated qualifiers
+   -offormat4          string     Output feature format
+   -ofopenfile4        string     Features file name
+   -ofextension4       string     File name extension
+   -ofdirectory4       string     Output directory
+   -ofname4            string     Base file name
+   -ofsingle4          boolean    Separate file for each entry
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   This program reads the USA of a protein sequence with STOP codons in
+   it.
+
+  Input files for usage example
+
+  File: paamir.pep
+
+>PAAMIR_1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
+ation
+GTAGRASARSPPAGRRELHDLPGEPGARAGSLRTALSDSHRRGNGWDRTRSGR*SACCSP
+KPASPPISSARTRMAHCSRSSN*TARAASAVARSKRCPRTPAATRTAIGCAPRTSFATGG
+YGSSWAATCRTRARR*CRWSSAPTRCSATRPPTRASSIRRTSSTAVRRRTRTVRRWRRT*
+FATTASGWCSSARTTSIRGKATM*CATCIASTAARCSRKSTFRCIPPTTTCSAPSSASTR
+RAPTWSSPPWWAPAPPSCIAPSPVATATAGGRRSPA*PPARRRWRRWRVTWQRGRWWSRL
+TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTC
+TTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTG
+PPAWAGDRSHERQLAARQPARVAGAGPQPAGGGQRRPGLAADPHRLFGAPVLAAAGSLRR
+AGGRGLHQHFPEWPPRRDRCAARRRDSAHYPGGAGGVRKPRGALADHRAGVPRRDHPAAR
+CPPGAACAGIGAAHQRGNGEAEAEDRAAPGPHRRPGPDQPGQGVADAAPWLGRARGAPAP
+VAGSDEAARADPEDRSGVAGKRAVRLSDPGRPEQ*QEGYRHHAGTGSAVRWRGAVSQCRL
+VAGQDQRSGGGGDQLPGRRAERLRRVLPDLFRSSRAGLAEGRSADPAIRFYLSVGGRQPV
+PRX
+
+Output file format
+
+   This program writes three files: the ORF report file
+   (paamir_1.checktrans), the output sequence file (paamir_1.fasta) and
+   the feature file (paamir_1.out3) which is in GFF format by default.
+
+   The ORF report file gives the numeric count of the ORF, the position
+   of the terminating STOP codon, the length of the ORF, its start and
+   end positions and the name of the sequence it has been written out as.
+
+   The name of the output sequences is constructed from the name of the
+   input sequence followed by an underscore and then the numeric count of
+   the ORF (e.g. 'PAAMIR_1_7').
+
+  Output files for usage example
+
+  File: paamir_1.checktrans
+
+
+
+CHECKTRANS of PAAMIR_1 from 1 to 724
+
+        ORF#    Pos     Len     ORF Range       Sequence name
+
+        7       635     357     278-634 PAAMIR_1_7
+
+        Total STOPS:     7
+
+
+  File: paamir_1.fasta
+
+>PAAMIR_1_7
+PPARRRWRRWRVTWQRGRWWSRLTSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGR
+PCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSR
+SAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHERQLAARQPARVAGAGPQPAGGGQRRP
+GLAADPHRLFGAPVLAAAGSLRRAGGRGLHQHFPEWPPRRDRCAARRRDSAHYPGGAGGV
+RKPRGALADHRAGVPRRDHPAARCPPGAACAGIGAAHQRGNGEAEAEDRAAPGPHRRPGP
+DQPGQGVADAAPWLGRARGAPAPVAGSDEAARADPEDRSGVAGKRAVRLSDPGRPEQ
+
+  File: paamir_1.gff
+
+##gff-version 2.0
+##date 2006-07-15
+##Type Protein PAAMIR_1
+PAAMIR_1        checktrans      misc_feature    278     634     0.000   +
+.       Sequence "PAAMIR_1.1"
+
+Data files
+
+   None.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   This program always exits with a status of 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name                         Description
+   backtranambig Back translate a protein sequence to ambiguous codons
+   backtranseq   Back translate a protein sequence
+   charge        Protein charge plot
+   compseq       Count composition of dimer/trimer/etc words in a sequence
+   emowse        Protein identification by mass spectrometry
+   freak         Residue/base frequency table or plot
+   iep           Calculates the isoelectric point of a protein
+   mwcontam      Shows molwts that match across a set of files
+   mwfilter      Filter noisy molwts from mass spec output
+   octanol       Displays protein hydropathy
+   pepinfo       Plots simple amino acid properties in parallel
+   pepstats      Protein statistics
+   pepwindow     Displays protein hydropathy
+   pepwindowall  Displays protein hydropathy of a set of sequences
+
+Author(s)
+
+   Rodrigo Lopez (rls © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK and modified by Gary Williams
+   (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK to output the sequence
+   data to a single file in the conventional EMBOSS style.
+
+History
+
+   Completed 24 Feb 2000 - Rodrigo Lopez
+
+   Modified 2 March 2000 - Gary Williams
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

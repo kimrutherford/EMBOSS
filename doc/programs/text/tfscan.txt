@@ -1,0 +1,418 @@
+
+                                  tfscan 
+
+
+
+Function
+
+   Scans DNA sequences for transcription factors
+
+Description
+
+   The TRANSFAC Database is a commercial database of eukaryotic
+   cis-acting regulatory DNA elements and trans-acting factors. It covers
+   the whole range from yeast to human.
+
+   An old public domain version is available at:
+   ftp://ftp.ebi.ac.uk/pub/databases/transfac/transfac32.tar.Z
+
+   The 'site.dat' data file from TRANSFAC contains information on
+   individual (putatively) regulatory protein binding sites. It has been
+   divided into the following taxonomic groups.
+
+     * Fungi
+     * Insects
+     * Plants
+     * Vertebrates
+     * Other
+
+   The program tfscan takes a sequence and the name of one of these
+   taxonomic groups and does a fast match of the TRANSFAC sequences
+   against the input sequence (optionally allowing mismatches).
+
+   The results is a list of the positions which match the binding sites
+   in the TRANSFAC SITE database.
+
+   Because the binding sites are so small, there will be many spurious
+   (false positive) matches.
+
+Usage
+
+   Here is a sample session with tfscan
+
+
+% tfscan 
+Scans DNA sequences for transcription factors
+Input nucleotide sequence(s): tembl:k00650
+Transcription Factor Class
+         F : fungi
+         I : insect
+         P : plant
+         V : vertebrate
+         O : other
+         C : Custom
+Select class [V]: v
+Number of mismatches [0]: 
+Output file [k00650.tfscan]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -menu               menu       [V] Select class (Values: F (fungi); I
+                                  (insect); P (plant); V (vertebrate); O
+                                  (other); C (Custom))
+*  -custom             datafile   Transfac database data file (optional)
+   -mismatch           integer    [0] Number of mismatches (Integer 0 or more)
+  [-outfile]           outfile    [*.tfscan] Output file name
+
+   Additional (Optional) qualifiers:
+   -minlength          integer    [1] Display matches equal to or above this
+                                  length (Integer 1 or more)
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   tfscan reads normal nucleic acid sequence USAs.
+
+  Input files for usage example
+
+   'tembl:k00650' is a sequence entry in the example nucleic acid
+   database 'tembl'
+
+  Database entry: tembl:k00650
+
+ID   K00650; SV 1; linear; genomic DNA; STD; HUM; 6210 BP.
+XX
+AC   K00650; M16287;
+XX
+DT   26-JUL-1991 (Rel. 28, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 4)
+XX
+DE   Human fos proto-oncogene (c-fos), complete cds.
+XX
+KW   c-myc proto-oncogene; fos oncogene; proto-oncogene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-4165
+RX   PUBMED; 6574479.
+RA   van Straaten F., Muller R., Curran T., Van Beveren C., Verma I.M.;
+RT   "Complete nucleotide sequence of a human c-onc gene: deduced amino acid
+RT   sequence of the human c-fos protein";
+RL   Proc. Natl. Acad. Sci. U.S.A. 80(11):3183-3187(1983).
+XX
+RN   [2]
+RX   DOI; 10.1016/0092-8674(85)90285-5.
+RX   PUBMED; 2414012.
+RA   Treisman R.;
+RT   "Transient accumulation of c-fos RNA following serum stimulation requires
+a
+RT   conserved 5' element and c-fos 3' sequences";
+RL   Cell 42(3):889-902(1985).
+XX
+RN   [3]
+RP   4166-6210
+RX   PUBMED; 3555978.
+RA   Verma I.M., Deschamps J., Van Beveren C., Sassone-Corsi P.;
+RT   "Human fos gene";
+RL   Cold Spring Harb. Symp. Quant. Biol. 51:0-0(0).
+XX
+DR   EPD; EP11145; HS_FOS.
+DR   TRANSFAC; R00458; HS$CFOS_01.
+DR   TRANSFAC; R00459; HS$CFOS_02.
+DR   TRANSFAC; R00460; HS$CFOS_03.
+DR   TRANSFAC; R00461; HS$CFOS_04.
+DR   TRANSFAC; R00463; HS$CFOS_06.
+DR   TRANSFAC; R00464; HS$CFOS_07.
+DR   TRANSFAC; R00465; HS$CFOS_08.
+DR   TRANSFAC; R00466; HS$CFOS_09.
+DR   TRANSFAC; R00467; HS$CFOS_10.
+DR   TRANSFAC; R00468; HS$CFOS_11.
+
+
+  [Part of this file has been deleted for brevity]
+
+     ccagctgtgc agctgcccac cgcaagggca gcagcagcaa tgagccttcc tctgactcgc      330
+0
+     tcagctcacc cacgctgctg gccctgtgag ggggcaggga aggggaggca gccggcaccc      336
+0
+     acaagtgcca ctgcccgagc tggtgcatta cagagaggag aaacacatct tccctagagg      342
+0
+     gttcctgtag acctagggag gaccttatct gtgcgtgaaa cacaccaggc tgtgggcctc      348
+0
+     aaggacttga aagcatccat gtgtggactc aagtccttac ctcttccgga gatgtagcaa      354
+0
+     aacgcatgga gtgtgtattg ttcccagtga cacttcagag agctggtagt tagtagcatg      360
+0
+     ttgagccagg cctgggtctg tgtctctttt ctctttctcc ttagtcttct catagcatta      366
+0
+     actaatctat tgggttcatt attggaatta acctggtgct ggatattttc aaattgtatc      372
+0
+     tagtgcagct gattttaaca ataactactg tgttcctggc aatagtgtgt tctgattaga      378
+0
+     aatgaccaat attatactaa gaaaagatac gactttattt tctggtagat agaaataaat      384
+0
+     agctatatcc atgtactgta gtttttcttc aacatcaatg ttcattgtaa tgttactgat      390
+0
+     catgcattgt tgaggtggtc tgaatgttct gacattaaca gttttccatg aaaacgtttt      396
+0
+     attgtgtttt taatttattt attaagatgg attctcagat atttatattt ttattttatt      402
+0
+     tttttctacc ttgaggtctt ttgacatgtg gaaagtgaat ttgaatgaaa aatttaagca      408
+0
+     ttgtttgctt attgttccaa gacattgtca ataaaagcat ttaagttgaa tgcgaccaac      414
+0
+     cttgtgctct tttcattctg gaagtcttgt aagtttctga aaggtattat tggagaccag      420
+0
+     tttgtcaaga agggtagctg ctggaggggg acacaccctc tgtctgatcc cttatcaaag      426
+0
+     aggacaagga aactatagag ctgattttag aatattttac aaatacatgc cttccattgg      432
+0
+     aatgctaaga ttttctactg cttctgggga cgggaaaccg ctgtgtaaca gcttttgtgg      438
+0
+     gaatacattt tttctgtttc agtactcgca gggggaaata tttaaatttt gttgtgctaa      444
+0
+     tattaaattc agatgttttg atcttaaagg aaccctttaa gcaaacagaa cctagctttg      450
+0
+     tacagactat tttaactttt tattctcaca aaatcacgtg gagggttatt ctacttcaaa      456
+0
+     gatgagcaaa ttgaagaatg gttagaataa acaactttct tgatattccg ttatcggcat      462
+0
+     tagaatcttc ctgctcgtta tcgtatccag caggctgaac tgcctcttga tacttggtta      468
+0
+     aaaaaaattt tcaggccggg cgcggtggcc catgcctgta atcctagcac tttgggaggc      474
+0
+     cgaggcaggc ggatcacctg aggtcgggag ttcgagacca gcctgaccaa catggagaaa      480
+0
+     ccccgtcttt actaaaaata caaaattagc ctggtgtggt ggtgcatgcc tgtaatccta      486
+0
+     gctacttgag aggctgagac aggaaaatca cttgaactcg ggaggcggat gttgcagcga      492
+0
+     actgagattg cgccattgca ctccagcctg ggcaacaaga ttgaaactct gtttaaaaaa      498
+0
+     aaaagttttc actaatgtgt acattttttt gtactctttt attctcgaaa gggaaggagg      504
+0
+     gctattgccc tatcccttat taataaatgc attgtggttt ctggtttctc taataccata      510
+0
+     tgcccttcat tcagtttata gtgggcggaa gtgggggaga aaaagttgct cagaaatcaa      516
+0
+     aagatatctc aaacagcaca aataatggct gatcgttctg caaacaaaaa gttacataat      522
+0
+     agctcaagaa ggagaagtca acatgactct gaacaagctt taacttagaa actttatcat      528
+0
+     cttaaggaag aacgtgacct ttgtccagga cgtctctggt aatggggcac ttacacacac      534
+0
+     atgcacacgt acaaaccaca gggaaaggag accgcccttc tgcctctgct cgcgagtatc      540
+0
+     acgcaggcac catgcactat gttttcacac acactgggtg gaagaagagc ttcagcgcca      546
+0
+     gtcttctaat gctttggtga taatgaaaat cactgggtgc ttatggggtg tcatattcaa      552
+0
+     tcgagttaaa agttttaatt caaaatgaca gttttactga ggttgatgtt ctcgtctatg      558
+0
+     atatctctgc ccctcccata aaaatggaca tttaaaagca acttaccgct ctttagatca      564
+0
+     ctcctatatc acacaccact tggggtgctg tttctgctag acttgtgatg acagtggcct      570
+0
+     taggatccct gtttgctgtt caaagggcaa atattttata gcctttaaat atacctaaac      576
+0
+     taaatacaga attaatataa ctaacaaaca cctggtctga aataacaagg tgatctaccc      582
+0
+     tggaaggaac ccagctggtg ggccaggagc ggtggctcac acctgtaatt ccagcacttt      588
+0
+     gggaggctga gacaggagga tcactggagt ccaggagttt gagaccagcc tgggcaacat      594
+0
+     ggcaaaaccc agtgtgcttc tgttgtccca gctacactac tcaggaggct gaggcaggag      600
+0
+     tatgacttga gcctgggagg gggaggttgc agagaactga tattgcacca ccactgcact      606
+0
+     ccagcctggg tgacacagca aaaccctatc tcaaaaaaaa aaaaaaaaaa aaggaaccca      612
+0
+     gctggttcct gtaggtgtgc aataataaca accagaggaa gaaaaggaag acgatttccc      618
+0
+     agatgaagaa gggcagctgg accttcggac                                       621
+0
+//
+
+Output file format
+
+  Output files for usage example
+
+  File: k00650.tfscan
+
+TFSCAN of K00650 from 1 to 6210
+
+MOUSE$FCGR3A_02      R04413   3287  3292  ttcctc
+                     T00702; PU.1;Quality: 3; Species: mouse, Mus musculus.
+HS$ALBU_03           R00079   5940  5944  tggca
+HS$ALBU_03           R00079   3757  3761  tggca
+HS$ALBU_03           R00079   2776  2780  tggca
+HS$ALBU_03           R00079   2418  2422  tggca
+HS$ALBU_03           R00079   2010  2014  tggca
+HS$ALBU_03           R00079   1676  1680  tggca
+HS$ALBU_03           R00079   1356  1360  tggca
+                     T00599; NF-1/L;Quality: 6; Species: rat, Rattus norvegicus
+.
+HS$ALBU_02           R00078   2009  2014  ttggca
+
+   The output consists of a title line then 5 columns separated by
+   whitespace.
+
+   The first column is the identifier of the entry.
+
+   The second column is the Accession Number of the entry.
+
+   The third and fourth columns are the start and end positions of the
+   match in your input sequence.
+
+   The fifth column is the sequence of the region where a match has been
+   found.
+
+   Binding factor information, where available, is given at the end of
+   the matches for each matching entry.
+
+Data files
+
+   tfscan reads the TRANSFAC SITE data held in the EMBOSS data files:
+
+     * tffungi
+     * tfinsect
+     * tfplant
+     * tfvertebrate
+     * tfother
+
+   Your EMBOSS administrator will have to run the EMBOSS program
+   tfextract in order to set these files up from the TRANSFAC
+   distribution files.
+
+   EMBOSS data files are distributed with the application and stored in
+   the standard EMBOSS data directory, which is defined by the EMBOSS
+   environment variable EMBOSS_DATA.
+
+   To see the available EMBOSS data files, run:
+
+% embossdata -showall
+
+   To fetch one of the data files (for example 'Exxx.dat') into your
+   current directory for you to inspect or modify, run:
+
+% embossdata -fetch -file Exxx.dat
+
+   Users can provide their own data files in their own directories.
+   Project specific files can be put in the current directory, or for
+   tidier directory listings in a subdirectory called ".embossdata".
+   Files for all EMBOSS runs can be put in the user's home directory, or
+   again in a subdirectory called ".embossdata".
+
+   The directories are searched in the following order:
+     * . (your current directory)
+     * .embossdata (under your current directory)
+     * ~/ (your home directory)
+     * ~/.embossdata
+
+Notes
+
+   None.
+
+References
+
+     * Nucleic Acids Res. 16: 1879-1902, 1988
+     * BioTechForum - Advances in Molecular Genetics (J. Collins,A.J.
+       Driesel, eds.) 4:95-108, 1991
+     * Nucleic Acids Res. 20:3-26, 1992
+
+Warnings
+
+   Your EMBOSS administrator will have to run the EMBOSS program
+   tfextract in order to set up the data files from the TRANSFAC
+   distribution files.
+
+Diagnostic Error Messages
+
+   "EMBOSS An error in tfscan.c at line 82:
+   Either EMBOSS_DATA undefined or TFEXTRACT needs running"
+
+   This means that you should contact your EMBOSS administrator and ask
+   them to run the tfextract program to set up the TRANSFAC data for
+   EMBOSS.
+
+Exit status
+
+   It always exits with a status of 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name Description
+
+   Your EMBOSS administrator will have to run the EMBOSS program
+   tfextract in order to set up the data files from the TRANSFAC
+   distribution files.
+
+Author(s)
+
+   Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+History
+
+   Written Summer 2000 - Alan Bleasby
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

@@ -1,0 +1,27 @@
+  seq {
+    id { local id 1 },
+    descr { title "FASTA FORMAT DNA SEQUENCE F30001" },
+    inst {
+      repr raw, mol dna, length 120, topology linear,
+      seq-data
+        iupacna "ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTA
+CGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT"
+      } } ,
+  seq {
+    id { local id 1 },
+    descr { title "FASTA FORMAT DNA SEQUENCE F30002" },
+    inst {
+      repr raw, mol dna, length 120, topology linear,
+      seq-data
+        iupacna "ACGTACGTACGTACGTACGT....ACGTACGTACGTACGTACGTACGTACGTACGTACGTA
+CGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTTGCAACGTACGT"
+      } } ,
+  seq {
+    id { local id 1 },
+    descr { title "FASTA FORMAT DNA SEQUENCE F30003" },
+    inst {
+      repr raw, mol dna, length 120, topology linear,
+      seq-data
+        iupacna "ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTCGTACGTACGTACGTACGTAC
+GTACGTACGTACGTACGTAACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT"
+      } } ,

@@ -1,0 +1,216 @@
+
+                                 degapseq 
+
+
+
+Function
+
+   Removes gap characters from sequences
+
+Description
+
+   degapseq reads in one or more sequences and writes them out again
+   minus any gap characters. In effect it removes gaps from aligned
+   sequences.
+
+   In fact, if does more than just this as it removes ANY non-alphabetic
+   character from the input sequence, so as well as removing the
+   gap-characters, it will remove such things as the '*' in protein
+   sequences that indicates the position of a 'translated' STOP codon.
+
+   There are many different formats for storing sequences in files. Some
+   sequence formats allow you to store aligned sequences, including the
+   information on where gaps have been introduced to make the sequence
+   align properly. This is indicated by using a special character to
+   indicate that there is a gap at that position. Different sequence
+   formats use different characters to indicate gaps. Some formats may
+   use more than one type of character to indicate different types of
+   gaps (e.g. gaps at the ends of the sequences, internal gaps, gaps
+   introduced by a program or by a person editing the alignment, etc.)
+   Some typicate characters used to indicate where gaps are may be: '.',
+   '-' and '~'.
+
+   When EMBOSS programs read in a sequence that has gap-characters in,
+   all gap characters are internally changed to '-' characters. i.e.
+   EMBOSS only has one type of gap character. Thus any distinguishing
+   characters for different gap types are reduced to a '-'. There is only
+   one type of gap in EMBOSS.
+
+   degapseq removes any non-alphabetic character in the sequence, in
+   effect this means that gaps and '*' characters are removed. The
+   sequence is then written out.
+
+Usage
+
+   Here is a sample session with degapseq
+
+
+% degapseq dnagap.fasta nogaps.seq 
+Removes gap characters from sequences
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     (Gapped) sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-outseq]            seqoutall  [.] Sequence set(s)
+                                  filename and optional format (output USA)
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   Any valid input sequence USA is allowed.
+
+   The input sequence can be nucleic or protein.
+
+   The input sequence can be gapped or ungapped.
+
+  Input files for usage example
+
+  File: dnagap.fasta
+
+>FASTA F10002 FASTA FORMAT DNA SEQUENCE
+ACGT....ACGTACGTACGTACGTACGTACGTACGTACGT
+ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT
+ACGTACGTACGTACGTACGT
+
+Output file format
+
+   The output is a sequence with no gaps.
+
+  Output files for usage example
+
+  File: nogaps.seq
+
+>FASTA F10002 FASTA FORMAT DNA SEQUENCE
+ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT
+ACGTACGTACGTACGTACGTACGTACGTACGTACGT
+
+Data files
+
+   None.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   It will remove '*' characters from protein sequences as well as
+   removing the gap characters.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name                         Description
+   biosed       Replace or delete sequence sections
+   codcopy      Reads and writes a codon usage table
+   cutseq       Removes a specified section from a sequence
+   descseq      Alter the name or description of a sequence
+   entret       Reads and writes (returns) flatfile entries
+   extractalign Extract regions from a sequence alignment
+   extractfeat  Extract features from a sequence
+   extractseq   Extract regions from a sequence
+   listor       Write a list file of the logical OR of two sets of sequences
+   makenucseq   Creates random nucleotide sequences
+   makeprotseq  Creates random protein sequences
+   maskfeat     Mask off features of a sequence
+   maskseq      Mask off regions of a sequence
+   newseq       Type in a short new sequence
+   noreturn     Removes carriage return from ASCII files
+   notseq       Exclude a set of sequences and write out the remaining ones
+   nthseq       Writes one sequence from a multiple set of sequences
+   pasteseq     Insert one sequence into another
+   revseq       Reverse and complement a sequence
+   seqret       Reads and writes (returns) sequences
+   seqretsplit  Reads and writes (returns) sequences in individual files
+   skipseq      Reads and writes (returns) sequences, skipping first few
+   splitter     Split a sequence into (overlapping) smaller sequences
+   trimest      Trim poly-A tails off EST sequences
+   trimseq      Trim ambiguous bits off the ends of sequences
+   union        Reads sequence fragments and builds one sequence
+   vectorstrip  Strips out DNA between a pair of vector sequences
+   yank         Reads a sequence range, appends the full USA to a list file
+
+Author(s)
+
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+History
+
+   Written (6 March 2001) - Gary Williams
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

@@ -1,0 +1,313 @@
+
+                               equicktandem 
+
+
+
+Function
+
+   Finds tandem repeats
+
+Description
+
+   equicktandem scans a sequence for potential tandem repeats up to a
+   specified size. The results can be used to run etandem on the
+   candidate repeat lengths to identify genuine tandem repeats.
+
+   equicktandem is a simple program that looks for segments in which each
+   base tends to match the base 'repeatsize' back, i.e. with an
+   autocorrelation peak at 'repeatsize'. This can allow drift in the
+   repeating sequence, i.e. it does not look for a consensus sequence for
+   the whole repeat block (that is what etandem does). But it is much
+   quicker than etandem. It does not account for gaps.
+
+   The score is +1 for a match to the corresponding base 'repeatsize'
+   back and -1 for a mismatch.
+
+Usage
+
+   Here is a sample session with equicktandem
+
+   The input sequence is the human herpesvirus tandem repeat.
+
+
+% equicktandem -noorigfile 
+Finds tandem repeats
+Input nucleotide sequence: tembl:L46634
+Maximum repeat size [600]: 
+Threshold score [20]: 
+Output report [l46634.qtan]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          sequence   Nucleotide sequence filename and optional
+                                  format, or reference (input USA)
+   -maxrepeat          integer    [600] Maximum repeat size (Any integer
+                                  value)
+   -threshold          integer    [20] Threshold score (Any integer value)
+  [-outfile]           report     [*.equicktandem] Output report file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -origfile           outfile    [*.equicktandem] Sanger Centre program
+                                  quicktandem output file (optional)
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
+
+   "-origfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   The input for equicktandem is a nucleotide sequence USA.
+
+  Input files for usage example
+
+   'tembl:L46634' is a sequence entry in the example nucleic acid
+   database 'tembl'
+
+  Database entry: tembl:L46634
+
+ID   L46634; SV 1; linear; genomic DNA; STD; VRL; 1272 BP.
+XX
+AC   L46634; L46689;
+XX
+DT   06-NOV-1995 (Rel. 45, Created)
+DT   04-MAR-2000 (Rel. 63, Last updated, Version 3)
+XX
+DE   Human herpesvirus 7 (clone ED132'1.2) telomeric repeat region.
+XX
+KW   telomeric repeat.
+XX
+OS   Human herpesvirus 7
+OC   Viruses; dsDNA viruses, no RNA stage; Herpesviridae; Betaherpesvirinae;
+OC   Roseolovirus.
+XX
+RN   [1]
+RP   1-1272
+RX   PUBMED; 7494318.
+RA   Secchiero P., Nicholas J., Deng H., Xiaopeng T., van Loon N., Ruvolo V.R.,
+RA   Berneman Z.N., Reitz M.S. Jr., Dewhurst S.;
+RT   "Identification of human telomeric repeat motifs at the genome termini of
+RT   human herpesvirus 7: structural analysis and heterogeneity";
+RL   J. Virol. 69(12):8041-8045(1995).
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1272
+FT                   /organism="Human herpesvirus 7"
+FT                   /strain="JI"
+FT                   /mol_type="genomic DNA"
+FT                   /clone="ED132'1.2"
+FT                   /db_xref="taxon:10372"
+FT   repeat_region   207..928
+FT                   /note="long and complex repeat region composed of various
+FT                   direct repeats, including TAACCC (TRS), degenerate copies
+FT                   of TRS motifs and a 14-bp repeat, TAGGGCTGCGGCCC"
+FT   misc_signal     938..998
+FT                   /note="pac2 motif"
+FT   misc_feature    1009
+FT                   /note="right genome terminus (...ACA)"
+XX
+SQ   Sequence 1272 BP; 346 A; 455 C; 222 G; 249 T; 0 other;
+     aagcttaaac tgaggtcaca cacgacttta attacggcaa cgcaacagct gtaagctgca        6
+0
+     ggaaagatac gatcgtaagc aaatgtagtc ctacaatcaa gcgaggttgt agacgttacc       12
+0
+     tacaatgaac tacacctcta agcataacct gtcgggcaca gtgagacacg cagccgtaaa       18
+0
+     ttcaaaactc aacccaaacc gaagtctaag tctcacccta atcgtaacag taaccctaca       24
+0
+     actctaatcc tagtccgtaa ccgtaacccc aatcctagcc cttagcccta accctagccc       30
+0
+     taaccctagc tctaacctta gctctaactc tgaccctagg cctaacccta agcctaaccc       36
+0
+     taaccgtagc tctaagttta accctaaccc taaccctaac catgaccctg accctaaccc       42
+0
+     tagggctgcg gccctaaccc tagccctaac cctaacccta atcctaatcc tagccctaac       48
+0
+     cctagggctg cggccctaac cctagcccta accctaaccc taaccctagg gctgcggccc       54
+0
+     taaccctaac cctagggctg cggcccgaac cctaacccta accctaaccc taaccctagg       60
+0
+     gctgcggccc taaccctaac cctagggctg cggccctaac cctaacccta gggctgcggc       66
+0
+     ccgaacccta accctaaccc taaccctagg gctgcggccc taaccctaac cctagggctg       72
+0
+     cggccctaac cctaacccta actctagggc tgcggcccta accctaaccc taaccctaac       78
+0
+     cctagggctg cggcccgaac cctagcccta accctaaccc tgaccctgac cctaacccta       84
+0
+     accctaaccc taaccctaac cctaacccta accctaaccc taaccctaac cctaacccta       90
+0
+     accctaaccc taaccctaac cctaaccccg cccccactgg cagccaatgt cttgtaatgc       96
+0
+     cttcaaggca ctttttctgc gagccgcgcg cagcactcag tgaaaaacaa gtttgtgcac      102
+0
+     gagaaagacg ctgccaaacc gcagctgcag catgaaggct gagtgcacaa ttttggcttt      108
+0
+     agtcccataa aggcgcggct tcccgtagag tagaaaaccg cagcgcggcg cacagagcga      114
+0
+     aggcagcggc tttcagactg tttgccaagc gcagtctgca tcttaccaat gatgatcgca      120
+0
+     agcaagaaaa atgttctttc ttagcatatg cgtggttaat cctgttgtgg tcatcactaa      126
+0
+     gttttcaagc tt                                                          127
+2
+//
+
+Output file format
+
+   The output is a standard EMBOSS report file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -rformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: embl,
+   genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+   feattable, motif, regions, seqtable, simple, srs, table, tagseq
+
+   See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
+   information on report formats.
+
+   By default equicktandem writes a 'table' report file.
+
+  Output files for usage example
+
+  File: l46634.qtan
+
+########################################
+# Program: equicktandem
+# Rundate: Sun 15 Jul 2007 12:00:00
+# Commandline: equicktandem
+#    -noorigfile
+#    -sequence tembl:L46634
+# Report_format: table
+# Report_file: l46634.qtan
+########################################
+
+#=======================================
+#
+# Sequence: L46634     from: 1   to: 1272
+# HitCount: 1
+#
+# Threshold: 20
+# Maxrepeat: 600
+#
+#=======================================
+
+  Start     End   Score   Size  Count
+    191     935     339      6    124
+
+#---------------------------------------
+#---------------------------------------
+
+Data files
+
+   None.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with a status of 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name                     Description
+   einverted    Finds DNA inverted repeats
+   etandem      Looks for tandem repeats in a nucleotide sequence
+   palindrome   Looks for inverted repeats in a nucleotide sequence
+
+   equicktandem identifies regions wich are likely to contain tanden
+   repeats. tandem should then be run on those regions to confirm them
+   and to get an accurate specification of the repeats. tandem runs
+   slowly.
+
+Author(s)
+
+   This program was originally written by Richard Durbin
+   (rd © sanger.ac.uk)
+   Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
+   CB10 1SA, UK.
+
+   This application was modified for inclusion in EMBOSS by Peter Rice
+   (pmr © ebi.ac.uk)
+   Informatics Division, European Bioinformatics Institute, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+History
+
+   Completed 25 May 1999
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

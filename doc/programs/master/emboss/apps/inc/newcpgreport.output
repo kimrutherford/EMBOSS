@@ -1,0 +1,29 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: u68037.newcpgreport</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+ID   U68037  1218 BP.
+XX
+DE   CpG Island report.
+XX
+CC   Obs/Exp ratio &gt; 0.60.
+CC   % C + % G &gt; 50.00.
+CC   Length &gt; 200.
+XX
+FH   Key              Location/Qualifiers
+FT   CpG island       104..509
+FT                    /size=406
+FT                    /Sum C+G=269
+FT                    /Percent CG=66.26
+FT                    /ObsExp=0.81
+FT   CpG island       596..924
+FT                    /size=329
+FT                    /Sum C+G=223
+FT                    /Percent CG=67.78
+FT                    /ObsExp=1.01
+FT   numislands       2
+//
+</pre>
+</td></tr></table><p>

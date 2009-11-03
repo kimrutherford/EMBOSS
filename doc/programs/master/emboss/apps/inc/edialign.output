@@ -1,0 +1,101 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: vtest.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;HTL2        
+ldtapC-LFSDGSPQKAAYVLWDQTILQQDITPLPSHethsaqkgELLAliCglraAKPW
+PSLNIFLDSKY-------------------------------------------------
+-----------------------------------------
+&gt;MMLV        
+gkk---------------------------------------------------------
+--LNVYTDSRYafatahihgeiyrrrglltsegkeiknkdeilallkalflpkrlsiihc
+pghqkghsaeargnrmADQAARKAAITETPDTSTLL-----
+&gt;HEPB        
+rpgl-CqVFADATPTGWGLVMGHQRMRGTFSAPLPIHta------ELLAa-Cf---ARSR
+SGANIIg-----------------------------------------------------
+----------------TDNSGRTSLYADSPSVPSHLpdrvh
+</pre>
+</td></tr></table><p>
+<p><h3>File: vtest.edialign</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+ 
+                           DIALIGN 2.2.1 
+                           *************
+ 
+          Program code written by Burkhard Morgenstern and Said Abdeddaim 
+             e-mail contact: dialign (at) gobics (dot) de 
+ 
+          Published research assisted by DIALIGN 2 should cite:  
+ 
+             Burkhard Morgenstern (1999).
+             DIALIGN 2: improvement of the segment-to-segment
+             approach to multiple sequence alignment.
+             Bioinformatics 15, 211 - 218. 
+
+          For more information, please visit the DIALIGN home page at 
+
+             http://bibiserv.techfak.uni-bielefeld.de/dialign/ 
+ 
+         ************************************************************
+ 
+
+
+   program call:  edialign  
+
+ 
+   Aligned sequences:          length:
+   ==================          =======
+ 
+   1) HTL2                        70
+   2) MMLV                        97
+   3) HEPB                        81
+
+   Average seq. length:           82.7 
+
+
+   Please note that only upper-case letters are considered to be aligned. 
+
+
+   Alignment (DIALIGN format):
+   ===========================
+ 
+HTL2               1   ldtapC-LFS DGSPQKAAYV LWDQTILQQD ITPLPSHeth saqkgELLAl 
+MMLV               1   gkk------- ---------- ---------- ---------- ---------- 
+HEPB               1   rpgl-CqVFA DATPTGWGLV MGHQRMRGTF SAPLPIHta- -----ELLAa 
+                                                                 
+                       0000000999 9999999999 9999999999 9999999000 0000000000 
+ 
+HTL2              50   iCglraAKPW PSLNIFLDSK Y--------- ---------- ---------- 
+MMLV               4   ---------- --LNVYTDSR Yafatahihg eiyrrrgllt segkeiknkd 
+HEPB              44   -Cf---ARSR SGANIIg--- ---------- ---------- ---------- 
+                                                                 
+                       0000000000 0077777777 7000000000 0000000000 0000000000 
+ 
+HTL2              71   ---------- ---------- ---------- ---------- ---------- 
+MMLV              42   eilallkalf lpkrlsiihc pghqkghsae argnrmADQA ARKAAITETP 
+HEPB              57   ---------- ---------- ---------- ------TDNS GRTSLYADSP 
+                                                                 
+                       0000000000 0000000000 0000000000 0000001111 1111111111 
+ 
+HTL2              71   ---------- - 
+MMLV              92   DTSTLL---- - 
+HEPB              71   SVPSHLpdrv h 
+                       
+                       1111110000 0 
+ 
+
+ 
+ 
+   Sequence tree:
+   ==============
+
+Tree constructed using UPGMA based on DIALIGN fragment weight scores
+ 
+((HTL2        :0.145587HEPB        :0.145587):0.108531MMLV        :0.254117);
+ 
+ 
+</pre>
+</td></tr></table><p>

@@ -1,0 +1,36 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>Directory: AAINDEX</h3>
+<p>This directory contains output files, for example kytj820101.
+<p><h3>File: AAINDEX/kytj820101</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+H KYTJ820101
+D Hydropathy index (Kyte-Doolittle, 1982)
+R LIT:0807099 PMID:7108955
+A Kyte, J. and Doolittle, R.F.
+T A simple method for displaying the hydropathic character of a protein
+J J. Mol. Biol. 157, 105-132 (1982)
+C CHOC760103    0.964  JANJ780102    0.922  DESM900102    0.898
+  EISD860103    0.897  CHOC760104    0.889  WOLR810101    0.885
+  RADA880101    0.884  MANP780101    0.881  EISD840101    0.878
+  PONP800103    0.870  NAKH920108    0.868  JANJ790101    0.867
+  JANJ790102    0.866  PONP800102    0.861  MEIH800103    0.856
+  PONP800101    0.851  PONP800108    0.850  WARP780101    0.845
+  RADA880108    0.842  ROSG850102    0.841  DESM900101    0.837
+  BIOV880101    0.829  RADA880107    0.828  CIDH920104    0.824
+  KANM800104    0.824  LIFS790102    0.824  MIYS850101    0.821
+  RADA880104    0.819  NAKH900111    0.817  NISK800101    0.812
+  FAUJ830101    0.811  ARGP820103    0.806  ARGP820102    0.803
+  NAKH920105    0.803  KRIW790101   -0.805  CHOC760102   -0.838
+  MONM990101   -0.842  GUYH850101   -0.843  RACS770102   -0.844
+  JANJ780103   -0.845  ROSM880101   -0.845  PRAM900101   -0.850
+  JANJ780101   -0.852  GRAR740102   -0.859  MEIH800102   -0.871
+  ROSM880102   -0.878  OOBM770101   -0.899
+I   A/L    R/K    N/M    D/F    C/P    Q/S    E/T    G/W    H/Y    I/V
+    1.8   -4.5   -3.5   -3.5    2.5   -3.5   -3.5   -0.4   -3.2    4.5
+    3.8   -3.9    1.9    2.8   -1.6   -0.8   -0.7   -0.9   -1.3    4.2
+//
+</pre>
+</td></tr></table><p>

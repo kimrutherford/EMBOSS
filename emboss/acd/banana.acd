@@ -1,0 +1,50 @@
+application: banana [
+  documentation: "Bending and curvature plot in B-DNA"
+  groups: "Nucleic:Composition"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  sequence: sequence [
+    parameter: "y"
+    type: "puredna"
+  ]
+
+  datafile: anglesfile [
+    additional: "Y"
+    information: "DNA base timer roll angles data file"
+    default: "Eangles_tri.dat"
+    knowntype: "base trimer roll angles"
+  ]
+
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  graph: graph [
+    standard: "Y"
+    gdesc: "Bending and curvature plot"
+    nullok: "Y"
+  ]
+
+  integer: residuesperline [
+    additional: "Y"
+    default: "50"
+    information: "Number of residues to be displayed on each
+                  line"
+  ]
+
+  outfile: outfile [
+    additional: "Y"
+    default: "banana.profile"
+    knowntype: "banana output"
+    nullok: "Y"
+  ]
+
+endsection: output

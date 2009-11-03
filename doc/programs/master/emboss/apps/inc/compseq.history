@@ -1,0 +1,10 @@
+
+Completed 2 March 2000
+
+<BR>
+
+5 April 2001 (version 1.12.0) - the operation of the option '-reverse'
+has changed.  It is now 'False' by default instead of being 'True' by
+default for nucleic sequences.  Too many people were getting confused by
+the counts being done on both senses, so this is now done on only the
+forward sense by default. 

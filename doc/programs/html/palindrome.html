@@ -1,0 +1,565 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: palindrome
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+palindrome
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+    Function
+</H2>
+Looks for inverted repeats in a nucleotide sequence
+
+<H2>
+    Description
+</H2>
+
+
+<b>palindrome</b> looks for inverted repeats (stem loops) in a
+nucleotide sequence. 
+
+<p>
+It will find inverted repeats that include a proportion of mismatches
+and gaps (bulges in the stem loop). 
+
+<p>
+
+It works by finding all possible inverted matches satisfying the
+specified conditions of minimum and maximum length of palindrome,
+maximum gap between repeated regions and number of mismatches allowed. 
+
+<p>
+
+Secondary structures like inverted repeats in genomic sequences may be
+implicated in initiation of DNA replication. 
+
+<p>
+
+Some genomic sequence entries in the databases are composed of
+unfinished, draft sequence with gaps of unknown size between contigs. 
+The positions of these gaps are often indicated by runs of 200 N
+characters.  To prevent <b>palindrome</b> producing large, uninformative
+outputs, any palindromes found that are composed only of N's will not be
+reported. 
+
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with palindrome</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>palindrome </b>
+Looks for inverted repeats in a nucleotide sequence
+Input nucleotide sequence(s): <b>tembl:d00596</b>
+Enter minimum length of palindrome [10]: <b>15</b>
+Enter maximum length of palindrome [100]: <b></b>
+Enter maximum gap between repeated regions [100]: <b></b>
+Number of mismatches allowed [0]: <b></b>
+Output file [d00596.pal]: <b></b>
+Report overlapping matches [Y]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -minpallen          integer    [10] Enter minimum length of palindrome
+                                  (Integer 1 or more)
+   -maxpallen          integer    [100] Enter maximum length of palindrome
+                                  (Any integer value)
+   -gaplimit           integer    [100] Enter maximum gap between repeated
+                                  regions (Integer 0 or more)
+   -nummismatches      integer    [0] Number of mismatches allowed (Positive
+                                  integer)
+  [-outfile]           outfile    [*.palindrome] Output file name
+   -[no]overlap        boolean    [Y] Report overlapping matches
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-minpallen</td>
+<td>Enter minimum length of palindrome</td>
+<td>Integer 1 or more</td>
+<td>10</td>
+</tr>
+
+<tr>
+<td>-maxpallen</td>
+<td>Enter maximum length of palindrome</td>
+<td>Any integer value</td>
+<td>100</td>
+</tr>
+
+<tr>
+<td>-gaplimit</td>
+<td>Enter maximum gap between repeated regions</td>
+<td>Integer 0 or more</td>
+<td>100</td>
+</tr>
+
+<tr>
+<td>-nummismatches</td>
+<td>Number of mismatches allowed</td>
+<td>Positive integer</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.palindrome</td>
+</tr>
+
+<tr>
+<td>-[no]overlap</td>
+<td>Report overlapping matches</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<b>palindrome</b> reads normal nucleotide sequence USAs.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:d00596' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:d00596</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   D00596; SV 1; linear; genomic DNA; STD; HUM; 18596 BP.
+XX
+AC   D00596;
+XX
+DT   17-JUL-1991 (Rel. 28, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 3)
+XX
+DE   Homo sapiens gene for thymidylate synthase, exons 1, 2, 3, 4, 5, 6, 7,
+DE   complete cds.
+XX
+KW   thymidylate syntase.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-18596
+RX   PUBMED; 2243092.
+RA   Kaneda S., Nalbantoglu J., Takeishi K., Shimizu K., Gotoh O., Seno T.,
+RA   Ayusawa D.;
+RT   "Structural and functional analysis of the human thymidylate synthase
+RT   gene.";
+RL   J. Biol. Chem. 265(33):20277-20284(1990).
+XX
+DR   GDB; 163670.
+DR   GDB; 182340.
+XX
+CC   These data kindly submitted in computer readable form by:
+CC   Sumiko Kaneda
+CC   National Institute of Genetics
+CC   1111 Yata
+CC   Mishima 411
+CC   Japan
+CC   Phone:  +81-559-72-2732
+CC   Fax:    +81-559-71-3651
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..18596
+FT                   /organism="Homo sapiens"
+FT                   /chromosome="18"
+FT                   /map="18p11.32"
+FT                   /mol_type="genomic DNA"
+FT                   /clone="lambdaHTS-1 and lambdaHTS-3"
+FT                   /db_xref="taxon:9606"
+FT   repeat_unit     1..148
+FT                   /note="Alu sequence"
+FT   repeat_unit     202..477
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+     ttttgttttt agcttcagcg agaacccaga cctttcccaa agctcaggat tcttcgaaaa     15660
+     gttgagaaaa ttgatgactt caaagctgaa gactttcaga ttgaagggta caatccgcat     15720
+     ccaactatta aaatggaaat ggctgtttag ggtgctttca aaggagctcg aaggatattg     15780
+     tcagtcttta ggggttgggc tggatgccga ggtaaaagtt ctttttgctc taaaagaaaa     15840
+     aggaactagg tcaaaaatct gtccgtgacc tatcagttat taatttttaa ggatgttgcc     15900
+     actggcaaat gtaactgtgc cagttctttc cataataaaa ggctttgagt taactcactg     15960
+     agggtatctg acaatgctga ggttatgaac aaagtgagga gaatgaaatg tatgtgctct     16020
+     tagcaaaaac atgtatgtgc atttcaatcc cacgtactta taaagaaggt tggtgaattt     16080
+     cacaagctat ttttggaata tttttagaat attttaagaa tttcacaagc tattccctca     16140
+     aatctgaggg agctgagtaa caccatcgat catgatgtag agtgtggtta tgaactttaa     16200
+     agttatagtt gttttatatg ttgctataat aaagaagtgt tctgcattcg tccacgcttt     16260
+     gttcattctg tactgccact tatctgctca gttccttcct aaaatagatt aaagaactct     16320
+     ccttaagtaa acatgtgctg tattctggtt tggatgctac ttaaaagagt atattttaga     16380
+     aataatagtg aatatatttt gccctatttt tctcatttta actgcatctt atcctcaaaa     16440
+     tataatgacc atttaggata gagttttttt tttttttttt taaactttta taaccttaaa     16500
+     gggttatttt aaaataatct atggactacc attttgccct cattagcttc agcatggtgt     16560
+     gacttctcta ataatatgct tagattaagc aaggaaaaga tgcaaaacca cttcggggtt     16620
+     aatcagtgaa atatttttcc cttcgttgca taccagatac ccccggtgtt gcacgactat     16680
+     ttttattctg ctaatttatg acaagtgtta aacagaacaa ggaattattc caacaagtta     16740
+     tgcaacatgt tgcttatttt caaattacag tttaatgtct aggtgccagc ccttgatata     16800
+     gctatttttg taagaacatc ctcctggact ttgggttagt taaatctaaa cttatttaag     16860
+     gattaagtag gataacgtgc attgatttgc taaaagaatc aagtaataat tacttagctg     16920
+     attcctgagg gtggtatgac ttctagctga actcatcttg atcggtagga ttttttaaat     16980
+     ccatttttgt aaaactattt ccaagaaatt ttaagccctt tcacttcaga aagaaaaaag     17040
+     ttgttggggc tgagcactta attttcttga gcaggaagga gtttcttcca aacttcacca     17100
+     tctggagact ggtgtttctt tacagattcc tccttcattt ctgttgagta gccgggatcc     17160
+     tatcaaagac caaaaaaatg agtcctgtta acaaccacct ggaacaaaaa cagattttat     17220
+     gcatttatgc tgctccaaga aatgctttta cgtctaagcc agaggcaatt aattaatttt     17280
+     tttttttttg acatggagtc actgtccgtt gcccaggctg cagtgcagtg gcgcaatctt     17340
+     ggctcactgc aacctccacc tcccaggttc aagtgattct cctgcctcag cctcccatgt     17400
+     agctgggatc acaggcacct gccaccatgc ccggctaatt ttttgtattt tttgtagaga     17460
+     cagggtttca ccatgttggc caggctggtc tcaaacacct gacctcaaat gatccacctg     17520
+     cctcagcctc ccaaagtgtt gggattacag gcgtaagcca ccatgcccag ccctgaatta     17580
+     atatttttaa aataagtttg gagactgttg gaaataatag ggcagaggaa catattttac     17640
+     tggctacttg ccagagttag ttaactcatc aaactctttg ataatagttt gacctctgtt     17700
+     ggtgaaaatg agccatgatc tcttgaacat gatcagaata aatgccccag ccacacaatt     17760
+     gtagtccaaa ctttttaggt cactaacttg ctagatggtg ccaggttttt ttgcacaagg     17820
+     agtgcaaatg ttaagatctc cactagtgag gaaaggctag tattacagaa gccttgtcag     17880
+     aggcaattga acctccaagc cctggccctc aggcctgagg attttgatac agacaaactg     17940
+     aagaaccgtt tgttagtgga tattgcaaac aaacaggagt caaagcttgg tgctccacag     18000
+     tctagttcac gagacaggcg tggcagtggc tggcagcatc tcttctcaca ggggccctca     18060
+     ggcacagctt accttgggag gcatgtagga agcccgctgg atcatcacgg gatacttgaa     18120
+     atgctcatgc aggtggtcaa catactcaca caccctagga ggagggaatc agatcggggc     18180
+     aatgatgcct gaagtcagat tattcacgtg gtgctaactt aaagcagaag gagcgagtac     18240
+     cactcaattg acagtgttgg ccaaggctta gctgtgttac catgcgtttc taggcaagtc     18300
+     cctaaacctc tgtgcctcag gtccttttct tctaaaatat agcaatgtga ggtggggact     18360
+     ttgatgacat gaacacacga agtccctctg agaggttttg tggtgccctt taaaagggat     18420
+     caattcagac tctgtaaata tccagaatta tttgggttcc tctggtcaaa agtcagatga     18480
+     atagattaaa atcaccacat tttgtgatct atttttcaag aagcgtttgt attttttcat     18540
+     atggctgcag cagctgccag gggcttgggg tttttttggc aggtagggtt gggagg         18596
+//
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Output file format
+</H2>
+
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: d00596.pal</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Palindromes of:  D00596 
+Sequence length is: 18596 
+Start at position: 1
+End at position: 18596
+Minimum length of Palindromes is: 15 
+Maximum length of Palindromes is: 100 
+Maximum gap between elements is: 100 
+Number of mismatches allowed in Palindrome: 0
+
+
+
+Palindromes:
+126      caaaaaaaaaaaaaaaa      142
+         |||||||||||||||||
+217      gtttttttttttttttt      201
+
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+215      tttttttttttttttt      200
+
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+214      tttttttttttttttt      199
+
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+213      tttttttttttttttt      198
+
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+212      tttttttttttttttt      197
+
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+211      tttttttttttttttt      196
+
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+210      tttttttttttttttt      195
+
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+209      tttttttttttttttt      194
+
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+208      tttttttttttttttt      193
+
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+207      tttttttttttttttt      192
+
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+206      tttttttttttttttt      191
+
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+205      tttttttttttttttt      190
+
+127      aaaaaaaaaaaaaaaagaccgccagggct      155
+         |||||||||||||||||||||||||||||
+204      ttttttttttttttttctggcggtcccga      176
+
+
+
+
+</pre>
+</td></tr></table><p>
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+
+Unless the qualifier '-nooverlap' is specified, palindrome makes no
+attempt to exclude subsets of previously found palindromes. 
+
+<p>
+Several examples can be seen in the sample output above.
+
+<H2>
+    References
+</H2>
+
+
+Some references on inverted repeats: 
+
+<ol>
+
+<li>Pearson CE, Zorbas H, Price GB, Zannis-Hadjopoulos M Inverted
+      repeats, stem-loops, and cruciforms: significance for initiation
+      of DNA replication. J Cell Biochem 1996 Oct;63(1):1-22
+
+<li>Waldman AS, Tran H, Goldsmith EC, Resnick MA. q Long inverted
+      repeats are an at-risk motif for recombination in mammalian
+      cells. Genetics. 1999 Dec;153(4):1873-83. PMID: 10581292; UI:
+      20050682
+
+<li>Jacobsen SE Gene silencing: Maintaining methylation patterns. Curr
+      Biol 1999 Aug 26;9(16):R617-9
+
+<li>Lewis S, Akgun E, Jasin M. Palindromic DNA and genome
+      stability. Further studies. Ann N Y Acad Sci. 1999 May
+      18;870:45-57. PMID: 10415472; UI: 99343961
+
+<li>Dai X, Greizerstein MB, Nadas-Chinni K, Rothman-Denes LB
+      Supercoil-induced extrusion of a regulatory DNA hairpin. Proc
+      Natl Acad Sci U S A 1997 Mar 18;94(6):2174-9
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="einverted.html">einverted</a></td>
+<td>Finds DNA inverted repeats</td>
+</tr>
+
+<tr>
+<td><a href="equicktandem.html">equicktandem</a></td>
+<td>Finds tandem repeats</td>
+</tr>
+
+<tr>
+<td><a href="etandem.html">etandem</a></td>
+<td>Looks for tandem repeats in a nucleotide sequence</td>
+</tr>
+
+</table>
+<p>
+
+<b>einverted</b> also looks for inverted repeats but is much slower and
+more sensitive, as it finds low-quality (very mismatched) repeats and
+repeats with gaps. 
+
+<H2>
+    Author(s)
+</H2>
+
+
+Mark Faller (current e-mail address unknown)
+<br>
+while he was with:
+<br>
+HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+
+
+<H2>
+    History
+</H2>
+
+Written (1999) - Mark Faller.
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+<H2>
+    Comments
+</H2>
+None
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,196 @@
+According to NCBI's "formatdb.txt" documentation, formatdb now writes
+databases with ASN.1 defline structures.
+
+These can be configured using a compile-time flag
+-DSET_ASN1_DEFLINE_BITS which is not too helpful for those who install
+the binary distribution. Installing from source means building the
+entire NCBI toolkit (ncbi.tar.gz) which includes blast. The
+configuration file is called .formatdbrc and is recommended for
+internal NCBI use only.
+
+Some clues are to be found in ncbi/include/readdb.h which defines
+NCBI's API for reading blast databases.
+
+The new format is supposed to contain, somewhere:
+
+taxid : an integer - hardly obtainable from a FASTA sequence file
+though!
+
+link bits : for "the link-out feature" to LocusLink, Unigene,
+Structure and Geo
+
+membership bits: for non-redundant blast databases to link to the source
+databases
+
+
+
+However, the example file provided in formatdb.txt does give some
+clues (see the annotated text below)
+
+EMBOSS code ajseqdb.c has isblast2 to spot version 2 (3 - for blast
+2.x.x) databases. We may need to make this isblast=3 and add isblast=4.
+
+Running formatdb (2.2.10) on the test/data/swnew file, which has 9
+entries, gives:
+
+swnew.pin (indices) - maybe the same as version 3
+
+See seqBlastOpen function
+-------------------------
+N/P Ver Type  Comment
+--- --- ----- ------
+        Uint  DbType   (check value)
+        Uint  DbFormat (check value)
+        Uint  TitleLen (rounded?)
+        Char* Title   (no trailing NULL)
+    3   Uint  DateLen (v3)
+    3   Char* Date (v3 - no trailing NULL)
+
+N   2   Unit  LineLen (v3 dna only - fasta sequence line length)
+
+P   3   Uint  TotLen (v3 - for protein)
+P   3   Unit  MaxSeqLen (v3 - reversed for dna)
+N   3   Unit  MaxSeqLen (v3 - reversed for dna)
+N   3   Uint  TotLen (v3 - for protein)
+
+N   2   Uint  CompLen - compressed db length (def=0)
+N   2   Uint  Cleancount - count of nt's cleaned (def=0)
+
+
+swnew.psq (sequence) - same as version 3 for swnew
+
+swnew.phr (deflines file) - definitely strange
+
+Apparently some codes are the type of what follows:
+
+x30
+
+xa0
+
+xa1
+
+xaa
+
+x1a length plus string plus 0 0. For a long string, (x81 x97) = length
+of chars
+
+
+Byte Text
+30   0 (ASCII zero)
+80
+30   0 (ASCII zero)
+80
+a0
+80
+1a
+81
+97
+4f   O (start of the ID)
+44   D
+4f   O
+32   2
+5f   _
+46   F
+55   U
+
+... (rest of ID line, as text, up to..)
+
+28   (
+46   F
+52   R
+41   A
+47   G
+4d   M
+45   E
+4e   N
+54   T
+29   )
+2e   . (full stop)
+
+00
+00
+a1
+80
+30
+80
+aa
+80
+30
+80
+a0
+80
+1a
+09   (tab)
+42   B
+4c   L
+5f   _
+4f   O
+52   R
+44   D
+5f   _
+49   I
+44   D
+00
+00
+a1
+80
+a0
+80
+1a
+44   D (not part of the ID)
+54   T (start of next ID)
+4d   M
+32   2
+31   1
+5f   _
+46   F
+55   U
+47   G
+52   R
+55   U
+
+; .formatdbrc: formatdb configuration file
+;
+; This information is needed for the new database format, to set
+; the links and membership information of the structured deflines.
+
+
+;;;;;;;;;;;;;;;;;;; Memberships section ;;;;;;;;;;;;;;;;;;;;;;
+; This section determines what the bits mean in the membership bit array.
+; These must be unique positive integers starting with 1.
+; When adding a new entry, remember to update the value of TotalNum  
+; This information is used to distinguish database subsets (e.g.: pdb,
+; swissprot) in non-redundant databases (e.g.: nr).
+[MembershipBitNumbers]
+TotalNum = 3
+1  = swissprot
+2  = pdb
+3  = refseq_protein
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;; Links section ;;;;;;;;;;;;;;;;;;;;;;;;;;
+; This section determines what the bits mean in the links bit array.
+; These must be unique positive integers starting with 1.
+; When adding a new entry, remember to update the value of TotalNum and 
+; adding the appropriate file paths for each database in the LinkFiles 
+; section.
+; This is used for the link out feature of the blast result formatter.
+[LinkBitNumbers]
+TotalNum = 4   ; total number of bits used so far
+1 = LocusLink
+2 = UniGene
+3 = Structure
+4 = Geo
+
+; These are the paths to the files containing the
+; gi's whose links will be modified. The format is
+; <link_type> = <file_path>
+; where link_type is one of the types of links defined in the LinkBitNumbers
+; section.
+[LinkFiles]
+LocusLink = /home/joe/locus_gis.txt
+UniGene   = /dev/null
+Structure = /dev/null
+Geo       = /home/john/geo.txt
+; EOF

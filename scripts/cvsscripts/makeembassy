@@ -1,0 +1,39 @@
+#!/bin/csh -x
+
+#######################################
+
+foreach t (mse phylip)
+
+  cd ~emboss/CURRENT/$1/emboss/embassy/$t
+
+  aclocal 
+  autoconf
+  automake -a
+
+  ./configure --disable-shared --enable-warnings
+
+  if ( ! { make } ) then
+    echo "Failed $t-build on `hostname` in `pwd`"
+    make |& \
+     rsh europa fold -w 77 "|"  Mail -s \"$t make failed on `ostype`\" il@sanger.ac.uk
+  endif
+
+  make dist
+end
+
+  cd ~emboss/CURRENT/$1/emboss/embassy/topo
+
+  aclocal -I m4
+  autoconf
+  automake -a
+
+  ./configure --disable-shared --enable-warnings
+
+  if ( ! { make } ) then
+    echo "Failed topo-build on `hostname` in `pwd`"
+    make |& \
+     rsh europa fold -w 77 "|"  Mail -s \"topo make failed on `ostype`\" il@sanger.ac.uk
+  endif
+
+  make dist
+

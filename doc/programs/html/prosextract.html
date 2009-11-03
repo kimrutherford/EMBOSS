@@ -1,0 +1,283 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: prosextract
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+prosextract
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+    Function
+</H2>
+Build the PROSITE motif database for use by patmatmotifs
+
+<H2>
+    Description
+</H2>
+
+
+Takes the IDentity, ACcession number and motif PAttern line 
+contents from prosite entries. Also converts the PAttern into a regular 
+expression and writes these four pieces to an output file -  defaulted to 
+be called 'prosite.lines'. 
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with prosextract</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>prosextract </b>
+Build the PROSITE motif database for use by patmatmotifs
+PROSITE database directory [.]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>
+
+<p>
+
+The output files named after the prosite accession numbers can now
+also be seen in the prosite directory. This files are automatically
+created after prosextract is run.
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-prositedir]        directory  PROSITE database directory
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers: (none)
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-prositedir]<br>(Parameter 1)</td>
+<td>PROSITE database directory</td>
+<td>Directory</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+
+
+These files must be the "prosite.dat" and "prosite.doc" file of a
+Prosite distribution, containing all current prosite data.
+
+<p>
+
+
+<H2>
+    Output file format
+</H2>
+
+
+These files are held in the prosite subdirectory of the emboss data
+directory. The default names are "prosite.lines" and "PS*****"
+(accession number documentation files)
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>Directory: PROSITE</h3>
+<p>This directory contains output files.
+<p>
+
+
+<H2>
+    Data files
+</H2>
+
+
+See Input file format above.
+
+<H2>
+    Notes
+</H2>
+
+
+This program is most useful when used as a prerequisite for patmatmotifs.
+
+<H2>
+    References
+</H2>
+
+
+<ol>
+<li>Bairoch, A., Bucher P. (1994) PROSITE: recent developments. Nucleic 
+Acids Research, Vol 22, No.17 3583-3589.
+
+<li>Bairoch, A., (1992) PROSITE: a dictionary of sites and patterns in 
+proteins. Nucleic Acids Research, Vol 20, Supplement, 2013-2018.
+
+<li>Peek, J., O'Reilly, T., Loukides, M., (1997) Unix Power Tools, 2nd 
+Edition.
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+
+The program will warn the user if the input file is incorrectly
+formatted.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+As in warnings.
+
+<H2>
+    Exit status
+</H2>
+
+
+Always exits with status 0
+
+<H2>
+    Known bugs
+</H2>
+
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="aaindexextract.html">aaindexextract</a></td>
+<td>Extract data from AAINDEX</td>
+</tr>
+
+<tr>
+<td><a href="cutgextract.html">cutgextract</a></td>
+<td>Extract data from CUTG</td>
+</tr>
+
+<tr>
+<td><a href="printsextract.html">printsextract</a></td>
+<td>Extract data from PRINTS</td>
+</tr>
+
+<tr>
+<td><a href="rebaseextract.html">rebaseextract</a></td>
+<td>Extract data from REBASE</td>
+</tr>
+
+<tr>
+<td><a href="tfextract.html">tfextract</a></td>
+<td>Extract data from TRANSFAC</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+Sinead O'Leary (current e-mail address unknown)
+<br>
+while she was at:
+<br>
+HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+
+
+
+<H2>
+    History
+</H2>
+
+
+Completed March 24 1999.
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by administrators responsible
+for software and database installation and maintenance. 
+
+
+<H2>
+    Comments
+</H2>
+None
+
+
+</BODY>
+</HTML>
+

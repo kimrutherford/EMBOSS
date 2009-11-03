@@ -1,0 +1,113 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <title>Jemboss Server Installation and Setup</title>
+<script type="text/javascript">
+
+function Start(page)         
+{
+  OpenWin = this.open(page, "CtrlWindow",
+           "toolbar=yes,menubar=yes,location=yes,scrollbars=yes,resizable=yes");
+}
+
+</script>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF" link="#0000EE" vlink="#551A8B" alink="#FF0000">
+
+<center>
+<h1>
+<a href="http://emboss.sourceforge.net/Jemboss/"><img SRC="Jemboss_logo_large.gif" BORDER=0 height=110 width=240></a></h1></center> 
+
+<center>
+<h2>Authentication</h2>
+</center>
+
+This is concerned with verifying that a particular username and
+password is valid for a given user on your platform.
+
+<p>The various authentication choices are either platform specific
+(e.g. for AIX and HP-UX) or more general. Most of the time
+you'll be able to use to following options but see the notes
+below.
+<p>
+
+<table noborder CELLSPACING=0 CELLPADDING=0>
+<td><tt>a) Linux</td><td><tt>--with-auth=shadow (or --with-auth=pam see
+                                PAM notes).</td><tr>
+<td><tt>b) Irix</td><td><tt>    --with-auth=shadow</td><tr>
+<td><tt>c) MacOSX</td><td><tt>  --with-auth=pam</td><tr>
+<td><tt>d) AIX</td><td><tt>     --with-auth=aixshadow</td><tr>
+<td><tt>e) HP-UX</td><td><tt>   --with-auth=hpuxshadow</td><tr>
+<td><tt>f) Solaris</td><td><tt> --with-auth=rshadow</td><tr>
+</table>
+
+<p>For AIX and HP-UX the above are the only possible choices.
+
+<p>If the above options do not work or you have a different
+operating system then here is a description of the possible
+choices which will hopefully guide to in selecting the
+correct one. Many will work with NIS (e.g. shadow, rshadow).
+
+<p>1. noshadow
+
+<p>In general this is used if your system has a /etc/passwd file
+which contains encrypted passwords and only a getpwnam()
+system call (man getpwnam). 
+
+<p>2. rnoshadow
+
+<p>This can be used if your system has a /etc/passwd file
+which contains encrypted passwords and your system has the
+re-entrant getpwnam_r() call (man getpwnam_r).
+
+<p>3. shadow
+
+<p>This can be used if your system has a /etc/shadow file (or
+equivalent) and your /etc/passwd file therefore does not
+contain encrypted passwords. It is used when the you only
+have the getspnam() and getpwnam()  system calls
+(man getspnam, man getpwnam).
+
+<p>4. rshadow
+
+<p>This can be used if your system has a /etc/shadow file (or
+equivalent) and your /etc/passwd file therefore does not
+contain encrypted passwords. If your platform has both the
+getspnam_r() and the getpwnam_r() re-entrant system calls
+then use this option (man getspnam_r, man getpwnam_r).
+
+<p>5. PAM
+
+<p>A possible choice if you have PAM set up but one of the
+above options might also work. See the <a href="pam.html">
+notes on using PAM</a>.
+For example, on most default RedHat Linux installations
+both 'shadow' and 'pam' will work but PAM requires a little
+extra effort to set up.
+
+<p>6. aixshadow
+
+<p>This is solely for AIX systems. It uses the getuserpw()
+and getpwnam() system calls.
+
+<p>7. hpuxshadow
+
+<p>This is solely for HP-UX systems. It uses the getspnam()
+and getpwnam_r() system calls. It also checks for
+'trusted' setups with the iscomsec() system call.
+
+
+<p>If your system fits into none of the above categories then
+the authentication will not work. You should then contact
+us (emboss-bug@emboss.open-bio.org), preferably with details of
+which system calls your platform uses for authentication,
+and we will hopefully be able to incorporate your system's
+authentication scheme into the EMBOSS distribution.
+
+<br>
+<p>
+<hr WIDTH="100%">
+<br>&nbsp;
+</body>
+</html>    

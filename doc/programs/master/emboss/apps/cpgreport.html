@@ -1,0 +1,238 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: cpgreport
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+cpgreport
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/cpgreport.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<b>cpgreport</b> scans a nucleotide sequence for regions with higher than
+expected frequencies of the dinucleotide CG. 
+
+<p>
+CpG refers to a C nucleotide immediately followed by a G.  The 'p' in
+'CpG' refers to the phosphate group linking the two bases. 
+
+<p>
+Detection of regions of genomic sequences that are rich in the CpG
+pattern is important because such regions are resistant to methylation
+and tend to be associated with genes which are frequently switched on. 
+Regions rich in the CpG pattern are known as CpG islands. 
+
+<p>
+
+This program does not find CpG islands as normally defined: "a region of
+greater than 200 bp with a %GC of greater than 50% and observed/expected
+CpG > 0.6".  <b>cpgreport</b> instead uses a running sum rather than a
+window to create the score as follows: if not CpG at position i, then
+decrement running-Sum counter, but if CpG then running-Sum counter is
+incremented by the CPGSCORE.  Spans greater than the threshold are
+searched for recursively. 
+
+<p>
+
+This method overpredicts islands but finds the smaller ones around
+primary exons. 
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/cpgreport.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/cpgreport.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/cpgreport.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+Any DNA sequence USA.
+
+<p>
+<!--#include file="inc/cpgreport.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/cpgreport.output" -->
+<p>
+
+The first non-blank line of the output file 'rnu68037.cpgreport' is the
+title line giving the program name, the name of sequence being analysed
+and the start and end positions of the sequence. 
+
+<p>
+
+The second non-blank line contains the headings of the columns.
+
+<p>
+
+Subsequent lines contain columns with the following information:
+
+<p>
+
+<ul>
+<li>The name of the sequence.
+<li>The begin position and the end position of the CpG-rich region.
+<li>The score of the CpG-rich region.
+<li>The number of CpG's in the CpG-rich region.
+<li>The %(G+C) in the CpG-rich region.
+<li>The ratio of CpG to GpC in the CpG-rich region.
+</ul>
+
+<p>
+
+If the count of GpC in the region is zero, then the ratio of CG/GC is
+reported as '-'. 
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+
+This program does not find CpG islands as normally defined (see cpgplot).
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+    0 if successful.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/cpgreport.isee" -->
+
+As there is no official definition of what is a cpg island is, and worst
+where they begin and end, we have to live with 2 definitions and thus
+two methods.  These are:
+
+<p>
+
+1.  <b>newcpgseek</b> and <b>cpgreport</b> - both declare a putative
+island if the score is higher than a threshold (17 at the moment).  They
+now also displaying the actual CpG count, the % CG and the
+observed/expected ration in the region where the score is above the
+threshold.  This scoring method based on sum/frequencies overpredicts
+islands but finds the smaller ones around primary exons.
+<b>newcpgseek</b> uses the same method as <b>cpgreport</b> but the
+output is different and more readable.
+
+<p>
+
+2.  <b>newcpgreport</b> and <b>cpgplot</b> use a sliding window within
+which the Obs/Exp ratio of CpG is calculated.  The important thing to
+note in this method is that an island, in order to be reported, is
+defined as a region that satisfies the following contraints:
+
+<p>
+<pre>
+   Obs/Exp ratio > 0.6
+   % C + % G > 50%
+   Length > 200.
+</pre>
+<p>
+
+<p>
+
+For all practical purposes you should probably use newcpgreport.  It is
+actually used to produce the human cpgisland database you can find on
+the EBI's ftp server as well as on the EBI's SRS server.
+
+<p>
+
+<b>geecee</b> measures CG content in the entire input sequence and is
+not to be used to detect CpG islands.  It can be usefull for detecting
+sequences that MIGHT contain an island.
+          
+
+<H2>
+    Author(s)
+</H2>
+
+
+This program was originally written by 
+
+<!--#include file="inc/gmicklem.address" -->
+
+<p>
+The algorithm was modified for inclusion in EGCG under the name 'CPGSPANS' by
+<!--#include file="inc/rlopez.address" -->
+
+
+<p>
+
+This application was modified for inclusion in EMBOSS by 
+<!--#include file="inc/ableasby.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/cpgreport.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/cpgreport.comment" -->
+
+</BODY>
+</HTML>
+

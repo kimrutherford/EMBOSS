@@ -1,0 +1,16 @@
+<b>Here is a sample session with union</b>
+<p>
+The file 'cds.list' contains a list of the regions making up the coding sequence of 'embl:x65923': 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>union </b>
+Reads sequence fragments and builds one sequence
+Input (gapped) sequence(s): <b>@cds.list</b>
+output sequence [x65921.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

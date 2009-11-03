@@ -1,0 +1,113 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: site.dat</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+AC  R00077
+XX
+ID  HS$ALBU_01
+XX
+DT  20.06.90 (created); ewi.
+DT  24.08.95 (updated); hiwi.
+XX
+TY  D
+XX
+DE  albumin; Gene: G000188.
+XX
+SQ  tGGTTAGtaattactaa.
+XX
+SF  -363 
+ST  -338 
+XX
+BF  T00368; HNF-1A;Quality: 1; Species: human, Homo sapiens.
+BF  T00369; HNF-1;Quality: 1; Species: rat, Rattus norvegicus.
+BF  T01950; HNF-1B;Quality: 1; Species: human, Homo sapiens.
+BF  T01951; HNF-1C;Quality: 1; Species: human, Homo sapiens.
+XX
+OS  human, Homo sapiens
+OC  eukaryota; animalia; metazoa; chordata; vertebrata; 
+OC  tetrapoda; mammalia; eutheria; primates
+XX
+SO  0103; Hep3B
+SO  0289; rl
+XX
+MM  gel retardation
+MM  direct gel shift
+MM  DNase I footprinting
+MM  gel shift competition
+MM  affinity chromatography
+MM  methylation interference
+XX
+DR  EMBL: M13075; HSALBEX1(695:711).
+XX
+RN  [1]
+RA  Frain M., Swart G., Monaci P., Nicosia A., Staempfli 
+RA  S., Frank R., Cortese R.
+RT  The liver-specific transcription factor LF-B1 contains 
+RT  a highly diverged homeobox DNA binding domain
+RL  Cell 59:145-157 (1989).
+RN  [2]
+RA  Frain M., Hardon E., Ciliberto G., Sala-Trepat J. M.
+RT  Binding of a liver-specific factor to the human albumin 
+RT  gene promoter and enhancer
+RL  Mol. Cell. Biol. 10:991-999 (1990).
+XX
+//
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+DR  EMBL: U11854; MM11854(1931:1941).
+XX
+RN  [1]
+RA  Feinman R., Qiu W. Q., Pearse R. N., Nikolajczyk B. 
+RA  S., Sen R., Sheffery M., Ravetch J. V.
+RT  PU.1 and an HLH family member contribute to the myeloid-specific 
+RT  transcription of the FcgammaRIIIA promoter
+RL  EMBO J. 13:3852-3860 (1994).
+XX
+//
+AC  R04413
+XX
+ID  MOUSE$FCGR3A_02
+XX
+DT  14.05.97 (created); ewi.
+DT  14.05.97 (updated); ewi.
+XX
+TY  D
+XX
+DE  FcgammaRIIIA (low-affinity Fc receptor IIIA for IgG); Gene: G001014.
+XX
+SQ  TTCCTC.
+XX
+EL  MRR
+XX
+SF  -48 
+ST  -43 
+XX
+BF  T00702; PU.1;Quality: 3; Species: mouse, Mus musculus.
+XX
+OS  mouse, Mus musculus
+OC  eukaryota; animalia; metazoa; chordata; vertebrata; 
+OC  tetrapoda; mammalia; eutheria; rodentia; myomorpha; muridae; murinae
+XX
+SO  0495; A20
+SO  0848; RAW264.7
+XX
+MM  direct gel shift
+MM  methylation interference
+MM  supershift (antibody binding)
+XX
+DR  EMBL: U11854; MM11854(1971:1976).
+XX
+RN  [1]
+RA  Feinman R., Qiu W. Q., Pearse R. N., Nikolajczyk B. 
+RA  S., Sen R., Sheffery M., Ravetch J. V.
+RT  PU.1 and an HLH family member contribute to the myeloid-specific 
+RT  transcription of the FcgammaRIIIA promoter
+RL  EMBO J. 13:3852-3860 (1994).
+XX
+//
+</pre>
+</td></tr></table><p>

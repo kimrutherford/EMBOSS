@@ -1,0 +1,43 @@
+application: whichdb [
+  documentation: "Search all databases for an entry"
+  groups: "Information"
+  gui: "yes"
+  batch: "yes"
+  cpu: "low"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  string: entry [
+    parameter: "Y"
+    information: "ID or Accession number"
+    knowntype: "sequence id input"
+  ]
+
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  toggle: get [
+    default: "N"
+    information: "Retrieve sequences"
+  ]
+
+  boolean: showall [
+    default: "N"
+    information: "Show failed attempts"
+  ]
+
+  outfile: outfile [
+    standard: "@(!$(get))"
+    nullok: "$(get)"
+    knowntype: "whichdb output"
+  ]
+
+endsection: output

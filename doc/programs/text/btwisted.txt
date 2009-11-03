@@ -1,0 +1,404 @@
+
+                                 btwisted 
+
+
+
+Function
+
+   Calculates the twisting in a B-DNA sequence
+
+Description
+
+   btwisted takes a region of a pure DNA sequence and calculates by
+   simple arithmetic the probable overall twist of the sequence and the
+   stacking energy.
+
+Usage
+
+   Here is a sample session with btwisted
+
+
+% btwisted -auto tembl:ab000095 -sbegin 100 -send 120 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          sequence   Nucleotide sequence filename and optional
+                                  format, or reference (input USA)
+  [-outfile]           outfile    [*.btwisted] Output file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -angledata          datafile   [Eangles.dat] DNA base pair twist angle data
+                                  file
+   -energydata         datafile   [Eenergy.dat] DNA base pair stacking
+                                  energies data file
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   Nucleic acid sequence USA.
+
+  Input files for usage example
+
+   'tembl:ab000095' is a sequence entry in the example nucleic acid
+   database 'tembl'
+
+  Database entry: tembl:ab000095
+
+ID   AB000095; SV 1; linear; mRNA; STD; HUM; 2399 BP.
+XX
+AC   AB000095;
+XX
+DT   10-MAR-1998 (Rel. 54, Created)
+DT   14-APR-2005 (Rel. 83, Last updated, Version 2)
+XX
+DE   Homo sapiens mRNA for hepatocyte growth factor activator inhibitor,
+DE   complete cds.
+XX
+KW   hepatocyte growth factor activator inhibitor.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-2399
+RA   Denda K.;
+RT   ;
+RL   Submitted (24-DEC-1996) to the EMBL/GenBank/DDBJ databases.
+RL   Kimitoshi Denda, Tokyo Institute of Technology, Department of Life Science
+;
+RL   4259 Nagatsuta, Midori-ku, Yokohama, Kanagawa 227, Japan
+RL   (E-mail:kdenda@bio.titech.ac.jp, Tel:45-924-5702, Fax:45-924-5771)
+XX
+RN   [2]
+RX   DOI; 10.1074/jbc.272.10.6370.
+RX   PUBMED; 9045658.
+RA   Shimomura T., Denda K., Kitamura A., Kawaguchi T., Kito M., Kondo J.,
+RA   Kagaya S., Qin L., Takata H., Miyazawa K., Kitamura N.;
+RT   "Hepatocyte growth factor activator inhibitor, a novel Kunitz-type serine
+RT   protease inhibitor";
+RL   J. Biol. Chem. 272(10):6370-6376(1997).
+XX
+DR   H-InvDB; HIT000057890.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..2399
+FT                   /organism="Homo sapiens"
+FT                   /mol_type="mRNA"
+FT                   /db_xref="taxon:9606"
+FT   CDS             176..1717
+FT                   /product="hepatocyte growth factor activator inhibitor"
+FT                   /db_xref="GDB:118879"
+FT                   /db_xref="GOA:O43278"
+FT                   /db_xref="HGNC:11246"
+FT                   /db_xref="PDB:1YC0"
+FT                   /db_xref="UniProtKB/Swiss-Prot:O43278"
+
+
+  [Part of this file has been deleted for brevity]
+
+FT                   QPDRGEDAIAACFLINCLYEQNFVCKFAPREGFINYLTREVYRSYRQLRTQGFGGSGI
+P
+FT                   KAWAGIDLKVQPQEPLVLKDVENTDWRLLRGDTDVRVERKDPNQVELWGLKEGTYLFQ
+L
+FT                   TVTSSDHPEDTANVTVTVLSTKQTEDYCLASNKVGRCRGSFPRWYYDPTEQICKSFVY
+G
+FT                   GCLGNKNNYLREEECILACRGVQGPSMERRHPVCSGTCQPTQFRCSNGCCIDSFLECD
+D
+FT                   TPNCPDASDEAACEKYTSGFDELQRIHFPSDKGHCVDLPDTGLCKESIPRWYYNPFSE
+H
+FT                   CARFTYGGCYGNKNNFEEEQQCLESCRGISKKDVFGLRREIPIPSTGSVEMAVAVFLV
+I
+FT                   CIVVVVAILGYCFFKNQRKDFHGHHHHPPPTPASSTVSTTEDTEHLVYNHTTRPL"
+FT   polyA_signal    2379..2384
+XX
+SQ   Sequence 2399 BP; 490 A; 777 C; 684 G; 448 T; 0 other;
+     cggccgagcc cagctctccg agcaccgggt cggaagccgc gacccgagcc gcgcaggaag        6
+0
+     ctgggaccgg aacctcggcg gacccggccc cacccaactc acctgcgcag gtcaccagca       12
+0
+     ccctcggaac ccagaggccc gcgctctgaa ggtgaccccc ctggggagga aggcgatggc       18
+0
+     ccctgcgagg acgatggccc gcgcccgcct cgccccggcc ggcatccctg ccgtcgcctt       24
+0
+     gtggcttctg tgcacgctcg gcctccaggg cacccaggcc gggccaccgc ccgcgccccc       30
+0
+     tgggctgccc gcgggagccg actgcctgaa cagctttacc gccggggtgc ctggcttcgt       36
+0
+     gctggacacc aacgcctcgg tcagcaacgg agctaccttc ctggagtccc ccaccgtgcg       42
+0
+     ccggggctgg gactgcgtgc gcgcctgctg caccacccag aactgcaact tggcgctagt       48
+0
+     ggagctgcag cccgaccgcg gggaggacgc catcgccgcc tgcttcctca tcaactgcct       54
+0
+     ctacgagcag aacttcgtgt gcaagttcgc gcccagggag ggcttcatca actacctcac       60
+0
+     gagggaagtg taccgctcct accgccagct gcggacccag ggctttggag ggtctgggat       66
+0
+     ccccaaggcc tgggcaggca tagacttgaa ggtacaaccc caggaacccc tggtgctgaa       72
+0
+     ggatgtggaa aacacagatt ggcgcctact gcggggtgac acggatgtca gggtagagag       78
+0
+     gaaagaccca aaccaggtgg aactgtgggg actcaaggaa ggcacctacc tgttccagct       84
+0
+     gacagtgact agctcagacc acccagagga cacggccaac gtcacagtca ctgtgctgtc       90
+0
+     caccaagcag acagaagact actgcctcgc atccaacaag gtgggtcgct gccggggctc       96
+0
+     tttcccacgc tggtactatg accccacgga gcagatctgc aagagtttcg tttatggagg      102
+0
+     ctgcttgggc aacaagaaca actaccttcg ggaagaagag tgcattctag cctgtcgggg      108
+0
+     tgtgcaaggc ccctccatgg aaaggcgcca tccagtgtgc tctggcacct gtcagcccac      114
+0
+     ccagttccgc tgcagcaatg gctgctgcat cgacagtttc ctggagtgtg acgacacccc      120
+0
+     caactgcccc gacgcctccg acgaggctgc ctgtgaaaaa tacacgagtg gctttgacga      126
+0
+     gctccagcgc atccatttcc ccagtgacaa agggcactgc gtggacctgc cagacacagg      132
+0
+     actctgcaag gagagcatcc cgcgctggta ctacaacccc ttcagcgaac actgcgcccg      138
+0
+     ctttacctat ggtggttgtt atggcaacaa gaacaacttt gaggaagagc agcagtgcct      144
+0
+     cgagtcttgt cgcggcatct ccaagaagga tgtgtttggc ctgaggcggg aaatccccat      150
+0
+     tcccagcaca ggctctgtgg agatggctgt cgcagtgttc ctggtcatct gcattgtggt      156
+0
+     ggtggtagcc atcttgggtt actgcttctt caagaaccag agaaaggact tccacggaca      162
+0
+     ccaccaccac ccaccaccca cccctgccag ctccactgtc tccactaccg aggacacgga      168
+0
+     gcacctggtc tataaccaca ccacccggcc cctctgagcc tgggtctcac cggctctcac      174
+0
+     ctggccctgc ttcctgcttg ccaaggcaga ggcctgggct gggaaaaact ttggaaccag      180
+0
+     actcttgcct gtttcccagg cccactgtgc ctcagagacc agggctccag cccctcttgg      186
+0
+     agaagtctca gctaagctca cgtcctgaga aagctcaaag gtttggaagg agcagaaaac      192
+0
+     ccttgggcca gaagtaccag actagatgga cctgcctgca taggagtttg gaggaagttg      198
+0
+     gagttttgtt tcctctgttc aaagctgcct gtccctaccc catggtgcta ggaagaggag      204
+0
+     tggggtggtg tcagaccctg gaggccccaa ccctgtcctc ccgagctcct cttccatgct      210
+0
+     gtgcgcccag ggctgggagg aaggacttcc ctgtgtagtt tgtgctgtaa agagttgctt      216
+0
+     tttgtttatt taatgctgtg gcatgggtga agaggagggg aagaggcctg tttggcctct      222
+0
+     ctgtcctctc ttcctcttcc cccaagattg agctctctgc ccttgatcag ccccaccctg      228
+0
+     gcctagacca gcagacagag ccaggagagg ctcagctgca ttccgcagcc cccaccccca      234
+0
+     aggttctcca acatcacagc ccagcccacc cactgggtaa taaaagtggt ttgtggaaa       239
+9
+//
+
+Output file format
+
+  Output files for usage example
+
+  File: ab000095.btwisted
+
+# Output from BTWISTED
+# Twisting calculated from 100 to 120 of AB000095
+Total twist (degrees): 681.1
+Total turns : 1.89
+Average bases per turn: 11.10
+Total stacking energy : -179.34
+Average stacking energy per dinucleotide: -8.97
+
+Data files
+
+   The program reads in two data files.
+
+   The first is prompted for by:
+
+   "File containing base pair twist angles"
+
+   This is the data file 'Eangles.dat' by default.
+
+   This consists of the data:
+
+aa      35.6    0.1
+ac      34.4    1.3
+ag      27.7    1.5
+at      31.5    1.1
+ca      34.5    0.9
+cc      33.7    0.1
+cg      29.8    1.1
+ct      27.7    1.5
+ga      36.9    0.9
+gc      40.0    1.2
+gg      33.7    0.1
+gt      34.4    1.3
+ta      36.0    1.0
+tc      36.9    0.9
+tg      34.5    0.9
+tt      35.6    0.1
+
+   The second is prompted for by:
+
+   "File containing base pair stacking energies"
+   This is the data file 'Eenergy.dat' by default.
+
+   This consists of the data:
+
+#base pair stacking energy for B-DNA
+aa      -5.37
+ac      -10.51
+ag      -6.78
+at      -6.57
+ca      -6.57
+cc      -8.26
+cg      -9.69
+ct      -6.78
+ga      -9.81
+gc      -14.59
+gg      -8.26
+gt      -10.51
+ta      -3.82
+tc      -9.81
+tg      -6.57
+tt      -5.37
+
+   No check is made that all dinucleotides have been read for the energy
+   and twist. Attempting to run btwisted with an incomplete data file
+   will result a fatal error if the sequence contains a dinucleotide not
+   in the data files.
+
+   EMBOSS data files are distributed with the application and stored in
+   the standard EMBOSS data directory, which is defined by the EMBOSS
+   environment variable EMBOSS_DATA.
+
+   To see the available EMBOSS data files, run:
+
+% embossdata -showall
+
+   To fetch one of the data files (for example 'Exxx.dat') into your
+   current directory for you to inspect or modify, run:
+
+% embossdata -fetch -file Exxx.dat
+
+   Users can provide their own data files in their own directories.
+   Project specific files can be put in the current directory, or for
+   tidier directory listings in a subdirectory called ".embossdata".
+   Files for all EMBOSS runs can be put in the user's home directory, or
+   again in a subdirectory called ".embossdata".
+
+   The directories are searched in the following order:
+     * . (your current directory)
+     * .embossdata (under your current directory)
+     * ~/ (your home directory)
+     * ~/.embossdata
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   No check is made that all dinucleotides have been read for the energy
+   and twist. Attempting to run btwisted with an incomplete data file
+   will result a fatal error if the sequence contains a dinucleotide not
+   in the data files.
+
+Diagnostic Error Messages
+
+   "Incomplete table"
+   You have supplied data files for either the angles or energies that do
+   not contain the fulll required set of possible dinucleotides.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   No check is made that all dinucleotides have been read for the energy
+   and twist. Attempting to run btwisted with an incomplete data file
+   will result a fatal error if the sequence contains a dinucleotide not
+   in the data files.
+
+See also
+
+   Program name                        Description
+   banana       Bending and curvature plot in B-DNA
+   chaos        Create a chaos game representation plot for a sequence
+   compseq      Count composition of dimer/trimer/etc words in a sequence
+   dan          Calculates DNA RNA/DNA melting temperature
+   freak        Residue/base frequency table or plot
+   isochore     Plots isochores in large DNA sequences
+   sirna        Finds siRNA duplexes in mRNA
+   wordcount    Counts words of a specified size in a DNA sequence
+
+Author(s)
+
+   David Martin (dmartin © rfcgr.mrc.ac.uk)
+   and Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+   This application was written during the first Scandinavian EMBOSS
+   Workshop.
+
+History
+
+   Written (Sept 2000) - David Martin & Alan Bleasby.
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

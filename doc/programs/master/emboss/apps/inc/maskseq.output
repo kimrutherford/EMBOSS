@@ -1,0 +1,44 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: prot2.seq</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;FASTA F00001 FASTA FORMAT PROTEIN SEQUENCE
+ACDEFGHIKXXXPQRSTVWYACDEFGHIKLMNPQRSTVWYACDEFGHIKLMNPQRSTVWY
+ACDEFGHIKLMNPQRSTVWYACDEFGHIKLMNPQRSTVWY
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: prot2.seq</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;FASTA F00001 FASTA FORMAT PROTEIN SEQUENCE
+ACDEFGHIKLMNPQRSTVWxxxxxxxxxxxMNPQRSTVWYACDEFGHIKLMNPQRSTVWY
+ACDEFGHIKLMNPQRSTVWYACDEFGHIKLMNPQRSTVWY
+</pre>
+</td></tr></table><p>
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: prot2.seq</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;FASTA F00001 FASTA FORMAT PROTEIN SEQUENCE
+ACDEFGHIKLMNPQRSTVWXXXXEFGHIKLMNPXXXXXXXXXXXXGHIKLMNPQRSTVWY
+ACDEFGHIKLMNPQRSTVWYACDEFGHXXXMNPQRSTVWY
+</pre>
+</td></tr></table><p>
+
+<a name="output.4"></a>
+<h3>Output files for usage example 4</h3>
+<p><h3>File: prot2.seq</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;FASTA F00001 FASTA FORMAT PROTEIN SEQUENCE
+ACDEFGHIKLMNPQRSTVWyacdEFGHIKLMNPqrstvwyacdefGHIKLMNPQRSTVWY
+ACDEFGHIKLMNPQRSTVWYACDEFGHiklMNPQRSTVWY
+</pre>
+</td></tr></table><p>

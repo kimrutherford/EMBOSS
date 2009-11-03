@@ -1,0 +1,185 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: hmoment
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+hmoment
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/hmoment.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<b>hmoment</b> plots or writes out the hydrophobic moment.  Hydrophic
+moment is the hydrophobicity of a peptide measured for a specified angle
+of rotation per residue. 
+
+<p>
+
+Periodicities in the polar/apolar character of the amino acid sequence
+of a protein can be examined by assigning to each residue a numerical
+hydrophobicity and searching for periodicity in the resulting
+one-dimensional function.  The strength of each periodic component is
+the quantity that has been termed the hydrophobic moment. 
+
+<p>
+
+When proteins of known three-dimensional structure are examined, it is
+found that sequences that form alpha helices tend to have, on average, a
+strong periodicity in the hydrophobicity of af 3.6 residues, the period
+of the alpha helix. The angle of rotation per residue in alpha helices is 
+100 degrees.
+
+Similarly, many sequences that form strands of beta sheets tend to have
+a periodicity in their hydrophobicity of about 2.3 residues, the period
+typical of beta structure.  The angle of rotation per residue in beta
+sheets is 160 degrees. 
+
+This means that many protein sequences tend to form the periodic
+structure that maximizes their amphiphilicity. 
+
+<p>
+
+The hydrophobic moment is measured within a moving window using the method
+of Eisenberg et al.  The default angle of 100 degrees is used for the
+alpha-helix results and the default of 160 degrees is used for the
+beta-sheet results.  These angles can be changed if required using the
+appropriate options. 
+
+<p>
+
+<b>hmoment</b> can plot two graphs when the option '-double' is given,
+one for the alpha helix moment and one for the beta sheet moment. 
+Otherwise it just plots the alpha helix moment.
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/hmoment.usage" -->
+
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/hmoment.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/hmoment.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+<b>hmoment</b> reads in a protein sequence USA.
+
+<p>
+<!--#include file="inc/hmoment.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+With the '-plot' option <b>hmoment</b> displays a graphical plot of the
+hydrophobic moment of the specified alpha helix angle. With the '-plot -double'
+options it also displays the beta-sheet hydrophobic moment.
+
+<p>
+
+Otherwise it writes out a files containing the two columns separated by
+space or TAB characters.  The first column is the position of the start
+of the window that the hydrophobic moment was calculated in.  The second is
+the hydrophobic moment ('uH').  (If the option '-double' is given then the
+beta-sheet angle hydrophobicity is given as a third column.)
+
+<p>
+<!--#include file="inc/hmoment.output" -->
+
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+<ol>
+
+<li>Eisenberg D, Weiss RM, Terwilliger TC 
+"The hydrophobic moment detects periodicity in protein hydrophobicity."
+Proc Natl Acad Sci U S A 1984 Jan;81(1):140-4
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/hmoment.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/ableasby.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/hmoment.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/hmoment.comment" -->
+</BODY>
+</HTML>
+

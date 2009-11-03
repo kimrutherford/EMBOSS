@@ -1,0 +1,44 @@
+LOCUS       Z52466                   389 bp    DNA     linear   STS 09-SEP-2004
+DEFINITION  H.sapiens (D1S2660) DNA segment containing (CA) repeat; clone
+            AFMa203yc1; single read, sequence tagged site.
+ACCESSION   Z52466
+VERSION     Z52466.1  GI:1233766
+KEYWORDS    STS; CA repeat; dinucleotide repeat; GT repeat; microsatellite DNA;
+            microsatellite marker; repeat polymorphism.
+SOURCE      Homo sapiens (human)
+  ORGANISM  Homo sapiens
+            Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+            Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+            Catarrhini; Hominidae; Homo.
+REFERENCE   1  (bases 1 to 389)
+  AUTHORS   Dib,C., Faure,S., Fizames,C., Samson,D., Drouot,N., Vignal,A.,
+            Millasseau,P., Marc,S., Hazan,J., Seboun,E., Lathrop,M., Gyapay,G.,
+            Morissette,J. and Weissenbach,J.
+  TITLE     A comprehensive genetic map of the human genome based on 5,264
+            microsatellites
+  JOURNAL   Nature 380 (6570), 152-154 (1996)
+   PUBMED   8600387
+REFERENCE   2  (bases 1 to 389)
+  AUTHORS   Weissenbach,J.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (01-SEP-1995) Genethon, B.P. 60, 91002 Evry Cedex France.
+            E-mail: Jean.Weissenbach@genethon.fr
+COMMENT     full automatic.
+FEATURES             Location/Qualifiers
+     source          1. .389
+                     /organism="Homo sapiens"
+                     /mol_type="genomic DNA"
+                     /db_xref="taxon:9606"
+                     /chromosome="1"
+                     /cell_line="CEPH 134702"
+                     /clone_lib="genomic DNA"
+                     /note="cloning vector is M13mp18"
+ORIGIN
+       1  AGCTGTGTGC ACACAACATG ANGGGGCACA CATGCACATG CACACATGCC CACATGCATA
+      61  TGCACACACA CACACACACA CACACACACA TTCATGCCCA AGCACGCCCA CCCTCATGTC
+     121  TCACCATGTG CACATAACAC ACAGTCACAT ATACCCTGGC ACACATGCCC ACATGCAGAC
+     181  ACGAAACACA GGCCCACGNT TNCATGCACA CAGGTATGGG CACACATACC ATGCACACAT
+     241  AANGACAAAT ACCAGGCCAG ACATGATTTG CCCCTGCTGG TGTCACTGTT AAGTGTGACA
+     301  GACAAGCAGA GGACACACAC CCACCTGGGA CGCGGGGCTT CAGGAGAGAG GCAGACCTAA
+     361  TAGGGCCCGG ATTCGGGGCT GGGGAGGCT
+//

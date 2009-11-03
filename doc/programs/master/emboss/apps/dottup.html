@@ -1,0 +1,170 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: dottup
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+dottup
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/dottup.ione" -->
+
+<H2>
+    Description
+</H2>
+
+A dotplot is a graphical representation of the regions of similarity
+between two sequences.
+
+<p> 
+
+The two sequences are placed on the axes of a rectangular image and
+(in the simplest forms of dotplot) wherever there is a similarity
+between the sequences a dot is placed on the image. 
+
+<p> 
+
+Where the two sequences have substantial regions of similarity, many
+dots align to form diagonal lines.  It is therefore possible to see at a
+glance where there are local regions of similarity as these will have
+long diagonal lines.  It is also easy to see other features such as
+repeats (which form parallel diagonal lines), and insertions or
+deletions (which form breaks or discontinuities in the diagonal lines). 
+
+<p>
+
+<b>dottup</b> looks for places where words (tuples) of a specified
+length have an exact match in both sequences and draws a diagonal line
+over the position of these words.  This is a fast, but not especially
+sensitive way of creating dotplots.  It is an acceptable method for
+displaying regions of substantial similarity between two sequences. 
+
+<p>
+
+Using a longer word (tuple) size displays less random noise, runs
+extremely quickly, but is less sensitive.  Shorter word sizes are more
+sensitive to shorter or fragmentary regions of similarity, but also
+display more random points of similarity (noise) and runs slower. 
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/dottup.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/dottup.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/dottup.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+Any two sequence USAs of the same type (DNA or protein).
+
+<p>
+<!--#include file="inc/dottup.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+An image is output to the requested output device.
+
+<p>
+<!--#include file="inc/dottup.output" -->
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+
+0 upon successful completion.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+
+<!--#include file="inc/dottup.isee" -->
+
+<p>
+
+<a href="dotmatcher.html">dotmatcher,</a> by comparison, moves a
+window of specified length up each diagonal and displays a line over
+the window if the sum of the comparisons (using a substitution matrix)
+exceeds a threshold. It is slower but much more sensitive.
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/ilongden.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/dottup.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/dottup.comment" -->
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,17 @@
+<b>Here is a sample session with prophet</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>prophet </b>
+Gapped alignment for profiles
+Input sequence(s): <b>tsw:h*</b>
+Profile or weight matrix file: <b>globins.gribskov</b>
+Gap opening coefficient [1.0]: <b></b>
+Gap extension coefficient [1.0]: <b></b>
+Output alignment [hd_fugru.prophet]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

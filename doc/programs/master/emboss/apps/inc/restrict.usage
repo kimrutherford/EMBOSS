@@ -1,0 +1,54 @@
+<b>Here is a sample session with restrict</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>restrict </b>
+Finds restriction enzyme cleavage sites
+Input nucleotide sequence(s): <b>tembl:x65923</b>
+Minimum recognition site length [4]: <b></b>
+Comma separated enzyme list [all]: <b></b>
+Output report [x65923.restrict]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+This gives the lengths of the restriction fragments produced by cutting with all of the specified enzymes. 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>restrict -fragments </b>
+Finds restriction enzyme cleavage sites
+Input nucleotide sequence(s): <b>tembl:x65923</b>
+Minimum recognition site length [4]: <b></b>
+Comma separated enzyme list [all]: <b></b>
+Output report [x65923.restrict]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+This gives the lengths of the restriction fragments created by cutting with just one of each of the specified enzymes in turn. 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>restrict -solofragment </b>
+Finds restriction enzyme cleavage sites
+Input nucleotide sequence(s): <b>tembl:x65923</b>
+Minimum recognition site length [4]: <b></b>
+Comma separated enzyme list [all]: <b></b>
+Output report [x65923.restrict]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.3">Go to the output files for this example</a><p><p>

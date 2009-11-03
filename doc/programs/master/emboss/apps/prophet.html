@@ -1,0 +1,181 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: prophet
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+prophet
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/prophet.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+<b>prophet</b> finds matches between a GRIBSKOV or HENIKOFF profile
+produced by <b>prophecy</b> and one or more sequences.
+
+<p>
+
+Note: <b>prophet</b> does <b>NOT</b> use the 'simple frequency matrices'
+produced by <b>prophecy</b>.  If you have a 'simple frequency matrix'you
+should use the program <b>profit</b> to scan sequences. 
+
+<p>
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/prophet.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/prophet.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/prophet.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>prophet</b> reads a GRIBSKOV or a HENIKOFF profile produced by
+<b>prophecy</b> and searches one or more sequence USAs. 
+
+<p>
+
+<!--#include file="inc/prophet.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/prophet.output" -->
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+<b>prophet</b> does <b>NOT</b> use the 'simple frequency matrices'
+produced by <b>prophecy</b>.  If you have a 'simple frequency matrix'you
+should use the program <b>profit</b> to scan sequences. 
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+If you see something like:
+
+<p>
+
+<pre>
+   EMBOSS An error in prophet.c at line 110:
+Unrecognised profile/matrix file format
+</pre>
+
+<p>
+
+then you have probably given <b>prophet</b> a 'simple frequency matrix'
+and not a a GRIBSKOV or HENIKOFF profile produced by <b>prophecy</b>.
+
+<p>
+
+If you see something like:
+
+<p>
+
+<pre>
+Uncaught exception
+Allocation Failed
+raised at prophet.c:147
+</pre>
+
+<p>
+
+then you have run out of memory.  This will occur if your sequence
+and/or your profile are large. 
+
+<p>
+
+<b>prophet</b> allocates space based on the length of the sequence and
+the size of the profile (8 x seqlen x profilelen)
+
+
+
+<H2>
+    Exit status
+</H2>
+
+It exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/prophet.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/ableasby.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/prophet.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/prophet.comment" -->
+
+</BODY>
+</HTML>
+

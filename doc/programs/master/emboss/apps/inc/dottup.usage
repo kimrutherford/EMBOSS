@@ -1,0 +1,14 @@
+<b>Here is a sample session with dottup</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>dottup tembl:j01636 tembl:v00294 -wordsize=6 -gtitle="v00294 vs j01636" -graph cps </b>
+Displays a wordmatch dotplot of two sequences
+
+Created dottup.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

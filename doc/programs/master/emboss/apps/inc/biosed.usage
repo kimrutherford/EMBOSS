@@ -1,0 +1,29 @@
+<b>Here is a sample session with biosed</b>
+<p>
+Replace all 'T's with 'U's to create an RNA sequence 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>biosed tembl:x65923 x65923.rna -target T -replace U </b>
+Replace or delete sequence sections
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+Replace all 'PPP' protein motifs with 'XXPPPXX'  
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>biosed tsw:amir_pseae amir_pseae.pep -target PPP -replace XXPPPXX </b>
+Replace or delete sequence sections
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.2">Go to the input files for this example</a><br><a href="#output.2">Go to the output files for this example</a><p><p>

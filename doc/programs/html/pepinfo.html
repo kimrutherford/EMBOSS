@@ -1,0 +1,693 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: pepinfo
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+pepinfo
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+<H2>
+    Function
+</H2>
+Plots simple amino acid properties in parallel
+
+<H2>
+    Description
+</H2>
+
+
+pepinfo detects and displays various useful metrics about a protein
+sequence. 
+
+<p>
+It can plot and display the following properties:
+
+<ul>
+
+<li>plots of hydrophobicity (using the method of Kyte & Doolittle), of
+OHM (Sweet & Eisenberg), or of consensus parameters (Eisenberg et al))
+
+<li>a histogram of the presence of residues with the physico-chemical
+properties: Tiny, Small, Aliphatic, Aromatic, Non-polar, Polar,
+Charged, Positive, Negative.
+
+</ul>
+
+<p>
+The data are also written out to a data file.
+
+<H2>
+    Usage
+</H2>
+<b>Here is a sample session with pepinfo</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>pepinfo </b>
+Plots simple amino acid properties in parallel
+Input protein sequence: <b>tsw:opsd_human</b>
+Graph type [x11]: <b>cps</b>
+Output file [opsd_human.pepinfo]: <b></b>
+
+Created pepinfo.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          sequence   Protein sequence filename and optional
+                                  format, or reference (input USA)
+   -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png, gif)
+  [-outfile]           outfile    [*.pepinfo] Output file name
+
+   Additional (Optional) qualifiers:
+   -aaproperties       datafile   [Eaa_properties.dat] Amino acid chemical
+                                  classes data file
+   -aahydropathy       datafile   [Eaa_hydropathy.dat] Amino acid hydropathy
+                                  values data file
+   -hwindow            integer    [9] Window size for hydropathy averaging
+                                  (Integer 1 or more)
+
+   Advanced (Unprompted) qualifiers:
+   -[no]generalplot    boolean    [Y] Plot histogram of general properties
+   -[no]hydropathyplot boolean    [Y] Plot graphs of hydropathy
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-graph" associated qualifiers
+   -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Protein sequence filename and optional format, or reference (input USA)</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-graph</td>
+<td>Graph type</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png, gif</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.pepinfo</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-aaproperties</td>
+<td>Amino acid chemical classes data file</td>
+<td>Data file</td>
+<td>Eaa_properties.dat</td>
+</tr>
+
+<tr>
+<td>-aahydropathy</td>
+<td>Amino acid hydropathy values data file</td>
+<td>Data file</td>
+<td>Eaa_hydropathy.dat</td>
+</tr>
+
+<tr>
+<td>-hwindow</td>
+<td>Window size for hydropathy averaging</td>
+<td>Integer 1 or more</td>
+<td>9</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-[no]generalplot</td>
+<td>Plot histogram of general properties</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]hydropathyplot</td>
+<td>Plot graphs of hydropathy</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>pepinfo</b> reads a protein sequence USA.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tsw:opsd_human' is a sequence entry in the example protein database 'tsw'
+<p>
+<p><h3>Database entry: tsw:opsd_human</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   OPSD_HUMAN              Reviewed;         348 AA.
+AC   P08100; Q16414; Q2M249;
+DT   01-AUG-1988, integrated into UniProtKB/Swiss-Prot.
+DT   01-AUG-1988, sequence version 1.
+DT   20-MAR-2007, entry version 91.
+DE   Rhodopsin (Opsin-2).
+GN   Name=RHO; Synonyms=OPN2;
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+OC   Catarrhini; Hominidae; Homo.
+OX   NCBI_TaxID=9606;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RX   MEDLINE=84272729; PubMed=6589631;
+RA   Nathans J., Hogness D.S.;
+RT   "Isolation and nucleotide sequence of the gene encoding human
+RT   rhodopsin.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 81:4851-4855(1984).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RA   Suwa M., Sato T., Okouchi I., Arita M., Futami K., Matsumoto S.,
+RA   Tsutsumi S., Aburatani H., Asai K., Akiyama Y.;
+RT   "Genome-wide discovery and analysis of human seven transmembrane helix
+RT   receptor genes.";
+RL   Submitted (JUL-2001) to the EMBL/GenBank/DDBJ databases.
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA].
+RC   TISSUE=Retina;
+RG   The German cDNA consortium;
+RL   Submitted (JUN-2003) to the EMBL/GenBank/DDBJ databases.
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA].
+RX   PubMed=15489334; DOI=10.1101/gr.2596504;
+RG   The MGC Project Team;
+RT   "The status, quality, and expansion of the NIH full-length cDNA
+RT   project: the Mammalian Gene Collection (MGC).";
+RL   Genome Res. 14:2121-2127(2004).
+RN   [5]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA] OF 1-120.
+RX   PubMed=8566799; DOI=10.1016/0378-1119(95)00688-5;
+RA   Bennett J., Beller B., Sun D., Kariko K.;
+RT   "Sequence analysis of the 5.34-kb 5' flanking region of the human
+RT   rhodopsin-encoding gene.";
+RL   Gene 167:317-320(1995).
+RN   [6]
+RP   REVIEW ON RP4 VARIANTS.
+RX   MEDLINE=94004905; PubMed=8401533;
+RA   Al-Maghtheh M., Gregory C., Inglehearn C., Hardcastle A.,
+RA   Bhattacharya S.;
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT                                /FTId=VAR_004816.
+FT   VARIANT     209    209       V -&gt; M (effect not known).
+FT                                /FTId=VAR_004817.
+FT   VARIANT     211    211       H -&gt; P (in RP4).
+FT                                /FTId=VAR_004818.
+FT   VARIANT     211    211       H -&gt; R (in RP4).
+FT                                /FTId=VAR_004819.
+FT   VARIANT     216    216       M -&gt; K (in RP4).
+FT                                /FTId=VAR_004820.
+FT   VARIANT     220    220       F -&gt; C (in RP4).
+FT                                /FTId=VAR_004821.
+FT   VARIANT     222    222       C -&gt; R (in RP4).
+FT                                /FTId=VAR_004822.
+FT   VARIANT     255    255       Missing (in RP4).
+FT                                /FTId=VAR_004823.
+FT   VARIANT     264    264       Missing (in RP4).
+FT                                /FTId=VAR_004824.
+FT   VARIANT     267    267       P -&gt; L (in RP4).
+FT                                /FTId=VAR_004825.
+FT   VARIANT     267    267       P -&gt; R (in RP4).
+FT                                /FTId=VAR_004826.
+FT   VARIANT     292    292       A -&gt; E (in CSNBAD1).
+FT                                /FTId=VAR_004827.
+FT   VARIANT     296    296       K -&gt; E (in RP4).
+FT                                /FTId=VAR_004828.
+FT   VARIANT     297    297       S -&gt; R (in RP4).
+FT                                /FTId=VAR_004829.
+FT   VARIANT     342    342       T -&gt; M (in RP4).
+FT                                /FTId=VAR_004830.
+FT   VARIANT     345    345       V -&gt; L (in RP4).
+FT                                /FTId=VAR_004831.
+FT   VARIANT     345    345       V -&gt; M (in RP4).
+FT                                /FTId=VAR_004832.
+FT   VARIANT     347    347       P -&gt; A (in RP4).
+FT                                /FTId=VAR_004833.
+FT   VARIANT     347    347       P -&gt; L (in RP4; common variant).
+FT                                /FTId=VAR_004834.
+FT   VARIANT     347    347       P -&gt; Q (in RP4).
+FT                                /FTId=VAR_004835.
+FT   VARIANT     347    347       P -&gt; R (in RP4).
+FT                                /FTId=VAR_004836.
+FT   VARIANT     347    347       P -&gt; S (in RP4).
+FT                                /FTId=VAR_004837.
+SQ   SEQUENCE   348 AA;  38893 MW;  6F4F6FCBA34265B2 CRC64;
+     MNGTEGPNFY VPFSNATGVV RSPFEYPQYY LAEPWQFSML AAYMFLLIVL GFPINFLTLY
+     VTVQHKKLRT PLNYILLNLA VADLFMVLGG FTSTLYTSLH GYFVFGPTGC NLEGFFATLG
+     GEIALWSLVV LAIERYVVVC KPMSNFRFGE NHAIMGVAFT WVMALACAAP PLAGWSRYIP
+     EGLQCSCGID YYTLKPEVNN ESFVIYMFVV HFTIPMIIIF FCYGQLVFTV KEAAAQQQES
+     ATTQKAEKEV TRMVIIMVIA FLICWVPYAS VAFYIFTHQG SNFGPIFMTI PAFFAKSAAI
+     YNPVIYIMMN KQFRNCMLTT ICCGKNPLGD DEASATVSKT ETSQVAPA
+//
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Output file format
+</H2>
+
+Graphs are written to the selected graphics device.
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: opsd_human.pepinfo </h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Printing out Tiny residues in OPSD_HUMAN from position 1 to 348
+
+Position  Residue			Result
+       1       M                               0
+       2       N                               0
+       3       G                               1
+       4       T                               1
+       5       E                               0
+       6       G                               1
+       7       P                               0
+       8       N                               0
+       9       F                               0
+      10       Y                               0
+      11       V                               0
+      12       P                               0
+      13       F                               0
+      14       S                               1
+      15       N                               0
+      16       A                               1
+      17       T                               1
+      18       G                               1
+      19       V                               0
+      20       V                               0
+      21       R                               0
+      22       S                               1
+      23       P                               0
+      24       F                               0
+      25       E                               0
+      26       Y                               0
+      27       P                               0
+      28       Q                               0
+      29       Y                               0
+      30       Y                               0
+      31       L                               0
+      32       A                               1
+      33       E                               0
+      34       P                               0
+      35       W                               0
+      36       Q                               0
+      37       F                               0
+      38       S                               1
+      39       M                               0
+      40       L                               0
+      41       A                               1
+      42       A                               1
+      43       Y                               0
+      44       M                               0
+      45       F                               0
+      46       L                               0
+      47       L                               0
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+  301       Y                           0.500
+  302       N                           0.549
+  303       P                           0.633
+  304       V                           0.636
+  305       I                           0.553
+  306       Y                           0.438
+  307       I                           0.358
+  308       M                           0.250
+  309       M                           0.262
+  310       N                          -0.172
+  311       K                          -0.288
+  312       Q                          -0.409
+  313       F                          -0.409
+  314       R                          -0.362
+  315       N                          -0.281
+  316       C                          -0.120
+  317       M                           0.128
+  318       L                           0.028
+  319       T                           0.341
+  320       T                           0.481
+  321       I                           0.282
+  322       C                           0.124
+  323       C                           0.020
+  324       G                           0.143
+  325       K                           0.202
+  326       N                          -0.051
+  327       P                          -0.183
+  328       L                          -0.298
+  329       G                          -0.282
+  330       D                          -0.136
+  331       D                           0.020
+  332       E                           0.001
+  333       A                           0.003
+  334       S                          -0.070
+  335       A                          -0.137
+  336       T                          -0.042
+  337       V                          -0.042
+  338       S                          -0.117
+  339       K                          -0.117
+  340       T                          -0.280
+  341       E                          -0.154
+  342       T                          -0.206
+  343       S                          -0.172
+  344       Q                           0.063
+  345       V                           0.000
+  346       A                           0.000
+  347       P                           0.000
+  348       A                           0.000
+
+
+
+</pre>
+</td></tr></table><p>
+<p><h3>Graphics File: pepinfo.ps</h3>
+<p><img src="pepinfo.1.pepinfo.gif" alt="[pepinfo results]">
+
+<p>
+
+The output file 'pepinfo.out' contains the coordinates from the graphs.
+
+<p>
+
+For the first set of graphs, 9 sets of true/false values are written out.
+For the second set of graphs, 3 sets of hydrophobicity values are written.
+
+<H2>
+    Data files
+</H2>
+
+
+The physico-chemical properties of the residues are read from the EMBOSS
+data file 'Eaa_properties.dat'.  This file can be copied into your
+current directory and inspected ot altered by using the application
+'embossdata -fetch'.  Another file can be specified using the qualifier
+'-aaproperties'.
+
+<p>
+The hydropathy data of the residues are read from the EMBOSS data file
+'Eaa_hydropathy.dat'.  This file can be copied into your current
+directory and inspected ot altered by using the application 'embossdata
+-fetch'.  Another file can be specified using the qualifier
+'-aahydropathy'. 
+
+<p>
+EMBOSS data files are distributed with the application and stored
+in the standard EMBOSS data directory, which is defined
+by EMBOSS environment variable EMBOSS_DATA.
+
+<p>
+
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called
+".embossdata". Files for all EMBOSS runs can be put in the user's home
+directory, or again in a subdirectory called ".embossdata".
+
+<p>
+The directories are searched in the following order:
+
+<ul>
+   <li> . (your current directory)
+   <li> .embossdata (under your current directory)
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+
+<ol>
+
+<li>
+Kyte J, Doolittle RF 
+A simple method for displaying the hydropathic character of a protein. 
+J Mol Biol 1982 May 5;157(1):105-132
+
+<li>
+Sweet RM, Eisenberg D 
+Correlation of sequence hydrophobicities measures similarity in
+three-dimensional protein structure. 
+J Mol Biol 1983 Dec 25;171(4):479-488
+
+<li>
+Eisenberg D, Weiss RM, Terwilliger TC.
+The helical hydrophobic moment: a measure of the amphiphilicity of a
+helix. 
+Nature 1982 Sep 23;299(5881):371-4
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="backtranambig.html">backtranambig</a></td>
+<td>Back translate a protein sequence to ambiguous codons</td>
+</tr>
+
+<tr>
+<td><a href="backtranseq.html">backtranseq</a></td>
+<td>Back translate a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="charge.html">charge</a></td>
+<td>Protein charge plot</td>
+</tr>
+
+<tr>
+<td><a href="checktrans.html">checktrans</a></td>
+<td>Reports STOP codons and ORF statistics of a protein</td>
+</tr>
+
+<tr>
+<td><a href="compseq.html">compseq</a></td>
+<td>Count composition of dimer/trimer/etc words in a sequence</td>
+</tr>
+
+<tr>
+<td><a href="emowse.html">emowse</a></td>
+<td>Protein identification by mass spectrometry</td>
+</tr>
+
+<tr>
+<td><a href="freak.html">freak</a></td>
+<td>Residue/base frequency table or plot</td>
+</tr>
+
+<tr>
+<td><a href="iep.html">iep</a></td>
+<td>Calculates the isoelectric point of a protein</td>
+</tr>
+
+<tr>
+<td><a href="mwcontam.html">mwcontam</a></td>
+<td>Shows molwts that match across a set of files</td>
+</tr>
+
+<tr>
+<td><a href="mwfilter.html">mwfilter</a></td>
+<td>Filter noisy molwts from mass spec output</td>
+</tr>
+
+<tr>
+<td><a href="octanol.html">octanol</a></td>
+<td>Displays protein hydropathy</td>
+</tr>
+
+<tr>
+<td><a href="pepstats.html">pepstats</a></td>
+<td>Protein statistics</td>
+</tr>
+
+<tr>
+<td><a href="pepwindow.html">pepwindow</a></td>
+<td>Displays protein hydropathy</td>
+</tr>
+
+<tr>
+<td><a href="pepwindowall.html">pepwindowall</a></td>
+<td>Displays protein hydropathy of a set of sequences</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+Mark Faller (current e-mail address unknown)
+<br>
+while he was with:
+<br>
+HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+
+
+<H2>
+    History
+</H2>
+
+Written (1999) - Mark Faller
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+
+<H2>
+    Comments
+</H2>
+
+None
+
+</BODY>
+</HTML>
+

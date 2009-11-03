@@ -1,0 +1,33 @@
+<b>Here is a sample session with backtranseq</b>
+<p>
+Note that this is a human protein and so the default human codon frequency file is used ie. is not specified 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>backtranseq </b>
+Back translate a protein sequence
+Input (gapped) protein sequence: <b>tsw:opsd_human</b>
+(gapped) nucleotide output sequence [opsd_human.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+This uses a drosophila sequence and codon table. 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>backtranseq -cfile Edrome.cut </b>
+Back translate a protein sequence
+Input (gapped) protein sequence: <b>tsw:ach2_drome</b>
+(gapped) nucleotide output sequence [ach2_drome.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.2">Go to the input files for this example</a><br><a href="#output.2">Go to the output files for this example</a><p><p>

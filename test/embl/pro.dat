@@ -1,0 +1,1472 @@
+ID   J01636; SV 1; linear; genomic DNA; STD; PRO; 7477 BP.
+XX
+AC   J01636; J01637; K01483; K01793;
+XX
+DT   30-NOV-1990 (Rel. 26, Created)
+DT   09-SEP-2004 (Rel. 81, Last updated, Version 8)
+XX
+DE   E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
+XX
+KW   acetyltransferase; beta-D-galactosidase; galactosidase; lac operon;
+KW   lac repressor protein; lacA gene; lacI gene; lactose permease; lacY gene;
+KW   lacZ gene; mutagenesis; palindrome; promoter region;
+KW   thiogalactoside acetyltransferase.
+XX
+OS   Escherichia coli
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Escherichia.
+XX
+RN   [1]
+RP   1243-1266
+RX   PUBMED; 4587255.
+RA   Gilbert W., Maxam A.;
+RT   "The nucleotide sequence of the lac operator";
+RL   Proc. Natl. Acad. Sci. U.S.A. 70(12):3581-3584(1973).
+XX
+RN   [2]
+RP   1246-1308
+RX   PUBMED; 4587256.
+RA   Maizels N.M.;
+RT   "The nucleotide sequence of the lactose messenger ribonucleic acid
+RT   transcribed from the UV5 promoter mutant of Escherichia coli";
+RL   Proc. Natl. Acad. Sci. U.S.A. 70(12):3585-3589(1973).
+XX
+RN   [3]
+RX   PUBMED; 4598642.
+RA   Gilbert W., Maizels N., Maxam A.;
+RT   "Sequences of controlling regions of the lactose operon";
+RL   Cold Spring Harb. Symp. Quant. Biol. 38:845-855(1974).
+XX
+RN   [4]
+RA   Gilbert W., Gralla J., Majors A.J., Maxam A.;
+RT   "Lactose operator sequences and the action of lac repressor";
+RL   (in) Sund H., Blauer G. (Eds.);
+RL   PROTEIN-LIGAND INTERACTIONS:193-207;
+RL   Walter de Gruyter, New York (1975)
+XX
+RN   [5]
+RP   1146-1282
+RX   PUBMED; 1088926.
+RA   Dickson R.C., Abelson J.N., Barnes W.M., Reznikoff W.S.;
+RT   "Genetic regulation: the Lac control region.";
+RL   Science 187(4171):27-35(1975).
+XX
+RN   [6]
+RP   1227-1271
+RA   Gilbert W., Maxam A., Mirzabekov A.;
+RT   "Contacts between the lac repressor and DNA revealed by methylation";
+RL   (in) Kjeldgaard N.C., Maaloe O. (Eds.);
+RL   CONTROL OF RIBOSOME SYNTHESIS:138-143;
+RL   Academic Press, New York (1976)
+XX
+RN   [7]
+RX   DOI; 10.1038/260360a0.
+RX   PUBMED; 768781.
+RA   Marians K.J., Wu R.;
+RT   "Structure of the lactose operator";
+RL   Nature 260(5549):360-363(1976).
+XX
+RN   [8]
+RP   1242-1268
+RX   DOI; 10.1038/263748a0.
+RX   PUBMED; 1069185.
+RA   Heyneker H.L., Shine J., Goodman H.M, Boyer H.W., Rosenberg J.,
+RA   Dickerson R.E., Narang S.A., Itakura K., Lin S., Riggs A.D.;
+RT   "Synthetic lac operator is functional in vivo";
+RL   Nature 263(5580):748-752(1976).
+XX
+RN   [9]
+RX   DOI; 10.1016/S0022-2836(77)80132-0.
+RX   PUBMED; 323498.
+RA   Dickson R.C., Abelson J.N., Johnson P., Reznikoff W.S., Barnes W.M.;
+RT   "Nucleotide sequence changes produced by mutations in the lac promoter of
+RT   Escherichia coli";
+RL   J. Mol. Biol. 111(1):65-75(1977).
+XX
+RN   [10]
+RP   51-264
+RX   PUBMED; 337294.
+RA   Steege D.A.;
+RT   "5'-Terminal nucleotide sequence of Escherichia coli lactose repressor
+RT   mRNA: features of translational initiation and reinitiation sites.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 74(10):4163-4167(1977).
+XX
+RN   [11]
+RP   1-81
+RX   DOI; 10.1038/274762a0.
+RX   PUBMED; 355890.
+RA   Calos M.P.;
+RT   "DNA sequence for a low-level promoter of the lac repressor and an 'up'
+RT   promoter mutation";
+RL   Nature 274(5673):762-765(1978).
+XX
+RN   [12]
+RP   49-1161
+RX   DOI; 10.1038/274765a0.
+RX   PUBMED; 355891.
+RA   Farabaugh P.J.;
+RT   "Sequence of the lacI gene";
+RL   Nature 274(5673):765-769(1978).
+XX
+RN   [13]
+RX   DOI; 10.1038/274770a0.
+RX   PUBMED; 355892.
+RA   Miller J.H., Coulondre C., Farabaugh P.J.;
+RT   "Correlation of nonsense sites in the lacI gene with specific codons in the
+RT   nucleotide sequence";
+RL   Nature 274(5673):770-775(1978).
+XX
+RN   [14]
+RX   DOI; 10.1007/BF00267233.
+RX   PUBMED; 6770231.
+RA   Calos M.P., Miller J.H.;
+RT   "DNA sequence alteration resulting from a mutation impairing promoter
+RT   function in the lac repressor gene";
+RL   Mol. Gen. Genet. 178(1):225-227(1980).
+XX
+RN   [15]
+RP   4306-5804
+RX   DOI; 10.1038/283541a0.
+RX   PUBMED; 6444453.
+RA   Buechel D.E., Gronenborn B., Mueller-Hill B.;
+RT   "Sequence of the lactose permease gene";
+RL   Nature 283(5747):541-545(1980).
+XX
+RN   [16]
+RX   PUBMED; 6271472.
+RA   Miller J.H., Calos M.P., Galas D.J.;
+RT   "Genetic and sequencing studies of the specificity of transposition into
+RT   the lac region of E. coli";
+RL   Cold Spring Harb. Symp. Quant. Biol. 45:243-257(1981).
+XX
+RN   [17]
+RX   DOI; 10.1016/0014-5793(81)81076-9.
+RX   PUBMED; 7023981.
+RA   Chenchick A., Beabealashvilli R.S., Mirzabekov A.;
+RT   "Topography of interaction of Escherichia coli RNA polymerase subunits with
+RT   lac UV5 promoter";
+RL   FEBS Lett. 128(1):46-50(1981).
+XX
+RN   [18]
+RX   DOI; 10.1016/0378-1119(81)90038-X.
+RX   PUBMED; 7016667.
+RA   Betz J.L., Sadler J.R.;
+RT   "Variants of a cloned synthetic lactose operator: I. A palindromic dimer
+RT   lactose operator derived from one strand of the cloned 40-base pair
+RT   operator";
+RL   Gene 13(1):1-12(1981).
+XX
+RN   [19]
+RX   DOI; 10.1016/0378-1119(81)90039-1.
+RX   PUBMED; 6263752.
+RA   Sadler J.R., Tecklenburg M.;
+RT   "Cloning and characterization of the natural lactose operator";
+RL   Gene 13(1):13-23(1981).
+XX
+RN   [20]
+RX   DOI; 10.1016/0378-1119(81)90128-1.
+RX   PUBMED; 6271642.
+RA   Betz J.L., Sadler J.R.;
+RT   "Variants of a cloned synthetic lactose operator: II.
+RT   Chloramphenicol-resistant revertants retaining a lactose opeator in the CAT
+RT   gene of plasmid pBR325";
+RL   Gene 15(2-3):187-200(1981).
+XX
+RN   [21]
+RX   DOI; 10.1007/BF00268783.
+RX   PUBMED; 7038381.
+RA   Calos M.P., Miller J.H.;
+RT   "The DNA sequence change resulting from the I-Q1 mutation, which greatly
+RT   increases promoter strength";
+RL   Mol. Gen. Genet. 183(3):559-560(1981).
+XX
+RN   [22]
+RX   PUBMED; 6278484.
+RA   Mieschendahl M., Buechel D.E., Bocklage H., Mueller-Hill B.;
+RT   "Mutations in the lacY gene of Escherichia coli define functional
+RT   organization of lactose permease";
+RL   Proc. Natl. Acad. Sci. U.S.A. 78(12):7652-7656(1981).
+XX
+RN   [23]
+RX   DOI; 10.1016/0378-1119(82)90042-7.
+RX   PUBMED; 6299890.
+RA   Russell D.R., Bennett G.N.;
+RT   "Construction and analysis of in vivo activity of E. coli promoter hybrids
+RT   and promoter mutants that alter the -35 to -10 spacing";
+RL   Gene 20(2):231-243(1982).
+XX
+RN   [24]
+RX   PUBMED; 6288696.
+RA   Horowitz H., Platt T.;
+RT   "A termination site for LacI transcription is between the CAP site and the
+RT   lac promoter.";
+RL   J. Biol. Chem. 257(19):11740-11746(1982).
+XX
+RN   [25]
+RX   PUBMED; 6290487.
+RA   Klein R.D., Wells R.D.;
+RT   "Effects of neighboring DNA homopolymers on the biochemical and physical
+RT   properties of the Escherichia coli lactose promoter: I. Cloning and
+RT   characterization studies";
+RL   J. Biol. Chem. 257(21):12954-12961(1982).
+XX
+RN   [26]
+RP   1183-1291
+RX   PUBMED; 7041119.
+RA   Weiher H., Schaller H.;
+RT   "Segment-specific mutagenesis: extensive mutagenesis of a lac
+RT   promoter/operator element.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 79(5):1408-1412(1982).
+XX
+RN   [27]
+RX   PUBMED; 6305557.
+RA   Van Dyke M.W., Dervan P.B.;
+RT   "Footprinting with MPE-Fe(II). Complementary-strand analyses of distamycin-
+RT   and actinomycin-binding sites on heterogeneous DNA";
+RL   Cold Spring Harb. Symp. Quant. Biol. 47:347-353(1983).
+XX
+RN   [28]
+RP   1287-4364
+RX   PUBMED; 6313347.
+RA   Kalnins A., Otto K., Ruether U., Mueller-Hill B.;
+RT   "Sequence of the lacZ gene of Escherichia coli";
+RL   EMBO J. 2(4):593-597(1983).
+XX
+RN   [29]
+RX   PUBMED; 6309841.
+RA   Cone K.C., Sellitti M.A., Steege D.A.;
+RT   "Lac repressor mRNA transcription terminates in vivo in the lac control
+RT   region";
+RL   J. Biol. Chem. 258(18):11296-11304(1983).
+XX
+RN   [30]
+RX   PUBMED; 6316325.
+RA   Sadler J.R., Sasmor H., Betz J.L.;
+RT   "A perfectly symmetric lac operator binds the lac repressor very tightly";
+RL   Proc. Natl. Acad. Sci. U.S.A. 80(22):6785-6789(1983).
+XX
+RN   [31]
+RX   PUBMED; 6582506.
+RA   Glickman B.W., Ripley L.S.;
+RT   "Structural intermediates of deletion mutagenesis: a role for palindromic
+RT   DNA.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 81(2):512-516(1984).
+XX
+RN   [32]
+RX   DOI; 10.1021/bi00332a019.
+RX   PUBMED; 3896305.
+RA   Spassky A., Kirkegaard K., Buc H.;
+RT   "Changes in the DNA structure of the lac UV5 promoter during formation of
+RT   an open complex with Escherichia coli RNA polymerase";
+RL   Biochemistry 24(11):2723-2731(1985).
+XX
+RN   [33]
+RX   DOI; 10.1016/0092-8674(85)90175-8.
+RX   PUBMED; 2416465.
+RA   Straney D.C., Crothers D.M.;
+RT   "Intermediates in transcription initiation from the E. coli lac UV5
+RT   promoter";
+RL   Cell 43(2 Pt 1):449-459(1985).
+XX
+RN   [34]
+RX   DOI; 10.1016/0378-1119(85)90267-7.
+RX   PUBMED; 3932130.
+RA   Looman A.C., de Gruyter M., Vogelaar A., van Knippenberg P.H.;
+RT   "Effects of heterologous ribosomal binding sites on the transcription and
+RT   translation of the lacZ gene of Escherichia coli";
+RL   Gene 37(1-3):145-154(1985).
+XX
+RN   [35]
+RX   PUBMED; 2999082.
+RA   Mandecki W., Goldman R.A., Powell B.S., Caruthers M.H.;
+RT   "lac Up-promoter mutants with increased homology to the consensus promoter
+RT   sequence.";
+RL   J. Bacteriol. 164(3):1353-1355(1985).
+XX
+RN   [36]
+RX   DOI; 10.1016/0022-2836(85)90427-9.
+RX   PUBMED; 2987506.
+RA   Malamy M.H., Rahaim P.T., Hoffman C.S., Baghdoyan D., O'Connor M.B.,
+RA   Miller J.F.;
+RT   "A frameshift mutation at the junction of an IS1 insertion within lacZ
+RT   restores beta-galactosidase activity via formation of an active lacZ-IS1
+RT   fusion protein";
+RL   J. Mol. Biol. 181(4):551-555(1985).
+XX
+RN   [37]
+RP   5646-7477
+RX   PUBMED; 3901000.
+RA   Hediger M.A, Johnson D.F., Nierlich D.P., Zabin I.;
+RT   "DNA sequence of the lactose operon: the lacA gene and the transcriptional
+RT   termination region.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 82(19):6414-6418(1985).
+XX
+CC   [3]  sites; UV5 mRNA transcripts and operator mutants. [(in)
+CC   Sund,H. and Blauer,G. (eds.);Protein-Ligand Interactions:
+CC   193-207;Walter de]  sites; operator mutational analysis. [7]
+CC   sites; S1 and mung bean nuclease action on operator DNA. [9]
+CC   sites; class I, II and III promoter mutant analysis. [13]  sites;
+CC   lacI mutant analysis.
+CC   [16]  sites; Tn5, Tn9 and Tn10 insertion sites in lac region. [14]
+CC   sites; lacI promoter mutation UJ177.
+CC   [18]  sites; palindromic dimer operator;.
+CC   [19]  sites; natural operator sequence.
+CC   [20]  sites; operator mutational analysis.
+CC   [21]  sites; lacI-Q deletion.
+CC   [17]  sites; RNA polymerase UV5 promoter interaction. [22]  sites;
+CC   lacY mutational analysis.
+CC   [24]  sites; lacI-promoted transcription termination. [25]  sites;
+CC   wt and UV5 promoter sequence studies. [23]  sites; UV5 promoter
+CC   mutational analysis.
+CC   [30]  sites; perfectly symmetric operator sequence. [29]  sites;
+CC   lacI mRNA termination site.
+CC   [27]  sites; distamycin and actinomycin binding to promoter. [31]
+CC   sites; lacI deletion studies.
+CC   [35]  sites; promoter mutational studies.
+CC   [33]  sites; DNAase I studies with promoter sequence. [34]  sites;
+CC   ribosomal binding and translation initiation for lacZ. [36]  sites;
+CC   insertion sequence IS1 integration in lacZ;. [32]  sites; DNAase I
+CC   studies with promoter.
+CC   [1] first reports a 27 bp operator(sites 1240-1266) with two-fold
+CC   symmetries; the operator has also been defined to be bases
+CC   1246-1266 or bases 1239-1273 [8]. [(in) Kjeldgaard,N.C. and Maaloe,
+CC   O.(eds);Control of ribosome synthesis: 138-143;A] explores the
+CC   ability of lac
+CC   repressor protein to affect methylation of operator DNA.  [8]
+CC   argues that DNA on both sides of the 21 bp operator (bases
+CC   1246-1266) affects repressor binding but that the sequences of this
+CC   DNA are probably not critical. [5] gives a larger sequence known as
+CC   the promoter-operator region for the wild-type, whereas [2] and
+CC   [26] give portions of this region for the mutant strain UV5. Within
+CC   the promoter region, bases 1162-1199 are identified as the
+CC   catabolite gene activator protein binding site (cap) and bases
+CC   1200-1245 are the RNA polymerase interaction site. [10] reports a
+CC   sequence for the 5'end of the lacI (repressor) gene and discusses
+CC   restart in mutant strains. [11] presents a sequence for the lacI
+CC   promoter region and identifies an I-Q mutation which enhances lacI
+CC   transcription approximately ten-fold. [12] gives a complete
+CC   sequence
+CC   for lacI which agrees with the known lac repressor sequence. [26]
+CC   examines the promoter-operator region in the UV5 strain (lac109)
+CC   and studies 23 mutant derivatives of this sequence. This sequence
+CC   agrees with known protein sequences for the lacZ, lacY and lacA
+CC   enzymes. [15] notes that the fMet codon is not present
+CC   for lacA and suggests that the 'ttg' codon (5727-5729), which
+CC   immediately precedes the mature N-terminal asparagine codon, is the
+CC   start codon. The cds for lacZ, lacY and lacA are included on a
+CC   single mRNA transcript.
+CC   Complete source information:
+CC   Escherichia coli DNA [1],[(in) Kjeldgaard,N.C. and Maaloe,O.(eds);
+CC   Control of ribosome synthesis: 138-143;A],[8],[12],[26]; mRNA [2],
+CC   [5],[10]; clone
+CC   lambda-h80dlac DNA [11],[15]; clone puk217 [28]; pgm8 [37].
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..7477
+FT                   /organism="Escherichia coli"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:562"
+FT   variation       16
+FT                   /note="c in wild-type; t in 'up' promoter mutant I-Q [11]"
+FT   mRNA            51..1230
+FT                   /note="lacI (repressor) mRNA; preferred in vivo 3' end
+FT                   [12],[29]"
+FT   CDS             79..1161
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /gene="lacI"
+FT                   /note="lac repressor protein (gtg start codon)"
+FT                   /db_xref="GOA:P03023"
+FT                   /db_xref="PDB:1CJG"
+FT                   /db_xref="PDB:1EFA"
+FT                   /db_xref="PDB:1JWL"
+FT                   /db_xref="PDB:1JYE"
+FT                   /db_xref="PDB:1JYF"
+FT                   /db_xref="PDB:1L1M"
+FT                   /db_xref="PDB:1LBG"
+FT                   /db_xref="PDB:1LBH"
+FT                   /db_xref="PDB:1LBI"
+FT                   /db_xref="PDB:1LCC"
+FT                   /db_xref="PDB:1LCD"
+FT                   /db_xref="PDB:1LQC"
+FT                   /db_xref="PDB:1LTP"
+FT                   /db_xref="PDB:1TLF"
+FT                   /db_xref="PDB:2BJC"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P03023"
+FT                   /protein_id="AAA24052.1"
+FT                   /translation="MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAEL
+FT                   NYIPNRVAQQLAGKQSLLIGVATSSLALHAPSQIVAAIKSRADQLGASVVVSMVERSGV
+FT                   EACKAAVHNLLAQRVSGLIINYPLDDQDAIAVEAACTNVPALFLDVSDQTPINSIIFSH
+FT                   EDGTRLGVEHLVALGHQQIALLAGPLSSVSARLRLAGWHKYLTRNQIQPIAEREGDWSA
+FT                   MSGFQQTMQMLNEGIVPTAMLVANDQMALGAMRAITESGLRVGADISVVGYDDTEDSSC
+FT                   YIPPSTTIKQDFRLLGQTSVDRLLQLSQGQAVKGNQLLPVSLVKRKTTLAPNTQTASPR
+FT                   ALADSLMQLARQVSRLESGQ"
+FT   misc_signal     1162..1199
+FT                   /note="cap protein binding site"
+FT   variation       1183..1186
+FT                   /note="ttag in wild-type; aatt in strain UV5 [26]"
+FT   variation       1209..1211
+FT                   /note="gct in wild-type; gt in mutant l305 [5]"
+FT   variation       1212
+FT                   /note="t in wild-type; a in mutant l241 [5]"
+FT   variation       1230
+FT                   /note="c in wild-type; a in mutant p-r-1a [5]"
+FT   variation       1237..1238
+FT                   /note="gt in wild-type; aa in strain UV5 [26]"
+FT   variation       1242..1245
+FT                   /note="gtgg in wild-type; ttca in synthetic operator [8]"
+FT   misc_signal     1246..1266
+FT                   /note="lac repressor protein binding site"
+FT   mRNA            1246..>4358
+FT                   /note="lacZ mRNA [2],[5]"
+FT   variation       1267..1268
+FT                   /note="tc in wild-type; tg in synthetic operator [8]"
+FT   variation       1282..1291
+FT                   /note="ctatgaccat in wild-type; gatccggcca in strain UV5
+FT                   [26]"
+FT   CDS             1284..4358
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /gene="lacZ"
+FT                   /note="beta-d-galactosidase"
+FT                   /db_xref="GOA:P00722"
+FT                   /db_xref="InterPro:IPR004199"
+FT                   /db_xref="InterPro:IPR006101"
+FT                   /db_xref="InterPro:IPR006102"
+FT                   /db_xref="InterPro:IPR006103"
+FT                   /db_xref="InterPro:IPR006104"
+FT                   /db_xref="InterPro:IPR008979"
+FT                   /db_xref="InterPro:IPR011013"
+FT                   /db_xref="InterPro:IPR013781"
+FT                   /db_xref="InterPro:IPR013812"
+FT                   /db_xref="PDB:1BGL"
+FT                   /db_xref="PDB:1BGM"
+FT                   /db_xref="PDB:1DP0"
+FT                   /db_xref="PDB:1F49"
+FT                   /db_xref="PDB:1F4A"
+FT                   /db_xref="PDB:1F4H"
+FT                   /db_xref="PDB:1GHO"
+FT                   /db_xref="PDB:1HN1"
+FT                   /db_xref="PDB:1JYN"
+FT                   /db_xref="PDB:1JYV"
+FT                   /db_xref="PDB:1JYW"
+FT                   /db_xref="PDB:1JYX"
+FT                   /db_xref="PDB:1JYY"
+FT                   /db_xref="PDB:1JYZ"
+FT                   /db_xref="PDB:1JZ0"
+FT                   /db_xref="PDB:1JZ1"
+FT                   /db_xref="PDB:1JZ2"
+FT                   /db_xref="PDB:1JZ3"
+FT                   /db_xref="PDB:1JZ4"
+FT                   /db_xref="PDB:1JZ5"
+FT                   /db_xref="PDB:1JZ6"
+FT                   /db_xref="PDB:1JZ7"
+FT                   /db_xref="PDB:1JZ8"
+FT                   /db_xref="PDB:1PX3"
+FT                   /db_xref="PDB:1PX4"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P00722"
+FT                   /protein_id="AAA24053.1"
+FT                   /translation="MTMITDSLAVVLQRRDWENPGVTQLNRLAAHPPFASWRNSEEART
+FT                   DRPSQQLRSLNGEWRFAWFPAPEAVPESWLECDLPEADTVVVPSNWQMHGYDAPIYTNV
+FT                   TYPITVNPPFVPTENPTGCYSLTFNVDESWLQEGQTRIIFDGVNSAFHLWCNGRWVGYG
+FT                   QDSRLPSEFDLSAFLRAGENRLAVMVLRWSDGSYLEDQDMWRMSGIFRDVSLLHKPTTQ
+FT                   ISDFHVATRFNDDFSRAVLEAEVQMCGELRDYLRVTVSLWQGETQVASGTAPFGGEIID
+FT                   ERGGYADRVTLRLNVENPKLWSAEIPNLYRAVVELHTADGTLIEAEACDVGFREVRIEN
+FT                   GLLLLNGKPLLIRGVNRHEHHPLHGQVMDEQTMVQDILLMKQNNFNAVRCSHYPNHPLW
+FT                   YTLCDRYGLYVVDEANIETHGMVPMNRLTDDPRWLPAMSERVTRMVQRDRNHPSVIIWS
+FT                   LGNESGHGANHDALYRWIKSVDPSRPVQYEGGGADTTATDIICPMYARVDEDQPFPAVP
+FT                   KWSIKKWLSLPGETRPLILCEYAHAMGNSLGGFAKYWQAFRQYPRLQGGFVWDWVDQSL
+FT                   IKYDENGNPWSAYGGDFGDTPNDRQFCMNGLVFADRTPHPALTEAKHQQQFFQFRLSGQ
+FT                   TIEVTSEYLFRHSDNELLHWMVALDGKPLASGEVPLDVAPQGKQLIELPELPQPESAGQ
+FT                   LWLTVRVVQPNATAWSEAGHISAWQQWRLAENLSVTLPAASHAIPHLTTSEMDFCIELG
+FT                   NKRWQFNRQSGFLSQMWIGDKKQLLTPLRDQFTRAPLDNDIGVSEATRIDPNAWVERWK
+FT                   AAGHYQAEAALLQCTADTLADAVLITTAHAWQHQGKTLFISRKTYRIDGSGQMAITVDV
+FT                   EVASDTPHPARIGLNCQLAQVAERVNWLGLGPQENYPDRLTAACFDRWDLPLSDMYTPY
+FT                   VFPSENGLRCGTRELNYGPHQWRGDFQFNISRYSQQQLMETSHRHLLHAEEGTWLNIDG
+FT                   FHMGIGGDDSWSPSVSAEFQLSAGRYHYQLVWCQK"
+FT   CDS             4410..5663
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /gene="lacY"
+FT                   /note="lactose permease"
+FT                   /db_xref="GOA:P02920"
+FT                   /db_xref="InterPro:IPR000576"
+FT                   /db_xref="InterPro:IPR007114"
+FT                   /db_xref="PDB:1M2U"
+FT                   /db_xref="PDB:1PV6"
+FT                   /db_xref="PDB:1PV7"
+FT                   /db_xref="PDB:2CFP"
+FT                   /db_xref="PDB:2CFQ"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P02920"
+FT                   /protein_id="AAA24054.1"
+FT                   /translation="MYYLKNTNFWMFGLFFFFYFFIMGAYFPFFPIWLHDINHISKSDT
+FT                   GIIFAAISLFSLLFQPLFGLLSDKLGLRKYLLWIITGMLVMFAPFFIFIFGPLLQYNIL
+FT                   VGSIVGGIYLGFCFNAGAPAVEAFIEKVSRRSNFEFGRARMFGCVGWALCASIVGIMFT
+FT                   INNQFVFWLGSGCALILAVLLFFAKTDAPSSATVANAVGANHSAFSLKLALELFRQPKL
+FT                   WFLSLYVIGVSCTYDVFDQQFANFFTSFFATGEQGTRVFGYVTTMGELLNASIMFFAPL
+FT                   IINRIGGKNALLLAGTIMSVRIIGSSFATSALEVVILKTLHMFEVPFLLVGCFKYITSQ
+FT                   FEVRFSATIYLVCFCFFKQLAMIFMSVLAGNMYESIGFQGAYLVLGLVALGFTLISVFT
+FT                   LSGPGPLSLLRRQVNEVA"
+FT   CDS             5727..6338
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /gene="lacA"
+FT                   /note="thiogalactoside acetyltransferase (ttg start codon)"
+FT                   /db_xref="GOA:P07464"
+FT                   /db_xref="InterPro:IPR001451"
+FT                   /db_xref="InterPro:IPR011004"
+FT                   /db_xref="PDB:1KQA"
+FT                   /db_xref="PDB:1KRR"
+FT                   /db_xref="PDB:1KRU"
+FT                   /db_xref="PDB:1KRV"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P07464"
+FT                   /protein_id="AAA24055.1"
+FT                   /translation="MNMPMTERIRAGKLFTDMCEGLPEKRLRGKTLMYEFNHSHPSEVE
+FT                   KRESLIKEMFATVGENAWVEPPVYFSYGSNIHIGRNFYANFNLTIVDDYTVTIGDNVLI
+FT                   APNVTLSVTGHPVHHELRKNGEMYSFPITIGNNVWIGSHVVINPGVTIGDNSVIGAGSI
+FT                   VTKDIPPNVVAAGVPCRVIREINDRDKHYYFKDYKVESSV"
+XX
+SQ   Sequence 7477 BP; 1739 A; 1991 C; 2004 G; 1743 T; 0 other;
+     gacaccatcg aatggcgcaa aacctttcgc ggtatggcat gatagcgccc ggaagagagt        60
+     caattcaggg tggtgaatgt gaaaccagta acgttatacg atgtcgcaga gtatgccggt       120
+     gtctcttatc agaccgtttc ccgcgtggtg aaccaggcca gccacgtttc tgcgaaaacg       180
+     cgggaaaaag tggaagcggc gatggcggag ctgaattaca ttcccaaccg cgtggcacaa       240
+     caactggcgg gcaaacagtc gttgctgatt ggcgttgcca cctccagtct ggccctgcac       300
+     gcgccgtcgc aaattgtcgc ggcgattaaa tctcgcgccg atcaactggg tgccagcgtg       360
+     gtggtgtcga tggtagaacg aagcggcgtc gaagcctgta aagcggcggt gcacaatctt       420
+     ctcgcgcaac gcgtcagtgg gctgatcatt aactatccgc tggatgacca ggatgccatt       480
+     gctgtggaag ctgcctgcac taatgttccg gcgttatttc ttgatgtctc tgaccagaca       540
+     cccatcaaca gtattatttt ctcccatgaa gacggtacgc gactgggcgt ggagcatctg       600
+     gtcgcattgg gtcaccagca aatcgcgctg ttagcgggcc cattaagttc tgtctcggcg       660
+     cgtctgcgtc tggctggctg gcataaatat ctcactcgca atcaaattca gccgatagcg       720
+     gaacgggaag gcgactggag tgccatgtcc ggttttcaac aaaccatgca aatgctgaat       780
+     gagggcatcg ttcccactgc gatgctggtt gccaacgatc agatggcgct gggcgcaatg       840
+     cgcgccatta ccgagtccgg gctgcgcgtt ggtgcggata tctcggtagt gggatacgac       900
+     gataccgaag acagctcatg ttatatcccg ccgtcaacca ccatcaaaca ggattttcgc       960
+     ctgctggggc aaaccagcgt ggaccgcttg ctgcaactct ctcagggcca ggcggtgaag      1020
+     ggcaatcagc tgttgcccgt ctcactggtg aaaagaaaaa ccaccctggc gcccaatacg      1080
+     caaaccgcct ctccccgcgc gttggccgat tcattaatgc agctggcacg acaggtttcc      1140
+     cgactggaaa gcgggcagtg agcgcaacgc aattaatgtg agttagctca ctcattaggc      1200
+     accccaggct ttacacttta tgcttccggc tcgtatgttg tgtggaattg tgagcggata      1260
+     acaatttcac acaggaaaca gctatgacca tgattacgga ttcactggcc gtcgttttac      1320
+     aacgtcgtga ctgggaaaac cctggcgtta cccaacttaa tcgccttgca gcacatcccc      1380
+     ctttcgccag ctggcgtaat agcgaagagg cccgcaccga tcgcccttcc caacagttgc      1440
+     gcagcctgaa tggcgaatgg cgctttgcct ggtttccggc accagaagcg gtgccggaaa      1500
+     gctggctgga gtgcgatctt cctgaggccg atactgtcgt cgtcccctca aactggcaga      1560
+     tgcacggtta cgatgcgccc atctacacca acgtaaccta tcccattacg gtcaatccgc      1620
+     cgtttgttcc cacggagaat ccgacgggtt gttactcgct cacatttaat gttgatgaaa      1680
+     gctggctaca ggaaggccag acgcgaatta tttttgatgg cgttaactcg gcgtttcatc      1740
+     tgtggtgcaa cgggcgctgg gtcggttacg gccaggacag tcgtttgccg tctgaatttg      1800
+     acctgagcgc atttttacgc gccggagaaa accgcctcgc ggtgatggtg ctgcgttgga      1860
+     gtgacggcag ttatctggaa gatcaggata tgtggcggat gagcggcatt ttccgtgacg      1920
+     tctcgttgct gcataaaccg actacacaaa tcagcgattt ccatgttgcc actcgcttta      1980
+     atgatgattt cagccgcgct gtactggagg ctgaagttca gatgtgcggc gagttgcgtg      2040
+     actacctacg ggtaacagtt tctttatggc agggtgaaac gcaggtcgcc agcggcaccg      2100
+     cgcctttcgg cggtgaaatt atcgatgagc gtggtggtta tgccgatcgc gtcacactac      2160
+     gtctgaacgt cgaaaacccg aaactgtgga gcgccgaaat cccgaatctc tatcgtgcgg      2220
+     tggttgaact gcacaccgcc gacggcacgc tgattgaagc agaagcctgc gatgtcggtt      2280
+     tccgcgaggt gcggattgaa aatggtctgc tgctgctgaa cggcaagccg ttgctgattc      2340
+     gaggcgttaa ccgtcacgag catcatcctc tgcatggtca ggtcatggat gagcagacga      2400
+     tggtgcagga tatcctgctg atgaagcaga acaactttaa cgccgtgcgc tgttcgcatt      2460
+     atccgaacca tccgctgtgg tacacgctgt gcgaccgcta cggcctgtat gtggtggatg      2520
+     aagccaatat tgaaacccac ggcatggtgc caatgaatcg tctgaccgat gatccgcgct      2580
+     ggctaccggc gatgagcgaa cgcgtaacgc gaatggtgca gcgcgatcgt aatcacccga      2640
+     gtgtgatcat ctggtcgctg gggaatgaat caggccacgg cgctaatcac gacgcgctgt      2700
+     atcgctggat caaatctgtc gatccttccc gcccggtgca gtatgaaggc ggcggagccg      2760
+     acaccacggc caccgatatt atttgcccga tgtacgcgcg cgtggatgaa gaccagccct      2820
+     tcccggctgt gccgaaatgg tccatcaaaa aatggctttc gctacctgga gagacgcgcc      2880
+     cgctgatcct ttgcgaatac gcccacgcga tgggtaacag tcttggcggt ttcgctaaat      2940
+     actggcaggc gtttcgtcag tatccccgtt tacagggcgg cttcgtctgg gactgggtgg      3000
+     atcagtcgct gattaaatat gatgaaaacg gcaacccgtg gtcggcttac ggcggtgatt      3060
+     ttggcgatac gccgaacgat cgccagttct gtatgaacgg tctggtcttt gccgaccgca      3120
+     cgccgcatcc agcgctgacg gaagcaaaac accagcagca gtttttccag ttccgtttat      3180
+     ccgggcaaac catcgaagtg accagcgaat acctgttccg tcatagcgat aacgagctcc      3240
+     tgcactggat ggtggcgctg gatggtaagc cgctggcaag cggtgaagtg cctctggatg      3300
+     tcgctccaca aggtaaacag ttgattgaac tgcctgaact accgcagccg gagagcgccg      3360
+     ggcaactctg gctcacagta cgcgtagtgc aaccgaacgc gaccgcatgg tcagaagccg      3420
+     ggcacatcag cgcctggcag cagtggcgtc tggcggaaaa cctcagtgtg acgctccccg      3480
+     ccgcgtccca cgccatcccg catctgacca ccagcgaaat ggatttttgc atcgagctgg      3540
+     gtaataagcg ttggcaattt aaccgccagt caggctttct ttcacagatg tggattggcg      3600
+     ataaaaaaca actgctgacg ccgctgcgcg atcagttcac ccgtgcaccg ctggataacg      3660
+     acattggcgt aagtgaagcg acccgcattg accctaacgc ctgggtcgaa cgctggaagg      3720
+     cggcgggcca ttaccaggcc gaagcagcgt tgttgcagtg cacggcagat acacttgctg      3780
+     atgcggtgct gattacgacc gctcacgcgt ggcagcatca ggggaaaacc ttatttatca      3840
+     gccggaaaac ctaccggatt gatggtagtg gtcaaatggc gattaccgtt gatgttgaag      3900
+     tggcgagcga tacaccgcat ccggcgcgga ttggcctgaa ctgccagctg gcgcaggtag      3960
+     cagagcgggt aaactggctc ggattagggc cgcaagaaaa ctatcccgac cgccttactg      4020
+     ccgcctgttt tgaccgctgg gatctgccat tgtcagacat gtataccccg tacgtcttcc      4080
+     cgagcgaaaa cggtctgcgc tgcgggacgc gcgaattgaa ttatggccca caccagtggc      4140
+     gcggcgactt ccagttcaac atcagccgct acagtcaaca gcaactgatg gaaaccagcc      4200
+     atcgccatct gctgcacgcg gaagaaggca catggctgaa tatcgacggt ttccatatgg      4260
+     ggattggtgg cgacgactcc tggagcccgt cagtatcggc ggaattccag ctgagcgccg      4320
+     gtcgctacca ttaccagttg gtctggtgtc aaaaataata ataaccgggc aggccatgtc      4380
+     tgcccgtatt tcgcgtaagg aaatccatta tgtactattt aaaaaacaca aacttttgga      4440
+     tgttcggttt attctttttc ttttactttt ttatcatggg agcctacttc ccgtttttcc      4500
+     cgatttggct acatgacatc aaccatatca gcaaaagtga tacgggtatt atttttgccg      4560
+     ctatttctct gttctcgcta ttattccaac cgctgtttgg tctgctttct gacaaactcg      4620
+     ggctgcgcaa atacctgctg tggattatta ccggcatgtt agtgatgttt gcgccgttct      4680
+     ttatttttat cttcgggcca ctgttacaat acaacatttt agtaggatcg attgttggtg      4740
+     gtatttatct aggcttttgt tttaacgccg gtgcgccagc agtagaggca tttattgaga      4800
+     aagtcagccg tcgcagtaat ttcgaatttg gtcgcgcgcg gatgtttggc tgtgttggct      4860
+     gggcgctgtg tgcctcgatt gtcggcatca tgttcaccat caataatcag tttgttttct      4920
+     ggctgggctc tggctgtgca ctcatcctcg ccgttttact ctttttcgcc aaaacggatg      4980
+     cgccctcttc tgccacggtt gccaatgcgg taggtgccaa ccattcggca tttagcctta      5040
+     agctggcact ggaactgttc agacagccaa aactgtggtt tttgtcactg tatgttattg      5100
+     gcgtttcctg cacctacgat gtttttgacc aacagtttgc taatttcttt acttcgttct      5160
+     ttgctaccgg tgaacagggt acgcgggtat ttggctacgt aacgacaatg ggcgaattac      5220
+     ttaacgcctc gattatgttc tttgcgccac tgatcattaa tcgcatcggt gggaaaaacg      5280
+     ccctgctgct ggctggcact attatgtctg tacgtattat tggctcatcg ttcgccacct      5340
+     cagcgctgga agtggttatt ctgaaaacgc tgcatatgtt tgaagtaccg ttcctgctgg      5400
+     tgggctgctt taaatatatt accagccagt ttgaagtgcg tttttcagcg acgatttatc      5460
+     tggtctgttt ctgcttcttt aagcaactgg cgatgatttt tatgtctgta ctggcgggca      5520
+     atatgtatga aagcatcggt ttccagggcg cttatctggt gctgggtctg gtggcgctgg      5580
+     gcttcacctt aatttccgtg ttcacgctta gcggccccgg cccgctttcc ctgctgcgtc      5640
+     gtcaggtgaa tgaagtcgct taagcaatca atgtcggatg cggcgcgacg cttatccgac      5700
+     caacatatca taacggagtg atcgcattga acatgccaat gaccgaaaga ataagagcag      5760
+     gcaagctatt taccgatatg tgcgaaggct taccggaaaa aagacttcgt gggaaaacgt      5820
+     taatgtatga gtttaatcac tcgcatccat cagaagttga aaaaagagaa agcctgatta      5880
+     aagaaatgtt tgccacggta ggggaaaacg cctgggtaga accgcctgtc tatttctctt      5940
+     acggttccaa catccatata ggccgcaatt tttatgcaaa tttcaattta accattgtcg      6000
+     atgactacac ggtaacaatc ggtgataacg tactgattgc acccaacgtt actctttccg      6060
+     ttacgggaca ccctgtacac catgaattga gaaaaaacgg cgagatgtac tcttttccga      6120
+     taacgattgg caataacgtc tggatcggaa gtcatgtggt tattaatcca ggcgtcacca      6180
+     tcggggataa ttctgttatt ggcgcgggta gtatcgtcac aaaagacatt ccaccaaacg      6240
+     tcgtggcggc tggcgttcct tgtcgggtta ttcgcgaaat aaacgaccgg gataagcact      6300
+     attatttcaa agattataaa gttgaatcgt cagtttaaat tataaaaatt gcctgatacg      6360
+     ctgcgcttat caggcctaca agttcagcga tctacattag ccgcatccgg catgaacaaa      6420
+     gcgcaggaac aagcgtcgca tcatgcctct ttgacccaca gctgcggaaa acgtactggt      6480
+     gcaaaacgca gggttatgat catcagccca acgacgcaca gcgcatgaaa tgcccagtcc      6540
+     atcaggtaat tgccgctgat actacgcagc acgccagaaa accacggggc aagcccggcg      6600
+     atgataaaac cgattccctg cataaacgcc accagcttgc cagcaatagc cggttgcaca      6660
+     gagtgatcga gcgccagcag caaacagagc ggaaacgcgc cgcccagacc taacccacac      6720
+     accatcgccc acaataccgg caattgcatc ggcagccaga taaagccgca gaaccccacc      6780
+     agttgtaaca ccagcgccag cattaacagt ttgcgccgat cctgatggcg agccatagca      6840
+     ggcatcagca aagctcctgc ggcttgccca agcgtcatca atgccagtaa ggaaccgctg      6900
+     tactgcgcgc tggcaccaat ctcaatatag aaagcgggta accaggcaat caggctggcg      6960
+     taaccgccgt taatcagacc gaagtaaaca cccagcgtcc acgcgcgggg agtgaatacc      7020
+     acgcgaaccg gagtggttgt tgtcttgtgg gaagaggcga cctcgcgggc gctttgccac      7080
+     caccaggcaa agagcgcaac aacggcaggc agcgccacca ggcgagtgtt tgataccagg      7140
+     tttcgctatg ttgaactaac cagggcgtta tggcggcacc aagcccaccg ccgcccatca      7200
+     gagccgcgga ccacagcccc atcaccagtg gcgtgcgctg ctgaaaccgc cgtttaatca      7260
+     ccgaagcatc accgcctgaa tgatgccgat ccccacccca ccaagcagtg cgctgctaag      7320
+     cagcagcgca ctttgcgggt aaagctcacg catcaatgca ccgacggcaa tcagcaacag      7380
+     actgatggcg acactgcgac gttcgctgac atgctgatga agccagcttc cggccagcgc      7440
+     cagcccgccc atggtaacca ccggcagagc ggtcgac                               7477
+//
+ID   X51872; SV 1; linear; genomic DNA; STD; PRO; 1832 BP.
+XX
+AC   X51872;
+XX
+DT   17-APR-1990 (Rel. 23, Created)
+DT   05-JUL-1999 (Rel. 60, Last updated, Version 5)
+XX
+DE   Escherichia coli lacA gene for thiogalactoside transacetylase
+XX
+KW   lac operon; lacA gene; lacY gene; thiogalactoside transacetylase.
+XX
+OS   Escherichia coli
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Escherichia.
+XX
+RN   [1]
+RC   (1-1832)
+RP   1-1832
+RX   PUBMED; 3901000.
+RA   Hediger M.A, Johnson D.F., Nierlich D.P., Zabin I.;
+RT   "DNA sequence of the lactose operon: the lacA gene and the transcriptional
+RT   termination region.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 82(19):6414-6418(1985).
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1832
+FT                   /organism="Escherichia coli"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:562"
+FT   CDS             <1..18
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /product="lacY gene product"
+FT                   /protein_id="CAA36161.1"
+FT                   /translation="VNEVA"
+FT   CDS             82..693
+FT                   /transl_table=11
+FT                   /gene="lacA"
+FT                   /product="thiogalactoside transacetylase"
+FT                   /db_xref="GOA:P07464"
+FT                   /db_xref="InterPro:IPR001451"
+FT                   /db_xref="InterPro:IPR011004"
+FT                   /db_xref="PDB:1KQA"
+FT                   /db_xref="PDB:1KRR"
+FT                   /db_xref="PDB:1KRU"
+FT                   /db_xref="PDB:1KRV"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P07464"
+FT                   /protein_id="CAA36162.1"
+FT                   /translation="MNMPMTERIRAGKLFTDMCEGLPEKRLRGKTLMYEFNHSHPSEVE
+FT                   KRESLIKEMFATVGENAWVEPPVYFSYGSNIHIGRNFYANFNLTIVDDYTVTIGDNVLI
+FT                   APNVTLSVTGHPVHHELRKNGEMYSFPITIGNNVWIGSHVVINPGVTIGDNSVIGAGSI
+FT                   VTKDIPPNVVAAGVPCRVIREINDRDKHYYFKDYKVESSV"
+XX
+SQ   Sequence 1832 BP; 519 A; 510 C; 450 G; 353 T; 0 other;
+     gtgaatgaag tcgcttaagc aatcaatgtc ggatgcggcg cgacgcttat ccgaccaaca        60
+     tatcataacg gagtgatcgc attgaacatg ccaatgaccg aaagaataag agcaggcaag       120
+     ctatttaccg atatgtgcga aggcttaccg gaaaaaagac ttcgtgggaa aacgttaatg       180
+     tatgagttta atcactcgca tccatcagaa gttgaaaaaa gagaaagcct gattaaagaa       240
+     atgtttgcca cggtagggga aaacgcctgg gtagaaccgc ctgtctattt ctcttacggt       300
+     tccaacatcc atataggccg caatttttat gcaaatttca atttaaccat tgtcgatgac       360
+     tacacggtaa caatcggtga taacgtactg attgcaccca acgttactct ttccgttacg       420
+     ggacaccctg tacaccatga attgagaaaa aacggcgaga tgtactcttt tccgataacg       480
+     attggcaata acgtctggat cggaagtcat gtggttatta atccaggcgt caccatcggg       540
+     gataattctg ttattggcgc gggtagtatc gtcacaaaag acattccacc aaacgtcgtg       600
+     gcggctggcg ttccttgtcg ggttattcgc gaaataaacg accgggataa gcactattat       660
+     ttcaaagatt ataaagttga atcgtcagtt taaattataa aaattgcctg atacgctgcg       720
+     cttatcaggc ctacaagttc agcgatctac attagccgca tccggcatga acaaagcgca       780
+     ggaacaagcg tcgcatcatg cctctttgac ccacagctgc ggaaaacgta ctggtgcaaa       840
+     acgcagggtt atgatcatca gcccaacgac gcacagcgca tgaaatgccc agtccatcag       900
+     gtaattgccg ctgatactac gcagcacgcc agaaaaccac ggggcaagcc cggcgatgat       960
+     aaaaccgatt ccctgcataa acgccaccag cttgccagca atagccggtt gcacagagtg      1020
+     atcgagcgcc agcagcaaac agagcggaaa cgcgccgccc agacctaacc cacacaccat      1080
+     cgcccacaat accggcaatt gcatcggcag ccagataaag ccgcagaacc ccaccagttg      1140
+     taacaccagc gccagcatta acagtttgcg ccgatcctga tggcgagcca tagcaggcat      1200
+     cagcaaagct cctgcggctt gcccaagcgt catcaatgcc agtaaggaac cgctgtactg      1260
+     cgcgctggca ccaatctcaa tatagaaagc gggtaaccag gcaatcaggc tggcgtaacc      1320
+     gccgttaatc agaccgaagt aaacacccag cgtccacgcg cggggagtga ataccacgcg      1380
+     aaccggagtg gttgttgtct tgtgggaaga ggcgacctcg cgggcgcttt gccaccacca      1440
+     ggcaaagagc gcaacaacgg caggcagcgc caccaggcga gtgtttgata ccaggtttcg      1500
+     ctatgttgaa ctaaccaggg cgttatggcg gcaccaagcc caccgccgcc catcagagcc      1560
+     gcggaccaca gccccatcac cagtggcgtg cgctgctgaa accgccgttt aatcaccgaa      1620
+     gcatcaccgc ctgaatgatg ccgatcccca ccccaccaag cagtgcgctg ctaagcagca      1680
+     gcgcactttg cgggtaaagc tcacgcatca atgcaccgac ggcaatcagc aacagactga      1740
+     tggcgacact gcgacgttcg ctgacatgct gatgaagcca gcttccggcc agcgccagcc      1800
+     cgcccatggt aaccaccggc agagcggtcg ac                                    1832
+//
+ID   V00294; SV 1; linear; genomic DNA; STD; PRO; 1113 BP.
+XX
+AC   V00294;
+XX
+DT   09-JUN-1982 (Rel. 01, Created)
+DT   10-FEB-1999 (Rel. 58, Last updated, Version 2)
+XX
+DE   E. coli laci gene (codes for the lac repressor).
+XX
+KW   DNA binding protein; repressor.
+XX
+OS   Escherichia coli
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Escherichia.
+XX
+RN   [1]
+RP   1-1113
+RX   DOI; 10.1038/274765a0.
+RX   PUBMED; 355891.
+RA   Farabaugh P.J.;
+RT   "Sequence of the lacI gene";
+RL   Nature 274(5673):765-769(1978).
+XX
+CC   KST ECO.LACI
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1113
+FT                   /organism="Escherichia coli"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:562"
+FT   CDS             31..1113
+FT                   /transl_table=11
+FT                   /note="reading frame"
+FT                   /db_xref="GOA:P03023"
+FT                   /db_xref="PDB:1CJG"
+FT                   /db_xref="PDB:1EFA"
+FT                   /db_xref="PDB:1JWL"
+FT                   /db_xref="PDB:1JYE"
+FT                   /db_xref="PDB:1JYF"
+FT                   /db_xref="PDB:1L1M"
+FT                   /db_xref="PDB:1LBG"
+FT                   /db_xref="PDB:1LBH"
+FT                   /db_xref="PDB:1LBI"
+FT                   /db_xref="PDB:1LCC"
+FT                   /db_xref="PDB:1LCD"
+FT                   /db_xref="PDB:1LQC"
+FT                   /db_xref="PDB:1LTP"
+FT                   /db_xref="PDB:1TLF"
+FT                   /db_xref="PDB:2BJC"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P03023"
+FT                   /protein_id="CAA23569.1"
+FT                   /translation="MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAEL
+FT                   NYIPNRVAQQLAGKQSLLIGVATSSLALHAPSQIVAAIKSRADQLGASVVVSMVERSGV
+FT                   EACKAAVHNLLAQRVSGLIINYPLDDQDAIAVEAACTNVPALFLDVSDQTPINSIIFSH
+FT                   EDGTRLGVEHLVALGHQQIALLAGPLSSVSARLRLAGWHKYLTRNQIQPIAEREGDWSA
+FT                   MSGFQQTMQMLNEGIVPTAMLVANDQMALGAMRAITESGLRVGADISVVGYDDTEDSSC
+FT                   YIPPSTTIKQDFRLLGQTSVDRLLQLSQGQAVKGNQLLPVSLVKRKTTLAPNTQTASPR
+FT                   ALADSLMQLARQVSRLESGQ"
+XX
+SQ   Sequence 1113 BP; 249 A; 304 C; 322 G; 238 T; 0 other;
+     ccggaagaga gtcaattcag ggtggtgaat gtgaaaccag taacgttata cgatgtcgca        60
+     gagtatgccg gtgtctctta tcagaccgtt tcccgcgtgg tgaaccaggc cagccacgtt       120
+     tctgcgaaaa cgcgggaaaa agtggaagcg gcgatggcgg agctgaatta cattcccaac       180
+     cgcgtggcac aacaactggc gggcaaacag tcgttgctga ttggcgttgc cacctccagt       240
+     ctggccctgc acgcgccgtc gcaaattgtc gcggcgatta aatctcgcgc cgatcaactg       300
+     ggtgccagcg tggtggtgtc gatggtagaa cgaagcggcg tcgaagcctg taaagcggcg       360
+     gtgcacaatc ttctcgcgca acgcgtcagt gggctgatca ttaactatcc gctggatgac       420
+     caggatgcca ttgctgtgga agctgcctgc actaatgttc cggcgttatt tcttgatgtc       480
+     tctgaccaga cacccatcaa cagtattatt ttctcccatg aagacggtac gcgactgggc       540
+     gtggagcatc tggtcgcatt gggtcaccag caaatcgcgc tgttagcggg cccattaagt       600
+     tctgtctcgg cgcgtctgcg tctggctggc tggcataaat atctcactcg caatcaaatt       660
+     cagccgatag cggaacggga aggcgactgg agtgccatgt ccggttttca acaaaccatg       720
+     caaatgctga atgagggcat cgttcccact gcgatgctgg ttgccaacga tcagatggcg       780
+     ctgggcgcaa tgcgcgccat taccgagtcc gggctgcgcg ttggtgcgga tatctcggta       840
+     gtgggatacg acgataccga agacagctca tgttatatcc cgccgtcaac caccatcaaa       900
+     caggattttc gcctgctggg gcaaaccagc gtggaccgct tgctgcaact ctctcagggc       960
+     caggcggtga agggcaatca gctgttgccc gtctcactgg tgaaaagaaa aaccaccctg      1020
+     gcgcccaata cgcaaaccgc ctctccccgc gcgttggccg attcattaat gcagctggca      1080
+     cgacaggttt cccgactgga aagcgggcag tga                                   1113
+//
+ID   V00295; SV 1; linear; genomic DNA; STD; PRO; 1500 BP.
+XX
+AC   V00295;
+XX
+DT   09-JUN-1982 (Rel. 01, Created)
+DT   07-JUL-1995 (Rel. 44, Last updated, Version 4)
+XX
+DE   E. coli lacY gene (codes for lactose permease).
+XX
+KW   membrane protein.
+XX
+OS   Escherichia coli
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Escherichia.
+XX
+RN   [1]
+RP   1-1500
+RX   DOI; 10.1038/283541a0.
+RX   PUBMED; 6444453.
+RA   Buechel D.E., Gronenborn B., Mueller-Hill B.;
+RT   "Sequence of the lactose permease gene";
+RL   Nature 283(5747):541-545(1980).
+XX
+CC   lacZ is a beta-galactosidase and lacA is transacetylase.
+CC   KST ECO.LACY
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1500
+FT                   /organism="Escherichia coli"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:562"
+FT   CDS             <1..54
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /note="reading frame (lacZ)"
+FT                   /db_xref="GOA:P00722"
+FT                   /db_xref="PDB:1BGL"
+FT                   /db_xref="PDB:1BGM"
+FT                   /db_xref="PDB:1DP0"
+FT                   /db_xref="PDB:1F49"
+FT                   /db_xref="PDB:1F4A"
+FT                   /db_xref="PDB:1F4H"
+FT                   /db_xref="PDB:1GHO"
+FT                   /db_xref="PDB:1HN1"
+FT                   /db_xref="PDB:1JYN"
+FT                   /db_xref="PDB:1JYV"
+FT                   /db_xref="PDB:1JYW"
+FT                   /db_xref="PDB:1JYX"
+FT                   /db_xref="PDB:1JYY"
+FT                   /db_xref="PDB:1JYZ"
+FT                   /db_xref="PDB:1JZ0"
+FT                   /db_xref="PDB:1JZ1"
+FT                   /db_xref="PDB:1JZ2"
+FT                   /db_xref="PDB:1JZ3"
+FT                   /db_xref="PDB:1JZ4"
+FT                   /db_xref="PDB:1JZ5"
+FT                   /db_xref="PDB:1JZ6"
+FT                   /db_xref="PDB:1JZ7"
+FT                   /db_xref="PDB:1JZ8"
+FT                   /db_xref="PDB:1PX3"
+FT                   /db_xref="PDB:1PX4"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P00722"
+FT                   /protein_id="CAA23570.1"
+FT                   /translation="FQLSAGRYHYQLVWCQK"
+FT   CDS             106..1359
+FT                   /transl_table=11
+FT                   /note="reading frame (lacY)"
+FT                   /db_xref="GOA:P02920"
+FT                   /db_xref="InterPro:IPR000576"
+FT                   /db_xref="InterPro:IPR007114"
+FT                   /db_xref="PDB:1M2U"
+FT                   /db_xref="PDB:1PV6"
+FT                   /db_xref="PDB:1PV7"
+FT                   /db_xref="PDB:2CFP"
+FT                   /db_xref="PDB:2CFQ"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P02920"
+FT                   /protein_id="CAA23571.1"
+FT                   /translation="MYYLKNTNFWMFGLFFFFYFFIMGAYFPFFPIWLHDINHISKSDT
+FT                   GIIFAAISLFSLLFQPLFGLLSDKLGLRKYLLWIITGMLVMFAPFFIFIFGPLLQYNIL
+FT                   VGSIVGGIYLGFCFNAGAPAVEAFIEKVSRRSNFEFGRARMFGCVGWALCASIVGIMFT
+FT                   INNQFVFWLGSGCALILAVLLFFAKTDAPSSATVANAVGANHSAFSLKLALELFRQPKL
+FT                   WFLSLYVIGVSCTYDVFDQQFANFFTSFFATGEQGTRVFGYVTTMGELLNASIMFFAPL
+FT                   IINRIGGKNALLLAGTIMSVRIIGSSFATSALEVVILKTLHMFEVPFLLVGCFKYITSQ
+FT                   FEVRFSATIYLVCFCFFKQLAMIFMSVLAGNMYESIGFQGAYLVLGLVALGFTLISVFT
+FT                   LSGPGPLSLLRRQVNEVA"
+FT   CDS             1423..>1500
+FT                   /transl_table=11
+FT                   /note="reading frame (lacA)"
+FT                   /db_xref="GOA:P07464"
+FT                   /db_xref="PDB:1KQA"
+FT                   /db_xref="PDB:1KRR"
+FT                   /db_xref="PDB:1KRU"
+FT                   /db_xref="PDB:1KRV"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P07464"
+FT                   /protein_id="CAA23572.1"
+FT                   /translation="MNMPMTERIRAGKLFTDMCEGLPEKR"
+XX
+SQ   Sequence 1500 BP; 315 A; 342 C; 357 G; 486 T; 0 other;
+     ttccagctga gcgccggtcg ctaccattac cagttggtct ggtgtcaaaa ataataataa        60
+     ccgggcaggc catgtctgcc cgtatttcgc gtaaggaaat ccattatgta ctatttaaaa       120
+     aacacaaact tttggatgtt cggtttattc tttttctttt acttttttat catgggagcc       180
+     tacttcccgt ttttcccgat ttggctacat gacatcaacc atatcagcaa aagtgatacg       240
+     ggtattattt ttgccgctat ttctctgttc tcgctattat tccaaccgct gtttggtctg       300
+     ctttctgaca aactcgggct gcgcaaatac ctgctgtgga ttattaccgg catgttagtg       360
+     atgtttgcgc cgttctttat ttttatcttc gggccactgt tacaatacaa cattttagta       420
+     ggatcgattg ttggtggtat ttatctaggc ttttgtttta acgccggtgc gccagcagta       480
+     gaggcattta ttgagaaagt cagccgtcgc agtaatttcg aatttggtcg cgcgcggatg       540
+     tttggctgtg ttggctgggc gctgtgtgcc tcgattgtcg gcatcatgtt caccatcaat       600
+     aatcagtttg ttttctggct gggctctggc tgtgcactca tcctcgccgt tttactcttt       660
+     ttcgccaaaa cggatgcgcc ctcttctgcc acggttgcca atgcggtagg tgccaaccat       720
+     tcggcattta gccttaagct ggcactggaa ctgttcagac agccaaaact gtggtttttg       780
+     tcactgtatg ttattggcgt ttcctgcacc tacgatgttt ttgaccaaca gtttgctaat       840
+     ttctttactt cgttctttgc taccggtgaa cagggtacgc gggtatttgg ctacgtaacg       900
+     acaatgggcg aattacttaa cgcctcgatt atgttctttg cgccactgat cattaatcgc       960
+     atcggtggga aaaacgccct gctgctggct ggcactatta tgtctgtacg tattattggc      1020
+     tcatcgttcg ccacctcagc gctggaagtg gttattctga aaacgctgca tatgtttgaa      1080
+     gtaccgttcc tgctggtggg ctgctttaaa tatattacca gccagtttga agtgcgtttt      1140
+     tcagcgacga tttatctggt ctgtttctgc ttctttaagc aactggcgat gatttttatg      1200
+     tctgtactgg cgggcaatat gtatgaaagc atcggtttcc agggcgctta tctggtgctg      1260
+     ggtctggtgg cgctgggctt caccttaatt tccgtgttca cgcttagcgg ccccggcccg      1320
+     ctttccctgc tgcgtcgtca ggtgaatgaa gtcgcttaag caatcaatgt cggatgcggc      1380
+     gcgacgctta tccgaccaac atatcataac ggagtgatcg cattgaacat gccaatgacc      1440
+     gaaagaataa gagcaggcaa gctatttacc gatatgtgcg aaggcttacc ggaaaaaaga      1500
+//
+ID   V00296; SV 1; linear; genomic DNA; STD; PRO; 3078 BP.
+XX
+AC   V00296;
+XX
+DT   13-JUL-1983 (Rel. 03, Created)
+DT   18-APR-2005 (Rel. 83, Last updated, Version 5)
+XX
+DE   E. coli gene lacZ coding for beta-galactosidase (EC 3.2.1.23).
+XX
+KW   galactosidase.
+XX
+OS   Escherichia coli
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Escherichia.
+XX
+RN   [1]
+RP   1-3078
+RX   PUBMED; 6313347.
+RA   Kalnins A., Otto K., Ruether U., Mueller-Hill B.;
+RT   "Sequence of the lacZ gene of Escherichia coli";
+RL   EMBO J. 2(4):593-597(1983).
+XX
+RN   [2]
+RX   PUBMED; 3038536.
+RA   Zell R., Fritz H.J.;
+RT   "DNA mismatch-repair in Escherichia coli counteracting the hydrolytic
+RT   deamination of 5-methyl-cytosine residues";
+RL   EMBO J. 6(6):1809-1815(1987).
+XX
+CC   Data kindly reviewed (18-MAY-1983) by U. Ruether
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..3078
+FT                   /organism="Escherichia coli"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:562"
+FT   CDS             <1..3072
+FT                   /transl_table=11
+FT                   /note="galactosidase"
+FT                   /db_xref="GOA:P00722"
+FT                   /db_xref="PDB:1BGL"
+FT                   /db_xref="PDB:1BGM"
+FT                   /db_xref="PDB:1DP0"
+FT                   /db_xref="PDB:1F49"
+FT                   /db_xref="PDB:1F4A"
+FT                   /db_xref="PDB:1F4H"
+FT                   /db_xref="PDB:1GHO"
+FT                   /db_xref="PDB:1HN1"
+FT                   /db_xref="PDB:1JYN"
+FT                   /db_xref="PDB:1JYV"
+FT                   /db_xref="PDB:1JYW"
+FT                   /db_xref="PDB:1JYX"
+FT                   /db_xref="PDB:1JYY"
+FT                   /db_xref="PDB:1JYZ"
+FT                   /db_xref="PDB:1JZ0"
+FT                   /db_xref="PDB:1JZ1"
+FT                   /db_xref="PDB:1JZ2"
+FT                   /db_xref="PDB:1JZ3"
+FT                   /db_xref="PDB:1JZ4"
+FT                   /db_xref="PDB:1JZ5"
+FT                   /db_xref="PDB:1JZ6"
+FT                   /db_xref="PDB:1JZ7"
+FT                   /db_xref="PDB:1JZ8"
+FT                   /db_xref="PDB:1PX3"
+FT                   /db_xref="PDB:1PX4"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P00722"
+FT                   /protein_id="CAA23573.1"
+FT                   /translation="TMITDSLAVVLQRRDWENPGVTQLNRLAAHPPFASWRNSEEARTD
+FT                   RPSQQLRSLNGEWRFAWFPAPEAVPESWLECDLPEADTVVVPSNWQMHGYDAPIYTNVT
+FT                   YPITVNPPFVPTENPTGCYSLTFNVDESWLQEGQTRIIFDGVNSAFHLWCNGRWVGYGQ
+FT                   DSRLPSEFDLSAFLRAGENRLAVMVLRWSDGSYLEDQDMWRMSGIFRDVSLLHKPTTQI
+FT                   SDFHVATRFNDDFSRAVLEAEVQMCGELRDYLRVTVSLWQGETQVASGTAPFGGEIIDE
+FT                   RGGYADRVTLRLNVENPKLWSAEIPNLYRAVVELHTADGTLIEAEACDVGFREVRIENG
+FT                   LLLLNGKPLLIRGVNRHEHHPLHGQVMDEQTMVQDILLMKQNNFNAVRCSHYPNHPLWY
+FT                   TLCDRYGLYVVDEANIETHGMVPMNRLTDDPRWLPAMSERVTRMVQRDRNHPSVIIWSL
+FT                   GNESGHGANHDALYRWIKSVDPSRPVQYEGGGADTTATDIICPMYARVDEDQPFPAVPK
+FT                   WSIKKWLSLPGETRPLILCEYAHAMGNSLGGFAKYWQAFRQYPRLQGGFVWDWVDQSLI
+FT                   KYDENGNPWSAYGGDFGDTPNDRQFCMNGLVFADRTPHPALTEAKHQQQFFQFRLSGQT
+FT                   IEVTSEYLFRHSDNELLHWMVALDGKPLASGEVPLDVAPQGKQLIELPELPQPESAGQL
+FT                   WLTVRVVQPNATAWSEAGHISAWQQWRLAENLSVTLPAASHAIPHLTTSEMDFCIELGN
+FT                   KRWQFNRQSGFLSQMWIGDKKQLLTPLRDQFTRAPLDNDIGVSEATRIDPNAWVERWKA
+FT                   AGHYQAEAALLQCTADTLADAVLITTAHAWQHQGKTLFISRKTYRIDGSGQMAITVDVE
+FT                   VASDTPHPARIGLNCQLAQVAERVNWLGLGPQENYPDRLTAACFDRWDLPLSDMYTPYV
+FT                   FPSENGLRCGTRELNYGPHQWRGDFQFNISRYSQQQLMETSHRHLLHAEEGTWLNIDGF
+FT                   HMGIGGDDSWSPSVSAEFQLSAGRYHYQLVWCQK"
+FT   mat_peptide     1..3069
+XX
+SQ   Sequence 3078 BP; 682 A; 841 C; 886 G; 669 T; 0 other;
+     accatgatta cggattcact ggccgtcgtt ttacaacgtc gtgactggga aaaccctggc        60
+     gttacccaac ttaatcgcct tgcagcacat ccccctttcg ccagctggcg taatagcgaa       120
+     gaggcccgca ccgatcgccc ttcccaacag ttgcgcagcc tgaatggcga atggcgcttt       180
+     gcctggtttc cggcaccaga agcggtgccg gaaagctggc tggagtgcga tcttcctgag       240
+     gccgatactg tcgtcgtccc ctcaaactgg cagatgcacg gttacgatgc gcccatctac       300
+     accaacgtaa cctatcccat tacggtcaat ccgccgtttg ttcccacgga gaatccgacg       360
+     ggttgttact cgctcacatt taatgttgat gaaagctggc tacaggaagg ccagacgcga       420
+     attatttttg atggcgttaa ctcggcgttt catctgtggt gcaacgggcg ctgggtcggt       480
+     tacggccagg acagtcgttt gccgtctgaa tttgacctga gcgcattttt acgcgccgga       540
+     gaaaaccgcc tcgcggtgat ggtgctgcgt tggagtgacg gcagttatct ggaagatcag       600
+     gatatgtggc ggatgagcgg cattttccgt gacgtctcgt tgctgcataa accgactaca       660
+     caaatcagcg atttccatgt tgccactcgc tttaatgatg atttcagccg cgctgtactg       720
+     gaggctgaag ttcagatgtg cggcgagttg cgtgactacc tacgggtaac agtttcttta       780
+     tggcagggtg aaacgcaggt cgccagcggc accgcgcctt tcggcggtga aattatcgat       840
+     gagcgtggtg gttatgccga tcgcgtcaca ctacgtctga acgtcgaaaa cccgaaactg       900
+     tggagcgccg aaatcccgaa tctctatcgt gcggtggttg aactgcacac cgccgacggc       960
+     acgctgattg aagcagaagc ctgcgatgtc ggtttccgcg aggtgcggat tgaaaatggt      1020
+     ctgctgctgc tgaacggcaa gccgttgctg attcgaggcg ttaaccgtca cgagcatcat      1080
+     cctctgcatg gtcaggtcat ggatgagcag acgatggtgc aggatatcct gctgatgaag      1140
+     cagaacaact ttaacgccgt gcgctgttcg cattatccga accatccgct gtggtacacg      1200
+     ctgtgcgacc gctacggcct gtatgtggtg gatgaagcca atattgaaac ccacggcatg      1260
+     gtgccaatga atcgtctgac cgatgatccg cgctggctac cggcgatgag cgaacgcgta      1320
+     acgcgaatgg tgcagcgcga tcgtaatcac ccgagtgtga tcatctggtc gctggggaat      1380
+     gaatcaggcc acggcgctaa tcacgacgcg ctgtatcgct ggatcaaatc tgtcgatcct      1440
+     tcccgcccgg tgcagtatga aggcggcgga gccgacacca cggccaccga tattatttgc      1500
+     ccgatgtacg cgcgcgtgga tgaagaccag cccttcccgg ctgtgccgaa atggtccatc      1560
+     aaaaaatggc tttcgctacc tggagagacg cgcccgctga tcctttgcga atacgcccac      1620
+     gcgatgggta acagtcttgg cggtttcgct aaatactggc aggcgtttcg tcagtatccc      1680
+     cgtttacagg gcggcttcgt ctgggactgg gtggatcagt cgctgattaa atatgatgaa      1740
+     aacggcaacc cgtggtcggc ttacggcggt gattttggcg atacgccgaa cgatcgccag      1800
+     ttctgtatga acggtctggt ctttgccgac cgcacgccgc atccagcgct gacggaagca      1860
+     aaacaccagc agcagttttt ccagttccgt ttatccgggc aaaccatcga agtgaccagc      1920
+     gaatacctgt tccgtcatag cgataacgag ctcctgcact ggatggtggc gctggatggt      1980
+     aagccgctgg caagcggtga agtgcctctg gatgtcgctc cacaaggtaa acagttgatt      2040
+     gaactgcctg aactaccgca gccggagagc gccgggcaac tctggctcac agtacgcgta      2100
+     gtgcaaccga acgcgaccgc atggtcagaa gccgggcaca tcagcgcctg gcagcagtgg      2160
+     cgtctggcgg aaaacctcag tgtgacgctc cccgccgcgt cccacgccat cccgcatctg      2220
+     accaccagcg aaatggattt ttgcatcgag ctgggtaata agcgttggca atttaaccgc      2280
+     cagtcaggct ttctttcaca gatgtggatt ggcgataaaa aacaactgct gacgccgctg      2340
+     cgcgatcagt tcacccgtgc accgctggat aacgacattg gcgtaagtga agcgacccgc      2400
+     attgacccta acgcctgggt cgaacgctgg aaggcggcgg gccattacca ggccgaagca      2460
+     gcgttgttgc agtgcacggc agatacactt gctgatgcgg tgctgattac gaccgctcac      2520
+     gcgtggcagc atcaggggaa aaccttattt atcagccgga aaacctaccg gattgatggt      2580
+     agtggtcaaa tggcgattac cgttgatgtt gaagtggcga gcgatacacc gcatccggcg      2640
+     cggattggcc tgaactgcca gctggcgcag gtagcagagc gggtaaactg gctcggatta      2700
+     gggccgcaag aaaactatcc cgaccgcctt actgccgcct gttttgaccg ctgggatctg      2760
+     ccattgtcag acatgtatac cccgtacgtc ttcccgagcg aaaacggtct gcgctgcggg      2820
+     acgcgcgaat tgaattatgg cccacaccag tggcgcggcg acttccagtt caacatcagc      2880
+     cgctacagtc aacagcaact gatggaaacc agccatcgcc atctgctgca cgcggaagaa      2940
+     ggcacatggc tgaatatcga cggtttccat atggggattg gtggcgacga ctcctggagc      3000
+     ccgtcagtat cggcggaatt ccagctgagc gccggtcgct accattacca gttggtctgg      3060
+     tgtcaaaaat aataataa                                                    3078
+//
+ID   X77160; SV 1; linear; genomic DNA; STD; PRO; 1212 BP.
+XX
+AC   X77160;
+XX
+DT   13-APR-1994 (Rel. 39, Created)
+DT   18-APR-2005 (Rel. 83, Last updated, Version 8)
+XX
+DE   Pseudomonas aeruginosa (PAC1) amiB gene.
+XX
+KW   amiB gene.
+XX
+OS   Pseudomonas aeruginosa
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
+OC   Pseudomonadaceae; Pseudomonas.
+XX
+RN   [1]
+RA   Wilson S.A., Wachira S.M., Drew R.E., Jones D., Pearl L.H.;
+RT   "Identification of a putative ABC transporter in the Pseudomonas aeruginosa
+RT   amidase operon";
+RL   Unpublished.
+XX
+RN   [2]
+RP   1-1212
+RA   Wilson S.A.;
+RT   ;
+RL   Submitted (17-JAN-1994) to the EMBL/GenBank/DDBJ databases.
+RL   S.A. Wilson, University College London, Dept of Biochemistry, Gower Street,
+RL   London WC1E 6BT, UK
+XX
+RN   [3]
+RP   1-1212
+RX   DOI; 10.1074/jbc.270.32.18818.
+RX   PUBMED; 7642533.
+RA   Wilson S.A., Williams R.J., Pearl L.H., Drew R.E.;
+RT   "Identification of two new genes in the Pseudomonas aeruginosa amidase
+RT   operon, encoding an ATPase (AmiB) and a putative integral membrane protein
+RT   (AmiS).";
+RL   J. Biol. Chem. 270(32):18818-18824(1995).
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1212
+FT                   /organism="Pseudomonas aeruginosa"
+FT                   /strain="PAC1"
+FT                   /mol_type="genomic DNA"
+FT                   /clone="plasmid pAS20"
+FT                   /db_xref="taxon:287"
+FT   CDS             97..1212
+FT                   /transl_table=11
+FT                   /gene="amiB"
+FT                   /db_xref="GOA:Q51416"
+FT                   /db_xref="UniProtKB/Swiss-Prot:Q51416"
+FT                   /protein_id="CAA54405.1"
+FT                   /translation="MPFLSDMLDQSRRQQDEEQALARENLAEASLLQAHLSHRSALHSR
+FT                   FRFDPAAVMDCLRAEVLGQEPALQAVEDMLKVVRADIADPRRPLFSALFLGPTGVGKTE
+FT                   IVRALARALHGDAEGFCRVDMNTLSQEHYAAALTGAPPGYVGAKEGTTLLEQDKLDGSP
+FT                   GRPGIVLFDELEKASPEVVHALLNVLDNGLLRVASGERTYHFRNTLVFMTSNLCAHEIQ
+FT                   RYDERRQRLPWRLLPVGGERRRRDIDGMVRARLLKTFSPEFVNRLDSVVTFNWIERDVV
+FT                   ARLVELEVQRLNRRLEKHRCRLEATPEVLAKIARAGFDRQFGARALRRSVRHHLEVPLA
+FT                   EHLLDHHQPGDGNCTIYLASLEHERVRFVRR"
+XX
+SQ   Sequence 1212 BP; 193 A; 426 C; 403 G; 190 T; 0 other;
+     gaaggaagcc tgacggcaga cgccgccagc ccggcgtgcc gtcgtgcggc acgccgtctc        60
+     cgccatttcc cccctgtggc agaaggagtt tcatccatgc cttttctgag cgacatgctc       120
+     gaccagtccc gccggcagca ggacgaggaa caggccctgg cgcgggagaa tcttgccgag       180
+     gcaagtctgc tccaggccca cctgagtcac cgcagcgccc tgcacagccg tttccgtttc       240
+     gacccggcgg cggtgatgga ctgcctgcgc gccgaggtgc tcggccagga accggcgcta       300
+     caggccgtcg aggacatgct caaggtggtt cgcgcggaca tcgccgaccc gcgccgtccg       360
+     ctgttcagcg cgctgttcct cggccccacc ggagtcggca agaccgagat cgtgcgcgcc       420
+     ctggccaggg ccctgcacgg cgacgccgag gggttctgcc gggtggacat gaacaccctg       480
+     tcccaggagc actatgccgc cgccctcacc ggtgcgccgc cgggctacgt cggggcgaag       540
+     gagggcacca ccctgttgga gcaggacaag ctggacggca gtcccgggcg ccccggcatc       600
+     gttctcttcg acgaactgga aaaggccagc ccggaagtgg tccatgcgtt gctcaacgta       660
+     ctcgacaacg gcctgctacg ggtcgcttcc ggcgaacgca cctaccattt ccgcaacacc       720
+     ctggtgttca tgaccagcaa tctctgcgcc catgagatcc agcgctacga cgagcgtcgc       780
+     cagcgcctgc cctggcgcct gctgccggtc ggcggcgagc gccggcggcg ggacatcgac       840
+     gggatggtcc gggcccggct gctgaagacc ttctcgccgg agttcgtcaa tcgtctcgat       900
+     agcgtggtca ccttcaactg gatcgaacgc gacgtcgtcg cgcgcctggt cgagctggag       960
+     gtgcagcggc tcaaccggcg cctggagaag catcgctgcc gcctggaggc gaccccggag      1020
+     gtgctggcga agatcgcccg cgccggcttc gaccggcagt tcggcgcccg tgcgttgcgc      1080
+     cgcagcgtcc gtcatcatct cgaggtaccg ctggccgagc atctgctcga tcaccaccag      1140
+     ccgggcgacg ggaactgcac gatctacctg gcgagcctgg agcacgagcg ggttcgcttc      1200
+     gtacggcgct ga                                                          1212
+//
+ID   M27612; SV 1; linear; genomic DNA; STD; PRO; 1065 BP.
+XX
+AC   M27612;
+XX
+DT   02-FEB-1990 (Rel. 22, Created)
+DT   22-APR-2002 (Rel. 71, Last updated, Version 4)
+XX
+DE   Pseudomonas aeruginosa aliphatic amidase (amiE) gene, complete cds.
+XX
+KW   .
+XX
+OS   Pseudomonas aeruginosa
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
+OC   Pseudomonadaceae; Pseudomonas.
+XX
+RN   [1]
+RP   1-1065
+RX   DOI; 10.1016/0014-5793(87)80164-3.
+RX   PUBMED; 3108030.
+RA   Brammar W.J., Charles I.G., Matfield M., Liu C.P., Drew R.E., Clarke P.H.;
+RT   "The nucleotide sequence of the amiE gene of Pseudomonas aeruginosa";
+RL   FEBS Lett. 215(2):291-294(1987).
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1065
+FT                   /organism="Pseudomonas aeruginosa"
+FT                   /strain="PAC433"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:287"
+FT   CDS             25..1065
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /gene="amiE"
+FT                   /product="aliphatic amidase"
+FT                   /EC_number="3.5.1.4"
+FT                   /db_xref="GOA:P11436"
+FT                   /db_xref="PDB:1K17"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P11436"
+FT                   /protein_id="AAA25697.1"
+FT                   /translation="MRHGDISSSNDTVGVAVVNYKMPRLHTAAEVLDNARKIADMIVGM
+FT                   KQGLPGMDLVVFPEYSLQGIMYDPAEMMETAVAIPGEETEIFSRACRKANVWGVFSLTG
+FT                   ERHEEHPRKAPYNTLVLIDNNGEIVQKYRKIIPWCPIEGWYPGGQTYVSEGPKGMKISL
+FT                   IICDDPNYPEIWRDCAMKGAELIVRCQGYMYPAKDQQVMMAKAMAWANNCYVAVANAAG
+FT                   FDGVYSYFGHSAIIGFDGRTLGECGEEEMGIQYAQLSLSQIRDARANDQSQNHLFKILH
+FT                   RGYSGLQASGDGDRGLAECPFEFYRTWVTDAEKARDNVERLTRSTTGVAQCPVGRLPYE
+FT                   GLEKEA"
+XX
+SQ   Sequence 1065 BP; 220 A; 337 C; 343 G; 165 T; 0 other;
+     aaataacaac aggaggtgat acccatgcgt cacggcgata tttccagcag caacgacacc        60
+     gtcggagtgg ccgtggtcaa ctacaagatg ccgcgcctgc acaccgcggc ggaggtcctg       120
+     gacaacgccc ggaagatcgc cgacatgatc gtcggcatga agcagggcct gcccggcatg       180
+     gacctggtgg tgttcccgga gtacagcctg cagggcatca tgtacgatcc ggcggagatg       240
+     atggaaaccg cggtggcgat ccccggcgag gaaaccgaga tattctcccg cgcctgccgc       300
+     aaggccaacg tctggggcgt attctccctc accggcgaac ggcacgagga gcatccgcgc       360
+     aaggcgccgt acaacaccct ggtgctgatc gacaacaacg gcgagatcgt ccagaagtac       420
+     cgcaagatca ttccctggtg ccccatcgag ggctggtatc ccggtggcca gacctacgtc       480
+     agcgaagggc cgaagggcat gaagatcagc ctgatcatct gcgacgaccc caattacccg       540
+     gagatctggc gcgactgcgc gatgaagggc gccgagctga tcgtgcgctg ccagggctac       600
+     atgtacccgg ccaaggacca gcaggtgatg atggccaagg ccatggcctg ggccaacaac       660
+     tgctatgtgg cggtggccaa cgcggccggc ttcgacggtg tctattccta cttcggccac       720
+     tcggcgatca tcggcttcga cggccgtacc ctcggtgagt gcggcgagga ggaaatgggt       780
+     atccagtacg cccagctgtc cctttcgcag atccgcgatg cgcgcgccaa cgatcagtcg       840
+     cagaaccacc tgttcaagat cctccaccgc ggctacagcg gcttgcaggc gtccggcgac       900
+     ggcgaccggg gcctggcgga gtgtccgttc gagttctacc gcacctgggt caccgacgcc       960
+     gagaaggcgc gcgacaatgt cgagcgactg acccgctcga ccaccggcgt ggcgcaatgc      1020
+     ccggtcggcc ggctgcccta tgagggactg gagaaggaag cctga                      1065
+//
+ID   X13776; SV 1; linear; genomic DNA; STD; PRO; 2167 BP.
+XX
+AC   X13776; M43175;
+XX
+DT   19-APR-1989 (Rel. 19, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 24)
+XX
+DE   Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+XX
+KW   aliphatic amidase regulator; amiC gene; amiR gene.
+XX
+OS   Pseudomonas aeruginosa
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
+OC   Pseudomonadaceae; Pseudomonas.
+XX
+RN   [1]
+RP   1167-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (16-DEC-1988) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
+XX
+RN   [2]
+RP   1167-2167
+RX   DOI; 10.1016/0014-5793(89)80249-2.
+RX   PUBMED; 2495988.
+RA   Lowe N., Rice P.M., Drew R.E.;
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene of Pseudomonas
+RT   aeruginosa";
+RL   FEBS Lett. 246(1-2):39-43(1989).
+XX
+RN   [3]
+RP   1-1292
+RX   PUBMED; 1907262.
+RA   Wilson S., Drew R.;
+RT   "Cloning and DNA seqence of amiC, a new gene regulating expression of the
+RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
+RT   product.";
+RL   J. Bacteriol. 173(16):4914-4921(1991).
+XX
+RN   [4]
+RP   1-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
+XX
+DR   GOA; Q51417.
+DR   UniProtKB/Swiss-Prot; Q51417; AMIS_PSEAE.
+XX
+CC   Data kindly reviewed (04-SEP-1991) by Rice P. M.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..2167
+FT                   /organism="Pseudomonas aeruginosa"
+FT                   /map="38 min"
+FT                   /strain="PAC"
+FT                   /isolate="PAC 1"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:287"
+FT   CDS             1289..1879
+FT                   /transl_table=11
+FT                   /gene="amiR"
+FT                   /note="aliphatic amidase regulator, positive  regulator of
+FT                   amiE"
+FT                   /db_xref="GOA:P10932"
+FT                   /db_xref="PDB:1QO0"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P10932"
+FT                   /protein_id="CAA32023.1"
+FT                   /translation="MSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWPP
+FT                   PEAFDVPVDVVFTSIFQNGHHDEIAALLAAGTPRTTLVALVEYESPAVLSQIIELECHG
+FT                   VITQPLDAHRVLPVLVSARRISEEMAKLKQKTEQLQDRIAGQARINQAKVLLMQRHGWD
+FT                   EREAHQHLSREAMKRREPILKIAQELLGNEPSA"
+FT   CDS             135..1292
+FT                   /transl_table=11
+FT                   /gene="amiC"
+FT                   /note="negative regulator of amiR"
+FT                   /db_xref="GOA:P27017"
+FT                   /db_xref="PDB:1PEA"
+FT                   /db_xref="PDB:1QNL"
+FT                   /db_xref="PDB:1QO0"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P27017"
+FT                   /protein_id="CAA32024.1"
+FT                   /translation="MGSHQERPLIGLLFSETGVTADIERSHAYGALLAVEQLNREGGVG
+FT                   GRPIETLSQDPGGDPDRYRLCAEDFIRNRGVRFLVGCYMSHTRKAVMPVVERADALLCY
+FT                   PTPYEGFEYSPNIVYGGPAPNQNSAPLAAYLIRHYGERVVFIGSDYIYPRESNHVMRHL
+FT                   YRQHGGTVLEEIYIPLYPSDDDLQRAVERIYQARADVVFSTVVGTGTAELYRAIARRYG
+FT                   DGRRPPIASLTTSEAEVAKMESDVAEGQVVVAPYFSSIDTPASRAFVQACHGFFPENAT
+FT                   ITAWAEAAYWQTLLLGRAAQAAGNWRVEDVQRHLYDIDIDAPQGPVRVERQNNHSRLSS
+FT                   RIAEIDARGVFQVRWQSPEPIRPDPYVVVHNLDDWSASMGGGPLP"
+FT   promoter        8..24
+FT                   /note="proposed rpoN-dependent promoter"
+FT   promoter        65..81
+FT                   /note="proposed rpoN-dependent promoter"
+FT   RBS             121..126
+FT                   /note="proposed Shine-Dalgarno sequence"
+FT   variation       912..1167
+FT                   /gene="amiC"
+FT                   /replace=""
+FT                   /note="ClaI fragment deleted in pSW36,  constitutive
+FT                   phenotype"
+FT   misc_feature    1
+FT                   /note="last base of an XhoI site"
+FT   misc_feature    648..653
+FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 causes
+FT                   constitutive expression of amiE"
+FT   conflict        1281
+FT                   /replace="g"
+FT                   /citation=[3]
+XX
+SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
+     ggtaccgctg gccgagcatc tgctcgatca ccaccagccg ggcgacggga actgcacgat        60
+     ctacctggcg agcctggagc acgagcgggt tcgcttcgta cggcgctgag cgacagtcac       120
+     aggagaggaa acggatggga tcgcaccagg agcggccgct gatcggcctg ctgttctccg       180
+     aaaccggcgt caccgccgat atcgagcgct cgcacgcgta tggcgcattg ctcgcggtcg       240
+     agcaactgaa ccgcgagggc ggcgtcggcg gtcgcccgat cgaaacgctg tcccaggacc       300
+     ccggcggcga cccggaccgc tatcggctgt gcgccgagga cttcattcgc aaccgggggg       360
+     tacggttcct cgtgggctgc tacatgtcgc acacgcgcaa ggcggtgatg ccggtggtcg       420
+     agcgcgccga cgcgctgctc tgctacccga ccccctacga gggcttcgag tattcgccga       480
+     acatcgtcta cggcggtccg gcgccgaacc agaacagtgc gccgctggcg gcgtacctga       540
+     ttcgccacta cggcgagcgg gtggtgttca tcggctcgga ctacatctat ccgcgggaaa       600
+     gcaaccatgt gatgcgccac ctgtatcgcc agcacggcgg cacggtgctc gaggaaatct       660
+     acattccgct gtatccctcc gacgacgact tgcagcgcgc cgtcgagcgc atctaccagg       720
+     cgcgcgccga cgtggtcttc tccaccgtgg tgggcaccgg caccgccgag ctgtatcgcg       780
+     ccatcgcccg tcgctacggc gacggcaggc ggccgccgat cgccagcctg accaccagcg       840
+     aggcggaggt ggcgaagatg gagagtgacg tggcagaggg gcaggtggtg gtcgcgcctt       900
+     acttctccag catcgatacg cccgccagcc gggccttcgt ccaggcctgc catggtttct       960
+     tcccggagaa cgcgaccatc accgcctggg ccgaggcggc ctactggcag accttgttgc      1020
+     tcggccgcgc cgcgcaggcc gcaggcaact ggcgggtgga agacgtgcag cggcacctgt      1080
+     acgacatcga catcgacgcg ccacaggggc cggtccgggt ggagcgccag aacaaccaca      1140
+     gccgcctgtc ttcgcgcatc gcggaaatcg atgcgcgcgg cgtgttccag gtccgctggc      1200
+     agtcgcccga accgattcgc cccgaccctt atgtcgtcgt gcataacctc gacgactggt      1260
+     ccgccagcat gggcggggga ccgctcccat gagcgccaac tcgctgctcg gcagcctgcg      1320
+     cgagttgcag gtgctggtcc tcaacccgcc gggggaggtc agcgacgccc tggtcttgca      1380
+     gctgatccgc atcggttgtt cggtgcgcca gtgctggccg ccgccggaag ccttcgacgt      1440
+     gccggtggac gtggtcttca ccagcatttt ccagaatggc caccacgacg agatcgctgc      1500
+     gctgctcgcc gccgggactc cgcgcactac cctggtggcg ctggtggagt acgaaagccc      1560
+     cgcggtgctc tcgcagatca tcgagctgga gtgccacggc gtgatcaccc agccgctcga      1620
+     tgcccaccgg gtgctgcctg tgctggtatc ggcgcggcgc atcagcgagg aaatggcgaa      1680
+     gctgaagcag aagaccgagc agctccagga ccgcatcgcc ggccaggccc ggatcaacca      1740
+     ggccaaggtg ttgctgatgc agcgccatgg ctgggacgag cgcgaggcgc accagcacct      1800
+     gtcgcgggaa gcgatgaagc ggcgcgagcc gatcctgaag atcgctcagg agttgctggg      1860
+     aaacgagccg tccgcctgag cgatccgggc cgaccagaac aataacaaga ggggtatcgt      1920
+     catcatgctg ggactggttc tgctgtacgt tggcgcggtg ctgtttctca atgccgtctg      1980
+     gttgctgggc aagatcagcg gtcgggaggt ggcggtgatc aacttcctgg tcggcgtgct      2040
+     gagcgcctgc gtcgcgttct acctgatctt ttccgcagca gccgggcagg gctcgctgaa      2100
+     ggccggagcg ctgaccctgc tattcgcttt tacctatctg tgggtggccg ccaaccagtt      2160
+     cctcgag                                                                2167
+//
+ID   X77161; SV 1; linear; genomic DNA; STD; PRO; 1130 BP.
+XX
+AC   X77161;
+XX
+DT   13-APR-1994 (Rel. 39, Created)
+DT   31-JUL-2003 (Rel. 76, Last updated, Version 7)
+XX
+DE   Pseudomonas aeruginosa (PAC1) amiS gene.
+XX
+KW   amiS gene.
+XX
+OS   Pseudomonas aeruginosa
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
+OC   Pseudomonadaceae; Pseudomonas.
+XX
+RN   [1]
+RA   Wilson S.A., Wachira S.M., Drew R.E., Jones D., Pearl L.H.;
+RT   "Identification of a putative ABC transporter in the Pseudomonas aeruginosa
+RT   amidase operon";
+RL   Unpublished.
+XX
+RN   [2]
+RP   1-1130
+RA   Wilson S.A.;
+RT   ;
+RL   Submitted (17-JAN-1994) to the EMBL/GenBank/DDBJ databases.
+RL   S.A. Wilson, University College London, Dept of Biochemistry, Gower Street,
+RL   London WC1E 6BT, UK
+XX
+RN   [3]
+RP   1-1130
+RX   DOI; 10.1074/jbc.270.32.18818.
+RX   PUBMED; 7642533.
+RA   Wilson S.A., Williams R.J., Pearl L.H., Drew R.E.;
+RT   "Identification of two new genes in the Pseudomonas aeruginosa amidase
+RT   operon, encoding an ATPase (AmiB) and a putative integral membrane protein
+RT   (AmiS).";
+RL   J. Biol. Chem. 270(32):18818-18824(1995).
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1130
+FT                   /organism="Pseudomonas aeruginosa"
+FT                   /strain="PAC1"
+FT                   /mol_type="genomic DNA"
+FT                   /clone="plasmid pAS20"
+FT                   /db_xref="taxon:287"
+FT   CDS             61..576
+FT                   /transl_table=11
+FT                   /gene="amiS"
+FT                   /db_xref="GOA:Q51417"
+FT                   /db_xref="UniProtKB/Swiss-Prot:Q51417"
+FT                   /protein_id="CAA54406.1"
+FT                   /translation="MLGLVLLYVGAVLFLNAVWLLGKISGREVAVINFLVGVLSACVAF
+FT                   YLIFSAAAGQGSLKAGALTLLFAFTYLWVAANQFLEVDGKGLGWFCLFVSLTACTVAIE
+FT                   SFAGASGPFGLWNAVNWTVWALLWFCFFLLLGLSRGIQKPVAYLTLASAIFTAWLPGLL
+FT                   LLGQVLKA"
+XX
+SQ   Sequence 1130 BP; 167 A; 335 C; 377 G; 251 T; 0 other;
+     gagccgtccg cctgagcgat ccgggccgac cagaacaata acaagagggg tatcgtcatc        60
+     atgctgggac tggttctgct gtacgttggc gcggtgctgt ttctcaatgc cgtctggttg       120
+     ctgggcaaga tcagcggtcg ggaggtggcg gtgatcaact tcctggtcgg cgtgctgagc       180
+     gcctgcgtcg cgttctacct gatcttttcc gcagcagccg ggcagggctc gctgaaggcc       240
+     ggagcgctga ccctgctatt cgcttttacc tatctgtggg tggccgccaa ccagttcctc       300
+     gaggtggacg gcaagggcct cggctggttc tgcctgttcg tcagcctcac cgcctgcacc       360
+     gtggcgatcg agtcgttcgc cggcgccagt ggtccgttcg gcctgtggaa cgcggtcaac       420
+     tggacagtct gggcgttgct ctggttctgt ttcttcctgc tgctggggct gtcccgcggc       480
+     atccagaagc cggtggccta cctgaccctg gccagcgcca tattcaccgc ctggttgccc       540
+     ggcctgctgc tgctcggaca ggtgctcaag gcatagcagg aagtcggaaa gggatgacgg       600
+     cttgccgcca tcccgtccct tccgaacgcc tagccgagcg gccagttgat caccacgacg       660
+     gcgtcgttgt agtcgttgtc ggtgccgtct tcagagccga ccagggcgaa gttcagctcg       720
+     ttggtcagga ttacctgtgc cgagaccaga tccgaggggc ggccgttgac gctgacctgg       780
+     acctgtacct tgccactgct gccggagttg agcacctggg tgccgatgac ggcgttattg       840
+     gtgctttgcc cgctgaaggt cgcggccgtg ctcgttgttg accagcacgt tcaccgtctg       900
+     ggttccggac gagttggcga aggcggtgac gccggaacct ggttgttggc gggaagggtg       960
+     aacactcctt gtggttgcca tggtggtatc tccactgaat acctggcccc ttccttttca      1020
+     ggcagccgtc tggcgcgcgg tatggcgtgt cgggagaaat ccgcagtcct tggcggcagg      1080
+     cgatgcgcag gcaggaagga cgcatcgttc agccaatcta cgccgtcgac                 1130
+//

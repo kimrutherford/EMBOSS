@@ -1,0 +1,22 @@
+# Data values for the DAN
+# Allawi H.T. and SantaLucia J. Jr. (1997), Biochemistry36:10581-10594 
+#
+# pH 7.0, 1M NaCl 300 K.
+#
+#             deltaH       deltaS     deltaG
+#             kcal/mol   kcal/K/mol  kcal/mol  
+#Bases        Enthalpy    Entropy     Energy
+#
+AA TT		7.9        22.2       1.2    
+AC GT           8.4        22.4       1.7    
+AG CT           7.8        21.0       1.5    
+AT AT           7.2        20.4       1.1  
+#
+CA TG           8.5        22.7       1.7  
+CC GG           8.0        19.9       2.0    
+CG CG          10.6        27.2       2.4   
+#
+GA TC           8.2        22.2       1.5    
+GC GC           9.8        24.4       2.5    
+#
+TA TA           7.2        21.3       0.8

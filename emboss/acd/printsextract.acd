@@ -1,0 +1,20 @@
+application: printsextract [
+  documentation: "Extract data from PRINTS"
+  groups: "Utils:Database creation"
+  gui: "yes"
+  batch: "yes"
+  cpu: "medium"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  infile: infile [
+    parameter: "Y"
+    information: "PRINTS database file"
+    knowntype: "prints database"
+  ]
+
+endsection: input

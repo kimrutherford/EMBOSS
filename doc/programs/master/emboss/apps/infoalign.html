@@ -1,0 +1,311 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: infoalign
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+
+<!--#include file="header1.inc" -->
+infoalign
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/infoalign.ione" -->
+
+
+
+<H2>
+    Description
+</H2>
+
+<b>infoalign</b> is small utility to list some simple properties of
+sequences in an alignment. 
+
+<p>
+
+It will write a table containing one line per sequence.  The information
+is written out in columns separated by space or TAB characters.  The
+columns of data are: the sequences' USA, name, two measures of length,
+counts of gaps, and numbers of identical, similar and different residues
+or bases in this sequence when compared to a reference sequence,
+together with a simple statistic of the % change between the reference
+sequence and this sequence. 
+
+<p>
+
+The reference sequence can be either the calculated consensus sequence
+(the default) or it can be one of the set of aligned sequences,
+specified by either the ordinal number of that sequence in the input
+file, or by its name.
+
+<p>
+
+Any combination of these types of information can be easily selected or
+unselected. 
+
+<p>
+
+By default, the output file starts each line with the USA of the
+sequence being described, so the output file is a list file that can be
+manually edited and read in by any other EMBOSS program that can read in
+one or more sequence to be analysed. 
+
+
+<H2>
+    Algorithm
+</H2>
+
+The set of aligned sequences is read in.
+
+<p>
+
+If the reference sequence is the consensus sequence (this is the
+default) then this is calculated.  If the reference sequence is
+specified as an ordinal number, then the sequences are counted (from 1)
+until the reference sequence is identified.  If the reference sequence
+is specified by its name then the names of the sequences are compared to
+the specified name until the reference sequence is identified. 
+
+<p>
+
+<pre>
+Foreach sequence:
+<p>
+  Find the position of the first residue or base which is not a gap character.
+<br>
+  Find the position of the last residue or base which is not a gap character.
+<p>
+  Foreach position from the first non-gap character to the last non-gap
+character:
+<p>
+    if the position is a gap character, then 
+<br>
+      increment the 'GapLen' count
+<br>
+      if this character is the start of a new gap, increment the 'Gaps' count
+<br>
+    else
+<br>
+      the character at this position of the sequence and in the
+      reference sequence are now compared. 
+<br>
+      if the sequence character and the reference character are identical 
+      (apart from case) then
+<br>
+        increment the 'Ident' count
+<br>
+      else if the similarity matrix score for the two characters is > 0
+      (i.e.  if they are similar) then
+<br>
+        increment the 'Similar' count
+<br>
+      else
+<br>
+        increment the 'Different' count
+<p>
+  The 'SeqLen' length of the sequence is the number of non-gap characters
+  in the sequence (i.e. 'Ident' + 'Similar' + 'Different')
+<p>
+  The 'AlignLen' length of the sequence is the length from the first
+  non-gap character to the last non-gap character.  (i.e.  the number of
+  bases or residues of the sequence plus the number of gap characters
+  internal to the sequence.)
+<p>
+  The '%Change' value for the sequence is calculated as: 
+<br>
+  ('AlignLen' - 'Ident') * 100 / 'AlignLen'
+</pre>
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/infoalign.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/infoalign.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/infoalign.itable" -->
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>infoalign</b> reads a normal multiple sequence alignment file, as
+produced by a alignment program. 
+
+<p>
+
+<!--#include file="inc/infoalign.input" -->
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/infoalign.output" -->
+
+<p>
+The first non-blank line is the heading.  This is followed by one line
+per sequence containing the following columns of data separated by one
+of more space or TAB characters:
+
+<p>
+
+<UL>
+<LI> The USA (Uniform Sequence Address) that EMBOSS can use to read in
+the sequence.
+
+<LI> Name - name of the sequence.
+
+<LI> SeqLen - length of the sequence when all gap characters are removed.
+
+<LI> AlignLen - length of the sequence including internal gap
+characters i.e. gaps at the start or the end are not included.
+
+<LI> Gaps - number of gaps e.g. 'AAA---AAA' is 1 gap (and 3 gap
+characters long (see GapLen)).
+
+<LI> GapLen - total number of internal gap characters, see the 3 gap
+characters above. This is the sum total of all of the internal gap
+characters in this sequence.
+
+<LI> Ident - number of characters that are identical to the specified
+reference sequence (uppercase 'A' is identical to lowercase 'a').
+
+<LI> Similar - number of characters which are non-identical - which
+score > 0 in the comparison matrix when compared to the reference
+sequence, but which are not identical.
+
+<LI> Different - number of characters which score <= 0 in the
+comparison matrix when compared to the reference sequence.
+
+<LI> %Change - a simple measure of the percentage change as compared
+to the reference sequence: (AlignLen - Ident) * 100 / AlignLen
+
+<LI> Description - the description annotation of the sequence (if
+any).
+
+</UL>
+
+<p>
+
+If qualifiers to inhibit various columns of information are used, then
+the remaining columns of information are output in the same order as
+shown above, so if '-noseqlength' is used, the order of output is: usa,
+name, alignlength, gaps, gapcount, idcount, simcount, diffcount, change,
+description. 
+
+<p>
+
+When the -html qualifier is specified, then the output will be wrapped
+in HTML tags, ready for inclusion in a Web page.  Note that tags such as
+<HTML> and <BODY> are not output by this program as the table of
+databases is expected to form only part of the contents of a web page -
+the rest of the web page must be supplier by the user. 
+
+<p>
+
+The lines of output information are guaranteed not to have trailing
+white-space at the end. 
+
+
+<H2>
+    Data files
+</H2>
+
+<b>infoalign</b> reads in scoring matrices to determine the consensus
+sequence and to determine which matches are similar or not. 
+
+<p>
+
+<!--#include file="inc/localfiles.ihtml" -->
+
+
+
+
+
+<H2>
+    Notes
+</H2>
+
+By default, the output file starts each line with the USA of the
+sequence being described, so the output file is a list file that can be
+manually edited and read in by other EMBOSS programs using the list-file
+specification of '@filename'. 
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/infoalign.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/gwilliam.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/infoalign.history" -->
+
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+
+<!--#include file="inc/infoalign.comment" -->
+
+</BODY>
+</HTML>
+

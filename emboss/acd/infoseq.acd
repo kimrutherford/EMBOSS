@@ -1,0 +1,132 @@
+application: infoseq [
+  documentation: "Displays some simple information about
+                  sequences"
+  groups: "Information"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "gapany"
+  ]
+
+endsection: input
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  boolean: columns [
+    default: "Y"
+    information: "Print information in neat, aligned columns."
+    help: "Set this option on (Y) to print the sequence information
+           into neat, aligned columns in the output file. Alternatively,
+           leave it unset (N), in which case the information records will be
+           delimited by a character, which you may specify by using the
+           -delimiter option. In other words, if -columns is set on, the
+           -delimiter option is overriden."
+  ]
+
+  string: delimiter [
+    default: "|"
+    information: "Delimiter of records in text output file"
+    help: "This string, which is usually a single character only, is
+           used to delimit individual records in the text output file. It
+           could be a space character, a tab character, a pipe character or
+           any other character or string."
+    knowntype: "output delimiter"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    additional: "Y"
+    default: "stdout"
+    knowntype: "infoseq output"
+    help: "If you enter the name of a file here then this program will
+           write the sequence details into that file."
+  ]
+
+  boolean: html [
+    additional: "Y"
+    default: "N"
+    information: "Format output as an HTML table"
+    outputmodifier: "Y"
+  ]
+
+  boolean: only [
+    default: "N"
+    information: "Display the specified columns"
+    help: "This is a way of shortening the command line if you only
+           want a few things to be displayed. Instead of specifying: \
+           '-nohead -noname -noacc -notype -nopgc -nodesc' \
+           to get only the length output, you can specify \
+           '-only -length'"
+  ]
+
+  boolean: heading [
+    default: "Y"
+    information: "Display column headings"
+  ]
+
+  boolean: usa [
+    default: "@(!$(only))"
+    information: "Display the USA of the sequence"
+  ]
+
+  boolean: database [
+    default: "@(!$(only))"
+    information: "Display 'database' column"
+  ]
+
+  boolean: name [
+    default: "@(!$(only))"
+    information: "Display 'name' column"
+  ]
+
+  boolean: accession [
+    default: "@(!$(only))"
+    information: "Display 'accession' column"
+  ]
+
+  boolean: gi [
+    default: "N"
+    information: "Display 'GI' column"
+  ]
+
+  boolean: version [
+    default: "N"
+    information: "Display 'version' column"
+  ]
+
+  boolean: type [
+    default: "@(!$(only))"
+    information: "Display 'type' column"
+  ]
+
+  boolean: length [
+    default: "@(!$(only))"
+    information: "Display 'length' column"
+  ]
+
+  boolean: pgc [
+    default: "@(!$(only))"
+    information: "Display 'percent GC content' column"
+  ]
+
+  boolean: description [
+    default: "@(!$(only))"
+    information: "Display 'description' column"
+  ]
+
+endsection: output

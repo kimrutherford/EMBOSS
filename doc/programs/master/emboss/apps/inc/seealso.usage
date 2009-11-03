@@ -1,0 +1,21 @@
+<b>Here is a sample session with seealso</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seealso </b>
+Finds programs sharing group names
+Program to search for: <b>matcher</b>
+
+SEE ALSO
+seqmatchall      All-against-all comparison of a set of sequences
+supermatcher     Match large sequences against one or more other sequences
+water            Smith-Waterman local alignment
+wordfinder       Match large sequences against one or more other sequences
+wordmatch        Finds all exact matches of a given size between 2 sequences
+
+
+</pre></td></tr></table><p>
+<p>
+<p>

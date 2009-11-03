@@ -1,0 +1,119 @@
+<b>Here is a sample session with transeq</b>
+<p>
+To translate a sequence in the first frame (starting at the first base and proceeding to the end): 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>transeq tembl:x13776 amir.pep </b>
+Translate nucleic acid sequences
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+To translate a sequence in the second frame: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>transeq tembl:x13776 amir.pep -frame=2 </b>
+Translate nucleic acid sequences
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+To translate a sequence in the first frame in the reverse sense (starting at the last frame 1 codon and proceeding to the start):  
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>transeq tembl:x13776 amir.pep -frame=-1 </b>
+Translate nucleic acid sequences
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.3">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 4</b>
+<p>
+To translate a sequence in all three forward frames: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>transeq tembl:x13776 amir.pep -frame=F </b>
+Translate nucleic acid sequences
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.4">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 5</b>
+<p>
+To translate a sequence in all three reverse frames: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>transeq tembl:x13776 amir.pep -frame=R </b>
+Translate nucleic acid sequences
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.5">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 6</b>
+<p>
+To translate a sequence in all six forward and reverse frames: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>transeq tembl:x13776 amir.pep -frame=6 </b>
+Translate nucleic acid sequences
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.6">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 7</b>
+<p>
+To translate a specific set of regions corresponding to a known set of coding sequences: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>transeq tembl:x13776 amir.pep -reg=2-45,67-201,328-509 </b>
+Translate nucleic acid sequences
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.7">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 8</b>
+<p>
+To translate a mitochondrial sequence using the mammalian mitochondrion genetic code table: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>transeq mito.seq mito.pep -table 2 </b>
+Translate nucleic acid sequences
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.8">Go to the input files for this example</a><br><a href="#output.8">Go to the output files for this example</a><p><p>

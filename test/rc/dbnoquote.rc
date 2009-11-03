@@ -1,0 +1,13 @@
+# Database definition with no trailing quote
+
+dbname unclosea [ type: 'n' format: 'fasta' method: 'direct'
+                  comment: 'unclosed single quotes
+]
+
+dbname uncloseb [ type: "n" format: "fasta" method: "direct"
+                  comment: "unclosed double quotes
+]
+
+dbname uncloseb [ type: "n" format: "fasta" method: "direct"
+                  comment: "unclosed mixed quotes' 
+]

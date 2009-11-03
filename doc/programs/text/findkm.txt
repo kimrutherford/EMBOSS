@@ -1,0 +1,175 @@
+
+                                  findkm 
+
+
+
+Function
+
+   Find Km and Vmax for an enzyme reaction
+
+Description
+
+   Takes a file of enzymatic data and plots Michaelis Menten and Hanes
+   Woolf plots of the data. From these it calculates the Michaelis Menten
+   constant (Km) and the maximum velocity (Vmax) of the reaction.
+
+Usage
+
+   Here is a sample session with findkm
+
+
+% findkm -graph cps 
+Find Km and Vmax for an enzyme reaction
+Enzyme kinetics data (application-specific) file: enztest.dat
+Output file [enztest.findkm]: 
+
+Created findkm.ps
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-infile]            infile     Enzyme kinetics data (application-specific)
+                                  file
+  [-outfile]           outfile    [*.findkm] Output file name
+   -graphlb            xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png, gif)
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -[no]plot           boolean    [Y] S/V vs S
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   "-graphlb" associated qualifiers
+   -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   The input file is a file of enzymatic data, [S] against V, Substrate
+   concentration against reaction velocity.
+
+  Input files for usage example
+
+  File: enztest.dat
+
+  0.10   2
+  0.20   4
+  0.50   9
+  1.00  17
+  2.00  29
+  5.00  50
+ 10.00  67
+ 20.00  80
+ 50.00  91
+100.00  95
+
+Output file format
+
+  Output files for usage example
+
+  File: enztest.findkm
+
+---Hanes Woolf Plot Calculations---
+Slope of best fit line is a = 0.01
+Coefficient in Eqn of line y = ma +b is b = 0.05
+Where line cuts x axis = (-0.20, 0)
+Where line cuts y axis = (0, 0.05)
+Limit-point of graph for plot = (103.00, 1.08)
+
+Vmax = 99.70, Km = 4.894611
+
+  Graphics File: findkm.ps
+
+   [findkm results]
+
+Data files
+
+   None.
+
+Notes
+
+   None.
+
+References
+
+    1. Voet & Voet (1993) 'Biochemistry'
+    2. Dawes 'Quantitative Problems in Biochemistry' 5th Edition.
+    3. Manuel G. Claros, Francisco M. Canovas 'Lines&Kinetics: a graphic
+       tool to deal with linear regressions and enzyme kinetics.'
+       EMBnet.news vol 5.1
+       http://www.uk.embnet.org/embnet.news/vol5_1/kinetics.html
+    4. Cornish-Bowden (1996) 'Fundamentals of Enzyme kinetics' Portland
+       Press, London.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It exits with a status of 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name Description
+
+Author(s)
+
+   Sinead O'Leary (current e-mail address unknown)
+   while she was at:
+   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+
+   This application was modified by David Martin
+   (dmartin © rfcgr.mrc.ac.uk)
+
+History
+
+   Completed November 1999
+
+   Modified May 2000
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

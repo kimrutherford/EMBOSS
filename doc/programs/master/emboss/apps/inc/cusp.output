@@ -1,0 +1,80 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: x13776.cusp</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+#CdsCount: 1
+
+#Coding GC 67.79%
+#1st letter GC 67.88%
+#2nd letter GC 46.89%
+#3rd letter GC 88.60%
+
+#Codon AA Fraction Frequency Number
+GCA    A     0.077     7.772      3
+GCC    A     0.462    46.632     18
+GCG    A     0.462    46.632     18
+GCT    A     0.000     0.000      0
+TGC    C     1.000    10.363      4
+TGT    C     0.000     0.000      0
+GAC    D     0.864    49.223     19
+GAT    D     0.136     7.772      3
+GAA    E     0.269    18.135      7
+GAG    E     0.731    49.223     19
+TTC    F     1.000    28.497     11
+TTT    F     0.000     0.000      0
+GGA    G     0.062     5.181      2
+GGC    G     0.719    59.585     23
+GGG    G     0.125    10.363      4
+GGT    G     0.094     7.772      3
+CAC    H     0.727    20.725      8
+CAT    H     0.273     7.772      3
+ATA    I     0.000     0.000      0
+ATC    I     0.800    41.451     16
+ATT    I     0.200    10.363      4
+AAA    K     0.000     0.000      0
+AAG    K     1.000     5.181      2
+CTA    L     0.000     0.000      0
+CTC    L     0.269    18.135      7
+CTG    L     0.577    38.860     15
+CTT    L     0.000     0.000      0
+TTA    L     0.000     0.000      0
+TTG    L     0.154    10.363      4
+ATG    M     1.000    15.544      6
+AAC    N     1.000    28.497     11
+AAT    N     0.000     0.000      0
+CCA    P     0.074     5.181      2
+CCC    P     0.222    15.544      6
+CCG    P     0.630    44.041     17
+CCT    P     0.074     5.181      2
+CAA    Q     0.062     2.591      1
+CAG    Q     0.938    38.860     15
+AGA    R     0.000     0.000      0
+AGG    R     0.029     2.591      1
+CGA    R     0.000     0.000      0
+CGC    R     0.629    56.995     22
+CGG    R     0.314    28.497     11
+CGT    R     0.029     2.591      1
+AGC    S     0.304    18.135      7
+AGT    S     0.087     5.181      2
+TCA    S     0.000     0.000      0
+TCC    S     0.261    15.544      6
+TCG    S     0.304    18.135      7
+TCT    S     0.043     2.591      1
+ACA    T     0.000     0.000      0
+ACC    T     0.733    28.497     11
+ACG    T     0.267    10.363      4
+ACT    T     0.000     0.000      0
+GTA    V     0.030     2.591      1
+GTC    V     0.394    33.679     13
+GTG    V     0.576    49.223     19
+GTT    V     0.000     0.000      0
+TGG    W     1.000    12.953      5
+TAC    Y     0.619    33.679     13
+TAT    Y     0.381    20.725      8
+TAA    *     0.000     0.000      0
+TAG    *     0.000     0.000      0
+TGA    *     1.000     2.591      1
+</pre>
+</td></tr></table><p>

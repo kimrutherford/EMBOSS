@@ -1,0 +1,17 @@
+# ACD file for QA testing - missing the application definition
+#
+
+appl: testalignpair [ doc: "testing" group: "testing" ]
+
+section: input [ info: "Input section" type: "page" ]
+
+align: test [
+      standard: Y
+      aformat: pair
+      minseq: 2
+      maxseq: 3
+]
+
+integer: testnum [ min: 1 info: "Pick a number" ]
+
+endsection: input

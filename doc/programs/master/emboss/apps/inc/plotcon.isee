@@ -1,0 +1,34 @@
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="edialign.html">edialign</a></td>
+<td>Local multiple alignment of sequences</td>
+</tr>
+
+<tr>
+<td><a href="emma.html">emma</a></td>
+<td>Multiple alignment program - interface to ClustalW program</td>
+</tr>
+
+<tr>
+<td><a href="infoalign.html">infoalign</a></td>
+<td>Information on a multiple sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="prettyplot.html">prettyplot</a></td>
+<td>Displays aligned sequences, with colouring and boxing</td>
+</tr>
+
+<tr>
+<td><a href="showalign.html">showalign</a></td>
+<td>Displays a multiple sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="tranalign.html">tranalign</a></td>
+<td>Align nucleic coding regions given the aligned proteins</td>
+</tr>
+
+</table>

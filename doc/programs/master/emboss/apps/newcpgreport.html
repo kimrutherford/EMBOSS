@@ -1,0 +1,236 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: newcpgreport
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+newcpgreport
+<!--#include file="header2.inc" -->
+<H2>
+    Function
+</H2>
+<!--#include file="inc/newcpgreport.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+
+This application is used in the production of the CpG Island database
+'CPGISLE'.  It produces CPGISLE database entry format reports for a
+potential CpG island. 
+
+<p>
+See the FTP site: <a
+href="ftp://ftp.ebi.ac.uk/pub/databases/cpgisle/">ftp://ftp.ebi.ac.uk/pub/databases/cpgisle/</a>
+for the finished database.
+
+<p>
+
+CpG refers to a C nucleotide immediately followed by a G.  The 'p' in
+'CpG' refers to the phosphate group linking the two bases.
+
+<p>
+Detection of regions of genomic sequences that are rich in the CpG
+pattern is important because such regions are resistant to methylation
+and tend to be associated with genes which are frequently switched on.
+Regions rich in the CpG pattern are known as CpG islands.
+
+<p>
+It has been estimated that about half of all mammalian genes have a
+CpG-rich region around their 5' end.  It is said that all mammalian
+house-keeping genes have a CpG island!
+
+<p>
+Non-mammalian vertebrates have some CpG islands that are associated with
+genes, but the association gets equivocal in the farther taxonomic
+groups.
+
+<p>
+Finding a CpG island upstream of predicted exons or genes is good
+contributory evidence for that gene's existance.
+
+<p>
+By default, this program defines a CpG island as a region where, over an
+average of 10 windows, the calculated % composition is over 50% and the
+calculated Obs/Exp ratio is over 0.6 and the conditions hold for a
+minimum of 200 bases.  These conditions can be modified by setting the
+values of the appropriate parameters.
+
+<p>
+The Expected number of CpG patterns in a window is calculated as the
+number of 'C's in the window multiplied by the number of 'G's in the
+window, divided by the window length.
+                                          
+<p>
+
+This program reads in one or more sequences and finds regions where
+there is a high absolute frequency of CpG dimers as well as a high
+proportion of CpG compared to GpC.  
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/newcpgreport.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/newcpgreport.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/newcpgreport.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<b>newcpgreport</b> reads one or more nucleic acid sequences.
+
+<p>
+
+<!--#include file="inc/newcpgreport.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+
+<!--#include file="inc/newcpgreport.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+
+<ol>
+
+<li>
+Larsen F., Gundersen, G., Lopez L., Prydz H.
+"CpG island as Gene Markers in the Human Genome"
+Genomics  13:1095-1107 (1992)
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/newcpgreport.isee" -->
+
+<p>
+
+As there is no official definition of what is a cpg island is, and worst
+where they begin and end, we have to live with 2 definitions and thus
+two methods.  These are:
+
+<p>
+
+1.  <b>newcpgseek</b> and <b>cpgreport</b> - both declare a putative
+island if the score is higher than a threshold (17 at the moment).  They
+now also display the actual CpG count, the % CG and the
+observed/expected ration in the region where the score is above the
+threshold.  This scoring method based on sum/frequencies overpredicts
+islands but finds the smaller ones around primary exons. 
+<b>newcpgseek</b> uses the same method as <b>cpgreport</b> but the
+output is different and more readable. 
+
+<p>
+
+2.  <b>newcpgreport</b> and <b>cpgplot</b> use the method which
+mentioned in the Description section above.  The important thing to note
+in this method is that an island, in order to be reported, is defined as
+a region that satisfies the following contraints:
+
+<p>
+<pre>
+   Obs/Exp ratio > 0.6
+   % C + % G > 50%
+   Length > 200.
+</pre>
+<p>
+
+<p>
+
+For all practical purposes you should probably use newcpgreport.  It is
+actually used to produce the human cpgisland database you can find on
+the EBI's ftp server as well as on the EBI's SRS server. 
+
+<p>
+
+<b>geecee</b> measures CG content in the entire input sequence and is
+not to be used to detect CpG islands.  It can be useful for detecting
+sequences that MIGHT contain an island. 
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/rlopez.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/newcpgreport.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/newcpgreport.comment" -->
+
+</BODY>
+</HTML>
+

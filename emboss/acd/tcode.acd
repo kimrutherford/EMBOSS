@@ -1,0 +1,93 @@
+application: tcode [
+  documentation: "Fickett TESTCODE statistic to identify
+                  protein-coding DNA"
+  groups: "Nucleic:Gene finding"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "dna"
+  ]
+
+  datafile: datafile [
+    information: "Testcode data file"
+    default: "Etcode.dat"
+    help: "The default data file is Etcode.dat and contains coding
+           probabilities for each base. The probabilities are for both
+           positional and compositional information."
+    knowntype: "testcode data"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  integer: window [
+    standard: "Y"
+    default: "200"
+    minimum: "200"
+    maximum: "$(sequence.length)"
+    information: "Length of sliding window"
+    help: "This is the number of nucleotide bases over which the
+           TESTCODE statistic will be performed each time. The window will
+           then slide along the sequence, covering the same number of bases
+           each time."
+  ]
+
+endsection: required
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  integer: step [
+    information: "Stepping increment for the window"
+    default: "3"
+    minimum: "1"
+    maximum: "@($(sequence.length) - $(window))"
+    help: "The selected window will, by default, slide along the
+           nucleotide sequence by three bases at a time, retaining the frame
+           (although the algorithm is not frame sensitive). This may be
+           altered to increase or decrease the increment of the slide."
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  toggle: plot [
+    information: "Graphical display"
+    default: "N"
+    help: "On selection a graph of the sequence (X axis) plotted
+           against the coding score (Y axis) will be displayed. Sequence
+           above the green line is coding, that below the red line is
+           non-coding."
+  ]
+
+  report: outfile [
+    standard: "@(!$(plot))"
+    rformat: "table"
+    multiple: "Y"
+    precision: "3"
+    taglist: "str:Estimation"
+    nullok: "$(plot)"
+  ]
+
+  xygraph: graph [
+    standard: "$(plot)"
+    gdesc: "Fickett testcode plot"
+  ]
+
+endsection: output

@@ -1,0 +1,267 @@
+
+                                seqmatchall 
+
+
+
+Function
+
+   All-against-all comparison of a set of sequences
+
+Description
+
+   This takes a set of sequences and does an all-against-all pairwise
+   comparison of words (fragments of the sequences of a specified fixed
+   size) in the sequences, finding regions of identity between any two
+   sequences.
+
+   The larger the specified word size, the faster the comparison will
+   proceed. Regions whose stretches of identity are shorter than the word
+   size will be missed. You should therefore choose a word size that is
+   small enough to find those regions of similarity you are interested in
+   within a reasonable time-frame.
+
+Usage
+
+   Here is a sample session with seqmatchall
+
+   Here is an example using an increased word size to avoid accidental
+   matches:
+
+
+% seqmatchall 
+All-against-all comparison of a set of sequences
+Input sequence set: @eclac.list
+Word size [4]: 15
+Output alignment [j01636.seqmatchall]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqset     Sequence set filename and optional format,
+                                  or reference (input USA)
+   -wordsize           integer    [4] Word size (Integer 2 or more)
+  [-outfile]           align      [*.seqmatchall] Output alignment file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -aformat2           string     Alignment format
+   -aextension2        string     File name extension
+   -adirectory2        string     Output directory
+   -aname2             string     Base file name
+   -awidth2            integer    Alignment width
+   -aaccshow2          boolean    Show accession number in the header
+   -adesshow2          boolean    Show description in the header
+   -ausashow2          boolean    Show the full USA in the alignment
+   -aglobal2           boolean    Show the full sequence in alignment
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+
+Input file format
+
+   seqmatchall reads a set of sequence USAs.
+
+   The sequences must be either all protein or all nucleic acid.
+
+  Input files for usage example
+
+  File: eclac.list
+
+#Formerly ECLAC
+tembl:J01636
+
+#Formerly ECLACA
+tembl:X51872
+
+#Formerly ECLACI
+tembl:V00294
+
+#Formerly ECLACY
+tembl:V00295
+
+#Formerly ECLACZ
+tembl:V00296
+
+Output file format
+
+  Output files for usage example
+
+  File: j01636.seqmatchall
+
+########################################
+# Program: seqmatchall
+# Rundate: Sun 15 Jul 2007 12:00:00
+# Commandline: seqmatchall
+#    -sequence @../../data/eclac.list
+#    -wordsize 15
+# Align_format: match
+# Report_file: j01636.seqmatchall
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: J01636
+# 2: X51872
+#=======================================
+
+  1832 J01636          +     5646..7477     X51872          +        1..1832
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: J01636
+# 2: V00294
+#=======================================
+
+  1113 J01636          +       49..1161     V00294          +        1..1113
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: J01636
+# 2: V00295
+#=======================================
+
+  1500 J01636          +     4305..5804     V00295          +        1..1500
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: J01636
+# 2: V00296
+#=======================================
+
+  3078 J01636          +     1287..4364     V00296          +        1..3078
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: X51872
+# 2: V00295
+#=======================================
+
+   159 X51872          +        1..159      V00295          +     1342..1500
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: V00295
+# 2: V00296
+#=======================================
+
+    60 V00295          +        1..60       V00296          +     3019..3078
+
+#---------------------------------------
+#---------------------------------------
+
+   ECLAC (the complete E.coli lac operon) matches ECLACI ECLACZ ECLACY
+   and ECLACA (the individual genes), and there is a short overlap
+   between ECLACY and the flanking genes ECLACZ and ECLACA
+
+   The output is a list of regions of identity in pairs of sequences,
+   each consisting of one line with 7 columns of data separated by TABs
+   or space characters.
+
+   The columns of data consist of:
+
+     * The length of the region of identity.
+     * The start position in sequence 1.
+     * The end position in sequence 1.
+     * The name of sequence 1.
+     * The start position in sequence 2.
+     * The end position in sequence 2.
+     * The name of sequence 2.
+
+Data files
+
+   None.
+
+Notes
+
+   The larger the word size, the faster the comparisons will proceed, but
+   regions of identitly smaller than the word size will not be reported.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It exits with a status of 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name                         Description
+   matcher      Finds the best local alignments between two sequences
+   supermatcher Match large sequences against one or more other sequences
+   water        Smith-Waterman local alignment
+   wordfinder   Match large sequences against one or more other sequences
+   wordmatch    Finds all exact matches of a given size between 2 sequences
+
+   polydot will give a graphical view of the same matches.
+
+Author(s)
+
+   Ian Longden (il © sanger.ac.uk)
+   Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
+   CB10 1SA, UK.
+
+History
+
+   1999 - written - Ian Longden
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

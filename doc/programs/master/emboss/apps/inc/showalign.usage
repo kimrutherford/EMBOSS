@@ -1,0 +1,201 @@
+<b>Here is a sample session with showalign</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showalign </b>
+Displays a multiple sequence alignment
+Input (aligned) sequence set: <b>globins.msf</b>
+Output file [globins.showalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+Display the sequences in order of similarity to the reference sequence 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showalign -order=s </b>
+Displays a multiple sequence alignment
+Input (aligned) sequence set: <b>globins.msf</b>
+Output file [globins.showalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+Format for HTML and highlight some interesting regions in different colours: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showalign -html -high '4-13 green 43-43 red 51-56 blue' </b>
+Displays a multiple sequence alignment
+Input (aligned) sequence set: <b>globins.msf</b>
+Output file [globins.showalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.3">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 4</b>
+<p>
+No consensus line at the bottom No ruler line No numbers line Don't repeat the reference sequence at the bottom of the sequences Use sequence 1 as the reference sequence Display residues from position 10 to 30 only  
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showalign -nocon -norule -nonum -nobot -ref=1 -sb=10 -send=30 </b>
+Displays a multiple sequence alignment
+Input (aligned) sequence set: <b>globins.msf</b>
+Output file [globins.showalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.4">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 5</b>
+<p>
+Show non-identities between the sequences 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showalign -show=n </b>
+Displays a multiple sequence alignment
+Input (aligned) sequence set: <b>globins.msf</b>
+Output file [globins.showalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 6</b>
+<p>
+Show all of the sequences 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showalign -show=a </b>
+Displays a multiple sequence alignment
+Input (aligned) sequence set: <b>globins.msf</b>
+Output file [globins.showalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.6">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 7</b>
+<p>
+Show identities between the sequences 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showalign -show=i </b>
+Displays a multiple sequence alignment
+Input (aligned) sequence set: <b>globins.msf</b>
+Output file [globins.showalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.7">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 8</b>
+<p>
+Show similarities between the sequences 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showalign -show=s </b>
+Displays a multiple sequence alignment
+Input (aligned) sequence set: <b>globins.msf</b>
+Output file [globins.showalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.8">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 9</b>
+<p>
+Show dissimilarities between the sequences 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showalign -show=d </b>
+Displays a multiple sequence alignment
+Input (aligned) sequence set: <b>globins.msf</b>
+Output file [globins.showalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.9">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 10</b>
+<p>
+Use the first sequence as the reference to compare to: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showalign -ref=1 </b>
+Displays a multiple sequence alignment
+Input (aligned) sequence set: <b>globins.msf</b>
+Output file [globins.showalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.10">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 11</b>
+<p>
+Show a range of sequences in uppercase, everything else in lowercase 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showalign -nocon -ref=1 -sl -upper 9-15 -nosimilarcase </b>
+Displays a multiple sequence alignment
+Input (aligned) sequence set: <b>globins.msf</b>
+Output file [globins.showalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.11">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 12</b>
+<p>
+Display the sequences in alphabetic order: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showalign -order=a </b>
+Displays a multiple sequence alignment
+Input (aligned) sequence set: <b>globins.msf</b>
+Output file [globins.showalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.12">Go to the output files for this example</a><p><p>

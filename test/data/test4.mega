@@ -1,0 +1,8 @@
+#mega
+TITLE: 2 exons from gene XYZ
+   Authors: James R. and Ray S., 1987
+   Sequencing procedure: PCR
+
+#cat          ATTCCCGGCCG "intron  10" ACCC
+#rat          ATTCCCGGGGG "intron  of length 8" ACCC
+#rabbit       ATTCCCGGGAA "no intron" ACCC

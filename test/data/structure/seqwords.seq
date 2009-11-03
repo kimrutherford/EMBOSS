@@ -1,0 +1,660 @@
+ID   ACEA_ECOLI     STANDARD;      PRT;   434 AA.
+AC   P05313;
+DT   01-NOV-1988 (Rel. 09, Created)
+DT   01-NOV-1988 (Rel. 09, Last sequence update)
+DT   15-DEC-1998 (Rel. 37, Last annotation update)
+DE   ISOCITRATE LYASE (EC 4.1.3.1) (ISOCITRASE) (ISOCITRATASE) (ICL).
+GN   ACEA OR ICL.
+OS   Escherichia coli.
+OC   Bacteria; Proteobacteria; gamma subdivision; Enterobacteriaceae;
+OC   Escherichia.
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RC   STRAIN=K12;
+RX   MEDLINE; 89083515.
+RA   Byrne C.R., Stokes H.W., Ward K.A.;
+RT   "Nucleotide sequence of the aceB gene encoding malate synthase A in
+RT   Escherichia coli.";
+RL   Nucleic Acids Res. 16:10924-10924(1988).
+RN   [2]
+RP   SEQUENCE FROM N.A.
+RC   STRAIN=K12;
+RX   MEDLINE; 88262573.
+RA   Rieul C., Bleicher F., Duclos B., Cortay J.-C., Cozzone A.J.;
+RT   "Nucleotide sequence of the aceA gene coding for isocitrate lyase in
+RT   Escherichia coli.";
+RL   Nucleic Acids Res. 16:5689-5689(1988).
+RN   [3]
+RP   SEQUENCE FROM N.A.
+RX   MEDLINE; 89008064.
+RA   Matsuoka M., McFadden B.A.;
+RT   "Isolation, hyperexpression, and sequencing of the aceA gene encoding
+RT   isocitrate lyase in Escherichia coli.";
+RL   J. Bacteriol. 170:4528-4536(1988).
+RN   [4]
+RP   SEQUENCE FROM N.A.
+RC   STRAIN=K12 / MG1655;
+RX   MEDLINE; 94089392.
+RA   Blattner F.R., Burland V.D., Plunkett G. III, Sofia H.J.,
+RA   Daniels D.L.;
+RT   "Analysis of the Escherichia coli genome. IV. DNA sequence of the
+RT   region from 89.2 to 92.8 minutes.";
+RL   Nucleic Acids Res. 21:5408-5417(1993).
+RN   [5]
+RP   SEQUENCE OF 293-434 FROM N.A.
+RX   MEDLINE; 88227861.
+RA   Klumpp D.J., Plank D.W., Bowdin L.J., Stueland C.S., Chung T.,
+RA   Laporte D.C.;
+RT   "Nucleotide sequence of aceK, the gene encoding isocitrate
+RT   dehydrogenase kinase/phosphatase.";
+RL   J. Bacteriol. 170:2763-2769(1988).
+RN   [6]
+RP   PHOSPHORYLATION.
+RX   MEDLINE; 88115398.
+RA   Robertson E.F., Hoyt J.C., Reeves H.C.;
+RT   "Evidence of histidine phosphorylation in isocitrate lyase from
+RT   Escherichia coli.";
+RL   J. Biol. Chem. 263:2477-2488(1988).
+RN   [7]
+RP   CHARACTERIZATION.
+RX   MEDLINE; 88269580.
+RA   Hoyt J.C., Robertson E.F., Berlyn K.A., Reeves H.C.;
+RT   "Escherichia coli isocitrate lyase: properties and comparisons.";
+RL   Biochim. Biophys. Acta 966:30-35(1988).
+RN   [8]
+RP   MUTAGENESIS OF CYS-195.
+RC   STRAIN=ML308;
+RX   MEDLINE; 95126911.
+RA   Robertson A.G., Nimmo H.G.;
+RT   "Site-directed mutagenesis of cysteine-195 in isocitrate lyase from
+RT   Escherichia coli ML308.";
+RL   Biochem. J. 305:239-244(1995).
+CC   -!- CATALYTIC ACTIVITY: ISOCITRATE = SUCCINATE + GLYOXYLATE.
+CC   -!- COFACTOR: REQUIRES DIVALENT CATIONS.
+CC   -!- ENZYME REGULATION: IS ACTIVATED BY PHOSPHORYLATION (ON HISTIDINE)
+CC       AND IS INHIBITED BY PEP, 3-PHOSPHOGLYCERATE AND SUCCINATE.
+CC   -!- PATHWAY: FIRST STEP IN GLYOXYLATE BYPASS, AN ALTERNATIVE TO THE
+CC       TRICARBOXYLIC ACID CYCLE (IN BACTERIA, PLANTS, AND FUNGI).
+CC   -!- SUBUNIT: HOMOTETRAMER.
+CC   -!- SUBCELLULAR LOCATION: CYTOPLASMIC.
+CC   -!- SIMILARITY: BELONGS TO THE ISOCITRATE LYASE FAMILY.
+CC   --------------------------------------------------------------------------
+CC   This SWISS-PROT entry is copyright. It is produced through a collaboration
+CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
+CC   the European Bioinformatics Institute.  There are no  restrictions on  its
+CC   use  by  non-profit  institutions as long  as its content  is  in  no  way
+CC   modified and this statement is not removed.  Usage  by  and for commercial
+CC   entities requires a license agreement (See http://www.isb-sib.ch/announce/
+CC   or send an email to license@isb-sib.ch).
+CC   --------------------------------------------------------------------------
+DR   EMBL; X12431; CAA30974.1; -.
+DR   EMBL; X07543; CAA30416.1; -.
+DR   EMBL; M20714; AAA24009.1; -.
+DR   EMBL; U00006; AAC43109.1; -.
+DR   EMBL; AE000474; AAC76985.1; -.
+DR   EMBL; M22621; AAC13650.1; -.
+DR   PIR; S05692; WZECIC.
+DR   SWISS-2DPAGE; P05313; COLI.
+DR   ECOGENE; EG10022; ACEA.
+DR   INTERPRO; IPR000918; -.
+DR   PFAM; PF00463; ICL; 2.
+DR   PROSITE; PS00161; ISOCITRATE_LYASE; 1.
+KW   Glyoxylate bypass; Tricarboxylic acid cycle; Lyase; Phosphorylation.
+FT   ACT_SITE    195    195       PROBABLE.
+FT   MUTAGEN     195    195       C->A: LARGE DECREASE IN ACTIVITY.
+FT   MUTAGEN     195    195       C->S: LARGE DECREASE IN ACTIVITY.
+FT   CONFLICT    101    117       LAASMYPDQSLYPANSV -> WRPACIRISRSIRQTRC
+FT                                (IN REF. 2).
+FT   CONFLICT    215    215       A -> P (IN REF. 2).
+FT   CONFLICT    293    293       P -> R (IN REF. 5).
+FT   CONFLICT    338    338       Q -> E (IN REF. 2).
+FT   CONFLICT    419    434       TSSVTALTGSTEESQF -> DVFSHRADRLH
+FT                                (IN REF. 3).
+SQ   SEQUENCE   434 AA;  47521 MW;  F66449CCD1E168E9 CRC64;
+     MKTRTQQIEE LQKEWTQPRW EGITRPYSAE DVVKLRGSVN PECTLAQLGA AKMWRLLHGE
+     SKKGYINSLG ALTGGQALQQ AKAGIEAVYL SGWQVAADAN LAASMYPDQS LYPANSVPAV
+     VERINNTFRR ADQIQWSAGI EPGDPRYVDY FLPIVADAEA GFGGVLNAFE LMKAMIEAGA
+     AAVHFEDQLA SVKKCGHMGG KVLVPTQEAI QKLVAARLAA DVTGVPTLLV ARTDADAADL
+     ITSDCDPYDS EFITGERTSE GFFRTHAGIE QAISRGLAYA PYADLVWCET STPDLELARR
+     FAQAIHAKYP GKLLAYNCSP SFNWQKNLDD KTIASFQQQL SDMGYKFQFI TLAGIHSMWF
+     NMFDLANAYA QGEGMKHYVE KVQQPEFAAA KDGYTFVSHQ QEVGTGYFDK VTTIIQGGTS
+     SVTALTGSTE ESQF
+//
+ID   ALR1_YEAST     STANDARD;      PRT;   859 AA.
+AC   Q08269; Q02811;
+DT   01-NOV-1997 (Rel. 35, Created)
+DT   01-NOV-1997 (Rel. 35, Last sequence update)
+DT   15-DEC-1998 (Rel. 37, Last annotation update)
+DE   ALUMINIUM RESISTANCE PROTEIN 1.
+GN   ALR1 OR YOL130W.
+OS   Saccharomyces cerevisiae (Baker's yeast).
+OC   Eukaryota; Fungi; Ascomycota; Saccharomycetes; Saccharomycetales;
+OC   Saccharomycetaceae; Saccharomyces.
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RC   STRAIN=S288C / FY1679;
+RX   MEDLINE; 97051588.
+RA   Casamayor A., Khalid H., Balcells L., Aldea M., Casas C.,
+RA   Herrero E., Arino J.;
+RT   "Sequence analysis of a 13.4 kbp fragment from the left arm of
+RT   chromosome XV reveals a malate dehydrogenase gene, a putative Ser/Thr
+RT   protein kinase, the ribosomal L25 gene and four new open reading
+RT   frames.";
+RL   Yeast 12:1013-1020(1996).
+RN   [2]
+RP   IDENTIFICATION.
+RA   McDiarmid C.W., Gardner R.C.;
+RL   Unpublished observations (XXX-1995).
+CC   -!- SIMILARITY: STRONG, TO YEAST ALR2. AND ALSO SIMILAR TO MNR2.
+CC   -!- SIMILARITY: SOME, TO E.COLI CORA.
+CC   --------------------------------------------------------------------------
+CC   This SWISS-PROT entry is copyright. It is produced through a collaboration
+CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
+CC   the European Bioinformatics Institute.  There are no  restrictions on  its
+CC   use  by  non-profit  institutions as long  as its content  is  in  no  way
+CC   modified and this statement is not removed.  Usage  by  and for commercial
+CC   entities requires a license agreement (See http://www.isb-sib.ch/announce/
+CC   or send an email to license@isb-sib.ch).
+CC   --------------------------------------------------------------------------
+DR   EMBL; Z74872; CAA99150.1; -.
+DR   EMBL; Z74871; CAA99149.1; -.
+DR   EMBL; U41293; AAC49462.1; -.
+DR   SGD; L0002887; ALR1.
+DR   INTERPRO; IPR002523; -.
+DR   PFAM; PF01544; CorA; 1.
+KW   Transmembrane.
+FT   TRANSMEM    744    764       POTENTIAL.
+FT   TRANSMEM    773    793       POTENTIAL.
+FT   CONFLICT     13     13       N -> Y (IN AAC49462).
+SQ   SEQUENCE   859 AA;  95869 MW;  6DA44CA70EFA2693 CRC64;
+     MSSSSSSSES SPNLSRSNSL ANTMVSMKTE DHTGLYDHRQ HPDSLPVRHQ PPTLKNKEIA
+     KSTKPSIPKE QKSATRYNSH VDVGSVPSRG RMDFEDEGQG MDETVAHHQL RASAILTSNA
+     RPSRLAHSMP HQRQLYVESN IHTPPKDVGV KRDYTMSSST ASSGNKSKLS ASSSASPITK
+     VRKSSLVSPV LEIPHESKSD THSKLAKPKK RTYSTTSAHS SINPAVLLTK STSQKSDADD
+     DTLERKPVRM NTRASFDSDV SQASRDSQET EEDVCFPMPP QLHTRVNGID FDELEEYAQF
+     ANAEKSQFLA SLQVPNEQKY SNVSQDIGFT SSTSTSGSSA ALKYTPRVSQ TGEKSESTNE
+     TEIHEKKEDE HEKIKPSLHP GISFGKNKVE GEENENIPSN DPAYCSYQGT DFQIPNRFSF
+     FCSESDETVH ASDIPSLVSE GQTFYELFRG GEPTWWLDCS CPTDDEMRCI AKAFGIHPLT
+     AEDIRMQETR EKVELFKSYY FVCFHTFEND KESEDFLEPI NVYIVVCRSG VLTFHFGPIS
+     HCANVRRRVR QLRDYVNVNS DWLCYALIDD ITDSFAPVIQ SIEYEADAIE DSVFMARDMD
+     FAAMLQRIGE SRRKTMTLMR LLSGKADVIK MFAKRCQDEA NGIGPALTSQ INIANLQARQ
+     DNASHIKNNS STTVPNNYAP TTSQPRGDIA LYLGDIQDHL LTMFQNLLAY EKIFSRSHTN
+     YLAQLQVESF NSNNKVTEML GKVTMIGTML VPLNVITGLF GMNVKVPGEN SSIAWWFGIL
+     GVLLLLAVLG WFLASYWIKR IDPPATLNEA AESGAKSVIS SFLPKRNKRF NDRSKNINVR
+     AGPSNKSVAS LPSRYSRYD
+//
+ID   GOX_SPIOL      STANDARD;      PRT;   369 AA.
+AC   P05414;
+DT   01-NOV-1988 (Rel. 09, Created)
+DT   01-NOV-1988 (Rel. 09, Last sequence update)
+DT   15-DEC-1998 (Rel. 37, Last annotation update)
+DE   (S)-2-HYDROXY-ACID OXIDASE, PEROXISOMAL (EC 1.1.3.15) (GLYCOLATE
+DE   OXIDASE) (GOX) (SHORT CHAIN ALPHA-HYDROXY ACID OXIDASE).
+OS   Spinacia oleracea (Spinach).
+OC   Eukaryota; Viridiplantae; Embryophyta; Tracheophyta; Spermatophyta;
+OC   Magnoliophyta; eudicotyledons; Caryophyllidae; Caryophyllales;
+OC   Chenopodiaceae; Spinacia.
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RX   MEDLINE; 88058933.
+RA   Volokita M., Somerville C.R.;
+RT   "The primary structure of spinach glycolate oxidase deduced from the
+RT   DNA sequence of a cDNA clone.";
+RL   J. Biol. Chem. 262:15825-15828(1987).
+RN   [2]
+RP   SEQUENCE.
+RX   MEDLINE; 88225066.
+RA   Cederlund E., Lindqvist Y., Soederlund G., Braenden C.-I.,
+RA   Joernvall H.;
+RT   "Primary structure of glycolate oxidase from spinach.";
+RL   Eur. J. Biochem. 173:523-530(1988).
+RN   [3]
+RP   X-RAY CRYSTALLOGRAPHY (2.0 ANGSTROMS).
+RX   MEDLINE; 90040713.
+RA   Lindqvist Y.;
+RT   "Refined structure of spinach glycolate oxidase at 2-A resolution.";
+RL   J. Mol. Biol. 209:151-166(1989).
+RN   [4]
+RP   ACTIVE SITE.
+RX   MEDLINE; 89123500.
+RA   Lindqvist Y., Braenden C.-I.;
+RT   "The active site of spinach glycolate oxidase.";
+RL   J. Biol. Chem. 264:3624-3628(1989).
+CC   -!- CATALYTIC ACTIVITY: (S)-2-HYDROXY-ACID + O(2) = 2-OXO ACID +
+CC       H(2)O(2).
+CC   -!- COFACTOR: FMN.
+CC   -!- PATHWAY: SECOND REACTION OF THE PHOTORESPIRATORY PATHWAY
+CC       (GLYCOLATE PATHWAY).
+CC   -!- SUBUNIT: HOMOTETRAMER OR HOMOOCTAMER.
+CC   -!- SUBCELLULAR LOCATION: PEROXISOMAL.
+CC   -!- SIMILARITY: BELONGS TO THE FMN-DEPENDENT ALPHA-HYDROXY ACID
+CC       DEHYDROGENASES FAMILY.
+CC   --------------------------------------------------------------------------
+CC   This SWISS-PROT entry is copyright. It is produced through a collaboration
+CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
+CC   the European Bioinformatics Institute.  There are no  restrictions on  its
+CC   use  by  non-profit  institutions as long  as its content  is  in  no  way
+CC   modified and this statement is not removed.  Usage  by  and for commercial
+CC   entities requires a license agreement (See http://www.isb-sib.ch/announce/
+CC   or send an email to license@isb-sib.ch).
+CC   --------------------------------------------------------------------------
+DR   EMBL; J03492; AAA34030.1; -.
+DR   PIR; A28496; OXSPH.
+DR   PIR; S00621; S00621.
+DR   PDB; 1GOX; 15-OCT-89.
+DR   PDB; 1AL7; 12-NOV-97.
+DR   PDB; 1AL8; 17-SEP-97.
+DR   PDB; 1GYL; 31-MAR-95.
+DR   INTERPRO; IPR000262; -.
+DR   PFAM; PF01070; FMN_dh; 1.
+DR   PROSITE; PS00342; MICROBODIES_CTER; 1.
+DR   PROSITE; PS00557; FMN_HYDROXY_ACID_DH; 1.
+KW   Oxidoreductase; Flavoprotein; FMN; Peroxisome; Glycolate pathway;
+KW   Photorespiration; 3D-structure; Acetylation.
+FT   MOD_RES       1      1       ACETYLATION.
+FT   SIMILAR     159    186       WITH CUCUMBER MALATE SYNTHETASE AND
+FT                                SOYBEAN NODULIN 35.
+FT   ACT_SITE     24     24       SUBSTRATE BINDING.
+FT   ACT_SITE    129    129       SUBSTRATE BINDING.
+FT   ACT_SITE    254    254       REMOVES THE SUBSTRATE ALPHA-PROTON AS THE
+FT                                FIRST STEP IN CATALYSIS.
+FT   ACT_SITE    257    257       SUBSTRATE BINDING.
+FT   SITE        367    369       MICROBODY TARGETING SIGNAL (POTENTIAL).
+FT   TURN          6      7
+FT   HELIX         8     16
+FT   HELIX        19     26
+FT   TURN         30     31
+FT   HELIX        33     44
+FT   STRAND       45     47
+FT   STRAND       59     59
+FT   STRAND       62     64
+FT   TURN         65     66
+FT   STRAND       67     69
+FT   STRAND       73     75
+FT   HELIX        81     83
+FT   TURN         84     84
+FT   TURN         86     87
+FT   HELIX        88     98
+FT   TURN         99    100
+FT   STRAND      103    105
+FT   TURN        107    108
+FT   HELIX       113    117
+FT   TURN        118    119
+FT   STRAND      124    128
+FT   STRAND      131    131
+FT   HELIX       134    146
+FT   TURN        147    148
+FT   STRAND      151    155
+FT   HELIX       165    169
+FT   TURN        170    171
+FT   TURN        176    177
+FT   HELIX       181    183
+FT   HELIX       199    205
+FT   TURN        206    206
+FT   STRAND      207    207
+FT   TURN        209    210
+FT   HELIX       213    222
+FT   STRAND      227    230
+FT   HELIX       235    243
+FT   TURN        244    245
+FT   STRAND      248    251
+FT   HELIX       254    256
+FT   TURN        257    257
+FT   TURN        260    261
+FT   HELIX       265    275
+FT   TURN        276    278
+FT   STRAND      282    285
+FT   HELIX       291    300
+FT   TURN        301    301
+FT   STRAND      304    307
+FT   HELIX       309    341
+FT   TURN        342    342
+FT   STRAND      345    345
+FT   TURN        346    348
+FT   HELIX       351    353
+FT   STRAND      354    356
+FT   TURN        357    358
+SQ   SEQUENCE   369 AA;  40285 MW;  892F1B3D0C1B48E0 CRC64;
+     MEITNVNEYE AIAKQKLPKM VYDYYASGAE DQWTLAENRN AFSRILFRPR ILIDVTNIDM
+     TTTILGFKIS MPIMIAPTAM QKMAHPEGEY ATARAASAAG TIMTLSSWAT SSVEEVASTG
+     PGIRFFQLYV YKDRNVVAQL VRRAERAGFK AIALTVDTPR LGRREADIKN RFVLPPFLTL
+     KNFEGIDLGK MDKANDSGLS SYVAGQIDRS LSWKDVAWLQ TITSLPILVK GVITAEDARL
+     AVQHGAAGII VSNHGARQLD YVPATIMALE EVVKAAQGRI PVFLDGGVRR GTDVFKALAL
+     GAAGVFIGRP VVFSLAAEGE AGVKKVLQMM RDEFELTMAL SGCRSLKEIS RSHIAADWDG
+     PSSRAVARL
+//
+ID   ICLR_ECOLI     STANDARD;      PRT;   274 AA.
+AC   P16528; P76782;
+DT   01-AUG-1990 (Rel. 15, Created)
+DT   01-AUG-1990 (Rel. 15, Last sequence update)
+DT   01-NOV-1997 (Rel. 35, Last annotation update)
+DE   ACETATE OPERON REPRESSOR.
+GN   ICLR.
+OS   Escherichia coli.
+OC   Bacteria; Proteobacteria; gamma subdivision; Enterobacteriaceae;
+OC   Escherichia.
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RX   MEDLINE; 90236928.
+RA   Sunnarborg A., Klumpp D.J., Chung T., Laporte D.C.;
+RT   "Regulation of the glyoxylate bypass operon: cloning and
+RT   characterization of iclR.";
+RL   J. Bacteriol. 172:2642-2649(1990).
+RN   [2]
+RP   SEQUENCE FROM N.A.
+RC   STRAIN=K12;
+RX   MEDLINE; 91138983.
+RA   Negre D., Cortay J.-C., Old I.G., Galinier A., Richaud C.,
+RA   Saint-Girons I., Cozzone A.J.;
+RT   "Overproduction and characterization of the iclR gene product of
+RT   Escherichia coli K-12 and comparison with that of Salmonella
+RT   typhimurium LT2.";
+RL   Gene 97:29-37(1991).
+RN   [3]
+RP   SEQUENCE FROM N.A.
+RC   STRAIN=K12 / MG1655;
+RX   MEDLINE; 94089392.
+RA   Blattner F.R., Burland V.D., Plunkett G. III, Sofia H.J.,
+RA   Daniels D.L.;
+RT   "Analysis of the Escherichia coli genome. IV. DNA sequence of the
+RT   region from 89.2 to 92.8 minutes.";
+RL   Nucleic Acids Res. 21:5408-5417(1993).
+RN   [4]
+RP   SEQUENCE OF 262-274 FROM N.A.
+RX   MEDLINE; 91138981.
+RA   Galinier A., Bleicher F., Negre D., Perriere G., Duclos B.,
+RA   Cozzone A.J., Cortay J.-C.;
+RT   "Primary structure of the intergenic region between aceK and iclR in
+RT   the Escherichia coli chromosome.";
+RL   Gene 97:149-150(1991).
+CC   -!- FUNCTION: REGULATION OF THE GLYOXYLATE BYPASS OPERON (ACEBAK),
+CC       WHICH ENCODES ISOCITRATE LYASE, MALATE SYNTHASE AS WELL AS
+CC       ISOCITRATE DEHYDROGENASE KINASE/PHOSPHORYLASE.
+CC   -!- SIMILARITY: BELONGS TO THE ICLR FAMILY OF TRANSCRIPTIONAL
+CC       REGULATORS.
+CC   --------------------------------------------------------------------------
+CC   This SWISS-PROT entry is copyright. It is produced through a collaboration
+CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
+CC   the European Bioinformatics Institute.  There are no  restrictions on  its
+CC   use  by  non-profit  institutions as long  as its content  is  in  no  way
+CC   modified and this statement is not removed.  Usage  by  and for commercial
+CC   entities requires a license agreement (See http://www.isb-sib.ch/announce/
+CC   or send an email to license@isb-sib.ch).
+CC   --------------------------------------------------------------------------
+DR   EMBL; M31761; AAA24008.1; -.
+DR   EMBL; M63914; AAA50561.1; ALT_INIT.
+DR   EMBL; U00006; AAC43112.1; ALT_INIT.
+DR   EMBL; AE000475; AAC76988.1; ALT_INIT.
+DR   EMBL; M63497; AAA73003.1; -.
+DR   PIR; A35267; RPECIR.
+DR   PIR; JQ0871; JQ0871.
+DR   ECOGENE; EG10491; ICLR.
+DR   INTERPRO; IPR000285; -.
+DR   PFAM; PF01614; IclR; 1.
+DR   PROSITE; PS01051; HTH_ICLR_FAMILY; 1.
+KW   Transcription regulation; Glyoxylate bypass; DNA-binding;
+KW   Repressor.
+FT   DNA_BIND     46     65       H-T-H MOTIF (POTENTIAL).
+SQ   SEQUENCE   274 AA;  29739 MW;  7C8A7E9FD2841D0C CRC64;
+     MVAPIPAKRG RKPAVATAPA TGQVQSLTRG LKLLEWIAES NGSVALTELA QQAGLPNSTT
+     HRLLTTMQQQ GFVRQVGELG HWAIGAHAFM VGSSFLQSRN LLAIVHPILR NLMEESGETV
+     NMAVLDQSDH EAIIIDQVQC THLMRMSAPI GGKLPMHASG AGKAFLAQLS EEQVTKLLHR
+     KGLHAYTHAT LVSPVHLKED LAQTRKRGYS FDDEEHALGL RCLAACIFDE HREPFAAISI
+     SGPISRITDD RVTEFGAMVI KAAKEVTLAY GGMR
+//
+ID   MDH_ECOLI      STANDARD;      PRT;   312 AA.
+AC   P06994; Q59343; Q59344; Q59345; Q59346; Q59347; Q59348; Q60133;
+AC   Q60150; O30401; O30402; O30403;
+DT   01-APR-1988 (Rel. 07, Created)
+DT   01-NOV-1995 (Rel. 32, Last sequence update)
+DT   30-MAY-2000 (Rel. 39, Last annotation update)
+DE   MALATE DEHYDROGENASE (EC 1.1.1.37).
+GN   MDH.
+OS   Escherichia coli.
+OC   Bacteria; Proteobacteria; gamma subdivision; Enterobacteriaceae;
+OC   Escherichia.
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RX   MEDLINE; 87259981.
+RA   McAlister-Henn L., Blaber M., Bradshaw R.A., Nisco S.J.;
+RT   "Complete nucleotide sequence of the Escherichia coli gene encoding
+RT   malate dehydrogenase.";
+RL   Nucleic Acids Res. 15:4993-4993(1987).
+RN   [2]
+RP   SEQUENCE FROM N.A.
+RX   MEDLINE; 88105815.
+RA   Vogel R.F., Entian K.-D., Mecke D.;
+RT   "Cloning and sequence of the mdh structural gene of Escherichia coli
+RT   coding for malate dehydrogenase.";
+RL   Arch. Microbiol. 149:36-42(1987).
+RN   [3]
+RP   SEQUENCE FROM N.A.
+RC   STRAIN=K12 / MG1655;
+RX   MEDLINE; 97426617.
+RA   Blattner F.R., Plunkett G. III, Bloch C.A., Perna N.T., Burland V.,
+RA   Riley M., Collado-Vides J., Glasner J.D., Rode C.K., Mayhew G.F.,
+RA   Gregor J., Davis N.W., Kirkpatrick H.A., Goeden M.A., Rose D.J.,
+RA   Mau B., Shao Y.;
+RT   "The complete genome sequence of Escherichia coli K-12.";
+RL   Science 277:1453-1474(1997).
+RN   [4]
+RP   SEQUENCE OF 1-40 FROM N.A.
+RX   MEDLINE; 85288979.
+RA   Sutherland P., McAlister-Henn L.;
+RT   "Isolation and expression of the Escherichia coli gene encoding
+RT   malate dehydrogenase.";
+RL   J. Bacteriol. 163:1074-1079(1985).
+RN   [5]
+RP   SEQUENCE OF 1-36.
+RX   MEDLINE; 82047078.
+RA   Fernley R.T., Lentz S.R., Bradshaw R.A.;
+RT   "Malate dehydrogenase: isolation from E. coli and comparison with the
+RT   eukaryotic mitochondrial and cytoplasmic forms.";
+RL   Biosci. Rep. 1:497-507(1981).
+RN   [6]
+RP   SEQUENCE OF 1-16.
+RX   MEDLINE; 93281685.
+RA   Henzel W.J., Billeci T.M., Stults J.T., Wong S.C., Grimley C.,
+RA   Watanabe C.;
+RT   "Identifying proteins from two-dimensional gels by molecular mass
+RT   searching of peptide fragments in protein sequence databases.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 90:5011-5015(1993).
+RN   [7]
+RP   SEQUENCE OF 1-26.
+RC   STRAIN=K12 / EMG2;
+RX   MEDLINE; 97443975.
+RA   Link A.J., Robison K., Church G.M.;
+RT   "Comparing the predicted and observed properties of proteins encoded
+RT   in the genome of Escherichia coli K-12.";
+RL   Electrophoresis 18:1259-1313(1997).
+RN   [8]
+RP   SEQUENCE OF 1-26.
+RA   Charnock C.;
+RL   Submitted (JAN-1996) to the SWISS-PROT data bank.
+RN   [9]
+RP   SEQUENCE OF 1-11.
+RC   STRAIN=K12 / W3110;
+RA   Frutiger S., Hughes G.J., Pasquali C., Hochstrasser D.F.;
+RL   Submitted (FEB-1996) to the SWISS-PROT data bank.
+RN   [10]
+RP   SEQUENCE OF 1-13.
+RX   MEDLINE; 96283620.
+RA   Nystroem T., Larsson C., Gustafsson L.;
+RT   "Bacterial defense against aging: role of the Escherichia coli ArcA
+RT   regulator in gene expression, readjusted energy flux and survival
+RT   during stasis.";
+RL   EMBO J. 15:3219-3228(1996).
+RN   [11]
+RP   SEQUENCE OF 12-299 FROM N.A.
+RC   STRAIN=VARIOUS STRAINS;
+RX   MEDLINE; 94151313.
+RA   Boyd E.F., Nelson K., Wang F.S., Whittam T.S., Selander R.K.;
+RT   "Molecular genetic basis of allelic polymorphism in malate
+RT   dehydrogenase (mdh) in natural populations of Escherichia coli and
+RT   Salmonella enterica.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 91:1280-1284(1994).
+RN   [12]
+RP   SEQUENCE OF 12-299 FROM N.A.
+RC   STRAIN=VARIOUS STRAINS;
+RX   MEDLINE; 97342740.
+RA   Pupo G.M., Karaolis D.K., Lan R., Reeves P.R.;
+RT   "Evolutionary relationships among pathogenic and nonpathogenic
+RT   Escherichia coli strains inferred from multilocus enzyme
+RT   electrophoresis and mdh sequence studies.";
+RL   Infect. Immun. 65:2685-2692(1997).
+RN   [13]
+RP   X-RAY CRYSTALLOGRAPHY (1.87 ANGSTROMS).
+RX   MEDLINE; 92373767.
+RA   Hall M.D., Levitt D.G., Banaszak L.J.;
+RT   "Crystal structure of Escherichia coli malate dehydrogenase. A
+RT   complex of the apoenzyme and citrate at 1.87-A resolution.";
+RL   J. Mol. Biol. 226:867-882(1992).
+CC   -!- CATALYTIC ACTIVITY: L-MALATE + NAD(+) = OXALOACETATE + NADH.
+CC   -!- SUBUNIT: HOMODIMER.
+CC   -!- SIMILARITY: BELONGS TO THE LDH FAMILY. MDH SUBFAMILY.
+CC   --------------------------------------------------------------------------
+CC   This SWISS-PROT entry is copyright. It is produced through a collaboration
+CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
+CC   the European Bioinformatics Institute.  There are no  restrictions on  its
+CC   use  by  non-profit  institutions as long  as its content  is  in  no  way
+CC   modified and this statement is not removed.  Usage  by  and for commercial
+CC   entities requires a license agreement (See http://www.isb-sib.ch/announce/
+CC   or send an email to license@isb-sib.ch).
+CC   --------------------------------------------------------------------------
+DR   EMBL; M10417; AAA24147.1; -.
+DR   EMBL; M24777; AAA16107.1; -.
+DR   EMBL; U18997; AAA58038.1; -.
+DR   EMBL; AE000403; AAC76268.1; -.
+DR   EMBL; Y00129; CAA68326.1; -.
+DR   EMBL; U04742; AAC43730.1; -.
+DR   EMBL; U04743; AAC43731.1; -.
+DR   EMBL; U04744; AAC43732.1; -.
+DR   EMBL; U04745; AAC43733.1; -.
+DR   EMBL; U04746; AAC43734.1; -.
+DR   EMBL; U04747; AAC43735.1; -.
+DR   EMBL; U04748; AAC43736.1; -.
+DR   EMBL; U04749; AAC43737.1; -.
+DR   EMBL; U04750; AAC43738.1; -.
+DR   EMBL; U04751; AAC43739.1; -.
+DR   EMBL; U04752; AAC43740.1; -.
+DR   EMBL; U04753; AAC43741.1; -.
+DR   EMBL; U04754; AAC43742.1; -.
+DR   EMBL; U04755; AAC43743.1; -.
+DR   EMBL; U04756; AAC43744.1; -.
+DR   EMBL; U04757; AAC43745.1; -.
+DR   EMBL; U04758; AAC43746.1; -.
+DR   EMBL; U04759; AAC43747.1; -.
+DR   EMBL; U04760; AAC43748.1; -.
+DR   EMBL; U04770; AAC43758.1; -.
+DR   EMBL; AF004170; AAB87003.1; -.
+DR   EMBL; AF004171; AAB87004.1; -.
+DR   EMBL; AF004172; AAB87005.1; -.
+DR   EMBL; AF004173; AAB87006.1; -.
+DR   EMBL; AF004174; AAB87007.1; -.
+DR   EMBL; AF004175; AAB87008.1; -.
+DR   EMBL; AF004176; AAB87009.1; -.
+DR   EMBL; AF004177; AAB87010.1; -.
+DR   EMBL; AF004179; AAB87012.1; -.
+DR   EMBL; AF004180; AAB87013.1; -.
+DR   EMBL; AF004182; AAB87015.1; -.
+DR   EMBL; AF004183; AAB87016.1; -.
+DR   EMBL; AF004184; AAB87017.1; -.
+DR   EMBL; AF004186; AAB87019.1; -.
+DR   EMBL; AF004187; AAB87020.1; -.
+DR   EMBL; AF004188; AAB87021.1; -.
+DR   EMBL; AF004190; AAB87023.1; -.
+DR   EMBL; AF004191; AAB87024.1; -.
+DR   EMBL; AF004195; AAB87028.1; -.
+DR   EMBL; AF004196; AAB87029.1; -.
+DR   EMBL; AF004199; AAB87032.1; -.
+DR   EMBL; AF004200; AAB87033.1; -.
+DR   EMBL; AF004201; AAB87034.1; -.
+DR   EMBL; AF004202; AAB87035.1; -.
+DR   EMBL; AF004203; AAB87036.1; -.
+DR   EMBL; AF004204; AAB87037.1; -.
+DR   EMBL; AF004205; AAB87038.1; -.
+DR   EMBL; AF004206; AAB87039.1; -.
+DR   EMBL; AF004207; AAB87040.1; -.
+DR   EMBL; AF004208; AAB87041.1; -.
+DR   EMBL; AF004209; AAB87042.1; -.
+DR   PIR; A26525; DEECM.
+DR   PDB; 2CMD; 31-OCT-93.
+DR   PDB; 1CME; 31-JAN-94.
+DR   PDB; 1EMD; 31-OCT-93.
+DR   SWISS-2DPAGE; P06994; COLI.
+DR   ECO2DBASE; F030.2; 6TH EDITION.
+DR   ECOGENE; EG10576; MDH.
+DR   INTERPRO; IPR001236; -.
+DR   INTERPRO; IPR001252; -.
+DR   PFAM; PF00056; ldh; 1.
+DR   PROSITE; PS00068; MDH; 1.
+KW   Oxidoreductase; Tricarboxylic acid cycle; NAD; 3D-structure.
+FT   ACT_SITE    150    150       PROTON-RELAY.
+FT   BINDING     153    153       SUBSTRATE CARBOXYL GROUP.
+FT   ACT_SITE    177    177       PROTON-RELAY.
+FT   VARIANT      71     71       D -> N (IN STRAINS EC47, EC49 AND EC50).
+FT   VARIANT     106    106       A -> S (IN STRAIN ECOR27).
+FT   VARIANT     218    218       A -> R (IN STRAINS A8190, E2666-74,
+FT                                E830587, E851819, E3406, EC10, EC14,
+FT                                EC32, EC35, EC38, EC40, EC44, EC46, EC47,
+FT                                EC49, EC50, EC52, EC58, E64 AND EC70).
+FT   VARIANT     232    232       A -> T (IN STRAIN ECOR37).
+FT   VARIANT     289    289       Q -> K (IN STRAINS EC35, EC38, EC40,
+FT                                EC44, EC46 AND EC47).
+FT   VARIANT     290    290       N -> S (IN STRAINS E2666-74, ECOR27 AND
+FT                                ECOR45).
+FT   VARIANT     291    291       A -> S (IN STRAIN EC35).
+FT   VARIANT     294    294       G -> A (IN STRAIN ECOR45).
+FT   VARIANT     297    297       D -> N (IN STRAIN E830587).
+FT   CONFLICT     37     37       P -> S (IN REF. 4).
+FT   CONFLICT     70     70       A -> R (IN REF. 2).
+FT   CONFLICT     80     80       A -> R (IN REF. 1 AND 2).
+FT   CONFLICT    116    116       I -> N (IN REF. 2).
+FT   CONFLICT    144    144       F -> L (IN REF. 1).
+FT   CONFLICT    305    312       LGEEFVNK -> WAKSSLISN (IN REF. 2).
+FT   CONFLICT    307    307       E -> Q (IN REF. 1).
+FT   STRAND        2      6
+FT   TURN          7      9
+FT   HELIX        11     23
+FT   TURN         26     27
+FT   STRAND       28     33
+FT   TURN         37     38
+FT   HELIX        39     47
+FT   TURN         48     48
+FT   STRAND       53     58
+FT   HELIX        64     67
+FT   TURN         68     69
+FT   STRAND       72     75
+FT   TURN         83     84
+FT   HELIX        87    108
+FT   TURN        110    111
+FT   STRAND      113    116
+FT   HELIX       121    134
+FT   TURN        135    136
+FT   TURN        140    141
+FT   STRAND      143    145
+FT   HELIX       148    162
+FT   TURN        163    163
+FT   HELIX       166    168
+FT   STRAND      173    175
+FT   TURN        179    181
+FT   STRAND      182    184
+FT   HELIX       186    188
+FT   TURN        190    191
+FT   HELIX       196    217
+FT   TURN        218    219
+FT   HELIX       225    242
+FT   TURN        243    244
+FT   STRAND      248    255
+FT   STRAND      263    271
+FT   TURN        272    273
+FT   STRAND      274    278
+FT   HELIX       286    311
+SQ   SEQUENCE   312 AA;  32337 MW;  17741A3B5AD068BA CRC64;
+     MKVAVLGAAG GIGQALALLL KTQLPSGSEL SLYDIAPVTP GVAVDLSHIP TAVKIKGFSG
+     EDATPALEGA DVVLISAGVA RKPGMDRSDL FNVNAGIVKN LVQQVAKTCP KACIGIITNP
+     VNTTVAIAAE VLKKAGVYDK NKLFGVTTLD IIRSNTFVAE LKGKQPGEVE VPVIGGHSGV
+     TILPLLSQVP GVSFTEQEVA DLTKRIQNAG TEVVEAKAGG GSATLSMGQA AARFGLSLVR
+     ALQGEQGVVE CAYVEGDGQY ARFFSQPLLL GKNGVEERKS IGTLSAFEQN ALEGMLDTLK
+     KDIALGEEFV NK
+//

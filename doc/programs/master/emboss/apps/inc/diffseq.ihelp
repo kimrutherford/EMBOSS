@@ -1,0 +1,118 @@
+   Standard (Mandatory) qualifiers:
+  [-asequence]         sequence   Sequence filename and optional format, or
+                                  reference (input USA)
+  [-bsequence]         sequence   Sequence filename and optional format, or
+                                  reference (input USA)
+   -wordsize           integer    [10] The similar regions between the two
+                                  sequences are found by creating a hash table
+                                  of 'wordsize'd subsequences. 10 is a
+                                  reasonable default. Making this value larger
+                                  (20?) may speed up the program slightly,
+                                  but will mean that any two differences
+                                  within 'wordsize' of each other will be
+                                  grouped as a single region of difference.
+                                  This value may be made smaller (4?) to
+                                  improve the resolution of nearby
+                                  differences, but the program will go much
+                                  slower. (Integer 2 or more)
+  [-outfile]           report     [*.diffseq] Output report file name
+  [-aoutfeat]          featout    [$(asequence.name).diffgff] File for output
+                                  of first sequence's features
+  [-boutfeat]          featout    [$(bsequence.name).diffgff] File for output
+                                  of second sequence's features
+
+   Additional (Optional) qualifiers:
+   -globaldifferences  boolean    [N] Normally this program will find regions
+                                  of identity that are the length of the
+                                  specified word-size or greater and will then
+                                  report the regions of difference between
+                                  these matching regions. This works well and
+                                  is what most people want if they are working
+                                  with long overlapping nucleic acid
+                                  sequences. You are usually not interested in
+                                  the non-overlapping ends of these
+                                  sequences. If you have protein sequences or
+                                  short RNA sequences however, you will be
+                                  interested in differences at the very ends .
+                                  It this option is set to be true then the
+                                  differences at the ends will also be
+                                  reported.
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-asequence" associated qualifiers
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-bsequence" associated qualifiers
+   -sbegin2            integer    Start of the sequence to be used
+   -send2              integer    End of the sequence to be used
+   -sreverse2          boolean    Reverse (if DNA)
+   -sask2              boolean    Ask for begin/end/reverse
+   -snucleotide2       boolean    Sequence is nucleotide
+   -sprotein2          boolean    Sequence is protein
+   -slower2            boolean    Make lower case
+   -supper2            boolean    Make upper case
+   -sformat2           string     Input sequence format
+   -sdbname2           string     Database name
+   -sid2               string     Entryname
+   -ufo2               string     UFO features
+   -fformat2           string     Features format
+   -fopenfile2         string     Features file name
+
+   "-outfile" associated qualifiers
+   -rformat3           string     Report format
+   -rname3             string     Base file name
+   -rextension3        string     File name extension
+   -rdirectory3        string     Output directory
+   -raccshow3          boolean    Show accession number in the report
+   -rdesshow3          boolean    Show description in the report
+   -rscoreshow3        boolean    Show the score in the report
+   -rusashow3          boolean    Show the full USA in the report
+   -rmaxall3           integer    Maximum total hits to report
+   -rmaxseq3           integer    Maximum hits to report for one sequence
+
+   "-aoutfeat" associated qualifiers
+   -offormat4          string     Output feature format
+   -ofopenfile4        string     Features file name
+   -ofextension4       string     File name extension
+   -ofdirectory4       string     Output directory
+   -ofname4            string     Base file name
+   -ofsingle4          boolean    Separate file for each entry
+
+   "-boutfeat" associated qualifiers
+   -offormat5          string     Output feature format
+   -ofopenfile5        string     Features file name
+   -ofextension5       string     File name extension
+   -ofdirectory5       string     Output directory
+   -ofname5            string     Base file name
+   -ofsingle5          boolean    Separate file for each entry
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+

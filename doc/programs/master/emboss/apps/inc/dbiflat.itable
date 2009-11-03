@@ -1,0 +1,122 @@
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-dbname]<br>(Parameter 1)</td>
+<td>Database name</td>
+<td>Any string from 2 to 19 characters, matching regular expression /[A-z][A-z0-9_]+/</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-idformat</td>
+<td>Entry format</td>
+<td><table><tr><td>EMBL</td> <td><i>(EMBL)</i></td></tr><tr><td>SWISS</td> <td><i>(Swiss-Prot, SpTrEMBL, TrEMBLnew)</i></td></tr><tr><td>GB</td> <td><i>(Genbank, DDBJ)</i></td></tr><tr><td>REFSEQ</td> <td><i>(Refseq)</i></td></tr></table></td>
+<td>SWISS</td>
+</tr>
+
+<tr>
+<td>-directory</td>
+<td>Database directory</td>
+<td>Directory</td>
+<td>.</td>
+</tr>
+
+<tr>
+<td>-filenames</td>
+<td>Wildcard database filename</td>
+<td>Any string is accepted</td>
+<td>*.dat</td>
+</tr>
+
+<tr>
+<td>-release</td>
+<td>Release number</td>
+<td>Any string up to 9 characters</td>
+<td>0.0</td>
+</tr>
+
+<tr>
+<td>-date</td>
+<td>Index date</td>
+<td>Date string dd/mm/yy</td>
+<td>00/00/00</td>
+</tr>
+
+<tr>
+<td>-outfile</td>
+<td>General log output file</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.dbiflat</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-fields</td>
+<td>Index fields</td>
+<td><table><tr><td>acc</td> <td><i>(acnum accession number index)</i></td></tr><tr><td>sv</td> <td><i>(seqvn sequence version and gi number index)</i></td></tr><tr><td>des</td> <td><i>(des description index)</i></td></tr><tr><td>key</td> <td><i>(keyword keywords index)</i></td></tr><tr><td>org</td> <td><i>(taxon taxonomy and organism index)</i></td></tr></table></td>
+<td>acc</td>
+</tr>
+
+<tr>
+<td>-exclude</td>
+<td>Wildcard filename(s) to exclude</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>-maxindex</td>
+<td>Maximum index length</td>
+<td>Integer 0 or more</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-sortoptions</td>
+<td>Sort options, typically '-T .' to use current directory for work files and '-k 1,1' to force GNU sort to use the first field</td>
+<td>Any string is accepted</td>
+<td>-T . -k 1,1</td>
+</tr>
+
+<tr>
+<td>-[no]systemsort</td>
+<td>Use system sort utility</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]cleanup</td>
+<td>Clean up temporary files</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-indexoutdir</td>
+<td>Index file output directory</td>
+<td>Output directory</td>
+<td>.</td>
+</tr>
+
+</table>

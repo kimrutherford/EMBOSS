@@ -1,0 +1,53 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: embl.ent</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+# Number of files: 9
+# Release: 0.0
+# Date:    00/00/00
+Dual filename database
+eem_ba1.seq eem_ba1.ref
+eem_est.seq eem_est.ref
+eem_fun.seq eem_fun.ref
+eem_htginv1.seq eem_htginv1.ref
+eem_hum1.seq eem_hum1.ref
+eem_in.seq eem_in.ref
+eem_ov.seq eem_ov.ref
+eem_ro.seq eem_ro.ref
+eem_vi.seq eem_vi.ref
+</pre>
+</td></tr></table><p>
+<p><h3>File: embl.pxac</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Order     71
+Fill      47
+Pagesize  2048
+Level     0
+Cachesize 200
+Order2    82
+Fill2     99
+Count     47
+Kwlimit   15
+</pre>
+</td></tr></table><p>
+<p><h3>File: embl.pxid</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Order     71
+Fill      47
+Pagesize  2048
+Level     0
+Cachesize 200
+Order2    82
+Fill2     99
+Count     39
+Kwlimit   15
+</pre>
+</td></tr></table><p>
+<p><h3>File: embl.xac</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: embl.xid</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.

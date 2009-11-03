@@ -1,0 +1,46 @@
+<b>Here is a sample session with fuzztran</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>fuzztran -opt </b>
+Protein pattern search after translation
+Input nucleotide sequence(s): <b>tembl:Z46957</b>
+Search pattern: <b>RA</b>
+Translation frames
+         1 : 1
+         2 : 2
+         3 : 3
+         F : Forward three frames
+        -1 : -1
+        -2 : -2
+        -3 : -3
+         R : Reverse three frames
+         6 : All six frames
+Frame(s) to translate [1]: <b>f</b>
+Genetic codes
+         0 : Standard
+         1 : Standard (with alternative initiation codons)
+         2 : Vertebrate Mitochondrial
+         3 : Yeast Mitochondrial
+         4 : Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma
+         5 : Invertebrate Mitochondrial
+         6 : Ciliate Macronuclear and Dasycladacean
+         9 : Echinoderm Mitochondrial
+        10 : Euplotid Nuclear
+        11 : Bacterial
+        12 : Alternative Yeast Nuclear
+        13 : Ascidian Mitochondrial
+        14 : Flatworm Mitochondrial
+        15 : Blepharisma Macronuclear
+        16 : Chlorophycean Mitochondrial
+        21 : Trematode Mitochondrial
+        22 : Scenedesmus obliquus
+        23 : Thraustochytrium Mitochondrial
+Code to use [0]: <b></b>
+Output report [z46957.fuzztran]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

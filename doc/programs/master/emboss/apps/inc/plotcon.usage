@@ -1,0 +1,15 @@
+<b>Here is a sample session with plotcon</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>plotcon -sformat msf globins.msf -graph cps </b>
+Plot quality of conservation of a sequence alignment
+Window size [4]: <b></b>
+
+Created plotcon.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

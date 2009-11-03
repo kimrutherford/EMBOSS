@@ -1,0 +1,18 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: enztest.findkm</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+---Hanes Woolf Plot Calculations---
+Slope of best fit line is a = 0.01
+Coefficient in Eqn of line y = ma +b is b = 0.05
+Where line cuts x axis = (-0.20, 0)
+Where line cuts y axis = (0, 0.05)
+Limit-point of graph for plot = (103.00, 1.08)
+
+Vmax = 99.70, Km = 4.894611
+</pre>
+</td></tr></table><p>
+<p><h3>Graphics File: findkm.ps</h3>
+<p><img src="findkm.1.findkm.gif" alt="[findkm results]">

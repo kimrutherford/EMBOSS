@@ -1,0 +1,114 @@
+   Standard (Mandatory) qualifiers:
+  [-estsequence]       seqall     Spliced EST nucleotide sequence(s)
+  [-genomesequence]    sequence   Unspliced genomic nucleotide sequence
+  [-outfile]           outfile    [*.est2genome] Output file name
+
+   Additional (Optional) qualifiers:
+   -match              integer    [1] Score for matching two bases (Any
+                                  integer value)
+   -mismatch           integer    [1] Cost for mismatching two bases (Any
+                                  integer value)
+   -gappenalty         integer    [2] Cost for deleting a single base in
+                                  either sequence, excluding introns (Any
+                                  integer value)
+   -intronpenalty      integer    [40] Cost for an intron, independent of
+                                  length. (Any integer value)
+   -splicepenalty      integer    [20] Cost for an intron, independent of
+                                  length and starting/ending on donor-acceptor
+                                  sites (Any integer value)
+   -minscore           integer    [30] Exclude alignments with scores below
+                                  this threshold score. (Any integer value)
+
+   Advanced (Unprompted) qualifiers:
+   -reverse            boolean    Reverse the orientation of the EST sequence
+   -[no]splice         boolean    [Y] Use donor and acceptor splice sites. If
+                                  you want to ignore donor-acceptor sites then
+                                  set this to be false.
+   -mode               menu       [both] This determines the comparion mode.
+                                  The default value is 'both', in which case
+                                  both strands of the est are compared
+                                  assuming a forward gene direction (ie GT/AG
+                                  splice sites), and the best comparsion
+                                  redone assuming a reversed (CT/AC) gene
+                                  splicing direction. The other allowed modes
+                                  are 'forward', when just the forward strand
+                                  is searched, and 'reverse', ditto for the
+                                  reverse strand. (Values: both (Both
+                                  strands); forward (Forward strand only);
+                                  reverse (Reverse strand only))
+   -[no]best           boolean    [Y] You can print out all comparisons
+                                  instead of just the best one by setting this
+                                  to be false.
+   -space              float      [10.0] For linear-space recursion. If
+                                  product of sequence lengths divided by 4
+                                  exceeds this then a divide-and-conquer
+                                  strategy is used to control the memory
+                                  requirements. In this way very long
+                                  sequences can be aligned.
+                                  If you have a machine with plenty of memory
+                                  you can raise this parameter (but do not
+                                  exceed the machine's physical RAM) (Any
+                                  numeric value)
+   -shuffle            integer    [0] Shuffle (Any integer value)
+   -seed               integer    [20825] Random number seed (Any integer
+                                  value)
+   -align              boolean    Show the alignment. The alignment includes
+                                  the first and last 5 bases of each intron,
+                                  together with the intron width. The
+                                  direction of splicing is indicated by angle
+                                  brackets (forward or reverse) or ????
+                                  (unknown).
+   -width              integer    [50] Alignment width (Any integer value)
+
+   Associated qualifiers:
+
+   "-estsequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-genomesequence" associated qualifiers
+   -sbegin2            integer    Start of the sequence to be used
+   -send2              integer    End of the sequence to be used
+   -sreverse2          boolean    Reverse (if DNA)
+   -sask2              boolean    Ask for begin/end/reverse
+   -snucleotide2       boolean    Sequence is nucleotide
+   -sprotein2          boolean    Sequence is protein
+   -slower2            boolean    Make lower case
+   -supper2            boolean    Make upper case
+   -sformat2           string     Input sequence format
+   -sdbname2           string     Database name
+   -sid2               string     Entryname
+   -ufo2               string     UFO features
+   -fformat2           string     Features format
+   -fopenfile2         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory3        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+

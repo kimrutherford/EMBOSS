@@ -1,0 +1,74 @@
+application: fuzznuc [
+  documentation: "Nucleic acid pattern search"
+  groups: "Nucleic:Motifs"
+  gui: "yes"
+  batch: "yes"
+  cpu: "medium"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "dna"
+  ]
+
+  pattern: pattern [
+    standard: "Y"
+    information: "Search pattern"
+    help: "The standard IUPAC one-letter codes for the nucleotides are
+           used. \
+           The symbol 'n' is used for a position where any nucleotide is
+           accepted. \
+           Ambiguities are indicated by listing the acceptable nucleotides
+           for a given position, between square parentheses '[ ]'. For
+           example: [ACG] stands for A or C or G. \
+           Ambiguities are also indicated by listing between a pair of curly
+           brackets '{ }' the nucleotides that are not accepted at a given
+           position. For example: {AG} stands for any nucleotides except A
+           and G. \
+           Each element in a pattern is separated from its neighbor by a '-'.
+           (Optional in fuzznuc). \
+           Repetition of an element of the pattern can be indicated by
+           following that element with a numerical value or a numerical range
+           between parenthesis. Examples: N(3) corresponds to N-N-N, N(2,4)
+           corresponds to N-N or N-N-N or N-N-N-N. \
+           When a pattern is restricted to either the 5' or 3' end of a
+           sequence, that pattern either starts with a '<' symbol or
+           respectively ends with a '>' symbol. \
+           A period ends the pattern. (Optional in fuzznuc). \
+           For example, [CG](5)TG{A}N(1,5)C"
+    type: "nucleotide"
+    pmismatch: "0"
+  ]
+
+endsection: input
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  boolean: complement [
+    default: "N"
+    information: "Search complementary strand"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  report: outfile [
+    parameter: "Y"
+    taglist: "str:pat=Pattern_name int:mismatch=Mismatch"
+    rformat: "seqtable"
+    precision: "0"
+  ]
+
+endsection: output

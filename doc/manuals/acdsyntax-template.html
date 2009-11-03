@@ -1,0 +1,4537 @@
+<html>
+
+<head>
+</head>
+
+<body bgcolor=white>
+
+<div align=center>
+
+<table border=0 cellspacing=0 cellpadding=0>
+ <tr>
+  <td>
+  <p><a href="http://emboss.sourceforge.net/">
+  <img border=0 width=55
+  height=55
+  src="/images/emboss_icon.jpg"></a></p>
+  </td>
+  <td>
+  <h2 align=center>ACD Syntax 3.0.0</h2>
+  </td>
+ </tr>
+</table>
+
+</div>
+
+<a name="sect1">&nbsp;</a>
+<h1>1. Introduction</h1>
+
+<p>The EMBOSS package
+consists of a large number of separate programs that have a specific function.
+They usually take a (number of) input file(s) and some parameters that are
+important to the function and produce output in the form of files, plots, web
+pages or simple text output.</p>
+
+<p>The programs can be invoked in a
+myriad of ways. Its name could be entered on the command line with all
+parameters, so the program will have all the information it needs all at once.
+A more interactive way is a query-answer session with the user, in which the
+user is asked to enter a piece of information one at a time. A third way could
+be a web-interface where a user chooses the options for the program using
+lists, checkboxes, radio buttons etc. In EMBOSS, the way a program interacts
+with the user, its interface, is independent of the actual program.</p>
+
+<a name="sect11">&nbsp;</a>
+<h2>1.1 Command line syntax</h2>
+
+<p>At the moment, EMBOSS
+programs are called by giving their name on the UNIX command line either with
+or without parameters. Many parameters can have qualifiers that will give more
+information about a parameter. For instance, the format of the information in a
+sequence file that is used as an input file could be specified on the command
+line, like:</p>
+
+<table border=0 cellpadding=0>
+ <tr>
+  <td>
+  <p>% <b>seqret</b> <i>filename.seq</i>
+  -sformat <i>fasta</i></p>
+  </td>
+ </tr>
+</table>
+
+<p>In this example the EMBOSS program ' <b>seqret</b> is called with
+the filename '<i>filename.seq</i>' as its first parameter.  '-sformat
+<i>fasta</i>' indicates that the sequence file is in 'fasta' format.
+A complete description of the command line syntax will follow in <a
+href="#sect2">section 2 Formal Description of the ACD language.</a>
+The percentage sign '%' indicates that the command was entered on the
+UNIX command line. This will be used throughout the documentation.</p>
+
+<a name="sect12">&nbsp;</a>
+<h2>1.2 ACD files</h2>
+
+<p>Every EMBOSS program will be accompanied by a so-called ACD (Ajax
+Command Definitions) file, which describes the parameters that the
+program it refers to needs. It contains information about its input
+and output files and other parameters the program may need. It will
+indicate if any of the parameters are mandatory (like an input
+sequence file) or that certain parameters are within certain limits (a
+gap penalty for an alignment must be higher then 0 for instance). It
+can also indicate whether one parameter's value is dependent on the
+value or the presence of another. (An example: If the input sequence
+for an alignment program is DNA, it should not accept a protein
+comparison matrix).</p>
+
+<a name="sect13">&nbsp;</a>
+<h2>1.3 ACD language</h2>
+
+<p>The parameters are
+defined in a special purpose language called Ajax Command Definitions or ACD,
+specially designed for EMBOSS. It will specify everything that can appear on
+the command line or can be used in another interface like web pages. It is a
+very 'forgiving' language in that it does not restrict the available syntax any
+more than is strictly necessary.</p>
+
+<a name="sect2">&nbsp;</a>
+<h1>2. Formal description of the ACD language</h1>
+
+<a name="sect21">&nbsp;</a>
+<h2>2.1 ACD file overview</h2>
+
+<p>ACD files are simple
+text files that contain the definitions. The files usually have the same prefix
+as the program, but this is not required. ACD files use the extension '.acd'.
+This is mandatory.</p>
+
+<ul type=disc>
+ <li>Comments start with "#" and continue to the end of the
+     line. </li>
+ <li>Each line is parsed into tokens delimited by <b>spaces</b>. </li>
+ <li>All values are regarded as strings until finally resolved. </li>
+ <li>There is only one pass through when parsing, so all variables in
+     dependencies have to be declared before the line where they are used.</li>
+ <li>Parameters and qualifiers are defined by a single token followed by
+     a colon ':' and white space, which in turn is
+     followed by a second token. The definition of the parameter or qualifier
+     is delimited by a pair of square brackets '[ ]', which can span multiple
+     lines.</li>
+</ul>
+
+<p><b>Formalised:</b></p>
+
+<pre>
+token: token [
+   <i>definition</i>
+]
+</pre>
+
+<p>is equivalent to</p>
+
+<pre>
+token=token [
+    <i>definition</i>
+]
+</pre>
+
+<p>The first token in the file must be "application" directly followed
+by a colon ':' or an equal sign '='. The second token is the
+application name with which this ACD file is associated. The
+application name is followed by (required) application attributes
+enclosed in square brackets. </p>
+
+<p><b>Formalised:</b></p>
+
+<pre>
+  application: appname [
+     <i>attributes</i>
+  ]
+</pre>
+
+<p><b>Example:</b></p>
+
+<pre>
+application: wossname [
+    documentation: "Finds programs by keywords"
+    groups: "Display"
+  ]
+</pre>
+
+<p>The first token of a parameter definition is an Ajax datatype,
+directly followed by a colon ':' (preferred) or equal sign '='. The
+second token is the name by which this parameter is going to be known
+(this is also the name that is used by the EMBOSS program to get the
+value of the parameter). After the name, definitions are in
+<b>mandatory</b> square brackets, [], which can make a definition span
+multiple lines.</p>
+
+<p><b>Formalised:</b></p>
+
+<pre>
+datatype: parametername [
+    <i>definition</i>
+  ]
+</pre>
+
+<p><b>Example:</b></p>
+
+<pre>
+sequence: asequence [
+    standard: "Y"
+  ]
+</pre>
+
+<p>Tokens representing data types can be abbreviated up to the point
+where they are not ambiguous. For example, <i>default:</i> can be
+abbreviated to <i>default:</i> or even <i>d:</i> although the latter is
+not recommended due to lack of clarity.</p>
+<p>Values can be delimited (i.e. treated as one token) by double quotes</p>
+
+<a name="sect22">&nbsp;</a>
+<h2>2.2 The application definition</h2>
+
+<p>The first token of an ACD file must be the <i>application:</i> token,
+followed by the application name. The application name and the ACD
+filename (without the <i>.acd</i> extension) are usually identical,
+but this is not mandatory. When a program calls the
+<i>embInit("program")</i> function with <i>"program"</i> as its
+parameter, the function will only look for an ACD file called
+<i>program.acd</i>. It will not compare the parameter with the string
+given after the <i>application:</i> token.</p>
+
+<a name="sect221">&nbsp;</a>
+<h3>2.2.1 Application attributes</h3>
+
+
+<a name="sect2211">&nbsp;</a>
+<h4>2.2.1.1 The documentation attribute</h4>
+
+<p>The <i>application:</i> token has a <i>documentation:</i> attribute which is
+followed by a string describing the function of the program.  This
+documentation string will be used to generate the description of the
+program when the program is run or the user specifies the <i>-help</i>
+qualifier. When the <i>documentation:</i> attribute is missing, a warning will
+be issued.
+</p>
+
+<p><b>Formalised:</b></p>
+
+<pre>
+application: appname [
+    documentation: string
+  ]
+</pre>
+
+<p><b>Example:</b></p>
+
+<p>ACD file definition (partly):</p>
+
+<pre>
+application: seqret [
+    documentation: "Reads and writes (returns) a sequence"
+  ]
+</pre>
+
+<p><b>Command line:</b></p>
+
+<pre>
+% <b>seqret</b>
+Reads and writes (returns) a sequence
+Input sequence :
+</pre>
+
+<p>The ACD file starts with the definition of the program
+<b>seqret</b>. The <i>documentation:</i> attribute is followed by a
+string briefly explaining the function of the program and this string
+is shown after the program is invoked and before it prompts the user
+for any input. The <i>documentation:</i> string is also searched by
+the <b>wossname</b> utility, which finds applications by keyword (in
+the <i>doc</i> string) and group.</p>
+
+<p>The length of the <i>documentation:</i> string should be kept to 63
+characters or shorter in order to allow the <b>wossname</b> utility to
+display each program name and its documentation on one 80-character
+line.</p>
+
+<p>The <i>documentation:</i> string should <b>not</b> end
+with a '.' character</p>
+
+<p>Any acronyms or capitalised abbreviations in the
+<i>documentation:</i> string should be written in upper case. (e.g.:
+SNPs, EST, DNA, ABI, SRS, ASCII, CDS, mRNA, B-DNA, RNA, CpG, ORFs,
+MAR/SAR, PCR, STS, REBASE, SCOP, PROSITE, PRINTS, EMBL, TRANSFAC,
+AAINDEX, BLAST, GCG, EMBOSS)</p>
+
+<p>The <i>documentation:</i> string should start with an
+upper-case letter.</p>
+
+<a name="sect2212">&nbsp;</a>
+<h4>2.2.1.2 The groups attribute</h4>
+
+<p>The <i>groups:</i> attribute allows the EMBOSS programs to be
+grouped together based on their functionality. The <i>groups:</i>
+attribute is followed by a string value, containing the name(s) of the
+group(s). When an application belongs to more then one group, the
+group names must be separated by either a comma (,) or semi-colon (;);
+i.e. a group name is not a token, but a list of tokens.</p>
+
+<p>The <i>groups:</i> string is also searched by the <b>wossname</b>
+utility, which finds applications by keyword (in the <i>doc</i>
+string) and group.</p>
+
+<p><b>Formalised:</b></p>
+
+<pre>
+application: appname [
+    groups: "group name1, group2, ... "
+  ]
+</pre>
+
+<p><b>Example:</b> ACD file definition (partly):</p>
+
+<pre>
+application: seqret [
+    groups: "Display"
+  ]
+</pre>
+
+<a name="sect2213">&nbsp;</a>
+<h4>2.2.1.3 Groups format</h4>
+
+<p>Group names can have spaces in them.</p>
+
+<p>The group names can be split into sub-levels by
+the use of a ':' character: <br>
+<b>First Level : Second Level</b> <br>
+Several third-party interfaces are starting to rely upon there being a maximum
+of 2 levels, so do not use more than one ':' in a group name.</p>
+
+<p>The group name is now checked against a list of
+accepted values in the file <b>groups.standard</b> which is defined
+and installed in the same directory as the ACD files. This file
+contains one line for each known group, with subgroups defined with a
+":" delimiter, and spaces replaced by underscores. Each group also
+has a short description.</p>
+
+<p>The table in the following section lists all groups currently
+defined</p>
+
+<a name="sect2214">&nbsp;</a>
+<h4>2.2.1.4 The groups structure</h4>
+
+<p>The First and Second level group names are
+given below with some explanation of what might be expected to be placed in the
+group.</p>
+
+<p>If a group is composed of two levels, such as <br>
+<b>Alignment : Consensus</b> <br>
+then the group specification must not use the group names singly, (i.e. you
+must not use <b>"Alignment"</b> or <b>"Consensus"</b>). <br>
+If the group consists of only one level, such as <br>
+<b>Display</b> <br> then please don't start adding sub-levels to
+it. (i.e. you must not use <b>"Display : Features"</b>)</p>
+
+<p>You are <b>strongly</b> encouraged to use the
+following groups structure. This is the set of groups defined by the
+<b>groups.standard</b> file. We have found that most things will fit in one or
+more of these groups. When, however, a completely new category of program is
+written, please discuss the creation of the new group name with the developers'
+mailing list. Sometimes a new group is required (for example the group "Enzyme
+Kinetics" which had to be created to hold 'findkm').</p>
+
+<!-- #tablegroups -->
+
+
+<a name="sect23">&nbsp;</a>
+<h2>2.3 Ajax Data Types</h2>
+
+<p>ACD files describe the parameters that a
+program needs, in an object-oriented manner. The most important types or
+objects are file objects, sequence objects, number objects, Boolean objects and
+string objects. The current objects are listed in Table 1.</p>
+
+
+
+<!-- #tabletypes -->
+
+<a name="sect231">&nbsp;</a>
+<h3>2.3.1 Description of the data types</h3>
+
+<a name="sect2311">&nbsp;</a>
+<!-- #acdtype-section-simple -->
+<h4>2.3.1.1 Simple</h4>
+
+<!-- #acdtype-array -->
+<h5>Array</h5>
+
+<p>Array parameters are lists of numbers, either
+integer or floating point. The ACD attributes control validation, for example
+the number of values, or a list of numbers that adds to a given total. The data
+value is a list of numbers separated by spaces or commas.</p>
+
+<!-- #acdtype-boolean -->
+<h5>Boolean</h5>
+
+<p>Boolean parameters are simple switches. If they
+are entered on the command line the value will be Y (True), if they are absent
+from the command line the value will be the default value. The name can also be
+prefixed by 'no' to force the value to be N (False). This is needed if the
+default value is Y (True). The data value is Y for yes and N for no.</p>
+
+<!-- #acdtype-integer -->
+<h5>Integer</h5>
+
+<p>The integer data type can hold simple integer
+values. The value range can be controlled by minimum and maximum values (a
+minimum value of 0 or 1 is often useful).</p>
+
+<!-- #acdtype-float -->
+<h5>Float</h5>
+
+<p>Simple float values. The value range can be
+controlled by minimum and maximum ACD attributes (a minimum value of 0.0 is
+often useful).</p>
+
+<!-- #acdtype-range -->
+<h5>Range</h5>
+
+<p>Ranges of sequence positions. Originally
+defined as a simple list of paired numbers, ranges can now be specified in
+files with the range syntax <i>"@filename"</i>, as pairs of numbers
+with text comments. For example:</p>
+
+<pre>
+# this is my set of ranges
+ 12      23
+  4      5       this is like 12-23, but smaller
+ 67      10348   interesting region
+</pre>
+
+<!-- #acdtype-string -->
+<h5>String</h5>
+
+<p>Any string value. The length can be controlled by ACD attributes,
+and a regular expression pattern to provide more general validation if
+necessary. Most string values are free text, although strings can be
+used by a program for any input that is not covered by a defined ACD
+type.</p>
+
+<!-- #acdtype-toggle -->
+<h5>Toggle</h5>
+
+<p>Toggle parameters are simple switches, and work in the same way as
+"boolean" parameters. Toggle parameters are intended for use in
+turning on/off other parameters. When ACD parameters are grouped in
+sections, a clean ACD file will  have all the "required" parameters in
+the "required" secion and all the "additional" parameters in the
+"additional" section. Some of these will have calculated values for
+the "standard" and "additional" attributes, controlled by the value of
+another parameter. The "toggle" parameters are designed to be used in
+these calculated values, and can be in the "required" section even if
+not themselves defined as "standard".</p>
+
+<p>Exactly like "boolean" parameters, if they
+are entered on the command line the value will be Y (True), if they are absent
+from the command line the value will be the default value. The name can also be
+prefixed by 'no' to force the value to be N (False). This is needed if the
+default value is Y (True). The data value is Y for yes and N for
+no.</p>
+
+
+<a name="sect2312">&nbsp;</a>
+<a name="fnB1">&nbsp;</a>
+<!-- #acdtype-section-input -->
+<h4>2.3.1.2 Input<a href="#fn1">[1]</a></h4>
+
+<!-- #acdtype-codon -->
+<h5>Codon</h5>
+
+<p>Codon usage tables are simple files read from the EMBOSS data
+search path, and are distributed in the emboss/data directory.</p>
+
+<p>Codon usage files can be read in several formats, including "gcg".</p>
+
+<!-- #acdtype-cpdb -->
+<h5>Cpdb</h5>
+
+<p>Cpdb (Cleaned PDB) files are simple input files
+in CPDB format. See the documentation for pdbparse, part of the
+EMBASSY domainatrix package, which generates
+CPDB files from PDB file input.</p>
+
+<!-- #acdtype-datafile -->
+<h5>Datafile</h5>
+
+<p>Datafile input refers to a formatted data file to be read from the
+standard
+EMBOSS data file locations (see the EMBOSS Administrator's guide for
+full details).</p>
+
+<p>EMBOSS looks for data files in the local/share/EMBOSS/data
+directory, or in various user directories.
+</p>
+
+<p>Most data files are already defined as their own ACD types -
+matrix, matrixf, codon. Otehrs are hard coded file names that do not
+need their own ACD definition, although users are free to define their
+own file with the appropriate name to override the default file provided.</p>
+
+<!-- #acdtype-directory -->
+<h5>Directory</h5>
+
+<p>Directory defines a directory that can be used for input or output
+definitions.</p>
+
+<p>Directory is intended for future use to replace string definitions
+of directory names in some applications, and to provide additional
+validation of the user input specific to directory specifications.</p>
+
+<!-- #acdtype-dirlist -->
+<h5>Dirlist</h5>
+
+<p>Directory defines a set (list) of directories that can be used for
+input or output definitions.</p>
+
+<p>Dirlist is intended for future use to replace string definitions
+of directory names in some applications, and to provide additional
+validation of the user input specific to directory specifications.</p>
+
+<!-- #acdtype-discretestates -->
+<h5>Discretestates</h5>
+
+<p>Discretestates is a new ACD type implemented specifically for
+the "phylipnew" EMBASSY package. Discretestates input is used by the
+phylip "discrete character" applications. By defining a specific ACD
+type EMBOSS can provide detailed type checking, and can automatically
+detect and validate the various alternative formats that phylip supports
+without the need for complex extra command line options.</p>
+
+<!-- #acdtype-distances -->
+<h5>Distances</h5>
+
+<p>Distances is a new ACD type implemented specifically for
+the "phylipnew" EMBASSY package. Discretestates input is used by the
+phylip "distance matrix" applications. By defining a specific ACD
+type EMBOSS can provide detailed type checking, and can automatically
+detect and validate the various alternative formats that phylip supports
+without the need for complex extra command line options.</p>
+
+<!-- #acdtype-features -->
+<h5>Features</h5>
+
+<p>Feature annotation in any known feature format.
+Features can also be read from a sequence and written with a sequence.</p>
+
+<!-- #acdtype-filelist -->
+<h5>Filelist</h5>
+
+<p>Filelist defines a set (list) of input files.</p>
+
+<p>Filelist is intended for future use to replace string definitions
+of input file names in some applications, and to provide additional
+validation of the user input specific to multiple input files.</p>
+
+<!-- #acdtype-frequencies -->
+<h5>Frequencies</h5>
+
+<p>Frequencies is a new ACD type implemented specifically for the
+"phylipnew" EMBASSY package. Discretestates input is used by the
+phylip "gene frequency and continuous character" applications. By
+defining a specific ACD type EMBOSS can provide detailed type
+checking, and can automatically detect and validate the various
+alternative formats that phylip supports without the need for complex extra
+command line options.</p>
+
+<!-- #acdtype-infile -->
+<h5>Infile</h5>
+
+<p>Non-sequence-related data file. This data type
+refers to files that are to be used in the program and do usually not contain
+sequence data. The type of data can be identified by a "knowntype"
+attribute and matched to Outfile standard types, or to report, align, featout,
+or seqout formats.</p>
+
+<!-- #acdtype-matrix -->
+<h5>Matrix</h5>
+
+<p>Comparison matrix files are used by many
+programs. They are data files read from the EMBOSS data search path, and are
+distributed in the emboss/data directory. For preference, we use the matrix
+files distributed with BLAST.</p>
+
+<p>Integer matrices are usually faster and are
+preferred by most applications. Floating-point matrix files are also available
+if needed, and an integer matrix file can of course also be read as floating
+point.</p>
+
+<p>The matrix data type has an attribute to force
+selection of a nucleic acid or protein comparison matrix. In ACD files, the
+type of the input sequence is often used here.</p>
+
+<p>Remember that any application which uses gap
+penalties will need to set them separately for each matrix.</p>
+
+<!-- #acdtype-matrixf -->
+<h5>Matrixf</h5>
+
+<p>Floating point comparison matrices are required by some
+algorithms. An integer matrix file can of course be used equally well
+as a floating point matrix.</p>
+
+<!-- #acdtype-pattern -->
+<h5>Pattern</h5>
+
+<p>Pattern definitions files allow multiple search patterns to be
+described, each with a name.</p>
+
+<p>Pattern files are used for PROSITE syntax sequence patterns. The
+same syntax is used for "regexp" input. Pattern files also allow
+mismatch values to be defined for each pattern, and a "-pmismatch"
+qualifier sets the mismatch default for all patterns in the
+file. Mismatches are not appropriate for regular expression matches.</p>
+
+<!-- #acdtype-properties -->
+<h5>Properties</h5>
+
+<p>Properties is a new ACD type implemented specifically for the
+"phylipnew" EMBASSY package. Properties input is used by the phylip
+applications to define weights, ancestral states and factors
+(multi-state characters). By defining a specific ACD type EMBOSS can
+provide detailed type checking, and can automatically detect and
+validate the various alternative formats that phylip supports without
+the need for complex extra command line options.</p>
+
+<!-- #acdtype-regexp -->
+<h5>Regexp</h5>
+
+<p>Any regular expression value, or (new in release 4.0.0) a file
+containing regular expressions and names.</p>
+
+<p>The length can be vallidated and controlled
+by ACD attributes. The case can be set to upper or lower case only.
+The regular expression must be supported by the EMBOSS regular
+expression library.</p>
+
+<p>EMBOSS uses the "Perl-Compatible Regular Expression Library"
+(PCRE), so any regular expression that is valid in Perl 5.0 should be
+valid here.</p>
+
+<!-- #acdtype-scop -->
+<h5>Scop</h5>
+
+<p>SCOP files are simple input files in SCOP
+format.</p>
+
+<!-- #acdtype-sequence -->
+<h5>Sequence</h5>
+
+<p>USA (database reference or file) indicating a single sequence. The
+type of sequence can be restricted by specific attribute <i>"type"</i>
+(for example, the program should only accept DNA files). Can also read
+features if the "features" ACD attribute is set.</p>
+
+<!-- #acdtype-seqall -->
+<h5>Seqall</h5>
+
+<p>set of single sequences that can be addressed
+one after another (for example a set of sequences that will be used in an
+multiple alignment). The type of sequence can be restricted by specific
+attribute <i>"type"</i> (for example, the program should only accept
+DNA files). Can also read features if the "features" ACD attribute is
+set.</p>
+
+<!-- #acdtype-seqset -->
+<h5>Seqset</h5>
+
+<p>set of single sequences that can be used all at the same time (for
+example a database of some sort that is to be used for a pattern
+search). The type of sequence can be restricted by specific attribute
+<i>"type"</i> (for example, the program should only accept DNA
+files). Can also read features if the "features" ACD attribute is
+set.</p>
+
+<!-- #acdtype-seqsetall -->
+<h5>Seqsetall</h5>
+
+<p>One or more sets of single sequences that can be used all at the
+same time (for example a database of some sort that is to be used for
+a pattern search). The type of sequence can be restricted by specific
+attribute <i>"type"</i> (for example, the program should only accept DNA
+files). Can also read features if the "features" ACD attribute is
+set.</p>
+
+<!-- #acdtype-tree -->
+<h5>Tree</h5>
+
+<p>Tree is a new ACD type implemented specifically for the "phylipnew"
+EMBASSY package. Properties input is used by the phylip applications
+to define one or more phylogenetic trees. By defining a specific ACD
+type EMBOSS can provide detailed type checking, and can automatically
+detect and validate the various alternative formats that phylip
+supports without the need for complex extra command line options. The
+trees are currently parsed by phylip itself, but in the near future we
+will implement parsing methods in ACD processing.</p>
+
+<a name="sect2313">&nbsp;</a>
+<!-- #acdtype-section-selection -->
+<h4>2.3.1.3 Selection lists</h4>
+
+<p>Selection lists are a way to present the user with
+a limited list of options he/she can choose from. For the user, the difference
+between the <i>list</i> and <i>selection</i> data type is minimal and lies only in
+the way the choices are labelled. In a <i>selection</i> data type, the choices are
+numbered automatically from 1 up. In a <i>list</i> data type the choices can be
+labelled by any arbitrary text label. The user can choose one of the options by
+either typing the number (for a <i>selection</i> type) or the text of the label
+(for a <i>list</i> type) or a non-ambiguous part of the value of the choice. In
+practice, the <i>list</i> data type is much preferred for this reason.</p>
+
+
+
+<!-- #acdtype-list -->
+<h5>List</h5>
+
+<p>A list of text descriptions with short labels.
+The user can enter one (or sometimes more) labels, or can specify partial text
+descriptions. The program is given a list of text labels as input.</p>
+
+<!-- #acdtype-selection -->
+<h5>Selection</h5>
+
+<p>A list of text descriptions (usually short,
+unlike list data), with generated numbers. The user can enter one (or sometimes
+more) numbers, or can specify partial text descriptions. The program is given a
+list of text descriptions as input. The <i>list</i>data
+type is usually preferred.</p>
+
+
+
+<ul type=disc>
+ <li>List </li>
+ <li>Selection</li>
+</ul>
+
+<a name="sect2314">&nbsp;</a>
+<!-- #acdtype-section-output -->
+<h4>2.3.1.4 Output <a href="#fn1">[1]</a></h4>
+
+<!-- #acdtype-align -->
+<h5>Align</h5>
+
+<p>An output file for sequence alignments. Defined
+in the same way as a plain text "Outfile" but with extra qualifiers
+to allow a choice of alignment formats, and attributes to specify whether the
+alignment will have 2 or more sequences (which limits the possible formats).
+The data is stored as sequences, the available formats include the most common
+sequence formats.</p>
+
+<!-- #acdtype-featout -->
+<h5>Featout</h5>
+
+<p>Feature annotation in any known feature format.
+Can also be stored with the sequence if the sequence output
+"features" attribute is set.</p>
+
+<!-- #acdtype-outcodon -->
+<h5>Outcodon</h5>
+
+<p>Output file containing codon usage data.
+The default data format can be specified by an "oformat" attribute
+which the <i>-oformat</i> associated qualifier can override.</p>
+
+<!-- #acdtype-outcpdb -->
+<h5>Outcpdb</h5>
+
+<p>Output file containing cleaned PDB protein structure data.
+The default data format can be specified by an "oformat" attribute
+which the <i>-oformat</i> associated qualifier can override.</p>
+
+<!-- #acdtype-outdata -->
+<h5>Outdata</h5>
+
+<p>Output file containing cleaned formatted data as tables or lists.
+The default data format can be specified by an "oformat" attribute
+which the <i>-oformat</i> associated qualifier can override.</p>
+
+<p>Multiple <b>outdata</b> definitions are by default appended to a
+single file. The individual ACD definitions allow the format of each
+file section to be defined.</p>
+
+<!-- #acdtype-outdir -->
+<h5>Outdir</h5>
+
+<p>Output directory for multiple output files to be written.
+Specifying an <b>outdir</b> allows other properties to be defined,
+including the default file extension with the "extension" attribute.</p>
+
+<!-- #acdtype-outdiscrete -->
+<h5>Outdiscrete</h5>
+
+<p>Output file containing phylogenetics discrete characteristics data.
+The default data format can be specified by an "oformat" attribute
+which the <i>-oformat</i> associated qualifier can override.</p>
+
+<!-- #acdtype-outdistance -->
+<h5>Outdistance</h5>
+
+<p>Output file containing phylogenetics distance matrix data.
+The default data format can be specified by an "oformat" attribute
+which the <i>-oformat</i> associated qualifier can override.</p>
+
+<!-- #acdtype-outfile -->
+<h5>Outfile</h5>
+
+<p>Non-sequence-related data file, usually plain
+text. This data type refers to files that are to be produced by the program and
+usually do not contain sequence data. The type of data can be identified by a
+"knowntype" attribute and matched to an Infile standard type for
+use as input to another program.</p>
+
+<!-- #acdtype-outfileall -->
+<h5>Outfileall</h5>
+
+<p>Non-sequence-related data files, usually plain
+text. This data type refers to files that are to be produced by the program and 
+usually do not contain sequence data. The type of data can be identified by a
+"knowntype" attribute and matched to an Infile standard type for
+use as input to another program.</p>
+
+<!-- #acdtype-outfreq -->
+<h5>Outfreq</h5>
+
+<p>Output file containing phylogenetics character frequency data.
+The default data format can be specified by an "oformat" attribute
+which the <i>-oformat</i> associated qualifier can override.</p>
+
+<!-- #acdtype-outmatrix -->
+<h5>Outmatrix</h5>
+
+<p>Output file containing integer comparison matrix data.
+The default data format can be specified by an "oformat" attribute
+which the <i>-oformat</i> associated qualifier can override.</p>
+
+<!-- #acdtype-outmatrixf -->
+<h5>Outmatrixf</h5>
+
+<p>Output file containing floating point comparison matrix data.
+The default data format can be specified by an "oformat" attribute
+which the <i>-oformat</i> associated qualifier can override.</p>
+
+<!-- #acdtype-outproperties -->
+<h5>Outproperties</h5>
+
+<p>Output file containing phylogenetics property data.
+The default data format can be specified by an "oformat" attribute
+which the <i>-oformat</i> associated qualifier can override.</p>
+
+<!-- #acdtype-outscop -->
+<h5>Outscop</h5>
+
+<p>Output file containing SCOP protein domain data.
+The default data format can be specified by an "oformat" attribute
+which the <i>-oformat</i> associated qualifier can override.</p>
+
+<!-- #acdtype-outtree -->
+<h5>Outtree</h5>
+
+<p>Output file containing phylogenetic tree data.
+The default data format can be specified by an "oformat" attribute
+which the <i>-oformat</i> associated qualifier can override.</p>
+
+<!-- #acdtype-report -->
+<h5>Report</h5>
+
+<p>An output file for sequence annotation. Defined
+in the same way as a plain "Outfile" but with extra qualifiers to
+allow a choice of report formats. Report data is stored internally as a feature
+table, so the available formats include the most common feature formats.</p>
+
+<!-- #acdtype-seqout -->
+<h5>Seqout</h5>
+
+<p>USA (database reference or file) indicating a
+single sequence. Can also write features if the "features" ACD
+attribute is set.</p>
+
+<p>The default file extension is the sequence format, but can be
+specifically set with the "osextension" attribute, for example where
+appliations produce two or more sequence outputs.</p>
+
+<!-- #acdtype-seqoutall -->
+<h5>Seqoutall</h5>
+
+<p>A set of single sequences to be written to a
+single file. Can also write features if the "features" ACD attribute
+is set.</p>
+
+<p>The default file extension is the sequence format, but can be
+specifically set with the "osextension" attribute, for example where
+appliations produce two or more sequence outputs.</p>
+
+<!-- #acdtype-seqoutset -->
+<h5>Seqoutset</h5>
+
+<p>A set of single sequences stored in memory
+together, usually a multiple sequence alignment. Can also write features if the
+"features" ACD attribute is set.</p>
+
+<p>The default file extension is the sequence format, but can be
+specifically set with the "osextension" attribute, for example where
+appliations produce two or more sequence outputs.</p>
+
+<a name="sect2315">&nbsp;</a>
+<!-- #acdtype-section-graph -->
+<h4>2.3.1.5 Graphics</h4>
+
+<!-- #acdtype-graph -->
+<h5>Graph</h5>
+
+<p>For graphical output of any general kind,
+including dotplots. The data value is the graphics device, as specified by the
+"PLPLOT" graphics library used in EMBOSS at present. Example values
+include "ps" for Postscript, "png" for PNG files, and
+"X11" for X-Windows. A value of "?" in answer to the prompt
+will list the available graphics devices on your installation.</p>
+
+<!-- #acdtype-xygraph -->
+<h5>Xygraph</h5>
+
+<p>For graphical output as a simple two
+dimensional (2D) XY plot with the sequence along the x-axis. . The data value
+is the graphics device, as specified by the "PLPLOT" graphics library
+used in EMBOSS at present. Example values include "ps" for
+Postscript, "png" for PNG files, and "X11" for X-Windows. A
+value of "?" in answer to the prompt will list the available graphics
+devices on your installation.</p>
+
+<a name="sect232">&nbsp;</a>
+<h3>2.3.2 Parameter names</h3>
+
+<p>ACD objects have mandatory names.</p>
+
+<p><b>Formalised:</b></p>
+
+<pre>
+<i>datatype:</i> <i>parametername</i> [
+ ]
+</pre>
+
+<p><b>Example:</b></p>
+
+<pre>
+sequence: asequence [
+ ]
+</pre>
+
+<p>This defines <i>asequence</i> to be the name
+of a sequence object.</p>
+
+<p>In order to assign a value to a parameter, the
+name of the parameter can be specified on the command line (in a number of
+ways, see section 4) followed by a value that is appropriate for that data
+type.</p>
+
+<p><b>Example:</b></p>
+
+<p>ACD file definition (partly):</p>
+
+<pre>
+sequence: asequence [
+  ]
+</pre>
+
+<p>Command line :</p>
+
+<pre>
+% <b>acddemo</b> -asequence <i>filename.seq</i>
+</pre>
+
+
+
+<p>This defines <i>filename.seq</i> to be the value of the parameter
+named <i>asequence</i> for the EMBOSS program acddemo.</p>
+
+<p>If a parameter is defined with a special
+parameter attribute ( <i>parameter:"Y"</i>), using the name of the
+parameter on the command line is not mandatory (see section 3.4). This is
+commonly used for input data and for output filenames.</p>
+
+<p>The name of an object is also used, in the
+EMBOSS program, to refer to the value of the parameter. After the initiation
+call using the EMBOSS function embInit(), the values of the parameters have
+been read in and checked (see 1.4). The program must then assign the parameter
+to an actual EMBOSS object, like sequence (AjPSeq), string (AjPStr) etc. The
+actual function calls are beyond the scope of this document, and the reader is
+referred to the AJAX documentation
+(http://srs.ebi.ac.uk/srs7bin/cgi-bin/wgetz?-fun+pagelibinfo+-info+EDATA
+for the SRS searchable Object documentation), but some examples can be found in
+section 1.4 and 1.5.</p>
+
+<p>The name can also be used in the definition of
+other ACD parameters. The value of the parameter (or variable) is retrieved,
+using the dollar sign '$' and a the name of the parameter encapsulated by a
+pair of parentheses.</p>
+
+<p><b>Formalised:</b></p>
+
+<pre>
+$(<i>parametername</i>)
+</pre>
+
+<p><b>Example:</b></p>
+
+<pre>
+integer: gappenalty    [
+    standard: Y
+    default: 10
+  ]
+
+
+integer: gapextpenalty [
+    default: $(gappenalty)
+  ]
+</pre>
+
+<p>This defines the default for parameter <i>gapextpenalty</i>
+as the value of parameter <i>gappenalty</i>.</p>
+
+<p><b>Naming conventions</b></p>
+
+<p>Although everybody is free to use any (valid)
+name for a parameter, we would like to propose a naming convention, to
+streamline the development of ACD files.</p>
+
+<table border=1 cellpadding=0>
+ <tr>
+  <td>
+  <p align=center><b>Name</b></p>
+  </td>
+  <td>
+  <p align=center><b>Datatype</b></p>
+  </td>
+  <td>
+  <p align=center><b>Usage</b></p>
+  </td>
+ </tr>
+ <tr>
+  <td>
+  <p>sequence</p>
+  </td>
+  <td>
+  <p>sequence</p>
+  </td>
+  <td>
+  <p>primary input sequence, generally
+  required</p>
+  </td>
+ </tr>
+ <tr>
+  <td>
+  <p>outseq</p>
+  </td>
+  <td>
+  <p>outseq</p>
+  </td>
+  <td>
+  <p>primary output sequence, generally
+  required, generally should default to the primary input sequence name,
+  extension defaults to the name of the output sequence format.</p>
+  </td>
+ </tr>
+ <tr>
+  <td>
+  <p>outfile</p>
+  </td>
+  <td>
+  <p>outfile</p>
+  </td>
+  <td>
+  <p>primary output non-sequence results file,
+  generally required. The file extension should be allowed to default to the
+  application name.</p>
+  </td>
+ </tr>
+ <tr>
+  <td>
+  <p>data</p>
+  </td>
+  <td>
+  <p>infile</p>
+  </td>
+  <td>
+  <p>primary auxiliary input data file,
+  generally optional</p>
+  </td>
+ </tr>
+ <tr>
+  <td>
+  <p>minlen</p>
+  </td>
+  <td>
+  <p>int</p>
+  </td>
+  <td>
+  <p>minimal length of sequence feature to be
+  found</p>
+  </td>
+ </tr>
+ <tr>
+  <td>
+  <p>maxlen</p>
+  </td>
+  <td>
+  <p>int</p>
+  </td>
+  <td>
+  <p>maximum length of sequence feature to be
+  found</p>
+  </td>
+ </tr>
+ <tr>
+  <td>
+  <p>wordsize</p>
+  </td>
+  <td>
+  <p>int</p>
+  </td>
+  <td>
+  <p>word size for hash tables etc. generally
+  minimum=2 for protein, 4 for DNA</p>
+  </td>
+ </tr>
+ <tr>
+  <td>
+  <p>window</p>
+  </td>
+  <td>
+  <p>int</p>
+  </td>
+  <td>
+  <p>window length for calculating
+  dotplots/features/etc.</p>
+  </td>
+ </tr>
+ <tr>
+  <td>
+  <p>shift</p>
+  </td>
+  <td>
+  <p>int</p>
+  </td>
+  <td>
+  <p>amount by which window is shifted in each
+  iteration</p>
+  </td>
+ </tr>
+ <tr>
+  <td>
+  <p>consensus</p>
+  </td>
+  <td>
+  <p>bool</p>
+  </td>
+  <td>
+  <p>flag for whether consensus sequence
+  should be output</p>
+  </td>
+ </tr>
+ <tr>
+  <td>
+  <p>gap</p>
+  </td>
+  <td>
+  <p>float</p>
+  </td>
+  <td>
+  <p>gap penalty</p>
+  </td>
+ </tr>
+ <tr>
+  <td>
+  <p>gapext</p>
+  </td>
+  <td>
+  <p>float</p>
+  </td>
+  <td>
+  <p>gap extension penalty</p>
+  </td>
+ </tr>
+ <tr>
+  <td>
+  <p>from</p>
+  </td>
+  <td>
+  <p>int</p>
+  </td>
+  <td>
+  <p>position of start of input sequence to
+  specify for an operation (e.g. deletion), defaults to start of sequence,
+  minimum value = 1, maximum value = sequence length</p>
+  </td>
+ </tr>
+ <tr>
+  <td>
+  <p>to</p>
+  </td>
+  <td>
+  <p>int</p>
+  </td>
+  <td>
+  <p>position of end of input sequence to
+  specify for an operation (e.g.: deletion), defaults to the 'from' value,
+  minimum value = 'from', value, maximum = sequence length.</p>
+  </td>
+ </tr>
+ <tr>
+  <td>
+  <p>threshold</p>
+  </td>
+  <td>
+  <p>float/int</p>
+  </td>
+  <td>
+  <p>threshold for various operations</p>
+  </td>
+ </tr>
+ <tr>
+  <td>
+  <p>left</p>
+  </td>
+  <td>
+  <p>bool</p>
+  </td>
+  <td>
+  <p>operation should be done at the start of
+  the sequence</p>
+  </td>
+ </tr>
+ <tr>
+  <td>
+  <p>right</p>
+  </td>
+  <td>
+  <p>bool</p>
+  </td>
+  <td>
+  <p>operation should be done at the end of
+  the sequence</p>
+  </td>
+ </tr>
+ <tr>
+  <td>
+  <p>pattern</p>
+  </td>
+  <td>
+  <p>string</p>
+  </td>
+  <td>
+  <p>pattern to search for in sequence</p>
+  </td>
+ </tr>
+ <tr>
+  <td>
+  <p>patterns</p>
+  </td>
+  <td>
+  <p>infile</p>
+  </td>
+  <td>
+  <p>file of patterns to search for in
+  sequence</p>
+  </td>
+ </tr>
+</table>
+
+<p><a name=table2>&nbsp;</a>
+<b>Table 3. Recommended naming conventions.</b></p>
+
+<a name="sect24">&nbsp;</a>
+<h2>2.4 Attributes</h2>
+
+<p>There are two types of attributes for parameters.  'Global'
+attributes cen be defined for any ACD data type. Each data type then
+has its own set of 'specific' attributes. These definitions can refer
+to 'calculated' attributes generated automatically by ACD
+processing. The 'global' and 'specific' ttributes are part of the
+parameter definition and are placed between the square brackets.</p>
+
+<p><b>Formalised:</b></p>
+
+<pre>
+<i>datatype:</i> <i>parametername</i> [ 
+    <i>attribute: "value"</i>
+  ]
+</pre>
+
+
+<a name="sect241">&nbsp;</a>
+<h3>2.4.1 Attributes</h3>
+
+<p>Attributes to parameters can specify the
+default value, and the requirements for a correct value, for a parameter. It
+can specify whether the parameter is mandatory and what the limits are for a
+valid value. There are global attributes that apply to all data types and there
+are data type-specific attributes.</p>
+
+<a name="sect2411">&nbsp;</a>
+<h4>2.4.1.1 The global attributes</h4>
+
+<p><i>default:</i></p>
+
+<p>Defines the default value for the parameter,
+which can be dependent on the values of parameters defined
+earlier.</p>
+
+<p>Each data type has a default value, which can be valid (for example
+a boolean will default to "N") or invalid (many input types
+will default to an empty string).
+
+<p><i>information:</i></p>
+
+<p>The string giving information about the
+parameter, for use on Web forms and in GUIs and also a default prompt to the
+user</p>
+
+<p>For some data types (sequence is a good example) there are standard
+prompts so no value is expected, and the acdvalid utility will issue a
+warning if an information attribute is found.
+
+<p><i>parameter:</i></p>
+
+<p>Defines a parameter on the command line which can appear without a
+qualifier name. Also implies that the value is <i>required</i> and
+will be prompted for if missing.</p>
+
+<p><i>standard:</i></p>
+
+<p>Indicates whether a parameter is mandatory and
+will be prompted for if missing.</p>
+
+<p><i>additional:</i></p>
+
+<p>Indicates if the parameter should be queried
+for when the <i>-options</i> qualifier is set on the command line.</p>
+
+<p<i>help:</i></p>
+
+<p>The string shown when the <i>-help</i>
+qualifier is used on the command line</p>
+
+<p>Help is usually only defined if a specific string is needed.
+If help is not defined, the value of the "information" attribute,
+or the default prompt, will be used.</p>
+
+<p><i>expect:</i></p>
+
+<p>A string used in the "Default" column
+of the command line syntax table in the documentation. This table is
+automatically generated from the ACD file, and in most cases there is a
+reasonable value generated. Where there is no suitable value, this attribute
+should be used to provide one.</p>
+
+<p><i>valid:</i></p>
+
+<p>A string used in the "Allowed values"
+column of the command line syntax table in the documentation. This table is
+automatically generated from the ACD file, and in most cases there is a
+reasonable value generated. Where there is no suitable value, this attribute
+should be used to provide one.</p>
+
+<p><i>knowntype:</i></p>
+
+<p>The <i>knowntype</i> attribute defines one of a controlled vocabulary of
+known value types. Some ACD data types require a knowntype attribute.</p>
+
+<p>These standard values are read from a file
+<b>knowntypes.standard</B> which is stored and installed in the ACD
+file directory. A few other values are accepted, for example
+"(programname) output" for an outfile data type. These are documented
+under each output type. The acdvalid utility will check all <i>knowntype</i>
+values in an ACD file, and report any missing values for data types
+that require a knowntype.</p>
+
+<p><i>prompt:</i></p>
+
+<p>The string used if the user has to be queried
+for a value, though <i>information</i> can be used instead and usually only one
+will be defined. <i>information</i> is preferred.</p>
+
+<p><i>missing:</i></p>
+
+<p>Indicates whether a qualifier can have no
+value, especially when it appears on the command line (for example to override
+a default value in the ACD file).</p>
+
+<p><i>needed:</i></p>
+
+<p>Indicates whether a parameter is expected to be
+included in a GUI form. Some parameters are available on the command line, but
+are not generally useful to users, or can cause confusion when presented in a
+GUI form with all other options.</p>
+
+<p><i>outputmodifier:</i></p>
+
+<p>Indicates that this qualifier modifies the output in ways that can
+break parsers, for example by changing text output into HTML. Authors
+of wrappers can use this to test for qualifiers that can be hardcoded
+to fix the output syntax and content. Please let the EMBOSS team know
+if any other qualifiers are candidates for marking as output modifiers.
+
+<p><i>code:</i></p>
+
+<p>A code word (no spaces) which is searched for
+in the file codes.english to give a standard prompt, for example when asking
+for an alignment gap penalty. The standard default prompts are in the same
+file. The code word is not case-sensitive. <i>information</i> is preferred.</p>
+
+<p><i>comment:</i></p>
+
+<p>A comment, provided for use by the EBI's SoapLab
+project but not defined in the standard ACD files.</p>
+
+<p><i>style:</i></p>
+
+<p>Provided for use by the EBI's SoapLab project
+but not defined in the standard ACD files.</p>
+
+<p>Any global or specific attribute must have a second token
+representing the value of the attribute. The attribute must be
+followed by a colon ':' and usually the value will be enclosed in
+double quotes.</p>
+
+<p>The syntax of the global attributes is</p>
+
+<p><b>Formalised:</b></p>
+
+<pre>
+help: <i>"String"</i>
+information: <i>"String"</i>
+default: <i>"value"</i>
+additional: <i>"Y"/"N"</i>
+parameter: <i>"Y"/"N"</i>
+information: <i>"String"</i>
+standard: <i>"Y"/"N"</i>
+</pre>
+
+<p><b>Example:</b></p>
+
+<pre>
+sequence: asequence [
+    standard: "Y"
+    information: "Enter filename"
+  ]
+</pre>
+
+
+<a name="sect24111">&nbsp;</a>
+<h5>2.4.1.1.1 Parameter: attribute</h5>
+
+<p>The <i>parameter:</i> attribute is a boolean attribute, defining
+the order of the parameters on the command line, if the parameter name
+is not explicitly entered on the command line. If set to Y, the
+parameter can be entered on the command line without using the
+parameter name.</p>
+
+<p><b>Formalised:</b></p>
+
+<pre>
+<i>datatype:</i> <i>parametername</i> [
+    parameter: Y/N
+  ]
+</pre>
+
+<p><b>Example:</b></p>
+
+<p>ACD file definition (partly) :</p>
+
+<pre>
+application: acddemo [
+    documentation: ""
+    groups: ""
+  ]
+
+sequence: asequence [
+  ]
+</pre>
+
+<p>Command line :</p>
+
+<pre>
+% <b>acddemo</b> -asequence <i>filename.seq</i>
+</pre>
+
+<p>Is equivalent to:</p>
+
+<p>ACD file definition (partly) :</p>
+
+<pre>
+sequence: asequence [
+    parameter: Y
+  ]
+</pre>
+
+<p>Command line:</p>
+
+<pre>
+% <b>acddemo</b> <i>filename.seq</i>
+</pre>
+
+<p>In both examples <i>filename.seq</i> is the value of the parameter
+named <i>asequence</i> for the EMBOSS program <b>acddemo</b>.
+</p>
+
+<p>The second example will also allow the command
+line from the first, as parameter names are accepted as qualifiers.</p>
+
+<p>If more then one parameter: attribute is used,
+the order in which they appear in the ACD file is the same as the order in
+which they appear on the command line.</p>
+
+<p><b>Example:</b> ACD file definition (partly) :</p>
+
+<pre>
+application: acddemo [
+    documentation: ""
+    groups: ""
+  ]
+
+sequence: asequence [
+    parameter: Y
+  ]
+outseq: outseq [
+    parameter: Y
+  ]
+</pre>
+
+<p>Command line :</p>
+
+<pre>
+% <b>acddemo</b> <i>infilename.seq</i> <i>outfilename.seq</i>
+</pre>
+
+<p>will assign the name <i>infilename.seq</i> to parameter
+<i>asequence</i>, and <i>outfilename.seq</i> to parameter
+<i>outseq</i>.</p>
+
+<a name="sect24112">&nbsp;</a>
+<h5>2.4.1.1.2 Standard: attribute</h5>
+
+<p>Any program is expected to have one or more
+required inputs. An ACD data type that is defined as a "parameter:"
+(see section 2.4.1.1.1) is automatically counted as required. All other
+required inputs should have the "standard:" attribute set.</p>
+
+<p>When the program runs, the user will be
+prompted for any "required" values that are not already on the
+command line.</p>
+
+<p>The only difference between
+"parameter:" and "standard:" is that a
+"parameter" can appear on the command line as the simple value with
+no name, to provide simple command lines.</p>
+
+<a name="sect24113">&nbsp;</a>
+<h5>2.4.1.1.3 Additional: attribute</h5>
+
+<p>When the additional: attribute is set, the parameter will only be
+queried for, when the <i>-options</i> qualifier is set (on the command
+line or when the system default is set using an environment variable
+(See 3.7) or any other way). If the <i>-options</i> qualifier is not
+set, the user will not be queried for this parameter, if it is omitted
+in the program execution (i.e. not mentioned on the command line or
+any other way).</p>
+
+<a name="sect24114">&nbsp;</a>
+<h5>2.4.1.1.4 The prompt: help: and information:
+attributes</h5>
+
+<p>The <i>information:</i> attribute defines the
+text hint to the user entering a data value. The same text is intended for use
+in the prompt to the user at a terminal, and as the text in an HTML form or a
+GUI.</p>
+
+<p>In rare cases where the <i>information:</i>
+string is misleading, a <i>prompt:</i> string can be defined for use as a
+terminal prompt. For general use, <i>information: </i>is
+now preferred.</p>
+
+<p>To provide standard prompts for common ACD
+data, there are default <i>information:</i> strings for most data types. These
+can be found in the file <i>codes.english</i> with the names DEFXXXX where XXXX
+is the name of the ACD data type.</p>
+
+<p>Common practice is to use the default prompt
+for input and output ACD data types.</p>
+
+<p>The <i>help:</i> attribute is shown in the help
+information, when the user requests assistance using the <i>-help</i> qualifier
+on the command line, or when help in other format is requested (Web page).</p>
+
+<p>Again, there is a default help string in the
+codes.english file with the name HELPXXXX where XXXX is the name of the ACD
+data type.</p>
+
+<p>The codes.english file includes some additional standard prompts
+such as GAP for gap penalties. These prompts can be used with the
+<i>code:</i> attribute, for example <i>code: "GAP"</i>, but GUI
+developers found these hard to use, so we have replaced them with
+normal <i>information:</i> attributes.</p>
+
+<a name="sect2412">&nbsp;</a>
+<h4>2.4.1 2 Data type-specific specific attributes</h4>
+
+<p>The default set of attributes is available for
+all ACD data type definitions.</p>
+
+
+
+<p>Each ACD type has its own set of specific
+attributes, summarized in Table 1 and described in more detail below.</p>
+
+<a name="sect24121">&nbsp;</a>
+<!-- #acdattr-section-simple -->
+<h5>2.4.1.2.1 Simple</h5>
+
+<p><b>Formalised:</b></p>
+
+<!-- #section-simple -->
+
+<!-- #acdattr-array -->
+<h5>Array</h5>
+
+<p>The value for an array is a set of floating point numbers with
+white space or commas. The <i>size:</i> attribute sets the number of
+elements in the array. As for the float data type, the <i>minimum:</i>
+and <i>maximum:</i> attributes define the lower and upper value limits
+and default to the boundaries as specified by the systems set-up. For
+validation purposes, the <i>sum:</i> attribute defines the total for
+all values in the array (tested unless the <i>sumtest:</i> attribute
+is false), and the <i>tolerance:</i> attribute specifies how closely
+the sum should match the total. Remember that most floating point
+fractions cannot be represented accurately in binary form.
+</p>
+
+<!-- #acdattr-boolean -->
+<h5>Boolean</h5>
+
+<p>Although there are (currently) no specific attributes for a boolean
+ACD type, care should be taken over the definition of the
+<i>information:</i> and <i>help:</i> attributes. These are used to
+prompt the user (interactively or via a GUI), and to provide help
+text. The text provided in each case should reflect the expected
+default value of the boolean option, which may be the opposite of what
+the name implies. For example, if set to "Y" by default, then the
+command line option would typically be "-noxxx" where "xxx" is the
+qualifier. If set to "N" by default, then the default action may be
+the opposite of what the information or help text implies. If the
+value is calculated, the user may need some extra guidance.</p>
+
+<p>The <i>outputmodifier:</i> attribute is set where this parameter
+changes the content or syntax of the output. This is provided for the
+developers of other interfaces and parsers of EMBOSS output so that
+they can fix the value, or provide parsers for each alternative.
+
+
+<!-- #acdattr-float -->
+<h5>Float</h5>
+
+<p>The <i>minimum:</i> and <i>maximum:</i> attributes define the lower
+and upper value limits and default to the boundaries as specified by
+the systems set-up.</p>
+
+<p>The <i>increment:</i> attribute defines the steps
+that this parameter is allowed to take, in case there is a need to
+iterate this parameter. The <i>increment:</i> attribute can be any
+valid float value.</p>
+
+<p>The <i>precision:</i> attribute defines the maximum number of significant
+decimal places that will be taken into account for this value.</p>
+
+
+<!-- #acdattr-integer -->
+<h5>Integer</h5>
+
+<p>The integer data type can hold simple integer values. The
+<i>minimum:</i> and <i>maximum:</i> attributes define the boundaries
+and default to the boundaries as specified by the systems setup. The
+<i>increment:</i> attribute defines the steps that this parameter is allowed to
+take, in case there is a need to iterate this parameter.</p>
+
+<!-- #acdattr-range -->
+<h5>Range</h5>
+
+<p>Sequence ranges have similar attribute to integers. The
+<i>minimum:</i> and <i>maximum:</i> attributes define the boundaries
+and default to the boundaries as specified by the systems setup. The
+<i>minlength:</i> attribute defines the minimum number of values
+required.</p>
+
+<p>The <i>size:</i> attribute defines an exact number of values
+required. The <i>minsize:</i> attribute defines a minimum number of values
+required for ranges that can be any length. Only one of these values
+should be defined for any range.</p>
+
+<p>The value provided by the user is a list of sequence position pairs
+to be interpreted by the application. The upper and lower bounds
+(sequence positions can be negative to count back from the end) will
+depend on the length of the sequence to which they are applied.</p>
+
+<!-- #acdattr-string -->
+<h5>String</h5>
+
+<p>The <i>minlength:</i> attribute defines the minimum length the string must
+be, the <i>maxlength:</i> attribute defines the maximum length the string
+can be. The default minimum length is zero. There is no default maximum.</p>
+
+<p>The <i>pattern:</i> attribute defines a regular expression used to
+check the string value. ACD uses the Perl-compatible regular
+expression library (PCRE) so any Perl-compatible regular expression should be
+usable.</p>
+
+<p>The <i>word:</i> attribute requires the result to be a valid word
+with no whitespace. The default minimum length of zero allows an empty
+string but this is not accepted as a word. This may change in future.</p>
+
+<!-- #acdattr-toggle -->
+<h5>Toggle</h5>
+
+<p>Although there are (currently) no specific attributes for a toggle
+ACD type, care should be taken over the definition of the
+<i>information:</i> and <i>help:</i> attributes. These are used to
+prompt the user (interactively or via a GUI), and to provide help
+text. The text provided in each case should reflect the expected
+default value of the toggle option, which may be the opposite of what
+the name implies. For example, if set to "Y" by default, then the
+command line option would typically be "-noxxx" where "xxx" is the
+qualifier. If set to "N" by default, then the default action may be
+the opposite of what the information or help text implies. If the
+value is calculated, the user may need some extra guidance.</p>
+
+<p>The <i>outputmodifier:</i> attribute is set where this parameter
+changes the content or syntax of the output. This is provided for the
+developers of other interfaces and parsers of EMBOSS output so that
+they can fix the value, or provide parsers for each alternative.
+
+
+<a name="sect24122">&nbsp;</a>
+<!-- #acdattr-section-input -->
+<h5>2.4.1.2.2 Input</h5>
+
+<p><b>Formalised:</b></p>
+
+<!-- #section-input -->
+
+<!-- #acdattr-codon -->
+<h5>Codon</h5>
+
+<p>Codon usage tables are species-specific, and in some cases specific
+to a class of genes within a species. This makes it useful to specify
+a default value for a codon usage table name. Internally, a default is
+set in the ACD source code. Usually this is "Ehum.cut", the human codon
+usage table provided in the EMBOSS distribution.</p>
+
+<p>Individual codon inputs can set their own default names with the
+<i>name:</i> attribute which in the current version has the same
+effect as setting the <i>default:</i> attribute.</p>
+
+<p>The <i>nullok:</i> attribute allows a default value to be replaced
+by an empty string or by -noxxx on the command line if the application
+can run without a data file. The application must be able to accept a
+null value for this qualifier.</p>
+
+<!-- #acdattr-cpdb -->
+<h5>Cpdb</h5>
+
+<p>Cleaned PDB file input has a default value (typically "1azu") set
+in the ACD source code although this is not really a good idea.</p>
+
+<p>Individual cpdb inputs can set their own default names with the
+<i>name:</i> attribute which in the current version has the same
+effect as setting the <i>default:</i> attribute.</p>
+
+
+<!-- #acdattr-datafile -->
+<h5>Datafile</h5>
+
+<p>The default datafile name is defined by two ACD attributes,
+<i>name:</i> and <i>extension:</i>. The <i>directory:</i> attribute
+defines the EMBOSS data subdirectory to be searched.</p>
+
+<p>The <i>nullok:</i> attribute allows a default value to be replaced
+by an empty string or by -noxxx on the command line if the application
+can run without a data file. The application must be able to accept a
+null value for this qualifier.</p>
+
+<!-- #acdattr-directory -->
+<h5>Directory</h5>
+
+<p>The <i>extension:</i> attribute sets the extension for all
+files read from the directory. Files with other extensions will not be
+read</p>
+
+<p>The <i>fullpath:</i> attribute can be used to require a full rather
+than a relative path specification for a directory.</p>
+
+<p>If a null value (the current directory) is allowed,the
+<i>nullok:</i> attribute must be set true.</p>
+
+<p>The <i>nullok:</i> attribute allows a default value to be replaced
+by an empty string or by -noxxx on the command line if the application
+can run without a directory. The application must be able to accept a
+null value for this qualifier.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no directory) as the default for
+programs where a directory is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<!-- #acdattr-dirlist -->
+<h5>Dirlist</h5>
+
+<p>The <i>extension:</i> attribute sets the extension for all
+files read from the directories. Files with other extensions will not be
+read</p>
+
+<p>The <i>fullpath:</i> attribute can be used to require a full rather
+than a relative path specification for a directory.</p>
+
+<p>If a null value (the current directory) is allowed,the
+<i>nullok:</i> attribute must be set true.</p>
+
+<p>The <i>nullok:</i> attribute allows a default value to be replaced
+by an empty string or by -noxxx on the command line if the application
+can run without a directory. The application must be able to accept a
+null value for this qualifier.</p>
+
+<!-- #acdattr-discretestates -->
+<h5>Discretestates</h5>
+
+<p>The discretestates data type can be replaced by a simple input
+file in GUIs, with the user required to provide the correct data
+format.</p>
+
+<p>The attributes define characteristics required for Phylip
+programs.</p>
+
+<p>The <i>length:</i> attribute defines the number of state values (the
+length of the discrete characters string) in each set
+</p>
+
+<p>The <i>size:</i> attribute defines the number of sets of values,
+usually 1 but some programs will accept multiple sets.
+</p>
+
+<p>The <i>characters:</i> attribute defines which discrete state
+characters can be specified. This is defined as a string containing
+all possible characters.
+</p>
+
+<p>The <i>nullok:</i> attribute allows a default value to be replaced
+by an empty string or by -noxxx on the command line if the application
+can run without a discretestates file.
+</p>
+
+<!-- #acdattr-distances -->
+<h5>Distances</h5>
+
+<p>The distances data type can be replaced by a simple input
+file in GUIs, with the user required to provide the correct data
+format.</p>
+
+<p>The attributes define characteristics required for Phylip
+programs. The distance matrices accepted by ACD include all the
+formats read by Phylip, with automatic interconversion.</p>
+
+<p>The <i>length:</i> attribute defines the number of rows in the
+distance matrix.</p>
+
+<p>The <i>nullok:</i> attribute allows a default value to be replaced
+by an empty string or by -noxxx on the command line if the application
+can run without a distance file.
+</p>
+
+<!-- #acdattr-features -->
+<h5>Features</h5>
+
+<p>The <i>type:</i> attribute defines whether the feature input is
+"protein" or "nucleotide". There is a default based on the type of any
+input sequence, but a value should always be specified.</p>
+
+<p>The <i>nullok:</i> attribute allows a default value to be replaced
+by an empty string or by -noxxx on the command line if the application
+can run without features input. The application must be able to accept a
+null value for this qualifier.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no feature input) as the default for
+programs where a directory is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<!-- #acdattr-filelist -->
+<h5>Filelist</h5>
+
+<p>Filelist is equivalent to infile, but allows the user to specify
+one or more input files.</p>
+
+<p>The <i>nullok:</i> attribute specifies that a missing input file is
+acceptable to the application, and that -noxxx can be used on the
+command line to avoid reading the default input file (if any)</p>
+
+<!-- #acdattr-frequencies -->
+<h5>Frequencies</h5>
+
+<p>The frequencies data type can be replaced by a simple input
+file in GUIs, with the user required to provide the correct data
+format.</p>
+
+<p>The attributes define characteristics required for Phylip
+programs. The frequencies files formats accepted by ACD include all the
+formats read by Phylip, with automatic interconversion.</p>
+
+<p>The <i>length:</i> attribute defines the number of loci (or values) in the
+frequencies file.</p>
+
+<p>The <i>size:</i> attribute defines the number of sets of values,
+usually 1 but some programs will accept multiple sets.
+</p>
+
+<p>The <i>continuous:</i> attribute specifies a frequencies file with
+continuous character data values.
+</p>
+
+<p>The <i>genedata:</i> attribute specifies a frequencies file with
+genetic locus data values.
+</p>
+
+<p>The <i>within:</i> attribute specifies a frequencies file with
+continuous data for multiple individuals (additional values on each line).
+</p>
+
+<p>The <i>nullok:</i> attribute allows a default value to be replaced
+by an empty string or by -noxxx on the command line if the application
+can run without a frequencies file.
+</p>
+
+
+<!-- #acdattr-infile -->
+<h5>Infile</h5>
+
+<p>The <i>nullok:</i> attribute specifies that a missing input file is
+acceptable to the application, and that -noxxx can be used on the
+command line to avoid reading the default input ifle (if any)</p>
+
+<!-- #acdattr-matrix -->
+<h5>Matrix</h5>
+
+<p>The <i>protein:</i> attribute will determine if the
+scoring matrix is used as a DNA or Protein matrix.</p>
+
+<!-- #acdattr-matrixf -->
+<h5>Matrixf</h5>
+
+<p>The <i>protein:</i> attribute will determine if the
+scoring matrix is used as a DNA or Protein matrix.</p>
+
+
+<!-- #acdattr-pattern -->
+<h5>Pattern</h5>
+
+<p>Patterns are processed by an internal set of library functions
+designed to handle PROSITE-style pattern definitions.</p>
+
+<p>The <i>minlength:</i> attribute defines the minimum length the
+string must be, the <i>maxlength:</i> attribute defines the maximum
+length the regular expression string can be.</p>
+
+<p>The <i>upper:</i> and <i>lower:</i>attributes convert an input
+regular expression to upper or lower case before compiling.</p>
+
+<p>The <i>type:</i> attribute describes the pattern as applying to
+nucleotide or protein sequence. Nucleotide patterns are compared in
+both directions.</p>
+
+<!-- #acdattr-properties -->
+<h5>Properties</h5>
+
+<p>The properties data type can be replaced by a simple input
+file in GUIs, with the user required to provide the correct data
+format.</p>
+
+<p>The attributes define characteristics required for Phylip
+programs. The properties files accepted by ACD include all the
+formats read by Phylip, with automatic interconversion.</p>
+
+<p>The <i>length:</i> attribute defines the number of values in the
+properties file.</p>
+
+<p>The <i>size:</i> attribute defines the number of sets of values,
+usually 1 but some programs will accept multiple sets.
+</p>
+
+<p>The <i>characters:</i> attribute defines which property
+characters can be specified. This is defined as a string containing
+all possible characters.
+</p>
+
+<p>The <i>nullok:</i> attribute allows a default value to be replaced
+by an empty string or by -noxxx on the command line if the application
+can run without a properties file.
+</p>
+
+
+<!-- #acdattr-regexp -->
+<h5>Regexp</h5>
+
+<p>Regular expressions are processed by the "Perl-Compatible Regular
+Expression Library" (PCRE). Any value must be accepted by this
+library's compilation function. Some additional attributes are
+provided for further validation by ACD.</p>
+
+<p>The <i>minlength:</i> attribute defines the minimum length the
+string must be, the <i>maxlength:</i> attribute defines the maximum
+length the regular expression string can be.</p>
+
+<p>The <i>upper:</i> and <i>lower:</i>attributes convert an input
+regular expression to upper or lower case before compiling.</p>
+
+<p>The <i>type:</i> attribute describes the pattern as applying to
+nucleotide or protein sequence. Nucleotide patterns are compared in
+both directions.</p>
+
+<!-- #acdattr-scop -->
+<h5>Scop</h5>
+
+<p>Scop file input has a default value (typically "d3sdha") set
+in the ACD source code although this is not really a good idea.</p>
+
+<p>Individual scop inputs can set their own default names with the
+<i>name:</i> attribute which in the current version has the same
+effect as setting the <i>default:</i> attribute.</p>
+
+<!-- #acdattr-sequence -->
+<h5>Sequence</h5>
+
+<p>The <i>type:</i> attribute will force the sequence to be
+of the given type. By default, any sequence type is accepted.</p>
+
+<p>We recommend always defining the <i>type:</i> attribute so that the
+accepted input sequence type is always clear.</p>
+
+<p>If the <i>features:</i> attribute is set, the sequence input will
+include feature information either in the same file (if the sequence
+format supports it) or in a separate file (by default in GFF format).</p>
+
+<p>If the <i>entry:</i> attribute is set, the sequence input will
+include the full original text of the input sequence or database entry.</p>
+
+<p>The <i>nullok:</i> attribute allows a default value to be replaced
+by an empty string or by -noxxx on the command line if the application
+can run without a sequence input. The application must be able to accept a
+null value for this qualifier.</p>
+
+<p>The <i>sask:</i> attribute sets the defauklt for the <i>-sask</i>
+qualifier, and if set to "Y" specifies that the program will prompt
+the user for a sequence begin and end position, and prompt for the
+reversing of a nucleotide sequence. The EMBOSS "yank" program works
+with fragments of sequences, and uses the <i>sask:</i> attribute to
+prompt the user.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no sequence input) as the default for
+programs where seqeunce input is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<!-- #acdattr-seqall -->
+<h5>Seqall</h5>
+
+<p>The <i>type:</i> attribute will force the sequence(s) to be
+of the given type. By default, any sequence type is accepted.</p>
+
+<p>We recommend always defining the <i>type:</i> attribute so that the
+accepted input sequence type is always clear.</p>
+
+<p>If the <i>features:</i> attribute is set, the sequence input will
+include feature information either in the same file (if the sequence
+format supports it) or in a separate file (by default in GFF format).</p>
+
+<p>If the <i>entry:</i> attribute is set, the sequence input will
+include the full original text of the input sequence or database entry.</p>
+
+<p>The <i>nullok:</i> attribute allows a default value to be replaced
+by an empty string or by -noxxx on the command line if the application
+can run without a sequence input. The application must be able to accept a
+null value for this qualifier.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no sequence input) as the default for
+programs where seqeunce input is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>minseqs:</i> attribute specifies a minimum number of
+sequences to be read. By default, a single sequence is acceptable.</p>
+
+<!-- #acdattr-seqset -->
+<h5>Seqset</h5>
+
+<p>The <i>type:</i> attribute will force the sequence set to be
+of the given type. By default, any sequence type is accepted.</p>
+
+<p>We recommend always defining the <i>type:</i> attribute so that the
+accepted input sequence type is always clear.</p>
+
+<p>The <i>aligned:</i> attribute, if true, specifies that all sequences in the
+input are expected to be aligned. If false, then the sequences are
+assumed to be unaligned, and are simply read into memory together for
+processing. We recommend always defining the <i>aligned:</i> attribute
+so that the nature of the sequence set if clearly defined.</p>
+
+<p>If the <i>features:</i> attribute is set, the sequence input will
+include feature information either in the same file (if the sequence
+format supports it) or in a separate file (by default in GFF format).</p>
+
+<p>If the <i>entry:</i> attribute is set, the sequence input will
+include the full original text of the input sequence or database entry.</p>
+
+<p>The <i>nullok:</i> attribute allows a default value to be replaced
+by an empty string or by -noxxx on the command line if the application
+can run without a sequence input. The application must be able to accept a
+null value for this qualifier.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no sequence input) as the default for
+programs where sequence input is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>minseqs:</i> attribute specifies a minimum number of
+sequences to be read. By default, a single sequence is acceptable.</p>
+
+<!-- #acdattr-seqsetall -->
+<h5>Seqsetall</h5>
+
+<p>The <i>type:</i> attribute will force the sequence set(s) to be
+of the given type. By default, any sequence type is accepted.</p>
+
+<p>We recommend always defining the <i>type:</i> attribute so that the
+accepted input sequence type is always clear.</p>
+
+<p>The <i>aligned:</i> attribute, if true, specifies that all sequences in the
+input are expected to be aligned. If false, then the sequences are
+assumed to be unaligned, and are simply read into memory together for
+processing. We recommend always defining the <i>aligned:</i> attribute
+so that the nature of the sequence set if clearly defined.</p>
+
+<p>If the <i>features:</i> attribute is set, the sequence input will
+include feature information either in the same file (if the sequence
+format supports it) or in a separate file (by default in GFF format).</p>
+
+<p>If the <i>entry:</i> attribute is set, the sequence input will
+include the full original text of the input sequence or database entry.</p>
+
+<p>The <i>nullok:</i> attribute allows a default value to be replaced
+by an empty string or by -noxxx on the command line if the application
+can run without a sequence input. The application must be able to accept a
+null value for this qualifier.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no sequence input) as the default for
+programs where sequence input is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>minseqs:</i> attribute specifies a minimum number of
+sequences to be read for each set. By default, a single sequence is acceptable.</p>
+
+<!-- #acdattr-tree -->
+<h5>Tree</h5>
+
+<p>The tree data type can be replaced by a simple input
+file in GUIs, with the user required to provide the correct data
+format.</p>
+
+<p>The attributes define characteristics required for Phylip
+programs. The tree files accepted by ACD include all the
+formats read by Phylip, with automatic interconversion.</p>
+
+<p>The <i>size:</i> attribute defines the number of trees in the input file,
+usually 0 but some programs will accept multiple sets. Some can
+only accept a single tree (so the value should be set to "1" for these.
+</p>
+
+<p>The <i>nullok:</i> attribute allows a default value to be replaced
+by an empty string or by -noxxx on the command line if the application
+can run without a properties file.
+</p>
+
+
+<a name="sect24123">&nbsp;</a>
+<!-- #acdattr-section-selection -->
+<h5>2.4.1.2.3 Selection lists</h5>
+
+<p><b>Formalised:</b></p>
+
+<!-- #section-selection -->
+
+<p>For both selection list types, the values that
+the user can choose from are defined in the <i>values:</i> attribute as a
+string, delimited by the character that is given by the <i>delimiter:</i>
+attribute (which defaults to the semi-colon ';'). For the <i>list</i> data type
+there is a second delimiter ( <i>codedelimiter:</i>) character that defines the
+delimiter that separates the label from the value (defaults to the colon
+":"). The <i>minimum:</i> and <i>maximum:</i> attributes define the number of
+choices that this parameter can handle. The <i>header:</i> attribute will hold
+the text that is displayed above the option list. The <i>casesensitive:</i>
+attribute will indicate if the options are case sensitive or not, but the value
+of the parameter will be exactly what the list value is. The <i>button:</i>
+attribute, which can either be Y(es) or N(o), is used in for web front ends, to
+indicate if radiobuttons/checkbox/selection lists are to be used or if the list
+is simply displayed with a text entry box beneath it, to enter the option.</p>
+
+<!-- #acdattr-list -->
+<h5>List</h5>
+
+<p>The <i>values:</i> attribute contains the list of valid code names and
+values. The <i>delimiter:</i> and <i>codedelimiter:</i> attributes
+specify how to parse this string into individual list items.</p>
+
+<p>The <i>minimum:</i> attribute specifies the minimum number of
+selections required. By default, 1 selection is required.</p>
+
+<p>The <i>maximum:</i> attribute specifies the maximum number of
+selections required. By default, exactly 1 selection is required. A
+higher value allows multiple selections.</p>
+
+<p>The <i>header:</i> attribute defines text to appear before the list
+is presented to the user. The <i>information:</i> attribute defines
+text to be used as a prompt after the list.</p>
+
+<p>The <i>delimiter:</i> attribute specifies the character used in the
+<i>values:</i> string to separate list items.</p>
+
+<p>The <i>codedelimiter:</i> attribute  specifies the character used in the
+<i>values:</i> string to separate codes (names) and descriptions of
+list items.</p>
+
+<p>The <i>button:</i> attribute suggests whether a list is best
+represented as checkboxes or radio buttons in an interface (value "Y")
+or as a pull-down list.</p>
+
+<p>The <i>casesensitive:</i> attribute defines whether the input must
+match the exact case of the selection list item.</p>
+
+<p>Example:</p>
+
+<pre>
+list: matrix [
+     default: "blosum"   # default value
+     minimum: 1 maximum: 1   # must select exactly 1
+     header: "Comparison matrices" # printed before list
+     values: "B:blosum, P:pam, I:id" 3 valid values
+     delim: ","      # delimiter default ";"
+     codedelim: ":"  # label delimiter default ":"
+     prompt: "Select one" # prompt after list
+     button: Y       # use radio buttons rather than
+                      # checkboxes in HTML,
+                     # ignored by ACD  ]
+</pre>
+
+<p>What you get is:</p>
+
+<pre>
+Comparison matrices
+
+      B : blosum
+      P : pam
+      I : id
+
+Select one [blosum] : PAM
+</pre>
+
+<!-- #acdattr-selection -->
+<h5>Selection</h5>
+
+<p>The <i>values:</i> attribute contains the list of valid values. The
+<i>delimiter:</i> attribute specifies how to parse this string into
+individual selection list items.</p>
+
+<p>The <i>minimum:</i> attribute specifies the minimum number of
+selections required. By default, 1 selection is required.</p>
+
+<p>The <i>maximum:</i> attribute specifies the maximum number of
+selections required. By default, exactly 1 selection is required. A
+higher value allows multiple selections.</p>
+
+<p>The <i>header:</i> attribute defines text to appear before the
+selection list is presented to the user. The <i>information:</i>
+attribute defines text to be used as a prompt after the list.</p>
+
+<p>The <i>delimiter:</i> attribute specifies the character used in the
+<i>values:</i> string to separate list items.</p>
+
+<p>The <i>button:</i> attribute suggests whether a selection list is best
+represented as checkboxes or radio buttons in an interface (value "Y")
+or as a pull-down list.</p>
+
+<p>The <i>casesensitive:</i> attribute defines whether the input must
+match the exact case of the selection list item.</p>
+
+<p>Example:</p>
+
+<pre>
+select: matrix [
+       default: "blosum"  # default value
+       minimum: "1" maximum: "1"  # must select exactly 1
+       header: "Comparison matrices" # printed before list
+       values: "blosum, pam, id" # valid values
+       delimiter: ","     # delimiter default ";"
+       information: "Select one" # prompt after list
+       button: "Y"      # use radio buttons rather than
+                      # checkboxes in HTML,
+                      # ignored by ACD
+  ]
+</pre>
+
+<p>What you get is:</p>
+
+<pre>
+Comparison matrices
+
+      1 : blosum
+      2 : pam
+      3 : id
+
+Select one [blosum] : PAM
+</pre>
+
+
+<a name="sect24124">&nbsp;</a>
+<!-- #acdattr-section-output -->
+<h5>2.4.1.2.4 Output</h5>
+
+<p><b>Formalised:</b></p>
+
+<!-- #section-output -->
+
+<!-- #acdattr-align -->
+<h5>Align</h5>
+
+<p>The <i>minseqs:</i> and <i>maxseqs:</i> attributes define whether
+the alignment will contain exactly 2 sequences, 1 or more, 3 or more,
+or whatever the program will produce. These values can be used to
+validate the choice of formats on the command line with the
+<i>-aformat</i> qualifier.</p>
+
+The <i>aformat:</i> attribute is required. It defines the default
+value for the <i>-aformat</i> qualifier.</p>
+
+The <i>aglobal:</i> attribute defines the default
+value for the <i>-aglobal</i> qualifier, and should be set true for
+programs that produce a global alignment.</p>
+
+The <i>multiple:</i> attribute should be set true if the output can
+contain more than one alignment from the same input.</p>
+
+<p>If a null value (the current directory) is allowed,the
+<i>nullok:</i> attribute must be set true.</p>
+
+<p>The <i>nullok:</i> attribute allows a default value to be replaced
+by an empty string or by -noxxx on the command line if the application
+can run without an alignment file. The application must be able to accept a
+null value for this qualifier.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no alignment file) as the default
+for programs where an alignment file is only occasionally
+required. If an empty string is specified on the command line, the
+standard default value will be generated instead.</p>
+
+<!-- #acdattr-featout -->
+<h5>Featout</h5>
+
+<p>The output filename is constructed from the <i>name:</i>
+and <i>extension:</i> attributes in a $( <i>name</i>).$(<i>extension</i>)
+format. If the <i>name:</i> attribute is not defined in the ACD file, it will
+default to the calculated attribute <i>name:</i> of the FIRST sequence that is
+read in ($(asequence.name) if the sequence parameter is named asequence).</p>
+
+<p>The <i>extension:</i> attribute will default to the output feature
+format.</p>
+
+<p>The <i>type:</i> attribute defines whether the feature output is
+"protein" or "nucleotide". There is a default based on the type of any
+input sequence, but a value should always be specified.</p>
+
+<p>The <i>nullok:</i> attribute allows a default value to be replaced
+by an empty string or by -noxxx on the command line if the application
+can run without this feature output.
+</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no feature output) as the default for
+programs where feature output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>offormat:</i> attribute defines the default value for the
+<i>-offormat</i> qualifier, used as the feature format and the default
+feature file extension.</p>
+
+<p>The <i>ofname:</i> attribute defines the default value for the
+<i>-ofname</i> qualifier, used as the default base file name</p>
+
+<!-- #acdattr-outcodon -->
+<h5>Outcodon</h5>
+
+<p>The <i>name:</i> attribute will default to "outfile".</p>
+
+<p>The <i>extension:</i> attribute will default to the format, with
+"cut" defined as the default format to match the usual codon usage
+filenaming convention. This format is also called "emboss".</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>oformat:</i> attribute defines the default value for the
+<i>-oformat</i> qualifier, used as the file format and the default
+file extension.</p>
+
+<!-- #acdattr-outcpdb -->
+<h5>Outcpdb</h5>
+
+<p>The <i>extension:</i> attribute will default to the output file
+format.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>oformat:</i> attribute defines the default value for the
+<i>-oformat</i> qualifier, used as the file format and the default
+file extension.</p>
+
+<!-- #acdattr-outdata -->
+<h5>Outdata</h5>
+
+<p>The <i>extension:</i> attribute will default to the output file
+format.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>oformat:</i> attribute defines the default value for the
+<i>-oformat</i> qualifier, used as the file format and the default
+file extension.</p>
+
+<!-- #acdattr-outdir -->
+<h5>Outdir</h5>
+
+<p>The <i>extension:</i> attribute sets the default extension for all
+files written to the directory.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>fullpath:</i> attribute requires the path to be specified in
+full when passed to the program, although the user may provide a path
+from the current working directory.</p>
+
+<!-- #acdattr-outdiscrete -->
+<h5>Outdiscrete</h5>
+
+<p>The <i>extension:</i> attribute will default to the output file
+format.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>oformat:</i> attribute defines the default value for the
+<i>-oformat</i> qualifier, used as the file format and the default
+file extension.</p>
+
+<!-- #acdattr-outdistance -->
+<h5>Outdistance</h5>
+
+<p>The <i>extension:</i> attribute will default to the output file
+format.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>oformat:</i> attribute defines the default value for the
+<i>-oformat</i> qualifier, used as the file format and the default
+file extension.</p>
+
+<!-- #acdattr-outfreq -->
+<h5>Outfreq</h5>
+
+<p>The <i>extension:</i> attribute will default to the output file
+format.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>oformat:</i> attribute defines the default value for the
+<i>-oformat</i> qualifier, used as the file format and the default
+file extension.</p>
+
+<!-- #acdattr-outfile -->
+<h5>Outfile</h5>
+
+<p>The output filename is constructed from the <i>name:</i>
+and <i>extension:</i> attributes in a $( <i>name</i>).$(<i>extension</i>)
+format. If the <i>name:</i> attribute is not defined in the ACD file, it will
+default to the calculated attribute <i>name:</i> of the FIRST sequence that is
+read in ($(asequence.name) if the sequence parameter is named asequence).</p>
+
+<p>The <i>extension:</i> attribute will default to the program name,
+and is usually left as the default value.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no output file) as the default
+for programs where an output file is only occasionally
+required. Examples include programs where the original output format
+is available, usually for users that still require it for parsing in
+automated scripts. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>nullok:</i> attribute allows a default value to be replaced
+by an empty string or by -noxxx on the command line if the application
+can run without an output file.
+</p>
+
+<p>The <i>knowntype:</i> attribute should always be defined. If the output
+is not of any special type, a knowntype of "(program) output" is the
+recommended value.</p>
+
+<p>The <i>append:</i> attribute specifies that output is appended to
+the end of an existing output file. By default, the output file will
+be overwritten.</p>
+
+
+<!-- #acdattr-outfileall -->
+<h5>Outfileall</h5>
+
+<p>The output filename is constructed from the <i>name:</i>
+and <i>extension:</i> attributes in a $( <i>name</i>).$(<i>extension</i>)
+format. If the <i>name:</i> attribute is not defined in the ACD file, it will
+default to the calculated attribute <i>name:</i> of the FIRST sequence that is
+read in ($(asequence.name) if the sequence parameter is named asequence).</p>
+
+<p>The <i>extension:</i> attribute will default to the program name,
+and is usually left as the default value.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no output file) as the default
+for programs where an output file is only occasionally
+required. Examples include programs where the original output format
+is available, usually for users that still require it for parsing in
+automated scripts. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>nullok:</i> attribute allows a default value to be replaced
+by an empty string or by -noxxx on the command line if the application
+can run without an output file.
+</p>
+
+<p>The <i>knowntype:</i> attribute should always be defined. If the output
+is not of any special type, a knowntype of "(program) output" is the
+recommended value.</p>
+
+
+<!-- #acdattr-outmatrix -->
+<h5>Outmatrix</h5>
+
+<p>The <i>extension:</i> attribute will default to the output file
+format.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>oformat:</i> attribute defines the default value for the
+<i>-oformat</i> qualifier, used as the file format and the default
+file extension.</p>
+
+<!-- #acdattr-outmatrixf -->
+<h5>Outmatrixf</h5>
+
+<p>The <i>extension:</i> attribute will default to the output file
+format.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>oformat:</i> attribute defines the default value for the
+<i>-oformat</i> qualifier, used as the file format and the default
+file extension.</p>
+
+<!-- #acdattr-outproperties -->
+<h5>Outproperties</h5>
+
+<p>The <i>extension:</i> attribute will default to the output file
+format.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>oformat:</i> attribute defines the default value for the
+<i>-oformat</i> qualifier, used as the file format and the default
+file extension.</p>
+
+<!-- #acdattr-outscop -->
+<h5>Outscop</h5>
+
+<p>The <i>extension:</i> attribute will default to the output file
+format.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>oformat:</i> attribute defines the default value for the
+<i>-oformat</i> qualifier, used as the file format and the default
+file extension.</p>
+
+<!-- #acdattr-outtree -->
+<h5>Outtree</h5>
+
+<p>The <i>extension:</i> attribute will default to the output file
+format.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>oformat:</i> attribute defines the default value for the
+<i>-oformat</i> qualifier, used as the file format and the default
+file extension.</p>
+
+<!-- #acdattr-report -->
+<h5>Report</h5>
+
+<p>The <i>minseqs:</i> and <i>maxseqs:</i> attributes define whether
+the alignment will contain exactly 2 sequences, 1 or more, 3 or more,
+or whatever the program will produce. These values can be used to
+validate the choice of formats on the command line with the
+<i>-aformat</i> qualifier.</p>
+
+The <i>rformat:</i> attribute is required. It defines the default
+value for the <i>-rformat</i> qualifier.</p>
+
+The <i>taglist:</i> attribute defines the additional tags to be
+reported from the internal feature table. The tag names and types must
+match the source code of the application. Each tag is in the format
+"type:tagname[=columnname]" for example "int:length" or "string:gc=GC%"</p>
+
+The <i>precision:</i> attribute sets the floating point precision of
+the score value. For integer scores this can be set to "0".</p>
+
+The <i>multiple:</i> attribute should be set true if the output can
+contain more than one report from the same input.</p>
+
+<p>The <i>nullok:</i> attribute allows a default value to be replaced
+by an empty string or by -noxxx on the command line if the application
+can run without a report output file. The application must be able to accept a
+null value for this qualifier.
+</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no report output) as the default for
+programs where report output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<pThe <i>rextension:</i> attribute sets the default value for the
+<i>-rextension</i> qualifier, which is normally the program name..</p>
+
+The <i>rscoreshow:</i> attribute specifies whether the feature score
+value should appear in the report. Where a score is not set by the
+program, the default 0.0 score is normally excluded in this way.</p>
+
+<!-- #acdattr-seqout -->
+<h5>Seqout</h5>
+
+<p>filename is constructed from the <i>name:</i>
+and <i>extension:</i> attribute in a $( <i>name</i>).$(<i>extension</i>)
+format. If the <i>name:</i> attribute is not defined in the ACD file, it will
+default to the calculated attribute <i>name:</i> of the FIRST sequence that is
+read in ($(asequence.name) if the sequence parameter is a named asequence).</p>
+
+<p>If the <i>features:</i> attribute is set, the sequence output will
+include feature information either in the same file (if the sequence
+format supports it) or in a separate file (by default in GFF format).</p>
+
+<p>The <i>type:</i> attribute defines the output sequnce
+type. Although this will default to the type of the first input
+sequence, it is ercommended that a value is always defined to make the
+output sequnce type clear.</p>
+
+<p>The <i>nullok:</i> attribute allows a default value to be replaced
+by an empty string or by -noxxx on the command line if the application
+can run without this sequence output. The application must be able to accept a
+null value for this qualifier.
+</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no sequence output) as the default for
+programs where sequence output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>osextension:</i> attribute sets the default file
+extension. This is usually the sequence format, but can be
+specifically set with this attribute, for example where
+appliations produce two or more sequence outputs.</p>
+
+<!-- #acdattr-seqoutall -->
+<h5>Seqoutall</h5>
+
+<p>filename is constructed from the <i>name:</i>
+and <i>extension:</i> attribute in a $( <i>name</i>).$(<i>extension</i>)
+format. If the <i>name:</i> attribute is not defined in the ACD file, it will
+default to the calculated attribute <i>name:</i> of the FIRST sequence that is
+read in ($(asequence.name) if the sequence parameter is a named asequence).</p>
+
+<p>If the <i>features:</i> attribute is set, the sequence output will
+include feature information either in the same file (if the sequence
+format supports it) or in a separate file (by default in GFF format).</p>
+
+<p>The <i>type:</i> attribute defines the output sequnce
+type. Although this will default to the type of the first input
+sequence, it is ercommended that a value is always defined to make the
+output sequnce type clear.</p>
+
+<p>The <i>nullok:</i> attribute allows a default value to be replaced
+by an empty string or by -noxxx on the command line if the application
+can run without this sequence output. The application must be able to accept a
+null value for this qualifier.
+</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no sequence output) as the default for
+programs where sequence output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>ossingle:</i> attribute sets the default value for the
+<i>-ossingle</i> qualifier and can be set to "Y" to direct output to
+multiple sequence files. For example, the EMBOSS program "seqretsplit"
+splits an input sequence input multiple files using this attribute.</p>
+
+<p>The <i>osextension:</i> attribute sets the default file
+extension. This is usually the sequence format, but can be
+specifically set with this attribute, for example where
+appliations produce two or more sequence outputs.</p>
+
+<!-- #acdattr-seqoutset -->
+<h5>Seqoutset</h5>
+
+<p>filename is constructed from the <i>name:</i>
+and <i>extension:</i> attribute in a $( <i>name</i>).$(<i>extension</i>)
+format. If the <i>name:</i> attribute is not defined in the ACD file, it will
+default to the calculated attribute <i>name:</i> of the FIRST sequence that is
+read in ($(asequence.name) if the sequence parameter is a named asequence).</p>
+
+<p>If the <i>features:</i> attribute is set, the sequence output will
+include feature information either in the same file (if the sequence
+format supports it) or in a separate file (by default in GFF format).</p>
+
+<p>The <i>type:</i> attribute defines the output sequnce
+type. Although this will default to the type of the first input
+sequence, it is ercommended that a value is always defined to make the
+output sequnce type clear.</p>
+
+<p>The <i>nullok:</i> attribute allows a default value to be replaced
+by an empty string or by -noxxx on the command line if the application
+can run without this sequence output. The application must be able to accept a
+null value for this qualifier.
+</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no sequence output) as the default for
+programs where sequence output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>osextension:</i> attribute sets the default file
+extension. This is usually the sequence format, but can be
+specifically set with this attribute, for example where
+appliations produce two or more sequence outputs.</p>
+
+<a name="sect24125">&nbsp;</a>
+<!-- #acdattr-section-graph -->
+<h5>2.4.1.2.5 Graphics</h5>
+
+<p><b>Formalised:</b></p>
+
+<!-- #section-graph -->
+
+
+<!-- #acdattr-graph -->
+<h5>Graph</h5>
+
+<p>The <i>nullok:</i> attribute allows a default value to be replaced
+by an empty string or by -noxxx on the command line if the application
+can run without this graph output. The application must be able to accept a
+null value for this qualifier.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no graph) as the default
+for programs where a graph is only occasionally
+required. If an empty string is specified on the command line, the
+standard default value will be generated instead.</p>
+
+<p>The <i>goutfile:</i> attribute specifies the base file name for
+output. It can be used to direct output to a named file rather than
+default to the first sequence name in the input.</p>
+
+<p>The command line qualifiers can be defined as ACD attributes. The
+most used are <i>gdesc:</i>, <i>gtitle:</i>, <i>gxtitle:</i> and
+<i>gytitle:</i>. 
+
+<!-- #acdattr-xygraph -->
+<h5>Xygraph</h5>
+
+<p>The <i>nullok:</i> attribute allows a default value to be replaced
+by an empty string or by -noxxx on the command line if the application
+can run without this graph output.
+</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no graph) as the default
+for programs where a graph is only occasionally
+required. If an empty string is specified on the command line, the
+standard default value will be generated instead.</p>
+
+<p>The command line qualifiers can be defined as ACD attributes. The
+most used are <i>gdesc:</i>, <i>gtitle:</i>, <i>gxtitle:</i> and
+<i>gytitle:</i>. 
+
+<p>The <i>multiple:</i> attribute specifies the number of multiple XY
+graphs in a single output. The default value is 1, but is sometimes
+defined in ACD files.</p>
+
+<p>The <i>goutfile:</i> attribute specifies the base file name for
+output. It can be used, for example by the EMBOSS program "tmap" to
+direct output to a named file rather than default to the first
+sequence name in the input.</p>
+
+<a name="sect242">&nbsp;</a>
+<h3>2.4.2 Calculated attributes</h3>
+
+<p>Calculated attributes are attributes that are
+assigned values (calculated in some points) AFTER the parameter has been
+validated (for instance, for a sequence data type, the sequence file has been
+checked to exist and read in). The values are extracted from the actual object
+the parameter is referring to. At the moment the calculated attributes are only
+referring to sequence type objects and can hold things like the name of the
+sequence, the length, the type of sequence (Protein, DNA, RNA etc).</p>
+
+<a name="sect2421">&nbsp;</a>
+<h4>2.4.2.1 Data type-specific calculated attributes</h4>
+
+<p><b>Formalised:</b></p>
+
+<!-- #tablecalc -->
+
+
+<a name="sect2422">&nbsp;</a>
+<h4>2.4.2.2 The sequence type: attribute </h4>
+
+<p>The <i>type:</i> attribute will describe the type of the sequence
+in a single token. The EMBOSS initialisation routines will try to
+establish the type, by reading the (first) sequence and examining the
+contents. Possible values for the <i>type:</i> attribute are listed in
+table 8.</p>
+
+
+<!-- #tableseq -->
+
+<a name="sect243">&nbsp;</a>
+<h3>2.4.3 Attribute usage</h3>
+
+<p>The values of attributes (default, specific and
+calculated) can be referred to <b>after</b> they have been defined by appending
+the attribute name to the parameter name, spaced by a dot '.' and enclosing it
+in parentheses, prefixed by a dollar sign '$'.</p>
+
+<p><b>Formalised:</b></p>
+
+<p>$(<i>parametername.attribute</i>)</p>
+
+<p>Example:</p>
+
+<pre>
+sequence: asequence [
+    standard: Y
+    prompt: "Enter filename"
+  ]
+
+
+integer: windowsize [
+    default: $(asequence.length)
+  ]
+</pre>
+
+<p>In this example the parameter <i>windowsize</i>
+will default to the length of the input sequence.</p>
+
+<a name="sect25">&nbsp;</a>
+<h2>2.5 Qualifiers</h2>
+
+<p>For many of the parameters/objects, qualifiers
+can be used to specify the properties of that object on the command line. The
+format of a sequence file (data type '<i>sequence</i>') can be specified by a
+qualifier as being, for instance, 'fasta'. These types of qualifiers are
+specific for a particular data type (or object) and are therefore called data
+type specific qualifiers.</p>
+
+<p>A second type of qualifier is independent of the data types. These
+are the global qualifiers and apply to the complete program. They are
+usually used to change the behaviour of the program.  Qualifiers can
+be set to turn the debugging on, for instance (by using the
+<i>-debug</i> qualifier), or it can instruct the program to behave
+like a filter, reading from the standard input and writing to the
+standard output ( <i>-filter</i> qualifier).</p>
+
+<p>Qualifiers can be entered on the command line
+in a myriad of ways and a full description of the command line syntax will be
+given in 1.4. For the moment qualifiers will be used in the UNIX style, which
+means that a qualifier name is prefixed with an hyphen and the value (if
+necessary) will be spaced from the qualifier by a space.</p>
+
+<p>Example:</p>
+
+<pre>
+% <b>seqret</b> <i>sequence.seq</i> <u>-sformat fasta</u>
+</pre>
+
+<p><i>"-sformat fasta"</i> is a <i>"qualifier/value pair"</i>.
+Where <b>seqret</b> is the program being called, <i>sequence.seq</i> the first
+(and only) parameter and <i>-sformat fasta</i> the qualifier/value pair for
+this parameter.</p>
+
+<p>The global qualifiers are boolean qualifiers and can be set by
+naming them on the command line and specifically unset by prefixing
+the qualifier with 'no', but since the global qualifiers all default
+to false anyway, there is no specific need to use this syntax at the
+moment.</p>
+
+<p>Example:</p>
+
+<pre>
+% <b>seqret</b> <i>sequence.seq</i> -debug
+
+
+% <b>seqret</b> <i>sequence.seq</i> -nodebug
+</pre>
+
+<p>In the first example <b>seqret</b> is the program being called,
+<i>sequence.seq</i> the first (and only) parameter and <i>-debug
+</i>instructs the program to turn debugging on. In the second example
+<b>seqret</b> is run with the same parameter, but the <i>-debug</i>
+qualifier is now prefixed with ' <i>no</i>', instructing the program to
+turn debugging off (this could be useful if debugging was turned on by
+default in the resource files or in an environment variable).</p>
+
+<a name="sect251">&nbsp;</a>
+<h3>2.5.1 Naming scheme for qualifiers</h3>
+
+<p>Qualifiers can have any name, but a recommended
+naming scheme is used at the moment. The first one or two letters of the
+qualifier indicate the data type they are related to. 'OS' is used for the
+output sequence data types (outseq, outseqset and outseqall) and 'S' for the
+input sequence data types (sequence, seqset and seqall). The rest of the
+qualifiers' name is free but should be something sensible related to the data
+type.</p>
+
+<a name="sect252">&nbsp;</a>
+<h3>2.5.2 Global qualifiers</h3>
+
+<p>Global qualifiers can change the behaviour of the program. They are
+boolean qualifiers and can be set by naming them on the command line
+and specifically unset by prefixing the qualifier with '<i>no</i>'
+<a name="fnB2"></a>
+<a href="#fn2">[2]</a>.
+The qualifiers can be used on the EMBOSS program and as a qualifier
+for <b>acdc</b>. The current global qualifiers are listed in the table
+below.</p>
+
+<p><b>Formalised:</b></p>
+
+<!-- #tablequals -->
+
+
+<a name="sect2521">&nbsp;</a>
+<h4>2.5.2.1 Global qualifier description</h4>
+
+<a name="sect25211">&nbsp;</a>
+<h5>2.5.2.1.1 acdlog (for testing only)</h5>
+
+<p>This qualifier will turn on the log function of the ACD file
+processing. It will produce a logfile of the ACD file parsing
+process. The logfile will have the name of the application, with the
+extension <i>.acdlog</i>.
+</p>
+
+<p>Example:</p>
+
+<pre>
+% <b>seqret</b> <i>sequence.seq</i> -acdlog -auto
+% <b>more</b> <i>seqret.acdlog</i>
+
+  seqret [
+    sequence: sequence [
+       parameter: "1"
+      ]
+    seqout: outseq [
+      parameter: "2"
+    ]
+-- All Done --
+
+Definitions in ACD file
+  ACD 0
+  Name: 'seqret'
+..(Removed lines)..
+</pre>
+
+<p>This example shows the application <b>seqret</b> being run with the
+<i>-acdlog</i> qualifier (and the <i>-auto</i> qualifier, (which will
+be discussed later). After completion of the program a file called
+<i>seqret.acdlog</i> is created in the current directory, with the
+logging information, of which the first sixteen lines are shown.</p>
+
+<p>The logfile will first list the ACD file
+description, with all abbreviated names extended to their full length. Next, it
+will list all the parameters and qualifiers it knows of and prints out all the
+information it has on the data types and qualifiers.</p>
+
+<a name="sect25212">&nbsp;</a>
+<h5>2.5.2.1.2 acdpretty (for testing only)</h5>
+
+<p>When the <i>-acdpretty</i> qualifier is used,
+an ACD file will be produced which is a formatted version of the original ACD
+file. It will produce the full-length names of all data type names, attributes
+and qualifiers. It will show all attributes on a separate line and all values
+enclosed in quotes. The file will be saved as <i>programname.acdpretty</i> in
+the current directory ( <i>programname</i> is the name of the original
+program).</p>
+
+<a name="sect25213">&nbsp;</a>
+<h5>2.5.2.1.3 auto</h5>
+
+<p>The <i>-auto</i> qualifier will turn off any
+prompting of the user. It will try to run the program with all the default
+settings that are defined in the ACD file. If a parameter does not have a
+default value and it is flagged as required, the program will stop and produce
+an error message.</p>
+
+<p>Example:</p>
+
+<pre>
+% <b>seqret</b> <i>sequence.seq</i>
+Output sequence [pdnirsecf.fasta]:
+
+% <b>seqret</b> <i>sequence.seq</i> -auto
+%
+</pre>
+
+<p>The first example shows the application <b>seqret</b> being run
+without the <i>-auto</i> qualifier. The program will prompt the user
+for an output filename, because the output sequence is a mandatory
+parameter.  It presents the user with a prompt and a default output
+filename ( <i>pdnirsecf.fasta</i>, constructed from the input sequence
+name and the output format).</p>
+
+<p>In the second example, the application <b>seqret</b>
+is run with the <i>-auto</i> qualifier. The user is not queried for the output
+filename and it will use the default filename( <i>pdnirsecf.fasta</i>) for the
+output file.</p>
+
+<a name="sect25214">&nbsp;</a>
+<h5>2.5.2.1.4 debug</h5>
+
+<p>This qualifier will turn on the debug tracing.  A file will be
+produced with the name of the program followed by the extension
+<i>.dbg</i>.  The debug file will contain a complete trace of the
+actions of the program reported by calls to the AJAX function
+<i>ajDebug()</i>.</p>
+
+<p>Example:</p>
+
+<pre>
+% <b>seqret</b> <i>sequence.seq</i> -debug -auto
+% <b>more</b> <i>seqret.dbg</i>
+acdArgsScan
+acdDebug Yes
+ajNamGetValueC 'acdroot' 'emboss_acdroot'
+definition for 'acdroot' not found
+ajNamResolve of '/packages/emboss/emboss/acd/seqret.acd'
+closing file '/packages/emboss/emboss/acd/seqret.acd'
+acdFindQualAssoc 'auto' pnum: 0
+ifound: 0
+acdSetQualAppl
+acdDebug YesajNamGetValueC 'filter' 'emboss_filter'
+definition for 'filter' not found
+ajNamGetValueC 'options' 'emboss_options'
+definition for 'options' not found
+ajNamGetValueC 'acdlog' 'emboss_acdlog'
+definition for 'acdlog' not found
+ajNamGetValueC 'help' 'emboss_help'
+definition for 'help' not found
+ajSeqInClear called
+Initializing seqInFormat, 24 formats
+ajNamGetValueC 'format' 'emboss_format'
+definition for 'format' not found
+ajSeqRead: no file yet - test USA '/people/tdeboer/seq/nir.gb'
+seqUsaProcess USA to test: '/people/tdeboer/seq/nir.gb'
+format regexp: No
+no format specified in USA
+...input format not set
+dbname dbexp: No
+no dbname specified
+entry-id regexp: Yes
+found filename /people/tdeboer/seq/nir.gb
+seqAccessFile /people/tdeboer/seq/nir.gb
+ajNamResolve of '/people/tdeboer/seq/nir.gb'
+ajSeqRead: calling seqRead '/people/tdeboer/seq/nir.gb'
+seqRead seqin format 0 ''
+try format 1 (gcg)
+seqGcgDots   .. found
+source          1..5574
+try format 3 (embl)
+first line
+'LOCUS   PDNIRSECF    5574 bp    DNA   BCT 30-MAR-1996
+try format 5 (swiss)
+first line
+'LOCUS   PDNIRSECF    5574 bp    DNA   BCT 30-MAR-1996
+try format 7 (fasta)
+</pre>
+
+<p>This examples shows the application <b>seqret</b> being run with
+the <i>-debug</i> qualifier (and the <i>-auto</i> qualifier, which
+will be discussed later). After completion of the program, a file
+called <i>seqret.dbg</i> is created in the current directory which
+contains the debug information, of which some of the lines are
+shown.</p>
+
+<a name="sect25215">&nbsp;</a>
+<h5>2.5.2.1.5 filter</h5>
+
+<p>The filter qualifier makes the program behave
+like a filter, reading its (first) input 'file' from the standard input, and
+writing its (first) output 'file' to the standard output. The -filter qualifier
+will also invoke the -auto qualifier, so the user is never prompted for any
+missing values.</p>
+
+<p>Example:</p>
+
+<pre>
+% cat <i>sequence.seq</i> | <b>seqret</b> <i>-filter</i> |  lpr
+</pre>
+
+<p>The example shows the application <b>seqret</b>
+being run with the <i>-filter</i> qualifier. The input file is 'piped' into the
+program using the Unix command <i>cat</i> and the output is 'piped' directly to
+the Unix program <i>lpr</i>, which will print it on the printer.</p>
+
+<a name="sect25216">&nbsp;</a>
+<h5>2.5.2.1.6 help</h5>
+
+<p>Help on a program's use can be obtained by
+using the <i>-help</i> qualifier. The help that is displayed will be
+automatically produced from the information in the ACD file. It will list all
+the parameters and their associated qualifiers. It will show the names of the
+parameters and qualifiers, their type and a brief help text, that is extracted
+from the <i>help:</i> attribute.</p>
+
+<p>A second qualifier <i>-verbose</i> gives a list
+of all available qualifiers, including any associated qualifiers (sequence
+formatting etc) and the general qualifiers such as <i>-help</i>.</p>
+
+<a name="sect25217">&nbsp;</a>
+<h5>2.5.2.1.7 options</h5>
+
+<p>A program wirll prompt the user for any missing "required" or
+"parameter" values. Some programs have more options that are normally
+not prompted for (although they can be used on the command line). When
+the <i>-options</i> qualifier is used, the program will query the user
+for the required parameters (data types with the <i>parameter:</i>
+attribute and/or <i>standard:</i> attribute) and also for the
+parameters that are labelled with the <i>additional:</i>
+attribute.</p>
+
+<p>Example:</p>
+
+<p>ACD file definition :</p>
+
+<pre>
+application: seqdemo
+
+sequence: asequence [
+    parameter: Y
+  ]
+
+outseq: outseq [
+    standard: Y
+  ]
+
+integer: outputLength [
+    additional: Y
+    information: "Output length"
+  ]
+</pre>
+
+<p>Command line :</p>
+
+<pre>
+% <b>seqdemo</b>
+Input sequence: <i>sequence.seq</i>
+Output sequence [pdnirsecf.fasta]: <i>&lt;ENTER&gt;</i>
+
+% <b>seqdemo</b> <i>-options</i>
+Input sequence: <i>sequence.seq</i>
+Output sequence [pdnirsecf.fasta]: <i>&lt;ENTER&gt;</i>
+Output length: <i>10</i>
+</pre>
+
+<p>In the first example the application <b>seqdemo</b>
+is run without any parameters or qualifiers and since the <i>asequence</i>
+parameter is a parameter it queries the user for the input filename. It also
+queries the user for the output sequence, since that parameter is labelled as
+being required by the attribute of that name. It will not query the user for
+the integer variable <i>outputLength</i>, since it is not labelled as a
+parameter and is not labelled as required.</p>
+
+<p>In the second example the user IS queried for the integer, since
+the <i>-options</i> qualifier forces the program to query for those
+parameters that are labelled with the <i>additional:</i>
+attribute.</p>
+
+<p>Any parameter that is not defined as a parameter (with the
+<i>parameter:</i> attribute), as required (by the <i>standard:</i>
+attribute) or as optional (by the <i>additional:</i> attribute) can
+still be used on the command line, but the user will NEVER be queried
+for them. These parameters are considered an 'advanced feature' and
+can only be used on the command line. They will only be shown by the
+<i>-help</i> qualifier.</p>
+
+<a name="sect25218">&nbsp;</a>
+<h5>2.5.2.1.8 stdout</h5>
+
+<p>When the <i>-stdout</i> qualifier is used, the
+user will still be prompted for all the info that is required, but will write
+to standard output. The user will also still be prompted for an output
+filename, in case the user wants to save the output to a file.</p>
+
+<p>Example:</p>
+
+<p>Command line :</p>
+
+<pre>
+% <b>seqret</b> -stdout
+Input sequence: <i>sequence.seq</i>
+Output sequence [stdout]: <i>&lt;ENTER&gt;</i>
+</pre>
+
+<p>In this example the <i>-stdout</i> qualifier
+changes the default output to be to standard output (the terminal) instead of
+to a file. The program can still prompt the user, so there is a chance to enter
+a filename instead. With <i>-auto</i> on the command line, the program would
+instead write to the terminal without asking.</p>
+
+<a name="sect2522">&nbsp;</a>
+<h4>2.5.2.2 Environment variables EMBOSS_qualifier</h4>
+
+<p>Most global qualifiers default to FALSE unless
+they are set on the command line or the environment variable is set to TRUE
+(the exceptions are the message level qualifiers <i>-warning</i> <i>-error</i>
+and <i>-fatal</i>). The actions of all the global qualifiers can be changed by
+using environment variables. Environment variables will override the default
+action of the program. The variables are constructed of the word EMBOSS (all
+capitals) and the name of the qualifier (also in capitals) divided by the
+underscore character '_'. If set, they can be set with YES, TRUE or 1. Both
+lowercase and uppercase is accepted, as is using only a part of the word YES or
+TRUE (i.e. Y and T)</p>
+
+<p><b>Formalised:</b></p>
+
+<pre>(csh)
+   setenv EMBOSS_<i>QUAL</i> TRUE
+or setenv EMBOSS_<i>QUAL</i> true
+
+   setenv EMBOSS_<i>QUAL</i> YES
+or setenv EMBOSS_<i>QUAL</i> yes
+
+   setenv EMBOSS_<i>QUAL</i> 1
+
+(sh or bash)
+   export EMBOSS_QUAL=YES
+</pre>
+
+<p>where <i>QUAL</i> represents the name of the
+global qualifier.</p>
+
+<p>The table below lists all environment variables
+for global qualifiers.</p>
+
+<!-- #tablequalvars -->
+
+
+<p>Environment variables can be specified in the global
+<i>emboss.defaults</i> file, in the user's <i>.embosssrc</i> file or set on the
+command line with the <i>setenv </i>command.</p>
+
+<p>When the environment variable is set, its
+effect can be cancelled by using the negating action of prefixing 'no' to the
+boolean qualifier name with the program name.</p>
+
+<p>Example:</p>
+
+<p>ACD file definition :</p>
+
+<pre>
+application: seqdemo
+
+  sequence: asequence [
+    parameter: Y
+  ]
+
+  outseq: outseq [
+    parameter: Y
+  ]
+
+  integer: outputLength [
+    additional: Y
+  ]
+</pre>
+
+<p>Command line :</p>
+
+<p>Example 1</p>
+
+<pre>
+% <b>seqdemo</b>
+Input sequence: <i>sequence.seq</i>
+Output sequence [pdnirsecf.fasta]: <i>&lt;ENTER&gt;</i>
+
+% <b>seqdemo</b> <i>-options</i>
+Input sequence: <i>sequence.seq</i>
+Output sequence [pdnirsecf.fasta]: <i>&lt;ENTER&gt;</i>
+Output length: <i>10</i>
+</pre>
+
+<p>Example 2:</p>
+
+<pre>
+% setenv EMBOSS_OPTIONS YES
+% <b>seqdemo</b>
+Input sequence: <i>sequence.seq</i>
+Output sequence [pdnirsecf.fasta]: <i>&lt;ENTER&gt;</i>
+Output length: <i>10</i>
+
+% <b>seqdemo</b> <i>-nooptions</i>
+Input sequence: <i>sequence.seq</i>
+Output sequence [pdnirsecf.fasta]: <i>&lt;ENTER&gt;</i>
+</pre>
+
+<p>The first example shows the behaviour without the EMBOSS_OPTIONS
+environment variable being set. The program <b>seqdemo</b> behaves in
+the standard way, and only asks for the <i>outputLength</i> parameter
+when the <i>-options</i> qualifier is used. In the second example the
+environment variable <i>EMBOSS_OPTIONS</i> is set at the command line
+and the effect of it is that it now asks for the <i>outputLength</i>
+parameter without the <i>-options</i> qualifier being used. The effect
+of the environment variable is cancelled by using the negating effect
+of the prefix ' <i>no</i>' to the qualifier <i>-options</i> (giving
+<i>-nooptions</i>).</p>
+
+<a name="sect253">&nbsp;</a>
+<h3>2.5.3 Data type specific qualifiers</h3>
+
+
+<a name="sect2531">&nbsp;</a>
+<h4>2.5.3.1 Input</h4>
+
+<p><b>Formalised:</b></p>
+
+<!-- #qual-input -->
+
+<a name="sect2532">&nbsp;</a>
+<h4>2.5.3.2 Output</h4>
+
+<p><b>Formalised:</b></p>
+
+<!-- #qual-output -->
+
+<a name="sect2533">&nbsp;</a>
+<h4>2.5.3.3 Graphics</h4>
+
+<p><b>Formalised:</b></p>
+
+<!-- #qual-graph -->
+
+
+<a name="sect254">&nbsp;</a>
+<h3>2.5.4 Multiple qualifiers</h3>
+
+<p>Qualifiers refer to the parameter that preceded
+the qualifier, until a parameter from the same data type appears on the command
+line. But, qualifiers that are specific for different data types can be
+intermixed. If there are no two parameters of equal type, the order of
+parameters and their qualifiers is irrelevant.</p>
+
+<p>Example 1</p>
+
+<pre>
+% <b>seqret</b> <i>in.seq out.seq</i> -sformat fasta -osformat gcg
+</pre>
+
+<p>In this example, the program <b>seqret</b>
+takes two parameters, an input sequence (file <i>in.seq</i>, data type
+'sequence') and an output sequence (file <i>out.seq</i>, data type 'outseq')
+and the order of the qualifiers is irrelevant, since the two qualifiers refer
+to different data types.</p>
+
+<p>Example 2</p>
+
+<pre>
+% <b>align</b> <i>aap.seq</i> -sformat fasta <i> noot.seq </i> -sformat gcg
+</pre>
+
+<p>In this example, the program <b>align</b> takes two parameters,
+both input sequences (files <i>aap.seq</i> and <i>noot.seq</i>, data
+type sequence) and here the order of the qualifiers is
+important. Since <i>aap.seq</i> is in 'fasta' format and
+<i>noot.seq</i> is in 'gcg' format.</p>
+
+<a name="sect255">&nbsp;</a>
+<h3>2.5.5 Numbering qualifiers</h3>
+
+<p>Instead of having to adhere to a rigorous order
+for the qualifiers when two or more parameters of the same data type are
+defined, it is also possible to use numbers in the qualifiers name, to indicate
+to which parameter the qualifier is referring.</p>
+
+<p><b>Formalised:</b></p>
+
+<p>-<i>qualifiername</i>#&nbsp;<i>qualifiervalue</i>
+</p>
+
+<p>where # represents an integer number,
+indicating which parameter the qualifier is referring to.</p>
+
+<p>Example:</p>
+
+<pre>
+% <b>align</b> <i>aap.seq</i> <i>noot.seq</i> -sformat2 gcg -sformat1 fasta
+</pre>
+
+<p>Is similar to example 2 above, but uses the
+qualifier numbering, to indicate that the format of the first parameter is
+'fasta' and the second 'gcg'.</p>
+
+<p>The number that is used is not the number of
+the parameter in the ACD definition, but indicates the number of SIMILLAR
+qualifiers.</p>
+
+<p>Example:</p>
+
+<p>#ACD definition</p>
+
+<pre>application: seqtest
+sequence: asequence1 [
+    parameter: Y
+  ]
+
+outfile:  outfile     [
+    parameter: Y
+  ]
+
+sequence: asequence2 [
+    parameter: Y
+  ]
+</pre>
+
+<p>Command line :</p>
+
+<pre>
+% <b>seqtest</b> <i>filename1.seq</i> seqtest.out <i>filename2.seq</i> \
+  -sformat1 gcg -sformat2 fasta
+</pre>
+
+<p>Defines that the first sequence file
+(filename1.seq) is in 'gcg' format and the second sequence file (filename2.seq)
+is in 'fasta' format. Note that the second -sformat qualifier has been numbered
+2, although it is the third parameter (but the second sequence parameter, hence
+number 2).</p>
+
+<a name="sect26">&nbsp;</a>
+<h2>2.6 Operations</h2>
+
+<p>Operations can be used to be more flexible in
+the ACD syntax. At the moment there are arithmetic and conditional operations.
+An operation is enclosed in a pair of parenthesis '()' and preceded by the at
+symbol '@'.</p>
+
+<p><b>Formalised:</b></p>
+
+<p>@(<i>operation</i>)</p>
+
+<p>If the operation contains white spaces, the
+whole token should be enclosed by double quotes (" ")</p>
+
+<p><b>Formalised:</b></p>
+
+<pre>
+"@(<i>operation with white space </i>)"
+</pre>
+
+<p>Operations can be nested.</p>
+
+<p><b>Formalised:</b></p>
+
+<pre>
+@(@(<i>operation</i>))</a>
+</pre>
+
+<a name="sect261">&nbsp;</a>
+<h3>2.6.1 Arithmetic operations</h3>
+
+<p>The current arithmetic operations are addition,
+subtraction, multiplication and division. The standard characters for the
+arithmetic operations are used: + - * and /.</p>
+
+<p><b>Formalised:</b></p>
+
+<pre>
+@(<i>a+b</i>) (Addition)
+
+@(<i>a-b</i>) (Subtraction)
+
+@(<i>a*b</i>) (Multiplication)
+
+@(<i>a/b</i>) (Division)
+</pre>
+
+<p>The operands <i>a</i> and <i>b</i> must parse
+to an integer or a float value. Only a single arithmetic operation is allowed
+per operation. If more then one arithmetic operation is required, one should
+make use of internal ACD variables to hold the intermediate results or nest
+separate @() operations.</p>
+
+<p>Example1:</p>
+
+<pre>
+variable: protlen "@( $(sequence.length) / 3 )"
+
+integer: window  [
+    maximum: "@($(protlen)-50)"
+    default: 50
+  ]
+</pre>
+
+<p>This is an example of using an internal ACD variable, to store the
+intermediate result. The internal ACD variable <i>$(protlen)</i> is
+calculated from the length of the input sequence ( <i>sequence</i> data
+type) and used in the definition of maximum size of the <i>window
+</i>parameter.</p>
+
+<p>Example2:</p>
+
+<pre>
+integer: window [
+    maximum: "@( @( $(sequence.length) / 3) - 50)"
+    default: 50
+  ]
+</pre>
+
+<p>This is an example using nesting of operations,
+achieving the same result as example1. The <i>window </i>parameter is
+calculated directly from the <i>sequence.length</i> variable (calculated
+attribute) by first dividing the sequence length by 3, using the divide
+arithmetic operation, nested with a separate subtraction operation.</p>
+
+<p>If any of the operands are not numerical, the
+result is undefined.</p>
+
+<a name="sect262">&nbsp;</a>
+<h3>2.6.2 Conditional operations</h3>
+
+<p>There are three conditional operations: The
+Boolean operation, the simple conditional (if/then/else type) and the case
+type.</p>
+
+<a name="sect2621">&nbsp;</a>
+<h4>2.6.2.1 Boolean operation</h4>
+
+<p>The Boolean operation will resolve to a Boolean
+variable using any of the four conditional operators, for equality (==),
+non-equality (!=), less-than (&lt;) and greater-than (&gt;).</p>
+
+<p><b>Formalised:</b></p>
+
+<pre>
+@(<i>token1==token2</i>) (Equality)
+
+@(<i>token1!=token2</i>) (Non-equality)
+
+@(<i>token1&lt;token2</i>) (Less-than)
+
+@(<i>token1&gt;token2</i>) (Greater-than)
+
+@(!<i>token1</i>) (Not)
+
+@(<i>token1|token2</i>) (Or)
+
+@(<i>token1&amp;token2</i>) (And)
+</pre>
+
+<p>The test values can be integers, floats and
+strings.</p>
+
+<p>Example:</p>
+
+<pre>
+sequence: seq [
+    standard: Y
+  ]
+
+infile:  data [
+    standard: @(seq.type==DNA)
+  ]
+</pre>
+
+<p>In this example, the data file is only required
+if the type of sequence is 'DNA'.</p>
+
+<a name="sect2622">&nbsp;</a>
+<h4>2.6.2.2 Simple conditional operation.</h4>
+
+<p>The simple conditional is a tri-operand operator. The test value is
+followed by a question mark '?', which in turn is followed by the two
+values the operation can resolve to, separated by a colon
+':'. <b>Formalised:</b>
+</p>
+
+<p>@(<i>boolval ? iftrue : iffalse</i>)</p>
+
+<p>The test value, <i>boolval</i>, which must be either a Boolean
+variable, a Boolean operation or an integer, is examined and if it
+resolves to true (or non-zero) the total operation resolves to the
+<i>iftrue</i> value. If the test value resolves to false (or zero) the
+operation resolves to the second value ( <i>iffalse</i>.</p>
+
+<p>Example:</p>
+
+<pre>
+string: matrix [
+    default: "@($(asequence.protein) ? BLOSUM62 : DNAMAT)"
+  ]
+</pre>
+
+<p>The <i>$(sequence.protein)</i> variable is a Boolean value that
+resolves to true if the <i>sequence</i> data type with the name
+<i>asequence</i> is a protein sequence. The operation would resolve to
+<i>BLOSUM62</i> if the sequence is a protein sequence and resolve to
+<i>DNAMAT</i> if it was not a protein sequence (i.e. a DNA or RNA
+sequence).</p>
+
+<p>From EMBOSS 2.8.0 the preferred method is to use the automatic ACD
+variable $(acdprotein) which is set to the type of the first input
+sequence. This makes the conversion of ACD files for GUI interfaces and other
+wrappers simpler. The examlpe then becomes:</p>
+
+<pre>
+string: matrix [
+    default: "@($(acdprotein) ? BLOSUM62 : DNAMAT)"
+  ]
+</pre>
+
+<p>The results will be the same because internally EMBOSS will use the
+value of "$(asequence.protein)"</p>
+
+<a name="sect2623">&nbsp;</a>
+<h4>2.6.2.3 Case operation.</h4>
+
+<p>In the case-type operation, the test value is
+compared with a list of possible values. If a match is found, the operation
+resolves to the result associated with that possible value. The test value,
+which is parsed as a string, is followed by an equal sign '=', which in turn is
+followed by one or more pairs of possible and associated values, separated by a
+colon ':'. If none of the possible values match, the operation will resolve to
+the default result, that is associated with the keyword <i>else</i>.</p>
+
+<p>The else : default value pair is not mandatory
+and if none of the possible values match in a operation without the default
+value, the operation will resolve to a null string. <b>Formalised:</b></p>
+
+<p>@(<i>testval = poss_valA : ass_valA poss_valB :
+ass_valB</i> else<i> : default_val</i>)</p>
+
+<p>Example:</p>
+
+<pre>
+string: matrix [
+    default: "@($(sequence.type) =
+          protein : BLOSUM62
+          dna : dnamat
+          rna : rnamat
+          else : unknown)"
+  ]
+</pre>
+
+<p>The <i>$(sequence.type)</i> variable is a
+string value that holds the type of sequence present in the <i>sequence</i>data
+type, with the name <i>sequence.</i> If the type is <i>'protein'</i>, the
+operation resolves to <i>BLOSUM62</i>, if the type is <i>'dna'</i> it resolves
+to <i>DNAMAT</i>, etc. If the type is not in this list, the operation resolves
+to unknown.</p>
+
+<p>If the test value cannot unambiguously be
+assigned to a single associated value, the operation will resolve to the LAST
+associated value that matches its possible value.</p>
+
+<a name="sect27">&nbsp;</a>
+<h3>2.7 Variables</h3>
+
+<p>The use of conditional operations in ACD files is often to test the
+values of <i>list</i> or <i>selection</i> data types.</p>
+
+<p>These tests are often used for several other qualifiers. To help
+understand the ACD file, and to help the developers of ACD parsers, an
+ACD file can use a <i>variable</i> definition to define the result
+once only, and then to refer to the variable by name in all later ACD
+data type definitions.</p>
+
+<p>Example1:</p>
+
+<pre>
+variable: usermatrix "@($(pwmatrix) == o)"
+
+infile: pairwisedata [
+  additional: "$(usermatrix)"
+  default: ""
+  nullok: "@(!$(usermatrix))"
+  information: "Filename of user pairwise matrix"
+  knowntype: "comparison matrix"
+]
+
+</pre>
+
+<p>Note that as a variable only has a single value and no attributes the
+square brackets are not used.</p>
+
+<p>Variables are used to simplify the ACD file, but they do indicate
+that there is some complexity in the ACD definitions. When a variable
+is used, or when a conditional operation refers to another ACD
+value, the application can be regarded as two or more separate
+applications with each possible condition resolved.</p>
+
+<a name="sect28">&nbsp;</a>
+<h3>2.8 Sections</h3>
+
+<p>The parameters and qualifiers defined by an ACD file are processed
+in the order in which they appear. This is sufficient for ACD
+processing by EMBOSS applications, but does not give enough detail for
+user interfaces to build clean groupings of options.</p>
+
+<p>To help user interfaces, all ACD parameters and qualifiers are now
+grouped into 5 major sections and in some cases into subsections. The
+5 major sections always appear in the following order in the ACD file
+(the order is tested by the acdvalid tool):</p>
+
+<table>
+<tr>
+<td><b>Section name</b></td>
+<td><b>Description</b></td>
+</tr>
+
+<tr>
+<td>Input</td>
+<td>Input values, including any infile, sequence, seqset, seqall,
+matrix, fmatrix, codon, or any
+other ACD type that will read input. At present datafile is included,
+although this may change. Other qualifiers related to input
+can also be placed in this section.</td>
+</tr>
+
+<tr>
+<td>Required</td>
+<td>Parameters and required qualifiers, including
+any whose "additional" attribute can be true but depends on a
+conditional operation. Also any toggles that their definitions
+use. Note that input and output parameters and qualifiers must be in
+their respective sections. Other qualifiers related to input and
+output can also be placed in those sections.</td>
+</tr>
+
+<tr>
+<td>Additional</td>
+<td>Additional qualifiers, including any whose "additional" attribute
+can be true but depends on a conditional operation. Also any toggles
+that their definitions use. Note that input and output parameters and
+qualifiers must be in their respective sections. Other qualifiers
+related to input and output can also be placed in those sections.</td>
+</tr>
+
+<tr>
+<td>Advanced</td>
+<td>Any qualifiers (except input and output qualifiers) which have no
+"standard" or "additional" attribute defined. Other qualifiers
+related to input and output can also be placed in those sections.</td>
+</tr>
+
+<tr>
+<td>Output</td>
+<td>Output values, including any outfile, outdata, seqout, seqoutall,
+seqoutset, outtree or any other data type that will write output. This
+is the last section to be defined, so all output definitions must be
+at the end. Other qualifiers related to output
+can also be placed in this section.</td>
+</tr>
+
+</table>
+
+<p>All sections and subsections are defined in the file
+<b>sections.standard</b> which is stored and installed in the same
+directory as the ACD files.</p>
+
+<a name="sect29">&nbsp;</a>
+<h3>2.9 Environment variables</h3>
+
+<p>The behaviour of EMBOSS programs can not only
+be influenced by command line options, but also by environment variables. Some
+of the environment variables were already mentioned in section 3.4.2.2 for the
+global qualifiers and they are listed here also, for completeness. There are a
+few others that are not directly related to specific data types, but are more
+general to the workings of an EMBOSS program.</p>
+
+
+<p>All environment variables should be described in the file
+<b>variables.standard</b> which is stored and installed in the same
+directory as the ACD files and is used to generate the table
+below. Unlike the other .standard files, there is no explicit test for
+a variable to be defined in this file.</p>
+
+<!-- #tableothervars -->
+
+
+<a name="sect3">&nbsp;</a>
+<h1>3. ACD utility programs</h1>
+
+
+<p>A set of 6 utility programs will run, test and document an ACD file
+without the need to write the program which will use the ACD file.</p>
+
+<p>The recommended approach for developing new applications is to
+first write and test the ACD file and then to write the application to
+use the values defined by the ACD file.
+
+
+<a name="sect31">&nbsp;</a>
+<h2>3.1 acdc</h2>
+
+
+<p>The <b>acdc</b> utility processes an ACD file in exactly the same
+way as an application, even if the application itself has not yet been
+written.</p>
+
+<p><b>acdc</b> can use general qualifiers such as -debug. Note that as
+the input files are read any debug calls made by the input functions
+will be reported.
+
+
+
+<a name="sect32">&nbsp;</a>
+<h2>3.2 acdtrace</h2>
+
+
+<p>The <b>acdtrace</b> utility runs like acdc but also reports the
+resolution of any ACD varaibles and operations as the file is
+processed. The output on screen can look a little confusing but is by
+far the best way to see how variables and operations work in your ACD file.</p>
+
+
+
+<a name="sect33">&nbsp;</a>
+<h2>3.3 acdvalid</h2>
+
+
+<p>The <b>acdvalid</b> utility validates an ACD file, testing many
+features which will not prevent an application from running, but will
+create problems for the user interface (commandline or some
+wrapper).</p>
+
+<p>Among the features tested by <b>acdvalid</b> are:</p>
+
+<ul>
+
+<li>sections in the correct order of input, required, additional,
+advanced and output</li>
+
+<li>calculated values for the <i>parameter</i> <i>standard</i> and
+<i>additional</i> attributes. These can use "toggle" data type values
+but not "boolean", so that interface wrappers can use "toggle" values
+to split an application into 2 or more simpler definitions.</li>
+
+<li><i>knowntype</i> attributes are defined for the data type in the
+<b>knowntypes.standard</b> file or match an accepted standard format
+for the data type</li>
+
+<li>qualifier names match an accepted standard, for example all
+sequence input should end in "sequence". The warning message will
+explain what the standard requires</li>
+
+<li>qualifiers that are restricted to one section (input or output)
+are ni the correct section</li>
+
+<li>Other qualifiers are valid in the section ni which they appear,
+for example the "advanced" section cannot have any qualifier that will
+be prompted, and the "additional" section can only have qualifiers
+whose <i>additional</i> attribute is set, or toggles which control them.</li>
+
+<li>sections and subsections must be defined in the
+<b>sections.standard</b> file</li>
+
+<li><i>parameter</i>, <i>standard</i> and <i>additional</i> attribute
+values cannot be "N" (the default) because this confuses parsers.</li>
+
+<li>section definitions must use a standard <i>information</i>
+attribute so that interface wrappers will have a consistent
+description when using sections to group qualifiers.</li>
+
+<li>The text values defined for <i>information</i> and other
+attributes should start in upper case</li>
+
+<li>Data types with standard prompts should not have
+<i>information</i> or <i>prompt</i> attributes</li>
+
+</ul>
+
+
+<p>If the message is a "Warning" then the ACD file will work, although
+it is worth trying to fix the problem. Recommended solutions are
+described in the web page
+http://www.ebi.ac.uk/~pmr/emboss/acdvalid-fix.html used by the
+developers
+</p>
+
+<p>Further validation tests will be added in future releases so it is
+worth running acdvalid on all local ACD files with each new version of
+EMBOSS</p>
+
+
+<a name="sect34">&nbsp;</a>
+<h2>3.4 acdpretty</h2>
+
+
+<p>The <b>acdpretty</b> utility simply reads an ACD file and rewrites
+it with clean indentation to file <b>(programname).acdpretty</b> which
+can be used to overwrite the original ACD file.</p>
+
+
+
+<a name="sect35">&nbsp;</a>
+<h2>3.5 acdtable</h2>
+
+
+<p>The <b>acdtable</b> utility is used to create the table of
+qualifiers, allowed values and defaults that appears in the
+application documentation. The allowed values uses the <i>valid</i>
+attribute, and the default value uses the <i>expect</i> attribute for
+cases where the ACD definition alone is not enough to define the value
+to be reported.</p>
+
+
+
+<a name="sect36">&nbsp;</a>
+<h2>3.6 acdlog</h2>
+
+
+<p>The <b>acdc</b> utility</p> runs like <b>acdc</b> but also produces
+a file <i>(programname).acdlog</i> which documents the internals of
+ACD processing.
+
+
+
+<a name="sect4">&nbsp;</a>
+<h1>4. Command line syntax</h1>
+
+<p>Most of the EMBOSS programs will be started
+from the UNIX command line, either with or without extra parameters and
+qualifiers. Which parameters and qualifiers can appear on the command line, is
+defined in the Ajax Command Definition (ACD) file that is associated with the
+EMBOSS program (See 1.2).</p>
+
+<p>The Command line syntax is very versatile and it does not restrict
+the available syntax more than is strictly necessary. To save
+confusion, there will be a recommended EMBOSS command style, which
+probably will be the UNIX style using '=' for parameter and qualifier
+values.</p>
+
+<a name="sect41">&nbsp;</a>
+<h2>4.1 Parameters and qualifiers.</h2>
+
+<p>For parameters it is not always mandatory to
+use the name of the parameter on the command line. If the <i>parameter:</i>
+attribute was used for a parameter it is not mandatory to use the name of the
+parameter as a prefix to the parameter value (See 3.4.1.1.1). For qualifiers it
+is always mandatory to provide the name of the qualifier (if a value for the
+qualifier is to be given on the command line).</p>
+
+<p>In the rest of the definition of the command
+line syntax, wherever the word qualifier is used, it means both parameters and
+qualifiers. If 'parameter' is used it will only apply to parameters.</p>
+
+<a name="sect42">&nbsp;</a>
+<h2>4.2 Qualifier definition</h2>
+
+<ul type=disc>
+ <li>Qualifiers are meaningful words rather than single letters. </li>
+ <li>Qualifiers are not case sensitive.</li>
+ <li>Qualifier values are usually not case sensitive. An obvious
+     exception is filenames, which must match in normal UNIX style (on normal
+     UNIX systems). </li>
+ <li>Qualifiers can be shortened as long as they are not ambiguous. </li>
+ <li>Qualifiers can appear in any order, although in some cases their
+     scope changes. </li>
+ <li>Associated qualifiers, specific for a certain data type, should
+     immediately follow a parameter of that data type. In this position, these
+     qualifiers apply only to that parameter and not to all parameters of that
+     data type. </li>
+ <li>Qualifiers must start with either the hyphen '-' (UNIX style) or
+     the forward slash '/' (OpenVMS style), unless there is an '=' sign between
+     the qualifier and the value (SeqPup command style). </li>
+ <li>The values are spaced from the qualifier name by either a space ' '
+     (UNIX style) or an equal sign '=' (OpenVMS or SeqPup style). </li>
+ <li>If the equal sign '=' is used to assign a value to a qualifier, the
+     prefix (hyphen '-' or forward slash '/') can be omitted (SeqPup
+     style).</li>
+ <li>Boolean (Yes/No) (True/False) qualifiers have no attached value and
+     are set True by giving the qualifier name, and set to False by adding the
+     prefix 'no' to the qualifier name. </li>
+</ul>
+
+<p>Example:</p>
+
+<p>ACD definition</p>
+
+<pre>
+application: seqdemo
+
+sequence: asequence [
+    parameter: Y
+  ]
+
+boolean:     output     [
+    default: Y
+  ]
+</pre>
+
+<p>Command line :</p>
+
+<pre>
+% <b>seqdemo</b> <i>filename.seq</i> -output
+
+% <b>seqdemo</b> <i>filename.seq</i> -nooutput
+</pre>
+
+<p>In the first command line example the bool parameter <i>output</i>
+is set to True (although it could have been omitted since the default
+value is True).</p>
+
+<p>In the second command line example the <i>output</i> parameter is
+set to False, by the prefix 'no'.</p>
+
+<p>Sequence specifications conform to the EMBOSS Uniform Sequence
+Address, but parts of the specification can also be given on the
+command line.</p>
+
+<p>Examples</p>
+
+<p>The following command lines all tell <b>seqdemo</b> to read
+sequence <i>paamir.tfa</i> in fasta format, starting at base 25.</p>
+
+<pre>
+% <b>seqdemo</b> -sbeg 25 paamir.tfa -sf fasta
+
+% <b>seqdemo</b> fasta::paamir.tfa -sbegin=25 
+
+% <b>seqdemo</b> -sbegin=25 fasta::paamir.tfa 
+
+% <b>seqdemo</b> -sbegin=25 paamir.tfa -sformat fasta
+
+% <b>seqdemo</b> -sbeg 25 paamir.tfa -sf=fasta
+
+% <b>seqdemo</b> -sbeg 25 -sequence=paamir.tfa -sf=fasta
+
+% <b>seqdemo</b> sbeg=25 -sequence=paamir.tfa sf=fasta
+
+% <b>seqdemo</b> -sbeg 25 -sequence paamir.tfa -sf fasta
+
+% <b>seqdemo</b> /SBEG=25 /SEQUENCE=paamir.tfa /SF=fasta
+</pre>
+
+<p>This may seem rather confusing, but only because there is no
+enforcement of a standard recommended way for users to specify the
+command lines.</p>
+
+<p>For general use, we strongly recommend the
+first example above.</p>
+
+<a name="sect5">&nbsp;</a>
+<h1>5. Using an ACD file in a new EMBOSS program</h1>
+
+<p>This part is intended as a simple guide to getting started as a
+developer using EMBOSS. EMBOSS is a new package, and can seem
+difficult at first. If you follow these steps you will find it can be
+easy.</p>
+
+<p>We start by assuming you want to write a new application. You will
+need to write the application source code, which will use the EMBOSS
+libraries, and you also need to add the application to EMBOSS.</p>
+
+<a name="sect51">&nbsp;</a>
+<h2>5.1 Application Command Definitions</h2>
+
+<p>Strangely, you add the application to EMBOSS
+before you write any source code. This is because EMBOSS can use the
+application command definition (ACD) file to test all the input for you,
+without any new source code.</p>
+
+<a name="sect511">&nbsp;</a>
+<h3>5.1.1 ACD files</h3>
+
+<p>ACD files live in the <i>emboss/acd/</i>
+directory with a filename or <i>appname</i>.acd ("<i>appname</i>" is
+the name of your application). You will find some files there already which you
+are welcome to use as templates for your own ACD file.</p>
+
+<pre>
+application: appname
+</pre>
+
+<p>Defines the application name. All ACD files
+start this way.</p>
+
+<pre>
+sequence: sequence [
+    parameter: Y
+  ]
+</pre>
+
+<p>This asks for a sequence as the first parameter
+on the command line.</p>
+
+<pre>
+outfile: outfile [
+    parameter: Y
+  ] 
+</pre>
+
+<p>This asks for an output file name as the second
+parameter on the command line.</p>
+
+<pre>
+integer: weight [
+  ]
+</pre>
+
+<p>Allows an integer value to be specified by
+"-weight" on the command line. It will not be prompted for unless you
+add "standard:Y", in which case you should add "prompt: 'prompt
+for the user'" as well.</p>
+
+<p>There are other things you can specify too. All
+values can have defaults provided in the ACD file and tests to make sure the
+values are reasonable. See the ACD documentation for more information.</p>
+
+<a name="sect512">&nbsp;</a>
+<h3>5.1.2 Testing your ACD file</h3>
+
+<p>Now for the cunning part. EMBOSS has an
+application called <b>acdc</b> which can pretend to be any other application.
+You put</p>
+
+<pre>
+% <b>acdc</b> appname
+</pre>
+
+<p>on the command line. It will read <i>appname.acd</i>
+and will read in any required data just as if the application itself was
+running. It will also test anything else you add on the command line and report
+syntax errors in exactly the same way as the real application.</p>
+
+<a name="sect52">&nbsp;</a>
+<h2>5.2 Application template</h2>
+
+<p>When the ACD file is ready, which should not take long, you can
+start on the application code. This lives in emboss/<i>appname</i>.c
+and to start with you will simply call the startup routines and pick
+up the values you defined in the ACD file.</p>
+
+<pre>
+#include "emboss.h"
+AjPSeq seq;
+AjPFile outfile;
+int iweight;
+
+int main (int argc, char * argv[]) {
+
+  embInit ("appname", argc, argv);
+  seq = ajAcdGetSeq ("sequence");
+  outfile = ajAcdGetOutfile ("outfile");
+  iweight = ajAcdGetInt ("weight");
+
+  ajExit();
+}
+</pre>
+
+<p>The "embInit" call is exactly what <b>acdc</b>
+was doing. It will read <i>appname.acd</i> and read everything you need from
+the command line or by prompting the user.</p>
+
+<p>The next 3 lines pick up the sequence, output
+file and integer value in the suggested ACD file (you will have your own set of
+calls here).</p>
+
+<p>Now you are ready to write your code. The sequence is in seq in an
+internal representation. You can use EMBOSS functions to work with
+this sequence, or convert it to a string and use the string functions,
+or convert it to a null-terminated C character string and use the C
+library functions and C pointers. It does not really matter which you
+choose.</p>
+
+<p>All output will be written to outfile. You should use the EMBOSS
+output functions to do this, typically ajFmtPrintF which works just
+like C's "printf" except that it uses an AJAX file object (AjPFile)
+and has some extra format options like %S for AJAX strings
+(AjPStr).</p>
+
+<a name="sect53">&nbsp;</a>
+<h2>5.3 Makefile changes</h2>
+
+<p>You can add a new application without too much
+difficulty if you are using the full developers version from the CVS server. Go
+to the emboss directory (/emboss). Edit file <i>Makefile.am</i> and make two
+changes. Add <i>appname</i> to the list of applications in bin_PROGRAMS and add
+a new line:</p>
+
+<pre>
+appname_SOURCES = appname.c
+</pre>
+
+<p>Then go back up to the top directory ( emboss/,
+and run <i>./configure</i> which will magically update the makefiles for you.
+You can then use <i>make</i> to make EMBOSS with your new application.</p>
+
+<p>What next?</p>
+
+<p>Time to write some real code for your
+application. Good luck and happy coding!</p>
+
+<a name="sect6">&nbsp;</a>
+<h1>6. Examples</h1>
+
+<p>The following ACD file for a hypothetical
+application called <b>ajtest</b> tests the data types for both required and
+optional values. The application will prompt for one value of each data type,
+in the order in which they are defined, and will accept definitions of the
+optional data on the command line.</p>
+
+<pre>
+# AJTEST application
+# AJAX COMMAND DEFINITION (ACD) FILE
+# use "" for missing values - these are required.
+# values in "" are trimmed to single spaces.
+# everything is treated as single tokens delimited by white space
+# (space, tab, newline)
+# pmr 8-jul-98
+
+application: ajtest [
+    documentation: "Testing ACD files"
+    groups: "Test"
+  ]
+
+boolean: reqbool [
+    default: Y
+    standard: Y
+    information: "Required bool"
+  ]
+
+boolean: bool [
+    default: N
+    information: "Another bool"
+  ]
+
+integer: reqint [
+    minimum: -50
+    maximum: +50
+    standard: Y
+    information: "Number -50 to 50"
+  ]
+
+integer: int [
+    minimum: -50
+    maximum: +50
+    information: "Enter a number -50 to 50"
+    additional: y
+  ]
+
+float: reqfloat [
+    minimum: -0.07
+    maximum: 2.5
+    standard: Y
+    information: "Float to 2.5"
+  ]
+
+float: float [
+    minimum: -7e-2
+    maximum: 2.5
+    information: "Float -0.07 to 2.5"
+  ]
+
+sequence: psequence [
+    parameter: Y
+  ]
+
+outfile: outfile [
+    default: stdout
+    extension: "test"
+    name: "ajtest"
+    type: "text"
+    standard: Y
+  ]
+
+sequence: qsequence [
+    parameter: Y
+  ]
+
+string: reqstring [
+    default: "abcd"
+    standard: Y
+    information: "rqstring"
+    minlen: 4
+  ]
+
+string: string [
+    default: "b"
+    information: "string"
+    minlen: 1
+    maxlen: 50
+  ]
+</pre>
+
+
+<a name="sect61">&nbsp;</a>
+<h2>6.1 Processing the ACD File</h2>
+
+<p>The AJAX Command Definition, and the command
+line entered by the user, are processed automatically by a single start-up call
+to <i>embInit</i>. The same call also handles all prompting of the user for
+missing information.</p>
+
+<a name="sect62">&nbsp;</a>
+<h2>6.2 Testing ACD Files</h2>
+
+<p>To help in evaluating the ACD files, there is a
+special EMBOSS application <b>acdc</b> (the ACD compiler) which, when given the
+name of an ACD file as the first argument on the command line, will process
+that file and use the remainder of the command line. This causes <b>acdc</b> to
+behave exactly like any (possibly not yet written) application and makes it
+very easy to test how a particular application could be defined.</p>
+
+<p>For example</p>
+
+<pre>
+% <b>acdc</b> ajtest
+</pre>
+
+<p>would use the example ACD file above and would
+prompt for each of the required data types:</p>
+
+<pre>
+% <b>acdc</b> ajtest
+Testing ACD files
+Required bool [Y] : 
+Number -50 to 50 [0] : 
+Float to 2.5 [0.0] : 
+First sequence : gcg::egmsmg.gcg
+Output file [stdout] : 
+Second sequence : paamir.tfa
+rqstring [abcd] : fred
+
+% <b>acdc</b> ajtest -sask
+Testing ACD files
+Required bool [Y] : 
+Number -50 to 50 [0] : 
+Float to 2.5 [0.0] : 
+First sequence : gcg::egmsmg.gcg
+Begin at base [1] : 
+End at base [1217] :
+Reverse strand [N] : 
+Output file [stdout] : 
+Second sequence : paamir.tfa
+Begin at base [1] : 
+End at base [1000] : 
+Reverse strand [N] : 
+rqstring [abcd] : fred
+
+% <b>acdc</b> ajtest -noreqb -reqf=1.5 <i>egmsmg.gcg</i> -sformat gcg
+Testing ACD files
+Number -50 to 50 [0] : 
+Output file [stdout] : 
+Second sequence : paamir.tfa
+rqstring [abcd] : fred
+
+% <b>acdc</b> ajtest -reqst=xyz
+Testing ACD files
+Required bool [Y] : 
+Number -50 to 50 [0] : 
+Float to 2.5 [0.0] : 
+First sequence : gcg:egmsmg.gcg
+Output file [stdout] : 
+Second sequence : paamir.tfa
+Too short - minimum length is 4 characters
+</pre>
+
+<a name="sect7">&nbsp;</a>
+<h1>7. Acknowledgements</h1>
+
+<p>This documentation was originally written by Thon de Boer at the
+HGMP RC in Hinxton, UK with input from Peter Rice at the Sanger Centre
+and Gary Williams at the HGMP RC. it is now maintained by <a
+href="mailto:pmr@ebi.ac.uk">Peter Rice at the European Bioinformatics
+Institute</a></p>
+
+<p>A web version can be found at
+<a href="http://emboss.sourceforge.net/developers/acd/">
+http://emboss.sourceforge.net/developers/acd/</a></p>
+
+
+<hr size=2 width="100%" align=center>
+
+
+<h1>Footnotes</h1>
+
+<p><a name="fn1"></a>
+<a href="#fnB1">[1]</a>
+Input (and output) will usually take place using files, but 'files' is
+used here in the broadest sense, since there are many different ways
+that the input can actually take place (via the USA method).</p>
+
+<p><a name="fn2"></a>
+<a href="#fnB2">[2]</a>
+The global qualifiers all default to 'false' at this moment, so there
+is no compelling reason to use this syntax.</p>
+
+<h2>Notes:</h2>
+
+<p>Need to add qualifier_assocqualifier syntax</p>
+
+<p>Need to add a lot more on features input and
+output and notes on features in reports</p>
+
+<p>Check details for ranges - can we add some attributes
+e.g. forwardonly so range appears in the tables</p>
+
+<p>Check the -nooutput option in the example(s)</p>
+
+<p>acd error checks - list and example for each - and how to log and
+debug the details</p>
+
+<p>cpdb, scop should all use name and extension attributes
+- makes more sense than just name. Only codon should have a default.</p>
+
+<p>datafile - does extension get added to anything the user specifies?
+always, only if it has no extension? </p>
+
+</body>
+
+</html>

@@ -1,0 +1,80 @@
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Nucleotide sequence filename and optional format, or reference (input USA)</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-minrepeat</td>
+<td>Minimum repeat size</td>
+<td>Integer, 2 or higher</td>
+<td>10</td>
+</tr>
+
+<tr>
+<td>-maxrepeat</td>
+<td>Maximum repeat size</td>
+<td>Integer, same as -minrepeat or higher</td>
+<td>Same as -minrepeat</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output report file name</td>
+<td>Report output file</td>
+<td><i>&lt;*&gt;</i>.etandem</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-threshold</td>
+<td>Threshold score</td>
+<td>Any integer value</td>
+<td>20</td>
+</tr>
+
+<tr>
+<td>-mismatch</td>
+<td>Allow N as a mismatch</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-uniform</td>
+<td>Allow uniform consensus</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-origfile</td>
+<td>Sanger Centre program tandem output file (optional)</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.etandem</td>
+</tr>
+
+</table>

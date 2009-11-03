@@ -1,0 +1,85 @@
+application: cons [
+  documentation: "Creates a consensus from multiple
+                  alignments"
+  groups: "Alignment:Consensus"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqset: sequence [
+    parameter: "Y"
+    type: "gapany"
+    aligned: "Y"
+    help: "File containing a sequence alignment."
+  ]
+
+  matrix: datafile [
+    additional: "Y"
+    information: "Scoring matrix"
+    protein: "$(acdprotein)"
+    help: "This is the scoring matrix file used when comparing
+           sequences. By default it is the file 'EBLOSUM62' (for proteins) or
+           the file 'EDNAFULL' (for nucleic sequences). These files are
+           found in the 'data' directory of the EMBOSS installation."
+  ]
+
+endsection: input
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  float: plurality [
+    additional: "Y"
+    information: "Plurality check value"
+    help: "Set a cut-off for the number of positive matches below
+           which there is no consensus. The default plurality is taken as
+           half the total weight of all the sequences in the alignment."
+    default: "@( $(sequence.totweight) / 2)"
+    expected: "Half the total sequence weighting"
+  ]
+
+  integer: identity [
+    additional: "Y"
+    information: "Required number of identities at a position"
+    help: "Provides the facility of setting the required number of
+           identities at a site for it to give a consensus at that position.
+           Therefore, if this is set to the number of sequences in the
+           alignment only columns of identities contribute to the consensus."
+    default: "0"
+    minimum: "0"
+  ]
+
+  float: setcase [
+    additional: "Y"
+    information: "Define a threshold above which the consensus
+                  is given in uppercase"
+    help: "Sets the threshold for the positive matches above which the
+           consensus is is upper-case and below which the consensus is in
+           lower-case."
+    default: "@( $(sequence.totweight) / 2)"
+  ]
+
+endsection: additional
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  seqout: outseq [
+    parameter: "Y"
+  ]
+
+  string: name [
+    additional: "Y"
+    default: ""
+    information: "Name of the consensus sequence"
+    knowntype: "sequence id output"
+  ]
+
+endsection: output

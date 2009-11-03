@@ -1,0 +1,188 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: msbar
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+msbar
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/msbar.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+
+This program changes a sequence a lot or a little, attempting to emulate
+various forms of mutation.  You can set the number and types of mutations.
+
+<p>
+It can act on the following sizes of sequence:
+
+<ul>
+<li>Point (single base or residue change)
+<li>Codon (not applicable in proteins)
+<li>Block of sequence (of a specified minimum and maximum random size)
+</ul>
+
+<p>
+If the sequence is nucleic, the codon and block-sized operations can
+optionally be done in-frame.  This causes the minimum block size to be
+set to 3 and the randomly chosen positions to be multiples of 3. 
+
+<p>
+For each of the above size of sequence it can produce the effects of any
+of the following types of mutation at a randomly chosen position:
+
+<ul>
+<li>Insertion of a randomly generated sequence
+<li>Deletion
+<li>Change (deletion then insertion of a random sequence of the same size)
+<li>Duplication at an adjacent position
+<li>Move region from one position to another (without deletion of the original)
+<li>Any of the above, chosen at random.
+<li>None of the above
+</ul>
+
+<p>
+The input and output sequences may not differ if only a few changes are
+chosen as (for example) one in four nucleic acid point substitutions
+will not change the sequence. 
+
+<p>
+N.B.  There is no selection of the types of mutation to produce viable
+sequence as there would be in a real organism.  In particular, there is
+no attempt to bias mutations of nucleic acid sequences to conform to the
+C+G ratio in the sequence or to bias the codons in the direction of the
+frequencies used in the organism.  This program emulates mutation, not
+selection. 
+
+<p>
+This program was named from the acronym of "Mutate Sequence Beyond All
+Recognition", by analogy with the acronym "fubar" commonly used in the
+US and UK armed forces. 
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/msbar.usage" -->
+
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/msbar.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/msbar.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>msbar</b> reads any sequence USA.
+
+<p>
+
+<!--#include file="inc/msbar.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+
+<!--#include file="inc/msbar.output" -->
+
+<p>
+
+The output is a sequence file with 5 substitutions relative to the
+original sequence.
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/msbar.isee" -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/gwilliam.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/msbar.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/msbar.comment" -->
+
+
+</BODY>
+</HTML>
+

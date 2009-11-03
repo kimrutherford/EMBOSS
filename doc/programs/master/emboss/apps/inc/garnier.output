@@ -1,0 +1,90 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: amic_pseae.garnier</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: garnier
+# Rundate: Sun 15 Jul 2007 12:00:00
+# Commandline: garnier
+#    -sequence tsw:amic_pseae
+# Report_format: tagseq
+# Report_file: amic_pseae.garnier
+########################################
+
+#=======================================
+#
+# Sequence: AMIC_PSEAE     from: 1   to: 385
+# HitCount: 113
+#
+# DCH = 0, DCS = 0
+# 
+#  Please cite:
+#  Garnier, Osguthorpe and Robson (1978) J. Mol. Biol. 120:97-120
+# 
+#
+#=======================================
+
+          .   10    .   20    .   30    .   40    .   50
+      MGSHQERPLIGLLFSETGVTADIERSQRYGALLAVEQLNREGGVGGRPIE
+helix                     HHHHH        HHHHH            
+sheet       EE EEEEE                 EE              EEE
+turns         T                TTTT          TTTT       
+ coil CCCCCC        CCCCCC         CC       C    CCCC   
+          .   60    .   70    .   80    .   90    .  100
+      TLSQDPGGDPDRYRLCAEDFIRNRGVRFLVGCYMSHTRKAVMPVVERADA
+helix                HHHHHH            HHHH H     HHHHHH
+sheet EE         EEEE           EEEE          EEEE      
+turns   TT TT   T          TTTTT    TTT    T T          
+ coil     C  CCC                                        
+          .  110    .  120    .  130    .  140    .  150
+      LLCYPTPYEGFEYSPNIVYGGPAPNQNSAPLAAYLIRHYGERVVFIGSDY
+helix                               HHH                 
+sheet EEEE    E       EE           E   EEEE    EEEEE    
+turns        T TTT  TT  T     TT           TT T     TTTT
+ coil     CCC     CC     CCCCC  CCC          C          
+          .  160    .  170    .  180    .  190    .  200
+      IYPRESNHVMRHLYRQHGGTVLEEIYIPLYPSDDDVQRAVERIYQARADV
+helix        HHHH                       HHHHHHHHHHHHH   
+sheet            EEE       EEEEEEE                   EEE
+turns    TTT        TTT             TTTT                
+ coil CCC   C          CCCC       CC                    
+          .  210    .  220    .  230    .  240    .  250
+      VFSTVVGTGTAELYRAIARRYGDGRRPPIASLTTSEAEVAKMESDVAEGQ
+helix           HHHHHHH                HHHHHHHHHHHHHHHHH
+sheet EEEEE            EE         EEE                   
+turns                    TTTTTT                         
+ coil      CCCCC               CCC   CC                 
+          .  260    .  270    .  280    .  290    .  300
+      VVVAPYFSSIDTAASRAFVQACHGFFPENATITAWAEAAYWQTLLLGRAA
+helix             HHHHHHH           HHHHHHHHHHHHH    HHH
+sheet EEEEE  EEE         EE                      E      
+turns      TT              TTT   TT                     
+ coil           CC            CCC  C              CCC   
+          .  310    .  320    .  330    .  340    .  350
+      QAAGSWRVEDVQRHLYDICIDAPQGPVRVERQNNHSRLSSRIAEIDARGV
+helix HH     HHHH                                HHH    
+sheet                  EEEE     EEEEE         EEE      E
+turns            TTTTTT     T        TT   T         TTT 
+ coil   CCCCC              C CCC       CCC CCC          
+          .  360    .  370    .  380
+      FQVRWQSPEPIRPDPYVVVHNLDDWSASMGGGALP
+helix                                    
+sheet EEE           EEEEEEE     E       E
+turns    TT    TT           TTT   TTT    
+ coil      CCCC  CCC       C   C C   CCC 
+
+#---------------------------------------
+#
+#  Residue totals: H:103   E:102   T: 86   C: 94
+#         percent: H: 27.9 E: 27.6 T: 23.3 C: 25.5
+#
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_hitcount: 113
+#---------------------------------------
+</pre>
+</td></tr></table><p>

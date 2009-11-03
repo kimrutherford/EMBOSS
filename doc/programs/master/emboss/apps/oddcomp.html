@@ -1,0 +1,224 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: oddcomp
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+oddcomp
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/oddcomp.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+
+<b>oddcomp</b> searches a series of protein files, reporting the identifier for
+those that exceed a certain amino acid composition threshold in a
+portion of the sequence. 
+
+<p>
+<b>oddcomp</b> was written to answer the question 'which proteins contain at
+least n X and m Y in p residues'. 
+
+<p>
+One could search for serine rich or polyglutamine rich, collagen helix,
+or similar proteins using this program. 
+
+<p>
+<b>oddcomp</b> takes as input an amino acid composition data file in the same
+format as the output from compseq.  It can tolerate any word length
+within reason for the memory capacity of the machine in question.  Only
+the first two fields in the composition data file are used: the word and
+the number of occurrences.  Any word not mentioned is initialised to a
+threshold of zero. 
+
+<p>
+<b>oddcomp</b> measures the amino acid composition (this can be dimers etc as
+well as monomers) in a sliding window.  If and when composition meets or
+exceeds all the specified thresholds, the sequence is reported and
+<b>oddcomp</b> moves to the next sequence.  It does not report where in the
+sequence it found the matching region, merely the sequence ID. 
+
+<p>
+<b>oddcomp</b> was originally written to identify SR/RS containing proteins. 
+eg.  specifying a window of forty amino acids containing at least 3 SR
+and 4 RS words. 
+
+<p>
+To search for a specific set of words in a sequence, edit the input
+composition data file to delete any words from the input file in which
+you are not interested.  The search is a boolean AND so there must be
+(from the short example above) at least 3 SR AND at least 4 RS for the
+sequence to be reported.  If your total words specified exceeds
+window-wordlength+1 you will never get any hits. 
+
+<p>
+
+Only one word size can be used and is specified at the top of the file
+in compseq-style output. 
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/oddcomp.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/oddcomp.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/oddcomp.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<!--#include file="inc/oddcomp.input" -->
+
+<p>
+
+The columns "Obs Frequency", "Exp Frequency" and "Obs/Exp Frequency" are
+not required - they were simply included in this example to show the
+similarity between this input file format and the output of the program
+<A HREF="compseq.html">compseq</A>.  A compseq output file can be used as the
+input to <b>oddcomp</b> - the extra columns are ignored by
+<b>oddcomp</b>. 
+
+<p>
+
+A minimal composition input data file would look like this:
+
+<hr>
+<pre>
+Word size       2
+Total count     0
+RS      2
+SR      1
+</pre>
+<hr>
+
+<p>
+
+Blank lines and lines starting with '#' are ignored.
+
+<p>
+
+The first non-comment line should start with 'Word size' and will
+specify the word size to use.
+
+<p>
+
+A line starting with the word 'Total' is required.
+
+<p>
+
+Anything after the line starting with the word 'Total' will be read as
+word count data. 
+
+<p>
+
+Word count data consists of a word to search for and the count of that
+word to search for within the sliding window.  The columns are separated
+by one or more spaces or TAB characters. Anything after these two columns
+will be ignored. 
+
+<H2>
+    Output file format
+</H2>
+
+
+<b>oddcomp</b> writes a list of sequence name identifiers.
+
+<p>
+
+<!--#include file="inc/oddcomp.output" -->
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+None.
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/oddcomp.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+
+<!--#include file="inc/dmartin.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/oddcomp.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/oddcomp.comment" -->
+
+</BODY>
+</HTML>
+

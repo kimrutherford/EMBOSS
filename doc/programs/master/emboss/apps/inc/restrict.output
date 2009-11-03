@@ -1,0 +1,321 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: x65923.restrict</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: restrict
+# Rundate: Sun 15 Jul 2007 12:00:00
+# Commandline: restrict
+#    -sequence tembl:x65923
+# Report_format: table
+# Report_file: x65923.restrict
+########################################
+
+#=======================================
+#
+# Sequence: X65923     from: 1   to: 518
+# HitCount: 54
+#
+# Minimum cuts per enzyme: 1
+# Maximum cuts per enzyme: 2000000000
+# Minimum length of recognition site: 4
+# Blunt ends allowed
+# Sticky ends allowed
+# DNA is linear
+# Ambiguities allowed
+#
+#=======================================
+
+  Start     End Enzyme_name Restriction_site 5prime 3prime 5primerev 3primerev
+     11      14 TaqI        TCGA                 11     13         .         .
+     28      25 AciI        CCGC                 25     27         .         .
+     36      31 BseYI       CCCAGC               31     35         .         .
+     38      41 AciI        CCGC                 38     40         .         .
+     44      40 BceAI       ACGGC                25     27         .         .
+     71      81 BsiYI       CCNNNNNNNGG          77     74         .         .
+     71      74 AciI        CCGC                 71     73         .         .
+     73      76 Hin6I       GCGC                 73     75         .         .
+     73      76 HhaI        GCGC                 75     73         .         .
+     77      81 EcoRII      CCWGG                76     81         .         .
+     77      81 BssKI       CCNGG                76     81         .         .
+     94      97 TaqI        TCGA                 94     96         .         .
+    103     106 HpaII       CCGG                103    105         .         .
+    105     108 HaeIII      GGCC                106    106         .         .
+    107     111 EcoRII      CCWGG               106    111         .         .
+    107     111 BssKI       CCNGG               106    111         .         .
+    107     117 BsiYI       CCNNNNNNNGG         113    110         .         .
+    122     132 BsiYI       CCNNNNNNNGG         128    125         .         .
+    125     135 Hin4I       GAYNNNNNVTC         116    111       148       143
+    146     150 BsrI        ACTGG               151    149         .         .
+    161     165 BssKI       CCNGG               160    165         .         .
+    162     165 HpaII       CCGG                162    164         .         .
+    182     186 EcoRII      CCWGG               181    186         .         .
+    182     186 BssKI       CCNGG               181    186         .         .
+    190     193 Hin6I       GCGC                190    192         .         .
+    190     193 HhaI        GCGC                192    190         .         .
+    192     195 Hin6I       GCGC                192    194         .         .
+    192     195 HhaI        GCGC                194    192         .         .
+    197     201 EcoRII      CCWGG               196    201         .         .
+    197     201 BssKI       CCNGG               196    201         .         .
+    209     212 HaeIII      GGCC                210    210         .         .
+    219     222 HaeIII      GGCC                220    220         .         .
+    221     231 BsiYI       CCNNNNNNNGG         227    224         .         .
+    225     221 BsrI        ACTGG               221    219         .         .
+    229     226 AciI        CCGC                226    228         .         .
+    236     239 HaeIII      GGCC                237    237         .         .
+    248     252 EcoRII      CCWGG               247    252         .         .
+    248     252 BssKI       CCNGG               247    252         .         .
+    261     264 HaeIII      GGCC                262    262         .         .
+    263     266 AciI        CCGC                263    265         .         .
+    293     297 EcoRII      CCWGG               292    297         .         .
+    293     297 BssKI       CCNGG               292    297         .         .
+    296     299 HaeIII      GGCC                297    297         .         .
+    335     338 HaeIII      GGCC                336    336         .         .
+    380     377 AciI        CCGC                377    379         .         .
+    383     380 AciI        CCGC                380    382         .         .
+    395     398 HpaII       CCGG                395    397         .         .
+    398     401 Hin6I       GCGC                398    400         .         .
+    398     401 HhaI        GCGC                400    398         .         .
+    405     410 HindII      GTYRAC              407    407         .         .
+    408     413 AclI        AACGTT              409    411         .         .
+    409     412 MaeII       ACGT                409    411         .         .
+    417     427 BsiYI       CCNNNNNNNGG         423    420         .         .
+    438     441 HaeIII      GGCC                439    439         .         .
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_hitcount: 54
+#---------------------------------------
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: x65923.restrict</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: restrict
+# Rundate: Sun 15 Jul 2007 12:00:00
+# Commandline: restrict
+#    -fragments
+#    -sequence tembl:x65923
+# Report_format: table
+# Report_file: x65923.restrict
+########################################
+
+#=======================================
+#
+# Sequence: X65923     from: 1   to: 518
+# HitCount: 54
+#
+# Minimum cuts per enzyme: 1
+# Maximum cuts per enzyme: 2000000000
+# Minimum length of recognition site: 4
+# Blunt ends allowed
+# Sticky ends allowed
+# DNA is linear
+# Ambiguities allowed
+#
+#=======================================
+
+  Start     End Enzyme_name Restriction_site 5prime 3prime 5primerev 3primerev
+     11      14 TaqI        TCGA                 11     13         .         .
+     28      25 AciI        CCGC                 25     27         .         .
+     36      31 BseYI       CCCAGC               31     35         .         .
+     38      41 AciI        CCGC                 38     40         .         .
+     44      40 BceAI       ACGGC                25     27         .         .
+     71      81 BsiYI       CCNNNNNNNGG          77     74         .         .
+     71      74 AciI        CCGC                 71     73         .         .
+     73      76 Hin6I       GCGC                 73     75         .         .
+     73      76 HhaI        GCGC                 75     73         .         .
+     77      81 EcoRII      CCWGG                76     81         .         .
+     77      81 BssKI       CCNGG                76     81         .         .
+     94      97 TaqI        TCGA                 94     96         .         .
+    103     106 HpaII       CCGG                103    105         .         .
+    105     108 HaeIII      GGCC                106    106         .         .
+    107     111 EcoRII      CCWGG               106    111         .         .
+    107     111 BssKI       CCNGG               106    111         .         .
+    107     117 BsiYI       CCNNNNNNNGG         113    110         .         .
+    122     132 BsiYI       CCNNNNNNNGG         128    125         .         .
+    125     135 Hin4I       GAYNNNNNVTC         116    111       148       143
+    146     150 BsrI        ACTGG               151    149         .         .
+    161     165 BssKI       CCNGG               160    165         .         .
+    162     165 HpaII       CCGG                162    164         .         .
+    182     186 EcoRII      CCWGG               181    186         .         .
+    182     186 BssKI       CCNGG               181    186         .         .
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+#     39
+#     33
+#     29
+#     20
+#     19
+#     17
+#     16
+#     15
+#     15
+#     14
+#     14
+#     14
+#     12
+#     11
+#     10
+#     10
+#     10
+#     9
+#     9
+#     9
+#     7
+#     7
+#     7
+#     6
+#     5
+#     5
+#     3
+#     3
+#     3
+#     3
+#     3
+#     2
+#     2
+#     2
+#     2
+#     2
+#     2
+#     2
+#     2
+#     1
+#     1
+#     1
+#     1
+#     1
+#
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_hitcount: 54
+#---------------------------------------
+</pre>
+</td></tr></table><p>
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: x65923.restrict</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: restrict
+# Rundate: Sun 15 Jul 2007 12:00:00
+# Commandline: restrict
+#    -solofragment
+#    -sequence tembl:x65923
+# Report_format: table
+# Report_file: x65923.restrict
+########################################
+
+#=======================================
+#
+# Sequence: X65923     from: 1   to: 518
+# HitCount: 54
+#
+# Minimum cuts per enzyme: 1
+# Maximum cuts per enzyme: 2000000000
+# Minimum length of recognition site: 4
+# Blunt ends allowed
+# Sticky ends allowed
+# DNA is linear
+# Ambiguities allowed
+#
+#=======================================
+
+  Start     End Enzyme_name Restriction_site 5prime 3prime 5primerev 3primerev
+     11      14 TaqI        TCGA                 11     13         .         .
+     28      25 AciI        CCGC                 25     27         .         .
+     36      31 BseYI       CCCAGC               31     35         .         .
+     38      41 AciI        CCGC                 38     40         .         .
+     44      40 BceAI       ACGGC                25     27         .         .
+     71      81 BsiYI       CCNNNNNNNGG          77     74         .         .
+     71      74 AciI        CCGC                 71     73         .         .
+     73      76 Hin6I       GCGC                 73     75         .         .
+     73      76 HhaI        GCGC                 75     73         .         .
+     77      81 EcoRII      CCWGG                76     81         .         .
+     77      81 BssKI       CCNGG                76     81         .         .
+     94      97 TaqI        TCGA                 94     96         .         .
+    103     106 HpaII       CCGG                103    105         .         .
+    105     108 HaeIII      GGCC                106    106         .         .
+    107     111 EcoRII      CCWGG               106    111         .         .
+    107     111 BssKI       CCNGG               106    111         .         .
+    107     117 BsiYI       CCNNNNNNNGG         113    110         .         .
+    122     132 BsiYI       CCNNNNNNNGG         128    125         .         .
+    125     135 Hin4I       GAYNNNNNVTC         116    111       148       143
+    146     150 BsrI        ACTGG               151    149         .         .
+    161     165 BssKI       CCNGG               160    165         .         .
+    162     165 HpaII       CCGG                162    164         .         .
+    182     186 EcoRII      CCWGG               181    186         .         .
+    182     186 BssKI       CCNGG               181    186         .         .
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+# 	70	151	297
+# 
+# BssKI:
+# [CCNGG]
+# 	15	21	30	45	51	54
+# 	76	226
+# 
+# EcoRII:
+# [CCWGG]
+# 	15	30	45	51	75	76
+# 	226
+# 
+# HaeIII:
+# [GGCC]
+# 	10	17	25	35	39	79
+# 	103	104	106
+# 
+# HhaI:
+# [GCGC]
+# 	2	75	117	118	206
+# 
+# Hin4I:
+# [GAYNNNNNVTC]
+# 	32	116	370
+# 
+# Hin6I:
+# [GCGC]
+# 	2	73	117	120	206
+# 
+# HindII:
+# [GTYRAC]
+# 	111	407
+# 
+# HpaII:
+# [CCGG]
+# 	59	103	123	233
+# 
+# MaeII:
+# [ACGT]
+# 	109	409
+# 
+# TaqI:
+# [TCGA]
+# 	11	83	424
+#
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_hitcount: 54
+#---------------------------------------
+</pre>
+</td></tr></table><p>
