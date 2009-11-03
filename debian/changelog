@@ -1,5 +1,6 @@
 emboss (6.1.0-5~unreleased) UNRELEASED; urgency=low
 
+  * The source package is not managed with Git (debian/control). 
   * debian/changelog: corrected an error on a progam name (vectorstrip).
   * debian/patches/transient-vectorstrip.patch: keep quality scores.
 
