@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Terminal=false
+Icon=jemboss
+Exec=runJemboss.csh
+Name=jEmboss
+GenericName=GUI for EMBOSS
+Comment=Graphical user interface for the European Molecular Biology Open Software Suite.
+Type=Application
+Categories=Biology;Science;Education;
