@@ -1,6 +1,6 @@
-Description: keeps quality scores.
- This is a transient patch for my personal use, but that I would like to share with others.
- I will discuss with Upstream about the possibiltiy to have it in the next official patch release.
+Description: Makes vectorsctrip retain quality scores.
+ This patch or an equivalent solution has been applied Upstream.
+ https://sourceforge.net/tracker/index.php?func=detail&aid=2886368&group_id=93650&atid=605034
 Origin: http://lists.open-bio.org/pipermail/emboss/2009-September/003735.html
 --- emboss-6.1.0.orig/ajax/ajseq.c
 +++ emboss-6.1.0/ajax/ajseq.c
