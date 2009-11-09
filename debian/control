@@ -7,7 +7,7 @@ Uploaders: Charles Plessy <plessy@debian.org>, Nelson A. de Oliveira <naoliv@deb
 Build-Depends: debhelper (>= 7), quilt, libx11-dev, x11proto-core-dev, libgdchart-gd2-xpm-dev, zlib1g-dev, libpng12-dev, libpcre3-dev, antiword, sharutils, autotools-dev, tcsh | csh | c-shell
 Build-Depends-Indep: openjdk-6-jdk
 Vcs-Browser: http://git.debian.org/?p=debian-med/emboss.git
-Vcs-Svn: git://git.debian.org/git/debian-med/emboss.git
+Vcs-Git: git://git.debian.org/git/debian-med/emboss.git
 Standards-Version: 3.8.3
 Homepage: http://emboss.sourceforge.net
 
