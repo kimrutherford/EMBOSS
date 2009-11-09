@@ -1,0 +1,17 @@
+DOI: 10.1016/S0168-9525(00)02024-2
+Contact: EMBOSS core development team <emboss-bug@emboss.open-bio.org>
+Homepage: http://emboss.sourceforge.net
+Name: EMBOSS
+PubMed: 10827456
+Reference_title: EMBOSS: The European Molecular Biology Open Software Suite
+Reference_journal = Trends in Genetics
+Reference_volume = 16
+Reference_number = 6
+Reference_pages = 276 - 277
+Reference_year = 2000
+Reference_issn = 0168-9525
+Reference_url = http://www.sciencedirect.com/science/article/B6TCY-40CRS27-G/2/b4e5945c07c58d5a1257cbd685971317
+Reference_author = Peter Rice and Ian Longden and Alan Bleasby
+Watch: |
+ version=3
+ ftp://emboss.open-bio.org/pub/EMBOSS/EMBOSS-([\d.]*)\.tar\.gz

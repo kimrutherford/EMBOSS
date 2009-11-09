@@ -1,10 +1,18 @@
-emboss (6.1.0-5~unreleased) UNRELEASED; urgency=low
+emboss (6.1.0-5) unstable; urgency=low
 
-  * The source package is now managed with Git (debian/control). 
+  * The source package is now managed with Git (debian/control).
+    - VCS URLs updated in debian/control.
   * debian/changelog: corrected an error on a progam name (vectorstrip).
   * debian/patches/transient-vectorstrip.patch: keep quality scores.
+  * Two new patches not yet officialised:
+    - debian/patches/transient-vectorstrip.patch: retain quality scores.
+    - debian/patches/tfm-html.patch: corrects path to HTML documentation.
+  * Added Debian and FreeDesktop menu entries for Jemboss.
+  * Do not create a makefile when there is not at clean time (debian/rules).
+  * Documented how the package is tested in README.debian.
+  * Added various informations about Upstream in debian/upstream-metadata.yaml
 
- -- Charles Plessy <plessy@debian.org>  Thu, 17 Sep 2009 11:45:08 +0900
+ -- Charles Plessy <plessy@debian.org>  Mon, 09 Nov 2009 20:39:28 +0900
 
 emboss (6.1.0-4) unstable; urgency=low
 
