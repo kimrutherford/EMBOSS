@@ -46,10 +46,10 @@ debian/copyright:
 	cat "AUTHORS" >> $@
 	cat "THANKS" >> $@
 
-clean: unpatch config.status
+clean: unpatch
 	dh_testdir
 	dh_testroot
-	$(MAKE) distclean
+	[ ! -f Makefile ] || $(MAKE) distclean
 
 	find jemboss/ -type f -name "*.class" | xargs -r rm -f
 
