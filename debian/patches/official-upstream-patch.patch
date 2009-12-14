@@ -5,45 +5,878 @@ Description: Official upstream patch.
               Correct FASTQ input searching for '@' to start next sequence
               Standardize FASTQ sequence formats with other OpenBio projects
               Correct issues in igstrict, genpept and refseqp formats
+ .
  24-Aug-2009: Fix string extension so that pointers in lists remain valid.
               This fixes a bug in processing SwissProt complex descriptions.
               Fix definition of AJRESIZE0 macro.
               Fix processing of first match in a profile alignment (prophet).
-Origin: ftp://emboss.open-bio.org/pub/EMBOSS/fixes/patches/patch-1-2.gz
+ .
+ 02-Dec-2009: Fixes problems with extractfeat. The fix includes cleaner
+              definitions of functions used to match feature tags and
+              feature types which result in minor updates to 6 other
+              applications.
+ .
+              Extractfeat in previous versions used its own text parser
+              to extract feature data from only a limited set of
+              formats. In release 6.1.0 it was replaced by the standard
+              EMBOSS feature table. With no options set, extractfeat
+              rejected all features (type '*' was needed to extract
+              features). Extractfeat default settings now extract all
+              features from an entry.
+ .
+              Features on the reverse strand were incorrectly processed
+              (an effect caused by some of the old extractfeat code
+              remaining). Reverse strand features are now correctly
+              parsed, including both "join(complement())" and
+              "complement(join())" syntax in EMBL/GenBank/DDBJ feature
+              tables.
+ .
+              Fixes an issue in GenBank parsing where the ORIGIN line is absent.
+ .
+              Fixes scaling errors in prettyplot, especially in mEMBOSS
+              when plotting to a window on screen (the default
+              output). The plplot library does not report the true
+              width and height for several devices. The assumptions in
+              prettyplot depend on reasonable size estimates. Release
+              6.2.0 will have further corrections to plplot device
+              scaling.
+ .
+              Fixes the counting of non-coding features in coderet.
+ .
+              Fixes a seqmatchall error for short sequences with perfect matches
+ .
+              When reverse-complementing sequences, also reverses
+              the quality scores.
+ .
+              Allows '-' in format names in the USA syntax, to allow
+              fastq-sanger fastq-illumina and fastq-solexa format names
+              to be used.
+ .
+              When reading protein sequences, a sequence with only a
+              stop is now recognized as empty (zero length) after
+              processing ambiguity codes and stops.
+ .
+              Fixes a problem writing features in PIR format when the
+              feature table is empty, for example a report file with no hits.
+ .
+              Fixes a dependency on 'ant' to install a Jemboss server.
+ .
+              Fixes a problem in logging Jemboss info/error messages.
+Origin: ftp://emboss.open-bio.org/pub/EMBOSS/fixes/patches/patch-1-3.gz
 Forwarded: not-needed
+
 diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajfeat.c EMBOSS-6.1.0/ajax/ajfeat.c
-*** EMBOSS-6.1.0orig/ajax/ajfeat.c	2009-07-06 16:48:46.000000000 +0100
---- EMBOSS-6.1.0/ajax/ajfeat.c	2009-07-30 15:28:13.000000000 +0100
+*** EMBOSS-6.1.0orig/ajax/ajfeat.c	Mon Sep 28 22:15:17 2009
+--- EMBOSS-6.1.0/ajax/ajfeat.c	Mon Dec  7 12:07:06 2009
 ***************
-*** 9517,9528 ****
-      ajint i;
+*** 373,378 ****
+--- 373,383 ----
+  				      AjPTable pTagsTable,
+  				       AjBool recursion);
+  static void         featWarn(const char* fmt, ...);
++ static AjBool featTypeTestDnaWild(const AjPStr type, const AjPStr str);
++ static AjBool featTypeTestProtWild(const AjPStr type, const AjPStr str);
++ static AjBool featTableTypeTestWild(const AjPStr type,
++                                     const AjPTable table,
++                                     const AjPStr str);
+  
+  
+  
+***************
+*** 6284,6290 ****
+  	/*ajDebug("last: calling featDumpPir for gfprev\n");*/
+  	/*ajDebug("location: '%S'\n", location);*/
+  
+! 	featDumpPir(gfprev,location, file); /* gfprev has tag data */
+  	ajStrDel(&location);
+  	ajStrDel(&pos);
+  	ajStrDel(&temp);
+--- 6289,6296 ----
+  	/*ajDebug("last: calling featDumpPir for gfprev\n");*/
+  	/*ajDebug("location: '%S'\n", location);*/
+  
+!         if(gfprev)
+!             featDumpPir(gfprev,location, file); /* gfprev has tag data */
+  	ajStrDel(&location);
+  	ajStrDel(&pos);
+  	ajStrDel(&temp);
+***************
+*** 6919,6931 ****
+  ** Returns all cross-references from a feature table
+  **
+  ** @param [r] thys [const AjPFeattable] Feature table
+! ** @param [u] xreflist [AjPList] List of sequence cross-reference objects
+  ** @param [w] Ptaxid [ajuint*] Taxon ID
+  ** @return [AjBool] True on success
+  ** @@
+  ******************************************************************************/
+  
+! AjBool ajFeattableGetXrefs(const AjPFeattable thys, AjPList xreflist,
+                             ajuint *Ptaxid)
+  {
+      AjIList iterfeat     = NULL;
+--- 6925,6937 ----
+  ** Returns all cross-references from a feature table
+  **
+  ** @param [r] thys [const AjPFeattable] Feature table
+! ** @param [u] Pxreflist [AjPList*] List of sequence cross-reference objects
+  ** @param [w] Ptaxid [ajuint*] Taxon ID
+  ** @return [AjBool] True on success
+  ** @@
+  ******************************************************************************/
+  
+! AjBool ajFeattableGetXrefs(const AjPFeattable thys, AjPList *Pxreflist,
+                             ajuint *Ptaxid)
+  {
+      AjIList iterfeat     = NULL;
+***************
+*** 6934,6941 ****
+--- 6940,6952 ----
+      AjPSeqXref  xref = NULL;
+      ajint ipos;
+      ajuint inum = 0;
++     AjPList xreflist;
+      AjPFeature feat  = NULL;
+  
++     if(!*Pxreflist)
++         *Pxreflist = ajListNew();
++     xreflist = *Pxreflist;
++ 
+      *Ptaxid = 0;
       
-      if(!featRegUfoFmt)
-! 	featRegUfoFmt = ajRegCompC("^([A-Za-z0-9]+):+(.*)$");
-      /* \1 format */
-      /* \2 remainder */
-      
-      if(!featRegUfoFile)
-! 	featRegUfoFile = ajRegCompC("^([^:]+)$");
-      
-      /*ajDebug("ajFeatUfoRead UFO '%S'\n", ufo);*/
-      
---- 9517,9528 ----
-      ajint i;
-      
-      if(!featRegUfoFmt)
-! 	featRegUfoFmt = ajRegCompC("^([A-Za-z0-9][A-Za-z0-9]+):+(.*)$");
-      /* \1 format */
-      /* \2 remainder */
-      
-      if(!featRegUfoFile)
-! 	featRegUfoFile = ajRegCompC("^(([A-Za-z]:)?[^:]+)$");
-      
-      /*ajDebug("ajFeatUfoRead UFO '%S'\n", ufo);*/
-      
+      if(thys->Features)
+***************
+*** 7224,7230 ****
+  
+  
+  
+! /* @func ajFeatGetSeq **********************************************************
+  **
+  ** Returns the sequence matching a feature. For multiple location features
+  ** (joins in an EMBL/GenBank feature table) the full feature table is used
+--- 7235,7241 ----
+  
+  
+  
+! /* @func ajFeatGetFlags *******************************************************
+  **
+  ** Returns the sequence matching a feature. For multiple location features
+  ** (joins in an EMBL/GenBank feature table) the full feature table is used
+***************
+*** 7233,7269 ****
+  ** The database name is used to retrieve sequences from other entries
+  **
+  ** @param [r] thys [const AjPFeature] Feature
+! ** @param [r] table [const AjPFeattable] Full feature table
+  ** @param [r] seq [const AjPSeq] Sequence for the current feature table
+  ** @param [u] Pseqstr [AjPStr*] Sequence for this feature
+  ** @return [AjBool] True on success
+  ** @@
+  ******************************************************************************/
+  
+! AjBool ajFeatGetSeq(const AjPFeature thys, const AjPFeattable table,
+                      const AjPSeq seq, AjPStr* Pseqstr)
+  {
+      const AjPFeature gf;
+      AjIList iter = NULL;
+      AjPSeq remoteseq = NULL;
+      AjBool isjoin = ajFalse;
+  
+      isjoin = ajFeatIsMultiple(thys);
+  
+!     ajDebug("ajFeatGetSeq nfeat:%u usa:%S\n",
+!             ajFeattableSize(table), ajSeqGetUsaS(seq));
+      iter = ajListIterNewread(table->Features);
+  
+      while(!ajListIterDone(iter))
+      {
+          gf = (const AjPFeature) ajListIterGet(iter);
+  
+          if(gf->Group == thys->Group)
+          {
+! /*
+!   if(isjoin && !ajFeatIsChild(gf))
+!                 continue;
+! */
+              ajFeatTrace(gf);
+  
+              if(gf->Flags & FEATFLAG_BETWEEN_SEQ)
+--- 7244,7411 ----
+  ** The database name is used to retrieve sequences from other entries
+  **
+  ** @param [r] thys [const AjPFeature] Feature
+! ** @param [u] Pseqstr [AjPStr*] Sequence for this feature
+! ** @return [AjBool] True on success
+! ** @@
+! ******************************************************************************/
+! 
+! AjBool ajFeatGetFlags(const AjPFeature thys,  AjPStr* Pflagstr)
+! {
+!     ajStrAssignC(Pflagstr, "");
+! 
+!     if(thys->Flags & FEATFLAG_START_BEFORE_SEQ)
+!         ajStrAppendC(Pflagstr, "<start ");
+!     if(thys->Flags & FEATFLAG_END_AFTER_SEQ)
+!         ajStrAppendC(Pflagstr, ">end ");
+!     if(thys->Flags & FEATFLAG_CHILD)
+!         ajStrAppendC(Pflagstr, "child-exon ");
+!     if(thys->Flags & FEATFLAG_BETWEEN_SEQ)
+!         ajStrAppendC(Pflagstr, "x^y ");
+!     if(thys->Flags & FEATFLAG_START_TWO)
+!         ajStrAppendC(Pflagstr, "startrange ");
+!     if(thys->Flags & FEATFLAG_END_TWO)
+!         ajStrAppendC(Pflagstr, "endrange ");
+!     if(thys->Flags & FEATFLAG_POINT)
+!         ajStrAppendC(Pflagstr, "single-base ");
+!     if(thys->Flags & FEATFLAG_COMPLEMENT_MAIN)
+!         ajStrAppendC(Pflagstr, "complement(join) ");
+!     if(thys->Flags & FEATFLAG_MULTIPLE)
+!         ajStrAppendC(Pflagstr, "multiple ");
+!     if(thys->Flags & FEATFLAG_GROUP)
+!         ajStrAppendC(Pflagstr, "group ");
+!     if(thys->Flags & FEATFLAG_ORDER)
+!         ajStrAppendC(Pflagstr, "order ");
+!     if(thys->Flags & FEATFLAG_ONEOF)
+!         ajStrAppendC(Pflagstr, "oneof ");
+!     if(thys->Flags & FEATFLAG_REMOTEID)
+!         ajStrAppendC(Pflagstr, "remoteid ");
+!     if(thys->Flags & FEATFLAG_LABEL)
+!         ajStrAppendC(Pflagstr, "LABEL ");
+!     if(thys->Flags & FEATFLAG_START_UNSURE)
+!         ajStrAppendC(Pflagstr, "start-unsure ");
+!     if(thys->Flags & FEATFLAG_END_UNSURE)
+!         ajStrAppendC(Pflagstr, "end-unsure ");
+! 
+!     ajStrTrimWhite(Pflagstr);
+! 
+!     return ajTrue;
+! }
+! 
+! 
+! 
+! 
+! /* @func ajFeatGetSeq *********************************************************
+! **
+! ** Returns the sequence matching a feature. 
+! **
+! ** The database name is used to retrieve sequences from other entries
+! **
+! ** @param [r] thys [const AjPFeature] Feature
+  ** @param [r] seq [const AjPSeq] Sequence for the current feature table
+  ** @param [u] Pseqstr [AjPStr*] Sequence for this feature
+  ** @return [AjBool] True on success
+  ** @@
+  ******************************************************************************/
+  
+! AjBool ajFeatGetSeq(const AjPFeature thys,
+                      const AjPSeq seq, AjPStr* Pseqstr)
+  {
++     AjPSeq remoteseq = NULL;
++     AjBool isjoin = ajFalse;
++     AjPStr tmpseq = NULL;
++     AjBool compjoin = ajFalse;
++ 
++     ajStrSetClear(Pseqstr);
++ 
++     isjoin = ajFeatIsMultiple(thys);
++ 
++     ajDebug("ajFeatGetSeq usa:%S\n",
++             ajSeqGetUsaS(seq));
++ 
++     if(thys->Flags & FEATFLAG_BETWEEN_SEQ)
++         return ajTrue;
++ 
++     ajFeatTrace(thys);
++ 
++     if(thys->Flags & FEATFLAG_REMOTEID)
++     {
++         if(!remoteseq)
++             remoteseq = ajSeqNew();
++ 
++         ajFeatGetRemoteseq(thys, ajSeqGetUsaS(seq), remoteseq);
++         ajStrAppendS(Pseqstr, ajSeqGetSeqS(remoteseq));
++     }
++     else
++     {
++         if(thys->Strand == '-' && !compjoin)
++         {
++             ajStrAppendSubS(&tmpseq, ajSeqGetSeqS(seq),
++                             ajFeatGetStart(thys)-1, ajFeatGetEnd(thys)-1);
++             ajSeqstrReverse(&tmpseq);
++             ajStrInsertS(Pseqstr, 0, tmpseq);
++             ajStrDel(&tmpseq);
++         }
++         else
++         {
++             ajStrAppendSubS(Pseqstr, ajSeqGetSeqS(seq),
++                             ajFeatGetStart(thys)-1, ajFeatGetEnd(thys)-1);
++         }
++     }
++ 
++     ajSeqDel(&remoteseq);
++ 
++     return ajTrue;
++ }
++ 
++ 
++ 
++ 
++ /* @func ajFeatGetSeqJoin ******************************************************
++ **
++ ** Returns the sequence matching a feature. For multiple location features
++ ** (joins in an EMBL/GenBank feature table) the full feature table is used
++ ** to find all exons.
++ **
++ ** The database name is used to retrieve sequences from other entries
++ **
++ ** @param [r] thys [const AjPFeature] Feature
++ ** @param [r] table [const AjPFeattable] Full feature table
++ ** @param [r] seq [const AjPSeq] Sequence for the current feature table
++ ** @param [u] Pseqstr [AjPStr*] Sequence for this feature
++ ** @return [AjBool] True on success
++ ** @@
++ ******************************************************************************/
++ 
++ AjBool ajFeatGetSeqJoin(const AjPFeature thys, const AjPFeattable table,
++                         const AjPSeq seq, AjPStr* Pseqstr)
++ {
+      const AjPFeature gf;
+      AjIList iter = NULL;
+      AjPSeq remoteseq = NULL;
+      AjBool isjoin = ajFalse;
++     AjPStr tmpseq = NULL;
++     AjBool compjoin = ajFalse;
++     AjPStr flags = NULL;
++     ajuint count=0;
++ 
++     ajStrSetClear(Pseqstr);
+  
+      isjoin = ajFeatIsMultiple(thys);
++     if(thys->Flags & FEATFLAG_COMPLEMENT_MAIN)
++         compjoin = ajTrue;
+  
+!     ajDebug("ajFeatGetSeqJoin nfeat:%u usa:%S\n",
+!             ajFeattableGetSize(table), ajSeqGetUsaS(seq));
+      iter = ajListIterNewread(table->Features);
+  
+      while(!ajListIterDone(iter))
+      {
++         count++;
+          gf = (const AjPFeature) ajListIterGet(iter);
+  
+          if(gf->Group == thys->Group)
+          {
+!             ajFeatGetFlags(gf, &flags);
+              ajFeatTrace(gf);
+  
+              if(gf->Flags & FEATFLAG_BETWEEN_SEQ)
+***************
+*** 7280,7295 ****
+              }
+              else
+              {
+!                 if(gf->Strand == '-')
+!                     ajStrAppendSubS(Pseqstr, ajSeqGetSeqS(seq),
+!                                     ajFeatGetEnd(gf)-1, ajFeatGetStart(gf)-1);
+                  else
+                      ajStrAppendSubS(Pseqstr, ajSeqGetSeqS(seq),
+                                      ajFeatGetStart(gf)-1, ajFeatGetEnd(gf)-1);
+              }
+          }
+      }
+  
+      ajListIterDel(&iter);
+      ajSeqDel(&remoteseq);
+  
+--- 7422,7447 ----
+              }
+              else
+              {
+!                 if(gf->Strand == '-' && !compjoin)
+!                 {
+!                     ajStrAppendSubS(&tmpseq, ajSeqGetSeqS(seq),
+!                                     ajFeatGetStart(gf)-1, ajFeatGetEnd(gf)-1);
+!                     ajSeqstrReverse(&tmpseq);
+!                     ajStrAppendS(Pseqstr, tmpseq);
+!                     ajStrDel(&tmpseq);
+!                 }
+                  else
++                 {
+                      ajStrAppendSubS(Pseqstr, ajSeqGetSeqS(seq),
+                                      ajFeatGetStart(gf)-1, ajFeatGetEnd(gf)-1);
++                 }
+              }
+          }
+      }
+  
++     if(compjoin)
++         ajSeqstrReverse(Pseqstr);
++ 
+      ajListIterDel(&iter);
+      ajSeqDel(&remoteseq);
+  
+***************
+*** 7355,7372 ****
+  ** Returns all cross-references from a feature
+  **
+  ** @param [r] thys [const AjPFeature] Feature
+! ** @param [u] xreflist [AjPList] List of sequence cross-reference objects
+  ** @return [AjBool] True on success
+  ** @@
+  ******************************************************************************/
+  
+! AjBool ajFeatGetXrefs(const AjPFeature thys, AjPList xreflist)
+  {
+      AjIList iter     = NULL;
+      FeatPTagval item = NULL;
+      AjPSeqXref  xref = NULL;
+      ajint ipos;
+      ajuint inum = 0;
+  
+      if(thys->Tags)
+      {
+--- 7507,7529 ----
+  ** Returns all cross-references from a feature
+  **
+  ** @param [r] thys [const AjPFeature] Feature
+! ** @param [u] Pxreflist [AjPList*] List of sequence cross-reference objects
+  ** @return [AjBool] True on success
+  ** @@
+  ******************************************************************************/
+  
+! AjBool ajFeatGetXrefs(const AjPFeature thys, AjPList *Pxreflist)
+  {
+      AjIList iter     = NULL;
+      FeatPTagval item = NULL;
+      AjPSeqXref  xref = NULL;
+      ajint ipos;
+      ajuint inum = 0;
++     AjPList xreflist;
++ 
++     if(!*Pxreflist)
++         *Pxreflist = ajListNew();
++     xreflist = *Pxreflist;
+  
+      if(thys->Tags)
+      {
+***************
+*** 7388,7395 ****
+                      xref->Start = ajFeatGetStart(thys)-1;
+                      xref->End   = ajFeatGetEnd(thys)-1;
+                      ajListPushAppend(xreflist, xref);
+-                     ajUser("/%S='%S' db: '%S' id: '%S'",
+-                            item->Tag, item->Value, xref->Db, xref->Id);
+                      xref->Type = XREF_DBXREF;
+                      xref = NULL;
+                  }
+--- 7545,7550 ----
+***************
+*** 10534,10539 ****
+--- 10689,10739 ----
+  
+  
+  
++ /* @funcstatic featTypeTestDnaWild *********************************************
++ **
++ ** Given a feature type name,
++ ** returns the valid feature type for the internal DNA feature table
++ ** following alternative names until a matching wildcard name is found
++ **
++ ** @param [r]   type  [const AjPStr] Type name
++ ** @param [r]   str   [const AjPStr] Wildcard name
++ ** @return [AjBool] True if a match is found
++ ** @@
++ ******************************************************************************/
++ 
++ static AjBool featTypeTestDnaWild(const AjPStr type, const AjPStr str)
++ {
++     featInit();
++ 
++     return featTableTypeTestWild(type, FeatTypeTableDna, str);
++ }
++ 
++ 
++ 
++ 
++ /* @funcstatic featTypeTestProtWild ********************************************
++ **
++ ** Given a feature type name,
++ ** returns the valid feature type for the internal protein feature table
++ ** following alternative names until a unique name is found
++ **
++ ** @param [r]   type  [const AjPStr] Type name
++ ** @param [r]   str   [const AjPStr] Wildcard name
++ ** @return [AjBool] True if a match is found
++ ** @@
++ ******************************************************************************/
++ 
++ static AjBool featTypeTestProtWild(const AjPStr type, const AjPStr str)
++ {
++     featInit();
++ 
++     return featTableTypeTestWild(type, FeatTypeTableProtein, str);
++ }
++ 
++ 
++ 
++ 
++ 
+  /* @funcstatic featTagDna *****************************************************
+  **
+  ** Given a feature tag name,
+***************
+*** 10771,10776 ****
+--- 10971,11071 ----
+  
+  
+  
++ /* @funcstatic featTableTypeTestWild *******************************************
++ **
++ ** Given a feature type name,
++ ** returns the valid feature type for a feature table
++ ** following alternative names which are common in the internal table
++ ** which is a combination of multiple definitions
++ **
++ ** @param [r]   type  [const AjPStr] Type name
++ ** @param [r]   table [const AjPTable]  Feature table
++ ** @param [r]   str   [const AjPStr] Wildcard name
++ ** @return [AjBool] True if a match is found
++ ** @@
++ ******************************************************************************/
++ 
++ static AjBool featTableTypeTestWild(const AjPStr type,
++                                     const AjPTable table,
++                                     const AjPStr str)
++ {
++     const AjPStr retkey = NULL;
++     const AjPStr tmpstr = NULL;
++     AjPStr tmpkey = NULL;
++     ajuint i = 0;
++     ajuint nkeys;
++     void **keys = NULL;
++     void **values = NULL;
++     AjPStr key = NULL;
++ 
++     if(ajStrMatchWildS(type, str))
++         return ajTrue;
++ 
++     retkey = (const AjPStr) ajTableFetchKey(table, type);
++ 
++     while(retkey && i < 5)
++     {
++ 	tmpstr = (AjPStr)ajTableFetch(table, retkey);
++ 	ajDebug("featTableTypeTestWild '%S' found in internal table"
++                 " as '%S' (%S)\n",type, retkey, tmpstr);
++ 
++ 	if(ajStrGetCharLast(tmpstr) != ';')
++ 	{
++             if(ajStrMatchWildS(tmpstr, str))
++                 return ajTrue;
++ 
++             tmpstr = (AjPStr)ajTableFetch(table, retkey);
++ 	    retkey = (const AjPStr) ajTableFetchKey(table, tmpstr);
++ 	}
++         else 
++         {
++             ajStrAssignSubS(&tmpkey, tmpstr, 0, ajStrFindAnyK(tmpstr, ';')-1);
++ 
++             if(ajStrMatchWildS(tmpkey, str))
++             {
++                 ajStrDel(&tmpkey);
++                 return ajTrue;
++             }
++ 
++             ajStrDel(&tmpkey);
++ 
++ 	    ajDebug("featTableTypeTestWild '%S' is an alias for '%S'\n",
++ 		 retkey, tmpstr);
++ 
++             retkey = (const AjPStr) ajTableFetchKey(table, tmpstr);
++ 
++ 	}
++ 
++ 	ajDebug("featTableTypeTestWild result %u '%S'\n",
++                 ++i, retkey);
++     }
++ 
++     nkeys = ajTableToarray(table, &keys, &values);
++     AJFREE(values);
++     for (i=0; i<nkeys; i++) 
++     {
++         key = (AjPStr) keys[i];
++         if(ajStrMatchWildS(key, str))
++         {
++             if(ajStrMatchS(featTableTypeInternalLimit(key,table),
++                            featTableTypeInternalLimit(type,table)))
++             {
++                 AJFREE(keys);
++                 return ajTrue;
++             }
++         }
++     }
++ 
++     AJFREE(keys);
++     ajDebug("featTableTypeTestWild '%S' not in internal table %x, "
++ 	    "default to NULL\n", type, table);
++ 
++     return ajFalse;
++ }
++ 
++ 
++ 
++ 
+  /* @funcstatic featTableTag ***************************************************
+  **
+  ** Given a feature tag name,
+***************
+*** 14471,14476 ****
+--- 14766,14829 ----
+  
+  
+  
++ /* @func ajFeatTypeMatchWildS **************************************************
++ **
++ ** Tests whether the feature type matches a given wildcard string
++ ** including testing for alternative names
++ **
++ ** @param [r] gf       [const AjPFeature]  Feature
++ ** @param [r] str      [const AjPStr]  Feature type name to test
++ ** @return [AjBool] ajTrue on success
++ ** @@
++ ******************************************************************************/
++ 
++ AjBool ajFeatTypeMatchWildS(const AjPFeature gf, const AjPStr str)
++ {
++     AjBool ret = ajFalse;
++     AjPStr mystr = NULL;
++ 
++     mystr = ajStrNewS(str);
++     ajStrFmtLower(&mystr);
++     
++     if(gf->Protein)
++     {
++ 	ret =  featTypeTestProtWild(gf->Type, mystr);
++ 
++         if(!ret)
++         {
++             if(ajStrIsWild(mystr))
++                 ajStrTrimEndC(&mystr, "*");
++             ret = ajFeatTypeMatchS(gf, mystr);
++         }
++     
++         ajDebug("ajFeatTypeMatchWildS: %B '%S' '%S' prot:'%S'\n",
++                 ret, mystr, gf->Type,
++                 featTypeProtLimit(gf->Type));
++     }
++     
++     else
++     {
++ 	ret =  featTypeTestDnaWild(gf->Type, mystr);
++ 
++         if(!ret)
++         {
++             if(ajStrIsWild(mystr))
++                 ajStrTrimEndC(&mystr, "*");
++             ret = ajFeatTypeMatchS(gf, mystr);
++         }
++ 
++         ajDebug("ajFeatTypeMatchWildS: %B '%S' '%S' dna: '%S'\n",
++                 ret, mystr, gf->Type,
++                 featTypeDnaLimit(gf->Type));
++     }
++     ajStrDel(&mystr);
++ 
++     return ret;
++ }
++ 
++ 
++ 
++ 
+  /* @func ajFeatIsLocal ********************************************************
+  **
+  ** Tests whether the feature is local to the sequence.
+diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajfeat.h EMBOSS-6.1.0/ajax/ajfeat.h
+*** EMBOSS-6.1.0orig/ajax/ajfeat.h	Mon Sep 28 22:15:17 2009
+--- EMBOSS-6.1.0/ajax/ajfeat.h	Wed Dec  2 12:27:01 2009
+***************
+*** 56,63 ****
+                                   AjPSeq seq);
+  float         ajFeatGetScore (const AjPFeature thys);
+  const AjPStr  ajFeatGetSource (const AjPFeature thys);
+! AjBool        ajFeatGetSeq(const AjPFeature feat, const AjPFeattable table,
+                             const AjPSeq seq, AjPStr* seqstr);
+  ajuint        ajFeatGetStart (const AjPFeature thys);
+  char          ajFeatGetStrand (const AjPFeature thys);
+  AjBool        ajFeatGetTagC(const AjPFeature thys, const char* tname,
+--- 56,66 ----
+                                   AjPSeq seq);
+  float         ajFeatGetScore (const AjPFeature thys);
+  const AjPStr  ajFeatGetSource (const AjPFeature thys);
+! AjBool        ajFeatGetFlags(const AjPFeature thys,  AjPStr* Pflagstr);
+! AjBool        ajFeatGetSeq(const AjPFeature feat,
+                             const AjPSeq seq, AjPStr* seqstr);
++ AjBool        ajFeatGetSeqJoin(const AjPFeature thys, const AjPFeattable table,
++                                const AjPSeq seq, AjPStr* Pseqstr);
+  ajuint        ajFeatGetStart (const AjPFeature thys);
+  char          ajFeatGetStrand (const AjPFeature thys);
+  AjBool        ajFeatGetTagC(const AjPFeature thys, const char* tname,
+***************
+*** 66,72 ****
+  			    ajint num, AjPStr* val);
+  AjBool        ajFeatGetTranslation(const AjPFeature feat, AjPStr* seqstr);
+  const AjPStr  ajFeatGetType (const AjPFeature thys);
+! AjBool        ajFeatGetXrefs(const AjPFeature thys, AjPList xreflist);
+  AjBool        ajFeatIsCompMult (const AjPFeature gf);
+  AjBool        ajFeatIsLocal (const AjPFeature gf);
+  AjBool        ajFeatIsLocalRange (const AjPFeature gf,
+--- 69,75 ----
+  			    ajint num, AjPStr* val);
+  AjBool        ajFeatGetTranslation(const AjPFeature feat, AjPStr* seqstr);
+  const AjPStr  ajFeatGetType (const AjPFeature thys);
+! AjBool        ajFeatGetXrefs(const AjPFeature thys, AjPList *Pxreflist);
+  AjBool        ajFeatIsCompMult (const AjPFeature gf);
+  AjBool        ajFeatIsLocal (const AjPFeature gf);
+  AjBool        ajFeatIsLocalRange (const AjPFeature gf,
+***************
+*** 107,113 ****
+  ajuint        ajFeattableGetSize(const AjPFeattable thys);
+  const char*   ajFeattableGetTypeC (const AjPFeattable thys);
+  const AjPStr  ajFeattableGetTypeS (const AjPFeattable thys);
+! AjBool        ajFeattableGetXrefs(const AjPFeattable thys, AjPList xreflist,
+                                    ajuint *Ptaxid);
+  AjBool        ajFeattableIsNuc (const AjPFeattable thys);
+  AjBool        ajFeattableIsProt (const AjPFeattable thys);
+--- 110,116 ----
+  ajuint        ajFeattableGetSize(const AjPFeattable thys);
+  const char*   ajFeattableGetTypeC (const AjPFeattable thys);
+  const AjPStr  ajFeattableGetTypeS (const AjPFeattable thys);
+! AjBool        ajFeattableGetXrefs(const AjPFeattable thys, AjPList *Pxreflist,
+                                    ajuint *Ptaxid);
+  AjBool        ajFeattableIsNuc (const AjPFeattable thys);
+  AjBool        ajFeattableIsProt (const AjPFeattable thys);
+***************
+*** 203,208 ****
+--- 206,212 ----
+  AjBool        ajFeatTypeIsCds(const AjPFeature gf);
+  AjBool        ajFeatTypeMatchC(const AjPFeature gf, const char* txt);
+  AjBool        ajFeatTypeMatchS(const AjPFeature gf, const AjPStr str);
++ AjBool        ajFeatTypeMatchWildS(const AjPFeature gf, const AjPStr str);
+  const AjPStr  ajFeatTypeNuc(const AjPStr type);
+  const AjPStr  ajFeatTypeProt(const AjPStr type);
+  AjPFeattable  ajFeatUfoRead (AjPFeattabIn tabin, const AjPStr Ufo);
+diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajgraph.c EMBOSS-6.1.0/ajax/ajgraph.c
+*** EMBOSS-6.1.0orig/ajax/ajgraph.c	Mon Nov 23 16:36:58 2009
+--- EMBOSS-6.1.0/ajax/ajgraph.c	Wed Dec  2 12:27:06 2009
+***************
+*** 2831,2836 ****
+--- 2831,2838 ----
+  void ajGraphGetOut(float *xp,float *yp, ajint *xleng, ajint *yleng,
+  		   ajint *xoff, ajint *yoff)
+  {
++     char devname[128];
++ 
+      ajDebug("=g= plgpage(&f &f) [&xp, &yp, &xleng, &yleng, &xoff, &yoff]\n");
+  
+      if(graphData)
+***************
+*** 2847,2852 ****
+--- 2849,2893 ----
+  	plgpage(xp,yp,xleng,yleng,xoff,yoff);
+  	ajDebug("returns xp:%.3f yp:%.3f xleng:%d yleng:%d xoff:%d yoff:%d\n",
+  		 *xp, *yp, *xleng, *yleng, *xoff, *yoff);
++         if(*xleng == 0.0) 
++         {
++             plgdev(devname);
++             if(!strcmp(devname, "win3"))
++             {
++                 *xleng = 720;
++                 *yleng = 540;
++             }
++             else if(!strcmp(devname, "xterm"))
++             {
++                 *xleng = 1024;
++                 *yleng = 780;
++             }
++             else if(!strcmp(devname, "xwin"))
++             {
++                 *xleng = 1440;
++                 *yleng = 900;
++             }
++             else if(!strcmp(devname, "ps"))
++             {
++                 *xleng = 720;
++                 *yleng = 540;
++             }
++             else if(!strcmp(devname, "psc"))
++             {
++                 *xleng = 720;
++                 *yleng = 540;
++             }
++             else if(!strcmp(devname, "png"))
++             {
++                 *xleng = 640;
++                 *yleng = 480;
++             }
++             else if(!strcmp(devname, "gif"))
++             {
++                 *xleng = 640;
++                 *yleng = 480;
++             }
++         }
+      }
+  
+      return;
+diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajmath.c EMBOSS-6.1.0/ajax/ajmath.c
+*** EMBOSS-6.1.0orig/ajax/ajmath.c	Mon Sep 28 22:15:17 2009
+--- EMBOSS-6.1.0/ajax/ajmath.c	Wed Dec  2 12:27:10 2009
+***************
+*** 671,690 ****
+  
+  ajuint ajMathPosI(ajuint len, ajuint imin, ajint ipos)
+  {
+!     ajuint jpos;
+  
+      if(ipos < 0)
+  	jpos = len + ipos;
+      else
+  	jpos = ipos;
+  
+!     if(jpos >= len)
+  	jpos = len - 1;
+  
+!     if(jpos < imin)
+  	jpos = imin;
+  
+!     return jpos;
+  }
+  
+  
+--- 671,692 ----
+  
+  ajuint ajMathPosI(ajuint len, ajuint imin, ajint ipos)
+  {
+!     ajint jpos;
+!     ajint jmin = imin;
+!     ajint jlen = len;
+  
+      if(ipos < 0)
+  	jpos = len + ipos;
+      else
+  	jpos = ipos;
+  
+!     if(jpos >= jlen)
+  	jpos = len - 1;
+  
+!     if(jpos < jmin)
+  	jpos = imin;
+  
+!     return (ajuint) jpos;
+  }
+  
+  
 diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajmem.h EMBOSS-6.1.0/ajax/ajmem.h
-*** EMBOSS-6.1.0orig/ajax/ajmem.h	2007-12-12 12:46:19.000000000 +0000
---- EMBOSS-6.1.0/ajax/ajmem.h	2009-08-25 09:31:44.000000000 +0100
+*** EMBOSS-6.1.0orig/ajax/ajmem.h	Mon Sep 28 22:15:17 2009
+--- EMBOSS-6.1.0/ajax/ajmem.h	Mon Sep 28 22:14:48 2009
 ***************
 *** 71,77 ****
   #define AJFREE(ptr) ((void)(ajMemFree(ptr), (ptr) = 0))
@@ -61,9 +894,48 @@ diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajmem.h EMBOSS-6.1.0/ajax/ajmem.h
   	(oldbytes), (nbytes), __FILE__, __LINE__, AJFALSE))
   #define AJCRESIZE(ptr, nbytes) 	((ptr) = ajMemResize((ptr), \
   	(nbytes)*sizeof *(ptr), __FILE__, __LINE__, AJFALSE))
+diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajseq.c EMBOSS-6.1.0/ajax/ajseq.c
+*** EMBOSS-6.1.0orig/ajax/ajseq.c	Mon Sep 28 22:15:17 2009
+--- EMBOSS-6.1.0/ajax/ajseq.c	Wed Dec  2 12:27:15 2009
+***************
+*** 2574,2580 ****
+--- 2574,2584 ----
+  {
+      ajint ibegin;
+      ajint iend;
++     ajuint ilen;
+      ajint itemp;
++     ajuint i;
++     ajuint j;
++     float atemp;
+  
+      ajDebug("ajSeqReverse len: %d Begin: %d End: %d Rev: %B Reversed: %B\n",
+  	    ajSeqGetLen(seq), seq->Begin, seq->End,
+***************
+*** 2608,2613 ****
+--- 2612,2630 ----
+      if(seq->Fttable)
+  	ajFeattableReverse(seq->Fttable);
+  
++     if(seq->Accuracy)
++     {
++         ilen = ajSeqGetLen(seq);
++         j = ilen;
++         for(i=0;i<ilen;i++)
++         {
++             if(--j <= i) break;
++             atemp = seq->Accuracy[j];
++             seq->Accuracy[j] = seq->Accuracy[i];
++             seq->Accuracy[i] = atemp;
++         }
++     }
++     
+      return;
+  }
+  
 diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajseqread.c EMBOSS-6.1.0/ajax/ajseqread.c
-*** EMBOSS-6.1.0orig/ajax/ajseqread.c	2009-07-07 00:08:26.000000000 +0100
---- EMBOSS-6.1.0/ajax/ajseqread.c	2009-07-30 15:27:39.000000000 +0100
+*** EMBOSS-6.1.0orig/ajax/ajseqread.c	Mon Sep 28 22:15:16 2009
+--- EMBOSS-6.1.0/ajax/ajseqread.c	Wed Dec  2 12:27:18 2009
 ***************
 *** 689,695 ****
          AJTRUE,  AJTRUE,  seqReadSwiss, AJFALSE, 0},
@@ -212,6 +1084,35 @@ diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajseqread.c EMBOSS-6.1.0/ajax/ajseq
          AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
          AJFALSE, AJTRUE,  seqReadFitch, AJFALSE, 0},
 ***************
+*** 1739,1745 ****
+  	else
+  	    ajSeqSetRange(seq, thys->Begin, thys->End);
+  
+! 	ajDebug ("ajSeqsetRead read sequence %d %x '%s' %d..%d (%d) "
+                   "Rev:%B Reversed:%B\n",
+  		 iseq, seq, ajSeqGetNameS(seq),
+  		 seq->Begin, seq->End, ajSeqGetLen(seq),
+--- 1739,1745 ----
+  	else
+  	    ajSeqSetRange(seq, thys->Begin, thys->End);
+  
+! 	ajDebug ("ajSeqsetRead read sequence %d %x '%S' %d..%d (%d) "
+                   "Rev:%B Reversed:%B\n",
+  		 iseq, seq, ajSeqGetNameS(seq),
+  		 seq->Begin, seq->End, ajSeqGetLen(seq),
+***************
+*** 2104,2109 ****
+--- 2104,2112 ----
+  
+  	    if(ajSeqTypeCheckIn(thys, seqin))
+  	    {
++                 if (!ajStrGetLen(thys->Seq))  /* removed all remaining chars */
++                     return FMT_EMPTY;
++ 
+  		/* ajSeqinTrace(seqin); */
+  		if(seqin->Upper)
+  		    ajSeqFmtUpper(thys);
+***************
 *** 2627,2634 ****
   				 seqin->Text, &thys->TextPtr);
   
@@ -221,7 +1122,7 @@ diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajseqread.c EMBOSS-6.1.0/ajax/ajseq
       {
           seqqualAppendWarn(&qualstr, seqReadLine);
   
---- 2627,2634 ----
+--- 2630,2637 ----
   				 seqin->Text, &thys->TextPtr);
   
       while(ok &&
@@ -240,7 +1141,7 @@ diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajseqread.c EMBOSS-6.1.0/ajax/ajseq
       {
           seqqualAppendWarn(&qualstr, seqReadLine);
   
---- 2790,2797 ----
+--- 2793,2800 ----
   				 seqin->Text, &thys->TextPtr);
   
       while(ok &&
@@ -259,7 +1160,7 @@ diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajseqread.c EMBOSS-6.1.0/ajax/ajseq
       {
           seqqualAppendWarn(&qualstr, seqReadLine);
   
---- 3157,3164 ----
+--- 3160,3167 ----
   				 seqin->Text, &thys->TextPtr);
   
       while(ok &&
@@ -278,7 +1179,7 @@ diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajseqread.c EMBOSS-6.1.0/ajax/ajseq
       {
           seqqualAppendWarn(&qualstr, seqReadLine);
   
---- 3352,3359 ----
+--- 3355,3362 ----
   				 seqin->Text, &thys->TextPtr);
   
       while(ok &&
@@ -297,7 +1198,7 @@ diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajseqread.c EMBOSS-6.1.0/ajax/ajseq
       bufflines++;
   
       while(ajBuffreadLineStore(buff, &seqReadLine,
---- 5254,5260 ----
+--- 5257,5263 ----
   	return ajFalse;
       }
   
@@ -315,7 +1216,7 @@ diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajseqread.c EMBOSS-6.1.0/ajax/ajseq
       bufflines++;
   
       while(ajBuffreadLineStore(buff, &seqReadLine,
---- 5329,5335 ----
+--- 5332,5338 ----
   	return ajFalse;
       }
   
@@ -325,7 +1226,7 @@ diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajseqread.c EMBOSS-6.1.0/ajax/ajseq
       while(ajBuffreadLineStore(buff, &seqReadLine,
 ***************
 *** 6651,6656 ****
---- 6649,6655 ----
+--- 6652,6658 ----
   	    if(ajStrIsWhite(phyitem->Name) ||
   	       ajTableFetch(phytable, phyitem->Name))
   	    {
@@ -335,7 +1236,7 @@ diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajseqread.c EMBOSS-6.1.0/ajax/ajseq
   			phyitem->Name);
 ***************
 *** 6745,6750 ****
---- 6744,6750 ----
+--- 6747,6753 ----
   			    ajDebug("phylip format length mismatch at %d "
   				    "(length %d)\n",
   				    maxlen, ilen);
@@ -345,7 +1246,7 @@ diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajseqread.c EMBOSS-6.1.0/ajax/ajseq
   			    seqMsfDataDel((SeqPMsfData*) &seqin->Data);
 ***************
 *** 6771,6776 ****
---- 6771,6777 ----
+--- 6774,6780 ----
   	    if(!done)
   	    {
   		ajDebug("seqReadPhylip read failed, try seqReadPhylipnon\n");
@@ -355,7 +1256,7 @@ diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajseqread.c EMBOSS-6.1.0/ajax/ajseq
   
 ***************
 *** 6781,6786 ****
---- 6782,6788 ----
+--- 6785,6791 ----
   	    {
   		ajDebug("Phylip format %d sequences partly read at end\n",
   			iseq-jseq);
@@ -364,8 +1265,25 @@ diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajseqread.c EMBOSS-6.1.0/ajax/ajseq
   		seqMsfDataDel((SeqPMsfData*) &seqin->Data);
   
 ***************
+*** 10621,10627 ****
+  
+      if(ajFeattableGetSize(thys->Fttable))
+      {
+!         ajFeattableGetXrefs(thys->Fttable, thys->Xreflist, &taxid);
+          if(taxid)
+              seqTaxidSaveI(thys, taxid);
+      }
+--- 10626,10632 ----
+  
+      if(ajFeattableGetSize(thys->Fttable))
+      {
+!         ajFeattableGetXrefs(thys->Fttable, &thys->Xreflist, &taxid);
+          if(taxid)
+              seqTaxidSaveI(thys, taxid);
+      }
+***************
 *** 10973,10978 ****
---- 10975,10982 ----
+--- 10978,10985 ----
       if(!ajBuffreadLine(buff, &seqReadLine))
   	return ajFalse;
   
@@ -376,7 +1294,7 @@ diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajseqread.c EMBOSS-6.1.0/ajax/ajseq
       ok = ajTrue;
 ***************
 *** 11030,11035 ****
---- 11034,11040 ----
+--- 11037,11043 ----
   
       if(nfields == 9) 
       {
@@ -386,7 +1304,7 @@ diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajseqread.c EMBOSS-6.1.0/ajax/ajseq
           return seqReadGenpept(thys,seqin);
 ***************
 *** 11053,11062 ****
---- 11058,11070 ----
+--- 11061,11073 ----
   	case 4:
   	    if(ajStrMatchC(token, "aa"))
               {
@@ -401,8 +1319,73 @@ diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajseqread.c EMBOSS-6.1.0/ajax/ajseq
               }
   	    if(!ajStrMatchC(token, "bp"))
 ***************
+*** 11089,11094 ****
+--- 11100,11106 ----
+      ok = ajBuffreadLineStore(buff, &seqReadLine, seqin->Text, &thys->TextPtr);
+  
+      while(ok &&
++ 	  !ajStrPrefixC(seqReadLine, "//") &&
+  	  !ajStrPrefixC(seqReadLine, "ORIGIN") &&
+  	  !ajStrPrefixC(seqReadLine, "BASE COUNT"))
+      {
+***************
+*** 11351,11364 ****
+  	/* read the sequence and terminator */
+  	ajDebug("sequence start at '%S'\n", seqReadLine);
+  
+! 	while(!ajStrPrefixC(seqReadLine,"ORIGIN") &&
+! 	      !ajStrPrefixC(seqReadLine,"BASE COUNT"))
+! 	    if(!ajBuffreadLineStore(buff,&seqReadLine,
+! 				   seqin->Text, &thys->TextPtr))
+! 		break;
+  
+- 	ok = ajBuffreadLineStore(buff, &seqReadLine,
+- 				seqin->Text, &thys->TextPtr);
+  	ajStrSetRes(&thys->Seq, seqlen+1);
+  
+  	while(ok && !ajStrPrefixC(seqReadLine, "//"))
+--- 11363,11383 ----
+  	/* read the sequence and terminator */
+  	ajDebug("sequence start at '%S'\n", seqReadLine);
+  
+! 	while(ok &&
+!               !ajStrPrefixC(seqReadLine,"//") &&
+! 	      !ajStrPrefixC(seqReadLine,"ORIGIN") &&
+!               !ajStrPrefixC(seqReadLine,"BASE COUNT"))
+!         {
+!             ok = ajBuffreadLineStore(buff,&seqReadLine,
+!                                      seqin->Text, &thys->TextPtr);
+!             if(!ok)
+!                 break;
+!         }
+! 
+!         if(ok && !ajStrPrefixC(seqReadLine,"//"))
+!             ok = ajBuffreadLineStore(buff, &seqReadLine,
+!                                      seqin->Text, &thys->TextPtr);
+  
+  	ajStrSetRes(&thys->Seq, seqlen+1);
+  
+  	while(ok && !ajStrPrefixC(seqReadLine, "//"))
+***************
+*** 11381,11387 ****
+  
+      if(ajFeattableGetSize(thys->Fttable))
+      {
+!         ajFeattableGetXrefs(thys->Fttable, thys->Xreflist, &taxid);
+          if(taxid)
+              seqTaxidSaveI(thys, taxid);
+      }
+--- 11400,11406 ----
+  
+      if(ajFeattableGetSize(thys->Fttable))
+      {
+!         ajFeattableGetXrefs(thys->Fttable, &thys->Xreflist, &taxid);
+          if(taxid)
+              seqTaxidSaveI(thys, taxid);
+      }
+***************
 *** 11521,11526 ****
---- 11529,11535 ----
+--- 11540,11546 ----
   
       if(nfields == 8) 
       {
@@ -412,7 +1395,7 @@ diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajseqread.c EMBOSS-6.1.0/ajax/ajseq
           return seqReadRefseqp(thys,seqin);
 ***************
 *** 11916,11921 ****
---- 11925,11932 ----
+--- 11936,11943 ----
       if(!ajBuffreadLine(buff, &seqReadLine))
   	return ajFalse;
   
@@ -431,7 +1414,7 @@ diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajseqread.c EMBOSS-6.1.0/ajax/ajseq
   
       ajStrTokenDel(&handle);
       ajStrDel(&token);
---- 12314,12321 ----
+--- 12325,12332 ----
   	    ok = ajBuffreadLineStore(buff,&seqReadLine,
   				    seqin->Text, &thys->TextPtr);
   
@@ -440,9 +1423,26 @@ diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajseqread.c EMBOSS-6.1.0/ajax/ajseq
   
       ajStrTokenDel(&handle);
       ajStrDel(&token);
+***************
+*** 13446,13452 ****
+          return;
+  
+      if(!seqRegUsaFmt)
+! 	seqRegUsaFmt = ajRegCompC("^([A-Za-z0-9]*)::(.*)$");
+      /* \1 format letters and numbers only */
+      /* \2 remainder (filename, etc.)*/
+  
+--- 13468,13474 ----
+          return;
+  
+      if(!seqRegUsaFmt)
+! 	seqRegUsaFmt = ajRegCompC("^([A-Za-z0-9-]*)::(.*)$");
+      /* \1 format letters and numbers only */
+      /* \2 remainder (filename, etc.)*/
+  
 diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajseqwrite.c EMBOSS-6.1.0/ajax/ajseqwrite.c
-*** EMBOSS-6.1.0orig/ajax/ajseqwrite.c	2009-07-06 16:50:31.000000000 +0100
---- EMBOSS-6.1.0/ajax/ajseqwrite.c	2009-07-30 15:27:55.000000000 +0100
+*** EMBOSS-6.1.0orig/ajax/ajseqwrite.c	Mon Sep 28 22:15:17 2009
+--- EMBOSS-6.1.0/ajax/ajseqwrite.c	Wed Dec  2 12:27:22 2009
 ***************
 *** 231,237 ****
   	 AJFALSE, AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
@@ -908,6 +1908,35 @@ diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajseqwrite.c EMBOSS-6.1.0/ajax/ajse
       
       ajStrDel(&seq);
 ***************
+*** 6927,6939 ****
+      ajDebug("seqoutUsaProcess\n");
+      if(!seqoutRegFmt)
+  #ifndef WIN32
+! 	seqoutRegFmt = ajRegCompC("^([A-Za-z0-9]*)::?(.*)$");
+      /* \1 format */
+      /* \2 remainder */
+  #else
+      /* Windows file names can start with e.g.: 'C:\' */
+      /* -> Require that format names have at least 2 letters */
+!     seqoutRegFmt = ajRegCompC("^([A-Za-z0-9][A-Za-z0-9][A-Za-z0-9]*)::?(.*)$");
+      /* \1 format */
+      /* \2 remainder */
+  #endif
+--- 6874,6886 ----
+      ajDebug("seqoutUsaProcess\n");
+      if(!seqoutRegFmt)
+  #ifndef WIN32
+! 	seqoutRegFmt = ajRegCompC("^([A-Za-z0-9-]*)::?(.*)$");
+      /* \1 format */
+      /* \2 remainder */
+  #else
+      /* Windows file names can start with e.g.: 'C:\' */
+      /* -> Require that format names have at least 2 letters */
+!     seqoutRegFmt = ajRegCompC("^([A-Za-z0-9][A-Za-z0-9-][A-Za-z0-9-]*)::?(.*)$");
+      /* \1 format */
+      /* \2 remainder */
+  #endif
+***************
 *** 7798,7803 ****
 --- 7745,7751 ----
   
@@ -918,8 +1947,8 @@ diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajseqwrite.c EMBOSS-6.1.0/ajax/ajse
   **
   ** Initialises sequence output formatting parameters.
 diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajstr.c EMBOSS-6.1.0/ajax/ajstr.c
-*** EMBOSS-6.1.0orig/ajax/ajstr.c	2009-06-22 16:51:03.000000000 +0100
---- EMBOSS-6.1.0/ajax/ajstr.c	2009-08-25 09:30:30.000000000 +0100
+*** EMBOSS-6.1.0orig/ajax/ajstr.c	Mon Sep 28 22:15:18 2009
+--- EMBOSS-6.1.0/ajax/ajstr.c	Mon Sep 28 22:14:49 2009
 ***************
 *** 3,13 ****
   **
@@ -1097,8 +2126,8 @@ diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajstr.c EMBOSS-6.1.0/ajax/ajstr.c
   	return ajTrue;
       }
 diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajstr.h EMBOSS-6.1.0/ajax/ajstr.h
-*** EMBOSS-6.1.0orig/ajax/ajstr.h	2009-06-22 16:51:04.000000000 +0100
---- EMBOSS-6.1.0/ajax/ajstr.h	2009-08-25 09:30:34.000000000 +0100
+*** EMBOSS-6.1.0orig/ajax/ajstr.h	Mon Sep 28 22:15:17 2009
+--- EMBOSS-6.1.0/ajax/ajstr.h	Mon Sep 28 22:14:48 2009
 ***************
 *** 65,70 ****
 --- 65,73 ----
@@ -1131,9 +2160,809 @@ diff -c -N --recursive EMBOSS-6.1.0orig/ajax/ajstr.h EMBOSS-6.1.0/ajax/ajstr.h
   AjBool     ajStrTruncateLen(AjPStr* Pstr, ajuint len);
   AjBool     ajStrTruncatePos(AjPStr* Pstr, ajint pos);
   
+diff -c -N --recursive EMBOSS-6.1.0orig/emboss/coderet.c EMBOSS-6.1.0/emboss/coderet.c
+*** EMBOSS-6.1.0orig/emboss/coderet.c	Mon Sep 28 22:15:20 2009
+--- EMBOSS-6.1.0/emboss/coderet.c	Wed Dec  2 12:28:05 2009
+***************
+*** 137,143 ****
+              if(seqoutcds && ajFeatTypeMatchC(gf, "CDS"))
+              {
+                  icds++;
+!                 ret = ajFeatGetSeq(gf, feat, seq, &cds);
+  		if(!ret)
+  		{
+  		    ajWarn("Cannot extract %S\n",ajSeqGetNameS(seq));
+--- 137,143 ----
+              if(seqoutcds && ajFeatTypeMatchC(gf, "CDS"))
+              {
+                  icds++;
+!                 ret = ajFeatGetSeqJoin(gf, feat, seq, &cds);
+  		if(!ret)
+  		{
+  		    ajWarn("Cannot extract %S\n",ajSeqGetNameS(seq));
+***************
+*** 149,155 ****
+              if(seqoutmrna && ajFeatTypeMatchC(gf, "mRNA"))
+              {
+                  imrna++;
+!                 ret = ajFeatGetSeq(gf, feat, seq, &mrna);
+                  if(!ret)
+                  {
+                      ajWarn("Cannot extract %s",ajSeqGetNameC(seq));
+--- 149,155 ----
+              if(seqoutmrna && ajFeatTypeMatchC(gf, "mRNA"))
+              {
+                  imrna++;
+!                 ret = ajFeatGetSeqJoin(gf, feat, seq, &mrna);
+                  if(!ret)
+                  {
+                      ajWarn("Cannot extract %s",ajSeqGetNameC(seq));
+***************
+*** 165,175 ****
+                  if(ajFeatTypeMatchC(gf, "CDS") ||
+                     ajFeatTypeMatchC(gf, "mRNA") ||
+                     ajFeatTypeMatchC(gf, "exon"))
+-                 {
+-                     irest++;
+                      ajFeatLocMark(gf, feat, &copyseq);
+!                 }
+! 
+              }
+  
+              if(seqoutprot && ajFeatTypeMatchC(gf, "CDS"))
+--- 165,173 ----
+                  if(ajFeatTypeMatchC(gf, "CDS") ||
+                     ajFeatTypeMatchC(gf, "mRNA") ||
+                     ajFeatTypeMatchC(gf, "exon"))
+                      ajFeatLocMark(gf, feat, &copyseq);
+!                 else
+!                     irest++;
+              }
+  
+              if(seqoutprot && ajFeatTypeMatchC(gf, "CDS"))
+***************
+*** 196,202 ****
+              ajFmtPrintF(logf, "%6d", itran);
+  
+          ajFmtPrintF(logf, "%6d %s\n",
+!                     icds+imrna+irest+itran, ajSeqGetNameC(seq));
+      }
+  
+  
+--- 194,200 ----
+              ajFmtPrintF(logf, "%6d", itran);
+  
+          ajFmtPrintF(logf, "%6d %s\n",
+!                     icds+imrna+irest, ajSeqGetNameC(seq));
+      }
+  
+  
+diff -c -N --recursive EMBOSS-6.1.0orig/emboss/extractfeat.c EMBOSS-6.1.0/emboss/extractfeat.c
+*** EMBOSS-6.1.0orig/emboss/extractfeat.c	Mon Sep 28 22:15:18 2009
+--- EMBOSS-6.1.0/emboss/extractfeat.c	Thu Dec 10 11:46:28 2009
+***************
+*** 205,214 ****
+      ajint   firstpos;
+      ajint   lastpos;	        /* bounds of feature in sequence */
+      AjPStr  describeout = NULL;	/* tag names/values to add to descriptions */
+! 
+  
+      /* For all features... */
+!     if(featab && ajFeattableSize(featab))
+      {
+  	/* initialise details of a feature */
+          featseq = ajStrNew();
+--- 205,214 ----
+      ajint   firstpos;
+      ajint   lastpos;	        /* bounds of feature in sequence */
+      AjPStr  describeout = NULL;	/* tag names/values to add to descriptions */
+!     ajuint count = 0;
+  
+      /* For all features... */
+!     if(featab && ajFeattableGetSize(featab))
+      {
+  	/* initialise details of a feature */
+          featseq = ajStrNew();
+***************
+*** 267,278 ****
+  	    ajDebug("feature %S %d-%d is parent %B, child %B, single %B\n",
+  		    ajFeatGetType(gf), ajFeatGetStart(gf), ajFeatGetEnd(gf),
+  		    parent, child, single);
+! 
+  	    /*
+  	    ** If single or parent, write out any stored previous feature
+  	    ** sequence
+  	    */	    
+!             if(!child)
+  	    {
+              	extractfeat_WriteOut(seqout, &featseq, compall, sense,
+  				     firstpos, lastpos, before, after, seq,
+--- 267,282 ----
+  	    ajDebug("feature %S %d-%d is parent %B, child %B, single %B\n",
+  		    ajFeatGetType(gf), ajFeatGetStart(gf), ajFeatGetEnd(gf),
+  		    parent, child, single);
+! /*
+! 	    ajUser("feature %S %d-%d is parent %B, child %B, single %B",
+! 		    ajFeatGetType(gf), ajFeatGetStart(gf), ajFeatGetEnd(gf),
+! 		    parent, child, single);
+! */
+  	    /*
+  	    ** If single or parent, write out any stored previous feature
+  	    ** sequence
+  	    */	    
+!             if(count++ && !child)
+  	    {
+              	extractfeat_WriteOut(seqout, &featseq, compall, sense,
+  				     firstpos, lastpos, before, after, seq,
+***************
+*** 333,340 ****
+  	    /* get feature sequence(complement if required) */
+              if(!child)
+              {
+!                 ajFeatGetSeq(gf, featab, seq, &tmpseq);
+                  ajDebug("extracted feature = %d bases\n", ajStrGetLen(tmpseq));
+              	ajStrAssignS(&featseq, tmpseq);
+  	    }
+  	}
+--- 337,348 ----
+  	    /* get feature sequence(complement if required) */
+              if(!child)
+              {
+!                 if(join)
+!                     ajFeatGetSeqJoin(gf, featab, seq, &tmpseq);
+!                 else
+!                     ajFeatGetSeq(gf, seq, &tmpseq);
+                  ajDebug("extracted feature = %d bases\n", ajStrGetLen(tmpseq));
++                 /*ajUser("extracted feature = %d bases", ajStrGetLen(tmpseq));*/
+              	ajStrAssignS(&featseq, tmpseq);
+  	    }
+  	}
+***************
+*** 375,381 ****
+  ** @param [r] before [ajint] region before feature to get
+  ** @param [r] after [ajint] region after feature to get
+  ** @param [r] seq [const AjPSeq] input sequence
+! ** @param [r] remote [AjBool] TRUE if must abort becuase it includes Remote IDs
+  ** @param [r] type [const AjPStr] type of feature
+  ** @param [r] featinname [AjBool] TRUE if want the type to be part of the name
+  ** @param [r] describestr [const AjPStr] tag names/values for description line
+--- 383,389 ----
+  ** @param [r] before [ajint] region before feature to get
+  ** @param [r] after [ajint] region after feature to get
+  ** @param [r] seq [const AjPSeq] input sequence
+! ** @param [r] remote [AjBool] TRUE if must abort because it includes Remote IDs
+  ** @param [r] type [const AjPStr] type of feature
+  ** @param [r] featinname [AjBool] TRUE if want the type to be part of the name
+  ** @param [r] describestr [const AjPStr] tag names/values for description line
+***************
+*** 395,404 ****
+--- 403,423 ----
+      AjPStr value  = NULL;	/* string value of start or end position */
+      AjPStr desc   = NULL;	/* sequence description */
+      ajint tmp;
++     AjBool forward = sense;
++ 
++     if(compall)
++         forward = ajFalse;
+  
++     ajDebug("WriteOut %S_%d_%d [%S] %d all:%B fwd:%B remote:%B\n",
++            ajSeqGetNameS(seq), firstpos+1, lastpos+1, type,
++            ajStrGetLen(*featstr), compall, sense, remote);
++  
+      /* see if there is a sequence to be written out */
+      if(!ajStrGetLen(*featstr))
+      {
++         ajWarn("feature %S_%d_%d [%S] "
++                "not written out because it has zero length\n",
++                ajSeqGetNameS(seq), firstpos+1, lastpos+1, type);
+          ajDebug("feature not written out because it has length=0 "
+  		"(probably first time round)\n");
+      	return;
+***************
+*** 407,439 ****
+      /* see if must abort because there were Remote IDs in the features */
+      if(remote)
+      {
+          ajDebug("feature not written out because it has Remote IDs\n");
+          return;
+      }
+  
+-     /* if complementing the whole sequence, swap before and after */
+-     if(compall)
+-     {
+-         tmp    = before;
+-         before = after;
+-         after  = tmp;
+-     }
+- 
+      ajDebug("feature = %d bases\n", ajStrGetLen(*featstr));
+  
+      /* featstr may be edited, so it is a AjPStr* */
+      extractfeat_BeforeAfter (seq, featstr, firstpos, lastpos, before,
+! 			     after, sense);
+  
+      ajDebug("feature+before/after = %d bases\n", ajStrGetLen(*featstr));
+  
+-     /*
+-     ** if join was all in reverse sense, now finally get reverse
+-     ** complement
+-     */
+-     if(compall)
+-     	ajSeqstrReverse(featstr);
+- 
+      /* set the extracted sequence */
+      newseq = ajSeqNew();
+      ajSeqAssignSeqS(newseq, *featstr);
+--- 426,444 ----
+      /* see if must abort because there were Remote IDs in the features */
+      if(remote)
+      {
++         ajWarn("feature not written out because it has Remote IDs\n");
+          ajDebug("feature not written out because it has Remote IDs\n");
+          return;
+      }
+  
+      ajDebug("feature = %d bases\n", ajStrGetLen(*featstr));
+  
+      /* featstr may be edited, so it is a AjPStr* */
+      extractfeat_BeforeAfter (seq, featstr, firstpos, lastpos, before,
+! 			     after, forward);
+  
+      ajDebug("feature+before/after = %d bases\n", ajStrGetLen(*featstr));
+  
+      /* set the extracted sequence */
+      newseq = ajSeqNew();
+      ajSeqAssignSeqS(newseq, *featstr);
+***************
+*** 518,524 ****
+      ajint len;
+  
+  
+- 
+      /*
+       ** There is now:
+       ** A complete set of joined features in featstr.
+--- 523,528 ----
+***************
+*** 819,829 ****
+  				       float maxscore, const AjPStr tag,
+  				       const AjPStr value, AjBool *tagsmatch)
+  {
+  
+!      /*
+!      ** is this a child of a join() ?
+!      ** if it is a child, then we use the previous result of MatchPatternTags
+!      */
+      if(!ajFeatIsMultiple(gf) || !ajFeatIsChild(gf))
+          *tagsmatch = extractfeat_MatchPatternTags(gf, tag, value);
+  
+--- 823,836 ----
+  				       float maxscore, const AjPStr tag,
+  				       const AjPStr value, AjBool *tagsmatch)
+  {
++     AjPStrTok tokens = NULL;
++     AjPStr key = NULL;
++     AjBool val = ajFalse;
+  
+!     /*
+!     ** is this a child of a join() ?
+!     ** if it is a child, then we use the previous result of MatchPatternTags
+!     */
+      if(!ajFeatIsMultiple(gf) || !ajFeatIsChild(gf))
+          *tagsmatch = extractfeat_MatchPatternTags(gf, tag, value);
+  
+***************
+*** 846,862 ****
+  
+      ajDebug("extractfeat_MatchFeature\n");
+  
+!     ajDebug("embMiscMatchPattern(ajFeatGetSource(gf), source) %B\n",
+! 	    embMiscMatchPattern(ajFeatGetSource(gf), source));
+      ajDebug("ajFeatTypeMatchS(gf, type) %B\n",
+! 	    ajFeatTypeMatchS(gf, type));
+      ajDebug("ajFeatGetStrand(gf) '%x' sense %d\n", ajFeatGetStrand(gf), sense);
+      ajDebug("testscore: %B ajFeatGetScore(gf): %f minscore:%f maxscore:%f\n",
+  	    testscore, ajFeatGetScore(gf), minscore, maxscore);
+!     if(!embMiscMatchPattern(ajFeatGetSource(gf), source))
+!         return ajFalse;
+!     if(ajStrGetLen(type) && !ajFeatTypeMatchS(gf, type))
+          return ajFalse;
+      if(ajFeatGetStrand(gf) == '+' && sense == -1)
+          return ajFalse;
+      if(ajFeatGetStrand(gf) == '-' && sense == +1)
+--- 853,888 ----
+  
+      ajDebug("extractfeat_MatchFeature\n");
+  
+!     ajDebug("embMiscMatchPatternDelim(ajFeatGetSource(gf), source) %B\n",
+! 	    embMiscMatchPatternDelimC(ajFeatGetSource(gf), source, ",;|"));
+      ajDebug("ajFeatTypeMatchS(gf, type) %B\n",
+!       ajFeatTypeMatchWildS(gf, type));
+      ajDebug("ajFeatGetStrand(gf) '%x' sense %d\n", ajFeatGetStrand(gf), sense);
+      ajDebug("testscore: %B ajFeatGetScore(gf): %f minscore:%f maxscore:%f\n",
+  	    testscore, ajFeatGetScore(gf), minscore, maxscore);
+!     if(!embMiscMatchPatternDelimC(ajFeatGetSource(gf), source, ",;|"))
+          return ajFalse;
++ 
++ 
++     if(ajStrGetLen(type))
++     {
++         val = ajFalse;
++         tokens = ajStrTokenNewC(type, " \t\n\r,;|");
++ 
++         while (ajStrTokenNextParse( &tokens, &key))
++         {
++             if (ajFeatTypeMatchWildS(gf, key))
++             {
++                 val = ajTrue;
++                 break;
++             }
++         }
++ 
++         ajStrTokenDel( &tokens);
++         ajStrDel(&key);
++         if(!val)
++             return ajFalse;
++     }
+      if(ajFeatGetStrand(gf) == '+' && sense == -1)
+          return ajFalse;
+      if(ajFeatGetStrand(gf) == '-' && sense == +1)
+***************
+*** 869,874 ****
+--- 895,901 ----
+          return ajFalse;
+  
+      ajDebug("All tests passed, return ajTrue\n");
++     /*ajUser("All tests passed, return ajTrue");*/
+  
+      return ajTrue;
+  }
+***************
+*** 914,920 ****
+  
+      while(ajFeatTagval(titer, &tagnam, &tagval))
+      {
+!         tval = embMiscMatchPattern(tagnam, tpattern);
+  
+          /*
+          ** If tag has no value then
+--- 941,947 ----
+  
+      while(ajFeatTagval(titer, &tagnam, &tagval))
+      {
+!         tval = embMiscMatchPatternDelimC(tagnam, tpattern, ",;|");
+  
+          /*
+          ** If tag has no value then
+***************
+*** 929,935 ****
+  		vval = ajFalse;
+          }
+  	else
+!             vval = embMiscMatchPattern(tagval, vpattern);
+  
+          if(tval && vval)
+  	{
+--- 956,962 ----
+  		vval = ajFalse;
+          }
+  	else
+!             vval = embMiscMatchPatternDelimC(tagval, vpattern, ",;|");
+  
+          if(tval && vval)
+  	{
+***************
+*** 978,984 ****
+  
+      while(ajFeatTagval(titer, &tagnam, &tagval))
+      {
+!         if(embMiscMatchPattern(tagnam, describe))
+  	{
+              /* There's a match, so write to strout in a pretty format */
+              if(!val)
+--- 1005,1011 ----
+  
+      while(ajFeatTagval(titer, &tagnam, &tagval))
+      {
+!         if(embMiscMatchPatternDelimC(tagnam, describe, ",;|"))
+  	{
+              /* There's a match, so write to strout in a pretty format */
+              if(!val)
+diff -c -N --recursive EMBOSS-6.1.0orig/emboss/notseq.c EMBOSS-6.1.0/emboss/notseq.c
+*** EMBOSS-6.1.0orig/emboss/notseq.c	Mon Sep 28 22:15:18 2009
+--- EMBOSS-6.1.0/emboss/notseq.c	Wed Dec  2 12:28:15 2009
+***************
+*** 62,69 ****
+  	ajStrAssignS(&name, ajSeqGetNameS(seq));
+  	ajStrAssignS(&acc, ajSeqGetAccS(seq));
+  
+! 	if(embMiscMatchPattern(name, pattern) ||
+! 	    embMiscMatchPattern(acc, pattern))
+  	    ajSeqoutWriteSeq(junkout, seq);
+  	else
+  	    /* no match, so not excluded */
+--- 62,69 ----
+  	ajStrAssignS(&name, ajSeqGetNameS(seq));
+  	ajStrAssignS(&acc, ajSeqGetAccS(seq));
+  
+! 	if(embMiscMatchPatternDelimC(name, pattern, ",;") ||
+! 	    embMiscMatchPatternDelimC(acc, pattern, ",;"))
+  	    ajSeqoutWriteSeq(junkout, seq);
+  	else
+  	    /* no match, so not excluded */
+diff -c -N --recursive EMBOSS-6.1.0orig/emboss/prettyplot.c EMBOSS-6.1.0/emboss/prettyplot.c
+*** EMBOSS-6.1.0orig/emboss/prettyplot.c	Mon Sep 28 22:15:18 2009
+--- EMBOSS-6.1.0/emboss/prettyplot.c	Wed Dec  2 12:28:21 2009
+***************
+*** 201,206 ****
+--- 201,207 ----
+      ajint newILend = 0;
+      ajint newILstart;
+      void *freeptr;
++     ajint itmp;
+      
+      ajGraphInit("prettyplot", argc, argv);
+  
+***************
+*** 427,442 ****
+      if(ixlen == 0.0)
+      {
+  	/* for postscript these are 0.0 ????? */
+- 	if(portrait)
+- 	{
+- 	    ixlen = 768;
+- 	    iylen = 960;
+- 	}
+- 	else
+- 	{
+  	    ixlen = 960;
+  	    iylen = 768;
+! 	}
+      }
+  
+      ajGraphGetCharSize(&defheight,&currentheight);
+--- 428,442 ----
+      if(ixlen == 0.0)
+      {
+  	/* for postscript these are 0.0 ????? */
+  	    ixlen = 960;
+  	    iylen = 768;
+!     }
+! 
+!     if(portrait)
+!     {
+!         itmp = ixlen;
+!         ixlen = iylen;
+!         iylen = itmp;
+      }
+  
+      ajGraphGetCharSize(&defheight,&currentheight);
+diff -c -N --recursive EMBOSS-6.1.0orig/emboss/seqmatchall.c EMBOSS-6.1.0/emboss/seqmatchall.c
+*** EMBOSS-6.1.0orig/emboss/seqmatchall.c	Mon Sep 28 22:15:18 2009
+--- EMBOSS-6.1.0/emboss/seqmatchall.c	Wed Dec  2 12:28:27 2009
+***************
+*** 76,82 ****
+  		for(j=i+1;j<ajSeqsetGetSize(seqset);j++)
+  		{
+  		    iseq2 = j;
+! 		    if(ajSeqGetLen(seqs[j]) > statwordlen)
+  		    {
+  			matchlist = embWordBuildMatchTable(seq1MatchTable,
+  							   seqs[j], ajTrue);
+--- 76,82 ----
+  		for(j=i+1;j<ajSeqsetGetSize(seqset);j++)
+  		{
+  		    iseq2 = j;
+! 		    if(ajSeqGetLen(seqs[j]) >= statwordlen)
+  		    {
+  			matchlist = embWordBuildMatchTable(seq1MatchTable,
+  							   seqs[j], ajTrue);
+diff -c -N --recursive EMBOSS-6.1.0orig/emboss/showfeat.c EMBOSS-6.1.0/emboss/showfeat.c
+*** EMBOSS-6.1.0orig/emboss/showfeat.c	Mon Sep 28 22:15:18 2009
+--- EMBOSS-6.1.0/emboss/showfeat.c	Wed Dec  2 12:28:34 2009
+***************
+*** 286,291 ****
+--- 286,294 ----
+      AjBool want_multiple_line = ajFalse; /* true if want a join()s line */
+      AjBool in_multiple_line = ajFalse;   /* true if this is a join()s line */
+      AjBool child;	                 /* true if multiple's child */
++     AjPStrTok tokens = NULL;
++     AjPStr key = NULL;
++     AjBool val = ajFalse;
+  
+      /* get the feature table of the sequence */
+      feat = ajSeqGetFeatCopy(seq);
+***************
+*** 355,366 ****
+  		continue;
+  
+  	    /* check that we want to output this match of source, type */
+! 	    if(!embMiscMatchPattern(ajFeatGetSource(gf), matchsource) ||
+! 	       !embMiscMatchPattern(ajFeatGetType(gf), matchtype) ||
+  	       !showfeat_MatchPatternTags(gf, matchtag, matchvalue,
+  					  stricttags, &tagstmp, values))
+  		continue;
+  
+  	     /*
+  	     ** Starting a new line?
+  	     ** Don't start a new line if:
+--- 358,390 ----
+  		continue;
+  
+  	    /* check that we want to output this match of source, type */
+! 	    if(!embMiscMatchPatternDelimC(ajFeatGetSource(gf),
+!                                           matchsource,",;|") ||
+  	       !showfeat_MatchPatternTags(gf, matchtag, matchvalue,
+  					  stricttags, &tagstmp, values))
+  		continue;
+  
++             if(ajStrGetLen(matchtype))
++             {
++                 val = ajFalse;
++                 tokens = ajStrTokenNewC(matchtype, " \t\n\r,;|");
++ 
++                 while (ajStrTokenNextParse( &tokens, &key))
++                 {
++                     if (ajFeatTypeMatchWildS(gf, key))
++                     {
++                         val = ajTrue;
++                         break;
++                     }
++                 }
++ 
++                 ajStrTokenDel( &tokens);
++                 ajStrDel(&key);
++                 if(!val)
++                     continue;
++             }
++             
++ 
+  	     /*
+  	     ** Starting a new line?
+  	     ** Don't start a new line if:
+***************
+*** 852,858 ****
+      titer = ajFeatTagIter(feat);
+      while(ajFeatTagval(titer, &tagnam, &tagval))
+      {
+!         tval = embMiscMatchPattern(tagnam, tpattern);
+  
+           /*
+  	 ** If tag has no value then
+--- 876,882 ----
+      titer = ajFeatTagIter(feat);
+      while(ajFeatTagval(titer, &tagnam, &tagval))
+      {
+!         tval = embMiscMatchPatternDelimC(tagnam, tpattern,",;|");
+  
+           /*
+  	 ** If tag has no value then
+***************
+*** 878,884 ****
+  	     ** without spitting it up into words. 
+  	     */
+              vval = (ajStrMatchS(tagval, vpattern) ||
+! 		    embMiscMatchPattern(tagval, vpattern));
+  	}
+  
+          if(tval && vval)
+--- 902,908 ----
+  	     ** without spitting it up into words. 
+  	     */
+              vval = (ajStrMatchS(tagval, vpattern) ||
+! 		    embMiscMatchPatternDelimC(tagval, vpattern,",;|"));
+  	}
+  
+          if(tval && vval)
+diff -c -N --recursive EMBOSS-6.1.0orig/emboss/showpep.c EMBOSS-6.1.0/emboss/showpep.c
+*** EMBOSS-6.1.0orig/emboss/showpep.c	Mon Sep 28 22:15:18 2009
+--- EMBOSS-6.1.0/emboss/showpep.c	Wed Dec  2 12:28:38 2009
+***************
+*** 438,445 ****
+       **      for sense, 0
+       **      for score, maxscore <= minscore
+       */
+!     if(!embMiscMatchPattern(ajFeatGetSource(gf), source) ||
+!        !embMiscMatchPattern(ajFeatGetType(gf), type) ||
+         (testscore && ajFeatGetScore(gf) < minscore) ||
+         (testscore && ajFeatGetScore(gf) > maxscore) ||
+         !*tagsmatch)
+--- 438,444 ----
+       **      for sense, 0
+       **      for score, maxscore <= minscore
+       */
+!     if(!embMiscMatchPatternDelimC(ajFeatGetSource(gf), source,",;|") ||
+         (testscore && ajFeatGetScore(gf) < minscore) ||
+         (testscore && ajFeatGetScore(gf) > maxscore) ||
+         !*tagsmatch)
+***************
+*** 495,501 ****
+      titer = ajFeatTagIter(gf);
+      while(ajFeatTagval(titer, &tagnam, &tagval))
+      {
+!         tval = embMiscMatchPattern(tagnam, tpattern);
+          /*
+          ** If tag has no value then
+          **   If vpattern is '*' the value pattern is a match
+--- 494,500 ----
+      titer = ajFeatTagIter(gf);
+      while(ajFeatTagval(titer, &tagnam, &tagval))
+      {
+!         tval = embMiscMatchPatternDelimC(tagnam, tpattern,",;|");
+          /*
+          ** If tag has no value then
+          **   If vpattern is '*' the value pattern is a match
+***************
+*** 516,522 ****
+  	    ** of the whole of vpattern without spitting it up into words.
+              */
+              vval = (ajStrMatchS(tagval, vpattern) ||
+! 		    embMiscMatchPattern(tagval, vpattern));
+  
+  
+          if(tval && vval)
+--- 515,521 ----
+  	    ** of the whole of vpattern without spitting it up into words.
+              */
+              vval = (ajStrMatchS(tagval, vpattern) ||
+! 		    embMiscMatchPatternDelimC(tagval, vpattern,",;|"));
+  
+  
+          if(tval && vval)
+diff -c -N --recursive EMBOSS-6.1.0orig/emboss/showseq.c EMBOSS-6.1.0/emboss/showseq.c
+*** EMBOSS-6.1.0orig/emboss/showseq.c	Mon Sep 28 22:15:18 2009
+--- EMBOSS-6.1.0/emboss/showseq.c	Wed Dec  2 12:28:42 2009
+***************
+*** 722,729 ****
+       **      for sense, 0
+       **      for score, maxscore <= minscore
+       */
+!     if(!embMiscMatchPattern(ajFeatGetSource(gf), source) ||
+!        !embMiscMatchPattern(ajFeatGetType(gf), type) ||
+         (ajFeatGetStrand(gf) == '+' && sense == -1) ||
+         (ajFeatGetStrand(gf) == '-' && sense == +1) ||
+         (testscore && ajFeatGetScore(gf) < minscore) ||
+--- 722,728 ----
+       **      for sense, 0
+       **      for score, maxscore <= minscore
+       */
+!     if(!embMiscMatchPatternDelimC(ajFeatGetSource(gf), source,",;|") ||
+         (ajFeatGetStrand(gf) == '+' && sense == -1) ||
+         (ajFeatGetStrand(gf) == '-' && sense == +1) ||
+         (testscore && ajFeatGetScore(gf) < minscore) ||
+***************
+*** 781,787 ****
+      titer = ajFeatTagIter(gf);
+      while(ajFeatTagval(titer, &tagnam, &tagval))
+      {
+!         tval = embMiscMatchPattern(tagnam, tpattern);
+          /*
+          ** If tag has no value then
+          **   If vpattern is '*' the value pattern is a match
+--- 780,786 ----
+      titer = ajFeatTagIter(gf);
+      while(ajFeatTagval(titer, &tagnam, &tagval))
+      {
+!         tval = embMiscMatchPatternDelimC(tagnam, tpattern,",;|");
+          /*
+          ** If tag has no value then
+          **   If vpattern is '*' the value pattern is a match
+***************
+*** 802,808 ****
+  	    ** of the whole of vpattern without spitting it up into words.
+              */
+              vval = (ajStrMatchS(tagval, vpattern) ||
+! 		    embMiscMatchPattern(tagval, vpattern));
+  
+  
+          if(tval && vval)
+--- 801,807 ----
+  	    ** of the whole of vpattern without spitting it up into words.
+              */
+              vval = (ajStrMatchS(tagval, vpattern) ||
+! 		    embMiscMatchPatternDelimC(tagval, vpattern,",;|"));
+  
+  
+          if(tval && vval)
+diff -c -N --recursive EMBOSS-6.1.0orig/emboss/twofeat.c EMBOSS-6.1.0/emboss/twofeat.c
+*** EMBOSS-6.1.0orig/emboss/twofeat.c	Mon Sep 28 22:15:18 2009
+--- EMBOSS-6.1.0/emboss/twofeat.c	Wed Dec  2 12:28:48 2009
+***************
+*** 612,617 ****
+--- 612,620 ----
+  				   const AjPStr tag, const AjPStr value,
+  				   AjBool *tagsmatch)
+  {
++     AjPStrTok tokens = NULL;
++     AjPStr key = NULL;
++     AjBool val = ajFalse;
+      AjBool scoreok;
+  
+      scoreok = (minscore < maxscore);
+***************
+*** 634,641 ****
+       **      for score, maxscore <= minscore
+       */
+  
+!     if(!embMiscMatchPattern(ajFeatGetSource(gf), source) ||
+!        !embMiscMatchPattern(ajFeatGetType(gf), type) ||
+         (ajFeatGetStrand(gf) == '+' && sense == -1) ||
+         (ajFeatGetStrand(gf) == '-' && sense == +1) ||
+         (scoreok && ajFeatGetScore(gf) < minscore) ||
+--- 637,643 ----
+       **      for score, maxscore <= minscore
+       */
+  
+!     if(!embMiscMatchPatternDelimC(ajFeatGetSource(gf), source,",;|") ||
+         (ajFeatGetStrand(gf) == '+' && sense == -1) ||
+         (ajFeatGetStrand(gf) == '-' && sense == +1) ||
+         (scoreok && ajFeatGetScore(gf) < minscore) ||
+***************
+*** 643,648 ****
+--- 645,670 ----
+         !*tagsmatch)
+  	return ajFalse;
+  
++     if(ajStrGetLen(type))
++     {
++         val = ajFalse;
++         tokens = ajStrTokenNewC(type, " \t\n\r,;|");
++ 
++         while (ajStrTokenNextParse( &tokens, &key))
++         {
++             if (ajFeatTypeMatchWildS(gf, key))
++             {
++                 val = ajTrue;
++                 break;
++             }
++         }
++ 
++         ajStrTokenDel( &tokens);
++         ajStrDel(&key);
++         if(!val)
++             return ajFalse;
++     }
++ 
+      return ajTrue;                        
+  }
+  
+***************
+*** 686,692 ****
+      titer = ajFeatTagIter(feat);
+      while(ajFeatTagval(titer, &tagnam, &tagval))
+      {
+!         tval = embMiscMatchPattern(tagnam, tpattern);
+  	 /*
+  	 ** If tag has no value then
+  	 **   If vpattern is '*' the value pattern is a match
+--- 708,714 ----
+      titer = ajFeatTagIter(feat);
+      while(ajFeatTagval(titer, &tagnam, &tagval))
+      {
+!         tval = embMiscMatchPatternDelimC(tagnam, tpattern,",;|");
+  	 /*
+  	 ** If tag has no value then
+  	 **   If vpattern is '*' the value pattern is a match
+***************
+*** 701,707 ****
+  		vval = ajFalse;
+          }
+  	else
+!             vval = embMiscMatchPattern(tagval, vpattern);
+  
+          if(tval && vval)
+  	{
+--- 723,729 ----
+  		vval = ajFalse;
+          }
+  	else
+!             vval = embMiscMatchPatternDelimC(tagval, vpattern,",;|");
+  
+          if(tval && vval)
+  	{
 diff -c -N --recursive EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/gui/Browser.java EMBOSS-6.1.0/jemboss/org/emboss/jemboss/gui/Browser.java
-*** EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/gui/Browser.java	2009-06-30 17:18:26.000000000 +0100
---- EMBOSS-6.1.0/jemboss/org/emboss/jemboss/gui/Browser.java	2009-07-30 15:29:18.000000000 +0100
+*** EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/gui/Browser.java	Mon Sep 28 22:15:15 2009
+--- EMBOSS-6.1.0/jemboss/org/emboss/jemboss/gui/Browser.java	Mon Sep 28 22:14:46 2009
 ***************
 *** 68,74 ****
 --- 68,77 ----
@@ -1205,8 +3034,8 @@ diff -c -N --recursive EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/gui/Browser.j
             if(loc != null) 
             {
 diff -c -N --recursive EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/gui/BuildProgramMenu.java EMBOSS-6.1.0/jemboss/org/emboss/jemboss/gui/BuildProgramMenu.java
-*** EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/gui/BuildProgramMenu.java	2009-07-08 09:45:48.000000000 +0100
---- EMBOSS-6.1.0/jemboss/org/emboss/jemboss/gui/BuildProgramMenu.java	2009-07-30 15:29:31.000000000 +0100
+*** EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/gui/BuildProgramMenu.java	Mon Sep 28 22:15:15 2009
+--- EMBOSS-6.1.0/jemboss/org/emboss/jemboss/gui/BuildProgramMenu.java	Mon Sep 28 22:14:46 2009
 ***************
 *** 141,146 ****
 --- 141,162 ----
@@ -1411,8 +3240,8 @@ diff -c -N --recursive EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/gui/BuildProg
           int npG = progs.getNumPrimaryGroups();
           menuBar.setLayout(new GridLayout(npG,1));
 diff -c -N --recursive EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/gui/form/BuildJembossForm.java EMBOSS-6.1.0/jemboss/org/emboss/jemboss/gui/form/BuildJembossForm.java
-*** EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/gui/form/BuildJembossForm.java	2009-07-13 17:24:04.000000000 +0100
---- EMBOSS-6.1.0/jemboss/org/emboss/jemboss/gui/form/BuildJembossForm.java	2009-07-30 15:29:52.000000000 +0100
+*** EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/gui/form/BuildJembossForm.java	Mon Sep 28 22:15:15 2009
+--- EMBOSS-6.1.0/jemboss/org/emboss/jemboss/gui/form/BuildJembossForm.java	Mon Sep 28 22:14:46 2009
 ***************
 *** 100,107 ****
     private boolean withSoap;
@@ -1487,8 +3316,8 @@ diff -c -N --recursive EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/gui/form/Buil
             options = options.concat(" -" + val + " " + textFloat[h].getValue());
             optionsA.add("-"+val);
 diff -c -N --recursive EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/gui/sequenceChooser/InputSequenceAttributes.java EMBOSS-6.1.0/jemboss/org/emboss/jemboss/gui/sequenceChooser/InputSequenceAttributes.java
-*** EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/gui/sequenceChooser/InputSequenceAttributes.java	2009-07-13 17:23:30.000000000 +0100
---- EMBOSS-6.1.0/jemboss/org/emboss/jemboss/gui/sequenceChooser/InputSequenceAttributes.java	2009-07-30 15:30:07.000000000 +0100
+*** EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/gui/sequenceChooser/InputSequenceAttributes.java	Mon Sep 28 22:15:15 2009
+--- EMBOSS-6.1.0/jemboss/org/emboss/jemboss/gui/sequenceChooser/InputSequenceAttributes.java	Mon Sep 28 22:14:46 2009
 ***************
 *** 281,287 ****
   //  bx.add(Box.createHorizontalGlue());
@@ -1559,9 +3388,192 @@ diff -c -N --recursive EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/gui/sequenceC
         optionsA.add(UFO.getText());
       }
   
+diff -c -N --recursive EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/server/AppendToLogFileThread.java EMBOSS-6.1.0/jemboss/org/emboss/jemboss/server/AppendToLogFileThread.java
+*** EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/server/AppendToLogFileThread.java	Mon Sep 28 22:15:16 2009
+--- EMBOSS-6.1.0/jemboss/org/emboss/jemboss/server/AppendToLogFileThread.java	Mon Dec  7 16:28:03 2009
+***************
+*** 72,79 ****
+      try
+      {
+        File logFile = new File(logFileName);
+-       if (!logFile.exists())
+-           logFile.mkdirs();
+        bw = new BufferedWriter(new FileWriter(logFile, true));
+        bw.write(logEntry);
+        bw.newLine();
+--- 72,77 ----
+diff -c -N --recursive EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/server/JembossAuthServer.java EMBOSS-6.1.0/jemboss/org/emboss/jemboss/server/JembossAuthServer.java
+*** EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/server/JembossAuthServer.java	Mon Sep 28 22:15:16 2009
+--- EMBOSS-6.1.0/jemboss/org/emboss/jemboss/server/JembossAuthServer.java	Thu Dec 10 13:57:58 2009
+***************
+*** 46,52 ****
+    private final String fs = new String(System.getProperty("file.separator"));
+    /** path separator */
+    private final String ps = new String(System.getProperty("path.separator"));
+!   /** line seperator */
+    private final String ls = System.getProperty("line.separator");
+  
+  //get paths to EMBOSS
+--- 46,52 ----
+    private final String fs = new String(System.getProperty("file.separator"));
+    /** path separator */
+    private final String ps = new String(System.getProperty("path.separator"));
+!   /** line separator */
+    private final String ls = System.getProperty("line.separator");
+  
+  //get paths to EMBOSS
+***************
+*** 80,85 ****
+--- 80,102 ----
+  // FIX FOR SOME SUNOS
+  
+  
++   
++   public JembossAuthServer(){
++       File logDir = new File(tmproot);
++       if (!tmproot.endsWith(fs))
++           tmproot += fs;
++       if (!logDir.exists())
++       {
++           logDir.mkdirs();
++           try {
++             Runtime.getRuntime().exec("chmod 1777 " + tmproot);
++         } catch (IOException e) {
++             e.printStackTrace();
++         } 
++       }
++   }
++   
++   
+    /**
+    *
+    * Retrieves the ACD file of an application.
+***************
+*** 376,386 ****
+      {
+  //    System.out.println("STATUS OK");
+        vans.add("length");
+!       vans.add(new Integer(aj.length));
+        vans.add("protein");
+!       vans.add(new Boolean(aj.protein));
+        vans.add("weight");
+!       vans.add(new Float(aj.weight));
+        vans.add("status");
+        vans.add("0");
+      }
+--- 393,403 ----
+      {
+  //    System.out.println("STATUS OK");
+        vans.add("length");
+!       vans.add(new Integer(Ajax.length));
+        vans.add("protein");
+!       vans.add(new Boolean(Ajax.protein));
+        vans.add("weight");
+!       vans.add(new Float(Ajax.weight));
+        vans.add("status");
+        vans.add("0");
+      }
+***************
+*** 610,616 ****
+                             project+fs+thiskey,userName);
+      }
+  
+! //write decription file to project directory
+      ok = false;
+      try
+      {
+--- 627,633 ----
+                             project+fs+thiskey,userName);
+      }
+  
+! //write description file to project directory
+      ok = false;
+      try
+      {
+***************
+*** 673,680 ****
+      {
+  
+  // COMMENT THIS LINE TO USE QUEUEING SOFTWARE
+!       boolean lforkB = aj.forkBatch(userName,passwd,environ,
+!                                     embossCommand,project);
+  
+  // UNCOMMENT ONE OF THESE LINE TO USE QUEUEING SOFTWARE
+  //    runAsBatch(aj,userName,passwd,project,quoteMe(embossCommand));
+--- 690,696 ----
+      {
+  
+  // COMMENT THIS LINE TO USE QUEUEING SOFTWARE
+!       aj.forkBatch(userName, passwd, environ, embossCommand, project);
+  
+  // UNCOMMENT ONE OF THESE LINE TO USE QUEUEING SOFTWARE
+  //    runAsBatch(aj,userName,passwd,project,quoteMe(embossCommand));
+***************
+*** 1070,1076 ****
+      lsr.add("OK");
+  
+      aj.setErrStd();
+!     boolean lsd = aj.listDirs(userName,passwd,environ,tmproot);
+      
+      String outStd = aj.getOutStd();
+  
+--- 1086,1092 ----
+      lsr.add("OK");
+  
+      aj.setErrStd();
+!     /*boolean lsd =*/ aj.listDirs(userName,passwd,environ,tmproot);
+      
+      String outStd = aj.getOutStd();
+  
+***************
+*** 1123,1139 ****
+      BufferedWriter bw = null;
+      try 
+      {
+!       File logFile = new File(logFileName);
+!       if (logFile.exists())
+!           logFile.mkdirs();
+!       bw = new BufferedWriter(new FileWriter(logFile, true));
+        bw.write(logEntry);
+        bw.newLine();
+        bw.flush();
+      } 
+      catch (Exception ioe) 
+      {
+!       System.out.println("Error writing to log file "+logFile);
+        ioe.printStackTrace();
+      } 
+      finally                     // always close the file
+--- 1139,1152 ----
+      BufferedWriter bw = null;
+      try 
+      {
+!       bw = new BufferedWriter(new FileWriter(logFileName, true));
+        bw.write(logEntry);
+        bw.newLine();
+        bw.flush();
+      } 
+      catch (Exception ioe) 
+      {
+!       System.out.println("Error writing to log file "+logFileName);
+        ioe.printStackTrace();
+      } 
+      finally                     // always close the file
+***************
+*** 1315,1320 ****
+--- 1328,1336 ----
+      }
+      catch(Exception exp) 
+      {
++       appendToLogFile(userName+":: "+new Date().toString().replace(':','_')+
++             " Failed Authorisation call "+userName+"\n"+
++             "Error message: "+exp.getMessage(),errorLog);        
+        ok = false;
+      }
+  
 diff -c -N --recursive EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/soap/GetVersion.java EMBOSS-6.1.0/jemboss/org/emboss/jemboss/soap/GetVersion.java
-*** EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/soap/GetVersion.java	1970-01-01 01:00:00.000000000 +0100
---- EMBOSS-6.1.0/jemboss/org/emboss/jemboss/soap/GetVersion.java	2009-07-30 15:30:24.000000000 +0100
+*** EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/soap/GetVersion.java	Thu Jan  1 01:00:00 1970
+--- EMBOSS-6.1.0/jemboss/org/emboss/jemboss/soap/GetVersion.java	Mon Sep 28 22:14:46 2009
 ***************
 *** 0 ****
 --- 1,82 ----
@@ -1648,8 +3660,8 @@ diff -c -N --recursive EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/soap/GetVersi
 + 
 + }
 diff -c -N --recursive EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/soap/ShowDB.java EMBOSS-6.1.0/jemboss/org/emboss/jemboss/soap/ShowDB.java
-*** EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/soap/ShowDB.java	2008-06-12 09:19:07.000000000 +0100
---- EMBOSS-6.1.0/jemboss/org/emboss/jemboss/soap/ShowDB.java	2009-07-30 15:30:32.000000000 +0100
+*** EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/soap/ShowDB.java	Mon Sep 28 22:15:15 2009
+--- EMBOSS-6.1.0/jemboss/org/emboss/jemboss/soap/ShowDB.java	Mon Sep 28 22:14:46 2009
 ***************
 *** 50,64 ****
     * @param mysettings 	jemboss properties
@@ -1681,8 +3693,8 @@ diff -c -N --recursive EMBOSS-6.1.0orig/jemboss/org/emboss/jemboss/soap/ShowDB.j
       statusmsg = dbReq.getVal("msg");
       status = dbReq.getVal("status");
 diff -c -N --recursive EMBOSS-6.1.0orig/jemboss/utils/install-jemboss-server.sh EMBOSS-6.1.0/jemboss/utils/install-jemboss-server.sh
-*** EMBOSS-6.1.0orig/jemboss/utils/install-jemboss-server.sh	2009-06-30 09:31:50.000000000 +0100
---- EMBOSS-6.1.0/jemboss/utils/install-jemboss-server.sh	2009-07-30 15:30:59.000000000 +0100
+*** EMBOSS-6.1.0orig/jemboss/utils/install-jemboss-server.sh	Mon Sep 28 22:15:12 2009
+--- EMBOSS-6.1.0/jemboss/utils/install-jemboss-server.sh	Thu Dec 10 11:56:58 2009
 ***************
 *** 694,718 ****
   echo "         EMBOSS and Jemboss Server installation script"
@@ -1788,9 +3800,44 @@ diff -c -N --recursive EMBOSS-6.1.0orig/jemboss/utils/install-jemboss-server.sh 
   
   #
 --- 1261,1266 ----
+***************
+*** 1413,1419 ****
+    cp $JEMBOSS/lib/mail.jar $TOMCAT_ROOT/webapps/axis/WEB-INF/lib
+    cp $JEMBOSS/lib/activation.jar $TOMCAT_ROOT/webapps/axis/WEB-INF/lib
+  
+-   mv $JEMBOSS/org $TOMCAT_ROOT/webapps/axis/WEB-INF/classes/org
+    cp -R $JEMBOSS/resources $TOMCAT_ROOT/webapps/axis/WEB-INF/classes/
+    
+    cp -R $EMBOSS_DOWNLOAD/jemboss/lib/axis $JEMBOSS/lib
+--- 1392,1397 ----
+***************
+*** 1429,1438 ****
+    jar -cvf ../lib/ajax.jar org
+    jar -xvf ../lib/client.jar
+    rm org/emboss/jemboss/parser/Ajax.class org/emboss/jemboss/parser/AjaxUtil.class
+-   jar -cvf ../lib/jemboss.jar .
+    cd ..;
+    rm -rf tmp;
+-   cp lib/jemboss.jar $TOMCAT_ROOT/webapps/axis/WEB-INF/lib/
+  
+    if [ -d "$TOMCAT_ROOT/shared/lib" ]; then
+    #tomcat 4.1.x and 5.5.x
+--- 1407,1418 ----
+    jar -cvf ../lib/ajax.jar org
+    jar -xvf ../lib/client.jar
+    rm org/emboss/jemboss/parser/Ajax.class org/emboss/jemboss/parser/AjaxUtil.class
+    cd ..;
++   javac org/emboss/jemboss/server/AppendToLogFileThread.java -d tmp
++   javac org/emboss/jemboss/server/JembossAuthServer.java -d tmp
++   javac org/emboss/jemboss/server/JembossFileAuthServer.java -d tmp
++   cp -R tmp/org $TOMCAT_ROOT/webapps/axis/WEB-INF/classes/
+    rm -rf tmp;
+  
+    if [ -d "$TOMCAT_ROOT/shared/lib" ]; then
+    #tomcat 4.1.x and 5.5.x
 diff -c -N --recursive EMBOSS-6.1.0orig/nucleus/embaln.c EMBOSS-6.1.0/nucleus/embaln.c
-*** EMBOSS-6.1.0orig/nucleus/embaln.c	2009-06-12 19:02:30.000000000 +0100
---- EMBOSS-6.1.0/nucleus/embaln.c	2009-08-25 09:31:28.000000000 +0100
+*** EMBOSS-6.1.0orig/nucleus/embaln.c	Mon Sep 28 22:15:07 2009
+--- EMBOSS-6.1.0/nucleus/embaln.c	Mon Sep 28 22:14:38 2009
 ***************
 *** 2091,2096 ****
 --- 2091,2098 ----
@@ -1802,3 +3849,104 @@ diff -c -N --recursive EMBOSS-6.1.0orig/nucleus/embaln.c EMBOSS-6.1.0/nucleus/em
   	    if(path[(row)*seqlen+(column)]<=0.)
   		break;
   
+diff -c -N --recursive EMBOSS-6.1.0orig/nucleus/embmisc.c EMBOSS-6.1.0/nucleus/embmisc.c
+*** EMBOSS-6.1.0orig/nucleus/embmisc.c	Mon Sep 28 22:15:07 2009
+--- EMBOSS-6.1.0/nucleus/embmisc.c	Wed Dec  2 12:27:39 2009
+***************
+*** 20,49 ****
+  
+  
+  
+! /* @func embMiscMatchPattern **************************************************
+  **
+  ** Does a simple OR'd test of matches to (possibly wildcarded) words.
+  ** The words are tested one at a time until a match is found.
+! ** Whitespace and , ; | characters can separate the words in the pattern.
+  **
+  ** @param [r] str [const AjPStr] string to test
+  ** @param [r] pattern [const AjPStr] pattern to match with
+  **
+  ** @return [AjBool] ajTrue = found a match
+  ** @@
+  ******************************************************************************/
+  
+! AjBool embMiscMatchPattern (const AjPStr str, const AjPStr pattern)
+  {
+  
+!     /* pmr: allow '|' which can appear in NCBI style IDs */
+! 
+!     char whiteSpace[] = " \t\n\r,;";  /* skip whitespace and , ; */
+      AjPStrTok tokens;
+      AjPStr key = NULL;
+      AjBool val = ajFalse;
+  
+!     tokens = ajStrTokenNewC(pattern, whiteSpace);
+  
+      while (ajStrTokenNextParse( &tokens, &key))
+  	if (ajStrMatchWildCaseS(str, key))
+--- 20,53 ----
+  
+  
+  
+! /* @func embMiscMatchPatternDelimC *********************************************
+  **
+  ** Does a simple OR'd test of matches to (possibly wildcarded) words.
+  ** The words are tested one at a time until a match is found.
+! ** Whitespace and additional delimiter characters can separate the
+! ** words in the pattern.
+  **
+  ** @param [r] str [const AjPStr] string to test
+  ** @param [r] pattern [const AjPStr] pattern to match with
++ ** @param [r] delim [const char*] additional delimiters
+  **
+  ** @return [AjBool] ajTrue = found a match
+  ** @@
+  ******************************************************************************/
+  
+! AjBool embMiscMatchPatternDelimC (const AjPStr str, const AjPStr pattern,
+!                                  const char* delim)
+  {
+  
+!     char whiteSpace[] = " \t\n\r";  /* skip whitespace */
+      AjPStrTok tokens;
++     AjPStr delimstr = NULL;
+      AjPStr key = NULL;
+      AjBool val = ajFalse;
+  
+!     delimstr = ajStrNewC(whiteSpace);
+!     ajStrAppendC(&delimstr, delim);
+!     tokens = ajStrTokenNewS(pattern, delimstr);
+  
+      while (ajStrTokenNextParse( &tokens, &key))
+  	if (ajStrMatchWildCaseS(str, key))
+***************
+*** 54,59 ****
+--- 58,64 ----
+  
+      ajStrTokenDel( &tokens);
+      ajStrDel(&key);
++     ajStrDel(&delimstr);
+  
+      return val;
+  
+diff -c -N --recursive EMBOSS-6.1.0orig/nucleus/embmisc.h EMBOSS-6.1.0/nucleus/embmisc.h
+*** EMBOSS-6.1.0orig/nucleus/embmisc.h	Mon Sep 28 22:15:07 2009
+--- EMBOSS-6.1.0/nucleus/embmisc.h	Wed Dec  2 12:27:42 2009
+***************
+*** 13,19 ****
+  ** Prototype definitions
+  */
+  
+! AjBool embMiscMatchPattern (const AjPStr str, const AjPStr pattern);
+  
+  /*
+  ** End of prototype definitions
+--- 13,20 ----
+  ** Prototype definitions
+  */
+  
+! AjBool embMiscMatchPatternDelimC (const AjPStr str, const AjPStr pattern,
+!                                   const char* delim);
+  
+  /*
+  ** End of prototype definitions
