@@ -1,5 +1,4 @@
-
-                                  pepnet 
+                                   pepnet
 
 
 
@@ -19,17 +18,17 @@ Description
    pepnet draws a helical net for an input protein sequence. This is a
    method of displaying the residues of a protein in a simple 3,4,3,4
    repeating pattern that emulates at a simple level the arrangement of
-   residues around an alpha helix. It is therefore easy to see patterns
-   of amphipathicity that you may wish to investigate in more detail by
-   using displays such as pepwheel. You can specify which residues to
-   mark up in squares, diamonds and octagons.
+   residues around an alpha helix. It is therefore easy to see patterns of
+   amphipathicity that you may wish to investigate in more detail by using
+   displays such as pepwheel. You can specify which residues to mark up in
+   squares, diamonds and octagons.
 
 Usage
 
    Here is a sample session with pepnet
 
 
-% pepnet -sask 
+% pepnet -sask
 Draw a helical net for a protein sequence
 Input protein sequence: tsw:gcn4_yeast
      Begin at position [start]: 253
@@ -38,28 +37,30 @@ Graph type [x11]: cps
 
 Created pepnet.ps
 
+
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Draw a helical net for a protein sequence
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Protein sequence filename and optional
                                   format, or reference (input USA)
    -graph              graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, das, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif)
 
    Additional (Optional) qualifiers (* if not always prompted):
 *  -squares            string     [ILVM] By default the aliphatic residues
-                                  ILVM are marked with squares. (Any string is
-                                  accepted)
+                                  ILVM are marked with squares. (Any string)
 *  -diamonds           string     [DENQST] By default the residues DENQST are
-                                  marked with diamonds. (Any string is
-                                  accepted)
+                                  marked with diamonds. (Any string)
 *  -octags             string     [HKR] By default the positively charged
                                   residues HKR are marked with octagons. (Any
-                                  string is accepted)
+                                  string)
 
    Advanced (Unprompted) qualifiers:
    -amphipathic        toggle     If this is true then the residues ACFGILMVWY
@@ -105,13 +106,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -280,8 +283,7 @@ See also
    pepwheel         Draw a helical wheel diagram for a protein sequence
    prettyplot       Draw a sequence alignment with pretty formatting
    prettyseq        Write a nucleotide sequence and its translation to file
-   remap            Display restriction enzyme binding sites in a nucleotide
-                    sequence
+   remap            Display restriction enzyme binding sites in a nucleotide sequence
    seealso          Finds programs with similar function to a specified program
    showalign        Display a multiple sequence alignment in pretty format
    showdb           Displays information on configured databases
@@ -294,7 +296,7 @@ See also
 
 Author(s)
 
-   Alan Bleasby (ajb © ebi.ac.uk)
+   Alan Bleasby (ajb (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

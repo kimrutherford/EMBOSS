@@ -1,6 +1,8 @@
 application: pepnet [
   documentation: "Draw a helical net for a protein sequence"
   groups: "Display, Protein:2D Structure"
+  relations: "EDAM: Protein secondary structure visualisation"
+  relations: "EDAM: Protein sequence hydropathy calculation"
 ]
 
 section: input [
@@ -11,6 +13,7 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "Protein"
+    relations: "EDAM: Sequence"                                            
   ]
 
 endsection: input
@@ -26,6 +29,7 @@ section: output [
            squares and all other residues are unmarked. This overrides any
            other markup that you may have specified using the qualifiers
            '-squares', '-diamonds' and '-octags'."
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   string: squares [
@@ -35,6 +39,7 @@ section: output [
     help: "By default the aliphatic residues ILVM are marked with
            squares."
     knowntype: "protein codes"
+    relations:  "EDAM: Amino acid code string"                         
   ]
 
   string: diamonds [
@@ -43,6 +48,7 @@ section: output [
     information: "Mark as diamonds"
     help: "By default the residues DENQST are marked with diamonds."
     knowntype: "protein codes"
+    relations:  "EDAM: Amino acid code string"                         
   ]
 
   string: octags [
@@ -52,11 +58,13 @@ section: output [
     help: "By default the positively charged residues HKR are marked
            with octagons."
     knowntype: "protein codes"
+    relations:  "EDAM: Amino acid code string"                         
   ]
 
   graph: graph [
     standard: "Y"
     gdesc: "Helical net"
+    relations: "EDAM: EMBOSS graph file"                                   
   ]
 
 endsection: output

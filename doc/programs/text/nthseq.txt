@@ -1,5 +1,4 @@
-
-                                  nthseq 
+                                   nthseq
 
 
 
@@ -25,16 +24,20 @@ Usage
    Here is a sample session with nthseq
 
 
-% nthseq 
+% nthseq
 Write to file a single sequence from an input stream of sequences
 Input (gapped) sequence(s): @eclac.list
 The number of the sequence to output [1]: 2
-output sequence [j01636.fasta]: 
+output sequence [j01636.fasta]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Write to file a single sequence from an input stream of sequences
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     (Gapped) sequence(s) filename and optional
@@ -84,13 +87,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -119,8 +124,8 @@ Output file format
 
    The output is the specified ordinal sequence from the input USA.
 
-   In the example, the second sequence from the input file will be
-   written out to the specified output file.
+   In the example, the second sequence from the input file will be written
+   out to the specified output file.
 
   Output files for usage example
 
@@ -268,7 +273,7 @@ See also
 
 Author(s)
 
-   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   Gary Williams (gwilliam (c) rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 

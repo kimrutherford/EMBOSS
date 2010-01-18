@@ -1,5 +1,4 @@
-
-                                extractseq 
+                                 extractseq
 
 
 
@@ -31,8 +30,9 @@ Usage
    Extract the region from position 10 to 20:
 
 
-% extractseq tembl:x65923 result.seq -regions '10-20' 
+% extractseq tembl:x65923 result.seq -regions '10-20'
 Extract regions from a sequence
+
 
    Go to the input files for this example
    Go to the output files for this example
@@ -42,8 +42,9 @@ Extract regions from a sequence
    Extract the regions 10 to 20, 30 to 45, 533 to 537:
 
 
-% extractseq tembl:x65921 result2.seq -regions '10-20 30-45 533-537' 
+% extractseq tembl:x65921 result2.seq -regions '10-20 30-45 533-537'
 Extract regions from a sequence
+
 
    Go to the input files for this example
    Go to the output files for this example
@@ -53,8 +54,8 @@ Extract regions from a sequence
    Extract the regions 782-856, 951-1095, 1557-1612 and 1787-1912:
 
 
-% extractseq tembl:x65921 -reg '782..856,951..1095,1557..1612,1787..1912' stdou
-t 
+% extractseq tembl:x65921 -reg '782..856,951..1095,1557..1612,1787..1912' stdout
+
 Extract regions from a sequence
 
 >X65921 X65921.1 H.sapiens fau 1 gene
@@ -66,14 +67,15 @@ gcccgtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaag
 aagaagacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtg
 cccacctttggcaagaagaagggccccaatgccaactcttaa
 
+
    Example 4
 
    Extract the regions 782-856, 951-1095, 1557-1612 and 1787-1912 all to
    separate output sequences:
 
 
-% extractseq tembl:x65921 -reg '782..856,951..1095,1557..1612,1787..1912' stdou
-t -separate 
+% extractseq tembl:x65921 -reg '782..856,951..1095,1557..1612,1787..1912' stdout
+ -separate
 Extract regions from a sequence
 
 >X65921_782_856 H.sapiens fau 1 gene
@@ -90,7 +92,11 @@ gtggccaaacaggagaagaagaagaagaagacaggtcgggctaagcggcggatgcagtac
 aaccggcgctttgtcaacgttgtgcccacctttggcaagaagaagggccccaatgccaac
 tcttaa
 
+
 Command line arguments
+
+Extract regions from a sequence
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Sequence filename and optional format, or
@@ -157,13 +163,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -171,8 +179,8 @@ Input file format
 
   Input files for usage example
 
-   'tembl:x65923' is a sequence entry in the example nucleic acid
-   database 'tembl'
+   'tembl:x65923' is a sequence entry in the example nucleic acid database
+   'tembl'
 
   Database entry: tembl:x65923
 
@@ -188,8 +196,7 @@ XX
 KW   fau gene.
 XX
 OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
-;
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
 OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
 OC   Homo.
 XX
@@ -233,10 +240,8 @@ FT                   /db_xref="HSSP:1GJZ"
 FT                   /db_xref="InterPro:IPR006846"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
 FT                   /protein_id="CAA46716.1"
-FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLA
-G
-FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKT
-G
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
 FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
 FT   misc_feature    98..102
 FT                   /note="nucleolar localization signal"
@@ -246,24 +251,15 @@ FT   polyA_signal    484..489
 FT   polyA_site      509
 XX
 SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
-     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        6
-0
-     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       12
-0
-     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       18
-0
-     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       24
-0
-     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       30
-0
-     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       36
-0
-     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       42
-0
-     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       48
-0
-     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               51
-8
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        60
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       120
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       180
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       240
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       300
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       360
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       420
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       480
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               518
 //
 
   Input files for usage example 2
@@ -282,8 +278,7 @@ XX
 KW   fau 1 gene.
 XX
 OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
-;
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
 OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
 OC   Homo.
 XX
@@ -341,79 +336,45 @@ FT                   /number=5
 FT   polyA_signal    1938..1943
 XX
 SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
-     ctaccatttt ccctctcgat tctatatgta cactcgggac aagttctcct gatcgaaaac        6
-0
-     ggcaaaacta aggccccaag taggaatgcc ttagttttcg gggttaacaa tgattaacac       12
-0
-     tgagcctcac acccacgcga tgccctcagc tcctcgctca gcgctctcac caacagccgt       18
-0
-     agcccgcagc cccgctggac accggttctc catccccgca gcgtagcccg gaacatggta       24
-0
-     gctgccatct ttacctgcta cgccagcctt ctgtgcgcgc aactgtctgg tcccgccccg       30
-0
-     tcctgcgcga gctgctgccc aggcaggttc gccggtgcga gcgtaaaggg gcggagctag       36
-0
-     gactgccttg ggcggtacaa atagcaggga accgcgcggt cgctcagcag tgacgtgaca       42
-0
-     cgcagcccac ggtctgtact gacgcgccct cgcttcttcc tctttctcga ctccatcttc       48
-0
-     gcggtagctg ggaccgccgt tcaggtaaga atggggcctt ggctggatcc gaagggcttg       54
-0
-     tagcaggttg gctgcggggt cagaaggcgc ggggggaacc gaagaacggg gcctgctccg       60
-0
-     tggccctgct ccagtcccta tccgaactcc ttgggaggca ctggccttcc gcacgtgagc       66
-0
-     cgccgcgacc accatcccgt cgcgatcgtt tctggaccgc tttccactcc caaatctcct       72
-0
-     ttatcccaga gcatttcttg gcttctctta caagccgtct tttctttact cagtcgccaa       78
-0
-     tatgcagctc tttgtccgcg cccaggagct acacaccttc gaggtgaccg gccaggaaac       84
-0
-     ggtcgcccag atcaaggtaa ggctgcttgg tgcgccctgg gttccatttt cttgtgctct       90
-0
-     tcactctcgc ggcccgaggg aacgcttacg agccttatct ttccctgtag gctcatgtag       96
-0
-     cctcactgga gggcattgcc ccggaagatc aagtcgtgct cctggcaggc gcgcccctgg      102
-0
-     aggatgaggc cactctgggc cagtgcgggg tggaggccct gactaccctg gaagtagcag      108
-0
-     gccgcatgct tggaggtgag tgagagagga atgttctttg aagtaccggt aagcgtctag      114
-0
-     tgagtgtggg gtgcatagtc ctgacagctg agtgtcacac ctatggtaat agagtacttc      120
-0
-     tcactgtctt cagttcagag tgattcttcc tgtttacatc cctcatgttg aacacagacg      126
-0
-     tccatgggag actgagccag agtgtagttg tatttcagtc acatcacgag atcctagtct      132
-0
-     ggttatcagc ttccacacta aaaattaggt cagaccaggc cccaaagtgc tctataaatt      138
-0
-     agaagctgga agatcctgaa atgaaactta agatttcaag gtcaaatatc tgcaactttg      144
-0
-     ttctcattac ctattgggcg cagcttctct ttaaaggctt gaattgagaa aagaggggtt      150
-0
-     ctgctgggtg gcaccttctt gctcttacct gctggtgcct tcctttccca ctacaggtaa      156
-0
-     agtccatggt tccctggccc gtgctggaaa agtgagaggt cagactccta aggtgagtga      162
-0
-     gagtattagt ggtcatggtg ttaggacttt ttttcctttc acagctaaac caagtccctg      168
-0
-     ggctcttact cggtttgcct tctccctccc tggagatgag cctgagggaa gggatgctag      174
-0
-     gtgtggaaga caggaaccag ggcctgatta accttccctt ctccaggtgg ccaaacagga      180
-0
-     gaagaagaag aagaagacag gtcgggctaa gcggcggatg cagtacaacc ggcgctttgt      186
-0
-     caacgttgtg cccacctttg gcaagaagaa gggccccaat gccaactctt aagtcttttg      192
-0
-     taattctggc tttctctaat aaaaaagcca cttagttcag tcatcgcatt gtttcatctt      198
-0
-     tacttgcaag gcctcaggga gaggtgtgct tctcgg                                201
-6
+     ctaccatttt ccctctcgat tctatatgta cactcgggac aagttctcct gatcgaaaac        60
+     ggcaaaacta aggccccaag taggaatgcc ttagttttcg gggttaacaa tgattaacac       120
+     tgagcctcac acccacgcga tgccctcagc tcctcgctca gcgctctcac caacagccgt       180
+     agcccgcagc cccgctggac accggttctc catccccgca gcgtagcccg gaacatggta       240
+     gctgccatct ttacctgcta cgccagcctt ctgtgcgcgc aactgtctgg tcccgccccg       300
+     tcctgcgcga gctgctgccc aggcaggttc gccggtgcga gcgtaaaggg gcggagctag       360
+     gactgccttg ggcggtacaa atagcaggga accgcgcggt cgctcagcag tgacgtgaca       420
+     cgcagcccac ggtctgtact gacgcgccct cgcttcttcc tctttctcga ctccatcttc       480
+     gcggtagctg ggaccgccgt tcaggtaaga atggggcctt ggctggatcc gaagggcttg       540
+     tagcaggttg gctgcggggt cagaaggcgc ggggggaacc gaagaacggg gcctgctccg       600
+     tggccctgct ccagtcccta tccgaactcc ttgggaggca ctggccttcc gcacgtgagc       660
+     cgccgcgacc accatcccgt cgcgatcgtt tctggaccgc tttccactcc caaatctcct       720
+     ttatcccaga gcatttcttg gcttctctta caagccgtct tttctttact cagtcgccaa       780
+     tatgcagctc tttgtccgcg cccaggagct acacaccttc gaggtgaccg gccaggaaac       840
+     ggtcgcccag atcaaggtaa ggctgcttgg tgcgccctgg gttccatttt cttgtgctct       900
+     tcactctcgc ggcccgaggg aacgcttacg agccttatct ttccctgtag gctcatgtag       960
+     cctcactgga gggcattgcc ccggaagatc aagtcgtgct cctggcaggc gcgcccctgg      1020
+     aggatgaggc cactctgggc cagtgcgggg tggaggccct gactaccctg gaagtagcag      1080
+     gccgcatgct tggaggtgag tgagagagga atgttctttg aagtaccggt aagcgtctag      1140
+     tgagtgtggg gtgcatagtc ctgacagctg agtgtcacac ctatggtaat agagtacttc      1200
+     tcactgtctt cagttcagag tgattcttcc tgtttacatc cctcatgttg aacacagacg      1260
+     tccatgggag actgagccag agtgtagttg tatttcagtc acatcacgag atcctagtct      1320
+     ggttatcagc ttccacacta aaaattaggt cagaccaggc cccaaagtgc tctataaatt      1380
+     agaagctgga agatcctgaa atgaaactta agatttcaag gtcaaatatc tgcaactttg      1440
+     ttctcattac ctattgggcg cagcttctct ttaaaggctt gaattgagaa aagaggggtt      1500
+     ctgctgggtg gcaccttctt gctcttacct gctggtgcct tcctttccca ctacaggtaa      1560
+     agtccatggt tccctggccc gtgctggaaa agtgagaggt cagactccta aggtgagtga      1620
+     gagtattagt ggtcatggtg ttaggacttt ttttcctttc acagctaaac caagtccctg      1680
+     ggctcttact cggtttgcct tctccctccc tggagatgag cctgagggaa gggatgctag      1740
+     gtgtggaaga caggaaccag ggcctgatta accttccctt ctccaggtgg ccaaacagga      1800
+     gaagaagaag aagaagacag gtcgggctaa gcggcggatg cagtacaacc ggcgctttgt      1860
+     caacgttgtg cccacctttg gcaagaagaa gggccccaat gccaactctt aagtcttttg      1920
+     taattctggc tttctctaat aaaaaagcca cttagttcag tcatcgcatt gtttcatctt      1980
+     tacttgcaag gcctcaggga gaggtgtgct tctcgg                                2016
 //
 
    You can specifiy a file of ranges to extract by giving the '-regions'
-   qualifier the value '@' followed by the name of the file containing
-   the ranges. (eg: '-regions @myfile').
+   qualifier the value '@' followed by the name of the file containing the
+   ranges. (eg: '-regions @myfile').
 
    The format of the range file is:
      * Comment lines start with '#' in the first column.
@@ -433,6 +394,7 @@ SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
  4   5       this is like 12-23, but smaller
 67   10348   interesting region
 
+
 Output file format
 
    The output is a normal sequence file.
@@ -451,11 +413,11 @@ ctcgactccat
 >X65921 X65921.1 H.sapiens fau 1 gene
 tccctctcgatacactcgggacaagttagggc
 
-   If the option '-separate' is used then each specified region is
-   written to the output file as a separate sequence. The name of the
-   sequence is created from the name of the original sequence with the
-   start and end positions of the range appended with underscore
-   characters between them,
+   If the option '-separate' is used then each specified region is written
+   to the output file as a separate sequence. The name of the sequence is
+   created from the name of the original sequence with the start and end
+   positions of the range appended with underscore characters between
+   them,
 
    For example: "XYZ region 2 to 34" is written as: "XYZ_2_34"
 
@@ -467,9 +429,9 @@ Notes
 
    extractseq allows you to specify one or more regions of a sequence to
    extract sub-sequences from to build up a contiguous output sequence.
-   This is modelled on the cell's process of splicing out exons from
-   mRNA, but the program is generally applicable to any cutting and
-   splicing or editing operation on a single sequence.
+   This is modelled on the cell's process of splicing out exons from mRNA,
+   but the program is generally applicable to any cutting and splicing or
+   editing operation on a single sequence.
 
    Where the -regions option is used to specify output as separate
    sequences, the name of the sequence is created from the name of the
@@ -557,7 +519,7 @@ See also
 
 Author(s)
 
-   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   Gary Williams (gwilliam (c) rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 

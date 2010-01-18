@@ -206,8 +206,8 @@ int main(int argc, char **argv)
 
 
    /* get conversion table and scoring matrix */
-    cvt = ajMatrixCvt(matrix);
-    sub = ajMatrixArray(matrix);
+    cvt = ajMatrixGetCvt(matrix);
+    sub = ajMatrixGetMatrix(matrix);
 
     /* get the number of the reference sequence */
     nrefseq = showalign_Getrefseq(refseq, seqset);

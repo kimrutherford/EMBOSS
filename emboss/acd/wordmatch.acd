@@ -1,6 +1,7 @@
 application: wordmatch [
   documentation: "Finds regions of identity (exact matches) of two sequences"
   groups: "Alignment:Local"
+  relations: "EDAM: Sequence word comparison"
 ]
 
 section: input [
@@ -8,13 +9,16 @@ section: input [
   type: "page"
 ]
 
-  sequence: asequence [
+  seqset: asequence [
     parameter: "Y"
-    type: "any"
+    relations: "EDAM: Sequence" 
+    aligned: "N"  
+    type: "any"                                         
   ]
 
-  sequence: bsequence [
+  seqall: bsequence [
     parameter: "Y"
+    relations: "EDAM: Sequence"                                            
     type: "@($(acdprotein) ? stopprotein : nucleotide)"
   ]
 
@@ -30,6 +34,7 @@ section: required [
     default: "4"
     minimum: "2"
     information: "Word size"
+    relations: "EDAM: Generic integer"                                     
   ]
 
 endsection: required
@@ -39,23 +44,53 @@ section: output [
   type: "page"
 ]
 
+  toggle: dumpalign [
+    default: "Y"
+    additional: "Y"
+    information: "Dump all matches as alignments"
+    relations: "EDAM: Generic boolean"                                     
+  ]
+  
   align: outfile [
-    parameter: "Y"
+    standard: "$(dumpalign)"
+    nullok: "@(!$(dumpalign))"
+    nulldefault: "@(!$(dumpalign))"
     aformat: "match"
     minseqs: "2"
-    maxseqs: "2"
+    relations: "EDAM: Pairwise sequence alignment data"                    
+  ]
+  
+  outfile: logfile [
+    additional: "Y"
+    default: "wordmatch.log"
+    knowntype: "wordmatch log"
+    information: "Wordmatch log output file"
+    help: "Log file reports statistics on kmer frequency
+                  distribution and number of matches in the seqall sequences
+                  for each sequence in the seqset"
+    relations:  "EDAM: EMBOSS wordmatch log file"                 
+  ]
+  
+  toggle: dumpfeat [
+    default: "Y"
+    additional: "Y"
+    information: "Dump all matches as feature files"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   featout: aoutfeat [
-    parameter: "Y"
-    ofname: "$(asequence.name)"
+    standard: "$(dumpfeat)"
+    nullok: "@(!$(dumpfeat))"
     offormat: "gff"
+    relations: "EDAM: Sequence feature table"                              
   ]
 
   featout: boutfeat [
-    parameter: "Y"
+    standard: "$(dumpfeat)"
+    nullok: "@(!$(dumpfeat))"
     ofname: "$(bsequence.name)"
     offormat: "gff"
+    relations: "EDAM: Sequence feature table"                              
   ]
 
 endsection: output

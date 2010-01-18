@@ -1,5 +1,4 @@
-
-                                  abiview 
+                                   abiview
 
 
 
@@ -17,27 +16,31 @@ Function
 Description
 
    abiview reads in an ABI sequencer trace file and graphically displays
-   the data. The probabilities of each of the 4 nucleotide bases along
-   the sequencing run is plotted and the assigned nucleotide (G, A, T, C
-   or N) from the ABI file is overlayed on the graphs. The complete
-   sequence is written to an output file.
+   the data. The probabilities of each of the 4 nucleotide bases along the
+   sequencing run is plotted and the assigned nucleotide (G, A, T, C or N)
+   from the ABI file is overlayed on the graphs. The complete sequence is
+   written to an output file.
 
 Usage
 
    Here is a sample session with abiview
 
 
-% abiview -graph cps 
+% abiview -graph cps
 Display the trace in an ABI sequencer file
 ABI sequencing trace file: abiview.abi
-nucleotide output sequence [abiview.fasta]: 
+nucleotide output sequence [abiview.fasta]:
 
 Created abiview.ps
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Display the trace in an ABI sequencer file
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     ABI sequencing trace file
@@ -45,7 +48,7 @@ Command line arguments
                                   filename and optional format (output USA)
    -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, das, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif)
 
    Additional (Optional) qualifiers:
    -startbase          integer    [0] First base to report or display (Integer
@@ -59,8 +62,8 @@ Command line arguments
    -window             integer    [40] Sequence display window size (Any
                                   integer value)
    -bases              string     [GATC] Base graphs to be displayed (Any
-                                  string is accepted, matching regular
-                                  expression /[GATC]+/)
+                                  string, matching regular expression
+                                  /[GATC]+/)
 
    Advanced (Unprompted) qualifiers:
    -separate           boolean    [N] Separate the trace graphs for the 4
@@ -98,13 +101,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -150,12 +155,12 @@ TCCGGTTGTTGAGCAGGGCTCTGTTATGTAGGATATCTCAGANTAACAGACCCCAGGT
 
    [abiview results]
 
-   The horizontal scale of the output image labelled 'Residue Position'
-   is only a very approximate indication of the spacing of residues in
-   the image. The real residue spacing is variable, as it relies on the
-   speed with which the oligo-nucleotides are eluted in the ABI
-   sequencer. Do not be surprised to see the nucleotide signals spaced at
-   a much greater distance than the horizontal scale might suggest.
+   The horizontal scale of the output image labelled 'Residue Position' is
+   only a very approximate indication of the spacing of residues in the
+   image. The real residue spacing is variable, as it relies on the speed
+   with which the oligo-nucleotides are eluted in the ABI sequencer. Do
+   not be surprised to see the nucleotide signals spaced at a much greater
+   distance than the horizontal scale might suggest.
 
 Data files
 
@@ -167,8 +172,8 @@ Notes
    run of an ABI nucleotide sequencer machine. A trace data file is what
    you get back from having some DNA sequenced, for example, by a 3730XL
    sequencer. The files are in "binary" format and so cannot be viewed
-   directly on screen. To inspect the sequencing data you must use a
-   trace viewer such as abiview. Another good trace viewer is FinchTV
+   directly on screen. To inspect the sequencing data you must use a trace
+   viewer such as abiview. Another good trace viewer is FinchTV
    (http://www.geospiza.com/finchtv/). It is stand-alone program and is
    freely available.
 
@@ -194,39 +199,38 @@ Known bugs
 
 See also
 
-   Program name     Description
-   cirdna           Draws circular maps of DNA constructs
-   lindna           Draws linear maps of DNA constructs
-   pepnet           Draw a helical net for a protein sequence
-   pepwheel         Draw a helical wheel diagram for a protein sequence
-   prettyplot       Draw a sequence alignment with pretty formatting
-   prettyseq        Write a nucleotide sequence and its translation to file
-   remap            Display restriction enzyme binding sites in a nucleotide
-                    sequence
-   seealso          Finds programs with similar function to a specified program
-   showalign        Display a multiple sequence alignment in pretty format
-   showdb           Displays information on configured databases
-   showfeat         Display features of a sequence in pretty format
-   showpep          Displays protein sequences with features in pretty format
-   showseq          Displays sequences with features in pretty format
-   sixpack          Display a DNA sequence with 6-frame translation and ORFs
-   textsearch       Search the textual description of sequence(s)
+                   Program name                            Description
+                   cirdna       Draws circular maps of DNA constructs
+                   lindna       Draws linear maps of DNA constructs
+                   pepnet       Draw a helical net for a protein sequence
+                   pepwheel     Draw a helical wheel diagram for a protein sequence
+                   prettyplot   Draw a sequence alignment with pretty formatting
+                   prettyseq    Write a nucleotide sequence and its translation to file
+                   remap        Display restriction enzyme binding sites in a nucleotide sequence
+                   seealso      Finds programs with similar function to a specified program
+                   showalign    Display a multiple sequence alignment in pretty format
+                   showdb       Displays information on configured databases
+                   showfeat     Display features of a sequence in pretty format
+                   showpep      Displays protein sequences with features in pretty format
+                   showseq      Displays sequences with features in pretty format
+                   sixpack      Display a DNA sequence with 6-frame translation and ORFs
+                   textsearch   Search the textual description of sequence(s)
 
 Author(s)
 
-   Tim Carver (tcarver © rfcgr.mrc.ac.uk)
-   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
-   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+   Tim              Carver (tcarver (c) rfcgr.mrc.ac.uk)
+   MRC              Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome           Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 History
 
-   Written (January 2001) - Tim Carver
+                    Written (January 2001) - Tim Carver
 
 Target users
 
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
 
 Comments
 
-   None
+                    None

@@ -1,6 +1,7 @@
 application: extractalign [
   documentation: "Extract regions from a sequence alignment"
   groups: "Edit"
+  relations: "EDAM: Sequence extraction and generation"
 ]
 
 section: input [
@@ -12,6 +13,7 @@ section: input [
     parameter: "Y"
     type: "gapany"
     aligned: "Y"
+    relations: "EDAM: Sequence alignment data"                             
   ]
 
 endsection: input
@@ -34,6 +36,7 @@ section: required [
            1:45, 67=99;765..888 \
            1,5,8,10,23,45,57,99"
     expected: "Whole sequence"
+    relations: "EDAM: Generic integer range"                               
   ]
 
 endsection: required
@@ -45,6 +48,7 @@ section: output [
 
   seqoutall: outseq [
     parameter: "Y"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: output

@@ -1,5 +1,4 @@
-
-                                   pscan 
+                                    pscan
 
 
 
@@ -16,8 +15,8 @@ Function
 
 Description
 
-   pscan reads one or more protein sequences and searches them against
-   the PRINTS database of diagnostic protein signatures (fingerprints). A
+   pscan reads one or more protein sequences and searches them against the
+   PRINTS database of diagnostic protein signatures (fingerprints). A
    fingerprint is a group of conserved motifs or elements that together
    form a diagnostic signature for a particular protein family. The
    minimum and maximum number of elements per fingerprint may be
@@ -33,30 +32,34 @@ Description
 Algorithm
 
    The matrix information used to scan a sequence is derived from the
-   final motif sets in the PRINTS database. The matrices are of the
-   simple frequency type and contain the number of times a residue occurs
-   in each position of a PRINTS alignment. Each matrix therefore has a
-   highest possible score, being the sum of the maximum score of each
-   column. A match to a window over the input sequence is obtained if it
-   has a score equal to or greater than the percentage of the maximum
-   score of the lowest scoring sequence in the final motif set.
+   final motif sets in the PRINTS database. The matrices are of the simple
+   frequency type and contain the number of times a residue occurs in each
+   position of a PRINTS alignment. Each matrix therefore has a highest
+   possible score, being the sum of the maximum score of each column. A
+   match to a window over the input sequence is obtained if it has a score
+   equal to or greater than the percentage of the maximum score of the
+   lowest scoring sequence in the final motif set.
 
 Usage
 
    Here is a sample session with pscan
 
 
-% pscan 
+% pscan
 Scans protein sequence(s) with fingerprints from the PRINTS database
 Input protein sequence(s): tsw:opsd_human
-Minimum number of elements per fingerprint [2]: 
-Maximum number of elements per fingerprint [20]: 
-Output file [opsd_human.pscan]: 
+Minimum number of elements per fingerprint [2]:
+Maximum number of elements per fingerprint [20]:
+Output file [opsd_human.pscan]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Scans protein sequence(s) with fingerprints from the PRINTS database
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -98,13 +101,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -266,11 +271,11 @@ Not all elements match but those that do are in order
 CLASS 4
 Remaining partial matches
 
+
    The program reports hits in four classes.
 
    Class1:
-          Matches where all elements of a motif exist in the correct
-          order
+          Matches where all elements of a motif exist in the correct order
 
    Class2:
           Matches where all elements exist but some are in the incorrect
@@ -301,12 +306,12 @@ Notes
    sequences (especially from genome projects).
 
    Usually the motifs or elements do not overlap, but are separated along
-   a sequence, though they may be contiguous in 3D-space. Fingerprints
-   can encode protein folds and functionalities more flexibly and
-   powerfully than can single motifs, full diagnostic potency deriving
-   from the mutual context provided by motif neighbours. Diagnostically,
-   this is more powerful than using single motifs by virtue of the
-   biological context afforded by matching motif neighbours.
+   a sequence, though they may be contiguous in 3D-space. Fingerprints can
+   encode protein folds and functionalities more flexibly and powerfully
+   than can single motifs, full diagnostic potency deriving from the
+   mutual context provided by motif neighbours. Diagnostically, this is
+   more powerful than using single motifs by virtue of the biological
+   context afforded by matching motif neighbours.
 
    The home web page of the PRINTS database is:
    http://www.bioinf.man.ac.uk/dbbrowser/PRINTS/
@@ -314,12 +319,11 @@ Notes
 References
 
     1. Attwood, T.K., Flower, D.R., Lewis, A.P., Mabey, J.E., Morgan,
-       S.R., Scordis, P., Selley, J. and Wright, W. (1999) PRINTS
-       prepares for the new millennium. Nucleic Acids Research, 27(1),
-       220-225.
-    2. Attwood, T.K., Beck, M.E., Flower, D.R., Scordis, P. and Selley,
-       J. (1998) The PRINTS protein fingerprint database in its fifth
-       year. Nucleic Acids Research, 26(1), 304-308.
+       S.R., Scordis, P., Selley, J. and Wright, W. (1999) PRINTS prepares
+       for the new millennium. Nucleic Acids Research, 27(1), 220-225.
+    2. Attwood, T.K., Beck, M.E., Flower, D.R., Scordis, P. and Selley, J.
+       (1998) The PRINTS protein fingerprint database in its fifth year.
+       Nucleic Acids Research, 26(1), 304-308.
     3. Attwood, T.K., Beck, M.E., Bleasby, A.J., Degtyarenko, K., Michie,
        A.D. and Parry-Smith, D.J. (1997) Novel developments with the
        PRINTS protein motif fingerprint database. Nucleic Acids Research,
@@ -329,42 +333,43 @@ References
     5. Bleasby, A.J., Akrigg, D.A. and Attwood, T.K. (1994) OWL - A
        non-redundant composite protein sequence database. Nucleic Acids
        Research, 22(17), 3574-77.
-    6. Bleasby, A.J. and Wootton, J.C. (1990) Constructing validated,
-       non- redundant composite protein sequence databases. Protein
+    6. Bleasby, A.J. and Wootton, J.C. (1990) Constructing validated, non-
+       redundant composite protein sequence databases. Protein
        Engineering, 3(3), 153-159.
-    7. Parry-Smith, D.J. and Attwood, T.K. (1992) ADSP - A new package
-       for computational sequence analysis. CABIOS, 8(5), 451-459.
+    7. Parry-Smith, D.J. and Attwood, T.K. (1992) ADSP - A new package for
+       computational sequence analysis. CABIOS, 8(5), 451-459.
     8. Attwood, T.K. and Findlay, J.B.C. (1994) Fingerprinting
        G-protein-coupled receptors. Prot.Engng. 7(2), 195-203.
-    9. Attwood, T.K. and Findlay, J.B.C. (1993) Design of a
-       discriminating finger- print for G-protein-coupled receptors.
-       Prot.Engng. 6(2) 167-176.
+    9. Attwood, T.K. and Findlay, J.B.C. (1993) Design of a discriminating
+       finger- print for G-protein-coupled receptors. Prot.Engng. 6(2)
+       167-176.
    10. Akrigg, D., Attwood, T.K., Bleasby, A.J., Findlay, J.B.C, North,
        A.C.T., Maughan, N.A., Parry-Smith, D.J., Perkins, D.N. and
        Wootton, J.C. (1992) SERPENT - An information storage and analysis
        resource for protein sequences. CABIOS 8(3) 295-296.
    11. Parry-Smith, D.J. and Attwood, T.K. (1991) SOMAP - A novel
-       interactive approach to multiple protein sequence aligment.
-       CABIOS, 7(2), 233-235.
+       interactive approach to multiple protein sequence aligment. CABIOS,
+       7(2), 233-235.
    12. Perkins, D.N. and Attwood, T.K. (1995) VISTAS - A package for
-       VIsualising STructures And Sequences of proteins. J.Mol.Graph.,
-       13, 73-75.
+       VIsualising STructures And Sequences of proteins. J.Mol.Graph., 13,
+       73-75.
    13. Parry-Smith, D.J., Payne, A.W.R, Michie, A.D. and Attwood, T.K.
        (1998) CINEMA - A novel Colour INteractive Editor for Multiple
        Alignments. Gene, 211(2), GC45-56.
 
 Warnings
 
-   The data files must have been created before running this program.
-   This is done by running the printsextract program with the prints.dat
-   file from a PRINTS release. You may have to ask your system manager to
-   do this.
+   The data files must have been created before running this program. This
+   is done by running the printsextract program with the prints.dat file
+   from a PRINTS release. You may have to ask your system manager to do
+   this.
 
 Diagnostic Error Messages
 
    If you get the following EMBOSS FATAL ERROR message:
 
 "prints.mat file not found. Create it with printsextract."
+
 
    then your local PRINTS data has not been set up correctly in your
    EMBOSS DATA directory. Use 'printsextract' to do this.
@@ -399,7 +404,7 @@ See also
 
 Author(s)
 
-   Alan Bleasby (ajb © ebi.ac.uk)
+   Alan Bleasby (ajb (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

@@ -1,6 +1,7 @@
 application: prettyplot [
   documentation: "Draw a sequence alignment with pretty formatting"
   groups: "Alignment:Multiple, Display"
+  relations: "EDAM: Sequence alignment reformatting"
 ]
 
 section: input [
@@ -12,6 +13,7 @@ section: input [
     parameter: "Y"
     type: "gapany"
     aligned: "Y"
+    relations: "EDAM: Sequence alignment data"                             
   ]
 
   matrix: matrixfile [
@@ -22,6 +24,7 @@ section: input [
            sequences. By default it is the file 'EBLOSUM62' (for proteins) or
            the file 'EDNAFULL' (for nucleic sequences). These files are
            found in the 'data' directory of the EMBOSS installation."
+    relations: "EDAM: Integer comparison matrix"                           
   ]
 
 endsection: input
@@ -37,6 +40,7 @@ section: additional [
     information: "Number of residues to be displayed on each
                   line"
     help: "The number of residues to be displayed on each line"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: resbreak [
@@ -46,12 +50,14 @@ section: additional [
     information: "Residues before a space"
     default: "$(residuesperline)"
     expected: "Same as -residuesperline to give no breaks"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   boolean: ccolours [
     additional: "Y"
     default: "Y"
     information: "Colour residues by their consensus value."
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   string: cidentity [
@@ -59,6 +65,7 @@ section: additional [
     information: "Colour to display identical residues (RED)"
     default: "RED"
     knowntype: "plot colour"
+    relations:  "EDAM: Generic enumerated string"                      
   ]
 
   string: csimilarity [
@@ -66,6 +73,7 @@ section: additional [
     information: "Colour to display similar residues (GREEN)"
     default: "GREEN"
     knowntype: "plot colour"
+    relations:  "EDAM: Generic enumerated string"                      
   ]
 
   string: cother [
@@ -73,12 +81,14 @@ section: additional [
     information: "Colour to display other residues (BLACK)"
     default: "BLACK"
     knowntype: "plot colour"
+    relations:  "EDAM: Generic enumerated string"                      
   ]
 
   boolean: docolour [
     additional: "Y"
     information: "Colour residues by table oily, amide etc."
     default: "N"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   string: shade [
@@ -98,6 +108,7 @@ section: additional [
     minlength: "0"
     knowntype: "plot shading"
     pattern: "^([BPLW]{4})?$"
+    relations:  "EDAM: Generic enumerated string"                      
   ]
 
   array: pair [
@@ -109,6 +120,7 @@ section: additional [
     size: "3"
     sumtest: "N"
     knowntype: "threshold identity similar related"
+    relations:  "EDAM: Generic float array"                            
   ]
 
   integer: identity [
@@ -117,18 +129,21 @@ section: additional [
                   sequences."
     default: "0"
     minimum: "0"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   boolean: box [
     additional: "Y"
     information: "Display prettyboxes"
     default: "Y"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: boxcol [
     additional: "Y"
     information: "Colour the background in the boxes"
     default: "N"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   string: boxuse [
@@ -136,30 +151,35 @@ section: additional [
     information: "Colour to be used for background. (GREY)"
     default: "GREY"
     knowntype: "plot colour"
+    relations:  "EDAM: Generic enumerated string"                      
   ]
 
   boolean: name [
     additional: "Y"
     information: "Display the sequence names"
     default: "Y"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   integer: maxnamelen [
     additional: "Y"
     information: "Margin size for the sequence name."
     default: "10"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   boolean: number [
     additional: "Y"
     information: "Display the residue number"
     default: "Y"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: listoptions [
     additional: "Y"
     information: "Display the date and options used"
     default: "Y"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   float: plurality [
@@ -167,6 +187,7 @@ section: additional [
     information: "Plurality check value (totweight/2)"
     default: "@( $(sequences.totweight) / 2)"
     expected: "Half the total sequence weighting"
+    relations: "EDAM: Generic float"                                       
   ]
 
   section: consensussection [
@@ -178,12 +199,14 @@ section: additional [
       additional: "Y"
       information: "Display the consensus"
       default: "N"
+    relations: "EDAM: Generic boolean"                                     
     ]
 
     boolean: collision [
       additional: "Y"
       information: "Allow collisions in calculating consensus"
       default: "Y"
+    relations: "EDAM: Generic boolean"                                     
     ]
 
     list: alternative [
@@ -209,6 +232,7 @@ section: additional [
       default: "0"
       minimum: "1"
       maximum: "1"
+    relations: "EDAM: Generic string array"                                
     ]
 
   endsection: consensussection
@@ -217,12 +241,14 @@ section: additional [
     additional: "Y"
     information: "Print residue scores"
     default: "-1"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   boolean: portrait [
     additional: "Y"
     information: "Set page to Portrait"
     default: "N"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: additional
@@ -235,6 +261,7 @@ section: output [
   graph: graph [
     standard: "Y"
     gdesc: "Pretty plot"
+    relations: "EDAM: EMBOSS graph file"                                   
   ]
 
 endsection: output

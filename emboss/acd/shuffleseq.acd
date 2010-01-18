@@ -2,6 +2,7 @@ application: shuffleseq [
   documentation: "Shuffles a set of sequences maintaining
                   composition"
   groups: "Nucleic:Mutation, Protein:Mutation"
+  relations: "EDAM: Sequence mutation and randomisation"
 ]
 
 section: input [
@@ -12,6 +13,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "any"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: input
@@ -24,6 +26,7 @@ section: advanced [
   integer: shuffle [
     default: "1"
     information: "Number of shuffles"
+    relations: "EDAM: Generic integer"                                     
   ]
 
 endsection: advanced
@@ -35,6 +38,7 @@ section: output [
 
   seqoutall: outseq [
     parameter: "Y"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: output

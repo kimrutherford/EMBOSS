@@ -1,5 +1,4 @@
-
-                                 pepwindow 
+                                  pepwindow
 
 
 
@@ -21,31 +20,35 @@ Description
 
 Algorithm
 
-   pepwindow calculates hydropathy in windows of a specified size over
-   the input sequence.
+   pepwindow calculates hydropathy in windows of a specified size over the
+   input sequence.
 
 Usage
 
    Here is a sample session with pepwindow
 
 
-% pepwindow tsw:opsd_human 
+% pepwindow tsw:opsd_human
 Draw a hydropathy plot for a protein sequence
 Graph type [x11]: cps
 
 Created pepwindow.ps
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
 
+Draw a hydropathy plot for a protein sequence
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Protein sequence filename and optional
                                   format, or reference (input USA)
    -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, das, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif)
 
    Additional (Optional) qualifiers:
    -datafile           datafile   [Enakai.dat] AAINDEX entry data file
@@ -89,13 +92,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -239,11 +244,12 @@ Data files
 
 % embossdata -fetch -file Exxx.dat
 
+
    Users can provide their own data files in their own directories.
    Project specific files can be put in the current directory, or for
-   tidier directory listings in a subdirectory called ".embossdata".
-   Files for all EMBOSS runs can be put in the user's home directory, or
-   again in a subdirectory called ".embossdata".
+   tidier directory listings in a subdirectory called ".embossdata". Files
+   for all EMBOSS runs can be put in the user's home directory, or again
+   in a subdirectory called ".embossdata".
 
    The directories are searched in the following order:
      * . (your current directory)
@@ -284,8 +290,8 @@ I   A/L    R/K    N/M    D/F    C/P    Q/S    E/T    G/W    H/Y    I/V
 
    pepwindow can use any of the "Nakai et al." database of amino acid
    parameters - these used to be in a database called "NAKAI" but are now
-   in one called "AAINDEX". EMBOSS has a program aaindexextract that
-   takes data from this database and makes it available for pepwindow.
+   in one called "AAINDEX". EMBOSS has a program aaindexextract that takes
+   data from this database and makes it available for pepwindow.
 
    1. FTP the AAINDEX database from Japan:
    ftp://ftp.genome.ad.jp/pub/db/genomenet/aaindex/aaindex1
@@ -306,6 +312,7 @@ References
 Kyte, J. and Doolittle, R.F.
 A simple method for displaying the hydropathic character of a protein
 J. Mol. Biol. 157, 105-132 (1982)
+
 
 Warnings
 
@@ -330,8 +337,8 @@ Known bugs
 See also
 
    Program name     Description
-   backtranambig    Back-translate a protein sequence to ambiguous
-                    nucleotide sequence
+   backtranambig    Back-translate a protein sequence to ambiguous nucleotide
+                    sequence
    backtranseq      Back-translate a protein sequence to a nucleotide sequence
    charge           Draw a protein charge plot
    checktrans       Reports STOP codons and ORF statistics of a protein
@@ -346,16 +353,16 @@ See also
    pepstats         Calculates statistics of protein properties
    pepwindowall     Draw Kyte-Doolittle hydropathy plot for a protein
                     alignment
-   wordcount        Count and extract unique words in DNA sequence(s)
+   wordcount        Count and extract unique words in molecular sequence(s)
 
    pepwindow can use any of the "Nakai et al." database of amino acid
    parameters - these are in a database called "AAINDEX". The program
-   aaindexextract takes data from this database and makes it available
-   for pepwindow.
+   aaindexextract takes data from this database and makes it available for
+   pepwindow.
 
 Author(s)
 
-   Ian Longden (il © sanger.ac.uk)
+   Ian Longden (il (c) sanger.ac.uk)
    Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
    CB10 1SA, UK.
 

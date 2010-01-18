@@ -1,3 +1,6 @@
+Finds neighbouring pairs of features in sequence(s)
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
                                   reference (input USA)
@@ -13,7 +16,7 @@
                                   If you wish to allow more than one type,
                                   separate their names with the character '|',
                                   eg:
-                                  *UTR | intron (Any string is accepted)
+                                  *UTR | intron (Any string)
    -btype              string     [*] By default every feature in the feature
                                   table is allowed. You can set this to be any
                                   feature type you wish to allow.
@@ -26,7 +29,7 @@
                                   If you wish to allow more than one type,
                                   separate their names with the character '|',
                                   eg:
-                                  *UTR | intron (Any string is accepted)
+                                  *UTR | intron (Any string)
    -minrange           integer    [0] If this is greater or equal to
                                   'maxrange', then no min or max range is
                                   specified (Any integer value)
@@ -48,7 +51,7 @@
                                   If you wish to allow more than one source,
                                   separate their names with the character '|',
                                   eg:
-                                  gene* | embl (Any string is accepted)
+                                  gene* | embl (Any string)
    -asense             menu       [0] By default any feature sense is allowed.
                                   You can set this to match the required
                                   sense. (Values: 0 (Any sense); + (Forward
@@ -79,7 +82,7 @@
                                   If you wish to allow more than one tag,
                                   separate their names with the character '|',
                                   eg:
-                                  gene | label (Any string is accepted)
+                                  gene | label (Any string)
    -avalue             string     [*] Tag values are the values associated
                                   with a feature tag. Tags are the types of
                                   extra values that a feature may have. For
@@ -103,7 +106,7 @@
                                   If you wish to allow more than one tag
                                   value, separate their names with the
                                   character '|', eg:
-                                  pax* | 10 (Any string is accepted)
+                                  pax* | 10 (Any string)
    -bsource            string     [*] By default any feature source in the
                                   feature table is allowed. You can set this
                                   to match any feature source you wish to
@@ -116,7 +119,7 @@
                                   If you wish to allow more than one source,
                                   separate their names with the character '|',
                                   eg:
-                                  gene* | embl (Any string is accepted)
+                                  gene* | embl (Any string)
    -bsense             menu       [0] By default any feature sense is allowed.
                                   You can set this to match the required
                                   sense. (Values: 0 (Any sense); + (Forward
@@ -147,7 +150,7 @@
                                   If you wish to allow more than one tag,
                                   separate their names with the character '|',
                                   eg:
-                                  gene | label (Any string is accepted)
+                                  gene | label (Any string)
    -bvalue             string     [*] Tag values are the values associated
                                   with a feature tag. Tags are the types of
                                   extra values that a feature may have. For
@@ -171,7 +174,7 @@
                                   If you wish to allow more than one tag
                                   value, separate their names with the
                                   character '|', eg:
-                                  pax* | 10 (Any string is accepted)
+                                  pax* | 10 (Any string)
    -overlap            menu       [A] This allows you to specify the allowed
                                   overlaps of the features A and B.
                                   You can allow any or no overlaps, specify
@@ -218,7 +221,7 @@
                                   list of the Swissprot feature types. If you
                                   specify an invalid feature type name, then
                                   the default name 'misc_feature' is used.
-                                  (Any string is accepted)
+                                  (Any string)
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
@@ -260,11 +263,12 @@
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 

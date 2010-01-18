@@ -113,6 +113,7 @@ int main(int argc, char **argv)
 	ajFilelistAddPathWildRecursiveIgnore(flocs, path,filename,rlist);
 	if(!ajListPop(flocs,(void **)&t))
 	    ajFatal("The file '%S' does not exist.", filename);
+
 	/* fetch it */
         datafile = ajFileNewInNameS(t);
         newdatafile = ajFileNewOutNameS(filename);
@@ -120,15 +121,7 @@ int main(int argc, char **argv)
             ajWriteline(newdatafile, line);
         ajFileClose(&datafile);
         ajFileClose(&newdatafile);
-        /*
-	ajStrAppendC(&cmd, "cp ");
-	ajStrAppendS(&cmd, t);
-	ajStrAppendC(&cmd, " ");
-	ajStrAppendS(&cmd, filename);
-	result = system(ajStrGetPtr(cmd));
-	if(result)
-	    ajFatal("File not copied.");
-        */
+
 	ajFmtPrintF(outf, "File '%S' has been copied successfully.\n", t);
 	ajStrDel(&t);
 	ajStrDel(&cmd);

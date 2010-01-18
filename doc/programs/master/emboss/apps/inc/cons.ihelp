@@ -1,3 +1,6 @@
+Create a consensus sequence from a multiple alignment
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers:
   [-sequence]          seqset     File containing a sequence alignment.
   [-outseq]            seqout     [<sequence>.<format>] Sequence filename and
@@ -29,8 +32,7 @@
                                   which the consensus is is upper-case and
                                   below which the consensus is in lower-case.
                                   (Any numeric value)
-   -name               string     Name of the consensus sequence (Any string
-                                  is accepted)
+   -name               string     Name of the consensus sequence (Any string)
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
@@ -71,11 +73,12 @@
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 

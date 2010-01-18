@@ -1,3 +1,6 @@
+Display basic information about sequences
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     (Gapped) sequence(s) filename and optional
                                   format, or reference (input USA)
@@ -23,8 +26,7 @@
                                   individual records in the text output file.
                                   It could be a space character, a tab
                                   character, a pipe character or any other
-                                  character or string. (Any string is
-                                  accepted)
+                                  character or string. (Any string)
    -only               boolean    [N] This is a way of shortening the command
                                   line if you only want a few things to be
                                   displayed. Instead of specifying:
@@ -40,7 +42,7 @@
    -name               boolean    [@(!$(only))] Display 'name' column
    -accession          boolean    [@(!$(only))] Display 'accession' column
    -gi                 boolean    [N] Display 'GI' column
-   -version            boolean    [N] Display 'version' column
+   -seqversion         boolean    [N] Display 'version' column
    -type               boolean    [@(!$(only))] Display 'type' column
    -length             boolean    [@(!$(only))] Display 'length' column
    -pgc                boolean    [@(!$(only))] Display 'percent GC content'
@@ -76,11 +78,12 @@
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 

@@ -282,8 +282,13 @@ public class ShowSavedResults extends JFrame
 	    {
 	      setCursor(cbusy);
 	      ResultList thisres = new ResultList(mysettings,
-                                   sel,"show_saved_results"); 
-              new ShowResultSet(thisres.hash(),sel,mysettings);
+                                   sel,"show_saved_results");
+	      if(thisres.hash().size()==0)
+	          JOptionPane.showMessageDialog(sp,
+              "This application launch '"+sel+
+              "' didn't produce any result files.");
+	      else
+	      new ShowResultSet(thisres.hash(),sel,mysettings);
 	      setCursor(cdone);
 	    } 
             catch (JembossSoapException eae)

@@ -46,7 +46,7 @@ public class ReportFormat
              "diffseq", "excel", "feattable",
              "motif", "nametable", "regions",
              "seqtable", "simple", "srs",
-             "table", "tagseq"};
+             "table", "tagseq", "dasgff"};
 
   /** container for report formats */
   private JembossComboPopup cp;

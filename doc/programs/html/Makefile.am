@@ -55,7 +55,8 @@ pkgdata2_DATA = libscan.html lindna.html listor.html \
 	maskambignuc.html maskambigprot.html maskfeat.html \
 	maskseq.html matcher.html megamerger.html menus_group.html \
 	merger.html msbar.html mwcontam.html mwfilter.html \
-	needle.html newcpgreport.html newcpgseek.html newseq.html \
+	needle.html needleall.html \
+	newcpgreport.html newcpgseek.html newseq.html \
 	nohtml.html noreturn.html nospace.html notab.html \
 	notseq.html nthseq.html nthseqset.html \
 	nucleic_2d_structure_group.html \

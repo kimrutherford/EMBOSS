@@ -1,5 +1,4 @@
-
-                                  fuzznuc 
+                                   fuzznuc
 
 
 
@@ -22,8 +21,8 @@ Description
    sequence or they can allow various ambiguities, matches to variable
    lengths of sequence and repeated subsections of the sequence. One or
    more nucleotide sequences are read from file. The output is a standard
-   EMBOSS report file that includes data such as location and score of
-   any matches.
+   EMBOSS report file that includes data such as location and score of any
+   matches.
 
 Algorithm
 
@@ -35,11 +34,12 @@ Usage
    Here is a sample session with fuzznuc
 
 
-% fuzznuc 
+% fuzznuc
 Search for patterns in nucleotide sequences
 Input nucleotide sequence(s): tembl:L46634
 Search pattern: AAGCTT
-Output report [l46634.fuzznuc]: 
+Output report [l46634.fuzznuc]:
+
 
    Go to the input files for this example
    Go to the output files for this example
@@ -47,11 +47,12 @@ Output report [l46634.fuzznuc]:
    Example 2
 
 
-% fuzznuc 
+% fuzznuc
 Search for patterns in nucleotide sequences
 Input nucleotide sequence(s): tembl:L46634
 Search pattern: @nucseq.pat
-Output report [l46634.fuzznuc]: 
+Output report [l46634.fuzznuc]:
+
 
    Go to the input files for this example
    Go to the output files for this example
@@ -59,11 +60,12 @@ Output report [l46634.fuzznuc]:
    Example 3
 
 
-% fuzznuc -pname test 
+% fuzznuc -pname test
 Search for patterns in nucleotide sequences
 Input nucleotide sequence(s): tembl:L46634
 Search pattern: @nucsimple.pat
-Output report [l46634.fuzznuc]: 
+Output report [l46634.fuzznuc]:
+
 
    Go to the input files for this example
    Go to the output files for this example
@@ -71,16 +73,20 @@ Output report [l46634.fuzznuc]:
    Example 4
 
 
-% fuzznuc 
+% fuzznuc
 Search for patterns in nucleotide sequences
 Input nucleotide sequence(s): tembl:L46634
 Search pattern: @nuc.pat
-Output report [l46634.fuzznuc]: 
+Output report [l46634.fuzznuc]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Search for patterns in nucleotide sequences
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -164,13 +170,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -178,8 +186,8 @@ Input file format
 
   Input files for usage example
 
-   'tembl:L46634' is a sequence entry in the example nucleic acid
-   database 'tembl'
+   'tembl:L46634' is a sequence entry in the example nucleic acid database
+   'tembl'
 
   Database entry: tembl:L46634
 
@@ -225,50 +233,28 @@ FT   misc_feature    1009
 FT                   /note="right genome terminus (...ACA)"
 XX
 SQ   Sequence 1272 BP; 346 A; 455 C; 222 G; 249 T; 0 other;
-     aagcttaaac tgaggtcaca cacgacttta attacggcaa cgcaacagct gtaagctgca        6
-0
-     ggaaagatac gatcgtaagc aaatgtagtc ctacaatcaa gcgaggttgt agacgttacc       12
-0
-     tacaatgaac tacacctcta agcataacct gtcgggcaca gtgagacacg cagccgtaaa       18
-0
-     ttcaaaactc aacccaaacc gaagtctaag tctcacccta atcgtaacag taaccctaca       24
-0
-     actctaatcc tagtccgtaa ccgtaacccc aatcctagcc cttagcccta accctagccc       30
-0
-     taaccctagc tctaacctta gctctaactc tgaccctagg cctaacccta agcctaaccc       36
-0
-     taaccgtagc tctaagttta accctaaccc taaccctaac catgaccctg accctaaccc       42
-0
-     tagggctgcg gccctaaccc tagccctaac cctaacccta atcctaatcc tagccctaac       48
-0
-     cctagggctg cggccctaac cctagcccta accctaaccc taaccctagg gctgcggccc       54
-0
-     taaccctaac cctagggctg cggcccgaac cctaacccta accctaaccc taaccctagg       60
-0
-     gctgcggccc taaccctaac cctagggctg cggccctaac cctaacccta gggctgcggc       66
-0
-     ccgaacccta accctaaccc taaccctagg gctgcggccc taaccctaac cctagggctg       72
-0
-     cggccctaac cctaacccta actctagggc tgcggcccta accctaaccc taaccctaac       78
-0
-     cctagggctg cggcccgaac cctagcccta accctaaccc tgaccctgac cctaacccta       84
-0
-     accctaaccc taaccctaac cctaacccta accctaaccc taaccctaac cctaacccta       90
-0
-     accctaaccc taaccctaac cctaaccccg cccccactgg cagccaatgt cttgtaatgc       96
-0
-     cttcaaggca ctttttctgc gagccgcgcg cagcactcag tgaaaaacaa gtttgtgcac      102
-0
-     gagaaagacg ctgccaaacc gcagctgcag catgaaggct gagtgcacaa ttttggcttt      108
-0
-     agtcccataa aggcgcggct tcccgtagag tagaaaaccg cagcgcggcg cacagagcga      114
-0
-     aggcagcggc tttcagactg tttgccaagc gcagtctgca tcttaccaat gatgatcgca      120
-0
-     agcaagaaaa atgttctttc ttagcatatg cgtggttaat cctgttgtgg tcatcactaa      126
-0
-     gttttcaagc tt                                                          127
-2
+     aagcttaaac tgaggtcaca cacgacttta attacggcaa cgcaacagct gtaagctgca        60
+     ggaaagatac gatcgtaagc aaatgtagtc ctacaatcaa gcgaggttgt agacgttacc       120
+     tacaatgaac tacacctcta agcataacct gtcgggcaca gtgagacacg cagccgtaaa       180
+     ttcaaaactc aacccaaacc gaagtctaag tctcacccta atcgtaacag taaccctaca       240
+     actctaatcc tagtccgtaa ccgtaacccc aatcctagcc cttagcccta accctagccc       300
+     taaccctagc tctaacctta gctctaactc tgaccctagg cctaacccta agcctaaccc       360
+     taaccgtagc tctaagttta accctaaccc taaccctaac catgaccctg accctaaccc       420
+     tagggctgcg gccctaaccc tagccctaac cctaacccta atcctaatcc tagccctaac       480
+     cctagggctg cggccctaac cctagcccta accctaaccc taaccctagg gctgcggccc       540
+     taaccctaac cctagggctg cggcccgaac cctaacccta accctaaccc taaccctagg       600
+     gctgcggccc taaccctaac cctagggctg cggccctaac cctaacccta gggctgcggc       660
+     ccgaacccta accctaaccc taaccctagg gctgcggccc taaccctaac cctagggctg       720
+     cggccctaac cctaacccta actctagggc tgcggcccta accctaaccc taaccctaac       780
+     cctagggctg cggcccgaac cctagcccta accctaaccc tgaccctgac cctaacccta       840
+     accctaaccc taaccctaac cctaacccta accctaaccc taaccctaac cctaacccta       900
+     accctaaccc taaccctaac cctaaccccg cccccactgg cagccaatgt cttgtaatgc       960
+     cttcaaggca ctttttctgc gagccgcgcg cagcactcag tgaaaaacaa gtttgtgcac      1020
+     gagaaagacg ctgccaaacc gcagctgcag catgaaggct gagtgcacaa ttttggcttt      1080
+     agtcccataa aggcgcggct tcccgtagag tagaaaaccg cagcgcggcg cacagagcga      1140
+     aggcagcggc tttcagactg tttgccaagc gcagtctgca tcttaccaat gatgatcgca      1200
+     agcaagaaaa atgttctttc ttagcatatg cgtggttaat cctgttgtgg tcatcactaa      1260
+     gttttcaagc tt                                                          1272
 //
 
   Input files for usage example 2
@@ -298,6 +284,7 @@ cctagc(3)ta
 >pat3
 cggc(2,4)taac(2,5)
 
+
   Pattern specification
 
    Patterns for fuzznuc are based on the format of pattern used in the
@@ -309,13 +296,13 @@ cggc(2,4)taac(2,5)
      * The standard IUPAC one-letter codes for the nucleotides are used.
      * The symbol `n' is used for a position where any nucleotide is
        accepted.
-     * Ambiguities are indicated by listing the acceptable nucleotides
-       for a given position, between square parentheses `[ ]'. For
-       example: [ACG] stands for A or C or G.
+     * Ambiguities are indicated by listing the acceptable nucleotides for
+       a given position, between square parentheses `[ ]'. For example:
+       [ACG] stands for A or C or G.
      * Ambiguities are also indicated by listing between a pair of curly
        brackets `{ }' the nucleotides that are not accepted at a given
-       position. For example: {AG} stands for any nucleotides except A
-       and G.
+       position. For example: {AG} stands for any nucleotides except A and
+       G.
      * Each element in a pattern is separated from its neighbor by a `-'.
        (Optional in fuzznuc).
      * Repetition of an element of the pattern can be indicated by
@@ -332,11 +319,12 @@ cggc(2,4)taac(2,5)
 
 [CG](5)TG{A}N(1,5)C
 
+
    This searches for "C or G" 5 times, followed by T and G, then anything
    except A, then any base (1 to 5 times) before a C.
 
-   You can use ambiguity codes for nucleic acid searches but not within
-   [] or {} as they expand to bracketed counterparts. For example, "s" is
+   You can use ambiguity codes for nucleic acid searches but not within []
+   or {} as they expand to bracketed counterparts. For example, "s" is
    expanded to "[GC]" therefore [S] would be expanded to [[GC]] which is
    illegal.
 
@@ -366,7 +354,7 @@ Output file format
 
 ########################################
 # Program: fuzznuc
-# Rundate: Tue 15 Jul 2008 12:00:00
+# Rundate: Fri 15 Jan 2010 12:00:00
 # Commandline: fuzznuc
 #    -sequence tembl:L46634
 #    -pattern AAGCTT
@@ -406,7 +394,7 @@ Output file format
 
 ########################################
 # Program: fuzznuc
-# Rundate: Tue 15 Jul 2008 12:00:00
+# Rundate: Fri 15 Jan 2010 12:00:00
 # Commandline: fuzznuc
 #    -sequence tembl:L46634
 #    -pattern @../../data/nucseq.pat
@@ -446,7 +434,7 @@ Output file format
 
 ########################################
 # Program: fuzznuc
-# Rundate: Tue 15 Jul 2008 12:00:00
+# Rundate: Fri 15 Jan 2010 12:00:00
 # Commandline: fuzznuc
 #    -pname test
 #    -sequence tembl:L46634
@@ -499,7 +487,7 @@ Output file format
 
 ########################################
 # Program: fuzznuc
-# Rundate: Tue 15 Jul 2008 12:00:00
+# Rundate: Fri 15 Jan 2010 12:00:00
 # Commandline: fuzznuc
 #    -sequence tembl:L46634
 #    -pattern @../../data/nuc.pat
@@ -597,7 +585,7 @@ See also
 
 Author(s)
 
-   Alan Bleasby (ajb © ebi.ac.uk)
+   Alan Bleasby (ajb (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

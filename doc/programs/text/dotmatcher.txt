@@ -1,5 +1,4 @@
-
-                                dotmatcher 
+                                 dotmatcher
 
 
 
@@ -16,8 +15,8 @@ Function
 
 Description
 
-   dotmatcher generates a dotplot from two input sequences. The dotplot
-   is an intuitive graphical representation of the regions of similarity
+   dotmatcher generates a dotplot from two input sequences. The dotplot is
+   an intuitive graphical representation of the regions of similarity
    between two sequences. All positions from the first input sequence are
    compared with all positions from the second input sequence using a
    specified substitution matrix. The two sequences are the axes of the
@@ -43,15 +42,19 @@ Usage
    Here is a sample session with dotmatcher
 
 
-% dotmatcher tsw:hba_human tsw:hbb_human -graph cps 
+% dotmatcher tsw:hba_human tsw:hbb_human -graph cps
 Draw a threshold dotplot of two sequences
 
 Created dotmatcher.ps
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Draw a threshold dotplot of two sequences
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-asequence]         sequence   Sequence filename and optional format, or
@@ -60,10 +63,10 @@ Command line arguments
                                   reference (input USA)
 *  -graph              graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, das, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif)
 *  -xygraph            xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, das, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif)
 
    Additional (Optional) qualifiers:
    -matrixfile         matrix     [EBLOSUM62 for protein, EDNAFULL for DNA]
@@ -142,13 +145,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -406,11 +411,12 @@ Data files
 
 % embossdata -fetch -file Exxx.dat
 
+
    Users can provide their own data files in their own directories.
    Project specific files can be put in the current directory, or for
-   tidier directory listings in a subdirectory called ".embossdata".
-   Files for all EMBOSS runs can be put in the user's home directory, or
-   again in a subdirectory called ".embossdata".
+   tidier directory listings in a subdirectory called ".embossdata". Files
+   for all EMBOSS runs can be put in the user's home directory, or again
+   in a subdirectory called ".embossdata".
 
    The directories are searched in the following order:
      * . (your current directory)
@@ -422,10 +428,9 @@ Notes
 
    Where the two sequences have substantial regions of similarity, the
    dots line up to form diagonal lines. It is possible to see at a glance
-   such local regions of similarity. It is also easy to see other
-   features such as repeats (which form parallel diagonal lines), and
-   insertions or deletions (which form breaks or discontinuities in the
-   diagonal lines).
+   such local regions of similarity. It is also easy to see other features
+   such as repeats (which form parallel diagonal lines), and insertions or
+   deletions (which form breaks or discontinuities in the diagonal lines).
 
 References
 
@@ -460,7 +465,7 @@ See also
 
 Author(s)
 
-   Ian              Longden (il © sanger.ac.uk)
+   Ian              Longden (il (c) sanger.ac.uk)
    Sanger           Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
                     CB10 1SA, UK.
 

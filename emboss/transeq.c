@@ -80,15 +80,15 @@ int main(int argc, char **argv)
     trnTable = ajTrnNewI(table);
 
     /* shift values of translate region to match -sbegin=n parameter */
-    /*  ajRangeBegin(regions, ajSeqallGetseqBegin(seqall));*/
+    /*  ajRangeSetOffset(regions, ajSeqallGetseqBegin(seqall));*/
 
 
     while(ajSeqallNext(seqall, &seq))
     {
 	ajSeqTrim(seq);
 
-	seqregions = ajRangeCopy(regions);
-        defr = ajRangeDefault(seqregions, seq);
+	seqregions = ajRangeNewRange(regions);
+        defr = ajRangeIsWhole(seqregions, seq);
 
 	/* get regions to translate */
 	if(!defr)

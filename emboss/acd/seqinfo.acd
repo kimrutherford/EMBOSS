@@ -1,6 +1,7 @@
 application: seqinfo [
   documentation: "Returns sequence information"
   groups: "Test"
+  relations: "EDAM: Sequence description"
 ]
 
 section: input [
@@ -11,6 +12,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "gapany"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: input
@@ -24,6 +26,7 @@ section: output [
     parameter: "Y"
     default: "stdout"
     knowntype: "seqinfo output"
+    relations: "EDAM: Free text file"                                      
   ]
 
 endsection: output

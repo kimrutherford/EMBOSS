@@ -21,9 +21,6 @@
 ******************************************************************************/
 
 #include "emboss.h"
-#ifndef NO_PLOT
-#include "ajgraph.h"
-#endif
 
 
 
@@ -108,7 +105,7 @@ int main(int argc, char **argv)
     IsochorePFltarr results;
 
     AjPGraph plot;
-    AjPGraphPlpData graphdata;
+    AjPGraphdata graphdata;
 
     ajint iwin;
     ajint ishift;
@@ -126,7 +123,7 @@ int main(int argc, char **argv)
     float amin = 0.;
     float amax = 0.;
 
-    ajGraphInit("isochore", argc, argv);
+    embInit("isochore", argc, argv);
 
     seq  = ajAcdGetSeq("sequence");
     out  = ajAcdGetOutfile("outfile");
@@ -186,27 +183,27 @@ int main(int argc, char **argv)
 
     /* create the graph */
 
-    graphdata = ajGraphPlpDataNew();
+    graphdata = ajGraphdataNew();
 
-    ajGraphArrayMaxMin(results->Array,isize,&amin,&amax);
+    ajGraphicsCalcRange(results->Array,isize,&amin,&amax);
 
-    ajGraphPlpDataSetMaxima(graphdata,(float)ipos,(float)(ipos+(ishift*isize)),
+    ajGraphdataSetTruescale(graphdata,(float)ipos,(float)(ipos+(ishift*isize)),
 			   amin,amax);
-    ajGraphPlpDataSetMaxMin(graphdata,(float)ipos,(float)(ipos+(ishift*isize)),
+    ajGraphdataSetMinmax(graphdata,(float)ipos,(float)(ipos+(ishift*isize)),
 			   amin,amax);
-    ajGraphPlpDataSetTypeC(graphdata,"2D Plot");
-    ajGraphPlpDataSetTitleC(graphdata,"");
+    ajGraphdataSetTypeC(graphdata,"2D Plot");
+    ajGraphdataSetTitleC(graphdata,"");
 
 
 
     ajGraphDataAdd(plot,graphdata);
-    ajGraphPlpDataCalcXY(graphdata, isize,(float)(ipos),(float)ishift,
+    ajGraphdataCalcXY(graphdata, isize,(float)(ipos),(float)ishift,
 			    results->Array);
 
 
     /* display the region 0 -> 1 for the y axis */
-    ajGraphxySetYStart(plot,0.0);
-    ajGraphxySetYEnd(plot,1.0);
+    ajGraphxySetYstartF(plot,0.0);
+    ajGraphxySetYendF(plot,1.0);
 
     /* draw the graph */
     ajGraphxyDisplay(plot,AJTRUE);

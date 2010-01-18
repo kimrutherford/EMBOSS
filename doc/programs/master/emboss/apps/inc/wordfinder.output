@@ -4,6 +4,11 @@
 <p><h3>File: wordfinder.error</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
+Target 1 J01636 matches 1
+Target 2 X51872 matches 1
+Target 3 V00294 matches 1
+Target 4 V00295 matches 1
+Target 5 V00296 matches 1
 </pre>
 </td></tr></table><p>
 <p><h3>File: j01636.wordfinder</h3>
@@ -11,7 +16,7 @@
 <pre>
 ########################################
 # Program: wordfinder
-# Rundate: Tue 15 Jul 2008 12:00:00
+# Rundate: Fri 15 Jan 2010 12:00:00
 # Commandline: wordfinder
 #    [-asequence] tembl:j01636
 #    [-bsequence] @../../data/eclac.list

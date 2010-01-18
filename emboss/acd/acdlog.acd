@@ -3,4 +3,5 @@ application: acdlog [
                   structures"
   gui: "no"
   groups: "Acd"
+  relations: "EDAM: File debugging"
 ]

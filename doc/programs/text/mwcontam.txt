@@ -1,5 +1,4 @@
-
-                                 mwcontam 
+                                  mwcontam
 
 
 
@@ -18,9 +17,9 @@ Description
 
    mwcontam finds molecular weights that are common between a set of mass
    spectrometry result files at a specified ppm tolerance. Such molecular
-   weights are usually a form of contamination resulting from autolysis
-   of a protease, degradation of the matrix or presence of keratin from
-   the sample preparer. The input is a comma-separated list of files each
+   weights are usually a form of contamination resulting from autolysis of
+   a protease, degradation of the matrix or presence of keratin from the
+   sample preparer. The input is a comma-separated list of files each
    containing a list of experimental molecular weights. The output is a
    file with a list of the molecular weights common to all files.
 
@@ -29,16 +28,20 @@ Usage
    Here is a sample session with mwcontam
 
 
-% mwcontam 
+% mwcontam
 Find weights common to multiple molecular weights files
 Molecular weights file list: ../data/mw2.dat,mw3.dat
-Ppm tolerance [50.0]: 
-Molecular weights output file [outfile.mwcontam]: 
+Ppm tolerance [50.0]:
+Molecular weights output file [outfile.mwcontam]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Find weights common to multiple molecular weights files
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-files]             filelist   Molecular weights file list
@@ -60,13 +63,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -131,7 +136,7 @@ Data files
    file for the mwfilter program ('Emwfilter.dat'). For example you might
    like to fetch 'Emwfilter.dat' using embossdata (as described in the
    mwfilter documentation) and edit it to include the lines:
-     _________________________________________________________________
+     __________________________________________________________________
 
 # data produced from the program mwcontam
 mwcontam        67.000
@@ -141,11 +146,10 @@ Notes
 
    The output of mwcontam, with minimal editing, can be added to the data
    file for the mwfilter program (Emwfilter.dat), which will then remove
-   these weights from its input file of molecular weights. For example
-   you might like to fetch Emwfilter.dat using embossdata (as described
-   in the mwfilter documentation) and edit it to include the lines: #
-   data produced from the program mwcontam mwcontam 67.000 mwcontam
-   415.000
+   these weights from its input file of molecular weights. For example you
+   might like to fetch Emwfilter.dat using embossdata (as described in the
+   mwfilter documentation) and edit it to include the lines: # data
+   produced from the program mwcontam mwcontam 67.000 mwcontam 415.000
 
 References
 
@@ -170,8 +174,8 @@ Known bugs
 See also
 
    Program name     Description
-   backtranambig    Back-translate a protein sequence to ambiguous
-                    nucleotide sequence
+   backtranambig    Back-translate a protein sequence to ambiguous nucleotide
+                    sequence
    backtranseq      Back-translate a protein sequence to a nucleotide sequence
    charge           Draw a protein charge plot
    checktrans       Reports STOP codons and ORF statistics of a protein
@@ -186,11 +190,11 @@ See also
    pepwindow        Draw a hydropathy plot for a protein sequence
    pepwindowall     Draw Kyte-Doolittle hydropathy plot for a protein
                     alignment
-   wordcount        Count and extract unique words in DNA sequence(s)
+   wordcount        Count and extract unique words in molecular sequence(s)
 
 Author(s)
 
-   Alan Bleasby (ajb © ebi.ac.uk)
+   Alan Bleasby (ajb (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

@@ -1,5 +1,4 @@
-
-                                  sizeseq 
+                                   sizeseq
 
 
 
@@ -24,16 +23,20 @@ Usage
    Here is a sample session with sizeseq
 
 
-% sizeseq -osformat swiss 
+% sizeseq -osformat swiss
 Sort sequences by size
 Input sequence set: globins.fasta
-Return longest sequence first [N]: 
-output sequence(s) [globins.swiss]: 
+Return longest sequence first [N]:
+output sequence(s) [globins.swiss]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Sort sequences by size
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequences]         seqset     Sequence set filename and optional format,
@@ -86,13 +89,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -269,7 +274,7 @@ See also
 
 Author(s)
 
-   Jon Ison (jison © ebi.ac.uk)
+   Jon Ison (jison (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

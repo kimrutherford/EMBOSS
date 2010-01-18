@@ -19,6 +19,7 @@ $installdir = "/usr/local";
 	    "expected" => "",
 	    "needed" => "Y",
 	    "knowntype" => "",
+	    "relations" => "",
 	    "style" => "Y",
 	    "qualifier" => "Y",
 	    "template" => "Y",

@@ -1,3 +1,6 @@
+Picks PCR primers and hybridization oligos
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     The sequence from which to choose primers.
                                   The sequence must be presented 5' to 3'
@@ -74,7 +77,7 @@
                                   where (start) is the index of the first base
                                   to consider, and (end) is the last in the
                                   primer-picking region.
-   -target             range      [(full sequence)] If one or more Targets is
+   -targetregion       range      [(full sequence)] If one or more Targets is
                                   specified then a legal primer pair must
                                   flank at least one of them. A Target might
                                   be a simple sequence repeat site (for
@@ -105,13 +108,12 @@
    -forwardinput       string     The sequence of a forward primer to check
                                   and around which to design reverse primers
                                   and optional internal oligos. Must be a
-                                  substring of SEQUENCE. (Any string is
-                                  accepted)
+                                  substring of SEQUENCE. (Any string)
    -reverseinput       string     The sequence of a reverse primer to check
                                   and around which to design forward primers
                                   and optional internal oligos. Must be a
                                   substring of the reverse strand of SEQUENCE.
-                                  (Any string is accepted)
+                                  (Any string)
 *  -gcclamp            integer    [0] Require the specified number of
                                   consecutive Gs and Cs at the 3' end of both
                                   the forward and reverse primer. (This
@@ -274,7 +276,7 @@
 *  -oligoinput         string     The sequence of an internal oligo to check
                                   and around which to design forward and
                                   reverse primers. Must be a substring of
-                                  SEQUENCE. (Any string is accepted)
+                                  SEQUENCE. (Any string)
 *  -osizeopt           integer    [20] Optimum length (in bases) of an
                                   internal oligo. EPrimer3 will attempt to
                                   pick primers close to this length. (Integer
@@ -570,11 +572,12 @@
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 

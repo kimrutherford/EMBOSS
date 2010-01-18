@@ -1,5 +1,4 @@
-
-                                  nohtml 
+                                   nohtml
 
 
 
@@ -25,15 +24,19 @@ Usage
    Here is a sample session with nohtml
 
 
-% nohtml 
+% nohtml
 Remove mark-up (e.g. HTML tags) from an ASCII text file
 ASCII text file: webfile.html
-ASCII text output file [webfile.nohtml]: 
+ASCII text output file [webfile.nohtml]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Remove mark-up (e.g. HTML tags) from an ASCII text file
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     ASCII text file
@@ -54,23 +57,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 
-                 Standard (Mandatory) qualifiers    Allowed values Default
-   [-infile]
-   (Parameter 1) ASCII text file        Input file  Required
-   [-outfile]
-   (Parameter 2) ASCII text output file Output file <*>.nohtml
-                 Additional (Optional) qualifiers   Allowed values Default
-                 (none)
-                 Advanced (Unprompted) qualifiers   Allowed values Default
-                 (none)
 
 Input file format
 
@@ -176,7 +171,7 @@ See also
 
 Author(s)
 
-   Jon Ison (jison © ebi.ac.uk)
+   Jon Ison (jison (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

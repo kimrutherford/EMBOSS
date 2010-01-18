@@ -747,7 +747,7 @@ PACKAGE_VERSION=
 PACKAGE_STRING=
 PACKAGE_BUGREPORT=
 
-ac_unique_file="ajax/ajacd.c"
+ac_unique_file="ajax/core/ajmath.c"
 # Factoring default headers for most tests.
 ac_includes_default="\
 #include <stdio.h>
@@ -799,8 +799,16 @@ ISAIXIA64_TRUE
 ISCYGWIN
 ISCYGWIN_FALSE
 ISCYGWIN_TRUE
+DEVWARNINGS
+DEVWARNINGS_FALSE
+DEVWARNINGS_TRUE
+DEVWARN_CFLAGS
 PURIFY_FALSE
 PURIFY_TRUE
+WARNINGS
+WARNINGS_FALSE
+WARNINGS_TRUE
+WARN_CFLAGS
 POSIX_MALLOC_THRESHOLD
 PCRE_POSIXLIB_VERSION
 PCRE_LIB_VERSION
@@ -814,6 +822,15 @@ EHAVEANT
 EHAVEANT_FALSE
 EHAVEANT_TRUE
 ant_in_path
+javac_in_path
+POSTGRESQL_LDFLAGS
+POSTGRESQL_CFLAGS
+POSTGRESQL_VERSION
+PG_CONFIG
+MYSQL_LDFLAGS
+MYSQL_CFLAGS
+MYSQL_VERSION
+MYSQL_CONFIG
 JAVA_OK
 havejavac
 AMPNG_FALSE
@@ -824,6 +841,7 @@ X_LIBS
 X_PRE_LIBS
 X_CFLAGS
 XMKMF
+AJAX_SYSTEM
 EMBOSS_TOP
 AJAX_FIXED_ROOT
 CPP
@@ -949,7 +967,8 @@ with_java
 with_javaos
 with_pngdriver
 with_auth
-with_grout
+with_mysql
+with_postgresql
 enable_debug
 enable_large
 enable_purify
@@ -1633,7 +1652,10 @@ Optional Packages:
   --with-pngdriver=DIR    root directory path of png/gd/zlib installation defaults to /usr
   --without-pngdriver     to disable pngdriver usage completely
   --with-auth=AUTHTYPE    defaults PAM
-  --with-grout            Grout graphics output alternative [default=no]
+  --with-mysql=[ARG]      use MySQL client library [default=yes], optionally
+                          specify path to mysql_config
+  --with-postgresql=[ARG] use PostgreSQL library [default=yes], optionally
+                          specify path to pg_config
   --with-thread=TYPE      thread type [default=linux]
 
 Some influential environment variables:
@@ -2567,7 +2589,7 @@ fi
 
 # Define the identity of the package.
  PACKAGE=EMBOSS
- VERSION=6.1.0
+ VERSION=6.2.0
 
 
 cat >>confdefs.h <<_ACEOF
@@ -2608,8 +2630,10 @@ am__tar='${AMTAR} chof - "$$tardir"'; am__untar='${AMTAR} xf -'
 
 
 
+# Make sure CFLAGS is defined to stop LT_INIT adding -g
 CFLAGS="$CFLAGS "
 
+# Use libtool to make a shared library.
 case `pwd` in
   *\ * | *\	*)
     { $as_echo "$as_me:$LINENO: WARNING: Libtool does not cope well with whitespace in \`pwd\`" >&5
@@ -2618,8 +2642,8 @@ esac
 
 
 
-macro_version='2.2.6'
-macro_revision='1.3012'
+macro_version='2.2.6b'
+macro_revision='1.3017'
 
 
 
@@ -4434,13 +4458,13 @@ if test "${lt_cv_nm_interface+set}" = set; then
 else
   lt_cv_nm_interface="BSD nm"
   echo "int some_variable = 0;" > conftest.$ac_ext
-  (eval echo "\"\$as_me:4437: $ac_compile\"" >&5)
+  (eval echo "\"\$as_me:4461: $ac_compile\"" >&5)
   (eval "$ac_compile" 2>conftest.err)
   cat conftest.err >&5
-  (eval echo "\"\$as_me:4440: $NM \\\"conftest.$ac_objext\\\"\"" >&5)
+  (eval echo "\"\$as_me:4464: $NM \\\"conftest.$ac_objext\\\"\"" >&5)
   (eval "$NM \"conftest.$ac_objext\"" 2>conftest.err > conftest.out)
   cat conftest.err >&5
-  (eval echo "\"\$as_me:4443: output\"" >&5)
+  (eval echo "\"\$as_me:4467: output\"" >&5)
   cat conftest.out >&5
   if $GREP 'External.*some_variable' conftest.out > /dev/null; then
     lt_cv_nm_interface="MS dumpbin"
@@ -5646,7 +5670,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 5649 "configure"' > conftest.$ac_ext
+  echo '#line 5673 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -7499,11 +7523,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7502: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7526: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7506: \$? = $ac_status" >&5
+   echo "$as_me:7530: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7838,11 +7862,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7841: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7865: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7845: \$? = $ac_status" >&5
+   echo "$as_me:7869: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7943,11 +7967,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7946: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7970: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:7950: \$? = $ac_status" >&5
+   echo "$as_me:7974: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -7998,11 +8022,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8001: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8025: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:8005: \$? = $ac_status" >&5
+   echo "$as_me:8029: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -10801,7 +10825,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<_LT_EOF
-#line 10804 "configure"
+#line 10828 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -10897,7 +10921,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<_LT_EOF
-#line 10900 "configure"
+#line 10924 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11125,6 +11149,8 @@ CC="$lt_save_CC"
 
 
 
+# Checks for programs.
+#as# AC_PROG_CXX
 for ac_prog in gawk mawk nawk awk
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
@@ -12213,6 +12239,16 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+#as# AC_PROG_INSTALL
+#as# AC_PROG_LN_S
+#as# AC_PROG_MAKE_SET
+#as# AC_PROG_RANLIB
+
+# Checks for libraries.
+
+# none needed for the libraries we build
+# external library dependencies tested in m4 macros: X11 gd, z, png
+
 
 
 if test "`uname`" = "IRIX" || test "`uname`" = "IRIX64" ; then
@@ -12802,9 +12838,9 @@ $as_echo "$as_me: error: unknown endianness
 
 
 
-PCRE_MAJOR=4
-PCRE_MINOR=3
-PCRE_DATE=21-May-2003
+PCRE_MAJOR=7
+PCRE_MINOR=9
+PCRE_DATE=11-Apr-2009
 PCRE_VERSION=${PCRE_MAJOR}.${PCRE_MINOR}
 
 
@@ -12819,6 +12855,9 @@ PCRE_POSIXLIB_VERSION=0:0:0
 AJAX_FIXED_ROOT="\\\"`pwd`/emboss\\\""
 
 EMBOSS_TOP=`pwd`
+
+AJAX_SYSTEM="\\\"`uname`\\\""
+
 
 # Find a good install program.  We prefer a C program (faster),
 # so one script is as good as another.  But avoid the broken or
@@ -12965,6 +13004,8 @@ fi
 fi
 fi
 
+# Checks for header files.
+#as# AC_PATH_X
 { $as_echo "$as_me:$LINENO: checking for X" >&5
 $as_echo_n "checking for X... " >&6; }
 
@@ -14922,7 +14963,13 @@ fi
 
 done
 
+#as# AC_CHECK_HEADERS([arpa/inet.h fcntl.h float.h limits.h \
+#as# 		  malloc.h memory.h netdb.h netinet/in.h \
+#as# 		  shadow.h stddef.h stdint.h stdlib.h string.h strings.h \
+#as# 		  sys/file.h sys/ioctl.h sys/param.h sys/socket.h sys/time.h \
+#as# 		  termios.h unistd.h])
 
+# Checks for typedefs, structures, and compiler characteristics.
 { $as_echo "$as_me:$LINENO: checking for an ANSI C-conforming const" >&5
 $as_echo_n "checking for an ANSI C-conforming const... " >&6; }
 if test "${ac_cv_c_const+set}" = set; then
@@ -15030,6 +15077,10 @@ _ACEOF
 
 fi
 
+#as# AC_HEADER_STDBOOL
+#as# AC_TYPE_UID_T
+#as# AC_C_INLINE
+#as# AC_TYPE_INT32_T
 { $as_echo "$as_me:$LINENO: checking for pid_t" >&5
 $as_echo_n "checking for pid_t... " >&6; }
 if test "${ac_cv_type_pid_t+set}" = set; then
@@ -15238,6 +15289,8 @@ _ACEOF
 
 fi
 
+#as# AC_STRUCT_TIMEZONE
+#as# AC_TYPE_UINT32_T
 { $as_echo "$as_me:$LINENO: checking whether struct tm is in sys/time.h or time.h" >&5
 $as_echo_n "checking whether struct tm is in sys/time.h or time.h... " >&6; }
 if test "${ac_cv_struct_tm+set}" = set; then
@@ -15301,6 +15354,11 @@ _ACEOF
 fi
 
 
+#as# AC_CHECK_TYPES([ptrdiff_t])
+
+
+
+#AC_FUNC_ERROR_AT_LINE
 { $as_echo "$as_me:$LINENO: checking whether getpgrp requires zero arguments" >&5
 $as_echo_n "checking whether getpgrp requires zero arguments... " >&6; }
 if test "${ac_cv_func_getpgrp_void+set}" = set; then
@@ -16237,6 +16295,10 @@ fi
 done
 
 
+#as# AC_FUNC_MALLOC
+#as# AC_FUNC_MKTIME
+#as# AC_FUNC_REALLOC
+#as# AC_FUNC_STRTOD
 
 
 for ac_func in memmove
@@ -16339,6 +16401,11 @@ _ACEOF
 fi
 done
 
+#as# AC_CHECK_FUNCS([alarm atexit bzero dup2 floor \
+#as# 		getcwd gethostbyname getspnam gettimeofday inet_ntoa \
+#as# 		localtime_r memmove memset mkdir modf pow regcomp rint \
+#as# 		select socket sqrt strchr strcspn strdup strerror strpbrk \
+#as# 		strrchr strspn strstr strtol])
 
 if test "${with_x}" != "no" ; then
 
@@ -17597,33 +17664,6 @@ fi
 
 
 #
-# Handle GROUT flags
-#
-{ $as_echo "$as_me:$LINENO: checking for gdome2" >&5
-$as_echo_n "checking for gdome2... " >&6; }
-
-# Check whether --with-grout was given.
-if test "${with_grout+set}" = set; then
-  withval=$with_grout; if test "$withval" != no ; then
-  { $as_echo "$as_me:$LINENO: result: yes" >&5
-$as_echo "yes" >&6; }
-  CPPFLAGS="$CPPFLAGS -DGROUT `gdome-config --cflags`"
-  LDFLAGS="$LDFLAGS `gdome-config --libs`"
-  if test "`uname`" = "SunOS"; then
-      LDFLAGS="$LDFLAGS -R$withval/lib"
-  fi
-
-fi
-else
-
-{ $as_echo "$as_me:$LINENO: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-
-
-
-#
 #
 #
 { $as_echo "$as_me:$LINENO: checking if Linux x86_64" >&5
@@ -17644,6 +17684,400 @@ else
 $as_echo "no" >&6; }
 fi
 
+
+
+
+
+# Check whether --with-mysql was given.
+if test "${with_mysql+set}" = set; then
+  withval=$with_mysql;
+        if test "$withval" = "no"; then
+            want_mysql="no"
+        elif test "$withval" = "yes"; then
+            want_mysql="yes"
+        else
+            want_mysql="yes"
+            MYSQL_CONFIG="$withval"
+        fi
+
+else
+  want_mysql="yes"
+
+fi
+
+
+    MYSQL_CFLAGS=""
+    MYSQL_LDFLAGS=""
+    MYSQL_VERSION=""
+
+
+    if test "$want_mysql" = "yes"; then
+
+        if test -z "$MYSQL_CONFIG" -o test; then
+            # Extract the first word of "mysql_config", so it can be a program name with args.
+set dummy mysql_config; ac_word=$2
+{ $as_echo "$as_me:$LINENO: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if test "${ac_cv_path_MYSQL_CONFIG+set}" = set; then
+  $as_echo_n "(cached) " >&6
+else
+  case $MYSQL_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_MYSQL_CONFIG="$MYSQL_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_path_MYSQL_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    $as_echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+IFS=$as_save_IFS
+
+  test -z "$ac_cv_path_MYSQL_CONFIG" && ac_cv_path_MYSQL_CONFIG="no"
+  ;;
+esac
+fi
+MYSQL_CONFIG=$ac_cv_path_MYSQL_CONFIG
+if test -n "$MYSQL_CONFIG"; then
+  { $as_echo "$as_me:$LINENO: result: $MYSQL_CONFIG" >&5
+$as_echo "$MYSQL_CONFIG" >&6; }
+else
+  { $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+        fi
+
+        if test "$MYSQL_CONFIG" != "no"; then
+            { $as_echo "$as_me:$LINENO: checking for MySQL libraries" >&5
+$as_echo_n "checking for MySQL libraries... " >&6; }
+
+            MYSQL_CFLAGS="`$MYSQL_CONFIG --include`"
+            MYSQL_LDFLAGS="`$MYSQL_CONFIG --libs`"
+
+            MYSQL_VERSION=`$MYSQL_CONFIG --version`
+
+
+    	    EMBCFLAGS=$CFLAGS
+	    EMBLDFLAGS=$LDFLAGS
+	    CFLAGS=$MYSQL_CFLAGS
+	    LDFLAGS=$MYSQL_LDFLAGS
+
+            cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <stdio.h>
+                                              #include "mysql.h"
+int
+main ()
+{
+mysql_info(NULL)
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
+$as_echo "$ac_try_echo") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext && {
+	 test "$cross_compiling" = yes ||
+	 $as_test_x conftest$ac_exeext
+       }; then
+  havemysql=yes
+else
+  $as_echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	havemysql=no
+fi
+
+rm -rf conftest.dSYM
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+
+	    CFLAGS=$EMBCFLAGS
+	    LDFLAGS=$EMBLDFLAGS
+
+            if test "$havemysql" = yes; then
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_MYSQL 1
+_ACEOF
+
+                found_mysql="yes"
+                { $as_echo "$as_me:$LINENO: result: yes" >&5
+$as_echo "yes" >&6; }
+            else
+	        MYSQL_CFLAGS=""
+	        MYSQL_LDFLAGS=""
+                found_mysql="no"
+                { $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
+            fi
+        else
+            found_mysql="no"
+            { $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
+        fi
+    fi
+
+
+
+    mysql_version_req=
+
+    if test "$found_mysql" = "yes" -a -n "$mysql_version_req"; then
+
+        { $as_echo "$as_me:$LINENO: checking if MySQL version is >= $mysql_version_req" >&5
+$as_echo_n "checking if MySQL version is >= $mysql_version_req... " >&6; }
+
+                        mysql_version_req_major=`expr $mysql_version_req : '\([0-9]*\)'`
+        mysql_version_req_minor=`expr $mysql_version_req : '[0-9]*\.\([0-9]*\)'`
+        mysql_version_req_micro=`expr $mysql_version_req : '[0-9]*\.[0-9]*\.\([0-9]*\)'`
+        if test "x$mysql_version_req_micro" = "x"; then
+            mysql_version_req_micro="0"
+        fi
+
+        mysql_version_req_number=`expr $mysql_version_req_major \* 1000000 \
+                                   \+ $mysql_version_req_minor \* 1000 \
+                                   \+ $mysql_version_req_micro`
+
+                        mysql_version_major=`expr $MYSQL_VERSION : '\([0-9]*\)'`
+        mysql_version_minor=`expr $MYSQL_VERSION : '[0-9]*\.\([0-9]*\)'`
+        mysql_version_micro=`expr $MYSQL_VERSION : '[0-9]*\.[0-9]*\.\([0-9]*\)'`
+        if test "x$mysql_version_micro" = "x"; then
+            mysql_version_micro="0"
+        fi
+
+        mysql_version_number=`expr $mysql_version_major \* 1000000 \
+                                   \+ $mysql_version_minor \* 1000 \
+                                   \+ $mysql_version_micro`
+
+        mysql_version_check=`expr $mysql_version_number \>\= $mysql_version_req_number`
+        if test "$mysql_version_check" = "1"; then
+            { $as_echo "$as_me:$LINENO: result: yes" >&5
+$as_echo "yes" >&6; }
+        else
+            { $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
+        fi
+    fi
+
+
+
+
+
+
+
+# Check whether --with-postgresql was given.
+if test "${with_postgresql+set}" = set; then
+  withval=$with_postgresql;
+        if test "$withval" = "no"; then
+            want_postgresql="no"
+        elif test "$withval" = "yes"; then
+            want_postgresql="yes"
+        else
+            want_postgresql="yes"
+            PG_CONFIG="$withval"
+        fi
+
+else
+  want_postgresql="yes"
+
+fi
+
+
+    POSTGRESQL_CFLAGS=""
+    POSTGRESQL_LDFLAGS=""
+    POSTGRESQL_POSTGRESQL=""
+
+
+    if test "$want_postgresql" = "yes"; then
+
+        if test -z "$PG_CONFIG" -o test; then
+            # Extract the first word of "pg_config", so it can be a program name with args.
+set dummy pg_config; ac_word=$2
+{ $as_echo "$as_me:$LINENO: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if test "${ac_cv_path_PG_CONFIG+set}" = set; then
+  $as_echo_n "(cached) " >&6
+else
+  case $PG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PG_CONFIG="$PG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_path_PG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    $as_echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+IFS=$as_save_IFS
+
+  test -z "$ac_cv_path_PG_CONFIG" && ac_cv_path_PG_CONFIG="no"
+  ;;
+esac
+fi
+PG_CONFIG=$ac_cv_path_PG_CONFIG
+if test -n "$PG_CONFIG"; then
+  { $as_echo "$as_me:$LINENO: result: $PG_CONFIG" >&5
+$as_echo "$PG_CONFIG" >&6; }
+else
+  { $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+        fi
+
+        if test "$PG_CONFIG" != "no"; then
+            { $as_echo "$as_me:$LINENO: checking for PostgreSQL libraries" >&5
+$as_echo_n "checking for PostgreSQL libraries... " >&6; }
+
+            POSTGRESQL_CFLAGS="-I`$PG_CONFIG --includedir`"
+            POSTGRESQL_LDFLAGS="-L`$PG_CONFIG --libdir` -lpq"
+
+            POSTGRESQL_VERSION=`$PG_CONFIG --version | sed -e 's#PostgreSQL ##'`
+
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_POSTGRESQL 1
+_ACEOF
+
+
+            found_postgresql="yes"
+            { $as_echo "$as_me:$LINENO: result: yes" >&5
+$as_echo "yes" >&6; }
+        else
+            found_postgresql="no"
+            { $as_echo "$as_me:$LINENO: result: Not configuring for PostgreSQL" >&5
+$as_echo "Not configuring for PostgreSQL" >&6; }
+        fi
+    fi
+
+
+
+    postgresql_version_req=
+
+    if test "$found_postgresql" = "yes" -a -n "$postgresql_version_req"; then
+
+        { $as_echo "$as_me:$LINENO: checking if PostgreSQL version is >= $postgresql_version_req" >&5
+$as_echo_n "checking if PostgreSQL version is >= $postgresql_version_req... " >&6; }
+
+                        postgresql_version_req_major=`expr $postgresql_version_req : '\([0-9]*\)'`
+        postgresql_version_req_minor=`expr $postgresql_version_req : '[0-9]*\.\([0-9]*\)'`
+        postgresql_version_req_micro=`expr $postgresql_version_req : '[0-9]*\.[0-9]*\.\([0-9]*\)'`
+        if test "x$postgresql_version_req_micro" = "x"; then
+            postgresql_version_req_micro="0"
+        fi
+
+        postgresql_version_req_number=`expr $postgresql_version_req_major \* 1000000 \
+                                   \+ $postgresql_version_req_minor \* 1000 \
+                                   \+ $postgresql_version_req_micro`
+
+                        postgresql_version_major=`expr $POSTGRESQL_VERSION : '\([0-9]*\)'`
+        postgresql_version_minor=`expr $POSTGRESQL_VERSION : '[0-9]*\.\([0-9]*\)'`
+        postgresql_version_micro=`expr $POSTGRESQL_VERSION : '[0-9]*\.[0-9]*\.\([0-9]*\)'`
+        if test "x$postgresql_version_micro" = "x"; then
+            postgresql_version_micro="0"
+        fi
+
+        postgresql_version_number=`expr $postgresql_version_major \* 1000000 \
+                                   \+ $postgresql_version_minor \* 1000 \
+                                   \+ $postgresql_version_micro`
+
+        postgresql_version_check=`expr $postgresql_version_number \>\= $postgresql_version_req_number`
+        if test "$postgresql_version_check" = "1"; then
+            { $as_echo "$as_me:$LINENO: result: yes" >&5
+$as_echo "yes" >&6; }
+        else
+            { $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
+        fi
+    fi
+
+
+
+
+
+
+CFLAGS="$CFLAGS $MYSQL_CFLAGS"
+LDFLAGS="$LDFLAGS $MYSQL_LDFLAGS"
+
+CFLAGS="$CFLAGS $POSTGRESQL_CFLAGS"
+LDFLAGS="$LDFLAGS $POSTGRESQL_LDFLAGS"
+
+
+
+# Extract the first word of "javac", so it can be a program name with args.
+set dummy javac; ac_word=$2
+{ $as_echo "$as_me:$LINENO: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if test "${ac_cv_prog_javac_in_path+set}" = set; then
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$javac_in_path"; then
+  ac_cv_prog_javac_in_path="$javac_in_path" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_prog_javac_in_path="true"
+    $as_echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+IFS=$as_save_IFS
+
+  test -z "$ac_cv_prog_javac_in_path" && ac_cv_prog_javac_in_path="false"
+fi
+fi
+javac_in_path=$ac_cv_prog_javac_in_path
+if test -n "$javac_in_path"; then
+  { $as_echo "$as_me:$LINENO: result: $javac_in_path" >&5
+$as_echo "$javac_in_path" >&6; }
+else
+  { $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
+fi
 
 
 # Extract the first word of "ant", so it can be a program name with args.
@@ -17684,15 +18118,13 @@ $as_echo "no" >&6; }
 fi
 
 
- if test "$ant_in_path" = "true"; then
+ if test "$ant_in_path" = "true" && "$javac_in_path" = "true"; then
   EHAVEANT_TRUE=
   EHAVEANT_FALSE='#'
 else
   EHAVEANT_TRUE='#'
   EHAVEANT_FALSE=
 fi
-
-
 
 
 
@@ -17829,16 +18261,29 @@ fi
 
 
 
+have_warnings=no
+
 # Check whether --enable-warnings was given.
 if test "${enable_warnings+set}" = set; then
   enableval=$enable_warnings;
 fi
 
 if test "${enable_warnings}" = "yes" ; then
-if test "$CC" = "gcc"; then
-  CFLAGS="$CFLAGS -Wall -fno-strict-aliasing"
+  if test "$CC" = "gcc"; then
+    have_warnings=yes
+    WARN_CFLAGS="-Wall -fno-strict-aliasing"
+  fi
 fi
+ if test "$have_warnings" = "yes"; then
+  WARNINGS_TRUE=
+  WARNINGS_FALSE='#'
+else
+  WARNINGS_TRUE='#'
+  WARNINGS_FALSE=
 fi
+
+
+
 
 if test "$CC" = "cc"; then
   case "$host" in
@@ -17854,42 +18299,53 @@ else
 fi
 
 
+have_devwarnings=no
+
 # Check whether --enable-devwarnings was given.
 if test "${enable_devwarnings+set}" = set; then
   enableval=$enable_devwarnings;
 fi
 
 if test "${enable_devwarnings}" = "yes" ; then
-if test "$CC" = "gcc"; then
+  if test "$CC" = "gcc"; then
+    have_devwarnings=yes
+  DEVWARN_CFLAGS="-Wextra"
 
-  CFLAGS="$CFLAGS -Wextra"
+  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wstrict-prototypes -Wmissing-prototypes"
+  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wold-style-definition -Wmissing-declarations"
 
-  CFLAGS="$CFLAGS -Wstrict-prototypes -Wmissing-prototypes"
-  CFLAGS="$CFLAGS -Wold-style-definition -Wmissing-declarations"
+  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wwrite-strings"
 
-  CFLAGS="$CFLAGS -Wwrite-strings"
+  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wshadow"
 
-  CFLAGS="$CFLAGS -Wshadow"
+  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wdeclaration-after-statement -Wundef"
+  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wpointer-arith"
+  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wcast-qual -Wcast-align"
 
-  CFLAGS="$CFLAGS -Wdeclaration-after-statement -Wundef"
-  CFLAGS="$CFLAGS -Wpointer-arith"
-  CFLAGS="$CFLAGS -Wcast-qual -Wcast-align"
+  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wbad-function-cast"
 
-  CFLAGS="$CFLAGS -Wbad-function-cast"
+  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wsign-compare"
 
-  CFLAGS="$CFLAGS -Wsign-compare"
-
-  CFLAGS="$CFLAGS -Wmissing-field-initializers"
-  CFLAGS="$CFLAGS -Wmissing-noreturn -Wnested-externs"
-  CFLAGS="$CFLAGS -Wredundant-decls"
-  CFLAGS="$CFLAGS -Wpadded"
-
-
+  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wmissing-field-initializers"
+  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wmissing-noreturn -Wnested-externs"
+  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wredundant-decls"
+  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wpadded"
 
 
 
+
+
+  fi
 fi
+ if test "$have_devwarnings" = "yes"; then
+  DEVWARNINGS_TRUE=
+  DEVWARNINGS_FALSE='#'
+else
+  DEVWARNINGS_TRUE='#'
+  DEVWARNINGS_FALSE=
 fi
+
+
 
 platform_cygwin='no'
 { $as_echo "$as_me:$LINENO: checking for cygwin" >&5
@@ -18082,7 +18538,7 @@ fi
 
 
 
-ac_config_files="$ac_config_files plplot/Makefile plplot/lib/Makefile nucleus/Makefile ajax/Makefile emboss/Makefile emboss/acd/Makefile test/Makefile test/data/Makefile test/embl/Makefile test/genbank/Makefile test/gb/Makefile test/pir/Makefile test/swiss/Makefile test/swnew/Makefile test/testdb/Makefile test/wormpep/Makefile emboss/data/Makefile emboss/data/AAINDEX/Makefile emboss/data/CODONS/Makefile emboss/data/REBASE/Makefile emboss/data/JASPAR_CORE/Makefile emboss/data/JASPAR_FAM/Makefile emboss/data/JASPAR_PHYLOFACTS/Makefile emboss/data/JASPAR_CNE/Makefile emboss/data/JASPAR_POLII/Makefile emboss/data/JASPAR_SPLICE/Makefile emboss/data/PRINTS/Makefile emboss/data/PROSITE/Makefile doc/Makefile doc/manuals/Makefile doc/tutorials/Makefile doc/programs/Makefile doc/programs/html/Makefile doc/programs/text/Makefile jemboss/Makefile jemboss/api/Makefile jemboss/api/org/Makefile jemboss/api/org/emboss/Makefile jemboss/api/org/emboss/jemboss/Makefile jemboss/api/org/emboss/jemboss/gui/Makefile jemboss/api/org/emboss/jemboss/gui/filetree/Makefile jemboss/api/org/emboss/jemboss/gui/form/Makefile jemboss/api/org/emboss/jemboss/gui/sequenceChooser/Makefile jemboss/api/org/emboss/jemboss/gui/startup/Makefile jemboss/api/org/emboss/jemboss/parser/Makefile jemboss/api/org/emboss/jemboss/parser/acd/Makefile jemboss/api/org/emboss/jemboss/programs/Makefile jemboss/api/org/emboss/jemboss/soap/Makefile jemboss/images/Makefile jemboss/lib/Makefile jemboss/lib/axis/Makefile jemboss/org/Makefile jemboss/org/emboss/Makefile jemboss/org/emboss/jemboss/Makefile jemboss/org/emboss/jemboss/graphics/Makefile jemboss/org/emboss/jemboss/gui/Makefile jemboss/org/emboss/jemboss/gui/filetree/Makefile jemboss/org/emboss/jemboss/gui/form/Makefile jemboss/org/emboss/jemboss/gui/startup/Makefile jemboss/org/emboss/jemboss/gui/sequenceChooser/Makefile jemboss/org/emboss/jemboss/parser/Makefile jemboss/org/emboss/jemboss/parser/acd/Makefile jemboss/org/emboss/jemboss/programs/Makefile jemboss/org/emboss/jemboss/server/Makefile jemboss/org/emboss/jemboss/soap/Makefile jemboss/org/emboss/jemboss/editor/Makefile jemboss/org/emboss/jemboss/draw/Makefile jemboss/resources/Makefile jemboss/utils/Makefile Makefile"
+ac_config_files="$ac_config_files plplot/Makefile plplot/lib/Makefile nucleus/Makefile ajax/Makefile ajax/pcre/Makefile ajax/expat/Makefile ajax/zlib/Makefile ajax/core/Makefile ajax/graphics/Makefile ajax/ensembl/Makefile ajax/ajaxdb/Makefile ajax/acd/Makefile emboss/Makefile emboss/acd/Makefile test/Makefile test/data/Makefile test/embl/Makefile test/genbank/Makefile test/pir/Makefile test/swiss/Makefile test/swnew/Makefile test/testdb/Makefile emboss/data/Makefile emboss/data/AAINDEX/Makefile emboss/data/CODONS/Makefile emboss/data/REBASE/Makefile emboss/data/JASPAR_CORE/Makefile emboss/data/JASPAR_FAM/Makefile emboss/data/JASPAR_PHYLOFACTS/Makefile emboss/data/JASPAR_CNE/Makefile emboss/data/JASPAR_POLII/Makefile emboss/data/JASPAR_SPLICE/Makefile emboss/data/PRINTS/Makefile emboss/data/PROSITE/Makefile doc/Makefile doc/manuals/Makefile doc/tutorials/Makefile doc/programs/Makefile doc/programs/html/Makefile doc/programs/text/Makefile jemboss/Makefile jemboss/api/Makefile jemboss/api/org/Makefile jemboss/api/org/emboss/Makefile jemboss/api/org/emboss/jemboss/Makefile jemboss/api/org/emboss/jemboss/gui/Makefile jemboss/api/org/emboss/jemboss/gui/filetree/Makefile jemboss/api/org/emboss/jemboss/gui/form/Makefile jemboss/api/org/emboss/jemboss/gui/sequenceChooser/Makefile jemboss/api/org/emboss/jemboss/gui/startup/Makefile jemboss/api/org/emboss/jemboss/parser/Makefile jemboss/api/org/emboss/jemboss/parser/acd/Makefile jemboss/api/org/emboss/jemboss/programs/Makefile jemboss/api/org/emboss/jemboss/soap/Makefile jemboss/images/Makefile jemboss/lib/Makefile jemboss/lib/axis/Makefile jemboss/org/Makefile jemboss/org/emboss/Makefile jemboss/org/emboss/jemboss/Makefile jemboss/org/emboss/jemboss/graphics/Makefile jemboss/org/emboss/jemboss/gui/Makefile jemboss/org/emboss/jemboss/gui/filetree/Makefile jemboss/org/emboss/jemboss/gui/form/Makefile jemboss/org/emboss/jemboss/gui/startup/Makefile jemboss/org/emboss/jemboss/gui/sequenceChooser/Makefile jemboss/org/emboss/jemboss/parser/Makefile jemboss/org/emboss/jemboss/parser/acd/Makefile jemboss/org/emboss/jemboss/programs/Makefile jemboss/org/emboss/jemboss/server/Makefile jemboss/org/emboss/jemboss/soap/Makefile jemboss/org/emboss/jemboss/editor/Makefile jemboss/org/emboss/jemboss/draw/Makefile jemboss/resources/Makefile jemboss/utils/Makefile Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -18275,10 +18731,24 @@ $as_echo "$as_me: error: conditional \"EHAVEANT\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
+if test -z "${WARNINGS_TRUE}" && test -z "${WARNINGS_FALSE}"; then
+  { { $as_echo "$as_me:$LINENO: error: conditional \"WARNINGS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+$as_echo "$as_me: error: conditional \"WARNINGS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
 if test -z "${PURIFY_TRUE}" && test -z "${PURIFY_FALSE}"; then
   { { $as_echo "$as_me:$LINENO: error: conditional \"PURIFY\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
 $as_echo "$as_me: error: conditional \"PURIFY\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${DEVWARNINGS_TRUE}" && test -z "${DEVWARNINGS_FALSE}"; then
+  { { $as_echo "$as_me:$LINENO: error: conditional \"DEVWARNINGS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+$as_echo "$as_me: error: conditional \"DEVWARNINGS\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -19058,18 +19528,24 @@ do
     "plplot/lib/Makefile") CONFIG_FILES="$CONFIG_FILES plplot/lib/Makefile" ;;
     "nucleus/Makefile") CONFIG_FILES="$CONFIG_FILES nucleus/Makefile" ;;
     "ajax/Makefile") CONFIG_FILES="$CONFIG_FILES ajax/Makefile" ;;
+    "ajax/pcre/Makefile") CONFIG_FILES="$CONFIG_FILES ajax/pcre/Makefile" ;;
+    "ajax/expat/Makefile") CONFIG_FILES="$CONFIG_FILES ajax/expat/Makefile" ;;
+    "ajax/zlib/Makefile") CONFIG_FILES="$CONFIG_FILES ajax/zlib/Makefile" ;;
+    "ajax/core/Makefile") CONFIG_FILES="$CONFIG_FILES ajax/core/Makefile" ;;
+    "ajax/graphics/Makefile") CONFIG_FILES="$CONFIG_FILES ajax/graphics/Makefile" ;;
+    "ajax/ensembl/Makefile") CONFIG_FILES="$CONFIG_FILES ajax/ensembl/Makefile" ;;
+    "ajax/ajaxdb/Makefile") CONFIG_FILES="$CONFIG_FILES ajax/ajaxdb/Makefile" ;;
+    "ajax/acd/Makefile") CONFIG_FILES="$CONFIG_FILES ajax/acd/Makefile" ;;
     "emboss/Makefile") CONFIG_FILES="$CONFIG_FILES emboss/Makefile" ;;
     "emboss/acd/Makefile") CONFIG_FILES="$CONFIG_FILES emboss/acd/Makefile" ;;
     "test/Makefile") CONFIG_FILES="$CONFIG_FILES test/Makefile" ;;
     "test/data/Makefile") CONFIG_FILES="$CONFIG_FILES test/data/Makefile" ;;
     "test/embl/Makefile") CONFIG_FILES="$CONFIG_FILES test/embl/Makefile" ;;
     "test/genbank/Makefile") CONFIG_FILES="$CONFIG_FILES test/genbank/Makefile" ;;
-    "test/gb/Makefile") CONFIG_FILES="$CONFIG_FILES test/gb/Makefile" ;;
     "test/pir/Makefile") CONFIG_FILES="$CONFIG_FILES test/pir/Makefile" ;;
     "test/swiss/Makefile") CONFIG_FILES="$CONFIG_FILES test/swiss/Makefile" ;;
     "test/swnew/Makefile") CONFIG_FILES="$CONFIG_FILES test/swnew/Makefile" ;;
     "test/testdb/Makefile") CONFIG_FILES="$CONFIG_FILES test/testdb/Makefile" ;;
-    "test/wormpep/Makefile") CONFIG_FILES="$CONFIG_FILES test/wormpep/Makefile" ;;
     "emboss/data/Makefile") CONFIG_FILES="$CONFIG_FILES emboss/data/Makefile" ;;
     "emboss/data/AAINDEX/Makefile") CONFIG_FILES="$CONFIG_FILES emboss/data/AAINDEX/Makefile" ;;
     "emboss/data/CODONS/Makefile") CONFIG_FILES="$CONFIG_FILES emboss/data/CODONS/Makefile" ;;

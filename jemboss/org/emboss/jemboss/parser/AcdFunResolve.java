@@ -22,7 +22,6 @@
 package org.emboss.jemboss.parser;
 
 import org.apache.regexp.*;
-import java.io.*;
 
 /**
 *
@@ -345,7 +344,6 @@ public class AcdFunResolve
   */
   private boolean acdExpNot(String exp)
   {
-    boolean ba;
 
     RECompiler rec = new RECompiler();
     try
@@ -764,8 +762,8 @@ public class AcdFunResolve
     try
     {
       REProgram caseexp = rec.compile("^[ \t]*([A-Za-z0-9]+)[ \t]*[=]");
-      REProgram listexp = rec.compile("^[ \t]*([^: \t]+)[ \t]*[:]+" +
-                                         "[ \t]*([^: \t,]+)[ \t,]*");
+      //REProgram listexp = rec.compile("^[ \t]*([^: \t]+)[ \t]*[:]+" +
+      //                                   "[ \t]*([^: \t,]+)[ \t,]*");
 
       RE caseregexp = new RE(caseexp);
       if(caseregexp.match(exp))

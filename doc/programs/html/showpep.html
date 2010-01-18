@@ -205,6 +205,9 @@ Output file [laci_ecoli.showpep]: <b></b>
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
+Displays protein sequences with features in pretty format
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     (Gapped) protein sequence(s) filename and
                                   optional format, or reference (input USA)
@@ -278,7 +281,7 @@ Output file [laci_ecoli.showpep]: <b></b>
                                   If you wish to show more than one source,
                                   separate their names with the character '|',
                                   eg:
-                                  gene* | embl (Any string is accepted)
+                                  gene* | embl (Any string)
    -typematch          string     [*] By default any feature type in the
                                   feature table is shown. You can set this to
                                   match any feature type you wish to show.
@@ -291,7 +294,7 @@ Output file [laci_ecoli.showpep]: <b></b>
                                   If you wish to show more than one type,
                                   separate their names with the character '|',
                                   eg:
-                                  *UTR | intron (Any string is accepted)
+                                  *UTR | intron (Any string)
    -minscore           float      [0.0] Minimum score of feature to display
                                   (see also maxscore) (Any numeric value)
    -maxscore           float      [0.0] Maximum score of feature to display.
@@ -307,7 +310,7 @@ Output file [laci_ecoli.showpep]: <b></b>
                                   If you wish to show more than one tag,
                                   separate their names with the character '|',
                                   eg:
-                                  gene | label (Any string is accepted)
+                                  gene | label (Any string)
    -valuematch         string     [*] Tag values are the values associated
                                   with a feature tag. Tags are the types of
                                   extra values that a feature may have. By
@@ -319,7 +322,7 @@ Output file [laci_ecoli.showpep]: <b></b>
                                   If you wish to show more than one tag value,
                                   separate their names with the character
                                   '|', eg:
-                                  pax* | 10 (Any string is accepted)
+                                  pax* | 10 (Any string)
    -stricttags         boolean    [N] By default if any tag/value pair in a
                                   feature matches the specified tag and value,
                                   then all the tags/value pairs of that
@@ -375,13 +378,14 @@ Output file [laci_ecoli.showpep]: <b></b>
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 
 </pre>
 </td></tr></table>
@@ -389,47 +393,56 @@ Output file [laci_ecoli.showpep]: <b></b>
 
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Qualifier</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Standard (Mandatory) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td>[-sequence]<br>(Parameter 1)</td>
+<td>seqall</td>
 <td>(Gapped) protein sequence(s) filename and optional format, or reference (input USA)</td>
 <td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-format</td>
+<td>list</td>
 <td>Display format</td>
 <td><table><tr><td>0</td> <td><i>(Enter your own list of things to display)</i></td></tr><tr><td>1</td> <td><i>(Sequence only)</i></td></tr><tr><td>2</td> <td><i>(Default sequence with features)</i></td></tr><tr><td>3</td> <td><i>(Pretty sequence 4:Baroque)</i></td></tr></table></td>
 <td>2</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-things</td>
+<td>list</td>
 <td>Specify a list of one or more code characters in the order in which you wish things to be displayed one above the other down the page. For example if you wish to see things displayed in the order: sequence, ticks line, blank line; then you should enter 'S,T,B'.</td>
 <td><table><tr><td>S</td> <td><i>(Sequence)</i></td></tr><tr><td>B</td> <td><i>(Blank line)</i></td></tr><tr><td>T</td> <td><i>(Ticks line)</i></td></tr><tr><td>N</td> <td><i>(Number ticks line)</i></td></tr><tr><td>F</td> <td><i>(Features)</i></td></tr><tr><td>A</td> <td><i>(Annotation)</i></td></tr></table></td>
 <td>B,N,T,S,A,F</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>[-outfile]<br>(Parameter 2)</td>
+<td>outfile</td>
 <td>Output file name</td>
 <td>Output file</td>
 <td><i>&lt;*&gt;</i>.showpep</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Additional (Optional) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
+<th align="left" colspan=5>Additional (Optional) qualifiers</th>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-uppercase</td>
+<td>range</td>
 <td>Regions to put in uppercase.
 If this is left blank, then the sequence case is left alone.
 A set of regions is specified by a set of pairs of positions.
@@ -443,8 +456,9 @@ Examples of region specifications are:
 <td>If this is left blank, then the sequence case is left alone.</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-highlight</td>
+<td>range</td>
 <td>Regions to colour if formatting for HTML.
 If this is left blank, then the sequence is left alone.
 A set of regions is specified by a set of pairs of positions.
@@ -458,8 +472,9 @@ A file of ranges to colour (one range per line) can be specified as '@filename'.
 <td><i>full sequence</i></td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-annotation</td>
+<td>range</td>
 <td>Regions to annotate by marking.
 If this is left blank, then no annotation is added.
 A set of regions is specified by a set of pairs of positions followed by optional text.
@@ -473,137 +488,385 @@ A file of ranges to annotate (one range per line) can be specified as '@filename
 <td>If this is left blank, then no annotation is added.</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-sourcematch</td>
+<td>string</td>
 <td>By default any feature source in the feature table is shown. You can set this to match any feature source you wish to show.
 The source name is usually either the name of the program that detected the feature or it is the feature table (eg: EMBL) that the feature came from.
 The source may be wildcarded by using '*'.
 If you wish to show more than one source, separate their names with the character '|', eg:
 gene* | embl</td>
-<td>Any string is accepted</td>
+<td>Any string</td>
 <td>*</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-typematch</td>
+<td>string</td>
 <td>By default any feature type in the feature table is shown. You can set this to match any feature type you wish to show.
 See http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www.expasy.ch/txt/userman.txt for a list of the Swissprot feature types.
 The type may be wildcarded by using '*'.
 If you wish to show more than one type, separate their names with the character '|', eg:
 *UTR | intron</td>
-<td>Any string is accepted</td>
+<td>Any string</td>
 <td>*</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-minscore</td>
+<td>float</td>
 <td>Minimum score of feature to display (see also maxscore)</td>
 <td>Any numeric value</td>
 <td>0.0</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-maxscore</td>
+<td>float</td>
 <td>Maximum score of feature to display.
 If both minscore and maxscore are zero (the default), then any score is ignored</td>
 <td>Any numeric value</td>
 <td>0.0</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-tagmatch</td>
+<td>string</td>
 <td>Tags are the types of extra values that a feature may have. By default any feature tag in the feature table is shown. You can set this to match any feature tag you wish to show.
 The tag may be wildcarded by using '*'.
 If you wish to show more than one tag, separate their names with the character '|', eg:
 gene | label</td>
-<td>Any string is accepted</td>
+<td>Any string</td>
 <td>*</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-valuematch</td>
+<td>string</td>
 <td>Tag values are the values associated with a feature tag. Tags are the types of extra values that a feature may have. By default any feature tag value in the feature table is shown. You can set this to match any feature tag valueyou wish to show.
 The tag value may be wildcarded by using '*'.
 If you wish to show more than one tag value, separate their names with the character '|', eg:
 pax* | 10</td>
-<td>Any string is accepted</td>
+<td>Any string</td>
 <td>*</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-stricttags</td>
+<td>boolean</td>
 <td>By default if any tag/value pair in a feature matches the specified tag and value, then all the tags/value pairs of that feature will be displayed. If this is set to be true, then only those tag/value pairs in a feature that match the specified tag and value will be displayed.</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
+<th align="left" colspan=5>Advanced (Unprompted) qualifiers</th>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-threeletter</td>
+<td>boolean</td>
 <td>Display protein sequences in three-letter code</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-number</td>
+<td>boolean</td>
 <td>Number the sequences</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-width</td>
+<td>integer</td>
 <td>Width of sequence to display</td>
 <td>Integer 1 or more</td>
 <td>60</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-length</td>
+<td>integer</td>
 <td>Line length of page (0 for indefinite)</td>
 <td>Integer 0 or more</td>
 <td>0</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-margin</td>
+<td>integer</td>
 <td>Margin around sequence for numbering</td>
 <td>Integer 0 or more</td>
 <td>10</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-[no]name</td>
+<td>boolean</td>
 <td>Set this to be false if you do not wish to display the ID name of the sequence</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-[no]description</td>
+<td>boolean</td>
 <td>Set this to be false if you do not wish to display the description of the sequence</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-offset</td>
+<td>integer</td>
 <td>Offset to start numbering the sequence from</td>
 <td>Any integer value</td>
 <td>1</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-html</td>
+<td>boolean</td>
 <td>Use HTML formatting</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-sequence" associated seqall qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sbegin1<br>-sbegin_sequence</td>
+<td>integer</td>
+<td>Start of each sequence to be used</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -send1<br>-send_sequence</td>
+<td>integer</td>
+<td>End of each sequence to be used</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sreverse1<br>-sreverse_sequence</td>
+<td>boolean</td>
+<td>Reverse (if DNA)</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sask1<br>-sask_sequence</td>
+<td>boolean</td>
+<td>Ask for begin/end/reverse</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -snucleotide1<br>-snucleotide_sequence</td>
+<td>boolean</td>
+<td>Sequence is nucleotide</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sprotein1<br>-sprotein_sequence</td>
+<td>boolean</td>
+<td>Sequence is protein</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -slower1<br>-slower_sequence</td>
+<td>boolean</td>
+<td>Make lower case</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -supper1<br>-supper_sequence</td>
+<td>boolean</td>
+<td>Make upper case</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sformat1<br>-sformat_sequence</td>
+<td>string</td>
+<td>Input sequence format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sdbname1<br>-sdbname_sequence</td>
+<td>string</td>
+<td>Database name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sid1<br>-sid_sequence</td>
+<td>string</td>
+<td>Entryname</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ufo1<br>-ufo_sequence</td>
+<td>string</td>
+<td>UFO features</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fformat1<br>-fformat_sequence</td>
+<td>string</td>
+<td>Features format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fopenfile1<br>-fopenfile_sequence</td>
+<td>string</td>
+<td>Features file name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory2<br>-odirectory_outfile</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>General qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -auto</td>
+<td>boolean</td>
+<td>Turn off prompts</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -stdout</td>
+<td>boolean</td>
+<td>Write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -filter</td>
+<td>boolean</td>
+<td>Read first file from standard input, write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -options</td>
+<td>boolean</td>
+<td>Prompt for standard and additional values</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -debug</td>
+<td>boolean</td>
+<td>Write debug output to program.dbg</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -verbose</td>
+<td>boolean</td>
+<td>Report some/full command line options</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -help</td>
+<td>boolean</td>
+<td>Report command line options and exit. More information on associated and general qualifiers can be found with -help -verbose</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -warning</td>
+<td>boolean</td>
+<td>Report warnings</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -error</td>
+<td>boolean</td>
+<td>Report errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fatal</td>
+<td>boolean</td>
+<td>Report fatal errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -die</td>
+<td>boolean</td>
+<td>Report dying program messages</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -version</td>
+<td>boolean</td>
+<td>Report version number and exit</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
 </tr>
 
 </table>

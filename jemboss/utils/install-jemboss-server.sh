@@ -17,8 +17,7 @@
 #  @author: Copyright (C) Tim Carver
 #
 #
-# Install EMBOSS & Jemboss 
-# last changed: 11/08/03
+# Installs EMBOSS & Jemboss server 
 #
 #
 
@@ -77,7 +76,7 @@ getPrimerPath()
   echo
   echo "-------------------------- Primer3  --------------------------"
   echo
-  echo "To use eprimer3 (EMBOSS interface primer3 from the Whitehead"
+  echo "To use eprimer3 (EMBOSS interface to Primer3 from the Whitehead"
   echo "Institute) Jemboss needs to know the path to the primer3_core"
   echo "binary."
   echo
@@ -96,47 +95,6 @@ getPrimerPath()
   fi
 }
 
-setDataDirectory()
-{
-
-  JEMBOSS_CLASS=$1/org/emboss/jemboss/server/
-  AUTH=$2
-  DATADIR=$3
-
-  OLDPATH="/tmp/SOAP/emboss"
-
-  if [ $AUTH = "y" ]; then
-    JEM_CLASS="$JEMBOSS_CLASS/JembossAuthServer.java"
-    if test -f "$JEM_CLASS.orig" && (test ! -z "$JEM_CLASS.orig");then
-      mv $JEM_CLASS.orig $JEM_CLASS
-    fi
-    mv $JEM_CLASS $JEM_CLASS.orig
-    sed "s|$OLDPATH|$DATADIR|" $JEM_CLASS.orig > $JEM_CLASS
-    
-    JEM_CLASS="$JEMBOSS_CLASS/JembossFileAuthServer.java"
-    if test -f "$JEM_CLASS.orig" && test ! -z "$JEM_CLASS.orig";then
-      mv $JEM_CLASS.orig $JEM_CLASS
-    fi
-    mv $JEM_CLASS $JEM_CLASS.orig
-    sed "s|$OLDPATH|$DATADIR|" $JEM_CLASS.orig > $JEM_CLASS
-#   echo "sed 's|$OLDPATH|$DATADIR|' $JEM_CLASS.old > $JEM_CLASS"
-  else
-    JEM_CLASS="$JEMBOSS_CLASS/JembossServer.java"
-    if test -f "$JEM_CLASS.orig" && test ! -z "$JEM_CLASS.orig";then
-      mv $JEM_CLASS.orig $JEM_CLASS
-    fi
-    mv $JEM_CLASS $JEM_CLASS.orig
-    sed "s|$OLDPATH|$DATADIR|" $JEM_CLASS.orig > $JEM_CLASS
-
-    JEM_CLASS="$JEMBOSS_CLASS/JembossFileServer.java"
-    if test -f "$JEM_CLASS.orig" && test ! -z "$JEM_CLASS.orig";then
-      mv $JEM_CLASS.orig $JEM_CLASS
-    fi
-    mv $JEM_CLASS $JEM_CLASS.orig
-    sed "s|$OLDPATH|$DATADIR|" $JEM_CLASS.orig > $JEM_CLASS
-  fi
-
-}
 
 
 embassy_install()
@@ -154,7 +112,7 @@ embassy_install()
   echo "EMBASSY packages can optionally be installed along with"
   echo "the EMBOSS applications, see:"
   echo "http://emboss.sourceforge.net/apps/release/version/embassy"
-  echo "where 'version' corresponds to the EMBOSS version e.g. 4.0"
+  echo "where 'version' corresponds to the EMBOSS version e.g. 6.0"
   echo
   echo "--------------------------------------------------------------"
   echo
@@ -313,6 +271,23 @@ ssl_print_notes()
      echo
    fi
  else
+
+   TCVERSION=`sed -n -e 's|\(.*\)Running The Apache Tomcat 6.0\(.*\)|6|p' $TOMCAT_ROOT/RUNNING.txt`
+
+   if [ "$TCVERSION" == "6" ]; then 
+   #tomcat 6.x
+       echo
+       echo '    <!-- Define an SSL HTTP/1.1 Connector on port '$PORT' -->'
+       echo '    <Connector port="'$PORT'" protocol="HTTP/1.1" minSpareThreads="5" maxSpareThreads="75"'
+       echo '           enableLookups="true" disableUploadTimeout="true"'
+       echo '           acceptCount="100"  maxThreads="200"'
+       echo '           scheme="https" secure="true" SSLEnabled="true"'
+       echo '           keystoreFile="'$KEYSTOREFILE'" keystorePass="'$PASSWD'"'
+       echo '           clientAuth="false" sslProtocol="TLS">'
+       echo '    </Connector>'
+       echo
+   else
+
 #tomcat 4.0.x
    echo '   <!-- Define an SSL HTTP/1.1 Connector on port '$PORT' -->'
    echo '   <Connector className="org.apache.catalina.connector.http.HttpConnector"'
@@ -325,7 +300,7 @@ ssl_print_notes()
    echo '   </Connector>'  
    echo 
  fi
-
+ fi
 }
 
 ssl_create_keystore()
@@ -370,6 +345,7 @@ make_jemboss_properties()
   EMBOSS_URL=$6
   CLUSTALW=$7
   PRIMER3=$8
+  RESULTSHOME=$9
 
   EMBOSSPATH=/usr/bin/:/bin
   export EMBOSSPATH
@@ -421,6 +397,8 @@ make_jemboss_properties()
   echo "embossData=$EMBOSS_INSTALL/share/EMBOSS/data/" >> $JEMBOSS_PROPERTIES
   echo "embossBin=$EMBOSS_INSTALL/bin/" >> $JEMBOSS_PROPERTIES
   echo "embossPath=$EMBOSSPATH" >> $JEMBOSS_PROPERTIES
+
+  echo "results.home=$RESULTSHOME" >> $JEMBOSS_PROPERTIES
 
 # echo "embossPath=/usr/bin/:/bin:$CLUSTALW:$PRIMER3:/packages/clustal/:/packages/primer3/bin:" \
 #                                                    >> $JEMBOSS_PROPERTIES
@@ -694,25 +672,16 @@ echo "--------------------------------------------------------------"
 echo "         EMBOSS and Jemboss Server installation script"
 echo "--------------------------------------------------------------"
 echo " "
-echo "Note: any default values are given in square brackets []. "
+echo "Note: any default values are given in square brackets []."
 echo " "
-echo "There are two types of installation see details at: "
-echo "http://emboss.sourceforge.net/Jemboss/install/setup.html"
-echo " "
-echo "(1) CLIENT-SERVER"
-echo "(2) STANDALONE"
-echo "Enter type of installation [1] :"
-read INSTALL_TYPE
-
-if (test "$INSTALL_TYPE" != "1") && (test "$INSTALL_TYPE" != "2"); then
-  INSTALL_TYPE="1"
-fi
-clear
-
+echo "This script installs EMBOSS as well as Jemboss."
+echo "Jemboss is deployed as a Java web application in your tomcat server."
+echo "A script is prepared to run the Jemboss client that by default uses the"
+echo "above Jemboss web application."
 echo
-echo "--------------------------------------------------------------"
-echo "         EMBOSS and Jemboss Server installation script"
-echo "--------------------------------------------------------------"
+echo "For detailed information on installing Jemboss see: "
+echo "http://emboss.sourceforge.net/Jemboss/install/setup.html"
+echo
 echo
 echo "*** This script needs to be run with permissions to be able"
 echo "*** to install EMBOSS in the required directories. This may"
@@ -721,15 +690,11 @@ echo
 echo "Before running this script you should download the latest:"
 echo
 echo "(1) EMBOSS release (contains Jemboss) ftp://emboss.open-bio.org/pub/EMBOSS/"
-
-
-if [ $INSTALL_TYPE = "1" ]; then
-  echo "(2) Tomcat release http://jakarta.apache.org/site/binindex.html"
-  echo "(3) Apache AXIS (SOAP) release   http://xml.apache.org/axis/"
-fi
+echo "(2) Tomcat 5.5 series (or above) release http://tomcat.apache.org/"
+echo "(3) Apache AXIS (SOAP) release 1.4   http://ws.apache.org/axis/"
   
 echo
-echo "Has the above been downloaded (y/n)? "
+echo "Have the above been downloaded (y/n)? "
 read DOWNLOADED
 
 if (test "$DOWNLOADED" != "y") && (test "$DOWNLOADED" != "Y"); then
@@ -831,14 +796,17 @@ else
 fi
 
 SSL="y"
+
+# keep the following variable for now so we have cvs compare for a while
+INSTALL_TYPE="1";
 if [ $INSTALL_TYPE = "1" ]; then
 #
 # localhost name
 #
   echo
-  echo "The IP address is needed by Jemboss to access"
-  echo "the Tomcat web server."
-  echo "Enter IP of server machine [localhost]:"
+  echo "The IP address or fully qualified domain name (e.g. emboss.company.com)"
+  echo "is needed by Jemboss to access the Tomcat web server."
+  echo "Enter IP address or fully qualified domain name of the server machine [localhost]:"
   read LOCALHOST
 
   if [ "$LOCALHOST" = "" ]; then
@@ -1111,11 +1079,6 @@ if [ $INSTALL_TYPE = "1" ]; then
   read DATADIR
   echo "$DATADIR" >> $RECORD
 
-  if [ "$DATADIR" != "" ]; then
-    setDataDirectory $EMBOSS_DOWNLOAD/jemboss $AUTH $DATADIR
-  else
-    setDataDirectory $EMBOSS_DOWNLOAD/jemboss $AUTH /tmp/SOAP/emboss
-  fi
   echo
 
 #
@@ -1126,7 +1089,7 @@ if [ $INSTALL_TYPE = "1" ]; then
 
   while [ ! -d "$TOMCAT_ROOT/webapps" ]
   do
-    echo "Enter Tomcat root directory (e.g. /usr/local/jakarta-tomcat-4.x.x)"
+    echo "Enter Tomcat root directory (e.g. /usr/local/tomcat)"
     read TOMCAT_ROOT
   done
   echo "$TOMCAT_ROOT" >> $RECORD
@@ -1157,7 +1120,7 @@ if [ $INSTALL_TYPE = "1" ]; then
 
   while [ ! -d "$SOAP_ROOT/webapps/axis" ]
   do
-    echo "Enter Apache AXIS (SOAP) root directory (e.g. /usr/local/axis-xx)"
+    echo "Enter Apache AXIS (SOAP) root directory (e.g. /usr/local/axis)"
     read SOAP_ROOT
   done
   echo "$SOAP_ROOT" >> $RECORD
@@ -1271,17 +1234,6 @@ getPrimerPath
 #cd $EMBOSS_INSTALL/share/EMBOSS/jemboss
 JEMBOSS=$EMBOSS_INSTALL/share/EMBOSS/jemboss
 
-#---------------------------------------------------------------------------------
-# Exit for standalone installations
-#---------------------------------------------------------------------------------
-if [ $INSTALL_TYPE = "2" ]; then
-  echo
-  echo "To run Jemboss:"
-  echo "cd $JEMBOSS"
-  echo "./runJemboss.sh"
-  echo
-  exit 0
-fi
 
 
 #
@@ -1314,7 +1266,7 @@ fi
 
 
 
-make_jemboss_properties $EMBOSS_INSTALL $LOCALHOST $AUTH $SSL $PORT $EMBOSS_URL $CLUSTALW $PRIMER3
+make_jemboss_properties $EMBOSS_INSTALL $LOCALHOST $AUTH $SSL $PORT $EMBOSS_URL $CLUSTALW $PRIMER3 $DATADIR
 
 #
 #
@@ -1413,9 +1365,7 @@ RUNFILE=$JEMBOSS/runJemboss.sh
   cp $JEMBOSS/lib/mail.jar $TOMCAT_ROOT/webapps/axis/WEB-INF/lib
   cp $JEMBOSS/lib/activation.jar $TOMCAT_ROOT/webapps/axis/WEB-INF/lib
 
-  mv $JEMBOSS/org $TOMCAT_ROOT/webapps/axis/WEB-INF/classes/org
-  cp -R $JEMBOSS/resources $TOMCAT_ROOT/webapps/axis/WEB-INF/classes/
-  
+  cp -R $JEMBOSS/resources $TOMCAT_ROOT/webapps/axis/WEB-INF/classes/  
   cp -R $EMBOSS_DOWNLOAD/jemboss/lib/axis $JEMBOSS/lib
   
 # Ensure that the native library is not loaded more than once.
@@ -1423,17 +1373,19 @@ RUNFILE=$JEMBOSS/runJemboss.sh
 # web app, and ensure that the loadLibrary() call is executed only once
 # during the lifetime of a particular JVM.
   cd $JEMBOSS;
+  echo "moving Ajax and AjaxUtil classes from jemboss.jar into ajax.jar"
   mkdir tmp;
   cd tmp;
-  jar -xvf ../lib/client.jar org/emboss/jemboss/parser/Ajax.class org/emboss/jemboss/parser/AjaxUtil.class
-  jar -cvf ../lib/ajax.jar org
-  jar -xvf ../lib/client.jar
+  jar -xf ../lib/jemboss.jar org/emboss/jemboss/parser/Ajax.class org/emboss/jemboss/parser/AjaxUtil.class
+  jar -cf ../lib/ajax.jar org
+  jar -xf ../lib/jemboss.jar
   rm org/emboss/jemboss/parser/Ajax.class org/emboss/jemboss/parser/AjaxUtil.class
-  jar -cvf ../lib/jemboss.jar .
+  echo "copying Java class files to axis web-application classes folder"
+  cp -R org $TOMCAT_ROOT/webapps/axis/WEB-INF/classes/
   cd ..;
   rm -rf tmp;
-  cp lib/jemboss.jar $TOMCAT_ROOT/webapps/axis/WEB-INF/lib/
 
+  echo "copying ajax.jar to Tomcat shared libraries folder"
   if [ -d "$TOMCAT_ROOT/shared/lib" ]; then
   #tomcat 4.1.x and 5.5.x
     cp lib/ajax.jar $TOMCAT_ROOT/shared/lib/
@@ -1468,7 +1420,7 @@ if [ "$SSL" != "y" ]; then
     echo "Please wait, starting tomcat......."
     ./tomstart
 
-    sleep 25
+    sleep 2
     deploy_axis_services $JEMBOSS/lib JembossServer.wsdd http://localhost:$PORT/ http://$LOCALHOST:$PORT/ $JAVA_HOME "" ""
   fi
 
@@ -1479,7 +1431,7 @@ else
   echo
   echo "Client and server certificates need to be generated for the"
   echo "secure (https) connection. These are then imported into"
-  echo "keystores. The keystores act as databases for security the"
+  echo "keystores. The keystores act as databases for the security"
   echo "certificates."
   echo  
   echo "For details see:"
@@ -1536,7 +1488,7 @@ else
     echo "Please wait, starting tomcat......."
     ./tomstart
 
-    sleep 45
+    sleep 2
     OPT_PROP1="-Djava.protocol.handler.pkgs=com.sun.net.ssl.internal.www.protocol"
     OPT_PROP2="-Djavax.net.ssl.trustStore=$JEMBOSS/resources/client.keystore"
 

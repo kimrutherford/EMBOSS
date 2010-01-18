@@ -78,11 +78,14 @@ Created pepwindowall.ps
     Command line arguments
 </H2>
 <pre>
+Draw Kyte-Doolittle hydropathy plot for a protein alignment
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers:
   [-sequences]         seqset     File containing a sequence alignment
   [-graph]             xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, das, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif)
 
    Additional (Optional) qualifiers:
    -datafile           datafile   [Enakai.dat] AAINDEX entry data file
@@ -126,13 +129,14 @@ Created pepwindowall.ps
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 
 </pre>
 </td></tr></table>
@@ -140,60 +144,357 @@ Created pepwindowall.ps
 
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Qualifier</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Standard (Mandatory) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td>[-sequences]<br>(Parameter 1)</td>
+<td>seqset</td>
 <td>File containing a sequence alignment</td>
 <td>Readable set of sequences</td>
 <td><b>Required</b></td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>[-graph]<br>(Parameter 2)</td>
+<td>xygraph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, das, xterm, png, gif</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Additional (Optional) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
+<th align="left" colspan=5>Additional (Optional) qualifiers</th>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-datafile</td>
+<td>datafile</td>
 <td>AAINDEX entry data file</td>
 <td>Data file</td>
 <td>Enakai.dat</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-length</td>
+<td>integer</td>
 <td>Window size</td>
 <td>Integer from 1 to 200</td>
 <td>19</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-normalize</td>
+<td>boolean</td>
 <td>Normalize data values</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
+<th align="left" colspan=5>Advanced (Unprompted) qualifiers</th>
 </tr>
 
 <tr>
-<td colspan=4>(none)</td>
+<td colspan=5>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-sequences" associated seqset qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sbegin1<br>-sbegin_sequences</td>
+<td>integer</td>
+<td>Start of each sequence to be used</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -send1<br>-send_sequences</td>
+<td>integer</td>
+<td>End of each sequence to be used</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sreverse1<br>-sreverse_sequences</td>
+<td>boolean</td>
+<td>Reverse (if DNA)</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sask1<br>-sask_sequences</td>
+<td>boolean</td>
+<td>Ask for begin/end/reverse</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -snucleotide1<br>-snucleotide_sequences</td>
+<td>boolean</td>
+<td>Sequence is nucleotide</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sprotein1<br>-sprotein_sequences</td>
+<td>boolean</td>
+<td>Sequence is protein</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -slower1<br>-slower_sequences</td>
+<td>boolean</td>
+<td>Make lower case</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -supper1<br>-supper_sequences</td>
+<td>boolean</td>
+<td>Make upper case</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sformat1<br>-sformat_sequences</td>
+<td>string</td>
+<td>Input sequence format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sdbname1<br>-sdbname_sequences</td>
+<td>string</td>
+<td>Database name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sid1<br>-sid_sequences</td>
+<td>string</td>
+<td>Entryname</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ufo1<br>-ufo_sequences</td>
+<td>string</td>
+<td>UFO features</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fformat1<br>-fformat_sequences</td>
+<td>string</td>
+<td>Features format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fopenfile1<br>-fopenfile_sequences</td>
+<td>string</td>
+<td>Features file name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-graph" associated xygraph qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -gprompt2<br>-gprompt_graph</td>
+<td>boolean</td>
+<td>Graph prompting</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -gdesc2<br>-gdesc_graph</td>
+<td>string</td>
+<td>Graph description</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -gtitle2<br>-gtitle_graph</td>
+<td>string</td>
+<td>Graph title</td>
+<td>Any string</td>
+<td>Kyte-Doolittle Plot</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -gsubtitle2<br>-gsubtitle_graph</td>
+<td>string</td>
+<td>Graph subtitle</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -gxtitle2<br>-gxtitle_graph</td>
+<td>string</td>
+<td>Graph x axis title</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -gytitle2<br>-gytitle_graph</td>
+<td>string</td>
+<td>Graph y axis title</td>
+<td>Any string</td>
+<td>Hydropathy</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -goutfile2<br>-goutfile_graph</td>
+<td>string</td>
+<td>Output file for non interactive displays</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -gdirectory2<br>-gdirectory_graph</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>General qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -auto</td>
+<td>boolean</td>
+<td>Turn off prompts</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -stdout</td>
+<td>boolean</td>
+<td>Write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -filter</td>
+<td>boolean</td>
+<td>Read first file from standard input, write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -options</td>
+<td>boolean</td>
+<td>Prompt for standard and additional values</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -debug</td>
+<td>boolean</td>
+<td>Write debug output to program.dbg</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -verbose</td>
+<td>boolean</td>
+<td>Report some/full command line options</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -help</td>
+<td>boolean</td>
+<td>Report command line options and exit. More information on associated and general qualifiers can be found with -help -verbose</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -warning</td>
+<td>boolean</td>
+<td>Report warnings</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -error</td>
+<td>boolean</td>
+<td>Report errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fatal</td>
+<td>boolean</td>
+<td>Report fatal errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -die</td>
+<td>boolean</td>
+<td>Report dying program messages</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -version</td>
+<td>boolean</td>
+<td>Report version number and exit</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
 </tr>
 
 </table>
@@ -484,7 +785,7 @@ None.
 
 <tr>
 <td><a href="wordcount.html">wordcount</a></td>
-<td>Count and extract unique words in DNA sequence(s)</td>
+<td>Count and extract unique words in molecular sequence(s)</td>
 </tr>
 
 </table>

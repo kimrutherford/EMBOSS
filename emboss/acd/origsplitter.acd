@@ -2,6 +2,7 @@ application: origsplitter [
   documentation: "Split a sequence into (overlapping) smaller
                   sequences"
   groups: "Edit"
+  relations: "EDAM: Sequence cutting"
 ]
 
 section: input [
@@ -12,6 +13,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "any"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: input
@@ -26,6 +28,7 @@ section: additional [
     minimum: "1"
     default: "10000"
     information: "Size to split at"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: overlap [
@@ -34,6 +37,7 @@ section: additional [
     maximum: "@($(size)-1)"
     default: "0"
     information: "Overlap between split sequences"
+    relations: "EDAM: Generic integer"                                     
   ]
 
 endsection: additional
@@ -46,6 +50,7 @@ section: advanced [
   boolean: addoverlap [
     default: "N"
     information: "Add overlap to size"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: advanced
@@ -57,6 +62,7 @@ section: output [
 
   seqoutall: outseq [
     parameter: "Y"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: output

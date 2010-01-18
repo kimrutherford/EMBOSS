@@ -2,6 +2,7 @@ application: stssearch [
   documentation: "Search a DNA database for matches with a
                   set of STS primers"
   groups: "Nucleic:Primers"
+  relations: "EDAM: Sequence database search by primer"
 ]
 
 section: input [
@@ -12,12 +13,14 @@ section: input [
   seqall: seqall [
     parameter: "Y"
     type: "dna"
+    relations: "EDAM: DNA sequence record"                                 
   ]
 
   infile: infile [
     parameter: "Y"
     information: "Primer pairs file"
     knowntype: "primer pairs"
+    relations:  "EDAM: Primer pairs sequence record"                   
   ]
 
 endsection: input
@@ -30,6 +33,7 @@ section: output [
   outfile: outfile [
     parameter: "Y"
     knowntype: "stssearch output"
+    relations:  "EDAM:Primer match report"                                 
   ]
 
 endsection: output

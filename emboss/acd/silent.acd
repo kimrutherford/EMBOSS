@@ -2,6 +2,7 @@ application: silent [
   documentation: "Find restriction sites to insert (mutate)
                   with no translation change"
   groups: "Nucleic:Restriction"
+  relations: "EDAM: Restriction site creation and digest"
 ]
 
 section: input [
@@ -12,6 +13,7 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "dna"
+    relations: "EDAM: Pure DNA sequence"                                   
   ]
 
 endsection: input
@@ -26,6 +28,7 @@ section: required [
     default: "all"
     information: "Comma separated enzyme list"
     knowntype: "enzyme list"
+    relations:  "EDAM: Restriction enzyme name"                        
   ]
 
 endsection: required
@@ -38,16 +41,19 @@ section: output [
   boolean: sshow [
     default: "N"
     information: "Display untranslated sequence"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: tshow [
     default: "N"
     information: "Display translated sequence"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: allmut [
     default: "N"
     information: "Display all mutations"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   report: outfile [
@@ -57,6 +63,7 @@ section: output [
     	      int:baseposn=Base-Posn rstr:aa=AAs
               rstr:silent=Silent rstr:mutation=Mutation"
     rscoreshow: "N"
+    relations: "EDAM: EMBOSS report"                                       
   ]
 
 endsection: output

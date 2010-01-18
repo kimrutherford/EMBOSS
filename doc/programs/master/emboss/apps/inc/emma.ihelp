@@ -1,3 +1,6 @@
+Multiple sequence alignment (ClustalW wrapper)
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     (Gapped) sequence(s) filename and optional
                                   format, or reference (input USA)
@@ -11,6 +14,19 @@
 *  -dend               toggle     [N] Do alignment using an old dendrogram
 *  -dendfile           infile     Dendrogram (tree file) from clustalw file
                                   (optional)
+   -[no]slow           toggle     [Y] A distance is calculated between every
+                                  pair of sequences and these are used to
+                                  construct the dendrogram which guides the
+                                  final multiple alignment. The scores are
+                                  calculated from separate pairwise
+                                  alignments. These can be calculated using 2
+                                  methods: dynamic programming (slow but
+                                  accurate) or by the method of Wilbur and
+                                  Lipman (extremely fast but approximate).
+                                  The slow-accurate method is fine for short
+                                  sequences but will be VERY SLOW for many
+                                  (e.g. >100) long (e.g. >1000 residue)
+                                  sequences.
 *  -pwmatrix           menu       [b] The scoring table which describes the
                                   similarity of each amino acid to each other.
                                   There are three 'in-built' series of weight
@@ -105,20 +121,7 @@
 *  -dnamatrix          menu       [i] This gives a menu where a single matrix
                                   (not a series) can be selected. (Values: i
                                   (iub); c (clustalw); o (own))
-*  -mamatrixfile       infile     Comparison matrix file (optional)'
-   -[no]slow           toggle     [Y] A distance is calculated between every
-                                  pair of sequences and these are used to
-                                  construct the dendrogram which guides the
-                                  final multiple alignment. The scores are
-                                  calculated from separate pairwise
-                                  alignments. These can be calculated using 2
-                                  methods: dynamic programming (slow but
-                                  accurate) or by the method of Wilbur and
-                                  Lipman (extremely fast but approximate).
-                                  The slow-accurate method is fine for short
-                                  sequences but will be VERY SLOW for many
-                                  (e.g. >100) long (e.g. >1000 residue)
-                                  sequences.
+*  -mamatrixfile       infile     Comparison matrix file (optional)
 *  -pwgapopen          float      [10.0] The penalty for opening a gap in the
                                   pairwise alignments. (Number 0.000 or more)
 *  -pwgapextend        float      [0.1] The penalty for extending a gap by 1
@@ -153,11 +156,11 @@
    -gapopen            float      [10.0] The penalty for opening a gap in the
                                   alignment. Increasing the gap opening
                                   penalty will make gaps less frequent.
-                                  (Positive foating point number)
+                                  (Positive floating point number)
    -gapextend          float      [5.0] The penalty for extending a gap by 1
                                   residue. Increasing the gap extension
                                   penalty will make gaps shorter. Terminal
-                                  gaps are not penalised. (Positive foating
+                                  gaps are not penalised. (Positive floating
                                   point number)
    -[no]endgaps        boolean    [Y] End gap separation: treats end gaps just
                                   like internal gaps for the purposes of
@@ -185,7 +188,7 @@
 *  -hgapres            string     [GPSNDQEKR] This is a set of the residues
                                   'considered' to be hydrophilic. It is used
                                   when introducing Hydrophilic gap penalties.
-                                  (Any string is accepted)
+                                  (Any string)
 *  -nohgap             boolean    [N] Hydrophilic gap penalties: used to
                                   increase the chances of a gap within a run
                                   (5 or more residues) of hydrophilic amino
@@ -245,11 +248,12 @@
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 

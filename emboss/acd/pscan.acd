@@ -2,6 +2,10 @@ application: pscan [
   documentation: "Scans protein sequence(s) with fingerprints from
                   the PRINTS database"
   groups: "Protein:Motifs"
+
+  relations: "EDAM: Protein motif searching"
+  relations: "EDAM: Sequence database search by motif or pattern"
+  relations: "EDAM: Protein secondary database search"
 ]
 
 section: input [
@@ -12,6 +16,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "Protein"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: input
@@ -27,6 +32,7 @@ section: required [
     maximum: "20"
     default: "2"
     information: "Minimum number of elements per fingerprint"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: emax [
@@ -35,6 +41,7 @@ section: required [
     maximum: "20"
     default: "20"
     information: "Maximum number of elements per fingerprint"
+    relations: "EDAM: Generic integer"                                     
   ]
 
 endsection: required
@@ -47,6 +54,7 @@ section: output [
   outfile: outfile [
     parameter: "Y"
     knowntype: "pscan output"
+    relations:  "EDAM:Fingerprint alignment report"                        
   ]
 
 endsection: output

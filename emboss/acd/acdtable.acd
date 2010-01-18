@@ -3,4 +3,5 @@ application: acdtable [
                   ACD file"
   gui: "no"
   groups: "Acd"
+  relations: "EDAM: Application information"
 ]

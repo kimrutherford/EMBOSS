@@ -34,8 +34,6 @@ public class ApplicationNamePanel extends JPanel
   private int x;
   /** y position for displaying name */
   private int y;
-  /** font size */
-  private int fontSize;
   /** application name */
   private String name;
 
@@ -53,7 +51,6 @@ public class ApplicationNamePanel extends JPanel
     this.name = name;
     this.x = x;
     this.y = y;
-    this.fontSize = fontSize;
     
     Font font = new Font("Dialog", Font.BOLD, fontSize);
     setFont(font);

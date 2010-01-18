@@ -35,9 +35,11 @@ import java.util.*;
 */
 public class JembossAuthServer
 {
+  /** jemboss properties */
+  final JembossParams jp  = new JembossParams();
 
   /** SOAP results directory */
-  private String tmproot = new String("/tmp/SOAP/emboss/");
+  private String tmproot = jp.getResultsHome();
   /** Jemboss log file       */
   private final String logFile = new String(tmproot+"/jemboss.log");
   /** Jemboss error log file */
@@ -46,12 +48,10 @@ public class JembossAuthServer
   private final String fs = new String(System.getProperty("file.separator"));
   /** path separator */
   private final String ps = new String(System.getProperty("path.separator"));
-  /** line seperator */
+  /** line separator */
   private final String ls = System.getProperty("line.separator");
 
 //get paths to EMBOSS
-  /** jemboss properties */
-  final JembossParams jp  = new JembossParams();
   /** plplot path */
   final String plplot     = jp.getPlplot();
   /** emboss data path */
@@ -80,6 +80,26 @@ public class JembossAuthServer
 // FIX FOR SOME SUNOS
 
 
+  
+  public JembossAuthServer(){
+
+      File logDir = new File(tmproot);
+      
+      if (!tmproot.endsWith(fs))
+          tmproot += fs;
+      
+      if (!logDir.exists())
+      {
+          logDir.mkdirs();
+          try {
+            Runtime.getRuntime().exec("chmod 1777 " + tmproot);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } 
+      }
+  }
+  
+  
   /**
   *
   * Retrieves the ACD file of an application.
@@ -376,11 +396,11 @@ public class JembossAuthServer
     {
 //    System.out.println("STATUS OK");
       vans.add("length");
-      vans.add(new Integer(aj.length));
+      vans.add(new Integer(Ajax.length));
       vans.add("protein");
-      vans.add(new Boolean(aj.protein));
+      vans.add(new Boolean(Ajax.protein));
       vans.add("weight");
-      vans.add(new Float(aj.weight));
+      vans.add(new Float(Ajax.weight));
       vans.add("status");
       vans.add("0");
     }
@@ -610,7 +630,7 @@ public class JembossAuthServer
                            project+fs+thiskey,userName);
     }
 
-//write decription file to project directory
+//write the description file to the project directory
     ok = false;
     try
     {
@@ -673,8 +693,7 @@ public class JembossAuthServer
     {
 
 // COMMENT THIS LINE TO USE QUEUEING SOFTWARE
-      boolean lforkB = aj.forkBatch(userName,passwd,environ,
-                                    embossCommand,project);
+      aj.forkBatch(userName, passwd, environ, embossCommand, project);
 
 // UNCOMMENT ONE OF THESE LINE TO USE QUEUEING SOFTWARE
 //    runAsBatch(aj,userName,passwd,project,quoteMe(embossCommand));
@@ -1070,7 +1089,7 @@ public class JembossAuthServer
     lsr.add("OK");
 
     aj.setErrStd();
-    boolean lsd = aj.listDirs(userName,passwd,environ,tmproot);
+    /*boolean lsd =*/ aj.listDirs(userName,passwd,environ,tmproot);
     
     String outStd = aj.getOutStd();
 
@@ -1123,17 +1142,14 @@ public class JembossAuthServer
     BufferedWriter bw = null;
     try 
     {
-      File logFile = new File(logFileName);
-      if (logFile.exists())
-          logFile.mkdirs();
-      bw = new BufferedWriter(new FileWriter(logFile, true));
+      bw = new BufferedWriter(new FileWriter(logFileName, true));
       bw.write(logEntry);
       bw.newLine();
       bw.flush();
     } 
     catch (Exception ioe) 
     {
-      System.out.println("Error writing to log file "+logFile);
+      System.out.println("Error writing to log file "+logFileName);
       ioe.printStackTrace();
     } 
     finally                     // always close the file
@@ -1315,6 +1331,9 @@ public class JembossAuthServer
     }
     catch(Exception exp) 
     {
+      appendToLogFile(userName+":: "+new Date().toString().replace(':','_')+
+            " Failed Authorisation call "+userName+"\n"+
+            "Error message: "+exp.getMessage(),errorLog);        
       ok = false;
     }
 
@@ -1368,5 +1387,28 @@ public class JembossAuthServer
     throw new java.lang.CloneNotSupportedException();
   }
 
-}
+  
+  /**
+   * returns the version string of the EMBOSS installation,
+   * which is used by this Jemboss server
+   * 
+   * @param mysettings    jemboss properties
+   * 
+   */
+  public String version()
+  {
+      String[] envp = jp.getEmbossEnvironmentArray(env);
+      String embossCommand = new String(embossBin + "embossversion");
+      RunEmbossApplication2 rea = new RunEmbossApplication2(embossCommand,
+              envp,null);
+      try
+      {
+          Process p = rea.getProcess();
+          p.waitFor();
+      }
+      catch(InterruptedException iexp){}
 
+      return rea.getProcessStdout();
+  }
+
+}

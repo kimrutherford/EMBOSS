@@ -1,6 +1,7 @@
 application: treetypedisplay [
   documentation: "Test of graphics"
   groups: "Test"
+  relations: "EDAM: File debugging"
 ]
 
 section: output [
@@ -10,6 +11,7 @@ section: output [
 
   graph: graph [
     standard: "Y"
+    relations: "EDAM: EMBOSS graph file"                                   
   ]
 
 endsection: output

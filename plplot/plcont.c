@@ -1,4 +1,4 @@
-/* $Id: plcont.c,v 1.3 2007/05/08 09:09:37 rice Exp $
+/* $Id: plcont.c,v 1.5 2009/09/15 16:56:55 rice Exp $
 
 	Contour plotter.
 
@@ -326,9 +326,9 @@ static void plfloatlabel(PLFLT value, char *string)
     else if (tmp < 0.0) {
 	tmp = -tmp;
 	if (floor(tmp) < tmp)
-            exponent = -(int )(floor(tmp) + 1.0);
+	  exponent = -((float) floor(tmp) + 1.0);
 	else
-            exponent = -(int )(floor(tmp));
+	  exponent = -((float) floor(tmp));
     }
 
     mant = value/pow(10.0, exponent);

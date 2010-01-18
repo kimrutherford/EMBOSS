@@ -1,6 +1,7 @@
 application: newseq [
   documentation: "Create a sequence file from a typed-in sequence"
   groups: "Edit"
+  relations: "EDAM: Sequence extraction and generation"
 ]
 
 section: input [
@@ -15,6 +16,7 @@ section: input [
            you will use to identify the sequence. It should have no (or few)
            punctuation characters in it."
     knowntype: "name"
+    relations:  "EDAM: Generic string"                                 
   ]
 
   string: description [
@@ -22,6 +24,7 @@ section: input [
     information: "Description of the sequence"
     help: "Enter any description of the sequence that you require."
     knowntype: "string"
+    relations:  "EDAM: Generic string"                                 
   ]
 
   list: type [
@@ -34,6 +37,7 @@ section: input [
     delimiter: ","
     codedelimiter: ":"
     information: "Type of sequence"
+    relations: "EDAM: Generic string array"                                
   ]
 
   string: sequence [
@@ -47,6 +51,7 @@ section: input [
            you will not be able to press the RETURN/ENTER key until you have
            deleted a few characters."
     knowntype: "sequence"
+    relations:  "EDAM: Sequence"                                       
   ]
 
 endsection: input
@@ -59,6 +64,7 @@ section: output [
   seqout: outseq [
     parameter: "Y"
     type: "@(@($(type) == P) ? gapprotein : gapnucleotide)"
+    relations: "EDAM: Sequence"                                            
   ]
 
 endsection: output

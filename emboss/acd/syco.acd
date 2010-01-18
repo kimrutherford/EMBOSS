@@ -1,7 +1,9 @@
 application: syco [
-  documentation: "Draw synonymous codon usage statictic plot for a
+  documentation: "Draw synonymous codon usage statistic plot for a
                   nucleotide sequence"
   groups: "Nucleic:Codon usage, Nucleic:Gene finding"
+  relations: "EDAM: Coding region prediction"
+  relations: "EDAM: Codon usage analysis"
 ]
 
 section: input [
@@ -12,11 +14,13 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "DNA"
+    relations: "EDAM: Sequence"                                            
   ]
 
   codon: cfile [
     standard: "Y"
     help: "Codon usage file"
+    relations: "EDAM: Codon usage table"                                   
   ]
 
 endsection: input
@@ -29,11 +33,13 @@ section: advanced [
   integer: window [
     default: "30"
     information: "Averaging window"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   boolean: uncommon [
     default: "N"
     information: "Show common codon usage"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   float: minimum [
@@ -41,6 +47,7 @@ section: advanced [
     minimum: "0.0"
     maximum: ".99"
     information: "Minimum value for a common codon"
+    relations: "EDAM: Generic float"                                       
   ]
 
 endsection: advanced
@@ -53,12 +60,14 @@ section: output [
   toggle: plot [
     information: "Produce plot"
     default: "Y"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   xygraph: graph [
     standard: "$(plot)"
     multiple: "3"
     gdesc: "Gribskov Codon Plot"
+    relations: "EDAM: EMBOSS graph file"                                   
   ]
 
   outfile: outfile [
@@ -66,6 +75,7 @@ section: output [
     knowntype: "syco output"
     nullok: "$(plot)"
     nulldefault: "$(plot)"
+    relations:  "EDAM:Synonymous codon usage statictic plot"               
   ]
 
 endsection: output

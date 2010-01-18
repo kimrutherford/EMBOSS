@@ -1,5 +1,4 @@
-
-                                 showalign 
+                                  showalign
 
 
 
@@ -24,19 +23,20 @@ Description
    or one of the input set (specified by name or the ordinal number of
    that sequence in the file). The output sequences can be displayed in
    either the input order (the default), sorted in order of their
-   similarity to the reference sequence, or sorted alphabetically by
-   their names. There are many other options to control the content and
-   format of the output.
+   similarity to the reference sequence, or sorted alphabetically by their
+   names. There are many other options to control the content and format
+   of the output.
 
 Usage
 
    Here is a sample session with showalign
 
 
-% showalign 
+% showalign
 Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: globins.msf
-Output file [globins.showalign]: 
+Output file [globins.showalign]:
+
 
    Go to the input files for this example
    Go to the output files for this example
@@ -46,10 +46,11 @@ Output file [globins.showalign]:
    Display the sequences in order of similarity to the reference sequence
 
 
-% showalign -order=s 
+% showalign -order=s
 Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: globins.msf
-Output file [globins.showalign]: 
+Output file [globins.showalign]:
+
 
    Go to the output files for this example
 
@@ -59,10 +60,11 @@ Output file [globins.showalign]:
    colours:
 
 
-% showalign -html -high '4-13 green 43-43 red 51-56 blue' 
+% showalign -html -high '4-13 green 43-43 red 51-56 blue'
 Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: globins.msf
-Output file [globins.showalign]: 
+Output file [globins.showalign]:
+
 
    Go to the output files for this example
 
@@ -74,10 +76,11 @@ Output file [globins.showalign]:
    to 30 only
 
 
-% showalign -nocon -norule -nonum -nobot -ref=1 -sb=10 -send=30 
+% showalign -nocon -norule -nonum -nobot -ref=1 -sb=10 -send=30
 Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: globins.msf
-Output file [globins.showalign]: 
+Output file [globins.showalign]:
+
 
    Go to the output files for this example
 
@@ -86,20 +89,22 @@ Output file [globins.showalign]:
    Show non-identities between the sequences
 
 
-% showalign -show=n 
+% showalign -show=n
 Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: globins.msf
-Output file [globins.showalign]: 
+Output file [globins.showalign]:
+
 
    Example 6
 
    Show all of the sequences
 
 
-% showalign -show=a 
+% showalign -show=a
 Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: globins.msf
-Output file [globins.showalign]: 
+Output file [globins.showalign]:
+
 
    Go to the output files for this example
 
@@ -108,10 +113,11 @@ Output file [globins.showalign]:
    Show identities between the sequences
 
 
-% showalign -show=i 
+% showalign -show=i
 Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: globins.msf
-Output file [globins.showalign]: 
+Output file [globins.showalign]:
+
 
    Go to the output files for this example
 
@@ -120,10 +126,11 @@ Output file [globins.showalign]:
    Show similarities between the sequences
 
 
-% showalign -show=s 
+% showalign -show=s
 Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: globins.msf
-Output file [globins.showalign]: 
+Output file [globins.showalign]:
+
 
    Go to the output files for this example
 
@@ -132,10 +139,11 @@ Output file [globins.showalign]:
    Show dissimilarities between the sequences
 
 
-% showalign -show=d 
+% showalign -show=d
 Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: globins.msf
-Output file [globins.showalign]: 
+Output file [globins.showalign]:
+
 
    Go to the output files for this example
 
@@ -144,10 +152,11 @@ Output file [globins.showalign]:
    Use the first sequence as the reference to compare to:
 
 
-% showalign -ref=1 
+% showalign -ref=1
 Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: globins.msf
-Output file [globins.showalign]: 
+Output file [globins.showalign]:
+
 
    Go to the output files for this example
 
@@ -156,10 +165,11 @@ Output file [globins.showalign]:
    Show a range of sequences in uppercase, everything else in lowercase
 
 
-% showalign -nocon -ref=1 -sl -upper 9-15 -nosimilarcase 
+% showalign -nocon -ref=1 -sl -upper 9-15 -nosimilarcase
 Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: globins.msf
-Output file [globins.showalign]: 
+Output file [globins.showalign]:
+
 
    Go to the output files for this example
 
@@ -168,14 +178,18 @@ Output file [globins.showalign]:
    Display the sequences in alphabetic order:
 
 
-% showalign -order=a 
+% showalign -order=a
 Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: globins.msf
-Output file [globins.showalign]: 
+Output file [globins.showalign]:
+
 
    Go to the output files for this example
 
 Command line arguments
+
+Display a multiple sequence alignment in pretty format
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqset     The sequence alignment to be displayed.
@@ -198,7 +212,7 @@ Command line arguments
                                   consensus sequence will be used as the
                                   reference sequence. By default the consensus
                                   sequence is used as the reference sequence.
-                                  (Any string is accepted)
+                                  (Any string)
    -[no]bottom         boolean    [Y] If this is true then the reference
                                   sequence is displayed at the bottom of the
                                   alignment as well as at the top.
@@ -331,13 +345,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -397,9 +413,10 @@ MYG_PHYCA  KDIAAKYKELGYQG
 GLB5_PETMA Y~~~~~~~~~~~~~
 LGB2_LUPLU IVIKKEMNDAA~~~
 
-   You can specifiy a file of ranges to display in uppercase by giving
-   the '-uppercase' qualifier the value '@' followed by the name of the
-   file containing the ranges. (eg: '-upper @myfile').
+
+   You can specifiy a file of ranges to display in uppercase by giving the
+   '-uppercase' qualifier the value '@' followed by the name of the file
+   containing the ranges. (eg: '-upper @myfile').
 
    The format of the range file is:
 
@@ -429,9 +446,9 @@ LGB2_LUPLU IVIKKEMNDAA~~~
 
    The format of this file is very similar to the format of the above
    uppercase range file, except that the text after the start and end
-   positions is used as the HTML colour name. This colour name is used
-   'as is' when specifying the colour in HTML in a '' construct, (where
-   'xxx' is the name of the colour).
+   positions is used as the HTML colour name. This colour name is used 'as
+   is' when specifying the colour in HTML in a '' construct, (where 'xxx'
+   is the name of the colour).
 
    The standard names of HTML font colours are given in:
    http://http://www.w3.org/TR/REC-html40/types.html and
@@ -490,6 +507,7 @@ GLB5_PETMA LAAViADTVAAG.AGF.KLM..ICI.LRS.Y-------------
 LGB2_LUPLU Ai.KTiKEVVGAKwsE.lNsaWTIAYDEl.IViKKeMNDAA---
 Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
 
+
   Output files for usage example 2
 
   File: globins.showalign
@@ -530,6 +548,7 @@ MYG_PHYCA  AiiH..HSRHPG..GAdAQGa.N.A.ELFRKDiAA..KELGYQG
 LGB2_LUPLU Ai.KTiKEVVGAKwsE.lNsaWTIAYDEl.IViKKeMNDAA---
 Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
 
+
   Output files for usage example 3
 
   File: globins.showalign
@@ -537,24 +556,24 @@ Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
 <pre>
                    10        20        30        40        50        60
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xxx<font color=green>xxxxxxxLSx</font>xExSxVxSxWxKxNxxxEVGGxALxxxLx<
-font color=red>x</font>IxPxxQx<font color=blue>FFxTFx</font>xLSx
-HBB_HUMAN  ---<font color=green>-----VH.tP</font>E.K.A.TaL.G.V.-VD....E..GR-.L<
-font color=red>V</font>vY.WT.R<font color=blue>..Es.G</font>D..T
-HBB_HORSE  ---<font color=green>-----VQ..G</font>E.KaA.LaL.D.V.-EE....E..GR-.L<
-font color=red>V</font>vY.WT.R<font color=blue>..Ds.G</font>D..N
-HBA_HUMAN  ---<font color=green>----------</font>-VL.PADKTNV.AA-WGk..AH.GEYGAE<
-font color=red>A</font>lERMFLS<font color=blue>.PT.KT</font>YFPH
-HBA_HORSE  ---<font color=green>----------</font>-VL.AADKTNV.AA-WSk...H.GEYGAE<
-font color=red>A</font>lERMFLG<font color=blue>.PT.KT</font>YFPH
-MYG_PHYCA  ---<font color=green>----VLSEGE</font>WqLVLHVWAKVeAd-VAGH.QDI.IR-.F<
-font color=red>K</font>SH.ETLE<font color=blue>K.DR.K</font>H.KT
-GLB5_PETMA PIV<font color=green>DTGSVAP..A</font>A.KtKiR.A.APVYSTY.TS.VDiLVKFF<
-font color=red>T</font>ST.AA.E<font color=blue>..PK.K</font>G.tT
-LGB2_LUPLU ---<font color=green>-----GA.tE</font>SqAaL.K.S.EeF.ANIPKHTHRFFILvL<
-font color=red>E</font>.A.AAkD<font color=blue>L.SFLK</font>GT.E
-Consensus  xxx<font color=green>xxxxxxxLSx</font>xExSxVxSxWxKxNxxxEVGGxALxxxLx<
-font color=red>x</font>IxPxxQx<font color=blue>FFxTFx</font>xLSx
+Consensus  xxx<font color=green>xxxxxxxLSx</font>xExSxVxSxWxKxNxxxEVGGxALxxxLx<f
+ont color=red>x</font>IxPxxQx<font color=blue>FFxTFx</font>xLSx
+HBB_HUMAN  ---<font color=green>-----VH.tP</font>E.K.A.TaL.G.V.-VD....E..GR-.L<f
+ont color=red>V</font>vY.WT.R<font color=blue>..Es.G</font>D..T
+HBB_HORSE  ---<font color=green>-----VQ..G</font>E.KaA.LaL.D.V.-EE....E..GR-.L<f
+ont color=red>V</font>vY.WT.R<font color=blue>..Ds.G</font>D..N
+HBA_HUMAN  ---<font color=green>----------</font>-VL.PADKTNV.AA-WGk..AH.GEYGAE<f
+ont color=red>A</font>lERMFLS<font color=blue>.PT.KT</font>YFPH
+HBA_HORSE  ---<font color=green>----------</font>-VL.AADKTNV.AA-WSk...H.GEYGAE<f
+ont color=red>A</font>lERMFLG<font color=blue>.PT.KT</font>YFPH
+MYG_PHYCA  ---<font color=green>----VLSEGE</font>WqLVLHVWAKVeAd-VAGH.QDI.IR-.F<f
+ont color=red>K</font>SH.ETLE<font color=blue>K.DR.K</font>H.KT
+GLB5_PETMA PIV<font color=green>DTGSVAP..A</font>A.KtKiR.A.APVYSTY.TS.VDiLVKFF<f
+ont color=red>T</font>ST.AA.E<font color=blue>..PK.K</font>G.tT
+LGB2_LUPLU ---<font color=green>-----GA.tE</font>SqAaL.K.S.EeF.ANIPKHTHRFFILvL<f
+ont color=red>E</font>.A.AAkD<font color=blue>L.SFLK</font>GT.E
+Consensus  xxx<font color=green>xxxxxxxLSx</font>xExSxVxSxWxKxNxxxEVGGxALxxxLx<f
+ont color=red>x</font>IxPxxQx<font color=blue>FFxTFx</font>xLSx
 
                    70        80        90       100       110       120
            ----:----|----:----|----:----|----:----|----:----|----:----|
@@ -593,6 +612,7 @@ HBA_HORSE  -----VL..ADKTNV.AA-WS
 MYG_PHYCA  SEGEWqLVLHVWAKVeAd-.A
 GLB5_PETMA P.sAA..tKiRsA.AP.YSTY
 LGB2_LUPLU A..ESqAaL.KsS.EeF.ANI
+
 
   Output files for usage example 6
 
@@ -634,6 +654,7 @@ GLB5_PETMA laavIadtvaagDagfEklmSMiciLlrsAy-------------
 LGB2_LUPLU aILktIkevvgakWSeELnSAwtiaydeLAivIkkEmndaa---
 Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
 
+
   Output files for usage example 7
 
   File: globins.showalign
@@ -673,6 +694,7 @@ MYG_PHYCA  ....VL......DF.......M.K.L.........KY.......
 GLB5_PETMA ............D...E...SM...L...A.-------------
 LGB2_LUPLU ..L.............E............A...........---
 Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
+
 
   Output files for usage example 8
 
@@ -714,6 +736,7 @@ GLB5_PETMA ....i.......D...E...SM...L...A.-------------
 LGB2_LUPLU .iL..i.......ws.El.sa.......lA..i..e.....---
 Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
 
+
   Output files for usage example 9
 
   File: globins.showalign
@@ -753,6 +776,7 @@ MYG_PHYCA  A..H..HSRHPG..GA.AQG..N.A.ELFRKD.AA..KELGYQG
 GLB5_PETMA LAAV.ADTVAAG.AGF.KLM..ICI.LRS.Y-------------
 LGB2_LUPLU A..KT.KEVVGAK..E..N..WTIAYDE..IV.KK.MNDAA---
 Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
+
 
   Output files for usage example 10
 
@@ -794,6 +818,7 @@ LGB2_LUPLU AilKTiKEVV.AkwsEElNs.wTIAYDEl.IViKKeMnDAA---
 HBB_HUMAN  VLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKYH------
 Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
 
+
   Output files for usage example 11
 
   File: globins.showalign
@@ -830,6 +855,7 @@ MYG_PHYCA  aiih..hsrhpgd.gada.g.mn.alelfrkdi.a..kelgyqg
 GLB5_PETMA laaviadtvaagdagfeklmsmicillrs.y-------------
 LGB2_LUPLU ailktikevv.akwseelns.wtiaydel.ivikkemndaa---
 HBB_HUMAN  vlvcvlahhfgkeftppvqaayqkvvagvanalahkyh------
+
 
   Output files for usage example 12
 
@@ -871,10 +897,11 @@ LGB2_LUPLU Ai.KTiKEVVGAKwsE.lNsaWTIAYDEl.IViKKeMNDAA---
 MYG_PHYCA  AiiH..HSRHPG..GAdAQGa.N.A.ELFRKDiAA..KELGYQG
 Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
 
+
 Data files
 
-   showalign reads in scoring matrices to determine the consesnus
-   sequence and to determine which matches are similar or not.
+   showalign reads in scoring matrices to determine the consensus sequence
+   and to determine which matches are similar or not.
 
    EMBOSS data files are distributed with the application and stored in
    the standard EMBOSS data directory, which is defined by the EMBOSS
@@ -889,11 +916,12 @@ Data files
 
 % embossdata -fetch -file Exxx.dat
 
+
    Users can provide their own data files in their own directories.
    Project specific files can be put in the current directory, or for
-   tidier directory listings in a subdirectory called ".embossdata".
-   Files for all EMBOSS runs can be put in the user's home directory, or
-   again in a subdirectory called ".embossdata".
+   tidier directory listings in a subdirectory called ".embossdata". Files
+   for all EMBOSS runs can be put in the user's home directory, or again
+   in a subdirectory called ".embossdata".
 
    The directories are searched in the following order:
      * . (your current directory)
@@ -903,16 +931,16 @@ Data files
 
 Notes
 
-   showalign reads in a scoring matrix to determine the consesnus
-   sequence and to determine which matches are similar or not.
+   showalign reads in a scoring matrix to determine the consensus sequence
+   and to determine which matches are similar or not.
 
    By using the -show option, the displayed sequences can be shown as:
      * complete (-show=All),
      * only identical matches between the sequence and the reference
        sequence, all other positions being replaced by '.' characters
        (-show=Identities)
-     * non-identical matches, with identical matches being replaced by
-       '.' characters, similar matches are shown in lower case
+     * non-identical matches, with identical matches being replaced by '.'
+       characters, similar matches are shown in lower case
        (-show=Non-identities)
      * similar matches, with non-similar matches being replaced by '.'
        characters, similar matches are shown in lower case
@@ -920,7 +948,7 @@ Notes
      * dissimilar matches, with identical or similar matches being
        replaced by '.' characters (-show=Dissimilarities)
 
-   Changing the similar matches to lowercase can optionally be disable by
+   Changing the similar matches to lowercase can optionally be disabled by
    using the option -nosimilarcase.
 
    A small table of the way these alignments are displayed illustrates
@@ -937,22 +965,21 @@ Similar         Il.
 Dissimilar      ..W
 
    The consensus line can be displayed in a mixture of uppercase and
-   lowercase symbols. Uppercase indicates a strong consensus and
-   lowercase a weak one. The cutoff for setting the consensus case is set
-   by the qualifier -setcase. If the number of residues at that position
-   that match the consensus value is greater than this, then the symbol
-   is in uppercase, otherwise the symbol is in lowercase. By default, the
-   value of -setcase is set so that if there are more than 50% of
-   residues identical to the consunsus at that position, then the
-   consensus is in uppercase. To put all of the consensus symbols into
-   uppercase or lowercase, make -setcase zero or very large (try 100000
-   ?).
+   lowercase symbols. Uppercase indicates a strong consensus and lowercase
+   a weak one. The cutoff for setting the consensus case is set by the
+   qualifier -setcase. If the number of residues at that position that
+   match the consensus value is greater than this, then the symbol is in
+   uppercase, otherwise the symbol is in lowercase. By default, the value
+   of -setcase is set so that if there are more than 50% of residues
+   identical to the consensus at that position, then the consensus is in
+   uppercase. To put all of the consensus symbols into uppercase or
+   lowercase, make -setcase zero or very large (try 100000 ?).
 
-   Other display options include Sequence numbering ruler with ticks
-   above the sequence. The width of a line can be set. The width of a
-   margin to the left of the sequences that shows the sequence names can
-   be set. Specified regions of the sequence can be displayed in
-   uppercase to highlight them.
+   Other display options include Sequence numbering ruler with ticks above
+   the sequence. The width of a line can be set. The width of a margin to
+   the left of the sequences that shows the sequence names can be set.
+   Specified regions of the sequence can be displayed in uppercase to
+   highlight them.
 
    The output can be formatted for HTML. If the output is being formatted
    for HTML, then specified regions of the sequence can be displayed in

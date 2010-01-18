@@ -1,5 +1,4 @@
-
-                                 epestfind 
+                                  epestfind
 
 
 
@@ -25,11 +24,11 @@ Description
 
    The epestfind output file includes poor and potential PEST motifs
    together with their PEST score, mass percent of DEPST and their
-   hydrophobicity index. 'Valid' PEST motifs below the specified
-   threshold score are considered as 'poor', while PEST scores above the
-   threshold score are of real biological interest. The higher the PEST
-   score, the more likely is degradation of proteins mediated via
-   'potential' PEST motifs in eukaryotic cells.
+   hydrophobicity index. 'Valid' PEST motifs below the specified threshold
+   score are considered as 'poor', while PEST scores above the threshold
+   score are of real biological interest. The higher the PEST score, the
+   more likely is degradation of proteins mediated via 'potential' PEST
+   motifs in eukaryotic cells.
 
 Algorithm
 
@@ -50,23 +49,22 @@ Algorithm
    expected. Another side effect of scanning for positively charged amino
    acids is that very long PEST motifs are sub-divided into adjacent
    smaller ones. However, identification of PEST motifs is achieved by an
-   initial scan for positively charged amino acids arginine (R),
-   histidine (H) and lysine (K) within the specified protein sequence.
-   All amino acids between the positively charged flanks are counted and
-   only those motifs are considered further, which contain a number of
-   amino acids equal to or higher than the window-size parameter.
-   Additionally, all 'valid' PEST regions are required to contain at
-   least one proline (P), one aspartate (D) or glutamate (E) and at least
-   one serine (S) or threonine(T). Sequences that do not meet the above
-   criteria are classified as 'invalid' PEST motifs and excluded from
-   further analysis.
+   initial scan for positively charged amino acids arginine (R), histidine
+   (H) and lysine (K) within the specified protein sequence. All amino
+   acids between the positively charged flanks are counted and only those
+   motifs are considered further, which contain a number of amino acids
+   equal to or higher than the window-size parameter. Additionally, all
+   'valid' PEST regions are required to contain at least one proline (P),
+   one aspartate (D) or glutamate (E) and at least one serine (S) or
+   threonine(T). Sequences that do not meet the above criteria are
+   classified as 'invalid' PEST motifs and excluded from further analysis.
 
    The quality of 'valid' PEST motifs is refined by means of a scoring
-   parameter based on the local enrichment of critical amino acids as
-   well as the motif's hydrophobicity. Enrichment of D, E, P, S and T is
+   parameter based on the local enrichment of critical amino acids as well
+   as the motif's hydrophobicity. Enrichment of D, E, P, S and T is
    expressed in mass percent (w/w) and corrected for one equivalent of D
-   or E, one of P and one of S or T. Calculation of hydrophobicity
-   follows in principle the method of J. Kyte and R.F. Doolittle [4]. For
+   or E, one of P and one of S or T. Calculation of hydrophobicity follows
+   in principle the method of J. Kyte and R.F. Doolittle [4]. For
    simplified calculations, Kyte-Doolittle hydropathy indices, which
    originally ranged from -4.5 for arginine to +4.5 for isoleucine, were
    converted to positive integers. This was achieved by the following
@@ -80,29 +78,29 @@ Algorithm
    The desired PEST score is obtained as combination of local enrichment
    term and hydrophobicity term as expressed by the following equation:
 
-          PEST score = 0.55 * DEPST - 0.5 * hydrophobicity index.
+           PEST score = 0.55 * DEPST - 0.5 * hydrophobicity index.
 
    Although, the formula above differs from the publication [1], it is in
    fact the correct one, which was also implemented in the original BASIC
-   programme (personal communication). In addition, the programme
-   includes a correction for the hydropathy index of tyrosine, introduced
-   by Robert H. Stellwagen from the University of Southern California.
-   However, PEST scores can range from -45 for poly-isoleucine to about
-   +50 for poly-aspartate plus one proline and one serine. 'Valid' PEST
-   motifs below the threshold score (5.0) are considered as 'poor', while
-   PEST scores above the threshold score are of real biological interest.
-   The higher the PEST score, the more likely is degradation of proteins
+   programme (personal communication). In addition, the programme includes
+   a correction for the hydropathy index of tyrosine, introduced by Robert
+   H. Stellwagen from the University of Southern California. However, PEST
+   scores can range from -45 for poly-isoleucine to about +50 for
+   poly-aspartate plus one proline and one serine. 'Valid' PEST motifs
+   below the threshold score (5.0) are considered as 'poor', while PEST
+   scores above the threshold score are of real biological interest. The
+   higher the PEST score, the more likely is degradation of proteins
    mediated via 'potential' PEST motifs in eukaryotic cells.
 
    Presently, all modified Kyte-Doolittle hydropathy indices are
    hard-coded into the programme, which might change in future.
 
    The array of linear transformed Kyte-Doolittle hydropathy indices
-   (ltkdhi) is listed in alphabetical order below. (A-M and N-Z as well
-   as N-terminus and C-terminus)
+   (ltkdhi) is listed in alphabetical order below. (A-M and N-Z as well as
+   N-terminus and C-terminus)
 
-   63, 10, 70, 10, 10, 72, 41, 13, 90, 0, 6, 82, 64, 10, 0, 29, 10, 0,
-   36, 38, 0, 87, 36, 45, 58, 10, 0, 0
+   63, 10, 70, 10, 10, 72, 41, 13, 90, 0, 6, 82, 64, 10, 0, 29, 10, 0, 36,
+   38, 0, 87, 36, 45, 58, 10, 0, 0
 
    The linear transformation was ltkdhi = 10 * kdhi + 45
    All values range from Argine R = 0 to Isoleucine I = 90
@@ -115,23 +113,27 @@ Usage
    Here is a sample session with epestfind
 
 
-% epestfind -graph cps -invalid 
+% epestfind -graph cps -invalid
 Finds PEST motifs as potential proteolytic cleavage sites
 Input protein sequence: exu2_drops.embl
-Window length [10]: 
+Window length [10]:
 Sort order of results
       1 : length
       2 : position
       3 : score
-Sort order of results [score]: 
-Output file [exu2_drops.epestfind]: 
+Sort order of results [score]:
+Output file [exu2_drops.epestfind]:
 
 Created epestfind.ps
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Finds PEST motifs as potential proteolytic cleavage sites
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Protein sequence USA to be analysed.
@@ -144,7 +146,7 @@ Command line arguments
                                   will be written.
    -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, das, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif)
 
    Additional (Optional) qualifiers:
    -mwdata             datafile   [Emolwt.dat] Molecular weights data file
@@ -208,13 +210,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -370,6 +374,7 @@ Invalid PEST motif with 10 amino acids between position 225 and 236.
        OOOOOOO   poor
        -------   invalid
 
+
   Graphics File: epestfind.ps
 
    [epestfind results]
@@ -405,11 +410,12 @@ Data files
 
 % embossdata -fetch -file Exxx.dat
 
+
    Users can provide their own data files in their own directories.
    Project specific files can be put in the current directory, or for
-   tidier directory listings in a subdirectory called ".embossdata".
-   Files for all EMBOSS runs can be put in the user's home directory, or
-   again in a subdirectory called ".embossdata".
+   tidier directory listings in a subdirectory called ".embossdata". Files
+   for all EMBOSS runs can be put in the user's home directory, or again
+   in a subdirectory called ".embossdata".
 
    The directories are searched in the following order:
      * . (your current directory)
@@ -462,10 +468,10 @@ Notes
    protein 70 (HSP 70), HMG-CoA reductase, tyrosine aminotransferase
    (TAT), ornithine decarboxylase (ODC), alpha-Casein and beta-Casein.
    Although all these proteins exerted various different cellular
-   functions it became apparent that they shared high local
-   concentrations of amino acids proline (P), glutamic acid (E), serine
-   (S), threonine (T) and to a lesser extent aspartic acid (D). From that
-   it was concluded that PEST motifs reduce the half-lives of proteins
+   functions it became apparent that they shared high local concentrations
+   of amino acids proline (P), glutamic acid (E), serine (S), threonine
+   (T) and to a lesser extent aspartic acid (D). From that it was
+   concluded that PEST motifs reduce the half-lives of proteins
    dramatically and hence, that they target proteins for proteolytic
    degradation.
 
@@ -521,7 +527,8 @@ See also
 
 Author(s)
 
-   Michael K. Schuster and Martin Grabner (martin.grabner © univie.ac.at)
+   Michael K. Schuster and Martin Grabner
+   (martin.grabner (c) univie.ac.at)
    from the Austrian National EMBnet node.
 
    Original program 'epestfind' by Scott Rogers and Martin Rechsteiner

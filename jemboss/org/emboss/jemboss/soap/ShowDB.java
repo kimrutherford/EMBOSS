@@ -50,15 +50,12 @@ public class ShowDB
   * @param mysettings 	jemboss properties
   *
   */
-  public ShowDB(JembossParams mysettings)
+  public ShowDB(JembossParams mysettings) throws JembossSoapException
   {
  
     PublicRequest dbReq = null;   
-    try
-    {
-      dbReq = new PublicRequest(mysettings, "show_db");
-    }
-    catch (JembossSoapException jse) {}
+
+    dbReq = new PublicRequest(mysettings, "show_db");
 
     statusmsg = dbReq.getVal("msg");
     status = dbReq.getVal("status");

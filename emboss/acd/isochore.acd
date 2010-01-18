@@ -1,6 +1,7 @@
 application: isochore [
   documentation: "Plots isochores in DNA sequences"
   groups: "Nucleic:Composition"
+  relations: "EDAM: CpG island and isochores identification"
 ]
 
 section: input [
@@ -11,6 +12,7 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "dna"
+    relations: "EDAM: Pure DNA sequence"                                   
   ]
 
 endsection: input
@@ -26,6 +28,7 @@ section: additional [
     minimum: "1"
     maximum: "@($(sequence.end)/2)"
     information: "Window size"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: shift [
@@ -34,6 +37,7 @@ section: additional [
     minimum: "1"
     maximum: "@($(sequence.end)/10)"
     information: "Shift increment"
+    relations: "EDAM: Generic integer"                                     
   ]
 
 endsection: additional
@@ -47,10 +51,12 @@ section: output [
     parameter: "Y"
     extension: "iso"
     knowntype: "isochore output"
+    relations:  "EDAM:CpG island and isochore report"                      
   ]
 
   xygraph: graph [
     standard: "Y"
+    relations: "EDAM: EMBOSS graph file"                                   
   ]
 
 endsection: output

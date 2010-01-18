@@ -2,6 +2,8 @@ application: getorf [
   documentation: "Finds and extracts open reading frames
                   (ORFs)"
   groups: "Nucleic:Gene finding"
+  relations: "EDAM: Coding region prediction"
+  relations: "EDAM: DNA translation"
 ]
 
 section: input [
@@ -12,6 +14,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "DNA"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: input
@@ -40,18 +43,21 @@ section: additional [
     delimiter: ";"
     codedelimiter: ":"
     information: "Code to use"
+    relations: "EDAM: Generic string array"                                
   ]
 
   integer: minsize [
     additional: "Y"
     default: "30"
     information: "Minimum nucleotide size of ORF to report"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: maxsize [
     additional: "Y"
     default: "1000000"
     information: "Maximum nucleotide size of ORF to report"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   list: find [
@@ -79,6 +85,7 @@ section: additional [
            investigate the statistical properties of the regions around
            potential START or STOP codons. The last option assumes that ORF
            lengths are calculated between two STOP codons."
+    relations: "EDAM: Generic string array"                                
   ]
 
 endsection: additional
@@ -95,11 +102,13 @@ section: advanced [
            usually code for Methionine, despite what the codon will code for
            when it is internal to a protein. This qualifier sets all such
            START codons to code for Methionine by default."
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: circular [
     default: "N"
     information: "Is the sequence circular"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: reverse [
@@ -107,6 +116,7 @@ section: advanced [
     information: "Find ORFs in the reverse sequence"
     help: "Set this to be false if you do not wish to find ORFs in the
            reverse complement of the sequence."
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   integer: flanking [
@@ -118,6 +128,7 @@ section: advanced [
            either side of that codon to output. If the region of flanking
            nucleotides crosses the start or end of the sequence, no output is
            given for this codon."
+    relations: "EDAM: Generic integer"                                     
   ]
 
 endsection: advanced
@@ -131,6 +142,7 @@ section: output [
     parameter: "Y"
     extension: "orf"
     type: "stopprotein"
+    relations: "EDAM: Protein sequence record"                             
   ]
 
 endsection: output

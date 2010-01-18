@@ -17,6 +17,9 @@ void embInit (const char *pgm, ajint argc, char * const argv[]);
 void embInitP (const char *pgm, ajint argc, char * const argv[],
 	       const char *package);
 
+void embInitPV (const char *pgm, ajint argc, char * const argv[],
+	       const char *package, const char *packversion);
+
 /*
 ** End of prototype definitions
 */

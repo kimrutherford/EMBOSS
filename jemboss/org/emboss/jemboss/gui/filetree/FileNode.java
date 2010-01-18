@@ -97,16 +97,19 @@ public class FileNode extends DefaultMutableTreeNode
       {
         File file = getFile();
         explored = true;
-        File[] children;
+        
+        if (file.canRead() == false)
+        	return;
+        
 // filter out dot files
-        children = file.listFiles(new FilenameFilter()
+        File[] children = file.listFiles(new FilenameFilter()
         {
           public boolean accept(File d, String n)
           {
             return !n.startsWith(".");
           }
         });
-
+        
 // sort into alphabetic order
         java.util.Arrays.sort(children);
         for(int i=0; i < children.length; ++i)

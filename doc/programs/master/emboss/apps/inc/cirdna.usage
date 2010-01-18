@@ -6,7 +6,7 @@
 
 % <b>cirdna -graph cps </b>
 Draws circular maps of DNA constructs
-Commands to the lindna drawing program file [inputfile]: <b>data.cirp</b>
+Commands to the cirdna drawing program file [inputfile]: <b>data.cirp</b>
 Draw a ruler [Y]: <b></b>
       Open : Open blocks
     Filled : Filled blocks

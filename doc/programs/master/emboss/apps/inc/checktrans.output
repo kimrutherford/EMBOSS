@@ -33,9 +33,9 @@ DQPGQGVADAAPWLGRARGAPAPVAGSDEAARADPEDRSGVAGKRAVRLSDPGRPEQ
 <pre>
 ##gff-version 3
 ##sequence-region PAAMIR_1 1 634
-#!Date 2008-07-15
+#!Date 2010-01-15
 #!Type Protein
-#!Source-version EMBOSS 6.1.0
+#!Source-version EMBOSS 6.2.0
 PAAMIR_1	checktrans	polypeptide_region	278	634	0.000	+	.	ID="PAAMIR_1.1"
 </pre>
 </td></tr></table><p>

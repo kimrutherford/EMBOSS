@@ -26,8 +26,8 @@
 #include <math.h>
 
 
-#define	min(a,b)	((a)<(b)?(a):(b))
-#define	max(a,b)	((a)>(b)?(a):(b))
+#define	edmin(a,b)	((a)<(b)?(a):(b))
+#define	edmax(a,b)	((a)>(b)?(a):(b))
 
 #define	TAILLE_MAX_LIGNE_FICHIER	10000
 
@@ -1760,16 +1760,16 @@ int main(int argc, char **argv)
     }
 */
 
-    av_dia_num = 2 * dia_num ;
+    av_dia_num = (float) (2 * dia_num);
     av_dia_num = av_dia_num / ( seqnum * ( seqnum - 1) ) ;
 
-    av_max_dia_num = 2 * max_dia_num ;
+    av_max_dia_num = (float) (2 * max_dia_num);
     av_max_dia_num = av_max_dia_num / ( seqnum * ( seqnum - 1) ) ;
 
 
 
-    tmpi1 = av_dia_num ;
-    tmpi2 = av_max_dia_num ;
+    tmpi1 = (ajint) av_dia_num ;
+    tmpi2 = (ajint) av_max_dia_num ;
 
     if(pr_av_nd)
 	printf(" %d ", tmpi1 );
@@ -2598,9 +2598,9 @@ static ajint edialign_addAlignedPositions(edialignCLOSURE *clos,
 
 	    if (clos->aligSet[nn].pos[x] == 0)
 	    {
-		clos->predFrontier[nn][x] = max(clos->gauche1[x],
+		clos->predFrontier[nn][x] = edmax(clos->gauche1[x],
 						clos->gauche2[x]);
-		clos->succFrontier[nn][x] = min(clos->droite1[x],
+		clos->succFrontier[nn][x] = edmin(clos->droite1[x],
 						clos->droite2[x]);
 	    }
 	    else
@@ -5618,7 +5618,7 @@ static void edialign_av_tree_print(void)
 			}  
 
   
-        depth = 1 / ( max_sim + 1 ) ; 
+        depth = (float) (1 / ( max_sim + 1 )); 
 
 	{
             m1 = max_pair[0];  
@@ -5642,13 +5642,15 @@ static void edialign_av_tree_print(void)
  
 			    if( ! strcmp(clust_sim , "max") )
 				new_similarity = 
-				    edialign_maxf2(clade_similarity[i][m1] ,
-						   clade_similarity[i][m2] );
+				    edialign_maxf2(
+					   (float) clade_similarity[i][m1] ,
+					   (float) clade_similarity[i][m2] );
 		    
 			    if( ! strcmp(clust_sim , "min") )
 				new_similarity =
-				    edialign_minf2(clade_similarity[i][m1],
-						   clade_similarity[i][m2]);
+				  edialign_minf2(
+					   (float) clade_similarity[i][m1],
+					   (float) clade_similarity[i][m2]);
 
 
 			    clade_similarity[i][m1] = new_similarity;
@@ -6445,9 +6447,9 @@ static void edialign_tp400_read( ajint w_type , double **pr_ptr )
 	ajFatal("\n\n problem with tp400 file \n\n");
     else
 	if( w_type % 2 )  
-	    av_sim_score_nuc = atof( line );
+	  av_sim_score_nuc = (float) atof( line );
 	else
-	    av_sim_score_pep = atof( line );
+	  av_sim_score_pep = (float) atof( line );
      
 
     while( fgets( line , MLINE , fp ) != NULL )
@@ -7138,7 +7140,8 @@ static void edialign_ali_arrange(ajint ifragno , struct multi_frag *d,
 		    i++ )
 		{ 
 		    if( !(i%10) )fprintf(fp, " ");
-		    pl_int = 9 * plot[ k * char_per_line + i ] / plot_num ;
+		    pl_int = (ajint) (9 * plot[ k * char_per_line + i ] /
+				      plot_num);
 		    fprintf(fp, "%d", pl_int );
 		} 
 		fprintf(fp, " \n");
@@ -7217,7 +7220,8 @@ static void edialign_ali_arrange(ajint ifragno , struct multi_frag *d,
 
 			if( frg_involved[ k * char_per_line + i ] ) {   
 
-			    f_inv = frg_involved[ k * char_per_line + i] ; 
+			  f_inv = (float) frg_involved[ k *
+							char_per_line + i] ; 
 			    frac_plus =  plus_count[ k * char_per_line + i ] /
 				f_inv ;
 			    frac_minus =  minus_count[k * char_per_line + i] /
@@ -8202,7 +8206,7 @@ static void** edialign_recallouer_mat2(void **pointeur, size_t t_elt,
 
     pointeur = (void **) edialign_reallouer(pointeur, nb_lig * sizeof(void *));
 
-    for (i=0; i < min(anc_nb_lig, nb_lig); i++)
+    for (i=0; i < edmin(anc_nb_lig, nb_lig); i++)
 	pointeur[i] = (void *) edialign_reallouer(pointeur[i], nb_col * t_elt);
 
     for (i=anc_nb_lig; i < nb_lig; i++)
@@ -8544,7 +8548,8 @@ static void edialign_seq_parse(char *mot_regex_unused)
 
     (void) mot_regex_unused;		/* make it used */
 
-    max_mot_offset = sqrt(-log(0.1) *  10 / mot_factor) * mot_offset_factor; 
+    max_mot_offset = (float)
+      (sqrt(-log(0.1) *  10 / mot_factor) * mot_offset_factor); 
 
 
     for(sn = 0 ; sn < seqnum ; sn++)
@@ -8651,7 +8656,7 @@ static float edialign_mot_dist_factor(ajint offset , float parameter)
     parameter2 = parameter * parameter ;
 
     /* factor1 = (float) offset2 / (parameter2 * 10); */
-    mdf = exp(-(offset2) / (parameter2 * 10)); 
+    mdf = (float) (exp(-(offset2) / (parameter2 * 10))); 
 
     return mdf ;
 }
@@ -8710,10 +8715,10 @@ static void edialign_rel_wgt_calc(ajint l1, ajint l2, float **rel_wgt)
       
   
 
-    l1f = l1;
-    l2f = l2;
+    l1f = (float) l1;
+    l2f = (float) l2;
 
-    factor = ( l1f * l2f ) / 400.00;
+    factor = ( l1f * l2f ) / (float) 400.00;
 
 
     for( l = 1 ; l <= max_dia; l++ )
@@ -8736,7 +8741,7 @@ static void edialign_rel_wgt_calc(ajint l1, ajint l2, float **rel_wgt)
 		    ent = 0;
 
 		    if(t_pr)
-			ent = -log( t_pr );
+		      ent = (float) -log( t_pr );
 
 		    if( ent > threshold )
 			rel_wgt[l][m] = ent;

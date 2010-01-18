@@ -73,7 +73,7 @@ public class JembossServer
   /** user name */
   private String username = System.getProperty("user.name") + fs;
   /** results directory */
-  private String tmproot  = "/tmp/SOAP/emboss/" + username;
+  private String tmproot  = jp.getResultsHome()+username;
   /** results directory */
   private File tmprootDir = new File(tmproot);
 

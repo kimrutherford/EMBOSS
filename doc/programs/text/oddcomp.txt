@@ -1,5 +1,4 @@
-
-                                  oddcomp 
+                                   oddcomp
 
 
 
@@ -22,16 +21,16 @@ Description
    file. The word composition is read from an input file which gives the
    minimum word occurence for any number of sequence words. For an input
    sequence to be listed in the output file, each word must be found at
-   least the stated number of times in any window over the input
-   sequence. The window size may be set to any value or the length of the
-   current protein (-fullwindow option).
+   least the stated number of times in any window over the input sequence.
+   The window size may be set to any value or the length of the current
+   protein (-fullwindow option).
 
 Algorithm
 
    The input file of sequence word composition data is in the same format
    as the output from compseq. Only one word size (of any length) can be
-   used and is specified at the top of the file. The search for words is
-   a boolean AND meaning all words given in the file must be found in a
+   used and is specified at the top of the file. The search for words is a
+   boolean AND meaning all words given in the file must be found in a
    sequence for it to be reported.
 
    Each word must occur at least the stated number of times in a window
@@ -47,17 +46,21 @@ Usage
    RS:
 
 
-% oddcomp 
+% oddcomp
 Identify proteins with specified sequence word composition
 Input protein sequence(s): tsw:*
 Program compseq output file: oddcomp.comp
-Window size to consider (e.g. 30 aa) [30]: 
+Window size to consider (e.g. 30 aa) [30]:
 Output file [12s1_arath.oddcomp]: out.odd
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Identify proteins with specified sequence word composition
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -117,13 +120,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -152,13 +157,13 @@ Other   0               0               0               0
    oddcomp - the extra columns are ignored by oddcomp.
 
    A minimal composition input data file would look like this:
-     _________________________________________________________________
+     __________________________________________________________________
 
 Word size       2
 Total count     0
 RS      2
 SR      1
-     _________________________________________________________________
+     __________________________________________________________________
 
    Blank lines and lines starting with '#' are ignored.
 
@@ -171,9 +176,9 @@ SR      1
    word count data.
 
    Word count data consists of a word to search for and the count of that
-   word to search for within the sliding window. The columns are
-   separated by one or more spaces or TAB characters. Anything after
-   these two columns will be ignored.
+   word to search for within the sliding window. The columns are separated
+   by one or more spaces or TAB characters. Anything after these two
+   columns will be ignored.
 
 Output file format
 
@@ -211,8 +216,8 @@ Notes
    similar proteins using this program.
 
    oddcomp does not report the location of the word matches in the
-   sequence, merely the sequence ID. To search for a specific set of
-   words in a sequence, you should edit the input file of sequence word
+   sequence, merely the sequence ID. To search for a specific set of words
+   in a sequence, you should edit the input file of sequence word
    composition data.
 
 References
@@ -256,7 +261,7 @@ See also
 
 Author(s)
 
-   David Martin (dmartin © rfcgr.mrc.ac.uk)
+   David Martin (dmartin (c) rfcgr.mrc.ac.uk)
 
 History
 

@@ -24,6 +24,7 @@ package org.emboss.jemboss.gui.sequenceChooser;
 
 import java.awt.*;
 import javax.swing.*;
+
 import java.awt.event.*;
 import java.io.*;
 
@@ -95,7 +96,6 @@ public class FileChooser
         if (returnVal == JFileChooser.APPROVE_OPTION) 
         {
           String fileSelected = fc.getSelectedFile().getAbsolutePath();
-          //String currentDirectory = fc.getCurrentDirectory().getPath();
           fileName.setText(fileSelected);
         }
       }
@@ -103,6 +103,58 @@ public class FileChooser
 
     file.add(Box.createHorizontalGlue());
   }
+  
+  
+  
+  
+  public static Box simpleFileChooser(String name,
+          final TextFieldSink fileName) {
+
+      SecurityManager sm = System.getSecurityManager();
+      if (sm != null)
+          System.setSecurityManager(null);
+
+      final JFileChooser fc = new JFileChooser();
+      if (sm != null)
+          System.setSecurityManager(sm);
+
+      fileName.setColumns(30);
+      JButton openButton = new JButton("Browse files...");
+      Box bdown = Box.createVerticalBox();
+      
+      Box pname = Box.createHorizontalBox();     
+      JLabel lname = new JLabel(name+":");
+      lname.setFont(org.emboss.jemboss.gui.form.SectionPanel.labfont);     
+      bdown.add(pname);
+      pname.add(lname);
+      pname.add(Box.createHorizontalGlue());
+
+      Box file = Box.createHorizontalBox();
+      bdown.add(file);
+      file.add(Box.createRigidArea(new Dimension(2, 2)));
+      file.add(fileName);
+      file.add(Box.createRigidArea(new Dimension(2, 2)));
+      file.add(openButton);
+
+      openButton.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
+
+              int returnVal = fc.showOpenDialog(fc);
+
+              if (returnVal == JFileChooser.APPROVE_OPTION) {
+                  String fileSelected = fc.getSelectedFile()
+                  .getAbsolutePath();
+                  fileName.setText(fileSelected);
+              }
+          }
+      });
+      
+      file.add(Box.createHorizontalGlue());
+      return bdown;
+  }
+
+
+
 
   /**
   *

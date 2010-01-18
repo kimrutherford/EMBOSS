@@ -1,6 +1,7 @@
 application: restover [
   documentation: "Find restriction enzymes producing a specific overhang"
   groups: "Nucleic:Restriction"
+  relations: "EDAM: Restriction site identification"
 ]
 
 section: input [
@@ -11,19 +12,22 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "DNA"
+    relations: "EDAM: Sequence record"                                     
   ]
 
   datafile: datafile [
     default: ""
     information: "Restriction enzyme data file (optional)"
-    nullok: "Y"
     knowntype: "restriction enzyme data"
+    nullok: "Y"
+    relations:  "EDAM: Restriction enzyme pattern data"                
   ]
 
   datafile: mfile [
     default: "Emethylsites.dat"
-    information: "Restriction enzyme data file (optional)"
+    information: "Restriction enzyme methylation data file"
     knowntype: "restriction enzyme methylation data"
+    relations:  "EDAM: Restriction enzyme reference data"        
   ]
 
 endsection: input
@@ -37,6 +41,7 @@ section: required [
     parameter: "Y"
     information: "Overlap sequence"
     knowntype: "nucleotide sequence"
+    relations:  "EDAM: Nucleotide sequence"                            
   ]
 
 endsection: required
@@ -51,6 +56,7 @@ section: advanced [
     maximum: "1000"
     default: "1"
     information: "Minimum cuts per RE"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: max [
@@ -58,37 +64,44 @@ section: advanced [
     maximum: "2000000000"
     default: "2000000000"
     information: "Maximum cuts per RE"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   boolean: single [
     default: "N"
     information: "Force single site only cuts"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: threeprime [
     default: "N"
     information: "Use 3' overhang e.g. BamHI has CTAG as a 5'
                   overhang, and ApaI has CCGG as 3' overhang."
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: blunt [
     default: "Y"
     information: "Allow blunt end cutters"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: sticky [
     default: "Y"
     information: "Allow sticky end cutters"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: ambiguity [
     default: "Y"
     information: "Allow ambiguous matches"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: plasmid [
     default: "N"
     information: "Allow circular DNA"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: methylation [
@@ -96,11 +109,13 @@ section: advanced [
     information: "Use methylation data"
     help: "If this is set then RE recognition sites will not match
            methylated bases."
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: commercial [
     default: "Y"
     information: "Only enzymes with suppliers"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: advanced
@@ -114,26 +129,31 @@ section: output [
     default: "N"
     information: "Create HTML output"
     outputmodifier: "Y"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: limit [
     default: "Y"
     information: "Limits reports to one isoschizomer"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: alphabetic [
     default: "N"
     information: "Sort output alphabetically"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: fragments [
     default: "N"
     information: "Show fragment lengths"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   outfile: outfile [
     parameter: "Y"
     knowntype: "restover output"
+    relations:  "EDAM:EMBOSS restover recognition site report"             
   ]
 
 endsection: output

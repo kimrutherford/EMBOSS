@@ -1,5 +1,4 @@
-
-                                extractfeat 
+                                 extractfeat
 
 
 
@@ -20,10 +19,10 @@ Description
    that are annotated as being a specified type of feature. It reads one
    or more sequences, and writes out the sequences and features of
    interest to an output sequence file. 'joined' features can either be
-   extracted as individual sequences, or as a single concatenated
-   sequence if the -join qualifier is used. If the feature is annotated
-   as being in the reverse sense of a nucleic acid sequence, then that
-   feature's sub-sequence is reverse-complemented before it is written.
+   extracted as individual sequences, or as a single concatenated sequence
+   if the -join qualifier is used. If the feature is annotated as being in
+   the reverse sense of a nucleic acid sequence, then that feature's
+   sub-sequence is reverse-complemented before it is written.
 
    There are many options control exactly what parts of the feature table
    are given in the output file. In addition, it is often useful to have
@@ -38,22 +37,24 @@ Usage
    To write out the exons of a sequence:
 
 
-% extractfeat tembl:x65921 -type exon 
+% extractfeat tembl:x65921 -type exon
 Extract features from sequence(s)
-output sequence [x65921.fasta]: 
+output sequence [x65921.fasta]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
    Example 2
 
-   To write out the exons with 10 extra bases at the start and end so
-   that you can inspect the splice sites:
+   To write out the exons with 10 extra bases at the start and end so that
+   you can inspect the splice sites:
 
 
-% extractfeat tembl:x65921 -type exon -before 10 -after 10 
+% extractfeat tembl:x65921 -type exon -before 10 -after 10
 Extract features from sequence(s)
-output sequence [x65921.fasta]: 
+output sequence [x65921.fasta]:
+
 
    Go to the output files for this example
 
@@ -63,9 +64,10 @@ output sequence [x65921.fasta]:
    the tembl database:
 
 
-% extractfeat 'tembl:*'  -type exon -before 5 -after -5 
+% extractfeat 'tembl:*'  -type exon -before 5 -after -5
 Extract features from sequence(s)
-output sequence [h45989.fasta]: 
+output sequence [h45989.fasta]:
+
 
    Go to the output files for this example
 
@@ -74,9 +76,10 @@ output sequence [h45989.fasta]:
    To extract the CDS region with the exons joined into one sequence:
 
 
-% extractfeat tembl:x65921 -type CDS -join 
+% extractfeat tembl:x65921 -type CDS -join
 Extract features from sequence(s)
-output sequence [x65921.fasta]: 
+output sequence [x65921.fasta]:
+
 
    Go to the output files for this example
 
@@ -86,13 +89,16 @@ output sequence [x65921.fasta]:
 
 
 % extractfeat 'tsw:*' -type MOD_RES -value 'phosphoserine*' -before 3 -after -4
- 
 Extract features from sequence(s)
-output sequence [12s1_arath.fasta]: 
+output sequence [12s1_arath.fasta]:
+
 
    Go to the output files for this example
 
 Command line arguments
+
+Extract features from sequence(s)
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -144,21 +150,21 @@ Command line arguments
                                   If you wish to show more than one source,
                                   separate their names with the character '|',
                                   eg:
-                                  gene* | embl (Any string is accepted)
+                                  gene* | embl (Any string)
    -type               string     [*] By default every feature in the feature
                                   table is extracted. You can set this to be
                                   any feature type you wish to extract.
                                   See http://www.ebi.ac.uk/Services/WebFeat/
                                   for a list of the EMBL feature types and see
                                   the Uniprot user manual in
-                                  http://www.uniprot.org/manual/sequence_annota
-tion
+                                  http://www.uniprot.org/manual/sequence_annotat
+ion
                                   for a list of the Uniprot feature types.
                                   The type may be wildcarded by using '*'.
                                   If you wish to extract more than one type,
                                   separate their names with the character '|',
                                   eg:
-                                  *UTR | intron (Any string is accepted)
+                                  *UTR | intron (Any string)
    -sense              integer    [0 - any sense, 1 - forward sense, -1 -
                                   reverse sense] By default any feature type
                                   in the feature table is extracted. You can
@@ -191,7 +197,7 @@ tion
                                   If you wish to extract more than one tag,
                                   separate their names with the character '|',
                                   eg:
-                                  gene | label (Any string is accepted)
+                                  gene | label (Any string)
    -value              string     [*] Tag values are the values associated
                                   with a feature tag. Tags are the types of
                                   extra values that a feature may have. For
@@ -214,7 +220,7 @@ tion
                                   If you wish to show more than one tag value,
                                   separate their names with a space or the
                                   character '|', eg:
-                                  pax* | 10 (Any string is accepted)
+                                  pax* | 10 (Any string)
    -join               boolean    [N] Some features, such as CDS (coding
                                   sequence) and mRNA are composed of introns
                                   concatenated together. There may be other
@@ -265,7 +271,7 @@ tion
                                   If you wish to extract more than one tag,
                                   separate their names with the character '|',
                                   eg:
-                                  gene | label (Any string is accepted)
+                                  gene | label (Any string)
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
@@ -306,13 +312,15 @@ tion
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -323,8 +331,8 @@ Input file format
 
   Input files for usage example
 
-   'tembl:x65921' is a sequence entry in the example nucleic acid
-   database 'tembl'
+   'tembl:x65921' is a sequence entry in the example nucleic acid database
+   'tembl'
 
   Database entry: tembl:x65921
 
@@ -340,8 +348,7 @@ XX
 KW   fau 1 gene.
 XX
 OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
-;
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
 OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
 OC   Homo.
 XX
@@ -399,74 +406,40 @@ FT                   /number=5
 FT   polyA_signal    1938..1943
 XX
 SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
-     ctaccatttt ccctctcgat tctatatgta cactcgggac aagttctcct gatcgaaaac        6
-0
-     ggcaaaacta aggccccaag taggaatgcc ttagttttcg gggttaacaa tgattaacac       12
-0
-     tgagcctcac acccacgcga tgccctcagc tcctcgctca gcgctctcac caacagccgt       18
-0
-     agcccgcagc cccgctggac accggttctc catccccgca gcgtagcccg gaacatggta       24
-0
-     gctgccatct ttacctgcta cgccagcctt ctgtgcgcgc aactgtctgg tcccgccccg       30
-0
-     tcctgcgcga gctgctgccc aggcaggttc gccggtgcga gcgtaaaggg gcggagctag       36
-0
-     gactgccttg ggcggtacaa atagcaggga accgcgcggt cgctcagcag tgacgtgaca       42
-0
-     cgcagcccac ggtctgtact gacgcgccct cgcttcttcc tctttctcga ctccatcttc       48
-0
-     gcggtagctg ggaccgccgt tcaggtaaga atggggcctt ggctggatcc gaagggcttg       54
-0
-     tagcaggttg gctgcggggt cagaaggcgc ggggggaacc gaagaacggg gcctgctccg       60
-0
-     tggccctgct ccagtcccta tccgaactcc ttgggaggca ctggccttcc gcacgtgagc       66
-0
-     cgccgcgacc accatcccgt cgcgatcgtt tctggaccgc tttccactcc caaatctcct       72
-0
-     ttatcccaga gcatttcttg gcttctctta caagccgtct tttctttact cagtcgccaa       78
-0
-     tatgcagctc tttgtccgcg cccaggagct acacaccttc gaggtgaccg gccaggaaac       84
-0
-     ggtcgcccag atcaaggtaa ggctgcttgg tgcgccctgg gttccatttt cttgtgctct       90
-0
-     tcactctcgc ggcccgaggg aacgcttacg agccttatct ttccctgtag gctcatgtag       96
-0
-     cctcactgga gggcattgcc ccggaagatc aagtcgtgct cctggcaggc gcgcccctgg      102
-0
-     aggatgaggc cactctgggc cagtgcgggg tggaggccct gactaccctg gaagtagcag      108
-0
-     gccgcatgct tggaggtgag tgagagagga atgttctttg aagtaccggt aagcgtctag      114
-0
-     tgagtgtggg gtgcatagtc ctgacagctg agtgtcacac ctatggtaat agagtacttc      120
-0
-     tcactgtctt cagttcagag tgattcttcc tgtttacatc cctcatgttg aacacagacg      126
-0
-     tccatgggag actgagccag agtgtagttg tatttcagtc acatcacgag atcctagtct      132
-0
-     ggttatcagc ttccacacta aaaattaggt cagaccaggc cccaaagtgc tctataaatt      138
-0
-     agaagctgga agatcctgaa atgaaactta agatttcaag gtcaaatatc tgcaactttg      144
-0
-     ttctcattac ctattgggcg cagcttctct ttaaaggctt gaattgagaa aagaggggtt      150
-0
-     ctgctgggtg gcaccttctt gctcttacct gctggtgcct tcctttccca ctacaggtaa      156
-0
-     agtccatggt tccctggccc gtgctggaaa agtgagaggt cagactccta aggtgagtga      162
-0
-     gagtattagt ggtcatggtg ttaggacttt ttttcctttc acagctaaac caagtccctg      168
-0
-     ggctcttact cggtttgcct tctccctccc tggagatgag cctgagggaa gggatgctag      174
-0
-     gtgtggaaga caggaaccag ggcctgatta accttccctt ctccaggtgg ccaaacagga      180
-0
-     gaagaagaag aagaagacag gtcgggctaa gcggcggatg cagtacaacc ggcgctttgt      186
-0
-     caacgttgtg cccacctttg gcaagaagaa gggccccaat gccaactctt aagtcttttg      192
-0
-     taattctggc tttctctaat aaaaaagcca cttagttcag tcatcgcatt gtttcatctt      198
-0
-     tacttgcaag gcctcaggga gaggtgtgct tctcgg                                201
-6
+     ctaccatttt ccctctcgat tctatatgta cactcgggac aagttctcct gatcgaaaac        60
+     ggcaaaacta aggccccaag taggaatgcc ttagttttcg gggttaacaa tgattaacac       120
+     tgagcctcac acccacgcga tgccctcagc tcctcgctca gcgctctcac caacagccgt       180
+     agcccgcagc cccgctggac accggttctc catccccgca gcgtagcccg gaacatggta       240
+     gctgccatct ttacctgcta cgccagcctt ctgtgcgcgc aactgtctgg tcccgccccg       300
+     tcctgcgcga gctgctgccc aggcaggttc gccggtgcga gcgtaaaggg gcggagctag       360
+     gactgccttg ggcggtacaa atagcaggga accgcgcggt cgctcagcag tgacgtgaca       420
+     cgcagcccac ggtctgtact gacgcgccct cgcttcttcc tctttctcga ctccatcttc       480
+     gcggtagctg ggaccgccgt tcaggtaaga atggggcctt ggctggatcc gaagggcttg       540
+     tagcaggttg gctgcggggt cagaaggcgc ggggggaacc gaagaacggg gcctgctccg       600
+     tggccctgct ccagtcccta tccgaactcc ttgggaggca ctggccttcc gcacgtgagc       660
+     cgccgcgacc accatcccgt cgcgatcgtt tctggaccgc tttccactcc caaatctcct       720
+     ttatcccaga gcatttcttg gcttctctta caagccgtct tttctttact cagtcgccaa       780
+     tatgcagctc tttgtccgcg cccaggagct acacaccttc gaggtgaccg gccaggaaac       840
+     ggtcgcccag atcaaggtaa ggctgcttgg tgcgccctgg gttccatttt cttgtgctct       900
+     tcactctcgc ggcccgaggg aacgcttacg agccttatct ttccctgtag gctcatgtag       960
+     cctcactgga gggcattgcc ccggaagatc aagtcgtgct cctggcaggc gcgcccctgg      1020
+     aggatgaggc cactctgggc cagtgcgggg tggaggccct gactaccctg gaagtagcag      1080
+     gccgcatgct tggaggtgag tgagagagga atgttctttg aagtaccggt aagcgtctag      1140
+     tgagtgtggg gtgcatagtc ctgacagctg agtgtcacac ctatggtaat agagtacttc      1200
+     tcactgtctt cagttcagag tgattcttcc tgtttacatc cctcatgttg aacacagacg      1260
+     tccatgggag actgagccag agtgtagttg tatttcagtc acatcacgag atcctagtct      1320
+     ggttatcagc ttccacacta aaaattaggt cagaccaggc cccaaagtgc tctataaatt      1380
+     agaagctgga agatcctgaa atgaaactta agatttcaag gtcaaatatc tgcaactttg      1440
+     ttctcattac ctattgggcg cagcttctct ttaaaggctt gaattgagaa aagaggggtt      1500
+     ctgctgggtg gcaccttctt gctcttacct gctggtgcct tcctttccca ctacaggtaa      1560
+     agtccatggt tccctggccc gtgctggaaa agtgagaggt cagactccta aggtgagtga      1620
+     gagtattagt ggtcatggtg ttaggacttt ttttcctttc acagctaaac caagtccctg      1680
+     ggctcttact cggtttgcct tctccctccc tggagatgag cctgagggaa gggatgctag      1740
+     gtgtggaaga caggaaccag ggcctgatta accttccctt ctccaggtgg ccaaacagga      1800
+     gaagaagaag aagaagacag gtcgggctaa gcggcggatg cagtacaacc ggcgctttgt      1860
+     caacgttgtg cccacctttg gcaagaagaa gggccccaat gccaactctt aagtcttttg      1920
+     taattctggc tttctctaat aaaaaagcca cttagttcag tcatcgcatt gtttcatctt      1980
+     tacttgcaag gcctcaggga gaggtgtgct tctcgg                                2016
 //
 
 Output file format
@@ -536,26 +509,26 @@ tctaggactt
 tctagttatc
 >K00650_2688_3329 [exon] Human fos proto-oncogene (c-fos), complete cds.
 tacaggagac
->D00596_1001_1205 [exon] Homo sapiens gene for thymidylate synthase, complete c
-ds.
+>D00596_1001_1205 [exon] Homo sapiens gene for thymidylate synthase, complete cd
+s.
 gcgccatgcc
->D00596_2895_2968 [exon] Homo sapiens gene for thymidylate synthase, complete c
-ds.
+>D00596_2895_2968 [exon] Homo sapiens gene for thymidylate synthase, complete cd
+s.
 ttcagatgaa
->D00596_5396_5570 [exon] Homo sapiens gene for thymidylate synthase, complete c
-ds.
+>D00596_5396_5570 [exon] Homo sapiens gene for thymidylate synthase, complete cd
+s.
 tccagggatc
 >D00596_11843_11944 [exon] Homo sapiens gene for thymidylate synthase, complete
- cds.
+cds.
 tacagattat
 >D00596_13449_13624 [exon] Homo sapiens gene for thymidylate synthase, complete
- cds.
+cds.
 ctcagatctt
 >D00596_14133_14204 [exon] Homo sapiens gene for thymidylate synthase, complete
- cds.
+cds.
 tatagccagg
 >D00596_15613_15750 [exon] Homo sapiens gene for thymidylate synthase, complete
- cds.
+cds.
 tttagcttca
 >AB009071_67_155 [exon] Homo sapiens HERG gene, complete cds.
 cccgcccatg
@@ -608,38 +581,38 @@ attggtctat
 cttaggctgc
 >U01317_63482_63742 [exon] Human beta globin region on chromosome 11.
 cacagctcct
->M23100_1541_1923 [exon] Human insulin receptor (INSR) gene, exon 1, clones lam
-bda-hINSR-(1-13).
+>M23100_1541_1923 [exon] Human insulin receptor (INSR) gene, exon 1, clones lamb
+da-hINSR-(1-13).
 ctccgggccc
->M23100_1542_1923 [exon] Human insulin receptor (INSR) gene, exon 1, clones lam
-bda-hINSR-(1-13).
+>M23100_1542_1923 [exon] Human insulin receptor (INSR) gene, exon 1, clones lamb
+da-hINSR-(1-13).
 tccgggcccc
->M23100_1548_1923 [exon] Human insulin receptor (INSR) gene, exon 1, clones lam
-bda-hINSR-(1-13).
+>M23100_1548_1923 [exon] Human insulin receptor (INSR) gene, exon 1, clones lamb
+da-hINSR-(1-13).
 ccccgagatc
->V00451_363_460 [exon] Glycine max leghemoglobin gene or pseudogene (no mRNA de
-tected).
+>V00451_363_460 [exon] Glycine max leghemoglobin gene or pseudogene (no mRNA det
+ected).
 gaaatatggg
->V00451_555_663 [exon] Glycine max leghemoglobin gene or pseudogene (no mRNA de
-tected).
+>V00451_555_663 [exon] Glycine max leghemoglobin gene or pseudogene (no mRNA det
+ected).
 aataggatat
->V00451_2182_2286 [exon] Glycine max leghemoglobin gene or pseudogene (no mRNA
-detected).
+>V00451_2182_2286 [exon] Glycine max leghemoglobin gene or pseudogene (no mRNA d
+etected).
 tgtaggtgcg
->V00451_3065_3208 [exon] Glycine max leghemoglobin gene or pseudogene (no mRNA
-detected).
+>V00451_3065_3208 [exon] Glycine max leghemoglobin gene or pseudogene (no mRNA d
+etected).
 cgtaggtggt
->M11903_351_499 [exon] Rattus norvegicus androgen-responsive protein precursor
-(Svf) gene, exons 1 and 1A, alternatively spliced.
+>M11903_351_499 [exon] Rattus norvegicus androgen-responsive protein precursor (
+Svf) gene, exons 1 and 1A, alternatively spliced.
 cctgtaggca
->M11903_401_499 [exon] Rattus norvegicus androgen-responsive protein precursor
-(Svf) gene, exons 1 and 1A, alternatively spliced.
+>M11903_401_499 [exon] Rattus norvegicus androgen-responsive protein precursor (
+Svf) gene, exons 1 and 1A, alternatively spliced.
 gctctcagtc
->M11904_109_445 [exon] Rattus norvegicus androgen-responsive protein precursor
-(Svf) gene, exon 2 and complete cds.
+>M11904_109_445 [exon] Rattus norvegicus androgen-responsive protein precursor (
+Svf) gene, exon 2 and complete cds.
 aacagaaaaa
->M11905_233_420 [exon] Rattus norvegicus androgen-responsive protein precursor
-(Svf) gene, exon 3.
+>M11905_233_420 [exon] Rattus norvegicus androgen-responsive protein precursor (
+Svf) gene, exon 3.
 cacaggttgt
 
   Output files for usage example 4
@@ -659,60 +632,60 @@ cccacctttggcaagaagaagggccccaatgccaactcttaa
 
   File: 12s1_arath.fasta
 
->AQP1_HUMAN_247_247 [protein_modification_categorized_by_chemical_process] Aqua
-porin-1 (AQP-1) (Aquaporin-CHIP) (Water channel protein for red blood cells and
- kidney proximal tubule) (Urine water channel)
+>AQP1_HUMAN_247_247 [protein_modification_categorized_by_chemical_process] Aquap
+orin-1 (AQP-1) (Aquaporin-CHIP) (Water channel protein for red blood cells and k
+idney proximal tubule) (Urine water channel)
 VWTSGQV
->AQP1_HUMAN_262_262 [protein_modification_categorized_by_chemical_process] Aqua
-porin-1 (AQP-1) (Aquaporin-CHIP) (Water channel protein for red blood cells and
- kidney proximal tubule) (Urine water channel)
+>AQP1_HUMAN_262_262 [protein_modification_categorized_by_chemical_process] Aquap
+orin-1 (AQP-1) (Aquaporin-CHIP) (Water channel protein for red blood cells and k
+idney proximal tubule) (Urine water channel)
 DINSRVE
->GCN4_YEAST_17_17 [protein_modification_categorized_by_chemical_process] Genera
-l control protein GCN4 (Amino acid biosynthesis regulatory protein)
+>GCN4_YEAST_17_17 [protein_modification_categorized_by_chemical_process] General
+ control protein GCN4 (Amino acid biosynthesis regulatory protein)
 MGFSPLD
->GCN4_YEAST_218_218 [protein_modification_categorized_by_chemical_process] Gene
-ral control protein GCN4 (Amino acid biosynthesis regulatory protein)
+>GCN4_YEAST_218_218 [protein_modification_categorized_by_chemical_process] Gener
+al control protein GCN4 (Amino acid biosynthesis regulatory protein)
 IPLSPIV
->OPSD_HUMAN_334_334 [protein_modification_categorized_by_chemical_process] Rhod
-opsin (Opsin-2)
+>OPSD_HUMAN_334_334 [protein_modification_categorized_by_chemical_process] Rhodo
+psin (Opsin-2)
 DEASATV
->OPSD_HUMAN_338_338 [protein_modification_categorized_by_chemical_process] Rhod
-opsin (Opsin-2)
+>OPSD_HUMAN_338_338 [protein_modification_categorized_by_chemical_process] Rhodo
+psin (Opsin-2)
 ATVSKTE
->OPSD_HUMAN_343_343 [protein_modification_categorized_by_chemical_process] Rhod
-opsin (Opsin-2)
+>OPSD_HUMAN_343_343 [protein_modification_categorized_by_chemical_process] Rhodo
+psin (Opsin-2)
 TETSQVA
->PAXI_HUMAN_83_83 [protein_modification_categorized_by_chemical_process] Paxill
-in
+>PAXI_HUMAN_83_83 [protein_modification_categorized_by_chemical_process] Paxilli
+n
 QPQSSSP
->PAXI_HUMAN_85_85 [protein_modification_categorized_by_chemical_process] Paxill
-in
+>PAXI_HUMAN_85_85 [protein_modification_categorized_by_chemical_process] Paxilli
+n
 QSSSPVY
->PAXI_HUMAN_106_106 [protein_modification_categorized_by_chemical_process] Paxi
-llin
+>PAXI_HUMAN_106_106 [protein_modification_categorized_by_chemical_process] Paxil
+lin
 SVGSPCS
->PAXI_HUMAN_109_109 [protein_modification_categorized_by_chemical_process] Paxi
-llin
+>PAXI_HUMAN_109_109 [protein_modification_categorized_by_chemical_process] Paxil
+lin
 SPCSRVG
->PAXI_HUMAN_126_126 [protein_modification_categorized_by_chemical_process] Paxi
-llin
+>PAXI_HUMAN_126_126 [protein_modification_categorized_by_chemical_process] Paxil
+lin
 KQKSAEP
->PAXI_HUMAN_130_130 [protein_modification_categorized_by_chemical_process] Paxi
-llin
+>PAXI_HUMAN_130_130 [protein_modification_categorized_by_chemical_process] Paxil
+lin
 AEPSPTV
->PAXI_HUMAN_137_137 [protein_modification_categorized_by_chemical_process] Paxi
-llin
+>PAXI_HUMAN_137_137 [protein_modification_categorized_by_chemical_process] Paxil
+lin
 MSTSLGS
->PAXI_HUMAN_303_303 [protein_modification_categorized_by_chemical_process] Paxi
-llin
+>PAXI_HUMAN_303_303 [protein_modification_categorized_by_chemical_process] Paxil
+lin
 GRSSPGG
->UBR5_RAT_193_193 [protein_modification_categorized_by_chemical_process] E3 ubi
-quitin-protein ligase UBR5 (6.3.2.-) (E3 ubiquitin-protein ligase, HECT domain-
-containing 1) (Hyperplastic discs protein homolog) (100 kDa protein) (Fragment)
+>UBR5_RAT_193_193 [protein_modification_categorized_by_chemical_process] E3 ubiq
+uitin-protein ligase UBR5 (6.3.2.-) (E3 ubiquitin-protein ligase, HECT domain-co
+ntaining 1) (Hyperplastic discs protein homolog) (100 kDa protein) (Fragment)
 GRPSQGL
->UBR5_RAT_607_607 [protein_modification_categorized_by_chemical_process] E3 ubi
-quitin-protein ligase UBR5 (6.3.2.-) (E3 ubiquitin-protein ligase, HECT domain-
-containing 1) (Hyperplastic discs protein homolog) (100 kDa protein) (Fragment)
+>UBR5_RAT_607_607 [protein_modification_categorized_by_chemical_process] E3 ubiq
+uitin-protein ligase UBR5 (6.3.2.-) (E3 ubiquitin-protein ligase, HECT domain-co
+ntaining 1) (Hyperplastic discs protein homolog) (100 kDa protein) (Fragment)
 SSRSVVD
 
    The sequences of the specified features are written out.
@@ -728,8 +701,8 @@ SSRSVVD
 
    The sequence is written out as a normal sequence.
 
-   If the feature is in the reverse sense of a nucleic acid sequence,
-   then it is reverse-complemented before being written.
+   If the feature is in the reverse sense of a nucleic acid sequence, then
+   it is reverse-complemented before being written.
 
 Data files
 
@@ -740,8 +713,7 @@ Notes
    Bear in mind that database annotation cannot always be trusted to be
    reliable. If you rely upon annotation written by other people or
    another program and do not independently verify such annotation, then
-   there is a chance that some of the reported features will be
-   erreneous.
+   there is a chance that some of the reported features will be erreneous.
 
   Controlling the output
 
@@ -765,14 +737,14 @@ Notes
    /transl_table, or /usedin. Some of these tags also have values, for
    example /gene can have the value of the gene name.
 
-   By default any feature tag value in the feature table is shown. You
-   can set this using -tag to match any specific feature tag value you
-   wish to show. Tag values are the values associated with a feature tag,
-   for example /gene can have the value of the gene name. Bear in mind
-   only some of these tags can have values.
+   By default any feature tag value in the feature table is shown. You can
+   set this using -tag to match any specific feature tag value you wish to
+   show. Tag values are the values associated with a feature tag, for
+   example /gene can have the value of the gene name. Bear in mind only
+   some of these tags can have values.
 
-   By default any feature source in the feature table is shown. -source
-   is used to set this to match a specific feature source.
+   By default any feature source in the feature table is shown. -source is
+   used to set this to match a specific feature source.
 
    By default features in either sense are extracted. The -sense option
    specifies a particular sense.
@@ -780,32 +752,32 @@ Notes
    The minimum and maximum score of features to be reported may be
    specified with -minscore and -maxscore.
 
-   To aid you in identifying the type of feature that has been output,
-   the type of feature is added to the start of the description of the
-   output sequence. Sometimes the description of a sequence is lost in
-   subsequent processing of the sequences file, so it is useful for the
-   type to be a part of the output sequence ID name. The -featinname
-   option specifies this behaviour.
+   To aid you in identifying the type of feature that has been output, the
+   type of feature is added to the start of the description of the output
+   sequence. Sometimes the description of a sequence is lost in subsequent
+   processing of the sequences file, so it is useful for the type to be a
+   part of the output sequence ID name. The -featinname option specifies
+   this behaviour.
 
    To aid you in identifying the properties of a feature that has been
-   output, -describe specifies one or more tag names that will be added
-   to the output sequence "Description" text, together with their values
-   (if any). For example, if this is set to be gene, then if any output
+   output, -describe specifies one or more tag names that will be added to
+   the output sequence "Description" text, together with their values (if
+   any). For example, if this is set to be gene, then if any output
    feature has the tag (for example) /gene=BRCA1 associated with it, then
-   the text (gene=BRCA1) will be added to the Description line. By
-   default no feature tag is given in the "Description" text. You can set
+   the text (gene=BRCA1) will be added to the Description line. By default
+   no feature tag is given in the "Description" text. You can set
    -describe to specify any feature tag you wish to show.
 
   "Joined" features
 
    Some features, such as CDS (coding sequence) and mRNA are composed of
    introns concatenated together. There may be other forms of 'joined'
-   sequence, depending on the feature table. By default, 'joined'
-   features are extracted as individual sequences. If the -join option is
+   sequence, depending on the feature table. By default, 'joined' features
+   are extracted as individual sequences. If the -join option is
    specified, then any group of these features will be output as a single
-   sequence. If the -before and -after qualifiers have been set, then
-   only the sequence before the first feature and after the last feature
-   are added.
+   sequence. If the -before and -after qualifiers have been set, then only
+   the sequence before the first feature and after the last feature are
+   added.
 
 References
 
@@ -883,7 +855,7 @@ See also
 
 Author(s)
 
-   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   Gary Williams (gwilliam (c) rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 

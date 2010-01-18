@@ -204,7 +204,7 @@ int main( int argc , char **argv )
 
     /* chain info for head of report */
     ajFmtPrintS(&header, "Chain: %d", (myindex+1));
-    ajReportSetHeader(report, header);
+    ajReportSetHeaderS(report, header);
 
     /* BEGIN ANALYSIS OF CHAIN HERE */
     /* loop through list until first residue in window reached */
@@ -363,7 +363,7 @@ int main( int argc , char **argv )
 
     /* DDDDEBUG TEST INFO FOR TAIL OF REPORT */
     /*     ajFmtPrintS(&ajpStrReportTail, "This is some tail text"); */
-    /*     ajReportSetTail(report, ajpStrReportTail); */
+    /*     ajReportSetTailS(report, ajpStrReportTail); */
 
     /* write the report to the output file */
     ajReportWrite(report,

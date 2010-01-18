@@ -1,6 +1,8 @@
 application: seqretsplit [
   documentation: "Reads sequences and writes them to individual files"
   groups: "Edit"
+  relations: "EDAM: Sequence extraction and generation"
+  relations: "EDAM: Sequence file handling"  
 ]
 
 section: input [
@@ -10,12 +12,14 @@ section: input [
 
   boolean: feature [
     information: "Use feature information"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   seqall: sequence [
     parameter: "Y"
     type: "gapany"
     features: "$(feature)"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: input
@@ -27,6 +31,7 @@ section: advanced [
 
   boolean: firstonly [
     information: "Read one sequence and stop"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: advanced
@@ -40,6 +45,7 @@ section: output [
     parameter: "Y"
     ossingle: "Y"
     features: "$(feature)"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: output

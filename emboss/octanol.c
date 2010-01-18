@@ -51,9 +51,9 @@ int main(int argc, char **argv)
     ajuint llen;
     ajuint i;
     ajuint j;
-    AjPGraphPlpData graphdata;
-    AjPGraphPlpData graphdata2;
-    AjPGraphPlpData graphdata3;
+    AjPGraphdata graphdata;
+    AjPGraphdata graphdata2;
+    AjPGraphdata graphdata3;
     AjPGraph mult;
     float min = 555.5;
     float max = -555.5;
@@ -81,7 +81,7 @@ int main(int argc, char **argv)
     ajuint ilen;
     ajuint tui;
     
-    ajGraphInit("octanol", argc, argv);
+    embInit("octanol", argc, argv);
 
     seq = ajAcdGetSeq("sequence");
     ilen = ajSeqGetLen(seq);
@@ -99,37 +99,37 @@ int main(int argc, char **argv)
 				    &err2[0]))
 	ajFatal("Could not read data file");
 
-    graphdata = ajGraphPlpDataNewI(ilen-llen);
-    ajGraphPlpDataSetColour(graphdata,GREEN);
+    graphdata = ajGraphdataNewI(ilen-llen);
+    ajGraphdataSetColour(graphdata,GREEN);
 
     if(iface)
     {
 	ajGraphDataAdd(mult,graphdata);
-	ajGraphPlpDataSetYTitleC(graphdata,"interface");
-	ajGraphPlpDataSetTypeC(graphdata,"2D Plot");
+	ajGraphdataSetYlabelC(graphdata,"interface");
+	ajGraphdataSetTypeC(graphdata,"2D Plot");
     }
 
 
-    graphdata3 = ajGraphPlpDataNewI(ilen-llen);
-    ajGraphPlpDataSetColour(graphdata3,BLACK);
+    graphdata3 = ajGraphdataNewI(ilen-llen);
+    ajGraphdataSetColour(graphdata3,BLACK);
 
     if(difference)
     {
 	ajGraphDataAdd(mult,graphdata3);
-	ajGraphPlpDataSetYTitleC(graphdata3,"difference");
-	ajGraphPlpDataSetTypeC(graphdata3,"2D Plot");
+	ajGraphdataSetYlabelC(graphdata3,"difference");
+	ajGraphdataSetTypeC(graphdata3,"2D Plot");
     }
 
-    graphdata2 = ajGraphPlpDataNewI(ilen-llen);
-    ajGraphPlpDataSetColour(graphdata2,RED);
+    graphdata2 = ajGraphdataNewI(ilen-llen);
+    ajGraphdataSetColour(graphdata2,RED);
 
     if(octanol)
     {
 	ajGraphDataAdd(mult,graphdata2);
-	ajGraphPlpDataSetYTitleC(graphdata2,"octanol");
-	ajGraphPlpDataSetTypeC(graphdata,"Overlay 2D Plot");
-	ajGraphPlpDataSetTypeC(graphdata2,"Overlay 2D Plot");
-	ajGraphPlpDataSetTypeC(graphdata3,"Overlay 2D Plot");
+	ajGraphdataSetYlabelC(graphdata2,"octanol");
+	ajGraphdataSetTypeC(graphdata,"Overlay 2D Plot");
+	ajGraphdataSetTypeC(graphdata2,"Overlay 2D Plot");
+	ajGraphdataSetTypeC(graphdata3,"Overlay 2D Plot");
     }
 
     ajGraphAddLine(mult,0.0,0.0,flen,0.0,BLACK);
@@ -192,10 +192,10 @@ int main(int argc, char **argv)
     min = min*(float)1.1;
     max = max*(float)1.1;
 
-    ajGraphxySetMaxMin(mult,0.0,flen,min,max);
-    ajGraphPlpDataSetMaxima(graphdata,xmin1,xmax1,ymin1,ymax1);
-    ajGraphPlpDataSetMaxima(graphdata2,xmin2,xmax2,ymin2,ymax2);
-    ajGraphPlpDataSetMaxima(graphdata3,xmin3,xmax3,ymin3,ymax3);
+    ajGraphxySetMinmax(mult,0.0,flen,min,max);
+    ajGraphdataSetTruescale(graphdata,xmin1,xmax1,ymin1,ymax1);
+    ajGraphdataSetTruescale(graphdata2,xmin2,xmax2,ymin2,ymax2);
+    ajGraphdataSetTruescale(graphdata3,xmin3,xmax3,ymin3,ymax3);
 
     ajGraphxyDisplay(mult,AJTRUE);
 
@@ -204,13 +204,13 @@ int main(int argc, char **argv)
     ajGraphxyDel(&mult);
 
     if(!iface)
-	ajGraphPlpDataDel(&graphdata);
+	ajGraphdataDel(&graphdata);
 
     if(!octanol)
-	ajGraphPlpDataDel(&graphdata2);
+	ajGraphdataDel(&graphdata2);
 
     if(!difference)
-	ajGraphPlpDataDel(&graphdata3);
+	ajGraphdataDel(&graphdata3);
 
     embExit();
 

@@ -1,6 +1,7 @@
 application: etandem [
   documentation: "Finds tandem repeats in a nucleotide sequence"
   groups: "Nucleic:Repeats"
+  relations: "EDAM: Repeat sequence finding"
 ]
 
 section: input [
@@ -11,6 +12,7 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "dna"
+    relations: "EDAM: Pure DNA sequence"                                   
   ]
 
 endsection: input
@@ -26,6 +28,7 @@ section: required [
     minimum: "2"
     information: "Minimum repeat size"
     valid: "Integer, 2 or higher"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: maxrepeat [
@@ -35,6 +38,7 @@ section: required [
     information: "Maximum repeat size"
     valid: "Integer, same as -minrepeat or higher"
     expected: "Same as -minrepeat"
+    relations: "EDAM: Generic integer"                                     
   ]
 
 endsection: required
@@ -47,14 +51,17 @@ section: advanced [
   integer: threshold [
     default: "20"
     information: "Threshold score"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   boolean: mismatch [
     information: "Allow N as a mismatch"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: uniform [
     information: "Allow uniform consensus"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: advanced
@@ -71,6 +78,7 @@ section: output [
               float:identity=Identity str:consensus=Consensus"
     rextension: "tan"
     precision: "0"
+    relations: "EDAM: EMBOSS report"                                       
   ]
 
   outfile: origfile [
@@ -81,6 +89,7 @@ section: output [
     knowntype: "tandem output"
     information: "Sanger Centre program tandem output file
                   (optional)"
+    relations:  "EDAM: quicktandem repeat sequence map report"         
   ]
 
 endsection: output

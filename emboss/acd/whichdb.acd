@@ -4,6 +4,7 @@ application: whichdb [
   gui: "yes"
   batch: "yes"
   cpu: "low"
+  relations: "EDAM: Sequence database search by code"
 ]
 
 section: input [
@@ -15,6 +16,7 @@ section: input [
     parameter: "Y"
     information: "ID or Accession number"
     knowntype: "sequence id input"
+    relations:  "EDAM: Sequence unique identifier"                     
   ]
 
 endsection: input
@@ -27,11 +29,13 @@ section: output [
   toggle: get [
     default: "N"
     information: "Retrieve sequences"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: showall [
     default: "N"
     information: "Show failed attempts"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   outfile: outfile [
@@ -39,6 +43,7 @@ section: output [
     nullok: "$(get)"
     nulldefault: "$(get)"
     knowntype: "whichdb output"
+    relations:  "EDAM:Database information report"                         
   ]
 
 endsection: output

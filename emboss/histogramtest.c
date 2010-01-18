@@ -48,7 +48,7 @@ int main(int argc, char **argv)
     ajint xstart;
     ajint xend;
 
-    ajGraphInit("histogramtest", argc, argv);
+    embInit("histogramtest", argc, argv);
 
     graph  = ajAcdGetGraphxy("graph");
     sets   = ajAcdGetInt("sets");
@@ -67,9 +67,9 @@ int main(int argc, char **argv)
     hist->xmax = xend;
 
     ajHistSetTitleC(hist, "A demo of the Histogram suite");
-    ajHistSetXAxisC(hist, "X axis");
-    ajHistSetYAxisLeftC(hist, "LEFT");
-    ajHistSetYAxisRightC(hist, "RIGHT");
+    ajHistSetXlabelC(hist, "X axis");
+    ajHistSetYlabelC(hist, "LEFT");
+    ajHistSetRlabelC(hist, "RIGHT");
 
     AJCNEW(data, sets);
     for(i=0;i<sets;i++)
@@ -79,14 +79,14 @@ int main(int argc, char **argv)
 	for(j=0;j<points;j++)
 	    data2[j] = k++;
 
-	ajHistSetPtrToData(hist, i, data2);
+	ajHistDataAdd(hist, i, data2);
     }
 
     ajHistDisplay(hist);
 
     for(i=0;i<sets;i++)
 	AJFREE(data[i]);
-    ajHistDelete(&hist);
+    ajHistDel(&hist);
 
     /* now do again but copy the data */
     hist = ajHistNewG(sets,points, graph);
@@ -97,9 +97,9 @@ int main(int argc, char **argv)
     hist->xmax = xend;
 
     ajHistSetTitleC(hist, "A demo of the Histogram suite");
-    ajHistSetXAxisC(hist, "X axis");
-    ajHistSetYAxisLeftC(hist, "LEFT");
-    ajHistSetYAxisRightC(hist, "RIGHT");
+    ajHistSetXlabelC(hist, "X axis");
+    ajHistSetYlabelC(hist, "LEFT");
+    ajHistSetRlabelC(hist, "RIGHT");
 
     k = -10;
     for(i=0;i<sets;i++)
@@ -108,14 +108,14 @@ int main(int argc, char **argv)
 	for(j=0;j<points;j++)
 	    data2[j] = k++;
 
-	ajHistCopyData(hist, i, data2);
+	ajHistDataCopy(hist, i, data2);
 	AJFREE(data2);
     }
 
     for(i=0;i<sets;i++)
-	ajHistSetPattern(hist, i, i);
+	ajHistSetmultiPattern(hist, i, i);
 
-    ajHistSetBlackandWhite(hist , AJTRUE);
+    ajHistSetMono(hist, AJTRUE);
     ajHistDisplay(hist);
 
     hist->displaytype=HIST_SEPARATE;
@@ -123,14 +123,14 @@ int main(int argc, char **argv)
     for(i=0;i<sets;i++)
     {
 	sprintf(temp,"number %d",i);
-	ajHistSetMultiTitleC(hist,i,temp);
+	ajHistSetmultiTitleC(hist,i,temp);
 	sprintf(temp,"sequence %d",i);
-	ajHistSetMultiXTitleC(hist,i,temp);
+	ajHistSetmultiXlabelC(hist,i,temp);
 	sprintf(temp,"y value for %d",i);
-	ajHistSetMultiYTitleC(hist,i,temp);
+	ajHistSetmultiYlabelC(hist,i,temp);
     }
 
-    ajHistSetBlackandWhite(hist , AJFALSE);
+    ajHistSetMono(hist , AJFALSE);
     ajHistDisplay(hist);
 
     for(i=0;i<sets;i++)
@@ -139,9 +139,9 @@ int main(int argc, char **argv)
 
     ajGraphxyDel(&graph);
 
-    ajHistDelete(&hist);
+    ajHistDel(&hist);
 
-    ajGraphClose();
+    ajGraphicsClose();
 
     embExit();
 

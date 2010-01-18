@@ -65,10 +65,10 @@ int main(int argc, char **argv)
     {
 	strlist = ajListstrNew();
 	ajRangeStrExtractList(regions, ajSeqGetSeqS(seq), strlist);
-	nr = ajRangeNumber(regions);
+	nr = ajRangeGetSize(regions);
 	for(i=0; i<nr; i++)
 	{
-	    ajRangeValues(regions, i, &st, &en);
+	    ajRangeElementGetValues(regions, i, &st, &en);
 	    ajListstrPop(strlist, &str);
 
 	    /* new sequence */

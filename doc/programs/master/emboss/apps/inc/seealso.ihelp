@@ -1,3 +1,6 @@
+Finds programs with similar function to a specified program
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers:
   [-search]            string     Enter the name of an EMBOSS program (Any
                                   string of at least 1 characters)
@@ -56,8 +59,7 @@
                                   libraries and share the same look and feel,
                                   but are generally developed by people who
                                   wish the programs to be outside of the GNU
-                                  Public Licence scheme (Any string is
-                                  accepted)
+                                  Public Licence scheme (Any string)
    -colon              boolean    [N] The groups that EMBOSS applications
                                   belong to have up to two levels, for example
                                   the primary group 'ALIGNMENT' has several
@@ -82,11 +84,12 @@
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 

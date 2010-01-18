@@ -21,6 +21,12 @@
 
 #include "emboss.h"
 
+/* In Windows allow getpid() without setting _CRT_NONSTDC_NO_DEPRECATE */
+#ifdef WIN32
+#include <process.h>
+#define getpid _getpid
+#endif
+
 static AjPStr emma_getUniqueFileName(void);
 
 
@@ -90,7 +96,6 @@ int main(int argc, char **argv, char **env)
     AjPSeqout fil_file = NULL;
     AjPSeq seq = NULL;
 
-    const char* prog_default = "clustalw";
     AjPStr cmd = NULL;
     AjPStr tmp = NULL;
     AjPStr tmpFilename;
@@ -228,8 +233,7 @@ int main(int argc, char **argv, char **env)
 	ajFatal("Multiple alignments need at least two sequences");
 
     /* Generate clustalw command line */
-    if(!ajNamGetValueC("clustalw", &cmd))
-      cmd = ajStrNewC(prog_default);
+    cmd = ajStrNewS(ajAcdGetpathC("clustalw"));
 
     /* add tmp file containing sequences */
     ajStrAppendC(&cmd, " -infile=");

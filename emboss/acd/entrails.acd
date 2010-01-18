@@ -2,6 +2,7 @@ application: entrails [
   documentation: "Reports the internal data from the EMBOSS
                   code"
   groups: "Utils:Misc"
+  relations: "EDAM: File debugging"
 ]
 
 section: additional [
@@ -14,6 +15,7 @@ section: additional [
     default: "N"
     information: "Full report"
     help: "By default, only the essential details are reported"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: additional
@@ -26,6 +28,7 @@ section: output [
   outfile: outfile [
     parameter: "Y"
     knowntype: "entrails output"
+    relations: "EDAM: Free text file"                                      
   ]
 
 endsection: output

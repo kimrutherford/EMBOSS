@@ -1,8 +1,11 @@
+Find restriction sites to insert (mutate) with no translation change
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Nucleotide sequence filename and optional
                                   format, or reference (input USA)
    -enzymes            string     [all] Comma separated enzyme list (Any
-                                  string is accepted)
+                                  string)
   [-outfile]           report     [*.silent] Output report file name
 
    Additional (Optional) qualifiers: (none)
@@ -50,11 +53,12 @@
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 

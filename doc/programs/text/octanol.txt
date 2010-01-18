@@ -1,5 +1,4 @@
-
-                                  octanol 
+                                   octanol
 
 
 
@@ -20,14 +19,14 @@ Description
    plots the free energy difference calculated for windows over the
    protein sequence, of the residues in water compared to two lipid
    environments: i. Octanol (equivalent to inside a lipid bilayer). ii.
-   The interface of a synthetic lipid bilayer. Free energy differences
-   are calculated for each position in a window of 19 residues by
-   default, about the size of a membrane spanning alpha-helix. The energy
-   values for each residue are summed to get two values for each window.
-   By default, the value plotted is the free energy difference between
-   the interface and octanol environments, which is the best indicator of
-   the location of probable transmembrane regions. Command line options
-   allow the display of the octanol and interface values, or hiding the
+   The interface of a synthetic lipid bilayer. Free energy differences are
+   calculated for each position in a window of 19 residues by default,
+   about the size of a membrane spanning alpha-helix. The energy values
+   for each residue are summed to get two values for each window. By
+   default, the value plotted is the free energy difference between the
+   interface and octanol environments, which is the best indicator of the
+   location of probable transmembrane regions. Command line options allow
+   the display of the octanol and interface values, or hiding the
    difference values. The experimental free energy values for the
    water-interface and water-octanol transitions are read from a datafile
    (Ewhite-wimley.dat)
@@ -37,24 +36,28 @@ Usage
    Here is a sample session with octanol
 
 
-% octanol 
+% octanol
 Draw a White-Wimley protein hydropathy plot
 Input protein sequence: tsw:opsd_human
 Graph type [x11]: ps
 
 Created octanol.ps
 
+
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Draw a White-Wimley protein hydropathy plot
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Protein sequence filename and optional
                                   format, or reference (input USA)
   [-graph]             xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, das, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif)
 
    Additional (Optional) qualifiers:
    -datafile           datafile   [Ewhite-wimley.dat] White-Wimley data file
@@ -100,13 +103,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -254,16 +259,17 @@ Output file format
 Input sequence: tsw:opsd_human
    Graph type [x11]:
 
+
    gives a graph with the water-interface and water-octanol plots.
 
    For those regions where the diference plot is close to zero, both the
-   other two plots are above the line, showing a preference for either
-   the octanol or the interface membrane environments rather than water.
+   other two plots are above the line, showing a preference for either the
+   octanol or the interface membrane environments rather than water.
 
 Data files
 
-   File Ewhite-wimley.dat contains the experimental free energy values
-   for the water-interface and water-octanol transitions.
+   File Ewhite-wimley.dat contains the experimental free energy values for
+   the water-interface and water-octanol transitions.
 
    EMBOSS data files are distributed with the application and stored in
    the standard EMBOSS data directory, which is defined by the EMBOSS
@@ -278,11 +284,12 @@ Data files
 
 % embossdata -fetch -file Exxx.dat
 
+
    Users can provide their own data files in their own directories.
    Project specific files can be put in the current directory, or for
-   tidier directory listings in a subdirectory called ".embossdata".
-   Files for all EMBOSS runs can be put in the user's home directory, or
-   again in a subdirectory called ".embossdata".
+   tidier directory listings in a subdirectory called ".embossdata". Files
+   for all EMBOSS runs can be put in the user's home directory, or again
+   in a subdirectory called ".embossdata".
 
    The directories are searched in the following order:
      * . (your current directory)
@@ -292,29 +299,29 @@ Data files
 
 Notes
 
-   Protein sequences that form transmembrane regions are assumed to have
-   a thermodynamic preference for a hydrophobic environment (inside the
+   Protein sequences that form transmembrane regions are assumed to have a
+   thermodynamic preference for a hydrophobic environment (inside the
    membrane lipid bilayer), rather than an aqueous environment in water.
    The free energy change for each amino acid residue between a lipid and
    a water environment can be measured experimentally, and the values for
    peptides can be shown to be additive (White and Wimley 1999).
 
    For each amino acid residue in the protein, the free energy difference
-   of the residue in lipid and water environments is measured in two
-   ways. The first is the free energy difference between the protein in
-   water and the protein associated with the interface (glycerol group)
-   of a POPC (palmitoyloleoylphosphocholine) bilayer. The second is the
-   free energy difference of the protein in water and the protein in
-   octanol, equivalent to the environment inside a lipid bilayer.
+   of the residue in lipid and water environments is measured in two ways.
+   The first is the free energy difference between the protein in water
+   and the protein associated with the interface (glycerol group) of a
+   POPC (palmitoyloleoylphosphocholine) bilayer. The second is the free
+   energy difference of the protein in water and the protein in octanol,
+   equivalent to the environment inside a lipid bilayer.
 
-   Residues which can be buried inside a lipid bilayer must be in a
-   region of the peptide where most residues show a free energy
-   difference in favour of being in an octanol environment or at least
-   being in the lipid/water interface region. White and Wimley (1999)
-   showed that a sliding window of either free energy difference will
-   indicate the location of probable transmembrane regions, but that the
-   best indicator is the difference between the two values, which is the
-   free energy difference between the interface and octanol environments.
+   Residues which can be buried inside a lipid bilayer must be in a region
+   of the peptide where most residues show a free energy difference in
+   favour of being in an octanol environment or at least being in the
+   lipid/water interface region. White and Wimley (1999) showed that a
+   sliding window of either free energy difference will indicate the
+   location of probable transmembrane regions, but that the best indicator
+   is the difference between the two values, which is the free energy
+   difference between the interface and octanol environments.
 
 References
 
@@ -341,8 +348,8 @@ Known bugs
 See also
 
    Program name     Description
-   backtranambig    Back-translate a protein sequence to ambiguous
-                    nucleotide sequence
+   backtranambig    Back-translate a protein sequence to ambiguous nucleotide
+                    sequence
    backtranseq      Back-translate a protein sequence to a nucleotide sequence
    charge           Draw a protein charge plot
    checktrans       Reports STOP codons and ORF statistics of a protein
@@ -357,11 +364,11 @@ See also
    pepwindow        Draw a hydropathy plot for a protein sequence
    pepwindowall     Draw Kyte-Doolittle hydropathy plot for a protein
                     alignment
-   wordcount        Count and extract unique words in DNA sequence(s)
+   wordcount        Count and extract unique words in molecular sequence(s)
 
 Author(s)
 
-   Ian Longden (il © sanger.ac.uk)
+   Ian Longden (il (c) sanger.ac.uk)
    Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
    CB10 1SA, UK.
 

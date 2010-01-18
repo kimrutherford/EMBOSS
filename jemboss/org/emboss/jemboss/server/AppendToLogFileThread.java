@@ -72,8 +72,6 @@ public class AppendToLogFileThread extends Thread
     try
     {
       File logFile = new File(logFileName);
-      if (!logFile.exists())
-          logFile.mkdirs();
       bw = new BufferedWriter(new FileWriter(logFile, true));
       bw.write(logEntry);
       bw.newLine();

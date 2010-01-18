@@ -220,7 +220,7 @@ int main(int argc, char **argv)
 
     recoder_fmt_muts(nmuts,feat, ajTrue);
 
-    ajReportSetTail(report, tailstr);
+    ajReportSetTailS(report, tailstr);
     ajReportSetStatistics(report, 1, ajSeqGetLenTrimmed(seq));
     (void) ajReportWrite (report,feat,seq);
     ajFeattableDel(&feat);
@@ -310,7 +310,7 @@ static AjPList recoder_rematch(const AjPStr sstr, AjPList relist,
 
     if(!rev)                           /* forward strand */
     {
-	ajTrnStrFrame(recoderTable,sstr,1,&pep); /* frame 1 */
+	ajTrnSeqFrameS(recoderTable,sstr,1,&pep); /* frame 1 */
     	if(tshow)
     	{
             recoder_fmt_seq("TRANSLATED SEQUENCE",
@@ -320,7 +320,7 @@ static AjPList recoder_rematch(const AjPStr sstr, AjPList relist,
     else                               /* reverse strand */
     {
 	ajStrAssignC(&tstr,ajStrGetPtr(sstr)+(end-begin+1)%3);
-	ajTrnStrFrame(recoderTable,tstr,1,&pep);
+	ajTrnSeqFrameS(recoderTable,tstr,1,&pep);
         if(tshow)
 	{
 	     recoder_fmt_seq("REVERSE TRANSLATED SEQUENCE",
@@ -617,7 +617,7 @@ static AjPList recoder_checkTrans(const AjPStr dna, const EmbPMatMatch match,
 
     if(!recoderTable)
 	recoderTable = ajTrnNewI(0);
-    s1 = ajStrNewC(ajStrGetPtr(ajTrnCodonC(recoderTable,s)));
+    s1 = ajStrNewK(ajTrnCodonC(recoderTable,s));
 
     res=ajListNew();
 
@@ -625,7 +625,7 @@ static AjPList recoder_checkTrans(const AjPStr dna, const EmbPMatMatch match,
     for(i=0;i<nb;i++)             /* try out other bases */
     {
       pseq[x] = tbase[i];
-      s2 = ajStrNewC(ajStrGetPtr(ajTrnCodonC(recoderTable,s)));
+      s2 = ajStrNewK(ajTrnCodonC(recoderTable,s));
 
       if(ajStrMatchS(s1,s2))
       {

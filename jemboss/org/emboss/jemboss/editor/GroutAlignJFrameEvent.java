@@ -14,14 +14,14 @@ import java.beans.PropertyChangeEvent;
 public class GroutAlignJFrameEvent extends PropertyChangeEvent
 {
   
-  private GroutAlignJFrame source;
+  //private GroutAlignJFrame source;
   
   /** Creates a new instance of GroutAlignJFrameEvent with source set */
   public GroutAlignJFrameEvent(Object source, String propertyName, 
 																Object oldValue, Object newValue)
   {
     super(source, propertyName, oldValue, newValue);
-    this.source = (GroutAlignJFrame) source;
+    //this.source = (GroutAlignJFrame) source;
   }
   
 }

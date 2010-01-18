@@ -1,5 +1,6 @@
-note QTEXT
+#include Etags.refseqp
 
 comment QTEXT
 
 ftid TEXT
+

@@ -24,6 +24,8 @@ package org.emboss.jemboss.server;
 import java.io.*;
 import java.util.*;
 
+import org.emboss.jemboss.JembossParams;
+
 /**
 *
 * File manager methods - for a non-authenticating server
@@ -32,12 +34,14 @@ import java.util.*;
 public class JembossFileServer
 {
 
+    /** jemboss properties */
+    JembossParams jp = new JembossParams();
 
-//SITE SPECIFIC CHANGE USER DIRECTORIES HERE
+
   /**
   *
   * Retrieves the file manager roots on the server
-  * @param user		username
+  * @param user		user name
   *
   */
   public Vector embreo_roots(String user)
@@ -53,7 +57,7 @@ public class JembossFileServer
     vans.add("HOME");
 
     vans.add("HOME");
-    vans.add("/tmp/SOAP/emboss/"+System.getProperty("user.name")+"/"+user);
+    vans.add(jp.getResultsHome()+user);
  
 // 
 // ADD OTHER DIRECTORY ROOTS HERE
@@ -67,7 +71,7 @@ public class JembossFileServer
   * Given the alias a user root alias e.g. "HOME" return
   * the directory this represents
   * @param s	root alias (e.g "HOME")
-  * @param user	username
+  * @param user	user name
   * @return 	directory path
   *
   */
@@ -91,8 +95,8 @@ public class JembossFileServer
   *
   * Get a directory listing
   * @param option       root alias
-  * @param dirname      direcory name
-  * @param user     	username
+  * @param dirname      directory name
+  * @param user     	user name
   * @return             directory listing
   *
   */
@@ -115,6 +119,7 @@ public class JembossFileServer
     String listAll = "";
     String listDir = "";
 
+    if(files!=null)
     for(int i=0;i<files.length;i++)
     {
       if(files[i].isDirectory())
@@ -139,7 +144,7 @@ public class JembossFileServer
   * Get the contents of a file
   * @param option       root alias
   * @param filename     file name
-  * @param user     	username
+  * @param user     	user name
   * @return             file contents
   *
   */
@@ -195,7 +200,7 @@ public class JembossFileServer
   * @param option       root alias
   * @param filename     name of file to add
   * @param filedata     file contents
-  * @param user     	username
+  * @param user     	user name
   * @return             message
   *
   */
@@ -233,7 +238,7 @@ public class JembossFileServer
   * Make a directory
   * @param option       root alias
   * @param dirname      name of new directory
-  * @param userName     username
+  * @param userName     user name
   * @return             message
   *
   */
@@ -263,7 +268,7 @@ public class JembossFileServer
   * Delete a file
   * @param option       root alias
   * @param filename     file name
-  * @param userName     username
+  * @param userName     user name
   * @return             message
   *
   */
@@ -291,7 +296,7 @@ public class JembossFileServer
   * Delete a directory
   * @param option       root alias
   * @param filename     directory name
-  * @param userName     username
+  * @param userName     user name
   * @return             message
   *
   */

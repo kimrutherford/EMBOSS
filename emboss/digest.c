@@ -154,7 +154,7 @@ int main(int argc, char **argv)
 	    ajFmtPrintS(&tmpStr,
 			"Complete digestion with %S yields %d fragments",
 			rname,ncomp);
-	    ajReportSetHeader(report, tmpStr);
+	    ajReportSetHeaderS(report, tmpStr);
 	    digest_report_hits(TabRpt,l,be, ajStrGetPtr(substr));
 	    ajReportWrite(report, TabRpt, a);
 	    ajFeattableClear(TabRpt);
@@ -174,7 +174,7 @@ int main(int argc, char **argv)
 			"\n\nPartial digest with %S yields %d extras.\n",
 			rname,npart);
 	    ajFmtPrintAppS(&tmpStr,"Only overlapping partials shown:\n");
-	    ajReportSetHeader(report, tmpStr);
+	    ajReportSetHeaderS(report, tmpStr);
 	    digest_report_hits(TabRpt, pa,be,ajStrGetPtr(substr));
 	    ajReportWrite(report, TabRpt, a);
 	    ajFeattableClear(TabRpt);
@@ -194,7 +194,7 @@ int main(int argc, char **argv)
 			"\n\nPartial digest with %S yields %d extras.\n",
 			rname,npart);
 	    ajFmtPrintAppS(&tmpStr,"All partials shown:\n");
-	    ajReportSetHeader(report, tmpStr);
+	    ajReportSetHeaderS(report, tmpStr);
 	    digest_report_hits(TabRpt, pa,be, ajStrGetPtr(substr));
 	    ajReportWrite(report, TabRpt, a);
 	    ajFeattableClear(TabRpt);

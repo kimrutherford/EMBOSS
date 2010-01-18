@@ -203,7 +203,7 @@ int main(int argc, char **argv)
 		lenap=0;
 	    }
 
-	ajReportSetHeader(report, tmpHeadStr);
+	ajReportSetHeaderS(report, tmpHeadStr);
 
 	if(outf)
 	{
@@ -570,7 +570,7 @@ static void antigenic_dumptoFeat(ajint nhits, const AjPUint hp,
     }
 
     ajFeatSortByStart(feattable);
-    ajFeatWrite(featout, feattable);
+    ajFeattableWrite(featout, feattable);
 
     ajFeattableDel(&feattable);
 

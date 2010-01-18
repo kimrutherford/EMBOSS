@@ -1,5 +1,4 @@
-
-                               printsextract 
+                                printsextract
 
 
 
@@ -16,26 +15,30 @@ Function
 
 Description
 
-   printsextract preprocesses the PRINTS database for use with the
-   program pscan. It derives matrix information from the final motif sets
-   of the PRINTS data file (prints.dat). It creates files in the EMBOSS
-   data subdirectory PRINTS these being a matrix file and files
-   containing text information for each fingerprint. Running this program
-   may be the job of your system manager.
+   printsextract preprocesses the PRINTS database for use with the program
+   pscan. It derives matrix information from the final motif sets of the
+   PRINTS data file (prints.dat). It creates files in the EMBOSS data
+   subdirectory PRINTS these being a matrix file and files containing text
+   information for each fingerprint. Running this program may be the job
+   of your system manager.
 
 Usage
 
    Here is a sample session with printsextract
 
 
-% printsextract 
+% printsextract
 Extract data from PRINTS database for use by pscan
 PRINTS database file: prints.test
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Extract data from PRINTS database for use by pscan
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     PRINTS database file
@@ -51,21 +54,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 
-                 Standard (Mandatory) qualifiers  Allowed values Default
-   [-infile]
-   (Parameter 1) PRINTS database file Input file  Required
-                 Additional (Optional) qualifiers Allowed values Default
-                 (none)
-                 Advanced (Unprompted) qualifiers Allowed values Default
-                 (none)
 
 Input file format
 
@@ -101,8 +98,7 @@ gr; http://bnlstb.bio.bnl.gov:8000/disk$3/giles/che.html
 bb;
 bb;
 gd; Acetylcholine is involved in the transfer of messages across a variety of
-gd; synapses in vertebrates and invertebrates. The diverse physiological effect
-s
+gd; synapses in vertebrates and invertebrates. The diverse physiological effects
 gd; attributable to this molecule arise from the presence of specific receptors
 gd; in the postsynaptic cell membranes. Several classes of receptor are known,
 gd; most of which translate the binding of acetylcholine into the opening of
@@ -114,17 +110,15 @@ gd;
 gd;          Acetylcholine + H(2)O -> Choline + Acetate
 gd;
 gd; The enzyme also acts on a variety of acetic esters and catalyses trans-
-gd; acetylations. It is found in, or attached to, cellular or basement membrane
-s
+gd; acetylations. It is found in, or attached to, cellular or basement membranes
 gd; of presynaptic cholinergic neurons and postsynaptic cholinoceptive cells.
 gd; To prevent continuous firing of nerve impulses, acetylcholinesterase has a
-gd; high K(cat) (~14000/s), to ensure that acetylcholine is broken down quickly
-.
+gd; high K(cat) (~14000/s), to ensure that acetylcholine is broken down quickly.
 gd;
 gd; Cholinesterases constitute a family of enzymes that fall into two main
 gd; types, depending on their substrate preference: enzymes that preferentially
-gd; hydrolyse acetyl esters are termed acetylcholinesterase (AChE) (EC 3.1.1.7)
-;
+gd; hydrolyse acetyl esters are termed acetylcholinesterase (AChE) (EC 3.1.1.7);
+
 gd; and those that prefer other types of ester, such as butyrylcholine are
 gd; termed butyrylcholinesterase (BChE) (EC 3.1.1.8).
 
@@ -205,8 +199,8 @@ Output file format
 
    This directory contains output files.
 
-   The output files are held in the PRINTS subdirectory of the EMBOSS
-   data directory.
+   The output files are held in the PRINTS subdirectory of the EMBOSS data
+   directory.
      * prints.mat matrices calculated from PRINTS
      * Pxxxxx text information for each fingerprint
 
@@ -221,12 +215,11 @@ Notes
 References
 
     1. Attwood, T.K., Flower, D.R., Lewis, A.P., Mabey, J.E., Morgan,
-       S.R., Scordis, P., Selley, J. and Wright, W. (1999) PRINTS
-       prepares for the new millennium. Nucleic Acids Research, 27(1),
-       220-225.
-    2. Attwood, T.K., Beck, M.E., Flower, D.R., Scordis, P. and Selley,
-       J. (1998) The PRINTS protein fingerprint database in its fifth
-       year. Nucleic Acids Research, 26(1), 304-308.
+       S.R., Scordis, P., Selley, J. and Wright, W. (1999) PRINTS prepares
+       for the new millennium. Nucleic Acids Research, 27(1), 220-225.
+    2. Attwood, T.K., Beck, M.E., Flower, D.R., Scordis, P. and Selley, J.
+       (1998) The PRINTS protein fingerprint database in its fifth year.
+       Nucleic Acids Research, 26(1), 304-308.
     3. Attwood, T.K., Beck, M.E., Bleasby, A.J., Degtyarenko, K., Michie,
        A.D. and Parry-Smith, D.J. (1997) Novel developments with the
        PRINTS protein motif fingerprint database. Nucleic Acids Research,
@@ -236,26 +229,26 @@ References
     5. Bleasby, A.J., Akrigg, D.A. and Attwood, T.K. (1994) OWL - A
        non-redundant composite protein sequence database. Nucleic Acids
        Research, 22(17), 3574-77.
-    6. Bleasby, A.J. and Wootton, J.C. (1990) Constructing validated,
-       non- redundant composite protein sequence databases. Protein
+    6. Bleasby, A.J. and Wootton, J.C. (1990) Constructing validated, non-
+       redundant composite protein sequence databases. Protein
        Engineering, 3(3), 153-159.
-    7. Parry-Smith, D.J. and Attwood, T.K. (1992) ADSP - A new package
-       for computational sequence analysis. CABIOS, 8(5), 451-459.
+    7. Parry-Smith, D.J. and Attwood, T.K. (1992) ADSP - A new package for
+       computational sequence analysis. CABIOS, 8(5), 451-459.
     8. Attwood, T.K. and Findlay, J.B.C. (1994) Fingerprinting
        G-protein-coupled receptors. Prot.Engng. 7(2), 195-203.
-    9. Attwood, T.K. and Findlay, J.B.C. (1993) Design of a
-       discriminating finger- print for G-protein-coupled receptors.
-       Prot.Engng. 6(2) 167-176.
+    9. Attwood, T.K. and Findlay, J.B.C. (1993) Design of a discriminating
+       finger- print for G-protein-coupled receptors. Prot.Engng. 6(2)
+       167-176.
    10. Akrigg, D., Attwood, T.K., Bleasby, A.J., Findlay, J.B.C, North,
        A.C.T., Maughan, N.A., Parry-Smith, D.J., Perkins, D.N. and
        Wootton, J.C. (1992) SERPENT - An information storage and analysis
        resource for protein sequences. CABIOS 8(3) 295-296.
    11. Parry-Smith, D.J. and Attwood, T.K. (1991) SOMAP - A novel
-       interactive approach to multiple protein sequence aligment.
-       CABIOS, 7(2), 233-235.
+       interactive approach to multiple protein sequence aligment. CABIOS,
+       7(2), 233-235.
    12. Perkins, D.N. and Attwood, T.K. (1995) VISTAS - A package for
-       VIsualising STructures And Sequences of proteins. J.Mol.Graph.,
-       13, 73-75.
+       VIsualising STructures And Sequences of proteins. J.Mol.Graph., 13,
+       73-75.
    13. Parry-Smith, D.J., Payne, A.W.R, Michie, A.D. and Attwood, T.K.
        (1998) CINEMA - A novel Colour INteractive Editor for Multiple
        Alignments. Gene, 211(2), GC45-56.
@@ -283,18 +276,18 @@ See also
 
    Program name     Description
    aaindexextract   Extract amino acid property data from AAINDEX
-   cutgextract      Extract codon usage tables from from CUTG database
+   cutgextract      Extract codon usage tables from CUTG database
    jaspextract      Extract data from JASPAR
    prosextract      Processes the PROSITE motif database for use by
                     patmatmotifs
-   rebaseextract    Process the REBASE database for use by restriction
-                    enzyme applications
+   rebaseextract    Process the REBASE database for use by restriction enzyme
+                    applications
    tfextract        Process TRANSFAC transcription factor database for use by
                     tfscan
 
 Author(s)
 
-   Alan Bleasby (ajb © ebi.ac.uk)
+   Alan Bleasby (ajb (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

@@ -22,18 +22,25 @@
 
 package org.emboss.jemboss.gui;
 
+import jalview.appletgui.AlignFrame;
+import jalview.appletgui.PaintRefresher;
+import jalview.datamodel.Alignment;
+import jalview.io.AppletFormatAdapter;
+import jalview.io.IdentifyFile;
+
 import java.awt.*;
-import java.io.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+
 import javax.swing.*;
-import java.awt.event.*;
+
 import org.emboss.jemboss.gui.form.TextFieldSink;
-import jalview.AlignFrame;
-//import jalview.MailProperties;
-//import jalview.PIDColourScheme;
 
 /**
 *
-* Launch Jalview (M.Clamp )
+* Launches JalviewLite (see jalview.org)
 *
 */
 public class LaunchJalView extends JFrame
@@ -41,7 +48,7 @@ public class LaunchJalView extends JFrame
 
   public LaunchJalView()
   {
-    super("Jalview ");
+    super("Launch JalviewLite ");
 
     final TextFieldSink tfs = new TextFieldSink();
     final Cursor cbusy = new Cursor(Cursor.WAIT_CURSOR);
@@ -51,58 +58,34 @@ public class LaunchJalView extends JFrame
     final Box bdown = Box.createVerticalBox();
     bdown.add(Box.createVerticalStrut(5));
 
-    JLabel lname = new JLabel("Multiple Sequence Filename");
+    JLabel lname = new JLabel("Multiple Sequence Filename:");
     lname.setFont(org.emboss.jemboss.gui.form.SectionPanel.labfont);
     lname.setForeground(Color.black);
-    bdown.add(Box.createVerticalStrut(1));
-    bacross.add(Box.createHorizontalStrut(1));
+    bdown.add(Box.createVerticalStrut(5));
+    bacross.add(Box.createHorizontalStrut(5));
     bacross.add(lname);
+    bacross.add(Box.createHorizontalStrut(100));
     bacross.add(Box.createHorizontalGlue());
     bdown.add(bacross);
  
     bdown.add(Box.createVerticalStrut(1));
 
     bacross = Box.createHorizontalBox();
-    bacross.add(Box.createHorizontalStrut(1));
+    bacross.add(Box.createHorizontalStrut(5));
     bacross.add(tfs);
-    bacross.add(Box.createHorizontalGlue());
     bdown.add(bacross);
 
-    bdown.add(Box.createVerticalStrut(5));
-    
-    lname = new JLabel("File Format");
-    lname.setFont(org.emboss.jemboss.gui.form.SectionPanel.labfont);
-    lname.setForeground(Color.black);
-    bacross = Box.createHorizontalBox();
-    bacross.add(Box.createHorizontalStrut(1));
-    bacross.add(lname);
-    bacross.add(Box.createHorizontalGlue());
-    bdown.add(bacross);
-
-    bdown.add(Box.createVerticalStrut(1));
-    String sformats[] = {"MSF", "FASTA", "CLUSTAL", "PIR"};
-    final JComboBox format = new JComboBox(sformats);
-    bdown.add(format);
-    bdown.add(Box.createVerticalStrut(5));
-
-    final JTextField mailServer = new JTextField();
-    mailServer.setText("mercury.hgmp.mrc.ac.uk");
-    bacross =  Box.createHorizontalBox();
-    bacross.add(Box.createHorizontalStrut(1));
-    bacross.add(mailServer);
-    JLabel lmail = new JLabel(" Mail Server ");
-    lmail.setForeground(Color.black);
-    bacross.add(lmail);
-    bdown.add(bacross);
     bdown.add(Box.createVerticalStrut(5));
 
     final JButton launch = new JButton("LAUNCH");
     bacross = Box.createHorizontalBox();
-    bacross.add(Box.createHorizontalStrut(1));
+    bacross.add(Box.createHorizontalStrut(100));
     bacross.add(launch);
-    bacross.add(Box.createHorizontalGlue());
     bdown.add(bacross);
 
+    tfs.setToolTipText("Enter full path of your input alignment" +
+    		" or multiple sequence file," +
+    		" or drag the file from local file manager to here.");
     final JFrame fr = this;
     launch.addActionListener(new ActionListener()
     {
@@ -116,43 +99,32 @@ public class LaunchJalView extends JFrame
           {
             setCursor(cbusy);
 
-            String name = tfs.getText();
-            File fn = new File(name);
+            String filename = tfs.getText();
+            File fn = new File(filename);
             if(!fn.exists())
             {
-              JOptionPane.showMessageDialog(fr,name+" not found.\n"+
+              JOptionPane.showMessageDialog(fr,filename+" not found.\n"+
                                             "Note if this is a file on the server then\n"+
                                             "drag it to the local file manager first.",
                                             "File Not Found",
                                             JOptionPane.ERROR_MESSAGE);
               setCursor(cdone);
-              setVisible(false);
+              dispose();
               return null;
             }           
 
-
-            String args[] = { 
-              name,                                //alignment file
-              "File",
-              (String)format.getSelectedItem(),    //format 
-              "-mail",
-              mailServer.getText()                 //mail server
-            };
             try
             {
-              AlignFrame af = AlignFrame.parseArgs(args);
-              af.setSize(700,500);
+              callJalview(filename, filename);
               setCursor(cdone);
-              setVisible(false);
-              af.setVisible(true);
+              dispose();
             }
             catch(Exception npe)
             {
               setCursor(cdone);
               JOptionPane.showMessageDialog(fr,
-                       "Check the sequence entered \n" + 
-                       "and the format chosen.",
-                       "Error Message", JOptionPane.ERROR_MESSAGE);
+                       "Check the input file entered.",
+                       "Error", JOptionPane.ERROR_MESSAGE);
             }
             return null;
           }
@@ -171,5 +143,27 @@ public class LaunchJalView extends JFrame
 
     setVisible(true);      
   }
+  
+  
+  public static void callJalview(String filename, String title) throws IOException
+  {
+      { // this block is a workaround to stop jalview calling System.exit()
+          final Label dummylabel = new Label("dummy");
+          final String dummyname = "dummy";
+          PaintRefresher.Register(dummylabel, dummyname);
+      }
+
+      Alignment al = null;
+      String format = new IdentifyFile().Identify(filename,
+              AppletFormatAdapter.FILE);
+      al = new AppletFormatAdapter().readFile(filename,
+              AppletFormatAdapter.FILE, format);
+      if (al.getHeight() > 0)
+      {
+          AlignFrame af = new AlignFrame(al, null, title, false);
+          af.setVisible(true);
+      }
+  }
+
 }
 

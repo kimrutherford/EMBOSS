@@ -1,5 +1,4 @@
-
-                                cutgextract 
+                                 cutgextract
 
 
 
@@ -12,17 +11,16 @@ Wiki
 
 Function
 
-   Extract codon usage tables from from CUTG database
+   Extract codon usage tables from CUTG database
 
 Description
 
-   Given the name of a directory containing the CUTG database,
-   cutgextract will calculate codon usage tables for individual species
-   (e.g. EHomo_sapiens.cut) and place them in the CODONS subdirectory of
-   the EMBOSS data directory. This is an all-or-nothing extraction; it
-   will create many files and take several minutes. The usage tables are
-   calculated from the sum of codons over all sequences for each
-   organism.
+   Given the name of a directory containing the CUTG database, cutgextract
+   will calculate codon usage tables for individual species (e.g.
+   EHomo_sapiens.cut) and place them in the CODONS subdirectory of the
+   EMBOSS data directory. This is an all-or-nothing extraction; it will
+   create many files and take several minutes. The usage tables are
+   calculated from the sum of codons over all sequences for each organism.
 
 Algorithm
 
@@ -30,22 +28,26 @@ Algorithm
    with the extension '.codon'. These are all expected to be CUTG data
    files. It then parses out the codon usage data and writes one file per
    species into the EMBOSS data/CODONS directory. The names of the files
-   are derived from the species names in the CUTG files. These files
-   names will be long and therefore descriptive.
+   are derived from the species names in the CUTG files. These files names
+   will be long and therefore descriptive.
 
 Usage
 
    Here is a sample session with cutgextract
 
 
-% cutgextract 
-Extract codon usage tables from from CUTG database
+% cutgextract
+Extract codon usage tables from CUTG database
 Codon usage directories [.]: data
-General log output file [outfile.cutgextract]: 
+General log output file [outfile.cutgextract]:
+
 
    Go to the output files for this example
 
 Command line arguments
+
+Extract codon usage tables from CUTG database
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-directory]         dirlist    [.] Codon usage directories
@@ -53,18 +55,16 @@ Command line arguments
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -release            string     CUTG release (Any string is accepted)
-   -wildspec           string     [*.codon] Type of codon file (Any string is
-                                  accepted)
-   -species            string     [*] Species wildcard (Any string is
-                                  accepted)
+   -release            string     CUTG release (Any string)
+   -wildspec           string     [*.codon] Type of codon file (Any string)
+   -species            string     [*] Species wildcard (Any string)
    -allrecords         boolean    [N] Include all records, including those
                                   with warnings
    -filename           string     Single output filename to override automatic
                                   one file for each species. Leave blank to
                                   generate the filenames. Specify a filename
                                   to combine several species into one file.
-                                  (Any string is accepted)
+                                  (Any string)
 
    Associated qualifiers:
 
@@ -79,20 +79,22 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
 Output file format
 
-   cutgextract writes a set of EMBOSS codon usage data files to the
-   EMBOSS data/CODONS data directory.
+   cutgextract writes a set of EMBOSS codon usage data files to the EMBOSS
+   data/CODONS data directory.
 
   Output files for usage example
 
@@ -118,8 +120,8 @@ Data files
 
 Notes
 
-   The EMBOSS distribution includes a set of codon usage tables
-   calculated from the files listed in
+   The EMBOSS distribution includes a set of codon usage tables calculated
+   from the files listed in
    ftp://ftp.ebi.ac.uk/pub/databases/codonusage/README), with a few
    additions whose exact derivation cannot easily be determined. Many
    people would prefer to create their own from the public CUTG data. The
@@ -165,14 +167,14 @@ See also
    printsextract    Extract data from PRINTS database for use by pscan
    prosextract      Processes the PROSITE motif database for use by
                     patmatmotifs
-   rebaseextract    Process the REBASE database for use by restriction
-                    enzyme applications
+   rebaseextract    Process the REBASE database for use by restriction enzyme
+                    applications
    tfextract        Process TRANSFAC transcription factor database for use by
                     tfscan
 
 Author(s)
 
-   Alan Bleasby (ajb © ebi.ac.uk)
+   Alan Bleasby (ajb (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

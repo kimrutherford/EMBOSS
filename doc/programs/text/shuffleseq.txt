@@ -1,5 +1,4 @@
-
-                                shuffleseq 
+                                 shuffleseq
 
 
 
@@ -27,15 +26,19 @@ Usage
    This makes two randomised copies of the input sequence:
 
 
-% shuffleseq -shuffle 2 
+% shuffleseq -shuffle 2
 Shuffles a set of sequences maintaining composition
 Input sequence(s): tembl:L48662
-output sequence(s) [l48662.fasta]: 
+output sequence(s) [l48662.fasta]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Shuffles a set of sequences maintaining composition
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -85,13 +88,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -99,8 +104,8 @@ Input file format
 
   Input files for usage example
 
-   'tembl:L48662' is a sequence entry in the example nucleic acid
-   database 'tembl'
+   'tembl:L48662' is a sequence entry in the example nucleic acid database
+   'tembl'
 
   Database entry: tembl:L48662
 
@@ -117,8 +122,7 @@ XX
 KW   .
 XX
 OS   Mus musculus (house mouse)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
-;
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
 OC   Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea;
 OC   Muridae; Murinae; Mus.
 XX
@@ -145,20 +149,13 @@ FT                   /tissue_type="spleen"
 FT                   /db_xref="taxon:10090"
 XX
 SQ   Sequence 366 BP; 100 A; 90 C; 85 G; 89 T; 2 other;
-     gagnnccagc tgcagcagtc tggacctgag ctggtaaagc ctggggcttc agtgaagatg        6
-0
-     tcctgcaagg cttctggata cacattcact agctatgtta tgcactgggt gaatcagaag       12
-0
-     cctgggcagg gccttgagtg gattggatat attaatcctt acaatgatgg tactaactac       18
-0
-     aatgagaagt tcaaaggcaa ggccacactg acttcagaca aatcctccag cacagcctac       24
-0
-     atggagttca gcagcctgac ctctgaggac tctgcggtct attactgtgc aagaaaaact       30
-0
-     tcctactata gtaacctata ttactttgac tactggggcc aaggcaccac tctcacagtc       36
-0
-     tcctca                                                                  36
-6
+     gagnnccagc tgcagcagtc tggacctgag ctggtaaagc ctggggcttc agtgaagatg        60
+     tcctgcaagg cttctggata cacattcact agctatgtta tgcactgggt gaatcagaag       120
+     cctgggcagg gccttgagtg gattggatat attaatcctt acaatgatgg tactaactac       180
+     aatgagaagt tcaaaggcaa ggccacactg acttcagaca aatcctccag cacagcctac       240
+     atggagttca gcagcctgac ctctgaggac tctgcggtct attactgtgc aagaaaaact       300
+     tcctactata gtaacctata ttactttgac tactggggcc aaggcaccac tctcacagtc       360
+     tcctca                                                                  366
 //
 
 Output file format
@@ -167,8 +164,8 @@ Output file format
 
   File: l48662.fasta
 
->L48662 L48662.1 Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA anti
-body heavy chain mRNA.
+>L48662 L48662.1 Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antib
+ody heavy chain mRNA.
 aggtttttatattacaagcatactaagagactcgcgatgatcgcacaattccaaatgtgc
 tcatgggtgtagcaagaacctcaaataaaagggcaaccatgagggtaaagtctccgcatg
 agcccctgggacgcgagagactttctcccgctagtgggtcgaacctgcagtgtcgataat
@@ -176,8 +173,8 @@ tggagttaaaatcgcagcatttacggccatgaattgtgtcgatanacgattcacgcaatc
 gttaagatcaggttcattgggntcacaaaccgtaggccccccgttgcctgacgcgtaacg
 ttcggatttccgtgacttcatctgactactctgtcacattcttacacgacaagctcaaca
 agccgg
->L48662 L48662.1 Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA anti
-body heavy chain mRNA.
+>L48662 L48662.1 Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antib
+ody heavy chain mRNA.
 gtggatggtatccctaacccatgacttgcgattccattgactaataccgatttcgctatg
 cgaataatactgcacaataagcgctgggggttggtttaaanttgcgatgtattatcaggt
 gcatcatacgcgtgtcttcaatcgcaggagaatacaaactcagtcccaagcctaaggcgc
@@ -227,7 +224,7 @@ See also
 
 Author(s)
 
-   Michael          Schmitz (mschmitz © lbl.gov)
+   Michael          Schmitz (mschmitz (c) lbl.gov)
    Lawrence         Berkeley Labs, USA
 
 History

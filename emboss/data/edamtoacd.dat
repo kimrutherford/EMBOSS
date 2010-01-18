@@ -1,0 +1,512 @@
+# edamtoacd.dat
+# This file lists values for the ACD relations: attribute taken from the EDAM ontology, for ACD data items with specified attributes.
+#
+# The meaning of the columns is:
+# ACD datatype | Value of relations: attribute | Attributes that must be specified
+# IMPORTANT.  When used with the EMBOSS application "acdrelations":
+# - the first line for each datatype should have no attributes defined - this gives the default value of the relations: attribute.
+# - subsequent lines for a given datatype must be in order of number of attributes in the third column (lowest number first)
+# - the attribute:value pairs (third column) must be delimited by ';'
+#
+align          | "EDAM: Sequence alignment data"                             |
+align          | "EDAM: Nucleotide sequence alignment data"                  | type:"nucleotide"
+align          | "EDAM: Protein sequence alignment data"                     | type:"protein"
+align          | "EDAM: Multiple sequence alignment data"                    | minseqs:"3"
+align          | "EDAM: Pairwise sequence alignment data"                    | minseqs:"2";       maxseqs:"2"
+align          | "EDAM: Multiple protein sequence alignment data"            | type:"protein";    minseqs:"3"
+align          | "EDAM: Multiple nucleotide sequence alignment data"         | type:"nucleotide"; minseqs:"3"
+align          | "EDAM: Pairwise nucleotide sequence alignment data"         | type:"nucleotide"; minseqs:"2"; maxseqs:"2"
+align          | "EDAM: Pairwise protein sequence alignment data"            | type:"protein";    minseqs:"2"; maxseqs:"2"
+array          | "EDAM: Generic float array"                                 | 
+#
+arraychar      | "EDAM: Generic character array"                             | 
+#
+arrayword      | "EDAM: Generic string array"                                | 
+#
+arraystring    | "EDAM: Generic string array"                                | 
+#
+arrayint       | "EDAM: Generic integer array"                               | 
+#
+arrayfloat     | "EDAM: Generic float array"                                 | 
+#
+arraydouble    | "EDAM: Generic double array"                                | 
+#
+boolean        | "EDAM: Generic boolean"                                     | 
+#
+codon          | "EDAM: Codon usage table"                                   | 
+#
+cpdb           | "EDAM: Protein tertiary structure"                          | 
+#
+datafile       | "EDAM: EMBOSS data file"                                    | 
+#
+directory      | "EDAM: Directory"                                           | 
+#
+dirlist        | "EDAM: Directory"                                           | 
+#
+discretestates | "EDAM: PHYLIP discrete states file"                         | 
+#
+distances      | "EDAM: PHYLIP phylogenetic distance matrix file"            | 
+#
+features       | "EDAM: Sequence feature table"                              | 
+features       | "EDAM: Nucleotide sequence feature table"                   | type:"nucleotide"
+features       | "EDAM: Protein sequence feature table"                      | type:"protein" 
+#
+featout        | "EDAM: Sequence feature table"                              | 
+featout        | "EDAM: Nucleotide sequence feature table"                   | type:"nucleotide"
+featout        | "EDAM: Protein sequence feature table"                      | type:"protein"
+#
+filelist       | "EDAM: List of file names"                                  | 
+#
+float          | "EDAM: Generic float"                                       | 
+#
+frequencies    | "EDAM: PHYLIP phylogenetic character frequency values file" | 
+#
+graph          | "EDAM: EMBOSS graph file"                                   | 
+#
+#
+infile         | "EDAM: Free text file"                                      | 
+infile         | "EDAM: Free text file"                                      | binary:"N"
+infile         | "EDAM: Binary file"                                         | binary:"Y"
+#
+integer        | "EDAM: Generic integer"                                     | 
+#
+list           | "EDAM: Generic string array"                                | 
+#
+matrix         | "EDAM: Integer comparison matrix"                           | 
+matrix         | "EDAM: Integer nucleotide comparison matrix"                | protein:"N"
+matrix         | "EDAM: Integer amino acid comparison matrix"                | protein:"Y"
+#
+matrixf        | "EDAM: Float comparison matrix"                             | 
+matrixf        | "EDAM: Float nucleotide comparison matrix"                  | protein:"N"
+matrixf        | "EDAM: Float amino acid comparison matrix"                  | protein:"Y"
+#
+outcodon       | "EDAM: Codon usage table"                                   | 
+#
+outcpdb        | "EDAM: Protein tertiary structure"                          | 
+#
+outdata        | "EDAM: EMBOSS data file"                                    | 
+#
+outdir         | "EDAM: Directory"                                           | 
+#
+outdiscrete    | "EDAM: PHYLIP discrete states file"                         | 
+outdistance    | "EDAM: PHYLIP phylogenetic distance matrix file"            |
+#
+outfile        | "EDAM: Free text file"                                      | 
+outfile        | "EDAM: Free text file"                                      | binary:"N"
+outfile        | "EDAM: Binary file"                                         | binary:"Y"
+#
+outfile        |  "EDAM:Nucleic acid conformation report"                    | knowntype:"banana output"                       
+outfile        |  "EDAM:Nucleic acid conformation report"                    | knowntype:"btwisted output"                     
+outfile        |  "EDAM:Codon adaptation index "                             | knowntype:"cai output"                          
+outfile        |  "EDAM:Protein charge plot"                                 | knowntype:"charge output"                       
+outfile        |  "EDAM:Coding region report"                                | knowntype:"checktrans output"                   
+outfile        |  "EDAM:Nc statistic"                                        | knowntype:"chips output"                        
+outfile        |  "EDAM:Codon usage fraction difference"                     | knowntype:"codcmp output"                       
+outfile        |  "EDAM:Sequence record"                                     | knowntype:"coderet output"                      
+outfile        |  "EDAM:CpG island and isochore report"                      | knowntype:"cpgplot output"                      
+outfile        |  "EDAM:CpG island and isochore report"                      | knowntype:"cpgreport output"                    
+outfile        |  "EDAM:Codon usage table file"                              | knowntype:"cusp output"                         
+outfile        |  "EDAM:Codon usage table file"                              | knowntype:"cutgextract output"                  
+outfile        |  "EDAM:Database index"                                      | knowntype:"dbiblast output"                     
+outfile        |  "EDAM:Database index"                                      | knowntype:"dbifasta output"                     
+outfile        |  "EDAM:Database index"                                      | knowntype:"dbiflat output"                      
+outfile        |  "EDAM:Database index"                                      | knowntype:"dbigcg output"                       
+outfile        |  "EDAM:Database index"                                      | knowntype:"dbxfasta output"                     
+outfile        |  "EDAM:Database index"                                      | knowntype:"dbxflat output"                      
+outfile        |  "EDAM:Database index"                                      | knowntype:"dbxgcg output"                       
+outfile        |  "EDAM:Database index"                                      | knowntype:"dbxreport output"                    
+outfile        |  "EDAM:Database index"                                      | knowntype:"dbxstat output"                      
+outfile        |  "EDAM:Phylogenetic distance matrix file"                   | knowntype:"distmat output"                      
+outfile        |  "EDAM:DIALIGN sequence alignment file"                     | knowntype:"edialign output"                     
+outfile        |  "EDAM:List of file names"                                  | knowntype:"embossdata output"                   
+outfile        |  "EDAM:Application version information"                     | knowntype:"embossversion output"                
+outfile        |  "EDAM:Clustalw tree record"                                | knowntype:"emma output"                         
+outfile        |  "EDAM:Peptide molecular weight hits report"                | knowntype:"emowse output"                        
+outfile        |  "EDAM:Sequence record"                                     | knowntype:"entret output"                       
+outfile        |  "EDAM:PEST site report"                                    | knowntype:"epestfind output"                    
+outfile        |  "EDAM:Primer report"                                       | knowntype:"eprimer3 output"                     
+outfile        |  "EDAM:Repeat sequence map report"                          | knowntype:"equicktandem output"                 
+outfile        |  "EDAM:Coding region report"                                | knowntype:"est2genome output"                   
+outfile        |  "EDAM:Repeat sequence map report"                          | knowntype:"etandem output"                      
+outfile        |  "EDAM:Enzyme kinetics report"                              | knowntype:"findkm output"                       
+outfile        |  "EDAM:Sequence composition report"                         | knowntype:"freak output"                        
+outfile        |  "EDAM:CpG island and isochore report"                      | knowntype:"geecee output"                       
+outfile        |  "EDAM:Protein isoelectric point report"                    | knowntype:"giep output"                         
+outfile        |  "EDAM:Peptide hydrophobic moment report"                   | knowntype:"hmoment output"                      
+outfile        |  "EDAM:Protein isoelectric point report"                    | knowntype:"iep output"                          
+outfile        |  "EDAM:Sequence alignment information report"               | knowntype:"infoalign output"                     
+outfile        |  "EDAM:Nucleotide base information report"                  | knowntype:"infobase output"                     
+outfile        |  "EDAM:Amino acid information report"                       | knowntype:"inforesidue output"                  
+outfile        |  "EDAM:Sequence information report"                         | knowntype:"infoseq output"                      
+outfile        |  "EDAM:CpG island and isochore report"                      | knowntype:"isochore output"                     
+outfile        |  "EDAM:EMBOSS List File"                                    | knowntype:"listor output"                       
+outfile        |  "EDAM:EMBOSS megamerger log file"                          | knowntype:"megamerger output"                          
+outfile        |  "EDAM:Peptide molecular weight report"                     | knowntype:"mwcontam output"                     
+outfile        |  "EDAM:Peptide molecular weight report"                     | knowntype:"mwfilter output"                     
+outfile        |  "EDAM:Protein secondary structure record"                  | knowntype:"newcoils output"                     
+outfile        |  "EDAM:CpG island and isochore report"                      | knowntype:"newcpgreport output"                 
+outfile        |  "EDAM:CpG island and isochore report"                      | knowntype:"newcpgseek output"                   
+outfile        |  "EDAM:Free text file"                                      | knowntype:"nohtml output"                       
+outfile        |  "EDAM:Free text file"                                      | knowntype:"noreturn output"                     
+outfile        |  "EDAM:Free text file"                                      | knowntype:"nospace output"                      
+outfile        |  "EDAM:Free text file"                                      | knowntype:"notab output"                        
+outfile        |  "EDAM:List of sequence accession numbers"                  | knowntype:"oddcomp output"                      
+outfile        |  "EDAM:Repeat sequence map report"                          | knowntype:"palindrome output"                   
+outfile        |  "EDAM:Protein sequence properties report"                  | knowntype:"pepinfo output"                      
+outfile        |  "EDAM:Nucleotide sequence translation report"              | knowntype:"prettyseq output"                      
+outfile        |  "EDAM:Primer report"                                       | knowntype:"prima output"                        
+outfile        |  "EDAM:Primer report"                                       | knowntype:"primers output"                      
+outfile        |  "EDAM:Primer report"                                       | knowntype:"primersearch output"                 
+outfile        |  "EDAM:Sequence-profile alignment report"                   | knowntype:"profit output"                       
+outfile        |  "EDAM:Sequence profile record"                             | knowntype:"prophecy output"                     
+outfile        |  "EDAM:Fingerprint alignment report"                        | knowntype:"pscan output"                        
+outfile        |  "EDAM:Restriction enzyme report"                           | knowntype:"redata output"                       
+outfile        |  "EDAM:Restriction map report"                              | knowntype:"remap output"                        
+outfile        |  "EDAM:EMBOSS restover recognition site report"             | knowntype:"restover output"                        
+outfile        |  "EDAM:Application information report"                      | knowntype:"seealso output"                      
+outfile        |  "EDAM:Multiple sequence alignment record"                  | knowntype:"showalign output"                    
+outfile        |  "EDAM:Database information report"                         | knowntype:"showdb output"                       
+outfile        |  "EDAM:Database information report"                         | knowntype:"showdball output"                    
+outfile        |  "EDAM:General sequence features report"                    | knowntype:"showfeat output"                     
+outfile        |  "EDAM:Nucleotide sequence translation report"              | knowntype:"showorf output"                        
+outfile        |  "EDAM:Protein sequence features report"                    | knowntype:"showpep output"                      
+outfile        |  "EDAM:Nucleotide sequence features report"                 | knowntype:"showseq output"                       
+outfile        |  "EDAM:Nucleotide sequence translation report"              | knowntype:"sixpack output" 
+outfile        |  "EDAM:Primer match report"                                 | knowntype:"stssearch output"                    
+outfile        |  "EDAM:Synonymous codon usage statictic plot"               | knowntype:"syco output"                         
+outfile        |  "EDAM:Sequence information report"                         | knowntype:"textsearch output"                   
+outfile        |  "EDAM:Application information report"                      | knowntype:"tfm output"                          
+outfile        |  "EDAM:Transcription factor binding site report"            | knowntype:"tfscan output"                       
+outfile        |  "EDAM:Transmembrane region report"                         | knowntype:"tmap output"                         
+outfile        |  "EDAM:Free text file"                                      | knowntype:"trimspace output"                    
+outfile        |  "EDAM:Application log file"                                | knowntype:"union output"                        
+outfile        |  "EDAM:EMBOSS vectorstrip log file"                         | knowntype:"vectorstrip output"                  
+outfile        |  "EDAM:Database information report"                         | knowntype:"whichdb output"                      
+outfile        |  "EDAM:Base position variability report"                    | knowntype:"wobble output"                       
+outfile        |  "EDAM:Sequence composition report"                         | knowntype:"wordcount output"                    
+outfile        |  "EDAM:Application information report"                      | knowntype:"wossname output"                     
+outfile        |  "EDAM:EMBOSS List File"                                    | knowntype:"yank output"                         
+#
+outfile        |  "EDAM:Free text file"                                      | knowntype:"crystalball output"                  
+outfile        |  "EDAM:Directory"                                           | knowntype:"allversusall output"                 
+outfile        |  "EDAM:Motif map report"                                    | knowntype:"eiprscan output"                     
+outfile        |  "EDAM:Signal peptide sequence map report"                  | knowntype:"echlorop output"                     
+outfile        |  "EDAM:Signal peptide sequence map report"                  | knowntype:"elipop output"                       
+outfile        |  "EDAM:Protein post-translation modification site report"   | knowntype:"enetnglyc output"                    
+outfile        |  "EDAM:Protein post-translation modification site report"   | knowntype:"enetoglyc output"                    
+outfile        |  "EDAM:Protein post-translation modification site report"   | knowntype:"enetphos output"                     
+outfile        |  "EDAM:Protein cleavage site report"                        | knowntype:"eprop output"                        
+outfile        |  "EDAM:Signal peptide sequence map report"                  | knowntype:"esignalp output"                     
+outfile        |  "EDAM:Transmembrane region report"                         | knowntype:"etmhmm output"                       
+outfile        |  "EDAM:Protein post-translation modification site report"   | knowntype:"eyinoyang output"                    
+#
+outfileall     | "EDAM: Free text file"                                      | 
+outfileall     | "EDAM: Free text file"                                      | binary:"N"
+outfileall     | "EDAM: Binary file"                                         | binary:"Y"
+#
+outfreq        | "EDAM: PHYLIP phylogenetic character frequency values file" | 
+#
+outmatrix      | "EDAM: Integer comparison matrix"                           | 
+outmatrix      | "EDAM: Integer nucleotide comparison matrix"                | protein:"N"
+outmatrix      | "EDAM: Integer amino acid comparison matrix"                | protein:"Y"
+#
+outmatrixf     | "EDAM: Float comparison matrix"                             | 
+outmatrixf     | "EDAM: Float nucleotide comparison matrix"                  | protein:"N"
+outmatrixf     | "EDAM: Float amino acid comparison matrix"                  | protein:"Y"
+#
+outproperties  | "EDAM: PHYLIP phylogenetic property values file"            |
+#
+outscop        | "EDAM: SCOP domain classification"                          |
+#
+outtree        | "EDAM: PHYLIP phylogenetic tree report"                     |
+#
+pattern        | "EMBOSS sequence pattern"                                   |
+#
+properties     | "EDAM: PHYLIP phylogenetic property values file"            |
+#
+range          | "EDAM: Generic integer range"                               |
+#
+regexp         | "EDAM: Regular expression"                                  |
+#
+report         | "EDAM: EMBOSS report"                                       |
+report         | "EDAM: Sequence feature table"                              | rformat:"embl"
+report         | "EDAM: Sequence feature table"                              | rformat:"genbank"
+report         | "EDAM: Sequence feature table"                              | rformat:"gff"
+report         | "EDAM: Sequence feature table"                              | rformat:"pir"
+report         | "EDAM: Sequence feature table"                              | rformat:"swiss"
+report         | "EDAM: Sequence feature table"                              | rformat:"feattable"
+report         | "EDAM: Nucleotide sequence feature table"                   | rformat:"embl";      type:"nucleotide"
+report         | "EDAM: Nucleotide sequence feature table"                   | rformat:"genbank";   type:"nucleotide"
+report         | "EDAM: Nucleotide sequence feature table"                   | rformat:"gff";       type:"nucleotide"
+report         | "EDAM: Nucleotide sequence feature table"                   | rformat:"pir";       type:"nucleotide"
+report         | "EDAM: Nucleotide sequence feature table"                   | rformat:"swiss";     type:"nucleotide"
+report         | "EDAM: Nucleotide sequence feature table"                   | rformat:"feattable"; type:"nucleotide"
+report         | "EDAM: Protein sequence feature table"                      | rformat:"embl";      type:"protein"
+report         | "EDAM: Protein sequence feature table"                      | rformat:"genbank";   type:"protein"
+report         | "EDAM: Protein sequence feature table"                      | rformat:"gff";       type:"protein"
+report         | "EDAM: Protein sequence feature table"                      | rformat:"pir";       type:"protein"
+report         | "EDAM: Protein sequence feature table"                      | rformat:"swiss";     type:"protein"
+report         | "EDAM: Protein sequence feature table"                      | rformat:"feattable"; type:"protein"
+#
+scop           | "EDAM: SCOP domain classification"                          |
+#
+selection      | "EDAM: Generic string array"                                | 
+#
+sequence       | "EDAM: Sequence"                                            | 
+sequence       | "EDAM: Sequence"                                            | type:"any"
+sequence       | "EDAM: Sequence"                                            | type:"gapany"
+sequence       | "EDAM: Pure nucleotide sequence"                            | type:"nucleotide"
+sequence       | "EDAM: Pure DNA sequence"                                   | type:"dna"
+sequence       | "EDAM: Pure RNA sequence"                                   | type:"rna"
+sequence       | "EDAM: Pure protein sequence"                               | type:"protein"
+sequence       | "EDAM: Pure protein sequence"                               | type:"proteinstandard"
+sequence       | "EDAM: Unambiguous pure nucleotide sequence"                | type:"purenucleotide"
+sequence       | "EDAM: Unambiguous pure DNA sequence"                       | type:"puredna"
+sequence       | "EDAM: Unambiguous pure RNA sequence"                       | type:"purerna"
+sequence       | "EDAM: Unambiguous pure protein sequence"                   | type:"pureprotein"
+sequence       | "EDAM: Nucleotide sequence"                                 | type:"gapnucleotide"
+sequence       | "EDAM: Nucleotide sequence"                                 | type:"gapnucleotidephylo"
+sequence       | "EDAM: DNA sequence"                                        | type:"gapdna"
+sequence       | "EDAM: RNA sequence"                                        | type:"gaprna"
+sequence       | "EDAM: DNA sequence"                                        | type:"gapdnaphylo"
+sequence       | "EDAM: RNA sequence"                                        | type:"gaprnaphylo"
+sequence       | "EDAM: Protein sequence"                                    | type:"gapprotein"
+sequence       | "EDAM: Protein sequence"                                    | type:"gapproteinphylo"
+sequence       | "EDAM: Protein sequence"                                    | type:"gapstopprotein"
+sequence       | "EDAM: Protein sequence"                                    | type:"stopprotein"
+sequence       | "EDAM: Protein sequence"                                    | type:"gapproteinstandard"
+sequence       | "EDAM: Protein sequence"                                    | type:"stopproteinstandard"
+#
+seqall         | "EDAM: Sequence record"                                     |
+seqall         | "EDAM: Sequence record"                                     | type:"any"
+seqall         | "EDAM: Sequence record"                                     | type:"gapany"
+seqall         | "EDAM: Nucleotide sequence record"                          | type:"nucleotide"
+seqall         | "EDAM: DNA sequence record"                                 | type:"dna"
+seqall         | "EDAM: RNA sequence record"                                 | type:"rna"
+seqall         | "EDAM: Protein sequence record"                             | type:"protein"
+seqall         | "EDAM: Protein sequence record"                             | type:"proteinstandard"
+seqall         | "EDAM: Nucleotide sequence record"                          | type:"purenucleotide"
+seqall         | "EDAM: DNA sequence record"                                 | type:"puredna"
+seqall         | "EDAM: RNA sequence record"                                 | type:"purerna"
+seqall         | "EDAM: Protein sequence record"                             | type:"pureprotein"
+seqall         | "EDAM: Nucleotide sequence record"                          | type:"gapnucleotide"
+seqall         | "EDAM: Nucleotide sequence record"                          | type:"gapnucleotidephylo"
+seqall         | "EDAM: DNA sequence record"                                 | type:"gapdna"
+seqall         | "EDAM: RNA sequence record"                                 | type:"gaprna"
+seqall         | "EDAM: DNA sequence record"                                 | type:"gapdnaphylo"
+seqall         | "EDAM: RNA sequence record"                                 | type:"gaprnaphylo"
+seqall         | "EDAM: Protein sequence record"                             | type:"gapprotein"
+seqall         | "EDAM: Protein sequence record"                             | type:"gapproteinphylo"
+seqall         | "EDAM: Protein sequence record"                             | type:"gapstopprotein"
+seqall         | "EDAM: Protein sequence record"                             | type:"stopprotein"
+seqall         | "EDAM: Protein sequence record"                             | type:"gapproteinstandard"
+seqall         | "EDAM: Protein sequence record"                             | type:"stopproteinstandard"
+#
+seqout         | "EDAM: Sequence"                                            | 
+seqout         | "EDAM: Sequence"                                            | type:"any"
+seqout         | "EDAM: Sequence"                                            | type:"gapany"
+seqout         | "EDAM: Pure nucleotide sequence"                            | type:"nucleotide"
+seqout         | "EDAM: Pure DNA sequence"                                   | type:"dna"
+seqout         | "EDAM: Pure RNA sequence"                                   | type:"rna"
+seqout         | "EDAM: Pure protein sequence"                               | type:"protein"
+seqout         | "EDAM: Pure protein sequence"                               | type:"proteinstandard"
+seqout         | "EDAM: Unambiguous pure nucleotide sequence"                | type:"purenucleotide"
+seqout         | "EDAM: Unambiguous pure DNA sequence"                       | type:"puredna"
+seqout         | "EDAM: Unambiguous pure RNA sequence"                       | type:"purerna"
+seqout         | "EDAM: Unambiguous pure protein sequence"                   | type:"pureprotein"
+seqout         | "EDAM: Nucleotide sequence"                                 | type:"gapnucleotide"
+seqout         | "EDAM: DNA sequence"                                        | type:"gapdna"
+seqout         | "EDAM: RNA sequence"                                        | type:"gaprna"
+seqout         | "EDAM: DNA sequence"                                        | type:"gapdnaphylo"
+seqout         | "EDAM: RNA sequence"                                        | type:"gaprnaphylo"
+seqout         | "EDAM: Protein sequence"                                    | type:"gapprotein"
+seqout         | "EDAM: Protein sequence"                                    | type:"gapproteinphylo"
+seqout         | "EDAM: Protein sequence"                                    | type:"gapstopprotein"
+seqout         | "EDAM: Protein sequence"                                    | type:"stopprotein"
+seqout         | "EDAM: Protein sequence"                                    | type:"gapproteinstandard"
+seqout         | "EDAM: Protein sequence"                                    | type:"stopproteinstandard"
+#
+seqoutall      | "EDAM: Sequence record"                                     |
+seqoutall      | "EDAM: Sequence record"                                     | type:"any"
+seqoutall      | "EDAM: Sequence record"                                     | type:"gapany"
+seqoutall      | "EDAM: Nucleotide sequence record"                          | type:"nucleotide"
+seqoutall      | "EDAM: DNA sequence record"                                 | type:"dna"
+seqoutall      | "EDAM: RNA sequence record"                                 | type:"rna"
+seqoutall      | "EDAM: Protein sequence record"                             | type:"protein"
+seqoutall      | "EDAM: Protein sequence record"                             | type:"proteinstandard"
+seqoutall      | "EDAM: Nucleotide sequence record"                          | type:"purenucleotide"
+seqoutall      | "EDAM: DNA sequence record"                                 | type:"puredna"
+seqoutall      | "EDAM: RNA sequence record"                                 | type:"purerna"
+seqoutall      | "EDAM: Protein sequence record"                             | type:"pureprotein"
+seqoutall      | "EDAM: Nucleotide sequence record"                          | type:"gapnucleotide"
+seqoutall      | "EDAM: Nucleotide sequence record"                          | type:"gapnucleotidephylo"
+seqoutall      | "EDAM: DNA sequence record"                                 | type:"gapdna"
+seqoutall      | "EDAM: RNA sequence record"                                 | type:"gaprna"
+seqoutall      | "EDAM: DNA sequence record"                                 | type:"gapdnaphylo"
+seqoutall      | "EDAM: RNA sequence record"                                 | type:"gaprnaphylo"
+seqoutall      | "EDAM: Protein sequence record"                             | type:"gapprotein"
+seqoutall      | "EDAM: Protein sequence record"                             | type:"gapproteinphylo"
+seqoutall      | "EDAM: Protein sequence record"                             | type:"gapstopprotein"
+seqoutall      | "EDAM: Protein sequence record"                             | type:"stopprotein"
+seqoutall      | "EDAM: Protein sequence record"                             | type:"gapproteinstandard"
+seqoutall      | "EDAM: Protein sequence record"                             | type:"stopproteinstandard"
+#
+seqoutset      | "EDAM: Sequence record"                                     |
+seqoutset      | "EDAM: Sequence record"                                     | type:"any"
+seqoutset      | "EDAM: Sequence record"                                     | type:"gapany"
+seqoutset      | "EDAM: Nucleotide sequence record"                          | type:"nucleotide"
+seqoutset      | "EDAM: DNA sequence record"                                 | type:"dna"
+seqoutset      | "EDAM: RNA sequence record"                                 | type:"rna"
+seqoutset      | "EDAM: Protein sequence record"                             | type:"protein"
+seqoutset      | "EDAM: Protein sequence record"                             | type:"proteinstandard"
+seqoutset      | "EDAM: Nucleotide sequence record"                          | type:"purenucleotide"
+seqoutset      | "EDAM: DNA sequence record"                                 | type:"puredna"
+seqoutset      | "EDAM: RNA sequence record"                                 | type:"purerna"
+seqoutset      | "EDAM: Protein sequence record"                             | type:"pureprotein"
+seqoutset      | "EDAM: Nucleotide sequence record"                          | type:"gapnucleotide"
+seqoutset      | "EDAM: Nucleotide sequence record"                          | type:"gapnucleotidephylo"
+seqoutset      | "EDAM: DNA sequence record"                                 | type:"gapdna"
+seqoutset      | "EDAM: RNA sequence record"                                 | type:"gaprna"
+seqoutset      | "EDAM: DNA sequence record"                                 | type:"gapdnaphylo"
+seqoutset      | "EDAM: RNA sequence record"                                 | type:"gaprnaphylo"
+seqoutset      | "EDAM: Protein sequence record"                             | type:"gapprotein"
+seqoutset      | "EDAM: Protein sequence record"                             | type:"gapproteinphylo"
+seqoutset      | "EDAM: Protein sequence record"                             | type:"gapstopprotein"
+seqoutset      | "EDAM: Protein sequence record"                             | type:"stopprotein"
+seqoutset      | "EDAM: Protein sequence record"                             | type:"gapproteinstandard"
+seqoutset      | "EDAM: Protein sequence record"                             | type:"stopproteinstandard"
+#
+seqset         | "EDAM: Sequence record"                                     |
+seqset         | "EDAM: Sequence record"                                     | type:"any"
+seqset         | "EDAM: Sequence record"                                     | type:"gapany"
+seqset         | "EDAM: Nucleotide sequence record"                          | type:"nucleotide"
+seqset         | "EDAM: DNA sequence record"                                 | type:"dna"
+seqset         | "EDAM: RNA sequence record"                                 | type:"rna"
+seqset         | "EDAM: Protein sequence record"                             | type:"protein"
+seqset         | "EDAM: Protein sequence record"                             | type:"proteinstandard"
+seqset         | "EDAM: Nucleotide sequence record"                          | type:"purenucleotide"
+seqset         | "EDAM: DNA sequence record"                                 | type:"puredna"
+seqset         | "EDAM: RNA sequence record"                                 | type:"purerna"
+seqset         | "EDAM: Protein sequence record"                             | type:"pureprotein"
+seqset         | "EDAM: Nucleotide sequence record"                          | type:"gapnucleotide"
+seqset         | "EDAM: Nucleotide sequence record"                          | type:"gapnucleotidephylo"
+seqset         | "EDAM: DNA sequence record"                                 | type:"gapdna"
+seqset         | "EDAM: RNA sequence record"                                 | type:"gaprna"
+seqset         | "EDAM: DNA sequence record"                                 | type:"gapdnaphylo"
+seqset         | "EDAM: RNA sequence record"                                 | type:"gaprnaphylo"
+seqset         | "EDAM: Protein sequence record"                             | type:"gapprotein"
+seqset         | "EDAM: Protein sequence record"                             | type:"gapproteinphylo"
+seqset         | "EDAM: Protein sequence record"                             | type:"gapstopprotein"
+seqset         | "EDAM: Protein sequence record"                             | type:"stopprotein"
+seqset         | "EDAM: Protein sequence record"                             | type:"gapproteinstandard"
+seqset         | "EDAM: Protein sequence record"                             | type:"stopproteinstandard"
+seqset         | "EDAM: Sequence alignment data"                             | aligned:"Y"
+#
+seqset         | "EDAM: Sequence alignment data"                             | type:"any";                 aligned:"Y"
+seqset         | "EDAM: Sequence alignment data"                             | type:"gapany";              aligned:"Y"
+seqset         | "EDAM: Nucleotide sequence alignment data"                  | type:"nucleotide";          aligned:"Y"
+seqset         | "EDAM: Nucleotide sequence alignment data"                  | type:"dna";                 aligned:"Y"
+seqset         | "EDAM: Nucleotide sequence alignment data"                  | type:"rna";                 aligned:"Y"
+seqset         | "EDAM: Protein sequence alignment data"                     | type:"protein";             aligned:"Y"
+seqset         | "EDAM: Protein sequence alignment data"                     | type:"proteinstandard";     aligned:"Y"
+seqset         | "EDAM: Nucleotide sequence alignment data"                  | type:"purenucleotide";      aligned:"Y"
+seqset         | "EDAM: Nucleotide sequence alignment data"                  | type:"puredna";             aligned:"Y"
+seqset         | "EDAM: Nucleotide sequence alignment data"                  | type:"purerna";             aligned:"Y"
+seqset         | "EDAM: Protein sequence alignment data"                     | type:"pureprotein";         aligned:"Y"
+seqset         | "EDAM: Nucleotide sequence alignment data"                  | type:"gapnucleotide";       aligned:"Y"
+seqset         | "EDAM: Nucleotide sequence alignment data"                  | type:"gapnucleotidephylo";  aligned:"Y"
+seqset         | "EDAM: Nucleotide sequence alignment data"                  | type:"gapdna";              aligned:"Y"
+seqset         | "EDAM: Nucleotide sequence alignment data"                  | type:"gaprna";              aligned:"Y"
+seqset         | "EDAM: Nucleotide sequence alignment data"                  | type:"gapdnaphylo";         aligned:"Y"
+seqset         | "EDAM: Nucleotide sequence alignment data"                  | type:"gaprnaphylo";         aligned:"Y"
+seqset         | "EDAM: Protein sequence alignment data"                     | type:"gapprotein";          aligned:"Y"
+seqset         | "EDAM: Protein sequence alignment data"                     | type:"gapproteinphylo";     aligned:"Y"
+seqset         | "EDAM: Protein sequence alignment data"                     | type:"gapstopprotein";      aligned:"Y"
+seqset         | "EDAM: Protein sequence alignment data"                     | type:"stopprotein";         aligned:"Y"
+seqset         | "EDAM: Protein sequence alignment data"                     | type:"gapproteinstandard";  aligned:"Y"
+seqset         | "EDAM: Protein sequence alignment data"                     | type:"stopproteinstandard"; aligned:"Y"
+seqset         | "EDAM: Nucleotide sequence alignment data"                  | type:"nucleotide";          aligned:"Y"
+seqset         | "EDAM: Protein sequence alignment data"                     | type:"protein";             aligned:"Y"
+seqset         | "EDAM: Multiple sequence alignment data"                    | aligned:"Y";                minseqs:"3"
+seqset         | "EDAM: Pairwise sequence alignment data"                    | aligned:"Y";                minseqs:"2"; maxseqs:"2"
+#
+seqset         | "EDAM: Multiple sequence alignment data"                    | type:"any";                 aligned:"Y";  minseqs:"3"
+seqset         | "EDAM: Multiple sequence alignment data"                    | type:"gapany";              aligned:"Y";  minseqs:"3"
+seqset         | "EDAM: Multiple nucleotide sequence alignment data"         | type:"nucleotide";          aligned:"Y";  minseqs:"3"
+seqset         | "EDAM: Multiple nucleotide sequence alignment data"         | type:"dna";                 aligned:"Y";  minseqs:"3"
+seqset         | "EDAM: Multiple nucleotide sequence alignment data"         | type:"rna";                 aligned:"Y";  minseqs:"3"
+seqset         | "EDAM: Multiple protein sequence alignment data"            | type:"protein";             aligned:"Y";  minseqs:"3"
+seqset         | "EDAM: Multiple protein sequence alignment data"            | type:"proteinstandard";     aligned:"Y";  minseqs:"3"
+seqset         | "EDAM: Multiple nucleotide sequence alignment data"         | type:"purenucleotide";      aligned:"Y";  minseqs:"3"
+seqset         | "EDAM: Multiple nucleotide sequence alignment data"         | type:"puredna";             aligned:"Y";  minseqs:"3"
+seqset         | "EDAM: Multiple nucleotide sequence alignment data"         | type:"purerna";             aligned:"Y";  minseqs:"3"
+seqset         | "EDAM: Multiple protein sequence alignment data"            | type:"pureprotein";         aligned:"Y";  minseqs:"3"
+seqset         | "EDAM: Multiple nucleotide sequence alignment data"         | type:"gapnucleotide";       aligned:"Y";  minseqs:"3"
+seqset         | "EDAM: Multiple nucleotide sequence alignment data"         | type:"gapnucleotidephylo";  aligned:"Y";  minseqs:"3"
+seqset         | "EDAM: Multiple nucleotide sequence alignment data"         | type:"gapdna";              aligned:"Y";  minseqs:"3"
+seqset         | "EDAM: Multiple nucleotide sequence alignment data"         | type:"gaprna";              aligned:"Y";  minseqs:"3"
+seqset         | "EDAM: Multiple nucleotide sequence alignment data"         | type:"gapdnaphylo";         aligned:"Y";  minseqs:"3"
+seqset         | "EDAM: Multiple nucleotide sequence alignment data"         | type:"gaprnaphylo";         aligned:"Y";  minseqs:"3"
+seqset         | "EDAM: Multiple protein sequence alignment data"            | type:"gapprotein";          aligned:"Y";  minseqs:"3"
+seqset         | "EDAM: Multiple protein sequence alignment data"            | type:"gapproteinphylo";     aligned:"Y";  minseqs:"3"
+seqset         | "EDAM: Multiple protein sequence alignment data"            | type:"gapstopprotein";      aligned:"Y";  minseqs:"3"
+seqset         | "EDAM: Multiple protein sequence alignment data"            | type:"stopprotein";         aligned:"Y";  minseqs:"3"
+seqset         | "EDAM: Multiple protein sequence alignment data"            | type:"gapproteinstandard";  aligned:"Y";  minseqs:"3"
+seqset         | "EDAM: Multiple protein sequence alignment data"            | type:"stopproteinstandard"; aligned:"Y";  minseqs:"3"
+#
+seqset         | "EDAM: Pairwise sequence alignment data"                    | type:"any";                 aligned:"Y"; minseqs:"2"; maxseqs:"2"
+seqset         | "EDAM: Pairwise sequence alignment data"                    | type:"gapany";              aligned:"Y"; minseqs:"2"; maxseqs:"2"
+seqset         | "EDAM: Pairwise nucleotide sequence alignment data"         | type:"nucleotide";          aligned:"Y"; minseqs:"2"; maxseqs:"2"
+seqset         | "EDAM: Pairwise nucleotide sequence alignment data"         | type:"dna";                 aligned:"Y"; minseqs:"2"; maxseqs:"2"
+seqset         | "EDAM: Pairwise nucleotide sequence alignment data"         | type:"rna";                 aligned:"Y"; minseqs:"2"; maxseqs:"2"
+seqset         | "EDAM: Pairwise protein sequence alignment data"            | type:"protein";             aligned:"Y"; minseqs:"2"; maxseqs:"2"
+seqset         | "EDAM: Pairwise protein sequence alignment data"            | type:"proteinstandard";     aligned:"Y"; minseqs:"2"; maxseqs:"2"
+seqset         | "EDAM: Pairwise nucleotide sequence alignment data"         | type:"purenucleotide";      aligned:"Y"; minseqs:"2"; maxseqs:"2"
+seqset         | "EDAM: Pairwise nucleotide sequence alignment data"         | type:"puredna";             aligned:"Y"; minseqs:"2"; maxseqs:"2"
+seqset         | "EDAM: Pairwise nucleotide sequence alignment data"         | type:"purerna";             aligned:"Y"; minseqs:"2"; maxseqs:"2"
+seqset         | "EDAM: Pairwise protein sequence alignment data"            | type:"pureprotein";         aligned:"Y"; minseqs:"2"; maxseqs:"2"
+seqset         | "EDAM: Pairwise nucleotide sequence alignment data"         | type:"gapnucleotide";       aligned:"Y"; minseqs:"2"; maxseqs:"2"
+seqset         | "EDAM: Pairwise nucleotide sequence alignment data"         | type:"gapnucleotidephylo";  aligned:"Y"; minseqs:"2"; maxseqs:"2"
+seqset         | "EDAM: Pairwise nucleotide sequence alignment data"         | type:"gapdna";              aligned:"Y"; minseqs:"2"; maxseqs:"2"
+seqset         | "EDAM: Pairwise nucleotide sequence alignment data"         | type:"gaprna";              aligned:"Y"; minseqs:"2"; maxseqs:"2"
+seqset         | "EDAM: Pairwise nucleotide sequence alignment data"         | type:"gapdnaphylo";         aligned:"Y"; minseqs:"2"; maxseqs:"2"
+seqset         | "EDAM: Pairwise nucleotide sequence alignment data"         | type:"gaprnaphylo";         aligned:"Y"; minseqs:"2"; maxseqs:"2"
+seqset         | "EDAM: Pairwise protein sequence alignment data"            | type:"gapprotein";          aligned:"Y"; minseqs:"2"; maxseqs:"2"
+seqset         | "EDAM: Pairwise protein sequence alignment data"            | type:"gapproteinphylo";     aligned:"Y"; minseqs:"2"; maxseqs:"2"
+seqset         | "EDAM: Pairwise protein sequence alignment data"            | type:"gapstopprotein";      aligned:"Y"; minseqs:"2"; maxseqs:"2"
+seqset         | "EDAM: Pairwise protein sequence alignment data"            | type:"stopprotein";         aligned:"Y"; minseqs:"2"; maxseqs:"2"
+seqset         | "EDAM: Pairwise protein sequence alignment data"            | type:"gapproteinstandard";  aligned:"Y"; minseqs:"2"; maxseqs:"2"
+seqset         | "EDAM: Pairwise protein sequence alignment data"            | type:"stopproteinstandard"; aligned:"Y"; minseqs:"2"; maxseqs:"2"
+#
+seqsetall      | "EDAM: Sequence record"                                     |
+seqsetall      | "EDAM: Sequence record"                                     | type:"any"
+seqsetall      | "EDAM: Sequence record"                                     | type:"gapany"
+seqsetall      | "EDAM: Nucleotide sequence record"                          | type:"nucleotide"
+seqsetall      | "EDAM: DNA sequence record"                                 | type:"dna"
+seqsetall      | "EDAM: RNA sequence record"                                 | type:"rna"
+seqsetall      | "EDAM: Protein sequence record"                             | type:"protein"
+seqsetall      | "EDAM: Protein sequence record"                             | type:"proteinstandard"
+seqsetall      | "EDAM: Nucleotide sequence record"                          | type:"purenucleotide"
+seqsetall      | "EDAM: DNA sequence record"                                 | type:"puredna"
+seqsetall      | "EDAM: RNA sequence record"                                 | type:"purerna"
+seqsetall      | "EDAM: Protein sequence record"                             | type:"pureprotein"
+seqsetall      | "EDAM: Nucleotide sequence record"                          | type:"gapnucleotide"
+seqsetall      | "EDAM: Nucleotide sequence record"                          | type:"gapnucleotidephylo"
+seqsetall      | "EDAM: DNA sequence record"                                 | type:"gapdna"
+seqsetall      | "EDAM: RNA sequence record"                                 | type:"gaprna"
+seqsetall      | "EDAM: DNA sequence record"                                 | type:"gapdnaphylo"
+seqsetall      | "EDAM: RNA sequence record"                                 | type:"gaprnaphylo"
+seqsetall      | "EDAM: Protein sequence record"                             | type:"gapprotein"
+seqsetall      | "EDAM: Protein sequence record"                             | type:"gapproteinphylo"
+seqsetall      | "EDAM: Protein sequence record"                             | type:"gapstopprotein"
+seqsetall      | "EDAM: Protein sequence record"                             | type:"stopprotein"
+seqsetall      | "EDAM: Protein sequence record"                             | type:"gapproteinstandard"
+seqsetall      | "EDAM: Protein sequence record"                             | type:"stopproteinstandard"
+#
+string         | "EDAM: Generic string"                                      | 
+#
+toggle         | "EDAM: Generic boolean"                                     | 
+#
+tree           | "EDAM: PHYLIP phylogenetic tree report"                     |
+#
+xygraph        | "EDAM: EMBOSS graph file"                                   | 

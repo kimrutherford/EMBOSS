@@ -1,5 +1,4 @@
-
-                                  sixpack 
+                                   sixpack
 
 
 
@@ -21,9 +20,9 @@ Description
    (optionally) three reverse translations in a pretty display format. A
    genetic code may be specified for the translation. There are various
    options to control the appearance of the output file. It also writes a
-   file of protein sequences corresponding to any open reading frames
-   that are larger than the specified minimum size: the default of 1 base
-   shows all possible open reading frames.
+   file of protein sequences corresponding to any open reading frames that
+   are larger than the specified minimum size: the default of 1 base shows
+   all possible open reading frames.
 
 Algorithm
 
@@ -38,24 +37,28 @@ Algorithm
  The forward translations are placed above the sequences.
  The reverse translation are placed below the sequences.
  The display is written out, split at the ends of lines.
- Any ORFs that are longer than the specified minimum size are written to the ou
-tput sequence file.
+ Any ORFs that are longer than the specified minimum size are written to the out
+put sequence file.
 
 Usage
 
    Here is a sample session with sixpack
 
 
-% sixpack 
+% sixpack
 Display a DNA sequence with 6-frame translation and ORFs
 Input nucleotide sequence: tembl:x13776
-Output file [x13776.sixpack]: 
-protein output sequence(s) [x13776.fasta]: 
+Output file [x13776.sixpack]:
+protein output sequence(s) [x13776.fasta]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Display a DNA sequence with 6-frame translation and ORFs
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Nucleotide sequence filename and optional
@@ -181,13 +184,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -195,8 +200,8 @@ Input file format
 
   Input files for usage example
 
-   'tembl:x13776' is a sequence entry in the example nucleic acid
-   database 'tembl'
+   'tembl:x13776' is a sequence entry in the example nucleic acid database
+   'tembl'
 
   Database entry: tembl:x13776
 
@@ -220,8 +225,7 @@ RP   1167-2167
 RA   Rice P.M.;
 RT   ;
 RL   Submitted (16-DEC-1988) to the EMBL/GenBank/DDBJ databases.
-RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
-.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
 XX
 RN   [2]
 RP   1167-2167
@@ -246,8 +250,7 @@ RP   1-2167
 RA   Rice P.M.;
 RT   ;
 RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
-RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
-.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
 XX
 DR   GOA; Q51417.
 DR   InterPro; IPR003211; AmiSUreI_transpt.
@@ -262,88 +265,50 @@ FT                   phenotype"
 FT   misc_feature    1
 FT                   /note="last base of an XhoI site"
 FT   misc_feature    648..653
-FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 cause
-s
+FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 causes
 FT                   constitutive expression of amiE"
 FT   conflict        1281
 FT                   /replace="g"
 FT                   /citation=[3]
 XX
 SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
-     ggtaccgctg gccgagcatc tgctcgatca ccaccagccg ggcgacggga actgcacgat        6
-0
-     ctacctggcg agcctggagc acgagcgggt tcgcttcgta cggcgctgag cgacagtcac       12
-0
-     aggagaggaa acggatggga tcgcaccagg agcggccgct gatcggcctg ctgttctccg       18
-0
-     aaaccggcgt caccgccgat atcgagcgct cgcacgcgta tggcgcattg ctcgcggtcg       24
-0
-     agcaactgaa ccgcgagggc ggcgtcggcg gtcgcccgat cgaaacgctg tcccaggacc       30
-0
-     ccggcggcga cccggaccgc tatcggctgt gcgccgagga cttcattcgc aaccgggggg       36
-0
-     tacggttcct cgtgggctgc tacatgtcgc acacgcgcaa ggcggtgatg ccggtggtcg       42
-0
-     agcgcgccga cgcgctgctc tgctacccga ccccctacga gggcttcgag tattcgccga       48
-0
-     acatcgtcta cggcggtccg gcgccgaacc agaacagtgc gccgctggcg gcgtacctga       54
-0
-     ttcgccacta cggcgagcgg gtggtgttca tcggctcgga ctacatctat ccgcgggaaa       60
-0
-     gcaaccatgt gatgcgccac ctgtatcgcc agcacggcgg cacggtgctc gaggaaatct       66
-0
-     acattccgct gtatccctcc gacgacgact tgcagcgcgc cgtcgagcgc atctaccagg       72
-0
-     cgcgcgccga cgtggtcttc tccaccgtgg tgggcaccgg caccgccgag ctgtatcgcg       78
-0
-     ccatcgcccg tcgctacggc gacggcaggc ggccgccgat cgccagcctg accaccagcg       84
-0
-     aggcggaggt ggcgaagatg gagagtgacg tggcagaggg gcaggtggtg gtcgcgcctt       90
-0
-     acttctccag catcgatacg cccgccagcc gggccttcgt ccaggcctgc catggtttct       96
-0
-     tcccggagaa cgcgaccatc accgcctggg ccgaggcggc ctactggcag accttgttgc      102
-0
-     tcggccgcgc cgcgcaggcc gcaggcaact ggcgggtgga agacgtgcag cggcacctgt      108
-0
-     acgacatcga catcgacgcg ccacaggggc cggtccgggt ggagcgccag aacaaccaca      114
-0
-     gccgcctgtc ttcgcgcatc gcggaaatcg atgcgcgcgg cgtgttccag gtccgctggc      120
-0
-     agtcgcccga accgattcgc cccgaccctt atgtcgtcgt gcataacctc gacgactggt      126
-0
-     ccgccagcat gggcggggga ccgctcccat gagcgccaac tcgctgctcg gcagcctgcg      132
-0
-     cgagttgcag gtgctggtcc tcaacccgcc gggggaggtc agcgacgccc tggtcttgca      138
-0
-     gctgatccgc atcggttgtt cggtgcgcca gtgctggccg ccgccggaag ccttcgacgt      144
-0
-     gccggtggac gtggtcttca ccagcatttt ccagaatggc caccacgacg agatcgctgc      150
-0
-     gctgctcgcc gccgggactc cgcgcactac cctggtggcg ctggtggagt acgaaagccc      156
-0
-     cgcggtgctc tcgcagatca tcgagctgga gtgccacggc gtgatcaccc agccgctcga      162
-0
-     tgcccaccgg gtgctgcctg tgctggtatc ggcgcggcgc atcagcgagg aaatggcgaa      168
-0
-     gctgaagcag aagaccgagc agctccagga ccgcatcgcc ggccaggccc ggatcaacca      174
-0
-     ggccaaggtg ttgctgatgc agcgccatgg ctgggacgag cgcgaggcgc accagcacct      180
-0
-     gtcgcgggaa gcgatgaagc ggcgcgagcc gatcctgaag atcgctcagg agttgctggg      186
-0
-     aaacgagccg tccgcctgag cgatccgggc cgaccagaac aataacaaga ggggtatcgt      192
-0
-     catcatgctg ggactggttc tgctgtacgt tggcgcggtg ctgtttctca atgccgtctg      198
-0
-     gttgctgggc aagatcagcg gtcgggaggt ggcggtgatc aacttcctgg tcggcgtgct      204
-0
-     gagcgcctgc gtcgcgttct acctgatctt ttccgcagca gccgggcagg gctcgctgaa      210
-0
-     ggccggagcg ctgaccctgc tattcgcttt tacctatctg tgggtggccg ccaaccagtt      216
-0
-     cctcgag                                                                216
-7
+     ggtaccgctg gccgagcatc tgctcgatca ccaccagccg ggcgacggga actgcacgat        60
+     ctacctggcg agcctggagc acgagcgggt tcgcttcgta cggcgctgag cgacagtcac       120
+     aggagaggaa acggatggga tcgcaccagg agcggccgct gatcggcctg ctgttctccg       180
+     aaaccggcgt caccgccgat atcgagcgct cgcacgcgta tggcgcattg ctcgcggtcg       240
+     agcaactgaa ccgcgagggc ggcgtcggcg gtcgcccgat cgaaacgctg tcccaggacc       300
+     ccggcggcga cccggaccgc tatcggctgt gcgccgagga cttcattcgc aaccgggggg       360
+     tacggttcct cgtgggctgc tacatgtcgc acacgcgcaa ggcggtgatg ccggtggtcg       420
+     agcgcgccga cgcgctgctc tgctacccga ccccctacga gggcttcgag tattcgccga       480
+     acatcgtcta cggcggtccg gcgccgaacc agaacagtgc gccgctggcg gcgtacctga       540
+     ttcgccacta cggcgagcgg gtggtgttca tcggctcgga ctacatctat ccgcgggaaa       600
+     gcaaccatgt gatgcgccac ctgtatcgcc agcacggcgg cacggtgctc gaggaaatct       660
+     acattccgct gtatccctcc gacgacgact tgcagcgcgc cgtcgagcgc atctaccagg       720
+     cgcgcgccga cgtggtcttc tccaccgtgg tgggcaccgg caccgccgag ctgtatcgcg       780
+     ccatcgcccg tcgctacggc gacggcaggc ggccgccgat cgccagcctg accaccagcg       840
+     aggcggaggt ggcgaagatg gagagtgacg tggcagaggg gcaggtggtg gtcgcgcctt       900
+     acttctccag catcgatacg cccgccagcc gggccttcgt ccaggcctgc catggtttct       960
+     tcccggagaa cgcgaccatc accgcctggg ccgaggcggc ctactggcag accttgttgc      1020
+     tcggccgcgc cgcgcaggcc gcaggcaact ggcgggtgga agacgtgcag cggcacctgt      1080
+     acgacatcga catcgacgcg ccacaggggc cggtccgggt ggagcgccag aacaaccaca      1140
+     gccgcctgtc ttcgcgcatc gcggaaatcg atgcgcgcgg cgtgttccag gtccgctggc      1200
+     agtcgcccga accgattcgc cccgaccctt atgtcgtcgt gcataacctc gacgactggt      1260
+     ccgccagcat gggcggggga ccgctcccat gagcgccaac tcgctgctcg gcagcctgcg      1320
+     cgagttgcag gtgctggtcc tcaacccgcc gggggaggtc agcgacgccc tggtcttgca      1380
+     gctgatccgc atcggttgtt cggtgcgcca gtgctggccg ccgccggaag ccttcgacgt      1440
+     gccggtggac gtggtcttca ccagcatttt ccagaatggc caccacgacg agatcgctgc      1500
+     gctgctcgcc gccgggactc cgcgcactac cctggtggcg ctggtggagt acgaaagccc      1560
+     cgcggtgctc tcgcagatca tcgagctgga gtgccacggc gtgatcaccc agccgctcga      1620
+     tgcccaccgg gtgctgcctg tgctggtatc ggcgcggcgc atcagcgagg aaatggcgaa      1680
+     gctgaagcag aagaccgagc agctccagga ccgcatcgcc ggccaggccc ggatcaacca      1740
+     ggccaaggtg ttgctgatgc agcgccatgg ctgggacgag cgcgaggcgc accagcacct      1800
+     gtcgcgggaa gcgatgaagc ggcgcgagcc gatcctgaag atcgctcagg agttgctggg      1860
+     aaacgagccg tccgcctgag cgatccgggc cgaccagaac aataacaaga ggggtatcgt      1920
+     catcatgctg ggactggttc tgctgtacgt tggcgcggtg ctgtttctca atgccgtctg      1980
+     gttgctgggc aagatcagcg gtcgggaggt ggcggtgatc aacttcctgg tcggcgtgct      2040
+     gagcgcctgc gtcgcgttct acctgatctt ttccgcagca gccgggcagg gctcgctgaa      2100
+     ggccggagcg ctgaccctgc tattcgcttt tacctatctg tgggtggccg ccaaccagtt      2160
+     cctcgag                                                                2167
 //
 
 Output file format
@@ -456,6 +421,7 @@ Total ORFs in frame 6 :    15
 
 Total ORFs :    67
 ##############################
+
 
   File: x13776.fasta
 
@@ -580,11 +546,12 @@ Data files
 
 % embossdata -fetch -file Exxx.dat
 
+
    Users can provide their own data files in their own directories.
    Project specific files can be put in the current directory, or for
-   tidier directory listings in a subdirectory called ".embossdata".
-   Files for all EMBOSS runs can be put in the user's home directory, or
-   again in a subdirectory called ".embossdata".
+   tidier directory listings in a subdirectory called ".embossdata". Files
+   for all EMBOSS runs can be put in the user's home directory, or again
+   in a subdirectory called ".embossdata".
 
    The directories are searched in the following order:
      * . (your current directory)
@@ -653,8 +620,8 @@ Data files
 
    The format of these files is very simple.
 
-   It consists of several lines of optional comments, each starting with
-   a '#' character.
+   It consists of several lines of optional comments, each starting with a
+   '#' character.
 
    These are followed the line: 'Genetic Code [n]', where 'n' is the
    number of the genetic code file.
@@ -684,6 +651,7 @@ Base1  = TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG
 Base2  = TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG
 Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
 ------------------------------------------------------------------------------
+
 
 Notes
 
@@ -717,8 +685,8 @@ See also
 
    Program name     Description
    abiview          Display the trace in an ABI sequencer file
-   backtranambig    Back-translate a protein sequence to ambiguous
-                    nucleotide sequence
+   backtranambig    Back-translate a protein sequence to ambiguous nucleotide
+                    sequence
    backtranseq      Back-translate a protein sequence to a nucleotide sequence
    cirdna           Draws circular maps of DNA constructs
    coderet          Extract CDS, mRNA and translations from feature tables
@@ -731,8 +699,7 @@ See also
    plotorf          Plot potential open reading frames in a nucleotide sequence
    prettyplot       Draw a sequence alignment with pretty formatting
    prettyseq        Write a nucleotide sequence and its translation to file
-   remap            Display restriction enzyme binding sites in a nucleotide
-                    sequence
+   remap            Display restriction enzyme binding sites in a nucleotide sequence
    seealso          Finds programs with similar function to a specified program
    showalign        Display a multiple sequence alignment in pretty format
    showdb           Displays information on configured databases
@@ -740,7 +707,7 @@ See also
    showorf          Display a nucleotide sequence and translation in pretty format
    showpep          Displays protein sequences with features in pretty format
    showseq          Displays sequences with features in pretty format
-   syco             Draw synonymous codon usage statictic plot for a nucleotide
+   syco             Draw synonymous codon usage statistic plot for a nucleotide
                     sequence
    tcode            Identify protein-coding regions using Fickett TESTCODE statistic
    textsearch       Search the textual description of sequence(s)
@@ -749,7 +716,7 @@ See also
 
 Author(s)
 
-   Thomas Laurent (thomas.laurent © uk.lionbioscience.com)
+   Thomas Laurent (thomas.laurent (c) uk.lionbioscience.com)
    Lion Bioscience Ltd, Compass House, 80-82 Newmarket Road, Cambridge,
    CB5 8DZ, UK
 

@@ -72,9 +72,9 @@ void embConsCalc(const AjPSeqset seqset,const AjPMatrix cmpmatrix,
     char nocon = '-';
     void *freeptr;
 
-    matrix  = ajMatrixArray(cmpmatrix);
-    cvt     = ajMatrixCvt(cmpmatrix);	/* return conversion table */
-    matsize = ajMatrixSize(cmpmatrix);
+    matrix  = ajMatrixGetMatrix(cmpmatrix);
+    cvt     = ajMatrixGetCvt(cmpmatrix);	/* return conversion table */
+    matsize = ajMatrixGetSize(cmpmatrix);
 
     AJCNEW(seqcharptr,nseqs);
     AJCNEW(identical,matsize);

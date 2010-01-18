@@ -1,6 +1,6 @@
 #!/bin/csh -f
 
-cd ~/cvsemboss
+cd ~/devemboss
 
 cd test/qa
 

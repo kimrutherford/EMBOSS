@@ -782,7 +782,7 @@ void embShowAddFT(EmbPShow thys, const AjPFeattable feat)
 
     AJNEW0(info);
 
-    info->feat = ajFeattableCopy(feat); /* store the feature table */
+    info->feat = ajFeattableNewFtable(feat); /* store the feature table */
   
     ajListPushAppend(thys->list, showInfoNew(info, SH_FT));
 
@@ -1166,15 +1166,16 @@ void embShowUpperRange(AjPStr * line, const AjPRange upperrange, ajuint pos)
     ajint value;     /* code for type of overlap of range with line */
     char *p;	      /* ptr to start of range in line to uppercase */
 
-    nr = ajRangeNumber(upperrange);
+    nr = ajRangeGetSize(upperrange);
 
     for(i=0; i<nr; i++)
     {
 	/* for each range in AjPRange upperrange */
-	ajRangeValues(upperrange, i, &start, &end);
+	ajRangeElementGetValues(upperrange, i, &start, &end);
 
 	/* get type of overlap */
-	value = ajRangeOverlapSingle(start, end, pos, ajStrGetLen(*line));
+	value = ajRangeElementTypeOverlap(upperrange, i,
+                                          pos, ajStrGetLen(*line));
 
 
 	ajDebug("embShowUpperRange %d %u..%u pos:%u len:%u value:%d\n",
@@ -1250,15 +1251,15 @@ void embShowColourRange(AjPStr * line, const AjPRange colour, ajuint pos)
     AjPStr html = NULL;
     AjPStr col = NULL;
 
-    nr = ajRangeNumber(colour);
+    nr = ajRangeGetSize(colour);
 
     for(i=0; i<nr; i++)
     {
 	/* for each range in AjPRange colour */
-	ajRangeValues(colour, i, &start, &end);
+	ajRangeElementGetValues(colour, i, &start, &end);
 
 	/* get type of overlap */
-	value = ajRangeOverlapSingle(start, end, pos, ajStrGetLen(*line));
+	value = ajRangeElementTypeOverlap(colour, i, pos, ajStrGetLen(*line));
 
 	/* partial or complete overlap */
 	if(value)
@@ -1274,7 +1275,7 @@ void embShowColourRange(AjPStr * line, const AjPRange colour, ajuint pos)
 
 	    /* start */
 	    ajStrAssignC(&html, "<font color=");
-	    ajRangeText(colour, i, &col);
+	    ajRangeElementGetText(colour, i, &col);
 
 	    if(ajStrGetLen(col))
 		ajStrAppendS(&html, col);
@@ -1440,11 +1441,11 @@ static void showFillSeq(const EmbPShow thys,
 	** nucleic or single-letter code 
 	** do uppercase ranges
 	*/
-	if(ajRangeOverlaps(info->upperrange, pos, width))
+	if(ajRangeCountOverlaps(info->upperrange, pos, width))
 	    embShowUpperRange(&line, info->upperrange, pos);
 
 	/* do colour ranges if we are displaying HTML*/
-	if(thys->html && ajRangeOverlaps(info->highlight, pos, width))
+	if(thys->html && ajRangeCountOverlaps(info->highlight, pos, width))
 	    embShowColourRange(&line, info->highlight, pos);
 
 	ajListstrPushAppend(lines, line);
@@ -1759,7 +1760,7 @@ static void showFillTran(const EmbPShow thys,
     if(!info->transeq)
     {
 	/* translate a set of ranges ... using frame number */
-	if(info->regions && ajRangeNumber(info->regions))
+	if(info->regions && ajRangeGetSize(info->regions))
 	{
 	    frame = info->frame;
 
@@ -3081,11 +3082,11 @@ static void showFillNote(const EmbPShow thys,
     linelist = ajListstrNew();
 
     /* count through the annotation regions */
-    if(info->regions && ajRangeNumber(info->regions))
+    if(info->regions && ajRangeGetSize(info->regions))
     {
-	for(count = 0; count < ajRangeNumber(info->regions); count++)
+	for(count = 0; count < ajRangeGetSize(info->regions); count++)
 	{
-            ajRangeValues(info->regions, count, &rstart, &rend);
+            ajRangeElementGetValues(info->regions, count, &rstart, &rend);
 
 	    /*
 	    ** check that the region is within the line to display
@@ -3094,7 +3095,7 @@ static void showFillNote(const EmbPShow thys,
 		continue;
 
 	    /* get annotation string */
-            ajRangeText(info->regions, count, &namestr);
+            ajRangeElementGetText(info->regions, count, &namestr);
 
 	    /*
 	    **  note the start and end positions of the name and line

@@ -2,6 +2,7 @@ application: acdtrace [
   documentation: "Trace processing of an application ACD file (for testing)"
   gui: "no"
   groups: "Acd"
+  relations: "EDAM: File debugging"
 ]
 
 section: required [
@@ -13,6 +14,7 @@ section: required [
     parameter: "Y"
     information: "Program name, followed by command line"
     knowntype: "Program name"
+    relations: "EDAM: Generic string"                                      
   ]
 
 endsection: required

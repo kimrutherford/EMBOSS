@@ -1,8 +1,6 @@
 #!/bin/csh -f
 
 set app = $argv[1]
-set embosshome = ~/cvsemboss
-set embossinst = ~/cvsemboss
 
 foreach embosshome (`embossversion -full -auto| grep '^BaseDirectory'`)
 #  echo "$embosshome"

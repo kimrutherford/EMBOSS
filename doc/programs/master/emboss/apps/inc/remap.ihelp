@@ -1,3 +1,6 @@
+Display restriction enzyme binding sites in a nucleotide sequence
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
                                   format, or reference (input USA)
@@ -22,7 +25,7 @@
                                   ! other enzymes
                                   hindiii
                                   HinfI
-                                  PpiI (Any string is accepted)
+                                  PpiI (Any string)
    -sitelen            integer    [4] This sets the minimum length of the
                                   restriction enzyme recognition site. Any
                                   enzymes with sites shorter than this will be
@@ -126,8 +129,8 @@
                                   them.
 
    Advanced (Unprompted) qualifiers:
-   -mfile              datafile   [Emethylsites.dat] Restriction enzyme data
-                                  file (optional)
+   -mfile              datafile   [Emethylsites.dat] Restriction enzyme
+                                  methylation data file
    -[no]translation    boolean    [Y] This displays the 6-frame translations
                                   of the sequence in the output.
    -[no]reverse        boolean    [Y] This displays the cut sites and
@@ -213,11 +216,12 @@
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 

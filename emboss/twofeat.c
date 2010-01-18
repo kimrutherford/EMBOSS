@@ -20,7 +20,6 @@
 ******************************************************************************/
 
 #include "emboss.h"
-#include "stdlib.h"
 
 
 
@@ -256,10 +255,10 @@ int main(int argc, char **argv)
 			      bvalue);
 
 
-        ajDebug("No of hits in tabA: %d\n", ajFeattableSize(tabA));
-        ajDebug("No of hits in tabB: %d\n", ajFeattableSize(tabB));
+        ajDebug("No of hits in tabA: %d\n", ajFeattableGetSize(tabA));
+        ajDebug("No of hits in tabB: %d\n", ajFeattableGetSize(tabB));
 
-	if(ajFeattableSize(tabA) && ajFeattableSize(tabB))
+	if(ajFeattableGetSize(tabA) && ajFeattableGetSize(tabB))
 	{
 	    /* initialise the output feature table */
             outtab = ajFeattableNewSeq(seq);
@@ -368,7 +367,7 @@ static void twofeat_rippledown(const AjPFeattable tabA,
 
     hitlist = ajListNew(); 
     
-    if(ajFeattableSize(tabA))
+    if(ajFeattableGetSize(tabA))
     {
         /* For all features in tabA ... */
     	iterA = ajListIterNewread(tabA->Features);
@@ -380,7 +379,7 @@ static void twofeat_rippledown(const AjPFeattable tabA,
 		    ajFeatGetEnd(gfA));
 
             /* For all features in tabB ... */
-            if(ajFeattableSize(tabB)) 
+            if(ajFeattableGetSize(tabB)) 
             {
    	        iterB = ajListIterNewread(tabB->Features);
                 while(!ajListIterDone(iterB))
@@ -460,8 +459,8 @@ static void twofeat_report_hits(const AjPList hitlist, AjBool twoout,
 
         if(twoout)
 	{
-            ajFeattableAdd(outtab, ajFeatCopy(detail->gfA));
-            ajFeattableAdd(outtab, ajFeatCopy(detail->gfB));
+            ajFeattableAdd(outtab, ajFeatNewFeat(detail->gfA));
+            ajFeattableAdd(outtab, ajFeatNewFeat(detail->gfB));
     
         }
 	else
@@ -546,7 +545,7 @@ static void twofeat_find_features(const AjPSeq seq, AjPFeattable tab,
     tagsmatch = ajFalse;
 
     /* For all features... */
-    if(ajFeattableSize(seqtab)) 
+    if(ajFeattableGetSize(seqtab)) 
     {
     	iter = ajListIterNewread(seqtab->Features);
     	while(!ajListIterDone(iter))
@@ -566,11 +565,11 @@ static void twofeat_find_features(const AjPSeq seq, AjPFeattable tab,
 			ajFeatGetStart(gf), ajFeatGetEnd(gf));
 		/*
 		** could explicitly make a new feature like this, but it
-		** is probably safer to let ajFeatCopy do it automatically
+		** is probably safer to let ajFeatNewFeat do it automatically
 		**  gfcopy = ajFeatNew(tab, gf->Source, gf->Type, gf->Start,
 		** gf->End, gf->Score, gf->Strand, gf->Frame);
 		*/
-		gfcopy = ajFeatCopy(gf);
+		gfcopy = ajFeatNewFeat(gf);
 		ajFeattableAdd(tab, gfcopy);
 
 		/* ajFeatTrace(gfcopy); */
@@ -580,7 +579,7 @@ static void twofeat_find_features(const AjPSeq seq, AjPFeattable tab,
     }
 
     ajDebug("(In twofeat_find_features) No of hits in tab: %d\n",
-	    ajFeattableSize(tab));
+	    ajFeattableGetSize(tab));
     
     return;
 }
@@ -612,6 +611,9 @@ static AjBool twofeat_MatchFeature(const AjPFeature gf,
 				   const AjPStr tag, const AjPStr value,
 				   AjBool *tagsmatch)
 {
+    AjPStrTok tokens = NULL;
+    AjPStr key = NULL;
+    AjBool val = ajFalse;
     AjBool scoreok;
 
     scoreok = (minscore < maxscore);
@@ -634,14 +636,33 @@ static AjBool twofeat_MatchFeature(const AjPFeature gf,
      **      for score, maxscore <= minscore
      */
 
-    if(!embMiscMatchPattern(ajFeatGetSource(gf), source) ||
-       !embMiscMatchPattern(ajFeatGetType(gf), type) ||
+    if(!embMiscMatchPatternDelimC(ajFeatGetSource(gf), source,",;|") ||
        (ajFeatGetStrand(gf) == '+' && sense == -1) ||
        (ajFeatGetStrand(gf) == '-' && sense == +1) ||
        (scoreok && ajFeatGetScore(gf) < minscore) ||
        (scoreok && ajFeatGetScore(gf) > maxscore) ||
        !*tagsmatch)
 	return ajFalse;
+
+    if(ajStrGetLen(type))
+    {
+        val = ajFalse;
+        tokens = ajStrTokenNewC(type, " \t\n\r,;|");
+
+        while (ajStrTokenNextParse( &tokens, &key))
+        {
+            if (ajFeatTypeMatchWildS(gf, key))
+            {
+                val = ajTrue;
+                break;
+            }
+        }
+
+        ajStrTokenDel( &tokens);
+        ajStrDel(&key);
+        if(!val)
+            return ajFalse;
+    }
 
     return ajTrue;                        
 }
@@ -686,7 +707,7 @@ static AjBool twofeat_MatchPatternTags(const AjPFeature feat,
     titer = ajFeatTagIter(feat);
     while(ajFeatTagval(titer, &tagnam, &tagval))
     {
-        tval = embMiscMatchPattern(tagnam, tpattern);
+        tval = embMiscMatchPatternDelimC(tagnam, tpattern,",;|");
 	 /*
 	 ** If tag has no value then
 	 **   If vpattern is '*' the value pattern is a match
@@ -701,7 +722,7 @@ static AjBool twofeat_MatchPatternTags(const AjPFeature feat,
 		vval = ajFalse;
         }
 	else
-            vval = embMiscMatchPattern(tagval, vpattern);
+            vval = embMiscMatchPatternDelimC(tagval, vpattern,",;|");
 
         if(tval && vval)
 	{

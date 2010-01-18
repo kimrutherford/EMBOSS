@@ -79,7 +79,7 @@ Finds regions of identity (exact matches) of two sequences
 Finds regions of identity (exact matches) of two sequences
 Word size [4]: <b></b>
 Output alignment [hba_human.wordmatch]: <b></b>
-Features output [HBA_HUMAN.gff]: <b></b>
+Features output [hba_human.gff]: <b></b>
 Second features output [HBB_HUMAN.gff]: <b></b>
 
 </pre></td></tr></table><p>
@@ -100,23 +100,33 @@ IT IS DONE FOR YOU.
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-   Standard (Mandatory) qualifiers:
-  [-asequence]         sequence   Sequence filename and optional format, or
-                                  reference (input USA)
-  [-bsequence]         sequence   Sequence filename and optional format, or
+Finds regions of identity (exact matches) of two sequences
+Version: EMBOSS:6.2.0
+
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-asequence]         seqset     Sequence set filename and optional format,
+                                  or reference (input USA)
+  [-bsequence]         seqall     Sequence(s) filename and optional format, or
                                   reference (input USA)
    -wordsize           integer    [4] Word size (Integer 2 or more)
-  [-outfile]           align      [*.wordmatch] Output alignment file name
-  [-aoutfeat]          featout    [unknown.gff] Output features UFO
-  [-boutfeat]          featout    [unknown.gff] Output features UFO
+*  -outfile            align      [*.wordmatch] Output alignment file name
+*  -aoutfeat           featout    [unknown.gff] Output features UFO
+*  -boutfeat           featout    [unknown.gff] Output features UFO
 
-   Additional (Optional) qualifiers: (none)
+   Additional (Optional) qualifiers:
+   -[no]dumpalign      toggle     [Y] Dump all matches as alignments
+   -logfile            outfile    [wordmatch.log] Log file reports statistics
+                                  on kmer frequency distribution and number of
+                                  matches in the seqall sequences for each
+                                  sequence in the seqset
+   -[no]dumpfeat       toggle     [Y] Dump all matches as feature files
+
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-asequence" associated qualifiers
-   -sbegin1            integer    Start of the sequence to be used
-   -send1              integer    End of the sequence to be used
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
    -sreverse1          boolean    Reverse (if DNA)
    -sask1              boolean    Ask for begin/end/reverse
    -snucleotide1       boolean    Sequence is nucleotide
@@ -131,8 +141,8 @@ IT IS DONE FOR YOU.
    -fopenfile1         string     Features file name
 
    "-bsequence" associated qualifiers
-   -sbegin2            integer    Start of the sequence to be used
-   -send2              integer    End of the sequence to be used
+   -sbegin2            integer    Start of each sequence to be used
+   -send2              integer    End of each sequence to be used
    -sreverse2          boolean    Reverse (if DNA)
    -sask2              boolean    Ask for begin/end/reverse
    -snucleotide2       boolean    Sequence is nucleotide
@@ -147,31 +157,34 @@ IT IS DONE FOR YOU.
    -fopenfile2         string     Features file name
 
    "-outfile" associated qualifiers
-   -aformat3           string     Alignment format
-   -aextension3        string     File name extension
-   -adirectory3        string     Output directory
-   -aname3             string     Base file name
-   -awidth3            integer    Alignment width
-   -aaccshow3          boolean    Show accession number in the header
-   -adesshow3          boolean    Show description in the header
-   -ausashow3          boolean    Show the full USA in the alignment
-   -aglobal3           boolean    Show the full sequence in alignment
+   -aformat            string     Alignment format
+   -aextension         string     File name extension
+   -adirectory         string     Output directory
+   -aname              string     Base file name
+   -awidth             integer    Alignment width
+   -aaccshow           boolean    Show accession number in the header
+   -adesshow           boolean    Show description in the header
+   -ausashow           boolean    Show the full USA in the alignment
+   -aglobal            boolean    Show the full sequence in alignment
+
+   "-logfile" associated qualifiers
+   -odirectory         string     Output directory
 
    "-aoutfeat" associated qualifiers
-   -offormat4          string     Output feature format
-   -ofopenfile4        string     Features file name
-   -ofextension4       string     File name extension
-   -ofdirectory4       string     Output directory
-   -ofname4            string     Base file name
-   -ofsingle4          boolean    Separate file for each entry
+   -offormat           string     Output feature format
+   -ofopenfile         string     Features file name
+   -ofextension        string     File name extension
+   -ofdirectory        string     Output directory
+   -ofname             string     Base file name
+   -ofsingle           boolean    Separate file for each entry
 
    "-boutfeat" associated qualifiers
-   -offormat5          string     Output feature format
-   -ofopenfile5        string     Features file name
-   -ofextension5       string     File name extension
-   -ofdirectory5       string     Output directory
-   -ofname5            string     Base file name
-   -ofsingle5          boolean    Separate file for each entry
+   -offormat           string     Output feature format
+   -ofopenfile         string     Features file name
+   -ofextension        string     File name extension
+   -ofdirectory        string     Output directory
+   -ofname             string     Base file name
+   -ofsingle           boolean    Separate file for each entry
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -181,13 +194,14 @@ IT IS DONE FOR YOU.
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 
 </pre>
 </td></tr></table>
@@ -195,71 +209,633 @@ IT IS DONE FOR YOU.
 
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Qualifier</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Standard (Mandatory) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td>[-asequence]<br>(Parameter 1)</td>
-<td>Sequence filename and optional format, or reference (input USA)</td>
-<td>Readable sequence</td>
+<td>seqset</td>
+<td>Sequence set filename and optional format, or reference (input USA)</td>
+<td>Readable set of sequences</td>
 <td><b>Required</b></td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>[-bsequence]<br>(Parameter 2)</td>
-<td>Sequence filename and optional format, or reference (input USA)</td>
-<td>Readable sequence</td>
+<td>seqall</td>
+<td>Sequence(s) filename and optional format, or reference (input USA)</td>
+<td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-wordsize</td>
+<td>integer</td>
 <td>Word size</td>
 <td>Integer 2 or more</td>
 <td>4</td>
 </tr>
 
-<tr>
-<td>[-outfile]<br>(Parameter 3)</td>
+<tr bgcolor="#FFFFCC">
+<td>-outfile</td>
+<td>align</td>
 <td>Output alignment file name</td>
 <td>Alignment output file</td>
 <td><i>&lt;*&gt;</i>.wordmatch</td>
 </tr>
 
-<tr>
-<td>[-aoutfeat]<br>(Parameter 4)</td>
-<td>Output features UFO</td>
-<td>Writeable feature table</td>
-<td><i>unknown.gff</i></td>
-</tr>
-
-<tr>
-<td>[-boutfeat]<br>(Parameter 5)</td>
+<tr bgcolor="#FFFFCC">
+<td>-aoutfeat</td>
+<td>featout</td>
 <td>Output features UFO</td>
 <td>Writeable feature table</td>
 <td><i>unknown.gff</i></td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Additional (Optional) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
-</tr>
-
-<tr>
-<td colspan=4>(none)</td>
+<td>-boutfeat</td>
+<td>featout</td>
+<td>Output features UFO</td>
+<td>Writeable feature table</td>
+<td><i>unknown.gff</i></td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
+<th align="left" colspan=5>Additional (Optional) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-[no]dumpalign</td>
+<td>toggle</td>
+<td>Dump all matches as alignments</td>
+<td>Toggle value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-logfile</td>
+<td>outfile</td>
+<td>Log file reports statistics on kmer frequency distribution and number of matches in the seqall sequences for each sequence in the seqset</td>
+<td>Output file</td>
+<td>wordmatch.log</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-[no]dumpfeat</td>
+<td>toggle</td>
+<td>Dump all matches as feature files</td>
+<td>Toggle value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Advanced (Unprompted) qualifiers</th>
 </tr>
 
 <tr>
-<td colspan=4>(none)</td>
+<td colspan=5>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-asequence" associated seqset qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sbegin1<br>-sbegin_asequence</td>
+<td>integer</td>
+<td>Start of each sequence to be used</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -send1<br>-send_asequence</td>
+<td>integer</td>
+<td>End of each sequence to be used</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sreverse1<br>-sreverse_asequence</td>
+<td>boolean</td>
+<td>Reverse (if DNA)</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sask1<br>-sask_asequence</td>
+<td>boolean</td>
+<td>Ask for begin/end/reverse</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -snucleotide1<br>-snucleotide_asequence</td>
+<td>boolean</td>
+<td>Sequence is nucleotide</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sprotein1<br>-sprotein_asequence</td>
+<td>boolean</td>
+<td>Sequence is protein</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -slower1<br>-slower_asequence</td>
+<td>boolean</td>
+<td>Make lower case</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -supper1<br>-supper_asequence</td>
+<td>boolean</td>
+<td>Make upper case</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sformat1<br>-sformat_asequence</td>
+<td>string</td>
+<td>Input sequence format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sdbname1<br>-sdbname_asequence</td>
+<td>string</td>
+<td>Database name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sid1<br>-sid_asequence</td>
+<td>string</td>
+<td>Entryname</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ufo1<br>-ufo_asequence</td>
+<td>string</td>
+<td>UFO features</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fformat1<br>-fformat_asequence</td>
+<td>string</td>
+<td>Features format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fopenfile1<br>-fopenfile_asequence</td>
+<td>string</td>
+<td>Features file name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-bsequence" associated seqall qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sbegin2<br>-sbegin_bsequence</td>
+<td>integer</td>
+<td>Start of each sequence to be used</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -send2<br>-send_bsequence</td>
+<td>integer</td>
+<td>End of each sequence to be used</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sreverse2<br>-sreverse_bsequence</td>
+<td>boolean</td>
+<td>Reverse (if DNA)</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sask2<br>-sask_bsequence</td>
+<td>boolean</td>
+<td>Ask for begin/end/reverse</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -snucleotide2<br>-snucleotide_bsequence</td>
+<td>boolean</td>
+<td>Sequence is nucleotide</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sprotein2<br>-sprotein_bsequence</td>
+<td>boolean</td>
+<td>Sequence is protein</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -slower2<br>-slower_bsequence</td>
+<td>boolean</td>
+<td>Make lower case</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -supper2<br>-supper_bsequence</td>
+<td>boolean</td>
+<td>Make upper case</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sformat2<br>-sformat_bsequence</td>
+<td>string</td>
+<td>Input sequence format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sdbname2<br>-sdbname_bsequence</td>
+<td>string</td>
+<td>Database name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sid2<br>-sid_bsequence</td>
+<td>string</td>
+<td>Entryname</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ufo2<br>-ufo_bsequence</td>
+<td>string</td>
+<td>UFO features</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fformat2<br>-fformat_bsequence</td>
+<td>string</td>
+<td>Features format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fopenfile2<br>-fopenfile_bsequence</td>
+<td>string</td>
+<td>Features file name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-outfile" associated align qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -aformat</td>
+<td>string</td>
+<td>Alignment format</td>
+<td>Any string</td>
+<td>match</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -aextension</td>
+<td>string</td>
+<td>File name extension</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -adirectory</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -aname</td>
+<td>string</td>
+<td>Base file name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -awidth</td>
+<td>integer</td>
+<td>Alignment width</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -aaccshow</td>
+<td>boolean</td>
+<td>Show accession number in the header</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -adesshow</td>
+<td>boolean</td>
+<td>Show description in the header</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ausashow</td>
+<td>boolean</td>
+<td>Show the full USA in the alignment</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -aglobal</td>
+<td>boolean</td>
+<td>Show the full sequence in alignment</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-logfile" associated outfile qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-aoutfeat" associated featout qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -offormat</td>
+<td>string</td>
+<td>Output feature format</td>
+<td>Any string</td>
+<td>gff</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ofopenfile</td>
+<td>string</td>
+<td>Features file name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ofextension</td>
+<td>string</td>
+<td>File name extension</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ofdirectory</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ofname</td>
+<td>string</td>
+<td>Base file name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ofsingle</td>
+<td>boolean</td>
+<td>Separate file for each entry</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-boutfeat" associated featout qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -offormat</td>
+<td>string</td>
+<td>Output feature format</td>
+<td>Any string</td>
+<td>gff</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ofopenfile</td>
+<td>string</td>
+<td>Features file name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ofextension</td>
+<td>string</td>
+<td>File name extension</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ofdirectory</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ofname</td>
+<td>string</td>
+<td>Base file name</td>
+<td>Any string</td>
+<td>$(bsequence.name)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ofsingle</td>
+<td>boolean</td>
+<td>Separate file for each entry</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>General qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -auto</td>
+<td>boolean</td>
+<td>Turn off prompts</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -stdout</td>
+<td>boolean</td>
+<td>Write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -filter</td>
+<td>boolean</td>
+<td>Read first file from standard input, write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -options</td>
+<td>boolean</td>
+<td>Prompt for standard and additional values</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -debug</td>
+<td>boolean</td>
+<td>Write debug output to program.dbg</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -verbose</td>
+<td>boolean</td>
+<td>Report some/full command line options</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -help</td>
+<td>boolean</td>
+<td>Report command line options and exit. More information on associated and general qualifiers can be found with -help -verbose</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -warning</td>
+<td>boolean</td>
+<td>Report warnings</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -error</td>
+<td>boolean</td>
+<td>Report errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fatal</td>
+<td>boolean</td>
+<td>Report fatal errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -die</td>
+<td>boolean</td>
+<td>Report dying program messages</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -version</td>
+<td>boolean</td>
+<td>Report version number and exit</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
 </tr>
 
 </table>
@@ -547,7 +1123,7 @@ for further information on alignment formats.
 <pre>
 ########################################
 # Program: wordmatch
-# Rundate: Tue 15 Jul 2008 12:00:00
+# Rundate: Fri 15 Jan 2010 12:00:00
 # Commandline: wordmatch
 #    [-asequence] tsw:hba_human
 #    [-bsequence] tsw:hbb_human
@@ -562,24 +1138,40 @@ for further information on alignment formats.
 # 2: HBB_HUMAN
 #=======================================
 
-     5 HBA_HUMAN       +       59..63       HBB_HUMAN       +       64..68
      4 HBA_HUMAN       +       15..18       HBB_HUMAN       +       16..19
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: HBA_HUMAN
+# 2: HBB_HUMAN
+#=======================================
+
+     5 HBA_HUMAN       +       59..63       HBB_HUMAN       +       64..68
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: HBA_HUMAN
+# 2: HBB_HUMAN
+#=======================================
+
      4 HBA_HUMAN       +      117..120      HBB_HUMAN       +      122..125
 
 #---------------------------------------
 #---------------------------------------
 </pre>
 </td></tr></table><p>
-<p><h3>File: HBA_HUMAN.gff</h3>
+<p><h3>File: hba_human.gff</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 3
 ##sequence-region HBA_HUMAN 1 142
-#!Date 2008-07-15
+#!Date 2010-01-15
 #!Type Protein
-#!Source-version EMBOSS 6.1.0
-HBA_HUMAN	wordmatch	polypeptide_region	59	63	1.000	+	.	ID="HBA_HUMAN.1";note="HBB_HUMAN"
-HBA_HUMAN	wordmatch	polypeptide_region	15	18	1.000	+	.	ID="HBA_HUMAN.2";note="HBB_HUMAN"
+#!Source-version EMBOSS 6.2.0
+HBA_HUMAN	wordmatch	polypeptide_region	15	18	1.000	+	.	ID="HBA_HUMAN.1";note="HBB_HUMAN"
+HBA_HUMAN	wordmatch	polypeptide_region	59	63	1.000	+	.	ID="HBA_HUMAN.2";note="HBB_HUMAN"
 HBA_HUMAN	wordmatch	polypeptide_region	117	120	1.000	+	.	ID="HBA_HUMAN.3";note="HBB_HUMAN"
 </pre>
 </td></tr></table><p>
@@ -588,12 +1180,37 @@ HBA_HUMAN	wordmatch	polypeptide_region	117	120	1.000	+	.	ID="HBA_HUMAN.3";note="
 <pre>
 ##gff-version 3
 ##sequence-region HBB_HUMAN 1 147
-#!Date 2008-07-15
+#!Date 2010-01-15
 #!Type Protein
-#!Source-version EMBOSS 6.1.0
-HBB_HUMAN	wordmatch	polypeptide_region	64	68	1.000	+	.	ID="HBB_HUMAN.1";note="HBA_HUMAN"
-HBB_HUMAN	wordmatch	polypeptide_region	16	19	1.000	+	.	ID="HBB_HUMAN.2";note="HBA_HUMAN"
+#!Source-version EMBOSS 6.2.0
+HBB_HUMAN	wordmatch	polypeptide_region	16	19	1.000	+	.	ID="HBB_HUMAN.1";note="HBA_HUMAN"
+HBB_HUMAN	wordmatch	polypeptide_region	64	68	1.000	+	.	ID="HBB_HUMAN.2";note="HBA_HUMAN"
 HBB_HUMAN	wordmatch	polypeptide_region	122	125	1.000	+	.	ID="HBB_HUMAN.3";note="HBA_HUMAN"
+</pre>
+</td></tr></table><p>
+<p><h3>File: wordmatch.log</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Sequence file for patterns: &lt;null&gt;
+Sequence file to be scanned for patterns: &lt;null&gt;
+Number of sequences in the patterns file: 1
+Pattern/word length: 4
+Number of patterns/words: 139
+Number of sequences in the file scanned for patterns: 1
+Number of all matches: 3 (wordmatch finds exact matches only)
+Sum of match lengths: 13
+Average match length: 4.33
+
+Distribution of the matches among pattern sequences:
+----------------------------------------------------
+HBA_HUMAN                                 :        3
+
+Pattern statistics:
+-------------------
+Pattern   #all-matches  #seq-matches  avg-match-length  avg-longest-match-length
+EFTP   :            1             1              4.00                      4.00
+HGKK   :            1             1              5.00                      5.00
+WGKV   :            1             1              4.00                      4.00
 </pre>
 </td></tr></table><p>
 

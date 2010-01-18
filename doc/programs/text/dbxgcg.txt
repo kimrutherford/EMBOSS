@@ -1,5 +1,4 @@
-
-                                  dbxgcg 
+                                   dbxgcg
 
 
 
@@ -25,7 +24,7 @@ Usage
    Here is a sample session with dbxgcg
 
 
-% dbxgcg 
+% dbxgcg
 Index a GCG formatted database using b+tree indices
 Basename for index files: embl
 Resource name: emblresource
@@ -35,19 +34,23 @@ Resource name: emblresource
        PIR : NBRF
 Entry format [SWISS]: embl
 Database directory [.]: embl
-Wildcard database filename [*.seq]: 
+Wildcard database filename [*.seq]:
         id : ID
        acc : Accession number
         sv : Sequence Version and GI
        des : Description
        key : Keywords
        org : Taxonomy
-Index fields [id,acc]: 
-General log output file [outfile.dbxgcg]: 
+Index fields [id,acc]:
+General log output file [outfile.dbxgcg]:
+
 
    Go to the output files for this example
 
 Command line arguments
+
+Index a GCG formatted database using b+tree indices
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     Basename for index files (Any string from 2
@@ -61,7 +64,7 @@ Command line arguments
                                   GENBANK (Genbank, DDBJ); PIR (NBRF))
    -directory          directory  [.] Database directory
    -filenames          string     [*.seq] Wildcard database filename (Any
-                                  string is accepted)
+                                  string)
    -fields             menu       [id,acc] Index fields (Values: id (ID); acc
                                   (Accession number); sv (Sequence Version and
                                   GI); des (Description); key (Keywords); org
@@ -73,8 +76,7 @@ Command line arguments
    -release            string     [0.0] Release number (Any string up to 9
                                   characters)
    -date               string     [00/00/00] Index date (Date string dd/mm/yy)
-   -exclude            string     Wildcard filename(s) to exclude (Any string
-                                  is accepted)
+   -exclude            string     Wildcard filename(s) to exclude (Any string)
    -indexoutdir        outdir     [.] Index file output directory
 
    Associated qualifiers:
@@ -90,13 +92,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -104,8 +108,8 @@ Input file format
 
 Output file format
 
-   dbxgcg creates one summary file for the database and two files for
-   each field indexed.
+   dbxgcg creates one summary file for the database and two files for each
+   field indexed.
 
      * dbalias.ent is the master file containing the names of the files
        that have been indexed. It is an ASCII file. This file also
@@ -191,8 +195,8 @@ Notes
    indexes. This feature is, however, not implemented in the current
    version. It will be made available in future releases.
 
-   Having created the EMBOSS indexes for this file, a database can then
-   be defined in the file emboss.defaults as something like:
+   Having created the EMBOSS indexes for this file, a database can then be
+   defined in the file emboss.defaults as something like:
 DB embl [
    type: N
    dbalias: embl   (see below)
@@ -203,18 +207,18 @@ DB embl [
    indexdirectory: /data/gcg/embl/indexes
 ]
 
-   The index file 'basename' given to dbxgcg must match the DB name in
-   the definition. If not, then a 'dbalias' line must be given which
-   specifies the basename of the indexes.
+   The index file 'basename' given to dbxgcg must match the DB name in the
+   definition. If not, then a 'dbalias' line must be given which specifies
+   the basename of the indexes.
 
   Fields Indexed
 
    By default, dbxgcg will index the ID name and the accession number (if
    present).
    If they are present in your database, you may also specify that dbxgcg
-   should index the Sequence Version and GI, the words in the
-   description, the keywords and the organism words using the '-fields'
-   qualifier with the appropriate values.
+   should index the Sequence Version and GI, the words in the description,
+   the keywords and the organism words using the '-fields' qualifier with
+   the appropriate values.
 
 Global Parameters
 
@@ -276,7 +280,7 @@ See also
 
 Author(s)
 
-   Alan             Bleasby (ajb © ebi.ac.uk)
+   Alan             Bleasby (ajb (c) ebi.ac.uk)
    European         Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton,         Cambridge CB10 1SD, UK
 

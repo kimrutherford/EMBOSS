@@ -84,8 +84,8 @@ int main(int argc, char **argv)
     gapopen   = ajAcdGetFloat("open");
     gapextend = ajAcdGetFloat("extension");
 
-    gapopen   = ajRoundF(gapopen, 8);
-    gapextend = ajRoundF(gapextend, 8);
+    gapopen   = ajRoundFloat(gapopen, 8);
+    gapextend = ajRoundFloat(gapextend, 8);
 
     cons = ajStrNewC("");
 
@@ -282,14 +282,14 @@ static void prophecy_gribskov_profile(const AjPSeqset seqset,
 
 
     mname = ajStrNewC("Epprofile");
-    ajMatrixfRead(&imtx,mname);
+    imtx = ajMatrixfNewFile(mname);
     ajStrDel(&mname);
 
     nseqs = ajSeqsetGetSize(seqset);
     mlen  = ajSeqsetGetLen(seqset);
 
-    sub = ajMatrixfArray(imtx);
-    cvt = ajMatrixfCvt(imtx);
+    sub = ajMatrixfGetMatrix(imtx);
+    cvt = ajMatrixfGetCvt(imtx);
 
 
 
@@ -520,8 +520,8 @@ static void prophecy_henikoff_profile(const AjPSeqset seqset,
     nseqs = ajSeqsetGetSize(seqset);
     mlen  = ajSeqsetGetLen(seqset);
 
-    sub = ajMatrixfArray(imtx);
-    cvt = ajMatrixfCvt(imtx);
+    sub = ajMatrixfGetMatrix(imtx);
+    cvt = ajMatrixfGetCvt(imtx);
 
 
     /*
@@ -667,7 +667,7 @@ static void prophecy_henikoff_profile(const AjPSeqset seqset,
     ajFmtPrintF(outf,"# Rows are alignment positions 1->n\n");
     ajFmtPrintF(outf,"Henikoff\n");
     ajFmtPrintF(outf,"Name\t\t%s\n",ajStrGetPtr(name));
-    ajFmtPrintF(outf,"Matrix\t\t%s\n",ajStrGetPtr(ajMatrixfName(imtx)));
+    ajFmtPrintF(outf,"Matrix\t\t%s\n",ajStrGetPtr(ajMatrixfGetName(imtx)));
     ajFmtPrintF(outf,"Length\t\t%d\n",mlen);
     ajFmtPrintF(outf,"Max_score\t%.2f\n",psum);
     ajFmtPrintF(outf,"Threshold\t%d\n",thresh);

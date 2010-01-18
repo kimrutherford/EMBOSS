@@ -1,5 +1,4 @@
-
-                                  density 
+                                   density
 
 
 
@@ -23,9 +22,10 @@ Usage
    Here is a sample session with density
 
 
-% density tembl:x13776 
+% density tembl:x13776
 Draw a nucleic acid density plot
-Output report [x13776.density]: 
+Output report [x13776.density]:
+
 
    Go to the input files for this example
    Go to the output files for this example
@@ -33,32 +33,36 @@ Output report [x13776.density]:
    Example 2
 
 
-% density tembl:x13776 -display quad -graph cps 
+% density tembl:x13776 -display quad -graph cps
 Draw a nucleic acid density plot
 
 Created density.ps
+
 
    Go to the output files for this example
 
    Example 3
 
 
-% density tembl:x13776 -display dual -graph cps 
+% density tembl:x13776 -display dual -graph cps
 Draw a nucleic acid density plot
 
 Created density.ps
 
+
    Go to the output files for this example
 
 Command line arguments
+
+Draw a nucleic acid density plot
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-seqall]            seqall     Nucleotide sequence(s) filename and optional
                                   format, or reference (input USA)
 *  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Density
                                   graph (ps, hpgl, hp7470, hp7580, meta, cps,
-                                  x11, tekt, tek, none, data, das, xterm, png,
-                                  gif)
+                                  x11, tek, tekt, none, data, xterm, png, gif)
 *  -outfile            report     [*.density] Output report file name
 
    Additional (Optional) qualifiers:
@@ -117,13 +121,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -131,8 +137,8 @@ Input file format
 
   Input files for usage example
 
-   'tembl:x13776' is a sequence entry in the example nucleic acid
-   database 'tembl'
+   'tembl:x13776' is a sequence entry in the example nucleic acid database
+   'tembl'
 
   Database entry: tembl:x13776
 
@@ -156,8 +162,7 @@ RP   1167-2167
 RA   Rice P.M.;
 RT   ;
 RL   Submitted (16-DEC-1988) to the EMBL/GenBank/DDBJ databases.
-RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
-.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
 XX
 RN   [2]
 RP   1167-2167
@@ -182,8 +187,7 @@ RP   1-2167
 RA   Rice P.M.;
 RT   ;
 RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
-RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
-.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
 XX
 DR   GOA; Q51417.
 DR   InterPro; IPR003211; AmiSUreI_transpt.
@@ -198,88 +202,50 @@ FT                   phenotype"
 FT   misc_feature    1
 FT                   /note="last base of an XhoI site"
 FT   misc_feature    648..653
-FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 cause
-s
+FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 causes
 FT                   constitutive expression of amiE"
 FT   conflict        1281
 FT                   /replace="g"
 FT                   /citation=[3]
 XX
 SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
-     ggtaccgctg gccgagcatc tgctcgatca ccaccagccg ggcgacggga actgcacgat        6
-0
-     ctacctggcg agcctggagc acgagcgggt tcgcttcgta cggcgctgag cgacagtcac       12
-0
-     aggagaggaa acggatggga tcgcaccagg agcggccgct gatcggcctg ctgttctccg       18
-0
-     aaaccggcgt caccgccgat atcgagcgct cgcacgcgta tggcgcattg ctcgcggtcg       24
-0
-     agcaactgaa ccgcgagggc ggcgtcggcg gtcgcccgat cgaaacgctg tcccaggacc       30
-0
-     ccggcggcga cccggaccgc tatcggctgt gcgccgagga cttcattcgc aaccgggggg       36
-0
-     tacggttcct cgtgggctgc tacatgtcgc acacgcgcaa ggcggtgatg ccggtggtcg       42
-0
-     agcgcgccga cgcgctgctc tgctacccga ccccctacga gggcttcgag tattcgccga       48
-0
-     acatcgtcta cggcggtccg gcgccgaacc agaacagtgc gccgctggcg gcgtacctga       54
-0
-     ttcgccacta cggcgagcgg gtggtgttca tcggctcgga ctacatctat ccgcgggaaa       60
-0
-     gcaaccatgt gatgcgccac ctgtatcgcc agcacggcgg cacggtgctc gaggaaatct       66
-0
-     acattccgct gtatccctcc gacgacgact tgcagcgcgc cgtcgagcgc atctaccagg       72
-0
-     cgcgcgccga cgtggtcttc tccaccgtgg tgggcaccgg caccgccgag ctgtatcgcg       78
-0
-     ccatcgcccg tcgctacggc gacggcaggc ggccgccgat cgccagcctg accaccagcg       84
-0
-     aggcggaggt ggcgaagatg gagagtgacg tggcagaggg gcaggtggtg gtcgcgcctt       90
-0
-     acttctccag catcgatacg cccgccagcc gggccttcgt ccaggcctgc catggtttct       96
-0
-     tcccggagaa cgcgaccatc accgcctggg ccgaggcggc ctactggcag accttgttgc      102
-0
-     tcggccgcgc cgcgcaggcc gcaggcaact ggcgggtgga agacgtgcag cggcacctgt      108
-0
-     acgacatcga catcgacgcg ccacaggggc cggtccgggt ggagcgccag aacaaccaca      114
-0
-     gccgcctgtc ttcgcgcatc gcggaaatcg atgcgcgcgg cgtgttccag gtccgctggc      120
-0
-     agtcgcccga accgattcgc cccgaccctt atgtcgtcgt gcataacctc gacgactggt      126
-0
-     ccgccagcat gggcggggga ccgctcccat gagcgccaac tcgctgctcg gcagcctgcg      132
-0
-     cgagttgcag gtgctggtcc tcaacccgcc gggggaggtc agcgacgccc tggtcttgca      138
-0
-     gctgatccgc atcggttgtt cggtgcgcca gtgctggccg ccgccggaag ccttcgacgt      144
-0
-     gccggtggac gtggtcttca ccagcatttt ccagaatggc caccacgacg agatcgctgc      150
-0
-     gctgctcgcc gccgggactc cgcgcactac cctggtggcg ctggtggagt acgaaagccc      156
-0
-     cgcggtgctc tcgcagatca tcgagctgga gtgccacggc gtgatcaccc agccgctcga      162
-0
-     tgcccaccgg gtgctgcctg tgctggtatc ggcgcggcgc atcagcgagg aaatggcgaa      168
-0
-     gctgaagcag aagaccgagc agctccagga ccgcatcgcc ggccaggccc ggatcaacca      174
-0
-     ggccaaggtg ttgctgatgc agcgccatgg ctgggacgag cgcgaggcgc accagcacct      180
-0
-     gtcgcgggaa gcgatgaagc ggcgcgagcc gatcctgaag atcgctcagg agttgctggg      186
-0
-     aaacgagccg tccgcctgag cgatccgggc cgaccagaac aataacaaga ggggtatcgt      192
-0
-     catcatgctg ggactggttc tgctgtacgt tggcgcggtg ctgtttctca atgccgtctg      198
-0
-     gttgctgggc aagatcagcg gtcgggaggt ggcggtgatc aacttcctgg tcggcgtgct      204
-0
-     gagcgcctgc gtcgcgttct acctgatctt ttccgcagca gccgggcagg gctcgctgaa      210
-0
-     ggccggagcg ctgaccctgc tattcgcttt tacctatctg tgggtggccg ccaaccagtt      216
-0
-     cctcgag                                                                216
-7
+     ggtaccgctg gccgagcatc tgctcgatca ccaccagccg ggcgacggga actgcacgat        60
+     ctacctggcg agcctggagc acgagcgggt tcgcttcgta cggcgctgag cgacagtcac       120
+     aggagaggaa acggatggga tcgcaccagg agcggccgct gatcggcctg ctgttctccg       180
+     aaaccggcgt caccgccgat atcgagcgct cgcacgcgta tggcgcattg ctcgcggtcg       240
+     agcaactgaa ccgcgagggc ggcgtcggcg gtcgcccgat cgaaacgctg tcccaggacc       300
+     ccggcggcga cccggaccgc tatcggctgt gcgccgagga cttcattcgc aaccgggggg       360
+     tacggttcct cgtgggctgc tacatgtcgc acacgcgcaa ggcggtgatg ccggtggtcg       420
+     agcgcgccga cgcgctgctc tgctacccga ccccctacga gggcttcgag tattcgccga       480
+     acatcgtcta cggcggtccg gcgccgaacc agaacagtgc gccgctggcg gcgtacctga       540
+     ttcgccacta cggcgagcgg gtggtgttca tcggctcgga ctacatctat ccgcgggaaa       600
+     gcaaccatgt gatgcgccac ctgtatcgcc agcacggcgg cacggtgctc gaggaaatct       660
+     acattccgct gtatccctcc gacgacgact tgcagcgcgc cgtcgagcgc atctaccagg       720
+     cgcgcgccga cgtggtcttc tccaccgtgg tgggcaccgg caccgccgag ctgtatcgcg       780
+     ccatcgcccg tcgctacggc gacggcaggc ggccgccgat cgccagcctg accaccagcg       840
+     aggcggaggt ggcgaagatg gagagtgacg tggcagaggg gcaggtggtg gtcgcgcctt       900
+     acttctccag catcgatacg cccgccagcc gggccttcgt ccaggcctgc catggtttct       960
+     tcccggagaa cgcgaccatc accgcctggg ccgaggcggc ctactggcag accttgttgc      1020
+     tcggccgcgc cgcgcaggcc gcaggcaact ggcgggtgga agacgtgcag cggcacctgt      1080
+     acgacatcga catcgacgcg ccacaggggc cggtccgggt ggagcgccag aacaaccaca      1140
+     gccgcctgtc ttcgcgcatc gcggaaatcg atgcgcgcgg cgtgttccag gtccgctggc      1200
+     agtcgcccga accgattcgc cccgaccctt atgtcgtcgt gcataacctc gacgactggt      1260
+     ccgccagcat gggcggggga ccgctcccat gagcgccaac tcgctgctcg gcagcctgcg      1320
+     cgagttgcag gtgctggtcc tcaacccgcc gggggaggtc agcgacgccc tggtcttgca      1380
+     gctgatccgc atcggttgtt cggtgcgcca gtgctggccg ccgccggaag ccttcgacgt      1440
+     gccggtggac gtggtcttca ccagcatttt ccagaatggc caccacgacg agatcgctgc      1500
+     gctgctcgcc gccgggactc cgcgcactac cctggtggcg ctggtggagt acgaaagccc      1560
+     cgcggtgctc tcgcagatca tcgagctgga gtgccacggc gtgatcaccc agccgctcga      1620
+     tgcccaccgg gtgctgcctg tgctggtatc ggcgcggcgc atcagcgagg aaatggcgaa      1680
+     gctgaagcag aagaccgagc agctccagga ccgcatcgcc ggccaggccc ggatcaacca      1740
+     ggccaaggtg ttgctgatgc agcgccatgg ctgggacgag cgcgaggcgc accagcacct      1800
+     gtcgcgggaa gcgatgaagc ggcgcgagcc gatcctgaag atcgctcagg agttgctggg      1860
+     aaacgagccg tccgcctgag cgatccgggc cgaccagaac aataacaaga ggggtatcgt      1920
+     catcatgctg ggactggttc tgctgtacgt tggcgcggtg ctgtttctca atgccgtctg      1980
+     gttgctgggc aagatcagcg gtcgggaggt ggcggtgatc aacttcctgg tcggcgtgct      2040
+     gagcgcctgc gtcgcgttct acctgatctt ttccgcagca gccgggcagg gctcgctgaa      2100
+     ggccggagcg ctgaccctgc tattcgcttt tacctatctg tgggtggccg ccaaccagtt      2160
+     cctcgag                                                                2167
 //
 
 Output file format
@@ -292,7 +258,7 @@ Output file format
 
 ########################################
 # Program: density
-# Rundate: Tue 15 Jul 2008 12:00:00
+# Rundate: Fri 15 Jan 2010 12:00:00
 # Commandline: density
 #    [-seqall] tembl:x13776
 # Report_format: table
@@ -447,11 +413,11 @@ See also
                     freak        Generate residue/base frequency table or plot
                     isochore     Plots isochores in DNA sequences
                     sirna        Finds siRNA duplexes in mRNA
-                    wordcount    Count and extract unique words in DNA sequence(s)
+                    wordcount    Count and extract unique words in molecular sequence(s)
 
 Author(s)
 
-   Alan             Bleasby (ajb © ebi.ac.uk)
+   Alan             Bleasby (ajb (c) ebi.ac.uk)
    European         Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton,         Cambridge CB10 1SD, UK
 

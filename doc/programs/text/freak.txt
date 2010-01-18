@@ -1,5 +1,4 @@
-
-                                   freak 
+                                    freak
 
 
 
@@ -17,39 +16,42 @@ Function
 Description
 
    freak reads one or more sequences and a set of bases or residues to
-   search for. It then calculates the frequency of these bases/residues
-   in a window as it moves along the sequence. The frequency is output to
-   a data file or (optionally) plotted.
+   search for. It then calculates the frequency of these bases/residues in
+   a window as it moves along the sequence. The frequency is output to a
+   data file or (optionally) plotted.
 
 Algorithm
 
-   The frequency of bases/residues is calculated in a window that is
-   moved along the sequence. The window size and stepping value (number
-   of positions the window is moved along each time) may be specified.
+   The frequency of bases/residues is calculated in a window that is moved
+   along the sequence. The window size and stepping value (number of
+   positions the window is moved along each time) may be specified.
 
 Usage
 
    Here is a sample session with freak
 
 
-% freak tembl:x65923 
+% freak tembl:x65923
 Generate residue/base frequency table or plot
-Residue letters [gc]: 
-Output file [x65923.freak]: 
+Residue letters [gc]:
+Output file [x65923.freak]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
 
+Generate residue/base frequency table or plot
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-seqall]            seqall     Sequence(s) filename and optional format, or
                                   reference (input USA)
-   -letters            string     [gc] Residue letters (Any string is
-                                  accepted)
+   -letters            string     [gc] Residue letters (Any string)
 *  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, das, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif)
 *  -outfile            outfile    [*.freak] Output file name
 
    Additional (Optional) qualifiers:
@@ -98,13 +100,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -112,8 +116,8 @@ Input file format
 
   Input files for usage example
 
-   'tembl:x65923' is a sequence entry in the example nucleic acid
-   database 'tembl'
+   'tembl:x65923' is a sequence entry in the example nucleic acid database
+   'tembl'
 
   Database entry: tembl:x65923
 
@@ -129,8 +133,7 @@ XX
 KW   fau gene.
 XX
 OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
-;
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
 OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
 OC   Homo.
 XX
@@ -174,10 +177,8 @@ FT                   /db_xref="HSSP:1GJZ"
 FT                   /db_xref="InterPro:IPR006846"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
 FT                   /protein_id="CAA46716.1"
-FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLA
-G
-FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKT
-G
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
 FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
 FT   misc_feature    98..102
 FT                   /note="nucleolar localization signal"
@@ -187,24 +188,15 @@ FT   polyA_signal    484..489
 FT   polyA_site      509
 XX
 SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
-     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        6
-0
-     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       12
-0
-     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       18
-0
-     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       24
-0
-     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       30
-0
-     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       36
-0
-     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       42
-0
-     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       48
-0
-     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               51
-8
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        60
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       120
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       180
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       240
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       300
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       360
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       420
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       480
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               518
 //
 
 Output file format
@@ -355,8 +347,8 @@ Known bugs
 See also
 
    Program name     Description
-   backtranambig    Back-translate a protein sequence to ambiguous
-                    nucleotide sequence
+   backtranambig    Back-translate a protein sequence to ambiguous nucleotide
+                    sequence
    backtranseq      Back-translate a protein sequence to a nucleotide sequence
    banana           Plot bending and curvature data for B-DNA
    btwisted         Calculate the twisting in a B-DNA sequence
@@ -378,11 +370,11 @@ See also
    pepwindowall     Draw Kyte-Doolittle hydropathy plot for a protein
                     alignment
    sirna            Finds siRNA duplexes in mRNA
-   wordcount        Count and extract unique words in DNA sequence(s)
+   wordcount        Count and extract unique words in molecular sequence(s)
 
 Author(s)
 
-   Alan Bleasby (ajb © ebi.ac.uk)
+   Alan Bleasby (ajb (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

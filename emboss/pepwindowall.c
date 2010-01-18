@@ -20,9 +20,11 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
 
-#include "limits.h"
-#include <float.h>
 #include "emboss.h"
+
+#include <limits.h>
+#include <float.h>
+
 
 #define AZ 28
 
@@ -47,7 +49,7 @@ int main(int argc, char **argv)
     AjBool normal;
     AjPStr aa0str = NULL;
     AjPSeqset seqset;
-    AjPGraphPlpData graphdata;
+    AjPGraphdata graphdata;
     AjPGraph mult;
     const char *seq;
     const char *s1;
@@ -56,7 +58,7 @@ int main(int argc, char **argv)
     ajuint j;
     ajuint k;
     ajuint w;
-    ajint a;
+    ajuint a;
     ajuint midpoint,llen, maxlen, maxsize;
     float total;
     float matrix[AZ];
@@ -74,7 +76,7 @@ int main(int argc, char **argv)
     ajuint istart;
     ajuint iend;
     
-    ajGraphInit("pepwindowall", argc, argv);
+    embInit("pepwindowall", argc, argv);
 
     seqset   = ajAcdGetSeqset("sequences");
     mult     = ajAcdGetGraphxy("graph");
@@ -111,8 +113,8 @@ int main(int argc, char **argv)
 	seq = ajSeqsetGetseqSeqC(seqset, i);
 	ajStrSetClear(&aa0str);
 
-	graphdata = ajGraphPlpDataNewI(maxlen);
-	ajGraphPlpDataSetTypeC(graphdata,"Overlay 2D Plot");
+	graphdata = ajGraphdataNewI(maxlen);
+	ajGraphdataSetTypeC(graphdata,"Overlay 2D Plot");
 	ymin = 64000.;
 	ymax = -64000.;
 
@@ -175,12 +177,12 @@ int main(int argc, char **argv)
 	while(!graphdata->x[end])
 	    --end;
 
-	ajGraphPlpDataSetMaxima(graphdata,(float)graphdata->x[0],
+	ajGraphdataSetTruescale(graphdata,(float)graphdata->x[0],
 			       (float)graphdata->x[graphdata->numofpoints-1],
 			       ymin,ymax);
 
-	ajGraphPlpDataSetYTitleC(graphdata,"Hydropathy");
-	ajGraphPlpDataSetXTitleC(graphdata,"Sequence");
+	ajGraphdataSetYlabelC(graphdata,"Hydropathy");
+	ajGraphdataSetXlabelC(graphdata,"Sequence");
 
 	ajGraphDataAdd(mult,graphdata);
     }
@@ -188,8 +190,8 @@ int main(int argc, char **argv)
     min = min * (float) 1.1;
     max = max * (float) 1.1;
 
-    ajGraphxySetGaps(mult,AJTRUE);
-    ajGraphxySetOverLap(mult,AJTRUE);
+    ajGraphxySetflagGaps(mult,AJTRUE);
+    ajGraphxySetflagOverlay(mult,AJTRUE);
 
     if(min == max)
     {
@@ -197,7 +199,7 @@ int main(int argc, char **argv)
         max++;
     }
 
-    ajGraphxySetMaxMin(mult,fstart,fend,min,max);
+    ajGraphxySetMinmax(mult,fstart,fend,min,max);
     ajGraphSetTitleC(mult,"Pepwindowall");
 
 

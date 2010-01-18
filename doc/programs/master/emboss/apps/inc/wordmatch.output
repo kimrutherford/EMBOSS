@@ -6,7 +6,7 @@
 <pre>
 ########################################
 # Program: wordmatch
-# Rundate: Tue 15 Jul 2008 12:00:00
+# Rundate: Fri 15 Jan 2010 12:00:00
 # Commandline: wordmatch
 #    [-asequence] tsw:hba_human
 #    [-bsequence] tsw:hbb_human
@@ -21,24 +21,40 @@
 # 2: HBB_HUMAN
 #=======================================
 
-     5 HBA_HUMAN       +       59..63       HBB_HUMAN       +       64..68
      4 HBA_HUMAN       +       15..18       HBB_HUMAN       +       16..19
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: HBA_HUMAN
+# 2: HBB_HUMAN
+#=======================================
+
+     5 HBA_HUMAN       +       59..63       HBB_HUMAN       +       64..68
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: HBA_HUMAN
+# 2: HBB_HUMAN
+#=======================================
+
      4 HBA_HUMAN       +      117..120      HBB_HUMAN       +      122..125
 
 #---------------------------------------
 #---------------------------------------
 </pre>
 </td></tr></table><p>
-<p><h3>File: HBA_HUMAN.gff</h3>
+<p><h3>File: hba_human.gff</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 3
 ##sequence-region HBA_HUMAN 1 142
-#!Date 2008-07-15
+#!Date 2010-01-15
 #!Type Protein
-#!Source-version EMBOSS 6.1.0
-HBA_HUMAN	wordmatch	polypeptide_region	59	63	1.000	+	.	ID="HBA_HUMAN.1";note="HBB_HUMAN"
-HBA_HUMAN	wordmatch	polypeptide_region	15	18	1.000	+	.	ID="HBA_HUMAN.2";note="HBB_HUMAN"
+#!Source-version EMBOSS 6.2.0
+HBA_HUMAN	wordmatch	polypeptide_region	15	18	1.000	+	.	ID="HBA_HUMAN.1";note="HBB_HUMAN"
+HBA_HUMAN	wordmatch	polypeptide_region	59	63	1.000	+	.	ID="HBA_HUMAN.2";note="HBB_HUMAN"
 HBA_HUMAN	wordmatch	polypeptide_region	117	120	1.000	+	.	ID="HBA_HUMAN.3";note="HBB_HUMAN"
 </pre>
 </td></tr></table><p>
@@ -47,11 +63,36 @@ HBA_HUMAN	wordmatch	polypeptide_region	117	120	1.000	+	.	ID="HBA_HUMAN.3";note="
 <pre>
 ##gff-version 3
 ##sequence-region HBB_HUMAN 1 147
-#!Date 2008-07-15
+#!Date 2010-01-15
 #!Type Protein
-#!Source-version EMBOSS 6.1.0
-HBB_HUMAN	wordmatch	polypeptide_region	64	68	1.000	+	.	ID="HBB_HUMAN.1";note="HBA_HUMAN"
-HBB_HUMAN	wordmatch	polypeptide_region	16	19	1.000	+	.	ID="HBB_HUMAN.2";note="HBA_HUMAN"
+#!Source-version EMBOSS 6.2.0
+HBB_HUMAN	wordmatch	polypeptide_region	16	19	1.000	+	.	ID="HBB_HUMAN.1";note="HBA_HUMAN"
+HBB_HUMAN	wordmatch	polypeptide_region	64	68	1.000	+	.	ID="HBB_HUMAN.2";note="HBA_HUMAN"
 HBB_HUMAN	wordmatch	polypeptide_region	122	125	1.000	+	.	ID="HBB_HUMAN.3";note="HBA_HUMAN"
+</pre>
+</td></tr></table><p>
+<p><h3>File: wordmatch.log</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Sequence file for patterns: &lt;null&gt;
+Sequence file to be scanned for patterns: &lt;null&gt;
+Number of sequences in the patterns file: 1
+Pattern/word length: 4
+Number of patterns/words: 139
+Number of sequences in the file scanned for patterns: 1
+Number of all matches: 3 (wordmatch finds exact matches only)
+Sum of match lengths: 13
+Average match length: 4.33
+
+Distribution of the matches among pattern sequences:
+----------------------------------------------------
+HBA_HUMAN                                 :        3
+
+Pattern statistics:
+-------------------
+Pattern   #all-matches  #seq-matches  avg-match-length  avg-longest-match-length
+EFTP   :            1             1              4.00                      4.00
+HGKK   :            1             1              5.00                      5.00
+WGKV   :            1             1              4.00                      4.00
 </pre>
 </td></tr></table><p>

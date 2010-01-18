@@ -20,7 +20,7 @@
 ******************************************************************************/
 
 #include "emboss.h"
-#include "ajgraph.h"
+
 
 static float xstart = 0;
 static float ystart = 0;
@@ -78,7 +78,7 @@ int main(int argc, char **argv)
     float flen2;
     ajuint tui;
     
-    ajGraphInit("polydot", argc, argv);
+    embInit("polydot", argc, argv);
 
     wordlen  = ajAcdGetInt("wordsize");
     seqset   = ajAcdGetSeqset("sequences");
@@ -119,12 +119,12 @@ int main(int argc, char **argv)
     else
 	tickgap = acceptableticks[13];
     
-    ajGraphSetTitlePlus(graph, ajSeqsetGetUsa(seqset));
+    ajGraphAppendTitleS(graph, ajSeqsetGetUsa(seqset));
 
     ajGraphOpenWin(graph, (float)0.0-xmargin,(total+xmargin)*(float)1.35,
 		   (float)0.0-ymargin,
 		   total+ymargin);
-    ajGraphSetCharScale((float)0.3);
+    ajGraphicsSetCharscale((float)0.3);
     
     
     for(i=0;i<ajSeqsetGetSize(seqset);i++)
@@ -142,9 +142,9 @@ int main(int argc, char **argv)
 		flen2 = (float) tui;
 
 		if(boxit)
-		    ajGraphRect(xstart,ystart,
-				xstart+flen1,
-				ystart+flen2);
+		    ajGraphicsDrawposRect(xstart,ystart,
+                                          xstart+flen1,
+                                          ystart+flen2);
 
 		matchlist = embWordBuildMatchTable(seq1MatchTable, seq2,
 						   ajTrue);
@@ -163,31 +163,37 @@ int main(int argc, char **argv)
 		{
 		    for(k=0.0;k<ajSeqGetLen(seq1);k+=tickgap)
 		    {
-			ajGraphLine(xstart+k,ystart,xstart+k,
+			ajGraphicsDrawposLine(xstart+k,ystart,xstart+k,
 				    ystart-ticklen);
 
 			sprintf(ptr,"%d",(ajint)k);
-			ajGraphTextMid(xstart+k,ystart-(onefifth),ptr);
+			ajGraphicsDrawposTextAtmid(xstart+k,
+                                                   ystart-(onefifth),
+                                                   ptr);
 		    }
-		    ajGraphTextMid(xstart+(flen1/(float)2.0),
-				   ystart-(3*onefifth),
-				   ajStrGetPtr(ajSeqsetGetseqNameS(seqset, i)));
+		    ajGraphicsDrawposTextAtmid(
+                        xstart+(flen1/(float)2.0),
+                        ystart-(3*onefifth),
+                        ajStrGetPtr(ajSeqsetGetseqNameS(seqset, i)));
 		}
 
 		if(i==0)
 		{
 		    for(k=0.0;k<ajSeqGetLen(seq2);k+=tickgap)
 		    {
-			ajGraphLine(xstart,ystart+k,xstart-ticklen,
+			ajGraphicsDrawposLine(xstart,ystart+k,xstart-ticklen,
 				    ystart+k);
 
 			sprintf(ptr,"%d",(ajint)k);
-			ajGraphTextEnd(xstart-(onefifth),ystart+k,ptr);
+			ajGraphicsDrawposTextAtend(xstart-(onefifth),
+                                                   ystart+k,
+                                                   ptr);
 		    }
-		    ajGraphTextLine(xstart-(3*onefifth),
-				    ystart+(flen2/(float)2.0),
-				    xstart-(3*onefifth),ystart+flen2,
-				    ajStrGetPtr(ajSeqsetGetseqNameS(seqset, j)),0.5);
+		    ajGraphicsDrawposTextAtlineJustify(
+                        xstart-(3*onefifth),
+                        ystart+(flen2/(float)2.0),
+                        xstart-(3*onefifth),ystart+flen2,
+                        ajStrGetPtr(ajSeqsetGetseqNameS(seqset, j)),0.5);
 		}
 		ystart += flen2+(float)gap;
 	    }
@@ -198,7 +204,7 @@ int main(int argc, char **argv)
 	ystart = 0.0;
     }
     
-    ajGraphTextStart(total+onefifth,total-(onefifth),
+    ajGraphicsDrawposTextAtstart(total+onefifth,total-(onefifth),
 		     "No. Length  Lines  Points Sequence");
     
     for(i=0;i<ajSeqsetGetSize(seqset);i++)
@@ -208,20 +214,20 @@ int main(int argc, char **argv)
 		    ajSeqGetLen(seq1),lines[i],
 		    pts[i],ajSeqGetNameC(seq1));
 
-	ajGraphTextStart(total+onefifth,total-(onefifth*(i+2)),
-			 ajStrGetPtr(sajb));
+	ajGraphicsDrawposTextAtstart(total+onefifth,total-(onefifth*(i+2)),
+                                     ajStrGetPtr(sajb));
     }
     
     if(dumpfeat && seq1out)
     {
 	for(i=0;i<ajSeqsetGetSize(seqset);i++)
 	{
-	    ajFeatWrite(seq1out, tabptr[i]);
+	    ajFeattableWrite(seq1out, tabptr[i]);
 	    ajFeattableDel(&tabptr[i]);
 	}
     }
     
-    ajGraphClose();
+    ajGraphicsClose();
     ajGraphxyDel(&graph);
 
     ajStrDel(&sajb);
@@ -269,7 +275,7 @@ static void polydot_drawPlotlines(void *x, void *cl)
     x2 += p->length;
     y2 += (PLFLT)p->length;
 
-    ajGraphLine(x1, y1, x2, y2);
+    ajGraphicsDrawposLine(x1, y1, x2, y2);
 
     return;
 }

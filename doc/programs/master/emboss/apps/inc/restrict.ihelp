@@ -1,3 +1,6 @@
+Report restriction enzyme cleavage sites in a nucleotide sequence
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
                                   format, or reference (input USA)
@@ -26,14 +29,14 @@
                                   ! other enzymes
                                   hindiii
                                   HinfI
-                                  PpiI (Any string is accepted)
+                                  PpiI (Any string)
   [-outfile]           report     [*.restrict] Output report file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
    -datafile           datafile   Restriction enzyme data file (optional)
-   -mfile              datafile   [Emethylsites.dat] Restriction enzyme data
-                                  file (optional)
+   -mfile              datafile   [Emethylsites.dat] Restriction enzyme
+                                  methylation data file (optional)
    -min                integer    [1] This sets the minimum number of cuts for
                                   any restriction enzyme that will be
                                   considered. Any enzymes that cut fewer times
@@ -143,11 +146,12 @@
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 

@@ -1,5 +1,4 @@
-
-                                    cai 
+                                     cai
 
 
 
@@ -20,34 +19,37 @@ Description
    sequence, given a reference codon usage table. The CAI index is a
    simple, effective measure of synonymous codon usage bias. It index
    assesses the extent to which selection has been effective in moulding
-   the pattern of codon usage. In that respect it is useful for
-   predicting the level of expression of a gene, for assessing the
-   adaptation of viral genes to their hosts, and for making comparisons
-   of codon usage in different organisms. The index may also give an
-   approximate indication of the likely success of heterologous gene
-   expression.
+   the pattern of codon usage. In that respect it is useful for predicting
+   the level of expression of a gene, for assessing the adaptation of
+   viral genes to their hosts, and for making comparisons of codon usage
+   in different organisms. The index may also give an approximate
+   indication of the likely success of heterologous gene expression.
 
 Algorithm
 
    The CAI index uses a reference set of highly expressed genes from a
-   species to assess the relative merits of each codon. A score for a
-   gene sequence is calculated from the frequency of use of all codons in
-   that gene sequence.
+   species to assess the relative merits of each codon. A score for a gene
+   sequence is calculated from the frequency of use of all codons in that
+   gene sequence.
 
 Usage
 
    Here is a sample session with cai
 
 
-% cai TEMBL:AB009602 
+% cai TEMBL:AB009602
 Calculate codon adaptation index
-Codon usage file [Eyeast_cai.cut]: 
-Output file [ab009602.cai]: 
+Codon usage file [Eyeast_cai.cut]:
+Output file [ab009602.cai]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Calculate codon adaptation index
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-seqall]            seqall     Nucleotide sequence(s) filename and optional
@@ -89,13 +91,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -152,31 +156,20 @@ FT                   /db_xref="GOA:O74468"
 FT                   /db_xref="InterPro:IPR016040"
 FT                   /db_xref="UniProtKB/Swiss-Prot:O74468"
 FT                   /protein_id="BAA23999.1"
-FT                   /translation="SMPKIPSFVPTQTTVFLMALHRLEILVQALIESGWPRVLPVCIA
-E
+FT                   /translation="SMPKIPSFVPTQTTVFLMALHRLEILVQALIESGWPRVLPVCIAE
 FT                   RVSCPDQRFIFSTLEDVVEEYNKYESLPPGLLITGYSCNTLRNTA"
 XX
 SQ   Sequence 561 BP; 135 A; 106 C; 98 G; 222 T; 0 other;
-     gttcgatgcc taaaatacct tcttttgtcc ctacacagac cacagttttc ctaatggctt        6
-0
-     tacaccgact agaaattctt gtgcaagcac taattgaaag cggttggcct agagtgttac       12
-0
-     cggtttgtat agctgagcgc gtctcttgcc ctgatcaaag gttcattttc tctactttgg       18
-0
-     aagacgttgt ggaagaatac aacaagtacg agtctctccc ccctggtttg ctgattactg       24
-0
-     gatacagttg taataccctt cgcaacaccg cgtaactatc tatatgaatt attttccctt       30
-0
-     tattatatgt agtaggttcg tctttaatct tcctttagca agtcttttac tgttttcgac       36
-0
-     ctcaatgttc atgttcttag gttgttttgg ataatatgcg gtcagtttaa tcttcgttgt       42
-0
-     ttcttcttaa aatatttatt catggtttaa tttttggttt gtacttgttc aggggccagt       48
-0
-     tcattattta ctctgtttgt atacagcagt tcttttattt ttagtatgat tttaatttaa       54
-0
-     aacaattcta atggtcaaaa a                                                 56
-1
+     gttcgatgcc taaaatacct tcttttgtcc ctacacagac cacagttttc ctaatggctt        60
+     tacaccgact agaaattctt gtgcaagcac taattgaaag cggttggcct agagtgttac       120
+     cggtttgtat agctgagcgc gtctcttgcc ctgatcaaag gttcattttc tctactttgg       180
+     aagacgttgt ggaagaatac aacaagtacg agtctctccc ccctggtttg ctgattactg       240
+     gatacagttg taataccctt cgcaacaccg cgtaactatc tatatgaatt attttccctt       300
+     tattatatgt agtaggttcg tctttaatct tcctttagca agtcttttac tgttttcgac       360
+     ctcaatgttc atgttcttag gttgttttgg ataatatgcg gtcagtttaa tcttcgttgt       420
+     ttcttcttaa aatatttatt catggtttaa tttttggttt gtacttgttc aggggccagt       480
+     tcattattta ctctgtttgt atacagcagt tcttttattt ttagtatgat tttaatttaa       540
+     aacaattcta atggtcaaaa a                                                 561
 //
 
 Output file format
@@ -187,14 +180,14 @@ Output file format
 
   File: ab009602.cai
 
-   Sequence: AB009602 CAI: 0.188
+Sequence: AB009602 CAI: 0.188
 
 Data files
 
-   cai requires a reference codon usage table prepared from a set of
-   genes which are known to be highly expressed. This is specified by the
-   -cfile option and must exist in the EMBOSS data directory. The default
-   codon usage table Eyeastcai.cut is the standard set of Saccharomyces
+   cai requires a reference codon usage table prepared from a set of genes
+   which are known to be highly expressed. This is specified by the -cfile
+   option and must exist in the EMBOSS data directory. The default codon
+   usage table Eyeastcai.cut is the standard set of Saccharomyces
    cerevisiae highly expressed gene codon frequiencies. Another table
    (Eschpo_cai.cut) was prepared from a set of Schizosaccharomyces pombe
    genes by Peter Rice for the S. pombe sequencing team at the Sanger
@@ -214,11 +207,12 @@ Data files
 
 % embossdata -fetch -file Exxx.dat
 
+
    Users can provide their own data files in their own directories.
    Project specific files can be put in the current directory, or for
-   tidier directory listings in a subdirectory called ".embossdata".
-   Files for all EMBOSS runs can be put in the user's home directory, or
-   again in a subdirectory called ".embossdata".
+   tidier directory listings in a subdirectory called ".embossdata". Files
+   for all EMBOSS runs can be put in the user's home directory, or again
+   in a subdirectory called ".embossdata".
 
    The directories are searched in the following order:
      * . (your current directory)
@@ -238,22 +232,22 @@ Notes
    acid.
 
    Codon preferences reflect a balance between mutational bias and
-   selection for efficiency of translation. In fast-growing
-   microorganisms there are optimal codons that reflect the composition
-   of the genomic tRNA pool and probably help achieve faster translation
-   rates and high accuracy. Such selection is expected to be strong in
-   highly expressed genes, as is the case for Escherichia coli or
-   Saccharomyces cerevisiae. In contrast, codon usage optimization is
-   normally absent in organisms with slower growing rates such as Homo
-   sapiens (human), where codon preferences are determined by mutational
-   biases characteristic to a particular genome.
+   selection for efficiency of translation. In fast-growing microorganisms
+   there are optimal codons that reflect the composition of the genomic
+   tRNA pool and probably help achieve faster translation rates and high
+   accuracy. Such selection is expected to be strong in highly expressed
+   genes, as is the case for Escherichia coli or Saccharomyces cerevisiae.
+   In contrast, codon usage optimization is normally absent in organisms
+   with slower growing rates such as Homo sapiens (human), where codon
+   preferences are determined by mutational biases characteristic to a
+   particular genome.
 
-   Various factors are thought to influence codon usage bias in
-   baceteria, including gene expression level already mentioned, %G+C
-   composition (reflecting horizontal gene transfer or mutational bias),
-   GC skew (reflecting strand-specific mutational bias), amino acid
-   conservation, protein hydropathy, transcriptional selection, RNA
-   stability, and optimal growth temperature.
+   Various factors are thought to influence codon usage bias in baceteria,
+   including gene expression level already mentioned, %G+C composition
+   (reflecting horizontal gene transfer or mutational bias), GC skew
+   (reflecting strand-specific mutational bias), amino acid conservation,
+   protein hydropathy, transcriptional selection, RNA stability, and
+   optimal growth temperature.
 
    Various methods have been used to analyze codon usage bias. CAI and
    methods such as the 'frequency of optimal codons' (Fop) are commonly
@@ -293,12 +287,12 @@ See also
    chips            Calculates Nc codon usage statistic
    codcmp           Codon usage table comparison
    cusp             Create a codon usage table from nucleotide sequence(s)
-   syco             Draw synonymous codon usage statictic plot for a nucleotide
+   syco             Draw synonymous codon usage statistic plot for a nucleotide
                     sequence
 
 Author(s)
 
-   Alan Bleasby (ajb © ebi.ac.uk)
+   Alan Bleasby (ajb (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

@@ -302,7 +302,7 @@ static void checktrans_dumptofeat(AjPFeattabOut featout, ajint from, ajint to,
     }
 
     ajFeatSortByStart(feattable);
-    ajFeatWrite(featout, feattable);
+    ajFeattableWrite(featout, feattable);
     ajFeattableDel(&feattable);
 
     ajStrDel(&name);

@@ -195,7 +195,7 @@ int main(int argc, char **argv)
   ajint     end;
   FILE *    stream;
   AjPStr    taskstr = NULL;
-  AjPStr    program  = NULL;
+  const AjPStr program  = NULL;
 
 /* fork/pipe variables */
   pid_t nPid;
@@ -223,7 +223,7 @@ int main(int argc, char **argv)
 /*
  *   included_region     = ajAcdGetRange("includedregion");
  */
-  target              = ajAcdGetRange("target");
+  target              = ajAcdGetRange("targetregion");
 /*
  *   excluded_region     = ajAcdGetRange("excludedregion");
  *   left_input          = ajAcdGetString("forwardinput");
@@ -356,18 +356,12 @@ int main(int argc, char **argv)
         close( pipefrom[0] );
         close( pipefrom[1] );
 
-	program = ajStrNew();
-	ajStrAssignC(&program, "primer3_core");
-	if (ajSysFileWhich(&program)) {
-	    execlp( "primer3_core", "primer3_core", NULL );
-	    ajFatal("There was a problem while executing primer3");
-	} else {
-	    ajFatal("The program 'primer3_core' must be on the path.\n"
-		    "It is part of the 'primer3' package,\n"
-		    "available from the Whitehead Institute.\n"
-		    "See: http://www-genome.wi.mit.edu/");
-	}
-	ajStrDel(&program);
+        program = ajAcdGetpathC("primer3_core");
+          
+        if(program)
+            execlp(ajStrGetPtr(program), "primer3_core", NULL);
+
+        ajDie("There was a problem while executing primer3");
 
     } else {
         /* PARENT PROCESS */
@@ -611,12 +605,12 @@ static void primers_send_range(FILE * stream,
   ajuint n;
   ajuint start, end;
 
-  if (ajRangeNumber(value)) {
+  if (ajRangeGetSize(value)) {
       (void) ajFmtPrintS(&str, "%s=", tag);
       primers_write(str, stream);
       ajStrSetClear(&str);
-      for (n=0; n < ajRangeNumber(value); n++) {
-          ajRangeValues(value, n, &start, &end);
+      for (n=0; n < ajRangeGetSize(value); n++) {
+          ajRangeElementGetValues(value, n, &start, &end);
           (void) ajFmtPrintS(&str, "%u,%u ", start, end-start+1);
           primers_write(str, stream);
 	  ajStrSetClear(&str);
@@ -648,12 +642,12 @@ static void primers_send_range(FILE * stream,
 //  ajint n;
 //  ajint start, end;
 //
-//  if (ajRangeNumber(value)) {
+//  if (ajRangeGetSize(value)) {
 //      (void) ajFmtPrintS(&str, "%s=", tag);
 //      primers_write(str, stream);
 //      ajStrSetClear(&str);
-//      for (n=0; n < ajRangeNumber(value); n++) {
-//          ajRangeValues(value, n, &start, &end);
+//      for (n=0; n < ajRangeGetSize(value); n++) {
+//          ajRangeElementGetValues(value, n, &start, &end);
 //          (void) ajFmtPrintS(&str, "%d-%d ", start, end);
 //          primers_write(str, stream);
 //	  ajStrSetClear(&str);

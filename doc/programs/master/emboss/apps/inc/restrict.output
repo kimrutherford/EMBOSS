@@ -6,7 +6,7 @@
 <pre>
 ########################################
 # Program: restrict
-# Rundate: Tue 15 Jul 2008 12:00:00
+# Rundate: Fri 15 Jan 2010 12:00:00
 # Commandline: restrict
 #    -sequence tembl:x65923
 # Report_format: table
@@ -103,7 +103,7 @@
 <pre>
 ########################################
 # Program: restrict
-# Rundate: Tue 15 Jul 2008 12:00:00
+# Rundate: Fri 15 Jan 2010 12:00:00
 # Commandline: restrict
 #    -fragments
 #    -sequence tembl:x65923
@@ -216,7 +216,7 @@
 <pre>
 ########################################
 # Program: restrict
-# Rundate: Tue 15 Jul 2008 12:00:00
+# Rundate: Fri 15 Jan 2010 12:00:00
 # Commandline: restrict
 #    -solofragment
 #    -sequence tembl:x65923

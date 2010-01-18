@@ -2,6 +2,9 @@ application: coderet [
   documentation: "Extract CDS, mRNA and translations from
                   feature tables"
   groups: "Feature tables, Nucleic:Translation"
+  relations: "EDAM: Coding region prediction"
+  relations: "EDAM: DNA translation"
+  relations: "EDAM: DNA transcription"
 ]
 
 section: input [
@@ -13,6 +16,7 @@ section: input [
     parameter: "Y"
     type: "DNA"
     features: "Y"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: input
@@ -26,6 +30,7 @@ section: output [
     parameter: "Y"
     extension: "coderet"
     knowntype: "coderet output"
+    relations:  "EDAM:Sequence record"                                     
   ]
 
   seqoutall: cdsoutseq [
@@ -36,6 +41,7 @@ section: output [
     osextension: "cds"
     nullok: "Y"
     knowntype: "cds sequence"
+    relations:  "EDAM: Nucleotide sequence"                            
   ]
 
   seqoutall: mrnaoutseq [
@@ -46,6 +52,7 @@ section: output [
     osextension: "mrna"
     nullok: "Y"
     knowntype: "mrna sequence"
+    relations:  "EDAM: RNA sequence"                                   
   ]
 
   seqoutall: translationoutseq [
@@ -56,6 +63,7 @@ section: output [
     osextension: "prot"
     nullok: "Y"
     knowntype: "translated cds sequence"
+    relations:  "EDAM: Protein sequence"                               
   ]
 
   seqoutall: restoutseq [
@@ -66,6 +74,7 @@ section: output [
     osextension: "noncoding"
     nullok: "Y"
     knowntype: "non coding sequence"
+    relations:  "EDAM: Nucleotide sequence"                            
   ]
 
 endsection: output

@@ -1,5 +1,4 @@
-
-                                featreport 
+                                 featreport
 
 
 
@@ -24,16 +23,20 @@ Usage
    Here is a sample session with featreport
 
 
-% featreport 
+% featreport
 Reads and writes a feature table
 Input sequence: paamir.fasta
 Input features: paamir.gff
 Output report [x13776.featreport]: test.out
 
+
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Reads and writes a feature table
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Sequence filename and optional format, or
@@ -90,13 +93,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -106,8 +111,8 @@ Input file format
 
   File: paamir.fasta
 
->X13776 X13776.1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidas
-e regulation
+>X13776 X13776.1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
+ regulation
 ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat
 ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac
 aggagaggaaacggatgggatcgcaccaggagcggccgctgatcggcctgctgttctccg
@@ -151,39 +156,39 @@ cctcgag
 ##gff-version 2.0
 ##date 2003-02-14
 ##Type DNA PAAMIR
-PAAMIR  EMBL    source  1       2167    0.000   +       .       Sequence "PAAMI
-R.1" ; db_xref "taxon:287" ; organism "Pseudomonas aeruginosa" ; strain "PAC" ;
- isolate "PAC 1" ; map "38 min"
-PAAMIR  EMBL    CDS     1289    1879    0.000   +       .       Sequence "PAAMI
-R.2" ; db_xref "SWISS-PROT:P10932" ; note "aliphatic amidase regulator, positiv
-e regulator of amiE" ; transl_table 11 ; gene "amiR" ; protein_id "CAA32023.1"
-; translation "MSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWPPPEAFDVPVDVVFTSIFQNG
-HHDEIAALLAAGTPRTTLVALVEYESPAVLSQIIELECHGVITQPLDAHRVLPVLVSARRISEEMAKLKQKTEQLQDRI
-AGQARINQAKVLLMQRHGWDEREAHQHLSREAMKRREPILKIAQELLGNEPSA"
-PAAMIR  EMBL    CDS     135     1292    0.000   +       .       Sequence "PAAMI
-R.3" ; db_xref "SWISS-PROT:P27017" ; note "negative regulator of amiR" ; transl
-_table 11 ; gene "amiC" ; protein_id "CAA32024.1" ; translation "MGSHQERPLIGLLF
-SETGVTADIERSHAYGALLAVEQLNREGGVGGRPIETLSQDPGGDPDRYRLCAEDFIRNRGVRFLVGCYMSHTRKAVMP
-VVERADALLCYPTPYEGFEYSPNIVYGGPAPNQNSAPLAAYLIRHYGERVVFIGSDYIYPRESNHVMRHLYRQHGGTVL
-EEIYIPLYPSDDDLQRAVERIYQARADVVFSTVVGTGTAELYRAIARRYGDGRRPPIASLTTSEAEVAKMESDVAEGQV
-VVAPYFSSIDTPASRAFVQACHGFFPENATITAWAEAAYWQTLLLGRAAQAAGNWRVEDVQRHLYDIDIDAPQGPVRVE
-RQNNHSRLSSRIAEIDARGVFQVRWQSPEPIRPDPYVVVHNLDDWSASMGGGPLP"
-PAAMIR  EMBL    promoter        8       24      0.000   +       .       Sequenc
-e "PAAMIR.4" ; note "proposed rpoN-dependent promoter"
-PAAMIR  EMBL    promoter        65      81      0.000   +       .       Sequenc
-e "PAAMIR.5" ; note "proposed rpoN-dependent promoter"
-PAAMIR  EMBL    RBS     121     126     0.000   +       .       Sequence "PAAMI
-R.6" ; note "proposed Shine-Dalgarno sequence"
-PAAMIR  EMBL    variation       912     1167    0.000   +       .       Sequenc
-e "PAAMIR.7" ; note "ClaI fragment deleted in pSW36, constitutive phenotype" ;
-replace "" ; gene "amiC"
-PAAMIR  EMBL    misc_feature    1       1       0.000   +       .       Sequenc
-e "PAAMIR.8" ; FeatFlags "0x40" ; note "last base of an XhoI site"
-PAAMIR  EMBL    misc_feature    648     653     0.000   +       .       Sequenc
-e "PAAMIR.9" ; note "end of 658bp XhoI fragment, deletion in pSW3 causes consti
-tutive expression of amiE"
-PAAMIR  EMBL    conflict        1281    1281    0.000   +       .       Sequenc
-e "PAAMIR.10" ; FeatFlags "0x40" ; replace "g" ; citation [3]
+PAAMIR  EMBL    source  1       2167    0.000   +       .       Sequence "PAAMIR
+.1" ; db_xref "taxon:287" ; organism "Pseudomonas aeruginosa" ; strain "PAC" ; i
+solate "PAC 1" ; map "38 min"
+PAAMIR  EMBL    CDS     1289    1879    0.000   +       .       Sequence "PAAMIR
+.2" ; db_xref "SWISS-PROT:P10932" ; note "aliphatic amidase regulator, positive
+regulator of amiE" ; transl_table 11 ; gene "amiR" ; protein_id "CAA32023.1" ; t
+ranslation "MSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWPPPEAFDVPVDVVFTSIFQNGHHDE
+IAALLAAGTPRTTLVALVEYESPAVLSQIIELECHGVITQPLDAHRVLPVLVSARRISEEMAKLKQKTEQLQDRIAGQAR
+INQAKVLLMQRHGWDEREAHQHLSREAMKRREPILKIAQELLGNEPSA"
+PAAMIR  EMBL    CDS     135     1292    0.000   +       .       Sequence "PAAMIR
+.3" ; db_xref "SWISS-PROT:P27017" ; note "negative regulator of amiR" ; transl_t
+able 11 ; gene "amiC" ; protein_id "CAA32024.1" ; translation "MGSHQERPLIGLLFSET
+GVTADIERSHAYGALLAVEQLNREGGVGGRPIETLSQDPGGDPDRYRLCAEDFIRNRGVRFLVGCYMSHTRKAVMPVVER
+ADALLCYPTPYEGFEYSPNIVYGGPAPNQNSAPLAAYLIRHYGERVVFIGSDYIYPRESNHVMRHLYRQHGGTVLEEIYI
+PLYPSDDDLQRAVERIYQARADVVFSTVVGTGTAELYRAIARRYGDGRRPPIASLTTSEAEVAKMESDVAEGQVVVAPYF
+SSIDTPASRAFVQACHGFFPENATITAWAEAAYWQTLLLGRAAQAAGNWRVEDVQRHLYDIDIDAPQGPVRVERQNNHSR
+LSSRIAEIDARGVFQVRWQSPEPIRPDPYVVVHNLDDWSASMGGGPLP"
+PAAMIR  EMBL    promoter        8       24      0.000   +       .       Sequence
+ "PAAMIR.4" ; note "proposed rpoN-dependent promoter"
+PAAMIR  EMBL    promoter        65      81      0.000   +       .       Sequence
+ "PAAMIR.5" ; note "proposed rpoN-dependent promoter"
+PAAMIR  EMBL    RBS     121     126     0.000   +       .       Sequence "PAAMIR
+.6" ; note "proposed Shine-Dalgarno sequence"
+PAAMIR  EMBL    variation       912     1167    0.000   +       .       Sequence
+ "PAAMIR.7" ; note "ClaI fragment deleted in pSW36, constitutive phenotype" ; re
+place "" ; gene "amiC"
+PAAMIR  EMBL    misc_feature    1       1       0.000   +       .       Sequence
+ "PAAMIR.8" ; FeatFlags "0x40" ; note "last base of an XhoI site"
+PAAMIR  EMBL    misc_feature    648     653     0.000   +       .       Sequence
+ "PAAMIR.9" ; note "end of 658bp XhoI fragment, deletion in pSW3 causes constitu
+tive expression of amiE"
+PAAMIR  EMBL    conflict        1281    1281    0.000   +       .       Sequence
+ "PAAMIR.10" ; FeatFlags "0x40" ; replace "g" ; citation [3]
 
 Output file format
 
@@ -195,40 +200,40 @@ Output file format
 
 ##gff-version 3
 ##sequence-region PAAMIR 1 2167
-#!Date 2008-07-15
+#!Date 2010-01-15
 #!Type DNA
-#!Source-version EMBOSS 6.1.0
-PAAMIR  EMBL    databank_entry  1       2167    0.000   +       .       ID="PAA
-MIR.1";db_xref="taxon:287";organism="Pseudomonas aeruginosa";strain="PAC";isola
-te="PAC 1";map="38 min"
-PAAMIR  EMBL    CDS     1289    1879    0.000   +       0       ID="PAAMIR.2";d
-b_xref="SWISS-PROT:P10932";note="aliphatic amidase regulator, positive regulato
-r of amiE";transl_table=11;gene="amiR";protein_id="CAA32023.1";translation="MSA
-NSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWPPPEAFDVPVDVVFTSIFQNGHHDEIAALLAAGTPRTTL
-VALVEYESPAVLSQIIELECHGVITQPLDAHRVLPVLVSARRISEEMAKLKQKTEQLQDRIAGQARINQAKVLLMQRHG
-WDEREAHQHLSREAMKRREPILKIAQELLGNEPSA"
-PAAMIR  EMBL    CDS     135     1292    0.000   +       0       ID="PAAMIR.3";d
-b_xref="SWISS-PROT:P27017";note="negative regulator of amiR";transl_table=11;ge
-ne="amiC";protein_id="CAA32024.1";translation="MGSHQERPLIGLLFSETGVTADIERSHAYGAL
-LAVEQLNREGGVGGRPIETLSQDPGGDPDRYRLCAEDFIRNRGVRFLVGCYMSHTRKAVMPVVERADALLCYPTPYEGF
-EYSPNIVYGGPAPNQNSAPLAAYLIRHYGERVVFIGSDYIYPRESNHVMRHLYRQHGGTVLEEIYIPLYPSDDDLQRAV
-ERIYQARADVVFSTVVGTGTAELYRAIARRYGDGRRPPIASLTTSEAEVAKMESDVAEGQVVVAPYFSSIDTPASRAFV
-QACHGFFPENATITAWAEAAYWQTLLLGRAAQAAGNWRVEDVQRHLYDIDIDAPQGPVRVERQNNHSRLSSRIAEIDAR
-GVFQVRWQSPEPIRPDPYVVVHNLDDWSASMGGGPLP"
-PAAMIR  EMBL    promoter        8       24      0.000   +       .       ID="PAA
-MIR.4";note="proposed rpoN-dependent promoter"
-PAAMIR  EMBL    promoter        65      81      0.000   +       .       ID="PAA
-MIR.5";note="proposed rpoN-dependent promoter"
+#!Source-version EMBOSS 6.2.0
+PAAMIR  EMBL    databank_entry  1       2167    0.000   +       .       ID="PAAM
+IR.1";db_xref="taxon:287";organism="Pseudomonas aeruginosa";strain="PAC";isolate
+="PAC 1";map="38 min"
+PAAMIR  EMBL    CDS     1289    1879    0.000   +       0       ID="PAAMIR.2";db
+_xref="SWISS-PROT:P10932";note="aliphatic amidase regulator, positive regulator
+of amiE";transl_table=11;gene="amiR";protein_id="CAA32023.1";translation="MSANSL
+LGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWPPPEAFDVPVDVVFTSIFQNGHHDEIAALLAAGTPRTTLVALV
+EYESPAVLSQIIELECHGVITQPLDAHRVLPVLVSARRISEEMAKLKQKTEQLQDRIAGQARINQAKVLLMQRHGWDERE
+AHQHLSREAMKRREPILKIAQELLGNEPSA"
+PAAMIR  EMBL    CDS     135     1292    0.000   +       0       ID="PAAMIR.3";db
+_xref="SWISS-PROT:P27017";note="negative regulator of amiR";transl_table=11;gene
+="amiC";protein_id="CAA32024.1";translation="MGSHQERPLIGLLFSETGVTADIERSHAYGALLAV
+EQLNREGGVGGRPIETLSQDPGGDPDRYRLCAEDFIRNRGVRFLVGCYMSHTRKAVMPVVERADALLCYPTPYEGFEYSP
+NIVYGGPAPNQNSAPLAAYLIRHYGERVVFIGSDYIYPRESNHVMRHLYRQHGGTVLEEIYIPLYPSDDDLQRAVERIYQ
+ARADVVFSTVVGTGTAELYRAIARRYGDGRRPPIASLTTSEAEVAKMESDVAEGQVVVAPYFSSIDTPASRAFVQACHGF
+FPENATITAWAEAAYWQTLLLGRAAQAAGNWRVEDVQRHLYDIDIDAPQGPVRVERQNNHSRLSSRIAEIDARGVFQVRW
+QSPEPIRPDPYVVVHNLDDWSASMGGGPLP"
+PAAMIR  EMBL    promoter        8       24      0.000   +       .       ID="PAAM
+IR.4";note="proposed rpoN-dependent promoter"
+PAAMIR  EMBL    promoter        65      81      0.000   +       .       ID="PAAM
+IR.5";note="proposed rpoN-dependent promoter"
 PAAMIR  EMBL    ribosome_entry_site     121     126     0.000   +       .
 ID="PAAMIR.6";note="proposed Shine-Dalgarno sequence"
 PAAMIR  EMBL    sequence_variant        912     1167    0.000   +       .
-ID="PAAMIR.7";note="ClaI fragment deleted in pSW36, constitutive phenotype";rep
-lace="";gene="amiC"
+ID="PAAMIR.7";note="ClaI fragment deleted in pSW36, constitutive phenotype";repl
+ace="";gene="amiC"
 PAAMIR  EMBL    sequence_feature        1       1       0.000   +       .
 ID="PAAMIR.8";featflags="0x40";note="last base of an XhoI site"
 PAAMIR  EMBL    sequence_feature        648     653     0.000   +       .
-ID="PAAMIR.9";note="end of 658bp XhoI fragment, deletion in pSW3 causes constit
-utive expression of amiE"
+ID="PAAMIR.9";note="end of 658bp XhoI fragment, deletion in pSW3 causes constitu
+tive expression of amiE"
 PAAMIR  EMBL    sequence_conflict       1281    1281    0.000   +       .
 ID="PAAMIR.10";featflags="0x40";replace="g";citation=[3]
 
@@ -312,7 +317,7 @@ See also
 
 Author(s)
 
-   Peter Rice (pmr © ebi.ac.uk)
+   Peter Rice (pmr (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

@@ -46,13 +46,11 @@ public class JembossJarUtil
   public JembossJarUtil(String jarFile) throws Exception
   {
 
-    try 
-    {
       // extracts just sizes only
       ClassLoader cl = this.getClass().getClassLoader();
       InputStream is = cl.getResourceAsStream(jarFile);
       if (is==null)
-    	  throw new Exception();
+    	  throw new Exception("Jemboss not able to use resource "+jarFile);
       ZipInputStream zis= new ZipInputStream(is);
       ZipEntry ze=null;
       Hashtable htSizes = new Hashtable();
@@ -98,24 +96,8 @@ public class JembossJarUtil
         // add to internal resource hashtable 
         jarStore.put(ze.getName(),b);
 
-//      System.out.println(ze.getName());
       }
       zis.close();
-    }
-    catch (Exception e) { throw new Exception();}
-
-//  catch (NullPointerException e) 
-//  {
-//    System.out.println("JembossJarUtil Error: jarStore");
-//  } 
-//  catch (FileNotFoundException e) 
-//  {
-//    e.printStackTrace();
-//  }
-//  catch (IOException e)
-//  {
-//    e.printStackTrace();
-//  }
   }
 
 

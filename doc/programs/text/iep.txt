@@ -1,5 +1,4 @@
-
-                                    iep 
+                                     iep
 
 
 
@@ -22,14 +21,18 @@ Description
    curve with respect to pH and write an output file of the data, where
    for each pH point the number of bound electrons and charge is given.
 
+   For peptide fragments it is possible to exclude the charges of the
+   amino and carboxy terminal residues.
+
 Usage
 
    Here is a sample session with iep
 
 
-% iep tsw:laci_ecoli 
+% iep tsw:laci_ecoli
 Calculate the isoelectric point of proteins
-Output file [laci_ecoli.iep]: 
+Output file [laci_ecoli.iep]:
+
 
    Go to the input files for this example
    Go to the output files for this example
@@ -37,21 +40,25 @@ Output file [laci_ecoli.iep]:
    Example 2
 
 
-% iep tsw:ifna2_human -disulphide 2 -lysinemodified 2  
+% iep tsw:ifna2_human -disulphide 2 -lysinemodified 2
 Calculate the isoelectric point of proteins
-Output file [ifna2_human.iep]: 
+Output file [ifna2_human.iep]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
 
+Calculate the isoelectric point of proteins
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Protein sequence(s) filename and optional
                                   format, or reference (input USA)
 *  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, das, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif)
 *  -outfile            outfile    [*.iep] Output file name
 
    Additional (Optional) qualifiers:
@@ -108,13 +115,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -439,11 +448,12 @@ Data files
 
 % embossdata -fetch -file Exxx.dat
 
+
    Users can provide their own data files in their own directories.
    Project specific files can be put in the current directory, or for
-   tidier directory listings in a subdirectory called ".embossdata".
-   Files for all EMBOSS runs can be put in the user's home directory, or
-   again in a subdirectory called ".embossdata".
+   tidier directory listings in a subdirectory called ".embossdata". Files
+   for all EMBOSS runs can be put in the user's home directory, or again
+   in a subdirectory called ".embossdata".
 
    The directories are searched in the following order:
      * . (your current directory)
@@ -471,10 +481,14 @@ Notes
 
    Adjusting the pH of an aqueous protein solution to the point where the
    numbers of positive and negative charges on the protein are equal
-   brings the protein to its isoelectric point. This is often the point
-   of lowest solubility, presumably because it is the point at which
-   there are fewest intermolecular repulsions, so that the molecules tend
-   to form aggregates.
+   brings the protein to its isoelectric point. This is often the point of
+   lowest solubility, presumably because it is the point at which there
+   are fewest intermolecular repulsions, so that the molecules tend to
+   form aggregates.
+
+   Modified lysines and disulphide bridges affect the contributions of
+   those residues to the protein charge. A set number of each residue can
+   be excluded.
 
 References
 
@@ -499,8 +513,8 @@ Known bugs
 See also
 
    Program name     Description
-   backtranambig    Back-translate a protein sequence to ambiguous
-                    nucleotide sequence
+   backtranambig    Back-translate a protein sequence to ambiguous nucleotide
+                    sequence
    backtranseq      Back-translate a protein sequence to a nucleotide sequence
    charge           Draw a protein charge plot
    checktrans       Reports STOP codons and ORF statistics of a protein
@@ -515,11 +529,11 @@ See also
    pepwindow        Draw a hydropathy plot for a protein sequence
    pepwindowall     Draw Kyte-Doolittle hydropathy plot for a protein
                     alignment
-   wordcount        Count and extract unique words in DNA sequence(s)
+   wordcount        Count and extract unique words in molecular sequence(s)
 
 Author(s)
 
-   Alan Bleasby (ajb © ebi.ac.uk)
+   Alan Bleasby (ajb (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

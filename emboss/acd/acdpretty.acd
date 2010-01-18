@@ -2,4 +2,5 @@ application: acdpretty [
   documentation: "Correctly reformat an application ACD file"
   gui: "no"
   groups: "Acd"
+  relations: "EDAM: File reformatting"
 ]

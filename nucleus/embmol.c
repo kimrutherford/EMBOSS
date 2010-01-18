@@ -20,10 +20,10 @@
 #include "ajax.h"
 #include "embprop.h"
 #include "embmol.h"
-#include "stdlib.h"
-#include "limits.h"
-#include "stdio.h"
-#include "math.h"
+#include <stdlib.h>
+#include <limits.h>
+#include <stdio.h>
+#include <math.h>
 
 
 

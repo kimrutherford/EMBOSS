@@ -55,7 +55,7 @@ int main(int argc, char **argv)
 
 
     AjPGraph   graph;
-    AjPGraphPlpData data;
+    AjPGraphdata data;
 
     float *x[6] = {NULL, NULL, NULL, NULL, NULL, NULL};
     float *y[6] = {NULL, NULL, NULL, NULL, NULL, NULL};
@@ -83,8 +83,8 @@ int main(int argc, char **argv)
 
 
 
-    ajGraphInit("wobble", argc, argv);
-    ajGraphSetPage(960, 960);
+    embInit("wobble", argc, argv);
+    ajGraphicsSetPagesize(960, 960);
 
     seq    = ajAcdGetSeq("sequence");
     graph  = ajAcdGetGraphxy("graph");
@@ -117,9 +117,9 @@ int main(int argc, char **argv)
 		      count,beg,ajStrGetPtr(gc),
 		      window);
 
-	data = ajGraphPlpDataNewI(count[i]);
+	data = ajGraphdataNewI(count[i]);
 
-	ajGraphxySetOverLap(graph,ajFalse);
+	ajGraphxySetflagOverlay(graph,ajFalse);
 
 	for(j=0;j<count[i];++j)
 	{
@@ -133,29 +133,29 @@ int main(int argc, char **argv)
 	    data->y[j] = y[i][j];
 	}
 
-	ajGraphArrayMaxMin(data->y,count[i],&ymin,&ymax);
-	ajGraphPlpDataSetMaxima(data,(float)beg,(float)end,ymin,ymax);
+	ajGraphicsCalcRange(data->y,count[i],&ymin,&ymax);
+	ajGraphdataSetTruescale(data,(float)beg,(float)end,ymin,ymax);
 
-	ajGraphPlpDataSetTypeC(data,"2D Plot");
+	ajGraphdataSetTypeC(data,"2D Plot");
 	ajGraphDataAdd(graph,data);
 
-	ajGraphxySetYTick(graph, ajTrue);
+	ajGraphxyShowYtick(graph, ajTrue);
 
-	ajGraphPlpDataSetYTitleC(data,ajStrGetPtr(gc));
-	ajGraphPlpDataSetXTitleC(data,"Sequence");
-	ajGraphPlpDataSetTitleC(data,ftit[i]);
-	ajGraphPlpDataAddLine(data,(float)beg,mean,(float)end,mean,4);
+	ajGraphdataSetYlabelC(data,ajStrGetPtr(gc));
+	ajGraphdataSetXlabelC(data,"Sequence");
+	ajGraphdataSetTitleC(data,ftit[i]);
+	ajGraphdataAddposLine(data,(float)beg,mean,(float)end,mean,4);
     }
     
     
-    ajGraphSetTitleDo(graph, ajTrue);
-    ajGraphxySetMaxMin(graph,(float)beg,(float)end,0.0,100.0);
+    ajGraphShowTitle(graph, ajTrue);
+    ajGraphxySetMinmax(graph,(float)beg,(float)end,0.0,100.0);
     
-    ajGraphxySetYStart(graph,0.0);
-    ajGraphxySetYEnd(graph,100.0);
+    ajGraphxySetYstartF(graph,0.0);
+    ajGraphxySetYendF(graph,100.0);
     ajGraphSetTitleC(graph,"Wobble bases");
     
-    ajGraphSetCharScale((float)0.7);
+    ajGraphicsSetCharscale((float)0.7);
     
     ajGraphxyDisplay(graph,ajTrue);
     

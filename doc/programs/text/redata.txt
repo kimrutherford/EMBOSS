@@ -1,5 +1,4 @@
-
-                                  redata 
+                                   redata
 
 
 
@@ -27,14 +26,18 @@ Usage
    Here is a sample session with redata
 
 
-% redata 
+% redata
 Retrieve information from REBASE restriction enzyme database
 Restriction enzyme name [BamHI]: BamHI
-Output file [outfile.redata]: 
+Output file [outfile.redata]:
+
 
    Go to the output files for this example
 
 Command line arguments
+
+Retrieve information from REBASE restriction enzyme database
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-enzyme]            string     [BamHI] Enter the name of the restriction
@@ -42,7 +45,7 @@ Command line arguments
                                   names often have a 'I' in them - this is a
                                   capital 'i', not a '1' or an 'l'. The names
                                   are case-independent ('AaeI' is the same as
-                                  'aaei') (Any string is accepted)
+                                  'aaei') (Any string)
   [-outfile]           outfile    [*.redata] Output file name
 
    Additional (Optional) qualifiers: (none)
@@ -65,13 +68,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -131,20 +136,20 @@ MRC-Holland (3/01)
 
 References:
 Brooks, J.E., Howard, K.A., US Patent Office, 1994.
-Brooks, J.E., Nathan, P.D., Landry, D., Sznyter, L.A., Waite-Rees, P., Ives, C.
-L., Moran, L.S., Slatko, B.E., Benner, J.S., (1991) Nucleic Acids Res., vol. 19
-, pp. 841-850.
-Hattman, S., Keister, T., Gottehrer, A., (1978) J. Mol. Biol., vol. 124, pp. 70
-1-711.
+Brooks, J.E., Nathan, P.D., Landry, D., Sznyter, L.A., Waite-Rees, P., Ives, C.L
+., Moran, L.S., Slatko, B.E., Benner, J.S., (1991) Nucleic Acids Res., vol. 19,
+pp. 841-850.
+Hattman, S., Keister, T., Gottehrer, A., (1978) J. Mol. Biol., vol. 124, pp. 701
+-711.
 Lee, S.P., Porter, D., Chirikjian, J.G., Knutson, J.R., Han, M.K., (1994) Anal.
- Biochem., vol. 220, pp. 377-383.
-Newman, M., Strzelecka, T., Dorner, L.F., Schildkraut, I., Aggarwal, A.K., (199
-4) Structure, vol. 2, pp. 439-452.
+Biochem., vol. 220, pp. 377-383.
+Newman, M., Strzelecka, T., Dorner, L.F., Schildkraut, I., Aggarwal, A.K., (1994
+) Structure, vol. 2, pp. 439-452.
 Roberts, R.J., Wilson, G.A., Young, F.E., (1977) Nature, vol. 265, pp. 82-84.
-Roy, K.B., Vrushank, D., Jayaram, B., (1994) Anal. Biochem., vol. 220, pp. 160-
-164.
+Roy, K.B., Vrushank, D., Jayaram, B., (1994) Anal. Biochem., vol. 220, pp. 160-1
+64.
 Strzelecka, T., Newman, M., Dorner, L.F., Knott, R., Schildkraut, I., Aggarwal,
- A.K., (1994) J. Mol. Biol., vol. 239, pp. 430-432.
+A.K., (1994) J. Mol. Biol., vol. 239, pp. 430-432.
 Wilson, G.A., Young, F.E., (1975) J. Mol. Biol., vol. 97, pp. 123-125.
 Xu, S.-Y., Fomenkov, A., (1994) Biotechniques, vol. 17, pp. 57.
 
@@ -166,11 +171,12 @@ Data files
 
 % embossdata -fetch -file Exxx.dat
 
+
    Users can provide their own data files in their own directories.
    Project specific files can be put in the current directory, or for
-   tidier directory listings in a subdirectory called ".embossdata".
-   Files for all EMBOSS runs can be put in the user's home directory, or
-   again in a subdirectory called ".embossdata".
+   tidier directory listings in a subdirectory called ".embossdata". Files
+   for all EMBOSS runs can be put in the user's home directory, or again
+   in a subdirectory called ".embossdata".
 
    The directories are searched in the following order:
      * . (your current directory)
@@ -178,8 +184,8 @@ Data files
      * ~/ (your home directory)
      * ~/.embossdata
 
-   The EMBOSS REBASE restriction enzyme data files are stored in
-   directory 'data/REBASE/*' under the EMBOSS installation directory.
+   The EMBOSS REBASE restriction enzyme data files are stored in directory
+   'data/REBASE/*' under the EMBOSS installation directory.
 
    These files must first be set up using the program 'rebaseextract'.
    Running 'rebaseextract' may be the job of your system manager.
@@ -192,25 +198,25 @@ Data files
 
    The column information is described at the top of the data files
 
-   The reported enzyme from any one group of isoschizomers (the
-   prototype) is specified in the REBASE database and the information is
-   held in the data file 'embossre.equ'. You may edit this file to set
-   your own preferred prototype, if you wish.
+   The reported enzyme from any one group of isoschizomers (the prototype)
+   is specified in the REBASE database and the information is held in the
+   data file 'embossre.equ'. You may edit this file to set your own
+   preferred prototype, if you wish.
 
    The format of the file "embossre.equ" is
    Enzyme-name Prototype-name
 
    i.e. two columns of enzyme names separated by a space. The first name
-   of the pair of enzymes is the name that is not preferred and the
-   second is the preferred (prototype) name.
+   of the pair of enzymes is the name that is not preferred and the second
+   is the preferred (prototype) name.
 
 Notes
 
-   The Restriction Enzyme database (REBASE) is a collection of
-   information about restriction enzymes and related proteins. It
-   contains published and unpublished references, recognition and
-   cleavage sites, isoschizomers, commercial availability, methylation
-   sensitivity, crystal and sequence data. DNA methyltransferases, homing
+   The Restriction Enzyme database (REBASE) is a collection of information
+   about restriction enzymes and related proteins. It contains published
+   and unpublished references, recognition and cleavage sites,
+   isoschizomers, commercial availability, methylation sensitivity,
+   crystal and sequence data. DNA methyltransferases, homing
    endonucleases, nicking enzymes, specificity subunits and control
    proteins are also included. More recently, putative DNA
    methyltransferases and restriction enzymes, as predicted from analysis
@@ -246,8 +252,7 @@ See also
    Program name     Description
    recoder          Find restriction sites to remove (mutate) with no translation
                     change
-   remap            Display restriction enzyme binding sites in a nucleotide
-                    sequence
+   remap            Display restriction enzyme binding sites in a nucleotide sequence
    restover         Find restriction enzymes producing a specific overhang
    restrict         Report restriction enzyme cleavage sites in a nucleotide
                     sequence
@@ -257,7 +262,7 @@ See also
 
 Author(s)
 
-   Alan Bleasby (ajb © ebi.ac.uk)
+   Alan Bleasby (ajb (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

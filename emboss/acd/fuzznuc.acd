@@ -4,6 +4,8 @@ application: fuzznuc [
   gui: "yes"
   batch: "yes"
   cpu: "medium"
+  relations: "EDAM: Nucleotide motif searching"
+  relations: "EDAM: Sequence database search by motif or pattern"
 ]
 
 section: input [
@@ -14,6 +16,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "dna"
+    relations: "EDAM: DNA sequence record"                                 
   ]
 
   pattern: pattern [
@@ -43,6 +46,7 @@ section: input [
            For example, [CG](5)TG{A}N(1,5)C"
     type: "nucleotide"
     pmismatch: "0"
+    relations: "EMBOSS sequence pattern"                                   
   ]
 
 endsection: input
@@ -55,6 +59,7 @@ section: advanced [
   boolean: complement [
     default: "N"
     information: "Search complementary strand"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: advanced
@@ -69,6 +74,7 @@ section: output [
     taglist: "str:pat=Pattern_name int:mismatch=Mismatch"
     rformat: "seqtable"
     precision: "0"
+    relations: "EDAM: EMBOSS report"                                       
   ]
 
 endsection: output

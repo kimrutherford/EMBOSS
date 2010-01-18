@@ -1280,10 +1280,10 @@ AjBool embDmxSeqNR(const AjPList input, AjPUint *keep, ajint *nset,
     AJCNEW(compass, maxarr);
     m = ajStrNew();
     n = ajStrNew();
-    gapopen   = ajRoundF(gapopen,8);
-    gapextend = ajRoundF(gapextend,8);
-    sub = ajMatrixfArray(matrix);
-    cvt = ajMatrixfCvt(matrix);
+    gapopen   = ajRoundFloat(gapopen,8);
+    gapextend = ajRoundFloat(gapextend,8);
+    sub = ajMatrixfGetMatrix(matrix);
+    cvt = ajMatrixfGetCvt(matrix);
 
     /* Convert the AjPList to an array of AjPseq */
     if(!(nin=ajListToarray(input,(void ***)&inseqs)))
@@ -1299,7 +1299,7 @@ AjBool embDmxSeqNR(const AjPList input, AjPUint *keep, ajint *nset,
 
 
     /* Create an ajint array to hold lengths of sequences */
-    lens = ajUintNewL(nin);
+    lens = ajUintNewRes(nin);
 
     for(x=0; x<nin; x++)
 	ajUintPut(&lens,x,ajSeqGetLen(inseqs[x]->Seq));
@@ -1564,10 +1564,10 @@ AjBool embDmxSeqNRRange(const AjPList input, AjPUint *keep, ajint *nset,
     AJCNEW(compass, maxarr);
     m = ajStrNew();
     n = ajStrNew();
-    gapopen   = ajRoundF(gapopen,8);
-    gapextend = ajRoundF(gapextend,8);
-    sub = ajMatrixfArray(matrix);
-    cvt = ajMatrixfCvt(matrix);
+    gapopen   = ajRoundFloat(gapopen,8);
+    gapextend = ajRoundFloat(gapextend,8);
+    sub = ajMatrixfGetMatrix(matrix);
+    cvt = ajMatrixfGetCvt(matrix);
 
 
     /* Convert the AjPList to an array of AjPseq */
@@ -1584,7 +1584,7 @@ AjBool embDmxSeqNRRange(const AjPList input, AjPUint *keep, ajint *nset,
 
 
     /* Create an ajint array to hold lengths of sequences */
-    lens = ajUintNewL(nin);
+    lens = ajUintNewRes(nin);
 
     for(x=0; x<nin; x++)
 	ajUintPut(&lens,x,ajSeqGetLen(inseqs[x]->Seq));
@@ -1832,10 +1832,10 @@ AjBool embDmxSeqCompall(const AjPList input, AjPFloat2d *scores,
     AJCNEW(compass, maxarr);
     m = ajStrNew();
     n = ajStrNew();
-    gapopen   = ajRoundF(gapopen,8);
-    gapextend = ajRoundF(gapextend,8);
-    sub = ajMatrixfArray(matrix);
-    cvt = ajMatrixfCvt(matrix);
+    gapopen   = ajRoundFloat(gapopen,8);
+    gapextend = ajRoundFloat(gapextend,8);
+    sub = ajMatrixfGetMatrix(matrix);
+    cvt = ajMatrixfGetCvt(matrix);
 
     /* Convert the AjPList to an array of AjPseq */
     if(!(nin=ajListToarray(input,(void ***)&inseqs)))
@@ -1851,7 +1851,7 @@ AjBool embDmxSeqCompall(const AjPList input, AjPFloat2d *scores,
 
 
     /* Create an ajint array to hold lengths of sequences */
-    lens = ajUintNewL(nin);
+    lens = ajUintNewRes(nin);
 
     for(x=0; x<nin; x++)
 	ajUintPut(&lens,x,ajSeqGetLen(inseqs[x]));

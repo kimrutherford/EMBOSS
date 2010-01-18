@@ -49,7 +49,6 @@
 */
 
 #include "emboss.h"
-#include "embest.h"
 #include <math.h>
 
 

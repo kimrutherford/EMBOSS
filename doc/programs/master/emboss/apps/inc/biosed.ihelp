@@ -1,10 +1,12 @@
+Replace or delete sequence sections
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     (Gapped) sequence(s) filename and optional
                                   format, or reference (input USA)
-   -target             string     [N] Sequence section to match (Any string is
-                                  accepted)
-*  -replace            string     [A] Replacement sequence section (Any string
-                                  is accepted)
+   -targetregion       string     [N] Sequence section to match (Any string)
+*  -replace            string     [A] Replacement sequence section (Any
+                                  string)
   [-outseq]            seqout     [<sequence>.<format>] Sequence filename and
                                   optional format (output USA)
 
@@ -53,11 +55,12 @@
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 

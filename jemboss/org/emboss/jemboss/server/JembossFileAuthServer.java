@@ -76,7 +76,7 @@ public class JembossFileAuthServer
     vans.add(userHomeDir);
 
     vans.add("EMBOSS results");
-    vans.add("/tmp/SOAP/emboss/"+userName);
+    vans.add(jp.getResultsHome()+userName);
  
 //ADD IN OTHER USER ROOT DIRECTORIES HERE
 
@@ -93,8 +93,8 @@ public class JembossFileAuthServer
   * Given a file manager root alias e.g. "HOME" return
   * the directory this represents
   * @param s		root alias (e.g "HOME")
-  * @param userName	username
-  * @param passwd	passwd
+  * @param userName	user name
+  * @param passwd	password
   * @return 		directory path
   *
   */
@@ -118,9 +118,9 @@ public class JembossFileAuthServer
   *
   * Get a directory listing
   * @param option	root alias
-  * @param dirname	direcory name
-  * @param userName     username
-  * @param passwd       passwd
+  * @param dirname	directory name
+  * @param userName     user name
+  * @param passwd       password
   * @return             directory listing
   *
   */
@@ -135,15 +135,13 @@ public class JembossFileAuthServer
 
     int split = options.indexOf("=")+1;
 
-    aj.listFiles(userName,passwd,environ,
-                 getRoot(options.substring(split),userName,passwd)
-                 + "/" + dirname);
+    String directory =
+        getRoot(options.substring(split),userName,passwd) + "/" + dirname;
+
+    aj.listFiles(userName, passwd, environ, directory);
     String listAll = aj.getOutStd();
 
-//  System.out.println("listAll "+listAll+" STDERR "+aj.getErrStd());
-    aj.listDirs(userName,passwd,environ,
-                 getRoot(options.substring(split),userName,passwd)
-                 + "/" + dirname);
+    aj.listDirs(userName, passwd, environ, directory);
     String listDir = aj.getOutStd();
 
     listAll = listAll.concat("\n"+listDir); 

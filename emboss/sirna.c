@@ -461,7 +461,7 @@ static ajint sirna_begin(const AjPSeq seq, AjPReport report, AjBool poliii,
 		  "should be ignored\nwhen ordering siRNA probes.\n");
  
     /* are there any features - find the first CDS feature */
-    if(ajFeattableSize(featab))
+    if(ajFeattableGetSize(featab))
     {
 	iter = ajListIterNewread(featab->Features);
 	while(!ajListIterDone(iter))
@@ -508,7 +508,7 @@ static ajint sirna_begin(const AjPSeq seq, AjPReport report, AjBool poliii,
     } 
 
     ajStrAppendS(&head, head2);
-    ajReportSetHeader(report, head);
+    ajReportSetHeaderS(report, head);
 
     ajDebug("sirna_begin begin=%d\n", begin);
 

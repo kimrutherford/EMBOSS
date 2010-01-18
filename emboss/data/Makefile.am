@@ -23,15 +23,17 @@ pkgdata_DATA = EBLOSUM30 EBLOSUM35 EBLOSUM40 EBLOSUM45 EBLOSUM50 \
                Efeatures.embl Efeatures.emboss \
                Efeatures.gff Efeatures.gff3 \
                Efeatures.gffprotein Efeatures.gff3protein \
-               Efeatures.pir Efeatures.protein Efeatures.swiss \
+               Efeatures.pir Efeatures.protein Efeatures.refseqp \
+               Efeatures.swiss \
                Efreqs.dat Ehet.dat Ehth.dat \
                Ehth87.dat Ememe.dat Emethylsites.dat Emolwt.dat Enakai.dat \
+	       EnsemblAliases.dat EnsemblIdentifiers.dat \
                Epepcoil.dat Epk.dat \
                Epprofile Eprior1.plib Eprior30.plib Erna.melt Eresidues.iub \
                Esig.euk Esig.pro \
                Etags.embl Etags.emboss \
                Etags.gff Etags.gff3 Etags.gffprotein Etags.gff3protein \
-               Etags.pir Etags.protein Etags.swiss \
+               Etags.pir Etags.protein Etags.refseqp Etags.swiss \
                Etcode.dat Evdw.dat Ewhite-wimley.dat \
                embossre.equ Emwfilter.dat Emass.dat Emassmod.dat \
                Matrices.nucleotide Matrices.protein Matrices.proteinstructure \

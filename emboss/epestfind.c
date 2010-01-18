@@ -293,7 +293,7 @@ int main(int argc, char **argv)
     AjBool  dspinv = AJTRUE;		/* display invalid motifs */
     AjBool  dspmap = AJTRUE;		/* display map of motifs */
     AjPGraph graph = NULL;		/* graphics object */
-    AjPGraphPlpData plot = NULL;	      /* sub set of graphics object */
+    AjPGraphdata plot = NULL;	      /* sub set of graphics object */
     
     PestfindPData pstdat = NULL;	/* PEST find data object */
     /*
@@ -345,9 +345,9 @@ int main(int argc, char **argv)
     AjBool mono;
     double dtmp = 0.;
     
-    ajGraphInit("epestfind", argc, argv);
+    embInit("epestfind", argc, argv);
 
-    ajGraphSetPage(960, 960);
+    ajGraphicsSetPagesize(960, 960);
 
     seq    = ajAcdGetSeq("sequence");
     win    = ajAcdGetInt("window");
@@ -705,21 +705,21 @@ int main(int argc, char **argv)
     ajListIterDel(&itrlst);
     
     /* Display graphics. */
-    plot = ajGraphPlpDataNew();
-    ajGraphxySetOverLap(graph, ajFalse);
-    ajGraphPlpDataSetTypeC(plot, "2D Plot");
-    ajGraphPlpDataSetTitleC(plot, "PEST-find");
+    plot = ajGraphdataNew();
+    ajGraphxySetflagOverlay(graph, ajFalse);
+    ajGraphdataSetTypeC(plot, "2D Plot");
+    ajGraphdataSetTitleC(plot, "PEST-find");
     ajFmtPrintS(&map, "Sequence %s from %d to %d", ajSeqGetNameC(seq),
 		begin, end);
-    ajGraphPlpDataSetXTitle(plot, map);
-    ajGraphPlpDataSetYTitleC(plot, "PEST score");
-    ajGraphPlpDataSetMaxMin(plot, (float) 1, (float) seqlen, ymin, ymax);
-    ajGraphPlpDataSetMaxima(plot, (float) 1, (float) seqlen, ymin, ymax);
+    ajGraphdataSetXlabelS(plot, map);
+    ajGraphdataSetYlabelC(plot, "PEST score");
+    ajGraphdataSetMinmax(plot, (float) 1, (float) seqlen, ymin, ymax);
+    ajGraphdataSetTruescale(plot, (float) 1, (float) seqlen, ymin, ymax);
     /* threshold line */
-    ajGraphPlpDataAddLine(plot, (float) 0, (float) trshld, (float) seqlen,
+    ajGraphdataAddposLine(plot, (float) 0, (float) trshld, (float) seqlen,
 			  (float) trshld, AQUAMARINE);
     ajFmtPrintS(&map, "threshold %+.2f", trshld);
-    ajGraphPlpDataAddText(plot, (float) 0 + 2, (float) trshld + 2,
+    ajGraphdataAddposTextC(plot, (float) 0 + 2, (float) trshld + 2,
 			  AQUAMARINE, ajStrGetPtr(map));
     ajListSort(reslst, pestfind_compare_position);
     itrlst = ajListIterNewread(reslst);
@@ -728,35 +728,35 @@ int main(int argc, char **argv)
 	pstdat = (PestfindPData) ajListIterGet(itrlst);
 	if((pstdat->Type) == PSTPOT)
 	{
-	    ajGraphPlpDataAddLine(plot, (float) (pstdat->Begin),
+	    ajGraphdataAddposLine(plot, (float) (pstdat->Begin),
 				  (float) (pstdat->Pscore),
 				  (float) (pstdat->End),
 				  (float) (pstdat->Pscore), GREEN);
 	    ajFmtPrintS(&map, "%+.2f", (pstdat->Pscore));
-	    ajGraphPlpDataAddText(plot, (float) (pstdat->Begin) + 2,
+	    ajGraphdataAddposTextC(plot, (float) (pstdat->Begin) + 2,
 				  (float) (pstdat->Pscore) + 2, GREEN,
 				  ajStrGetPtr(map));
 	}
 
 	if((pstdat->Type) == PSTWEA)
 	{
-	    ajGraphPlpDataAddLine(plot, (float) (pstdat->Begin),
+	    ajGraphdataAddposLine(plot, (float) (pstdat->Begin),
 				  (float) (pstdat->Pscore),
 				  (float) (pstdat->End),
 				  (float) (pstdat->Pscore), RED);
 	    ajFmtPrintS(&map, "%+.2f", (pstdat->Pscore));
-	    ajGraphPlpDataAddText(plot, (float) (pstdat->Begin) + 2,
+	    ajGraphdataAddposTextC(plot, (float) (pstdat->Begin) + 2,
 				  (float) (pstdat->Pscore) + 2, RED,
 				  ajStrGetPtr(map));
 	}
 
 	if((pstdat->Type) == PSTINV)
 	{
-	    ajGraphPlpDataAddLine(plot, (float) (pstdat->Begin),
+	    ajGraphdataAddposLine(plot, (float) (pstdat->Begin),
 				  (float) (pstdat->Pscore),
 				  (float) (pstdat->End),
 				  (float) (pstdat->Pscore), BROWN);
-	    ajGraphPlpDataAddText(plot, (float) (pstdat->Begin) + 2,
+	    ajGraphdataAddposTextC(plot, (float) (pstdat->Begin) + 2,
 				  (float) (pstdat->Pscore) + 2, BROWN,
 				  "inv.");
 	}
@@ -764,10 +764,10 @@ int main(int argc, char **argv)
     ajListIterDel(&itrlst);
 
     ajGraphDataAdd(graph, plot);
-    ajGraphSetCharScale(0.50);
+    ajGraphicsSetCharscale(0.50);
     ajGraphSetTitleC(graph, "PEST-find");
     ajGraphxyDisplay(graph, AJTRUE);
-    ajGraphCloseWin();
+    ajGraphicsClose();
     ajGraphxyDel(&graph);
     
     /* clean-up and destruction */

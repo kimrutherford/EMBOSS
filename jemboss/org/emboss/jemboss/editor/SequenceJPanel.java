@@ -37,7 +37,6 @@ public class SequenceJPanel extends JPanel
                             implements ActionListener
 {
 
-  private Color col;
   /** sequence to display */
   protected Sequence seq;
   /** font size */
@@ -202,7 +201,6 @@ public class SequenceJPanel extends JPanel
   */
   public SequenceJPanel(int interval, int seqLength)
   {
-    seq = null;
     this.drawNumber = true;
     this.interval   = interval;
     this.seqLength  = seqLength+1;
@@ -361,7 +359,7 @@ public class SequenceJPanel extends JPanel
 
     int istart = 0;
     int istop  = seqLength;
-    try
+    if (viewPane != null)
     {
       Rectangle viewRect = ((GraphicSequenceCollection)viewPane).getViewRect();
       istart = viewRect.x/resWidth;
@@ -369,7 +367,6 @@ public class SequenceJPanel extends JPanel
       if(istop > seqLength)
         istop = seqLength;
     }
-    catch( NullPointerException npe) {}
 
 // highlight patterns by making bold
     Vector pvec = null;
@@ -858,6 +855,8 @@ public class SequenceJPanel extends JPanel
   */
   public String getName()
   {
+      if(seq==null)
+          return null;
     return seq.getName();
   }
 

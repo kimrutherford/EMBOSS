@@ -1,6 +1,7 @@
 application: seqmatchall [
   documentation: "All-against-all word comparison of a sequence set"
   groups: "Alignment:Local"
+  relations: "EDAM: Sequence word comparison"
 ]
 
 section: input [
@@ -12,6 +13,7 @@ section: input [
     parameter: "Y"
     type: "any"
     aligned: "N"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: input
@@ -26,6 +28,7 @@ section: required [
     default: "4"
     minimum: "2"
     information: "Word size"
+    relations: "EDAM: Generic integer"                                     
   ]
 
 endsection: required
@@ -40,6 +43,7 @@ section: output [
     aformat: "match"
     minseqs: "2"
     maxseqs: "2"
+    relations: "EDAM: Pairwise sequence alignment data"                    
   ]
 
 endsection: output

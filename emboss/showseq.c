@@ -211,7 +211,7 @@ int main(int argc, char **argv)
     showseq_read_file_of_enzyme_names(&enzymes);
     
     /* check that the translate range is ordered */
-    if(!ajRangeOrdered(translaterange))
+    if(!ajRangeIsOrdered(translaterange))
 	ajWarn("Translation ranges are not in ascending, "
 		"non-overlapping order.");
     
@@ -704,10 +704,14 @@ static AjBool showseq_MatchFeature(const AjPFeature gf, AjPFeature newgf,
 				   const AjPStr tag, const AjPStr value,
 				   AjBool *tagsmatch, AjBool stricttags)
 {
-     /*
-     ** is this a child of a join() ?
-     ** if it is a child, then we use the previous result of MatchPatternTags
-     */
+    AjPStrTok tokens = NULL;
+    AjPStr key = NULL;
+    AjBool val = ajFalse;
+
+    /*
+    ** is this a child of a join() ?
+    ** if it is a child, then we use the previous result of MatchPatternTags
+    */
     if(!ajFeatIsMultiple(gf) || !ajFeatIsChild(gf))
 	*tagsmatch = showseq_MatchPatternTags(gf, newgf, tag, value,
 					      stricttags);
@@ -722,8 +726,7 @@ static AjBool showseq_MatchFeature(const AjPFeature gf, AjPFeature newgf,
      **      for sense, 0
      **      for score, maxscore <= minscore
      */
-    if(!embMiscMatchPattern(ajFeatGetSource(gf), source) ||
-       !embMiscMatchPattern(ajFeatGetType(gf), type) ||
+    if(!embMiscMatchPatternDelimC(ajFeatGetSource(gf), source,",;|") ||
        (ajFeatGetStrand(gf) == '+' && sense == -1) ||
        (ajFeatGetStrand(gf) == '-' && sense == +1) ||
        (testscore && ajFeatGetScore(gf) < minscore) ||
@@ -731,6 +734,26 @@ static AjBool showseq_MatchFeature(const AjPFeature gf, AjPFeature newgf,
        !*tagsmatch)
 	return ajFalse;
 
+    if(ajStrGetLen(type))
+    {
+        val = ajFalse;
+        tokens = ajStrTokenNewC(type, " \t\n\r,;|");
+
+        while (ajStrTokenNextParse( &tokens, &key))
+        {
+            if (ajFeatTypeMatchWildS(gf, key))
+            {
+                val = ajTrue;
+                break;
+            }
+        }
+
+        ajStrTokenDel( &tokens);
+        ajStrDel(&key);
+        if(!val)
+            return ajFalse;
+    }
+            
     return ajTrue;
 }
 
@@ -781,7 +804,7 @@ static AjBool showseq_MatchPatternTags(const AjPFeature gf,
     titer = ajFeatTagIter(gf);
     while(ajFeatTagval(titer, &tagnam, &tagval))
     {
-        tval = embMiscMatchPattern(tagnam, tpattern);
+        tval = embMiscMatchPatternDelimC(tagnam, tpattern,",;|");
         /*
         ** If tag has no value then
         **   If vpattern is '*' the value pattern is a match
@@ -802,7 +825,7 @@ static AjBool showseq_MatchPatternTags(const AjPFeature gf,
 	    ** of the whole of vpattern without spitting it up into words.
             */
             vval = (ajStrMatchS(tagval, vpattern) ||
-		    embMiscMatchPattern(tagval, vpattern));
+		    embMiscMatchPatternDelimC(tagval, vpattern,",;|"));
 
 
         if(tval && vval)

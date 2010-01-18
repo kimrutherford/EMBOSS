@@ -1,6 +1,8 @@
 application: helixturnhelix [
   documentation: "Identify nucleic acid-binding motifs in protein sequences"
   groups: "Protein:2D Structure, Protein:Motifs"
+  relations: "EDAM: Protein super-secondary structure prediction"
+  relations: "EDAM: Protein-nucleic acid binding prediction"
 ]
 
 section: input [
@@ -11,6 +13,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "PureProtein"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: input
@@ -26,6 +29,7 @@ section: additional [
     maximum: "10000."
     default: "238.71"
     information: "Mean value"
+    relations: "EDAM: Generic float"                                       
   ]
 
   float: sd [
@@ -34,6 +38,7 @@ section: additional [
     maximum: "10000."
     default: "293.61"
     information: "Standard Deviation value"
+    relations: "EDAM: Generic float"                                       
   ]
 
   float: minsd [
@@ -42,11 +47,13 @@ section: additional [
     maximum: "100."
     default: "2.5"
     information: "Minimum SD"
+    relations: "EDAM: Generic float"                                       
   ]
 
   boolean: eightyseven [
     additional: "Y"
     information: "Use the old (1987) weight data"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: additional
@@ -62,6 +69,7 @@ section: output [
     rextension: "hth"
     taglist: "int:pos=Maximum_score_at
               float:sd=Standard_deviations"
+    relations: "EDAM: EMBOSS report"                                       
   ]
 
 endsection: output

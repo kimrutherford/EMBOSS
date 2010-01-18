@@ -1,5 +1,4 @@
-
-                              helixturnhelix 
+                               helixturnhelix
 
 
 
@@ -26,15 +25,19 @@ Usage
    Here is a sample session with helixturnhelix
 
 
-% helixturnhelix 
+% helixturnhelix
 Identify nucleic acid-binding motifs in protein sequences
 Input protein sequence(s): tsw:laci_ecoli
-Output report [laci_ecoli.hth]: 
+Output report [laci_ecoli.hth]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Identify nucleic acid-binding motifs in protein sequences
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -90,13 +93,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -236,7 +241,7 @@ Output file format
 
 ########################################
 # Program: helixturnhelix
-# Rundate: Tue 15 Jul 2008 12:00:00
+# Rundate: Fri 15 Jan 2010 12:00:00
 # Commandline: helixturnhelix
 #    -sequence tsw:laci_ecoli
 # Report_format: motif
@@ -288,11 +293,12 @@ Data files
 
 % embossdata -fetch -file Exxx.dat
 
+
    Users can provide their own data files in their own directories.
    Project specific files can be put in the current directory, or for
-   tidier directory listings in a subdirectory called ".embossdata".
-   Files for all EMBOSS runs can be put in the user's home directory, or
-   again in a subdirectory called ".embossdata".
+   tidier directory listings in a subdirectory called ".embossdata". Files
+   for all EMBOSS runs can be put in the user's home directory, or again
+   in a subdirectory called ".embossdata".
 
    The directories are searched in the following order:
      * . (your current directory)
@@ -310,8 +316,8 @@ Data files
    default data (Ehth.dat) has a motif length of 22 residues.
 
    With care these can be replaced to suit your data sets. If the files
-   are placed in the following directories they will be used in
-   preference to the files in the EMBOSS distribution data directory:
+   are placed in the following directories they will be used in preference
+   to the files in the EMBOSS distribution data directory:
      * . (your current directory)
      * .embossdata
      * ~/ (your home directory)
@@ -347,24 +353,25 @@ Sample: 91 aligned sequences
   W  2  0  0  0  0  0  0  0  0  1  0  1  0  0  0  0  0  0  2 21  0  0    27 105
   Y  2  0  4  3  0  1  0  0  2  4  0  1  1  2  0  2  0 15  5  7  0  0    49 267
 
+
 Notes
 
-   The helix-turn-helix protein structural motif was originally
-   identified as the DNA-binding domain of phage repressors. One
-   alpha-helix lies in the wide groove of DNA; the other lies at an angle
-   across DNA. The motif is commonly involved in binding DNA. The motif
-   is of fundamental biological importance and is found in most proteins
-   that regulate gene expression. It is formed by of two alpha-helices
-   joined by a short turn.
+   The helix-turn-helix protein structural motif was originally identified
+   as the DNA-binding domain of phage repressors. One alpha-helix lies in
+   the wide groove of DNA; the other lies at an angle across DNA. The
+   motif is commonly involved in binding DNA. The motif is of fundamental
+   biological importance and is found in most proteins that regulate gene
+   expression. It is formed by of two alpha-helices joined by a short
+   turn.
 
 References
 
-    1. Dodd I.B., Egan J.B. (1987) "Systematic method for the detection
-       of potential lambda cro-like DNA-binding regions in proteins." J.
-       Mol. Biol. 194: 557-564.
-    2. Dodd I.B., Egan J.B. (1990) "Improved detection of
-       helix-turn-helix DNA-binding motifs in protein sequences." Nucleic
-       Acids Res. 18: 5019-5026.
+    1. Dodd I.B., Egan J.B. (1987) "Systematic method for the detection of
+       potential lambda cro-like DNA-binding regions in proteins." J. Mol.
+       Biol. 194: 557-564.
+    2. Dodd I.B., Egan J.B. (1990) "Improved detection of helix-turn-helix
+       DNA-binding motifs in protein sequences." Nucleic Acids Res. 18:
+       5019-5026.
 
 Warnings
 
@@ -408,12 +415,12 @@ See also
 
 Author(s)
 
-   Alan Bleasby (ajb © ebi.ac.uk)
+   Alan Bleasby (ajb (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 
    Original program "HELIXTURNHELIX" (EGCG 1990) by Peter Rice
-   (pmr © ebi.ac.uk)
+   (pmr (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

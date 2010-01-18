@@ -72,7 +72,7 @@ int main(int argc, char **argv)
     regexp =embPatPrositeToRegExp(motif);
 
     ajFmtPrintAppS(&tmpstr, "Motif: %S\n", motif);
-    ajReportSetHeader(report, tmpstr);
+    ajReportSetHeaderS(report, tmpstr);
 
     while(ajSeqallNext(seqall, &seq))
     {

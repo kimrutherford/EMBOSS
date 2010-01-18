@@ -34,6 +34,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 
 import org.emboss.jemboss.soap.PrivateRequest;
+import org.emboss.jemboss.gui.LaunchJalView;
 import org.emboss.jemboss.gui.ShowResultSet;
 import org.emboss.jemboss.JembossParams;
 
@@ -110,6 +111,9 @@ public class DragTree extends JTree implements DragGestureListener,
     openMenu = new JMenu("Open With");
     popup.add(openMenu);
     menuItem = new JMenuItem("Jemboss Alignment Editor");
+    menuItem.addActionListener(this);
+    openMenu.add(menuItem);
+    menuItem = new JMenuItem("JalviewLite");
     menuItem.addActionListener(this);
     openMenu.add(menuItem);
     menuItem = new JMenuItem("Text Editor");
@@ -209,6 +213,14 @@ public class DragTree extends JTree implements DragGestureListener,
       org.emboss.jemboss.editor.AlignJFrame ajFrame =
                new org.emboss.jemboss.editor.AlignJFrame(f);
       ajFrame.setVisible(true);
+    }
+    else if(source.getText().equals("JalviewLite"))
+    {
+        try {
+            LaunchJalView.callJalview(f.getAbsolutePath(), f.getName());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
     else if(source.getText().equals("Text Editor"))
       showFilePane(f.getAbsolutePath(), mysettings);
@@ -481,7 +493,7 @@ public class DragTree extends JTree implements DragGestureListener,
   *
   * Adding a file (or directory) to the file tree manager.
   * This looks to see if the directory has already been opened
-  * and updates the filetree if it has.
+  * and updates the file tree if it has.
   * @param child        new child to add in
   * @param path         path to where child is to be added
   * @param node         node to add child to

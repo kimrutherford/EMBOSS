@@ -81,7 +81,7 @@ int main(int argc, char **argv)
     float y;
 
 
-    ajGraphInit("pepnet", argc, argv);
+    embInit("pepnet", argc, argv);
 
 
     seq         = ajAcdGetSeq("sequence");
@@ -118,20 +118,18 @@ int main(int argc, char **argv)
     ajStrFmtUpper(&strand);
     ajStrAssignSubC(&substr,ajStrGetPtr(strand),begin-1,end-1);
 
-    ajGraphSetTitlePlus(graph, ajSeqGetUsaS(seq));
-
-    ajGraphSetBackWhite();
+    ajGraphAppendTitleS(graph, ajSeqGetUsaS(seq));
 
     ajGraphOpenWin(graph, xmin,xmax,ymin,ymax);
 
     for(count=begin-1,r=0;count<end;count+=231)
     {
 	if (count > begin)
-	    ajGraphNewPage(graph, ajFalse);
+	    ajGraphNewpage(graph, ajFalse);
 	pstart=count;
 	pstop = AJMIN(end-1, count+230);
 
-	ajGraphSetCharScale(0.75);
+	ajGraphicsSetCharscale(0.75);
 
 	xstart = 145.0;
 	ystart =  80.0;
@@ -153,8 +151,8 @@ int main(int argc, char **argv)
 
 	    ajFmtPrintS(&txt,"%d",i+1);
 
-	    ajGraphSetFore(RED);
-	    ajGraphText(x-xinc,y-yinc-1,ajStrGetPtr(txt),0.5);
+	    ajGraphicsSetFgcolour(RED);
+	    ajGraphicsDrawposTextJustify(x-xinc,y-yinc-1,ajStrGetPtr(txt),0.5);
 
 	    for(j=0;j<4;++j)
 	    {
@@ -183,7 +181,7 @@ int main(int argc, char **argv)
 	}
     }
 
-    ajGraphCloseWin();
+    ajGraphicsClose();
     ajGraphxyDel(&graph);
 
     ajStrDel(&strand);
@@ -231,8 +229,8 @@ static void pepnet_drawocta(float x, float y, float size)
     ajint i;
 
     for(i=0;i<8;++i)
-	ajGraphLine(x+polyx[i]*size,y+polyy[i]*size,x+polyx[i+1]*size,
-			y+polyy[i+1]*size);
+	ajGraphicsDrawposLine(x+polyx[i]*size,y+polyy[i]*size,x+polyx[i+1]*size,
+                              y+polyy[i+1]*size);
 
     return;
 }
@@ -262,28 +260,28 @@ static void pepnet_plotresidue(char c, float x, float y, const char *squares,
     *cs=c;
 
 
-    ajGraphSetFore(GREEN);
+    ajGraphicsSetFgcolour(GREEN);
 
     if(strstr(squares,cs))
     {
-	ajGraphSetFore(BLUE);
-	ajGraphBox(x-(float)1.5,y-(float)1.32,(float)3.0);
+	ajGraphicsSetFgcolour(BLUE);
+	ajGraphicsDrawposBox(x-(float)1.5,y-(float)1.32,(float)3.0);
     }
 
     if(strstr(octags,cs))
     {
-	ajGraphSetFore(BLUEVIOLET);
+	ajGraphicsSetFgcolour(BLUEVIOLET);
 	pepnet_drawocta(x,y+(float)0.225,(float)20.0);
     }
 
     if(strstr(diamonds,cs))
     {
-	ajGraphSetFore(RED);
-	ajGraphDia(x-(float)2.5,y-(float)2.25,(float)5.0);
+	ajGraphicsSetFgcolour(RED);
+	ajGraphicsDrawposDia(x-(float)2.5,y-(float)2.25,(float)5.0);
     }
 
-    ajGraphText(x,y,cs,0.5);
-    ajGraphSetFore(GREEN);
+    ajGraphicsDrawposTextJustify(x,y,cs,0.5);
+    ajGraphicsSetFgcolour(GREEN);
 
     return;
 }

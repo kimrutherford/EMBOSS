@@ -1,0 +1,231 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: needleall
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+needleall
+<!--#include file="header2.inc" -->
+<H2>
+    Function
+</H2>
+<!--#include file="inc/needleall.ione" -->
+
+
+<H2>
+    Description
+</H2>
+
+
+<p><b>needleall</b> reads a set of input sequences and compares them all to one or more sequences,  writing their optimal global sequence alignments to file. It uses the Needleman-Wunsch alignment algorithm to find the optimum alignment (including gaps) of two sequences along their entire length. The algorithm uses a dynamic programming method to ensure the alignment is optimum, by exploring all possible alignments and choosing the best. A scoring matrix is read that contains values for every possible residue or nucleotide match. Needleall finds the alignment with the maximum possible score where the score of an alignment is equal to the sum of the matches taken from the scoring matrix, minus penalties arising from opening and extending gaps in the aligned sequences.  The substitution matrix and gap opening and extension penalties are user-specified.</p>
+
+
+<H3>
+    Algorithm
+</H3>
+
+
+<p>The Needleman-Wunsch algorithm is a member of the class of algorithms that can calculate the best score and alignment of two sequences in the order of <tt>mn</tt> steps, where <tt>n</tt> and <tt>m</tt> are the sequence lengths.  These dynamic programming algorithms were first developed for protein sequence comparison by Needleman and Wunsch, though similar methods were independently devised during the late 1960's and early 1970's for use in the fields of speech processing and computer science.</p>
+
+<p>An important problem is the treatment of gaps, i.e., spaces inserted to optimise the alignment score. A penalty is subtracted from the score for each gap opened (the 'gap open' penalty) and a penalty is subtracted from the score for the total number of gap spaces multiplied by a cost (the 'gap extension' penalty). Typically, the cost of extending a gap is set to be 5-10 times lower than the cost for opening a gap.</p>
+
+<p>Penalty for a gap of <tt>n</tt> positions is calculated using the following formula:
+
+<pre>gap opening penalty + (n - 1) * gap extension penalty
+</pre>
+
+</p>
+
+<p>In a Needleman-Wunsch global alignment, the entire length of each sequence is aligned. The sequences might be partially overlapping or one sequence might be aligned entirely internally to the other.  There is no penalty for the hanging ends of the overlap. In bioinformatics, it is usually reasonable to assume that the sequences are incomplete and there should be no penalty for failing to align the missing bases.</p>
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/needleall.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/needleall.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+
+<!--#include file="inc/needleall.itable" -->
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>needleall</b> reads any 2 sequence USAs of the same type (DNA or protein).
+
+<p>
+
+<!--#include file="inc/needleall.input" -->
+
+<H2>
+    Output file format
+</H2>
+
+<!--#include file="inc/alignformats.ihtml" -->
+
+<p>
+
+
+<!--#include file="inc/needleall.output" -->
+
+<p>
+
+The <b>Identity:</b> is the percentage of identical matches between the two
+sequences over the reported aligned region (including any gaps in the length).
+
+<p>
+
+The <b>Similarity:</b> is the percentage of matches between the two
+sequences over the reported aligned region (including any gaps in the length).
+     
+
+
+<H2>
+    Data files
+</H2>
+
+
+For protein sequences EBLOSUM62 is used for the substitution
+matrix. For nucleotide sequence, EDNAFULL is used. Others can be
+specified.
+
+<p>
+<!--#include file="inc/localfiles.ihtml" -->
+
+<H2>
+    Notes
+</H2>
+
+<b>needleall</b> is a true implementation of the Needleman-Wunsch
+algorithm and so produces a full path matrix. It therefore cannot be
+used with genome sized sequences unless you've a lot of memory and a
+lot of time.
+
+<H2>
+    References
+</H2>
+
+
+<ol>
+
+<li>
+Needleman, S.  B.  and Wunsch, C.  D.  (1970) J.  Mol.  Biol.  48,
+443-453. 
+
+<li>
+Kruskal, J.  B.  (1983) An overview of squence comparison In D.  Sankoff
+and J.  B.  Kruskal, (ed.), Time warps, string edits and macromolecules:
+the theory and practice of sequence comparison, pp.  1-44 Addison
+Wesley. 
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+
+<b>needleall</b> is for aligning pairs of sequences over their entire length.  This
+works best with closely related sequences.  If you use needleall to align
+very distantly-related sequences, it will produce a result but much of
+the alignment may have little or no biological significance. 
+
+<p>
+
+A true Needleman Wunsch implementation like <b>needleall</b> needs memory
+proportional to the product of the sequence lengths.  For two sequences
+of length 10,000,000 and 1,000 it therefore needs memory proportional to
+10,000,000,000 characters.  Two arrays of this size are produced, one of
+ints and one of floats so multiply that figure by 8 to get the memory
+usage in bytes.  That doesn't include other overheads.  Therefore only
+use water and needle for accurate alignment of reasonably short
+sequences.
+
+<p>
+The first input sequence USA is loaded completely into memory. When
+comparing large numbers (or lengths) of sequences, the smallest set
+should be the first input to make the most efficient use of memory.
+<p>
+
+If you run out of memory, try using 
+<b>stretcher</b> instead.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<pre>
+Uncaught exception
+ Assertion failed
+ raised at ajmem.c:xxx
+</pre>
+
+<p>
+
+Probably means you have run out of memory. Try using 
+<b>stretcher</b> if this happens. 
+
+<H2>
+    Exit status
+</H2>
+
+  0 upon successful completion.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/needleall.isee" -->
+
+<P>
+When you want an alignment that covers the whole length of two
+sequences, use <a href="needle.html">needle. </A> 
+
+<p>
+When you are trying to find the best region of similarity between two
+sequences, use <a href="water.html">water.</a>
+<p>
+
+<a href="stretcher.html">stretcher</a> is a more suitable program to use to
+find global alignments of very long sequences.
+
+
+<H2>
+    Author(s)
+</H2>
+<!--#include file="inc/uludag.address" -->
+
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/needleall.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/needleall.comment" -->
+
+</BODY>
+</HTML>
+

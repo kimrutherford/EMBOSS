@@ -1,4 +1,4 @@
-/* $Id: tek.c,v 1.4 2007/05/08 09:09:37 rice Exp $
+/* $Id: tek.c,v 1.5 2009/12/01 14:49:51 rice Exp $
 
 	PLplot tektronix device & emulators driver.
 */
@@ -105,11 +105,12 @@ static enum { RESET, CBREAK } ttystate = RESET;
 static void tty_setup	(void);
 static int  tty_cbreak	(void);
 static int  tty_reset	(void);
+static void tty_atexit	(void);
 #else
 static void tty_setup	(void) {}
 static int  tty_cbreak	(void) {return 0;}
 static int  tty_reset	(void) {return 0;}
-/* static void tty_atexit	(void) {} */ /* pmr:unused */
+static void tty_atexit	(void) {}
 #endif
 
 /* Pixel settings */
@@ -1233,11 +1234,13 @@ tty_reset(void)				/* restore terminal's mode */
     return 0;
 }
 
+#ifdef STDC_HEADERS
 static void
 tty_atexit(void)			/* exit handler */
 {
     tty_reset();
 }
+#endif			/* STDC_HEADERS */
 
 #endif			/* HAVE_TERMIOS_H */
 

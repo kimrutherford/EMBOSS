@@ -1,6 +1,7 @@
 application: cutseq [
   documentation: "Removes a section from a sequence"
   groups: "Edit"
+  relations: "EDAM: Sequence cutting"
 ]
 
 section: input [
@@ -11,6 +12,7 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "gapany"
+    relations: "EDAM: Sequence"                                            
   ]
 
 endsection: input
@@ -29,6 +31,7 @@ section: required [
     help: "This is the start position (inclusive) of the section of
            the sequence that you wish to remove."
     expected: "Start of sequence (0)"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: to [
@@ -40,6 +43,7 @@ section: required [
     help: "This is the end position (inclusive) of the section of the
            sequence that you wish to remove."
     expected: "End of sequence (0)"
+    relations: "EDAM: Generic integer"                                     
   ]
 
 endsection: required
@@ -51,6 +55,7 @@ section: output [
 
   seqout: outseq [
     parameter: "Y"
+    relations: "EDAM: Sequence"                                            
   ]
 
 endsection: output

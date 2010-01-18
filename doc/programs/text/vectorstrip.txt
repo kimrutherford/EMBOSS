@@ -1,5 +1,4 @@
-
-                                vectorstrip 
+                                 vectorstrip
 
 
 
@@ -18,33 +17,37 @@ Description
 
    vectorstrip reads one or more nucleotide sequences and writes them out
    again but with any of a specified set of vector sequences removed from
-   the 5' and 3' termini. An output file with a summary of the results if
+   the 5' and 3' termini. An output file with a summary of the results is
    also written. The vector sequences to strip out are (typically)
    provided in an input file. The pair of 5' and 3' vector sequences are
-   searched against each input sequence allowing a specified maximum
-   level of mismatches. Each 5' hit is paired with each 3' hit and the
-   resulting subsequences output. By default only the best match between
-   the vector patterns and each sequence are reported. Optionally, all
-   matches up to the specified maximum mismatch level are reported.
+   searched against each input sequence allowing a specified maximum level
+   of mismatches. Each 5' hit is paired with each 3' hit and the resulting
+   subsequences output. By default only the best match between the vector
+   patterns and each sequence are reported. Optionally, all matches up to
+   the specified maximum mismatch level are reported.
 
 Usage
 
    Here is a sample session with vectorstrip
 
 
-% vectorstrip @vecseqs.list 
+% vectorstrip @vecseqs.list
 Removes vectors from the ends of nucleotide sequence(s)
-Are your vector sequences in a file? [Y]: 
+Are your vector sequences in a file? [Y]:
 Cloning vector definition file (optional): vectors
-Max allowed % mismatch [10]: 
-Show only the best hits (minimise mismatches)? [Y]: 
+Max allowed % mismatch [10]:
+Show only the best hits (minimise mismatches)? [Y]:
 Output file [pbluescript.vectorstrip]: vector.strip
 output sequence(s) [pbluescript.fasta]: vector.fasta
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Removes vectors from the ends of nucleotide sequence(s)
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -55,8 +58,8 @@ Command line arguments
                                   value)
    -[no]besthits       boolean    [Y] Show only the best hits (minimise
                                   mismatches)?
-*  -alinker            string     The 5' sequence (Any string is accepted)
-*  -blinker            string     The 3' sequence (Any string is accepted)
+*  -alinker            string     The 5' sequence (Any string)
+*  -blinker            string     The 3' sequence (Any string)
   [-outfile]           outfile    [*.vectorstrip] Output file name
   [-outseq]            seqoutall  [.] Sequence set(s)
                                   filename and optional format (output USA)
@@ -106,13 +109,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -139,8 +144,8 @@ pLITMUS GATATCCTGCAGGAATTCC     TCGAGACCGTACGTGCG
    the vector sequence in upper case so the sequence trimming can be
    readily seen.
 
-   Each line of the vector file should contain the name of the vector,
-   the 5' pattern and the 3' pattern.
+   Each line of the vector file should contain the name of the vector, the
+   5' pattern and the 3' pattern.
    Lines beginning with # are treated as comments and ignored.
    If only one vector sequence is given in the it will be assumed that
    this is the 5' pattern.
@@ -270,21 +275,20 @@ Notes
    sequence is paired with each of the hits of the 3' sequence and the
    resulting subsequences are output. For example, if the 5' sequence
    matches the sequence from (a) position 30-60, and(b)position 70-100,
-   and the 3' sequence matches from 150-175, then two subsequences will
-   be output: from 61-149, and from 101-149. The lower the quality of the
+   and the 3' sequence matches from 150-175, then two subsequences will be
+   output: from 61-149, and from 101-149. The lower the quality of the
    sequence, the more likely multiple hits become if nonzero mismatches
    are accepted.
 
-   Default behaviour is to report only the best matches between the
-   vector patterns and the sequence. This means that if you specify a
-   maximum mismatch level of 10%, but the vector patterns match the
-   sequence with zero mismatches, the search will stop and the program
-   will output only these "best" matches. If there are no perfect
-   matches, the program will try searching again allowing 1 mismatch,
-   then 2, and so on until either the patterns match the sequence or the
-   maximum specified mismatch level is exceeded. You can tell vectorstrip
-   to show all possible matches up to your specified maximum level, as
-   illustrated in the examples below.
+   Default behaviour is to report only the best matches between the vector
+   patterns and the sequence. This means that if you specify a maximum
+   mismatch level of 10%, but the vector patterns match the sequence with
+   zero mismatches, the search will stop and the program will output only
+   these "best" matches. If there are no perfect matches, the program will
+   try searching again allowing 1 mismatch, then 2, and so on until either
+   the patterns match the sequence or the maximum specified mismatch level
+   is exceeded. You can tell vectorstrip to show all possible matches up
+   to your specified maximum level, as illustrated in the examples below.
 
 References
 
@@ -302,14 +306,13 @@ No suitable vectors found - exiting
        usually this is as a result of an empty vectorfile.
     2.
 Illegal pattern
-       indicates that one of the vector patterns could not be compiled
-       and therefore cannot be searched.
+       indicates that one of the vector patterns could not be compiled and
+       therefore cannot be searched.
     3.
 5' and 3' sequence matches are identical; inconclusive
        indicates that the 5' and 3' patterns provided were identical, and
        that they only match the sequence once. Thus the program cannot
-       determine which part of the sequence is vector and which is
-       insert.
+       determine which part of the sequence is vector and which is insert.
 
 Exit status
 

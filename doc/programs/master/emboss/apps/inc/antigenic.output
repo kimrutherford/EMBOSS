@@ -6,7 +6,7 @@
 <pre>
 ########################################
 # Program: antigenic
-# Rundate: Tue 15 Jul 2008 12:00:00
+# Rundate: Fri 15 Jan 2010 12:00:00
 # Commandline: antigenic
 #    -sequence tsw:actb1_fugru
 # Report_format: motif
@@ -119,9 +119,9 @@ Max_score_pos at "*"
 <pre>
 ##gff-version 3
 ##sequence-region ACTB1_FUGRU 1 375
-#!Date 2008-07-15
+#!Date 2010-01-15
 #!Type Protein
-#!Source-version EMBOSS 6.1.0
+#!Source-version EMBOSS 6.2.0
 ACTB1_FUGRU	antigenic	epitope	214	222	1.207	+	.	ID="ACTB1_FUGRU.1";note="*pos 218"
 ACTB1_FUGRU	antigenic	epitope	131	145	1.187	+	.	ID="ACTB1_FUGRU.2";note="*pos 137"
 ACTB1_FUGRU	antigenic	epitope	5	12	1.166	+	.	ID="ACTB1_FUGRU.3";note="*pos 8"

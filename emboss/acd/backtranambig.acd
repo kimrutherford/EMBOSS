@@ -2,6 +2,7 @@ application: backtranambig [
   documentation: "Back-translate a protein sequence to ambiguous
                   nucleotide sequence"
   groups: "Nucleic:Translation, Protein:Composition"
+  relations: "EDAM: DNA back-translation"
 ]
 
 section: input [
@@ -12,6 +13,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "gapstopprotein"
+    relations: "EDAM: Protein sequence record"                             
   ]
 
 endsection: input
@@ -40,6 +42,7 @@ section: additional [
     delimiter: ";"
     codedelimiter: ":"
     information: "Genetic code to use"
+    relations: "EDAM: Generic string array"                                
   ]
 
 endsection: additional
@@ -52,6 +55,7 @@ section: output [
   seqoutall: outfile [
     parameter: "Y"
     type: "gapnucleotide"
+    relations: "EDAM: Nucleotide sequence record"                          
   ]
 
 endsection: output

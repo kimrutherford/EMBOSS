@@ -134,17 +134,17 @@ fi
 # Create Jemboss jar file
 
 cd $CWPWD
-jar cf Jemboss.jar images/* org/emboss/jemboss/*class resources/*.jar \
+
+jar cf Jemboss.jar images/* resources/*.jar \
         resources/version resources/jemboss.properties \
         resources/*html 
-jar uf Jemboss.jar org/emboss/jemboss/*/*class 
-jar uf Jemboss.jar org/emboss/jemboss/*/*/*class 
 
 mv Jemboss.jar jnlp
 cp lib/*jar jnlp
 cp lib/axis/*jar jnlp
 cp images/Jemboss_logo_large.gif jnlp
 cp utils/template.html jnlp/index.html
+cp utils/jws-launch-button.png jnlp/jws-launch-button.png
 cd jnlp
 rm mail.jar activation.jar servlet.jar log4j-1.2.8.jar axis-ant.jar
 
@@ -214,34 +214,39 @@ echo '<?xml version="1.0" encoding="UTF-8"?>'            > $JNLP
 echo '<jnlp'                                            >> $JNLP
 echo '        spec="1.0+"'                              >> $JNLP
 echo '        codebase="http://EDIT"'                   >> $JNLP
-echo '        href="'$JNLP'">'                          >> $JNLP 
-echo '         <information>'                           >> $JNLP  
-echo '           <title>Jemboss</title>'                >> $JNLP  
-echo '           <vendor>HGMP-RC</vendor> '             >> $JNLP  
+echo '        href="'$JNLP'">'                          >> $JNLP
+echo '         <information>'                           >> $JNLP
+echo '           <title>Jemboss</title>'                >> $JNLP
+echo '           <vendor>HGMP-RC</vendor> '             >> $JNLP
 echo '           <homepage href="http://emboss.sourceforge.net/Jemboss/"/>' \
                                                         >> $JNLP  
 echo '           <description>Jemboss</description>'    >> $JNLP  
 echo '           <description kind="short">A Java user interface to EMBOSS.' \
-                                                        >> $JNLP  
-echo '           </description>'                        >> $JNLP 
-echo '           <icon href="Jemboss_logo_large.gif"/>' >> $JNLP 
-echo '           <offline-allowed/>'                    >> $JNLP 
-echo '         </information>'                          >> $JNLP 
-echo '         <security>'                              >> $JNLP 
-echo '           <all-permissions/>'                    >> $JNLP 
-echo '         </security>'                             >> $JNLP 
-echo '         <resources>'                             >> $JNLP 
-echo '           <j2se version="1.3+"/>'                >> $JNLP 
+                                                        >> $JNLP
+echo '           </description>'                        >> $JNLP
+echo '           <icon href="Jemboss_logo_large.gif"/>' >> $JNLP
+echo '             <shortcut online="true">'            >> $JNLP
+echo '               <desktop/>'                        >> $JNLP
+echo '               <menu submenu="Jemboss"/>'         >> $JNLP
+echo '             </shortcut>'                         >> $JNLP
+echo '           <offline-allowed/>'                    >> $JNLP
+echo '         </information>'                          >> $JNLP
+echo '         <security>'                              >> $JNLP
+echo '           <all-permissions/>'                    >> $JNLP
+echo '         </security>'                             >> $JNLP
+echo '         <resources>'                             >> $JNLP
+echo '           <j2se version="1.3+"/>'                >> $JNLP
 
 echo '             <jar href="'sjaxrpc.jar'"/>'                 >> $JNLP
 echo '             <jar href="'saxis.jar'"/>'                   >> $JNLP
 echo '             <jar href="'scommons-logging.jar'"/>'        >> $JNLP
 echo '             <jar href="'scommons-discovery.jar'"/>'      >> $JNLP
-echo '             <jar href="'sJemboss.jar'"  main="'true'"/>' >> $JNLP
+echo '             <jar href="'sJemboss.jar'"/>'                >> $JNLP
+echo '             <jar href="'sjemboss.jar'"  main="'true'"/>' >> $JNLP
 for i in s*.jar; do
   if (test $i != "sJemboss.jar") && (test $i != "sjaxrpc.jar") && (test $i != "saxis.jar");then
     if (test $i != "scommons-logging.jar") && (test $i != "scommons-discovery.jar");then
-      if (test $i != "saaj.jar");then
+      if (test $i != "saaj.jar") && (test $i != "sjemboss.jar");then
         echo '             <jar href="'$i'"/>'          >> $JNLP
       fi
     fi
@@ -262,8 +267,7 @@ echo "*** The signed jar files, index.html and $JNLP have been"
 echo "*** created in the directory $CWPWD/jnlp."
 echo "*** "
 echo "*** Please edit the 'codebase' line in $JNLP."
-echo "*** Also, edit the 'Click here' line in index.html to point"
-echo "*** href at $JNLP."
+echo "*** "
 echo "*** The 'jnlp' directory will then need to be added to your HTTP"
 echo "*** server configuration file or moved into the www data"
 echo "*** directories."

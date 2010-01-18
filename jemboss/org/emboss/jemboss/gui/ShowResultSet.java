@@ -23,7 +23,7 @@
 package org.emboss.jemboss.gui;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
+//import java.awt.event.KeyEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
@@ -34,7 +34,7 @@ import org.apache.regexp.*;
 import java.util.Hashtable;
 import java.util.Enumeration;
 
-import org.emboss.grout.*;
+//import org.emboss.grout.*;
 import org.emboss.jemboss.graphics.*;
 import org.emboss.jemboss.gui.filetree.FileEditorDisplay;
 import org.emboss.jemboss.JembossParams;
@@ -52,7 +52,7 @@ public class ShowResultSet extends JFrame
   /** tabbed pane */
   private JTabbedPane rtp;
   /** grout panel */
-  private GroutPanel grout = null;
+//  private GroutPanel grout = null;
   /** toolbar */
   private JToolBar toolbar = null;
 
@@ -192,14 +192,17 @@ public class ShowResultSet extends JFrame
     String title = rtp.getTitleAt(index);
     if (toolbar != null)
         remove(toolbar);
-    if(title.endsWith("x3d"))
-    {
-      grout = (GroutPanel)rtp.getSelectedComponent();
-      JMenuBar groutMenuBar = grout.getMenuBar();
-      setJMenuBar(groutMenuBar);
-      toolbar = grout.getToolBar();
-    }
-    else if(title.endsWith(".dat"))
+    
+//    if(title.endsWith("x3d"))
+//    {
+//      grout = (GroutPanel)rtp.getSelectedComponent();
+//      JMenuBar groutMenuBar = grout.getMenuBar();
+//      setJMenuBar(groutMenuBar);
+//      toolbar = grout.getToolBar();
+//    }
+//    else
+    
+    if(title.endsWith(".dat"))
     {
       Graph2DPlot graph = getGraph2DPlot((JScrollPane)rtp.getSelectedComponent());
       if(graph == null)
@@ -279,34 +282,34 @@ public class ShowResultSet extends JFrame
             rtp.add(thiskey,r1);
           }
         }
-        else if (thiskey.endsWith("x3d")) // grout
-        {
-          GroutPanel panel = new GroutPanel()
-          {
-            protected void addDisposeOfGroutPanelMenuItem(JMenu menu)
-            {
-              JMenuItem menuItem = new JMenuItem("Close");
-              menuItem.setAccelerator(KeyStroke.getKeyStroke(
-                        KeyEvent.VK_E, ActionEvent.CTRL_MASK));
-
-              menuItem.addActionListener(new ActionListener()
-              {
-                public void actionPerformed(ActionEvent e)
-                {
-                  dispose();
-                }
-              });
-              menu.add(menuItem);                         
-            }
-          };
-
-          if(h.get(thiskey) instanceof String)
-            panel.setX3DFile((String)h.get(thiskey));
-          else
-            panel.setX3DFile(new String((byte[])h.get(thiskey)));
-          rtp.add(thiskey,panel);
-          setJMenuBar(panel.getMenuBar());
-        }
+//        else if (thiskey.endsWith("x3d")) // grout
+//        {
+//          GroutPanel panel = new GroutPanel()
+//          {
+//            protected void addDisposeOfGroutPanelMenuItem(JMenu menu)
+//            {
+//              JMenuItem menuItem = new JMenuItem("Close");
+//              menuItem.setAccelerator(KeyStroke.getKeyStroke(
+//                        KeyEvent.VK_E, ActionEvent.CTRL_MASK));
+//
+//              menuItem.addActionListener(new ActionListener()
+//              {
+//                public void actionPerformed(ActionEvent e)
+//                {
+//                  dispose();
+//                }
+//              });
+//              menu.add(menuItem);                         
+//            }
+//          };
+//
+//          if(h.get(thiskey) instanceof String)
+//            panel.setX3DFile((String)h.get(thiskey));
+//          else
+//            panel.setX3DFile(new String((byte[])h.get(thiskey)));
+//          rtp.add(thiskey,panel);
+//          setJMenuBar(panel.getMenuBar());
+//        }
         else
         {
           FileEditorDisplay fed = new FileEditorDisplay(thiskey,

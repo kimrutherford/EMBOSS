@@ -4,6 +4,9 @@ application: fuzztran [
   gui: "yes"
   batch: "yes"
   cpu: "medium"
+  relations: "EDAM: Motif searching"
+  relations: "EDAM: Sequence database search by motif or pattern"
+  relations: "EDAM: DNA translation"
 ]
 
 section: input [
@@ -14,6 +17,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "dna"
+    relations: "EDAM: DNA sequence record"                                 
   ]
 
   pattern: pattern [
@@ -43,6 +47,7 @@ section: input [
            For example, [DE](2)HS{P}X(2)PX(2,4)C"
     type: "protein"
     pmismatch: "0"
+    relations: "EMBOSS sequence pattern"                                   
   ]
 
 endsection: input
@@ -63,6 +68,7 @@ section: additional [
     delimiter: ","
     codedelimiter: ":"
     information: "Frame(s) to translate"
+    relations: "EDAM: Generic string array"                                
   ]
 
   list: table [
@@ -84,6 +90,7 @@ section: additional [
     delimiter: ";"
     codedelimiter: ":"
     information: "Code to use"
+    relations: "EDAM: Generic string array"                                
   ]
 
 endsection: additional
@@ -100,6 +107,7 @@ section: output [
               str:translation=Translation"
     rformat: "table"
     precision: "0"
+    relations: "EDAM: EMBOSS report"                                       
   ]
 
 endsection: output

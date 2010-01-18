@@ -35,8 +35,6 @@ static AjBool dbxflat_NextEntry(EmbPBtreeEntry entry, AjPFile inf);
 
 int global = 0;
 
-
-
 /* @datastatic DbxflatPParser *************************************************
 **
 ** Parser definition structure
@@ -116,7 +114,10 @@ int main(int argc, char **argv)
     AjPTime starttime = NULL;
     AjPTime begintime = NULL;
     AjPTime nowtime = NULL;
-
+    ajlong startclock = 0;
+    ajlong beginclock = 0;
+    ajlong nowclock = 0;
+    
     embInit("dbxflat", argc, argv);
 
     dbtype     = ajAcdGetListSingle("idformat");
@@ -157,6 +158,7 @@ int main(int argc, char **argv)
     for(i=0;i<nfiles;++i)
     {
         begintime = ajTimeNewToday();
+        beginclock = ajClockNow();
 
 	ajListPop(entry->files,(void **)&thysfile);
 	ajListPushAppend(entry->files,(void *)thysfile);
@@ -264,10 +266,13 @@ int main(int argc, char **argv)
 	ajFileClose(&inf);
 	nentries += ientries;
 	nowtime = ajTimeNewToday();
-	ajFmtPrintF(outf, " entries: %Lu (%Lu) time: %.1fs (%.1fs)\n",
+        nowclock = ajClockNow();
+	ajFmtPrintF(outf, " entries: %Lu (%Lu) time: %.1f/%.1fs (%.1f/%.1fs)\n",
 		    nentries, ientries,
-		    ajTimeDiff(starttime, nowtime),
-		    ajTimeDiff(begintime, nowtime));
+		    ajClockDiff(startclock,nowclock),
+                    ajTimeDiff(starttime, nowtime),
+		    ajClockDiff(beginclock,nowclock),
+                    ajTimeDiff(begintime, nowtime));
 	ajTimeDel(&begintime);
 	ajTimeDel(&nowtime);
     }
@@ -315,7 +320,6 @@ int main(int argc, char **argv)
     ajBtreePriDel(&priobj);
     ajBtreeHybDel(&hyb);
 
-
     embExit();
 
     return 0;
@@ -353,7 +357,6 @@ static AjBool dbxflat_ParseEmbl(EmbPBtreeEntry entry, AjPFile inf)
 	    ajStrDel(&line);
 	    return ajFalse;
 	}
-	
 	if(ajStrPrefixC(line,"ID"))
 	{
 	    entry->fpos = pos;
@@ -444,7 +447,7 @@ static AjBool dbxflat_ParseGenbank(EmbPBtreeEntry entry, AjPFile inf)
 	    {
 		ajStrAssignS(&sumline,line);
 		ret = ajReadlineTrim(inf,&line);
-		while(ret && *MAJSTRGETPTR(line)==' ')
+                while(ret && *MAJSTRGETPTR(line)==' ')
 		{
 		    ajStrAppendS(&sumline,line);
 		    ret = ajReadlineTrim(inf,&line);

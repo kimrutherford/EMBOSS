@@ -1,6 +1,8 @@
 application: makenucseq [
   documentation: "Create random nucleotide sequences"
   groups: "Edit"
+  relations: "EDAM: Sequence mutation and randomisation"
+  relations: "EDAM: Sequence extraction and generation"
 ]
 
 section: input [
@@ -16,6 +18,7 @@ section: input [
            end trimmed to be in the correct reading frame."
     nullok: "Y"
     knowntype: "codon usage"
+    relations:  "EDAM: Codon usage table file"                         
   ]
 
 endsection: input
@@ -30,6 +33,7 @@ section: required [
     default: "100"
     minimum: "1"
     information: "Number of sequences created"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: length [
@@ -37,12 +41,14 @@ section: required [
     default: "100"
     minimum: "1"
     information: "Length of each sequence"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   toggle: useinsert [
     additional: "Y"
     information: "Do you want to make an insert"
     default: "N"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   string: insert [
@@ -50,6 +56,7 @@ section: required [
     information: "Inserted string"
     help: "String that is inserted into sequence"
     knowntype: "sequence"
+    relations:  "EDAM: Sequence"                                       
   ]
 
   integer: start [
@@ -57,6 +64,7 @@ section: required [
     information: "Start point of inserted sequence"
     minimum: "1"
     default: "1"
+    relations: "EDAM: Generic integer"                                     
   ]
 
 endsection: required
@@ -70,6 +78,7 @@ section: output [
     parameter: "Y"
     type: "nucleotide"
     name: "makeseq"
+    relations: "EDAM: Nucleotide sequence record"                          
   ]
 
 endsection: output

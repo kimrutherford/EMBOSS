@@ -1,6 +1,8 @@
 application: edialign [
   documentation: "Local multiple alignment of sequences"
   groups: "Alignment:Multiple"
+  relations: "EDAM: Local sequence alignment"
+  relations: "EDAM: Multiple sequence alignment"
 ]
 
 section: input [
@@ -12,6 +14,7 @@ section: input [
     parameter: "Y"
     type: "any"
     aligned: "N"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: input
@@ -28,12 +31,14 @@ section: additional [
            mixed)"
     values: "n: simple; nt: translation; ma: mixed alignments"
     default: "n"
+    relations: "EDAM: Generic string array"                                
   ]
 
   boolean: revcomp [
     additional: "@($(sequences.nucleic) & @($(nucmode) != n))"
     information: "Also consider the reverse complement"
     default: "N"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   selection: overlapw [
@@ -43,6 +48,7 @@ section: additional [
            can set this to 'yes' or 'no'"
     values: "default (when Nseq =< 35);yes;no"
     default: "default (when Nseq =< 35)"
+    relations: "EDAM: Generic string array"                                
   ]
 
   list: linkage [
@@ -53,6 +59,7 @@ section: additional [
     values: "UPGMA: UPGMA; max: maximum linkage; min: minimum
              linkage"
     default: "UPGMA"
+    relations: "EDAM: Generic string array"                                
   ]
 
   integer: maxfragl [
@@ -60,6 +67,7 @@ section: additional [
     information: "Maximum fragment length"
     minimum: "0"
     default: "40"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   boolean: fragmat [
@@ -67,6 +75,7 @@ section: additional [
     information: "Consider only N-fragment pairs that start
                   with two matches"
     default: "N"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   integer: fragsim [
@@ -75,12 +84,14 @@ section: additional [
                   acid or codon pair has similarity score of at least n"
     minimum: "0"
     default: "4"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   boolean: itscore [
     additional: "Y"
     information: "Use iterative score"
     default: "N"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   float: threshold [
@@ -89,6 +100,7 @@ section: additional [
                   alignment"
     minimum: "0.0"
     default: "0.0"
+    relations: "EDAM: Generic float"                                       
   ]
 
 endsection: additional
@@ -102,11 +114,13 @@ section: output [
     information: "Replace unaligned characters by stars '*'
                   rather then putting them in lowercase"
     default: "N"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: dostars [
     information: "Activate writing of stars instead of numbers"
     default: "N"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   integer: starnum [
@@ -114,17 +128,20 @@ section: output [
                   to indicate level of conservation"
     minimum: "0"
     default: "4"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   outfile: outfile [
     parameter: "Y"
     knowntype: "edialign output"
+    relations:  "EDAM:DIALIGN sequence alignment file"                     
   ]
 
   seqoutall: outseq [
     parameter: "Y"
     type: "gapany"
     aligned: "Y"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: output

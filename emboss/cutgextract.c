@@ -211,7 +211,7 @@ int main(int argc, char **argv)
 	ajFileClose(&inf);
     }
 
-    ajTableToarray(table,(void***) &keyarray, (void***) &valarray);
+    ajTableToarrayKeysValues(table,(void***) &keyarray, (void***) &valarray);
 
     i = 0;
     while(keyarray[i])
@@ -232,7 +232,7 @@ int main(int argc, char **argv)
 	    else
 		codon->aa[x] = c-'A';
 	}
-	ajCodCalculateUsage(codon,sum);
+	ajCodCalcUsage(codon,sum);
 
 	ajStrAppendC(&key, ".cut");
 	if(allrecords)
@@ -259,12 +259,12 @@ int main(int argc, char **argv)
 	if(!outf)
 	    ajFatal("Cannot open output file %S",fname);
 
-	ajCodAssName(codon, key);
-	ajCodAssSpecies(codon, value->Species);
-	ajCodAssDivision(codon, value->Division);
-	ajCodAssRelease(codon, release);
-	ajCodAssNumcds(codon, value->CdsCount);
-	ajCodAssNumcodon(codon, sum);
+	ajCodSetNameS(codon, key);
+	ajCodSetSpeciesS(codon, value->Species);
+	ajCodSetDivisionS(codon, value->Division);
+	ajCodSetReleaseS(codon, release);
+	ajCodSetNumcds(codon, value->CdsCount);
+	ajCodSetNumcodons(codon, sum);
 
 	ajCodWrite(codon, outf);
 	ajFileClose(&outf);

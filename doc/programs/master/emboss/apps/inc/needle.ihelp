@@ -1,3 +1,6 @@
+Needleman-Wunsch global alignment of two sequences
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers:
   [-asequence]         sequence   Sequence filename and optional format, or
                                   reference (input USA)
@@ -36,6 +39,21 @@
                                   'EDNAFULL' (for nucleic sequences). These
                                   files are found in the 'data' directory of
                                   the EMBOSS installation.
+   -endweight          boolean    [N] Apply end gap penalties.
+   -endopen            float      [10.0 for any sequence] The end gap open
+                                  penalty is the score taken away when an end
+                                  gap is created. The best value depends on
+                                  the choice of comparison matrix. The default
+                                  value assumes you are using the EBLOSUM62
+                                  matrix for protein sequences, and the
+                                  EDNAFULL matrix for nucleotide sequences.
+                                  (Floating point number from 1.0 to 100.0)
+   -endextend          float      [0.5 for any sequence] The end gap
+                                  extension, penalty is added to the end gap
+                                  penalty for each base or residue in the end
+                                  gap. This is how long end gaps are
+                                  penalized. (Floating point number from 0.0
+                                  to 10.0)
 
    Advanced (Unprompted) qualifiers:
    -[no]brief          boolean    [Y] Brief identity and similarity
@@ -93,11 +111,12 @@
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 

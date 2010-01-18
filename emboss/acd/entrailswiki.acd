@@ -1,0 +1,39 @@
+application: entrailswiki [
+  documentation: "Reports the internal structures in wikitext"
+  groups: "Utils:Misc"
+]
+
+section: required [
+  information: "required section"
+  type: "page"
+]
+
+  list: tables [
+    standard: "Y"
+    default: "all"
+    minimum: "1"
+    value: "all: All tables;
+           inseq: Input sequence formats;
+           outseq: Output sequence formats;
+           infeat: Input feature formats;
+           outfeat: Output feature formats;
+           report: Output report formats;
+           align: Output alignment formats"
+    information: "Tables to be written"
+    relations: "EDAM: Generic string array"                                
+  ]
+
+endsection: required
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    knowntype: "wikitext"
+    relations: "EDAM: Free text file"                                      
+  ]
+
+endsection: output

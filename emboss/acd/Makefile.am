@@ -1,6 +1,6 @@
 
 pkgdata_DATA = aaindexextract.acd abiview.acd acdc.acd acdlog.acd \
-	acdpretty.acd acdtable.acd acdtrace.acd acdvalid.acd ajbad.acd \
+	acdpretty.acd acdrelations.acd acdtable.acd acdtrace.acd acdvalid.acd ajbad.acd \
 	ajfeatest.acd ajtest.acd aligncopy.acd aligncopypair.acd antigenic.acd \
 	backtranambig.acd backtranseq.acd banana.acd \
 	biosed.acd btwisted.acd cai.acd chaos.acd charge.acd checktrans.acd \
@@ -15,12 +15,13 @@ pkgdata_DATA = aaindexextract.acd abiview.acd acdc.acd acdlog.acd \
 	distmat.acd dotmatcher.acd dotpath.acd dottup.acd dreg.acd \
 	edialign.acd \
 	einverted.acd embossdata.acd embossversion.acd emma.acd emowse.acd \
+	edamclean.acd ensembltest.acd \
 	entrails.acd entret.acd epestfind.acd eprimer3.acd equicktandem.acd \
 	est2genome.acd etandem.acd \
 	extractalign.acd extractfeat.acd extractseq.acd \
 	featcopy.acd featreport.acd findkm.acd freak.acd \
 	fuzznuc.acd fuzzpro.acd fuzztran.acd \
-	garnier.acd geecee.acd getorf.acd giep.acd \
+	garnier.acd geecee.acd getorf.acd \
 	helixturnhelix.acd histogramtest.acd \
 	hmoment.acd iep.acd infoalign.acd infobase.acd inforesidue.acd \
         infoseq.acd intconv.acd \
@@ -30,7 +31,8 @@ pkgdata_DATA = aaindexextract.acd abiview.acd acdc.acd acdlog.acd \
 	matcher.acd megamerger.acd \
 	merger.acd msbar.acd mwcontam.acd mwfilter.acd
 
-pkgdata2_DATA = needle.acd newcoils.acd newcpgreport.acd newcpgseek.acd \
+pkgdata2_DATA = needle.acd needleall.acd \
+	newcoils.acd newcpgreport.acd newcpgseek.acd \
 	newseq.acd nohtml.acd noreturn.acd nospace.acd notab.acd \
 	notseq.acd nthseq.acd nthseqset.acd \
 	octanol.acd oddcomp.acd origsplitter.acd origunion.acd \
@@ -49,7 +51,7 @@ pkgdata2_DATA = needle.acd newcoils.acd newcpgreport.acd newcpgseek.acd \
 	showpep.acd showseq.acd shuffleseq.acd \
 	sigcleave.acd silent.acd sirna.acd \
 	sixpack.acd sizeseq.acd skipredundant.acd skipseq.acd \
-	splitsource.acd splitter.acd stretcher.acd \
+	splitsource.acd splitter.acd sqltest.acd stretcher.acd \
 	stssearch.acd supermatcher.acd syco.acd \
 	tcode.acd testplot.acd textsearch.acd tfextract.acd tfm.acd \
 	tfscan.acd tmap.acd tranalign.acd transeq.acd treetypedisplay.acd \

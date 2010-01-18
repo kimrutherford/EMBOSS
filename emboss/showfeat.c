@@ -286,6 +286,9 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
     AjBool want_multiple_line = ajFalse; /* true if want a join()s line */
     AjBool in_multiple_line = ajFalse;   /* true if this is a join()s line */
     AjBool child;	                 /* true if multiple's child */
+    AjPStrTok tokens = NULL;
+    AjPStr key = NULL;
+    AjBool val = ajFalse;
 
     /* get the feature table of the sequence */
     feat = ajSeqGetFeatCopy(seq);
@@ -298,7 +301,7 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
     tagsout = ajStrNewC("");
     posout  = ajStrNewC("");
 
-    if(ajFeattableSize(feat))
+    if(ajFeattableGetSize(feat))
     {
 	if(!ajStrCmpC(sortlist, "source"))
 	    /* sort by: sense, source, type, start */
@@ -355,19 +358,39 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
 		continue;
 
 	    /* check that we want to output this match of source, type */
-	    if(!embMiscMatchPattern(ajFeatGetSource(gf), matchsource) ||
-	       !embMiscMatchPattern(ajFeatGetType(gf), matchtype) ||
+	    if(!embMiscMatchPatternDelimC(ajFeatGetSource(gf),
+                                          matchsource,",;|") ||
 	       !showfeat_MatchPatternTags(gf, matchtag, matchvalue,
 					  stricttags, &tagstmp, values))
 		continue;
 
-	     /*
-	     ** Starting a new line?
-	     ** Don't start a new line if:
-	     ** collapse and source, type and sense are the same as the last gf
-	     **  or
-	     **  joinfeat and child and we are in an existing join multiple line
-	     */
+            if(ajStrGetLen(matchtype))
+            {
+                val = ajFalse;
+                tokens = ajStrTokenNewC(matchtype, " \t\n\r,;|");
+
+                while (ajStrTokenNextParse( &tokens, &key))
+                {
+                    if (ajFeatTypeMatchWildS(gf, key))
+                    {
+                        val = ajTrue;
+                        break;
+                    }
+                }
+
+                ajStrTokenDel( &tokens);
+                ajStrDel(&key);
+                if(!val)
+                    continue;
+            }
+            
+            /*
+            ** Starting a new line?
+            ** Don't start a new line if:
+            ** collapse and source, type and sense are the same as the last gf
+            **  or
+            **  joinfeat and child and we are in an existing join multiple line
+            */
 	    if((!collapse ||
 		first ||
 		ajFeatGetStrand(gf) != strandout ||
@@ -430,12 +453,12 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
         /* 
         ** Now do the annotation range object, if we have one
         */
-        if (annotation && ajRangeNumber(annotation)) {
+        if (annotation && ajRangeGetSize(annotation)) {
             ann_text = ajStrNew();
             gotoutput = ajFalse;
-            for(count = 0; count < ajRangeNumber(annotation); count++)
+            for(count = 0; count < ajRangeGetSize(annotation); count++)
             {
-                ajRangeValues(annotation, count, &rstart, &rend);
+                ajRangeElementGetValues(annotation, count, &rstart, &rend);
 
 	    /* check that the feature is within the range we wish to
                display */
@@ -443,7 +466,7 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
 		    continue;
 
                 /* get the annotation text */                 
-                ajRangeText(annotation, count, &ann_text);
+                ajRangeElementGetText(annotation, count, &ann_text);
 
            /* don't start a new line if collapse and previous text is
               the same */
@@ -852,7 +875,7 @@ static AjBool showfeat_MatchPatternTags(const AjPFeature feat,
     titer = ajFeatTagIter(feat);
     while(ajFeatTagval(titer, &tagnam, &tagval))
     {
-        tval = embMiscMatchPattern(tagnam, tpattern);
+        tval = embMiscMatchPatternDelimC(tagnam, tpattern,",;|");
 
          /*
 	 ** If tag has no value then
@@ -878,7 +901,7 @@ static AjBool showfeat_MatchPatternTags(const AjPFeature feat,
 	     ** without spitting it up into words. 
 	     */
             vval = (ajStrMatchS(tagval, vpattern) ||
-		    embMiscMatchPattern(tagval, vpattern));
+		    embMiscMatchPatternDelimC(tagval, vpattern,",;|"));
 	}
 
         if(tval && vval)

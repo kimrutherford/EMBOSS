@@ -1,5 +1,4 @@
-
-                               rebaseextract 
+                                rebaseextract
 
 
 
@@ -18,27 +17,31 @@ Description
 
    rebaseextract processes the REBASE database for use by the EMBOSS
    restriction enzyme applications. It derives recognition site and
-   cleavage information from the withrefm file of an REBASE distribution.
-   It creates three files in the EMBOSS data subdirectory REBASE: a
-   pattern file, a reference file and a supplier file. It will also (by
-   default) produce an embossre.equ file of preferred isoschizomers using
-   restriction enzyme prototypes in the "proto" file. This can be turned
-   off by setting the -equivalences option to be false.
+   cleavage information from the "withrefm" file of an REBASE
+   distribution. It creates three files in the EMBOSS data subdirectory
+   REBASE: a pattern file, a reference file and a supplier file. It will
+   also (by default) produce an embossre.equ file of preferred
+   isoschizomers using restriction enzyme prototypes in the "proto" file.
+   This can be turned off by setting the -equivalences option to be false.
 
 Usage
 
    Here is a sample session with rebaseextract
 
 
-% rebaseextract 
+% rebaseextract
 Process the REBASE database for use by restriction enzyme applications
 REBASE database withrefm file: withrefm
 REBASE database proto file: proto
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Process the REBASE database for use by restriction enzyme applications
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     REBASE database withrefm file
@@ -59,13 +62,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -136,24 +141,24 @@ Rich Roberts                                                    May 31 2001
 <6>ATCC 49790
 <7>ABCDEFGHIJKLMNOQRSTU
 <8>Kiss, A., Finta, C., Venetianer, P., (1991) Nucleic Acids Res., vol. 19, pp.
- 3460.
+3460.
 Smith, D.I., Blattner, F.R., Davies, J., (1976) Nucleic Acids Res., vol. 3, pp.
- 343-353.
-Tomassini, J., Roychoudhury, R., Wu, R., Roberts, R.J., (1978) Nucleic Acids Re
-s., vol. 5, pp. 4055-4064.
+343-353.
+Tomassini, J., Roychoudhury, R., Wu, R., Roberts, R.J., (1978) Nucleic Acids Res
+., vol. 5, pp. 4055-4064.
 
 <1>Ksp632I
-<2>Bco5I,Bco116I,BcoKI,BcoSI,BcrAI,BseZI,BsrEI,Bst6I,Bst158I,Bsu6I,Eam1104I,Ear
-I,TdeII,Uba1192I,Uba1276I,VpaKutEI,VpaKutFI,VpaO5I
+<2>Bco5I,Bco116I,BcoKI,BcoSI,BcrAI,BseZI,BsrEI,Bst6I,Bst158I,Bsu6I,Eam1104I,EarI
+,TdeII,Uba1192I,Uba1276I,VpaKutEI,VpaKutFI,VpaO5I
 <3>CTCTTC(1/4)
 <4>
 <5>Kluyvera species 632
 <6>DSM 4196
 <7>M
-<8>Bolton, B.J., Schmitz, G.G., Jarsch, M., Comer, M.J., Kessler, C., (1988) Ge
-ne, vol. 66, pp. 31-43.
-Tsukahara, S., Yamakawa, H., Takai, K., Takaku, H., (1994) Nucleosides & Nucleo
-tides, vol. 13, pp. 1617-1626.
+<8>Bolton, B.J., Schmitz, G.G., Jarsch, M., Comer, M.J., Kessler, C., (1988) Gen
+e, vol. 66, pp. 31-43.
+Tsukahara, S., Yamakawa, H., Takai, K., Takaku, H., (1994) Nucleosides & Nucleot
+ides, vol. 13, pp. 1617-1626.
 
 <1>MaeII
 <2>HpyCH4IV,HpyF13III,HpyF35II,HpyF74II,TaiI,TscI,Tsp49I,TspIDSI,TspWAM8AI,TtmI
@@ -162,8 +167,8 @@ tides, vol. 13, pp. 1617-1626.
 <5>Methanococcus aeolicus PL-15/H
 <6>K.O. Stetter
 <7>M
-<8>Schmid, K., Thomm, M., Laminet, A., Laue, F.G., Kessler, C., Stetter, K.O.,
-Schmitt, R., (1984) Nucleic Acids Res., vol. 12, pp. 2619-2628.
+<8>Schmid, K., Thomm, M., Laminet, A., Laue, F.G., Kessler, C., Stetter, K.O., S
+chmitt, R., (1984) Nucleic Acids Res., vol. 12, pp. 2619-2628.
 
 <1>NotI
 <2>CciNI,CspBI,MchAI
@@ -172,30 +177,31 @@ Schmitt, R., (1984) Nucleic Acids Res., vol. 12, pp. 2619-2628.
 <5>Nocardia otitidis-caviarum
 <6>ATCC 14630
 <7>ABCDEFGHJKLMNOQRSTU
-<8>Borsetti, R., Wise, D., Qiang, B.-Q., Schildkraut, I., Unpublished observati
-ons.
+<8>Borsetti, R., Wise, D., Qiang, B.-Q., Schildkraut, I., Unpublished observatio
+ns.
 Morgan, R.D., Unpublished observations.
 Morgan, R.D., Benner, J.S., Claus, T.E., US Patent Office, 1994.
 Qiang, B.-Q., Schildkraut, I., (1987) Methods Enzymol., vol. 155, pp. 15-21.
 
 <1>TaqI
-<2>CviSIII,EsaBC3I,HpyV,Hpy26II,HpyF14III,HpyF16I,HpyF23I,HpyF24I,HpyF26III,Hpy
-F30I,HpyF35I,HpyF40II,HpyF42IV,HpyF45I,HpyF49I,HpyF52I,HpyF59III,HpyF62II,HpyF6
-4I,HpyF65II,HpyF66IV,HpyF71I,HpyF73II,HpyJP26II,PpaAII,Taq20I,Tbr51I,TfiA3I,Tfi
-Tok4A2I,TfiTok6A1I,TflI,Tsc4aI,Tsp32I,Tsp32II,Tsp358I,Tsp505I,Tsp510I,TspAK13D2
-1I,TspAK16D24I,TspNI,TspVi4AI,TspVil3I,Tth24I,TthHB8I,TthRQI
+<2>CviSIII,EsaBC3I,HpyV,Hpy26II,HpyF14III,HpyF16I,HpyF23I,HpyF24I,HpyF26III,HpyF
+30I,HpyF35I,HpyF40II,HpyF42IV,HpyF45I,HpyF49I,HpyF52I,HpyF59III,HpyF62II,HpyF64I
+,HpyF65II,HpyF66IV,HpyF71I,HpyF73II,HpyJP26II,PpaAII,Taq20I,Tbr51I,TfiA3I,TfiTok
+4A2I,TfiTok6A1I,TflI,Tsc4aI,Tsp32I,Tsp32II,Tsp358I,Tsp505I,Tsp510I,TspAK13D21I,T
+spAK16D24I,TspNI,TspVi4AI,TspVil3I,Tth24I,TthHB8I,TthRQI
 <3>T^CGA
 <4>4(6)
 <5>Thermus aquaticus YTI
 <6>J.I. Harris
 <7>ABCDEFGIJLMNOQRSTU
 <8>Anton, B.P., Brooks, J.E., Unpublished observations.
-Fomenkov, A., Xiao, J.-P., Dila, D., Raleigh, E., Xu, S.-Y., (1994) Nucleic Aci
-ds Res., vol. 22, pp. 2399-2403.
+Fomenkov, A., Xiao, J.-P., Dila, D., Raleigh, E., Xu, S.-Y., (1994) Nucleic Acid
+s Res., vol. 22, pp. 2399-2403.
 McClelland, M., (1981) Nucleic Acids Res., vol. 9, pp. 6795-6804.
-Sato, S., Hutchison, C.A. III, Harris, J.I., (1977) Proc. Natl. Acad. Sci. U. S
-. A., vol. 74, pp. 542-546.
+Sato, S., Hutchison, C.A. III, Harris, J.I., (1977) Proc. Natl. Acad. Sci. U. S.
+ A., vol. 74, pp. 542-546.
 Zebala, J.A., (1993) Diss. Abstr., vol. 54, pp. 1394-1398.
+
 
   File: proto
 
@@ -246,6 +252,7 @@ EcoPI                          AGACC
 EcoP15I                        CAGCAG (25/27)
 HinfIII                        CGAAT
 StyLTI                         CAGAG
+
 
 Output file format
 
@@ -348,15 +355,15 @@ HpyCH4IV MaeII
 #
 AaeI
 Acetobacter aceti sub. liquefaciens
-BamHI,AacI,AcaII,AccEBI,AinII,AliI,Ali12257I,Ali12258I,ApaCI,AsiI,AspTII,Atu1II
-,BamFI,BamKI,BamNI,Bca1259I,Bce751I,Bco10278I,BnaI,BsaDI,Bsp30I,Bsp46I,Bsp90II,
-Bsp98I,Bsp130I,Bsp131I,Bsp144I,Bsp4009I,BspAAIII,BstI,Bst1126I,Bst2464I,Bst2902
-I,BstQI,Bsu90I,Bsu8565I,Bsu8646I,BsuB519I,BsuB763I,CelI,DdsI,GdoI,GinI,GoxI,Gse
-III,MleI,Mlu23I,NasBI,Nsp29132II,NspSAIV,OkrAI,Pac1110I,Pae177I,Pfl8I,Psp56I,Rh
-sI,Rlu4I,RspLKII,SolI,SpvI,SurI,Uba19I,Uba31I,Uba38I,Uba51I,Uba88I,Uba1098I,Uba
-1163I,Uba1167I,Uba1172I,Uba1173I,Uba1205I,Uba1224I,Uba1242I,Uba1250I,Uba1258I,U
-ba1297I,Uba1302I,Uba1324I,Uba1325I,Uba1334I,Uba1339I,Uba1346I,Uba1383I,Uba1398I
-,Uba1402I,Uba1414I
+BamHI,AacI,AcaII,AccEBI,AinII,AliI,Ali12257I,Ali12258I,ApaCI,AsiI,AspTII,Atu1II,
+BamFI,BamKI,BamNI,Bca1259I,Bce751I,Bco10278I,BnaI,BsaDI,Bsp30I,Bsp46I,Bsp90II,Bs
+p98I,Bsp130I,Bsp131I,Bsp144I,Bsp4009I,BspAAIII,BstI,Bst1126I,Bst2464I,Bst2902I,B
+stQI,Bsu90I,Bsu8565I,Bsu8646I,BsuB519I,BsuB763I,CelI,DdsI,GdoI,GinI,GoxI,GseIII,
+MleI,Mlu23I,NasBI,Nsp29132II,NspSAIV,OkrAI,Pac1110I,Pae177I,Pfl8I,Psp56I,RhsI,Rl
+u4I,RspLKII,SolI,SpvI,SurI,Uba19I,Uba31I,Uba38I,Uba51I,Uba88I,Uba1098I,Uba1163I,
+Uba1167I,Uba1172I,Uba1173I,Uba1205I,Uba1224I,Uba1242I,Uba1250I,Uba1258I,Uba1297I
+,Uba1302I,Uba1324I,Uba1325I,Uba1334I,Uba1339I,Uba1346I,Uba1383I,Uba1398I,Uba1402
+I,Uba1414I
 
 M. Van Montagu
 
@@ -380,21 +387,21 @@ Psp1406I
 S.K. Degtyarev
 IN
 2
-Degtyarev, S.K., Abdurashitov, M.A., Kolyhalov, A.A., Rechkunova, N.I., (1992)
-Nucleic Acids Res., vol. 20, pp. 3787.
+Degtyarev, S.K., Abdurashitov, M.A., Kolyhalov, A.A., Rechkunova, N.I., (1992) N
+ucleic Acids Res., vol. 20, pp. 3787.
 Lunnen, K.D., Wilson, G.G., Unpublished observations.
 //
 BamHI
 Bacillus amyloliquefaciens H
-AacI,AaeI,AcaII,AccEBI,AinII,AliI,Ali12257I,Ali12258I,ApaCI,AsiI,AspTII,Atu1II,
-BamFI,BamKI,BamNI,Bca1259I,Bce751I,Bco10278I,BnaI,BsaDI,Bsp30I,Bsp46I,Bsp90II,B
-sp98I,Bsp130I,Bsp131I,Bsp144I,Bsp4009I,BspAAIII,BstI,Bst1126I,Bst2464I,Bst2902I
-,BstQI,Bsu90I,Bsu8565I,Bsu8646I,BsuB519I,BsuB763I,CelI,DdsI,GdoI,GinI,GoxI,GseI
-II,MleI,Mlu23I,NasBI,Nsp29132II,NspSAIV,OkrAI,Pac1110I,Pae177I,Pfl8I,Psp56I,Rhs
-I,Rlu4I,RspLKII,SolI,SpvI,SurI,Uba19I,Uba31I,Uba38I,Uba51I,Uba88I,Uba1098I,Uba1
-163I,Uba1167I,Uba1172I,Uba1173I,Uba1205I,Uba1224I,Uba1242I,Uba1250I,Uba1258I,Ub
-a1297I,Uba1302I,Uba1324I,Uba1325I,Uba1334I,Uba1339I,Uba1346I,Uba1383I,Uba1398I,
-Uba1402I,Uba1414I
+AacI,AaeI,AcaII,AccEBI,AinII,AliI,Ali12257I,Ali12258I,ApaCI,AsiI,AspTII,Atu1II,B
+amFI,BamKI,BamNI,Bca1259I,Bce751I,Bco10278I,BnaI,BsaDI,Bsp30I,Bsp46I,Bsp90II,Bsp
+98I,Bsp130I,Bsp131I,Bsp144I,Bsp4009I,BspAAIII,BstI,Bst1126I,Bst2464I,Bst2902I,Bs
+tQI,Bsu90I,Bsu8565I,Bsu8646I,BsuB519I,BsuB763I,CelI,DdsI,GdoI,GinI,GoxI,GseIII,M
+leI,Mlu23I,NasBI,Nsp29132II,NspSAIV,OkrAI,Pac1110I,Pae177I,Pfl8I,Psp56I,RhsI,Rlu
+4I,RspLKII,SolI,SpvI,SurI,Uba19I,Uba31I,Uba38I,Uba51I,Uba88I,Uba1098I,Uba1163I,U
+ba1167I,Uba1172I,Uba1173I,Uba1205I,Uba1224I,Uba1242I,Uba1250I,Uba1258I,Uba1297I,
+Uba1302I,Uba1324I,Uba1325I,Uba1334I,Uba1339I,Uba1346I,Uba1383I,Uba1398I,Uba1402I
+,Uba1414I
 5(4)
 ATCC 49763
 ABCDEFGHIJKLMNOQRSTUV
@@ -407,25 +414,25 @@ Brooks, J.E., Howard, K.A., US Patent Office, 1994.
 ATCC 49790
 ABCDEFGHIJKLMNOQRSTU
 3
-Kiss, A., Finta, C., Venetianer, P., (1991) Nucleic Acids Res., vol. 19, pp. 34
-60.
+Kiss, A., Finta, C., Venetianer, P., (1991) Nucleic Acids Res., vol. 19, pp. 346
+0.
 Smith, D.I., Blattner, F.R., Davies, J., (1976) Nucleic Acids Res., vol. 3, pp.
- 343-353.
-Tomassini, J., Roychoudhury, R., Wu, R., Roberts, R.J., (1978) Nucleic Acids Re
-s., vol. 5, pp. 4055-4064.
+343-353.
+Tomassini, J., Roychoudhury, R., Wu, R., Roberts, R.J., (1978) Nucleic Acids Res
+., vol. 5, pp. 4055-4064.
 //
 Ksp632I
 Kluyvera species 632
-Bco5I,Bco116I,BcoKI,BcoSI,BcrAI,BseZI,BsrEI,Bst6I,Bst158I,Bsu6I,Eam1104I,EarI,T
-deII,Uba1192I,Uba1276I,VpaKutEI,VpaKutFI,VpaO5I
+Bco5I,Bco116I,BcoKI,BcoSI,BcrAI,BseZI,BsrEI,Bst6I,Bst158I,Bsu6I,Eam1104I,EarI,Td
+eII,Uba1192I,Uba1276I,VpaKutEI,VpaKutFI,VpaO5I
 
 DSM 4196
 M
 2
 Bolton, B.J., Schmitz, G.G., Jarsch, M., Comer, M.J., Kessler, C., (1988) Gene,
- vol. 66, pp. 31-43.
-Tsukahara, S., Yamakawa, H., Takai, K., Takaku, H., (1994) Nucleosides & Nucleo
-tides, vol. 13, pp. 1617-1626.
+vol. 66, pp. 31-43.
+Tsukahara, S., Yamakawa, H., Takai, K., Takaku, H., (1994) Nucleosides & Nucleot
+ides, vol. 13, pp. 1617-1626.
 //
 MaeII
 Methanococcus aeolicus PL-15/H
@@ -434,8 +441,8 @@ HpyCH4IV,HpyF13III,HpyF35II,HpyF74II,TaiI,TscI,Tsp49I,TspIDSI,TspWAM8AI,TtmI
 K.O. Stetter
 M
 1
-Schmid, K., Thomm, M., Laminet, A., Laue, F.G., Kessler, C., Stetter, K.O., Sch
-mitt, R., (1984) Nucleic Acids Res., vol. 12, pp. 2619-2628.
+Schmid, K., Thomm, M., Laminet, A., Laue, F.G., Kessler, C., Stetter, K.O., Schm
+itt, R., (1984) Nucleic Acids Res., vol. 12, pp. 2619-2628.
 //
 NotI
 Nocardia otitidis-caviarum
@@ -444,29 +451,28 @@ CciNI,CspBI,MchAI
 ATCC 14630
 ABCDEFGHJKLMNOQRSTU
 4
-Borsetti, R., Wise, D., Qiang, B.-Q., Schildkraut, I., Unpublished observations
-.
+Borsetti, R., Wise, D., Qiang, B.-Q., Schildkraut, I., Unpublished observations.
 Morgan, R.D., Unpublished observations.
 Morgan, R.D., Benner, J.S., Claus, T.E., US Patent Office, 1994.
 Qiang, B.-Q., Schildkraut, I., (1987) Methods Enzymol., vol. 155, pp. 15-21.
 //
 TaqI
 Thermus aquaticus YTI
-CviSIII,EsaBC3I,HpyV,Hpy26II,HpyF14III,HpyF16I,HpyF23I,HpyF24I,HpyF26III,HpyF30
-I,HpyF35I,HpyF40II,HpyF42IV,HpyF45I,HpyF49I,HpyF52I,HpyF59III,HpyF62II,HpyF64I,
-HpyF65II,HpyF66IV,HpyF71I,HpyF73II,HpyJP26II,PpaAII,Taq20I,Tbr51I,TfiA3I,TfiTok
-4A2I,TfiTok6A1I,TflI,Tsc4aI,Tsp32I,Tsp32II,Tsp358I,Tsp505I,Tsp510I,TspAK13D21I,
-TspAK16D24I,TspNI,TspVi4AI,TspVil3I,Tth24I,TthHB8I,TthRQI
+CviSIII,EsaBC3I,HpyV,Hpy26II,HpyF14III,HpyF16I,HpyF23I,HpyF24I,HpyF26III,HpyF30I
+,HpyF35I,HpyF40II,HpyF42IV,HpyF45I,HpyF49I,HpyF52I,HpyF59III,HpyF62II,HpyF64I,Hp
+yF65II,HpyF66IV,HpyF71I,HpyF73II,HpyJP26II,PpaAII,Taq20I,Tbr51I,TfiA3I,TfiTok4A2
+I,TfiTok6A1I,TflI,Tsc4aI,Tsp32I,Tsp32II,Tsp358I,Tsp505I,Tsp510I,TspAK13D21I,TspA
+K16D24I,TspNI,TspVi4AI,TspVil3I,Tth24I,TthHB8I,TthRQI
 4(6)
 J.I. Harris
 ABCDEFGIJLMNOQRSTU
 5
 Anton, B.P., Brooks, J.E., Unpublished observations.
-Fomenkov, A., Xiao, J.-P., Dila, D., Raleigh, E., Xu, S.-Y., (1994) Nucleic Aci
-ds Res., vol. 22, pp. 2399-2403.
+Fomenkov, A., Xiao, J.-P., Dila, D., Raleigh, E., Xu, S.-Y., (1994) Nucleic Acid
+s Res., vol. 22, pp. 2399-2403.
 McClelland, M., (1981) Nucleic Acids Res., vol. 9, pp. 6795-6804.
-Sato, S., Hutchison, C.A. III, Harris, J.I., (1977) Proc. Natl. Acad. Sci. U. S
-. A., vol. 74, pp. 542-546.
+Sato, S., Hutchison, C.A. III, Harris, J.I., (1977) Proc. Natl. Acad. Sci. U. S.
+ A., vol. 74, pp. 542-546.
 Zebala, J.A., (1993) Diss. Abstr., vol. 54, pp. 1394-1398.
 //
 
@@ -500,8 +506,8 @@ T Advanced Biotechnologies Ltd. (3/98)
 U Bangalore Genei (2/01)
 V MRC-Holland (3/01)
 
-   The output files are held in the REBASE subdirectory of the EMBOSS
-   data directory. There are three:
+   The output files are held in the REBASE subdirectory of the EMBOSS data
+   directory. There are three:
      * embossre.enz Enzyme pattern file
      * embossre.ref Enzyme references
      * embossre.sup Enzyme suppliers
@@ -521,11 +527,11 @@ Data files
 
 Notes
 
-   The Restriction Enzyme database (REBASE) is a collection of
-   information about restriction enzymes and related proteins. It
-   contains published and unpublished references, recognition and
-   cleavage sites, isoschizomers, commercial availability, methylation
-   sensitivity, crystal and sequence data. DNA methyltransferases, homing
+   The Restriction Enzyme database (REBASE) is a collection of information
+   about restriction enzymes and related proteins. It contains published
+   and unpublished references, recognition and cleavage sites,
+   isoschizomers, commercial availability, methylation sensitivity,
+   crystal and sequence data. DNA methyltransferases, homing
    endonucleases, nicking enzymes, specificity subunits and control
    proteins are also included. Most recently, putative DNA
    methyltransferases and restriction enzymes, as predicted from analysis
@@ -564,7 +570,7 @@ See also
 
    Program name     Description
    aaindexextract   Extract amino acid property data from AAINDEX
-   cutgextract      Extract codon usage tables from from CUTG database
+   cutgextract      Extract codon usage tables from CUTG database
    jaspextract      Extract data from JASPAR
    printsextract    Extract data from PRINTS database for use by pscan
    prosextract      Processes the PROSITE motif database for use by
@@ -574,7 +580,7 @@ See also
 
 Author(s)
 
-   Alan Bleasby (ajb © ebi.ac.uk)
+   Alan Bleasby (ajb (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

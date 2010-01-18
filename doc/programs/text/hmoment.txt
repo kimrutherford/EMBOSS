@@ -1,5 +1,4 @@
-
-                                  hmoment 
+                                   hmoment
 
 
 
@@ -19,39 +18,43 @@ Description
    hmoment plots or writes out the hydrophobic moment calculated for
    overlapping windows over one or more input protein sequences. The
    hydrophic moment reflects the periodicity of hydrophobicity of a
-   peptide, as measured per residue for a specified angle of rotation.
-   The window size, alpha helix angle, and beta sheet angle are
+   peptide, as measured per residue for a specified angle of rotation. The
+   window size, alpha helix angle, and beta sheet angle are
    user-specified. The alpha helix moment and beta sheet moment may be
    plotted or output.
 
 Algorithm
 
    The hydrophobic moment is measured within a moving window using the
-   method of Eisenberg et al. The default angle of 100 degrees is used
-   for the alpha-helix results and the default of 160 degrees is used for
-   the beta-sheet results. These angles can be changed if required using
-   the appropriate options.
+   method of Eisenberg et al. The default angle of 100 degrees is used for
+   the alpha-helix results and the default of 160 degrees is used for the
+   beta-sheet results. These angles can be changed if required using the
+   appropriate options.
 
 Usage
 
    Here is a sample session with hmoment
 
 
-% hmoment tsw:hbb_human 
+% hmoment tsw:hbb_human
 Calculate and plot hydrophobic moment for protein sequence(s)
-Output file [hbb_human.hmoment]: 
+Output file [hbb_human.hmoment]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
 
+Calculate and plot hydrophobic moment for protein sequence(s)
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-seqall]            seqall     Protein sequence(s) filename and optional
                                   format, or reference (input USA)
 *  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, das, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif)
 *  -outfile            outfile    [*.hmoment] Output file name
 
    Additional (Optional) qualifiers:
@@ -105,13 +108,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -236,12 +241,11 @@ Output file format
    hydrophobic moment of the specified alpha helix angle. With the '-plot
    -double' options it also displays the beta-sheet hydrophobic moment.
 
-   Otherwise it writes out a files containing the two columns separated
-   by space or TAB characters. The first column is the position of the
-   start of the window that the hydrophobic moment was calculated in. The
-   second is the hydrophobic moment ('uH'). (If the option '-double' is
-   given then the beta-sheet angle hydrophobicity is given as a third
-   column.)
+   Otherwise it writes out a files containing the two columns separated by
+   space or TAB characters. The first column is the position of the start
+   of the window that the hydrophobic moment was calculated in. The second
+   is the hydrophobic moment ('uH'). (If the option '-double' is given
+   then the beta-sheet angle hydrophobicity is given as a third column.)
 
   Output files for usage example
 
@@ -364,8 +368,8 @@ Notes
    a strong periodicity in the hydrophobicity of af 3.6 residues, the
    period of the alpha helix. The angle of rotation per residue in alpha
    helices is 100 degrees. Similarly, many sequences that form strands of
-   beta sheets tend to have a periodicity in their hydrophobicity of
-   about 2.3 residues, the period typical of beta structure. The angle of
+   beta sheets tend to have a periodicity in their hydrophobicity of about
+   2.3 residues, the period typical of beta structure. The angle of
    rotation per residue in beta sheets is 160 degrees. This means that
    many protein sequences tend to form the periodic structure that
    maximizes their amphiphilicity.
@@ -416,7 +420,7 @@ See also
 
 Author(s)
 
-   Alan Bleasby (ajb © ebi.ac.uk)
+   Alan Bleasby (ajb (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

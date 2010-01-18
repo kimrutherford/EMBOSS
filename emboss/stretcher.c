@@ -189,12 +189,12 @@ int main(int argc, char **argv)
     s1 = ajStrGetPtr(ajSeqGetSeqS(glseq0));
     s2 = ajStrGetPtr(ajSeqGetSeqS(glseq1));
 
-    sub = ajMatrixArray(matrix);
-    cvt = ajMatrixCvt(matrix);
+    sub = ajMatrixGetMatrix(matrix);
+    cvt = ajMatrixGetCvt(matrix);
 
     /*
-    ** ajMatrixSeqNum(matrix, glseq0,  &aa0str);
-    ** ajMatrixSeqNum(matrix, glseq1, &aa1str);
+    ** ajMatrixSeqIndex(matrix, glseq0,  &aa0str);
+    ** ajMatrixSeqIndex(matrix, glseq1, &aa1str);
     */
 
     aa0str = ajStrNewRes(2+ajSeqGetLen(glseq0)); /* length + blank + trailing null */

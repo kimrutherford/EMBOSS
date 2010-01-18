@@ -100,7 +100,7 @@ int main(int argc, char **argv)
     float yy2;
 
 
-    ajGraphInit("pepwheel", argc, argv);
+    embInit("pepwheel", argc, argv);
 
 
     seq         = ajAcdGetSeq("sequence");
@@ -136,11 +136,11 @@ int main(int argc, char **argv)
     ajStrAssignSubC(&substr,ajStrGetPtr(strand),begin-1,end-1);
     len = ajStrGetLen(substr);
 
-    ajGraphSetTitlePlus(graph, ajSeqGetUsaS(seq));
+    ajGraphAppendTitleS(graph, ajSeqGetUsaS(seq));
 
     ajGraphOpenWin(graph,xmin,xmax,ymin,ymax);
 
-    ajGraphSetFore(AJB_BLACK);
+    ajGraphicsSetFgcolour(AJB_BLACK);
 
     ang = ((float)360.0 / (float)steps) * (float)turns;
 
@@ -168,18 +168,18 @@ int main(int argc, char **argv)
 		{
 		    if(wheel)
 		    {
-			ajPolToRec(wradius-wheelgap,oldangle,&xx1,&yy1);
-			ajPolToRec(wradius,angle,&xx2,&yy2);
-			ajGraphLine(xx1,yy1,xx2,yy2);
+			ajCvtPolToRec(wradius-wheelgap,oldangle,&xx1,&yy1);
+			ajCvtPolToRec(wradius,angle,&xx2,&yy2);
+			ajGraphicsDrawposLine(xx1,yy1,xx2,yy2);
 		    }
 		    startloop=ajFalse;
 		}
 		else
 		    if(wheel)
 		    {
-			ajPolToRec(wradius,oldangle,&xx1,&yy1);
-			ajPolToRec(wradius,angle,&xx2,&yy2);
-			ajGraphLine(xx1,yy1,xx2,yy2);
+			ajCvtPolToRec(wradius,oldangle,&xx1,&yy1);
+			ajCvtPolToRec(wradius,angle,&xx2,&yy2);
+			ajGraphicsDrawposLine(xx1,yy1,xx2,yy2);
 		    }
 	    }
 	    pepwheel_plotresidue(*(ajStrGetPtr(substr)+lc),radius+resgap,angle,
@@ -194,7 +194,7 @@ int main(int argc, char **argv)
 
     }
 
-    ajGraphCloseWin();
+    ajGraphicsClose();
     ajGraphxyDel(&graph);
 
     ajStrDel(&strand);
@@ -242,8 +242,8 @@ static void pepwheel_drawocta(float x, float y, float size)
 
 
     for(i=0;i<8;++i)
-	ajGraphLine(x+polyx[i]*size,y+polyy[i]*size,x+polyx[i+1]*size,
-			y+polyy[i+1]*size);
+	ajGraphicsDrawposLine(x+polyx[i]*size,y+polyy[i]*size,x+polyx[i+1]*size,
+                              y+polyy[i+1]*size);
 
     return;
 }
@@ -281,34 +281,34 @@ static void pepwheel_plotresidue(char c, float r, float a, const char *squares,
     cs[1] = '\0';
     *cs   = c;
 
-    ajPolToRec(r, a, &x, &y);
+    ajCvtPolToRec(r, a, &x, &y);
 
     if(x<xmin+.1 || x>xmax-.1 || y<ymin+.2 || y>ymax-.2)
 	return;
 
 
-    ajGraphSetFore(AJB_PURPLE);
+    ajGraphicsSetFgcolour(AJB_PURPLE);
 
     if(strstr(squares,cs))
     {
-	ajGraphSetFore(AJB_BLUE);
-	ajGraphBox(x-(float)0.025,y-(float)0.022,(float)0.05);
+	ajGraphicsSetFgcolour(AJB_BLUE);
+	ajGraphicsDrawposBox(x-(float)0.025,y-(float)0.022,(float)0.05);
     }
 
     if(strstr(octags,cs))
     {
-	ajGraphSetFore(AJB_BLACK);
+	ajGraphicsSetFgcolour(AJB_BLACK);
 	pepwheel_drawocta(x,y+(float)0.003,(float)0.28);
     }
 
     if(strstr(diamonds,cs))
     {
-	ajGraphSetFore(AJB_RED);
-	ajGraphDia(x-(float)0.042,y-(float)0.04,(float)0.085);
+	ajGraphicsSetFgcolour(AJB_RED);
+	ajGraphicsDrawposDia(x-(float)0.042,y-(float)0.04,(float)0.085);
     }
 
-    ajGraphText(x,y,cs,0.5);
-    ajGraphSetFore(AJB_BLACK);
+    ajGraphicsDrawposTextJustify(x,y,cs,0.5);
+    ajGraphicsSetFgcolour(AJB_BLACK);
  
     return;
 }

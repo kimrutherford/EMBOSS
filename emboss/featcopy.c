@@ -41,7 +41,7 @@ int main(int argc, char **argv)
     feat = ajAcdGetFeatures("features");
     featout = ajAcdGetFeatout("outfeat");
 
-    ajFeatWrite(featout, feat);
+    ajFeattableWrite(featout, feat);
 
     ajFeattableDel(&feat);
     ajFeattabOutDel(&featout);

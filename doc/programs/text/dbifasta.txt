@@ -1,5 +1,4 @@
-
-                                 dbifasta 
+                                  dbifasta
 
 
 
@@ -27,7 +26,7 @@ Usage
    Here is a sample session with dbifasta
 
 
-% dbifasta 
+% dbifasta
 Index a fasta file database
 Database name: EMROD
               simple : >ID
@@ -39,13 +38,17 @@ Database name: EMROD
 ID line format [idacc]: idacc
 Database directory [.]: data
 Wildcard database filename [*.dat]: emrod
-Release number [0.0]: 
-Index date [00/00/00]: 
-General log output file [outfile.dbifasta]: 
+Release number [0.0]:
+Index date [00/00/00]:
+General log output file [outfile.dbifasta]:
+
 
    Go to the output files for this example
 
 Command line arguments
+
+Index a fasta file database
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     Database name (Any string from 2 to 19
@@ -57,7 +60,7 @@ Command line arguments
                                   ID); ncbi (| formats))
    -directory          directory  [.] Database directory
    -filenames          string     [*.dat] Wildcard database filename (Any
-                                  string is accepted)
+                                  string)
    -release            string     [0.0] Release number (Any string up to 9
                                   characters)
    -date               string     [00/00/00] Index date (Date string dd/mm/yy)
@@ -69,13 +72,12 @@ Command line arguments
                                   accession number index); sv (seqvn sequence
                                   version and gi number index); des (des
                                   description index))
-   -exclude            string     Wildcard filename(s) to exclude (Any string
-                                  is accepted)
+   -exclude            string     Wildcard filename(s) to exclude (Any string)
    -maxindex           integer    [0] Maximum index length (Integer 0 or more)
    -sortoptions        string     [-T . -k 1,1] Sort options, typically '-T .'
                                   to use current directory for work files and
                                   '-k 1,1' to force GNU sort to use the first
-                                  field (Any string is accepted)
+                                  field (Any string)
    -[no]systemsort     boolean    [Y] Use system sort utility
    -[no]cleanup        boolean    [Y] Clean up temporary files
    -indexoutdir        outdir     [.] Index file output directory
@@ -93,13 +95,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -131,10 +135,10 @@ Output file format
 
 ########################################
 # Program: dbifasta
-# Rundate: Tue 15 Jul 2008 12:00:00
+# Rundate: Fri 15 Jan 2010 12:00:00
 # Dbname: EMROD
 # Release: 0.0
-# Date: 15/07/08
+# Date: 15/01/10
 # CurrentDirectory: /homes/user/test/qa/dbifasta-ex-keep/
 # IndexDirectory: ./
 # IndexDirectoryPath: /homes/user/test/qa/dbifasta-ex-keep/
@@ -176,19 +180,19 @@ Total 1 files 6 entries (0 duplicates)
        header, mainly used to store the record size which will depend on
        the size of the longest entryname in the database. Each entry is
        stored in sorted alphanumeric order so that a binary search can be
-       used to efficiently find any record. The record also holds the
-       file number from division.lkp and the offsets in the data and
-       sequence files for that entry.
+       used to efficiently find any record. The record also holds the file
+       number from division.lkp and the offsets in the data and sequence
+       files for that entry.
      * acnum.trg holds the accession number information. The file has the
        usual 300 byte header, and a sorted list of record by accession
        number. Each accession number record contains the first record
-       number in acnum.hit and the total number of records in acnum.hit
-       so that secondary (duplicated) accession numbers can be searched.
+       number in acnum.hit and the total number of records in acnum.hit so
+       that secondary (duplicated) accession numbers can be searched.
      * acnum.hit is a very simple file. After the usual 300 byte header,
        each record simply holds the record number in entryname.idx. An
-       accession number search will use acnum.trg to find a start
-       position and number of records to read in this file, and will then
-       simply read the entryname.idx records for each entry in turn.
+       accession number search will use acnum.trg to find a start position
+       and number of records to read in this file, and will then simply
+       read the entryname.idx records for each entry in turn.
 
 Data files
 
@@ -200,8 +204,8 @@ Notes
    No allowance is made for two entries with the same name so it is not
    possible to index EMBL and EMBLNEW together.
 
-   Having created the EMBOSS indices for this file, a database can then
-   be defined in the file emboss.defaults as something like:
+   Having created the EMBOSS indices for this file, a database can then be
+   defined in the file emboss.defaults as something like:
 DB emrod [
    type: N
    format: fasta
@@ -246,7 +250,7 @@ See also
 
 Author(s)
 
-   Alan             Bleasby (ajb © ebi.ac.uk)
+   Alan             Bleasby (ajb (c) ebi.ac.uk)
    European         Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton,         Cambridge CB10 1SD, UK
 

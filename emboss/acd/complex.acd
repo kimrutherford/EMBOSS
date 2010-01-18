@@ -2,6 +2,7 @@ application: complex [
   documentation: "Find the linguistic complexity in
                   nucleotide sequences"
   groups: "Nucleic:Composition"
+  relations: "EDAM: Nucleotide sequence complexity calculation"
 ]
 
 section: input [
@@ -12,6 +13,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "dna"
+    relations: "EDAM: DNA sequence record"                                 
   ]
 
   integer: lwin [
@@ -19,6 +21,7 @@ section: input [
     default: "100"
     maximum: "$(sequence.length)"
     information: "Window length"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: step [
@@ -27,6 +30,7 @@ section: input [
     maximum: "$(lwin)"
     information: "Step size"
     help: "Displacement of the window over the sequence"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: jmin [
@@ -36,6 +40,7 @@ section: input [
     maximum: "20"
     information: "Minimum word length"
     help: ""
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: jmax [
@@ -45,6 +50,7 @@ section: input [
     maximum: "50"
     information: "Maximum word length"
     help: ""
+    relations: "EDAM: Generic integer"                                     
   ]
 
 endsection: input
@@ -58,6 +64,7 @@ section: advanced [
     default: "N"
     information: "All sequences"
     help: "Calculate over a set of sequences"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   integer: sim [
@@ -65,6 +72,7 @@ section: advanced [
     information: "Simulations"
     help: "Calculate the linguistic complexity by comparison with a
            number of simulations having a uniform distribution of bases"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   boolean: freq [
@@ -72,6 +80,7 @@ section: advanced [
     information: "Calculate frequency"
     help: "Execute the simulation of a sequence based on the base
            frequency of the original sequence"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: advanced
@@ -87,11 +96,13 @@ section: output [
     help: "Generate a file named UjTable containing the values of Uj
            for each word j in the real sequence(s) and in any simulated
            sequences"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   outfile: outfile [
     parameter: "Y"
     knowntype: "complex output"
+    relations:  "EDAM: Sequence complexity report"                     
   ]
 
   outfile: ujtablefile [
@@ -100,11 +111,13 @@ section: output [
     knowntype: "complex temporary output"
     help: ""
     nullok: "Y"
+    relations:                                                 
   ]
 
   seqoutall: outseq [
     standard: "$(omnia)"
     nullok: "Y"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: output

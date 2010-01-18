@@ -1,5 +1,4 @@
-
-                                  fuzzpro 
+                                   fuzzpro
 
 
 
@@ -22,8 +21,8 @@ Description
    sequence or they can allow various ambiguities, matches to variable
    lengths of sequence and repeated subsections of the sequence. One or
    more protein sequences are read from file. The output is a standard
-   EMBOSS report file that includes data such as location and score of
-   any matches.
+   EMBOSS report file that includes data such as location and score of any
+   matches.
 
 Algorithm
 
@@ -35,16 +34,20 @@ Usage
    Here is a sample session with fuzzpro
 
 
-% fuzzpro 
+% fuzzpro
 Search for patterns in protein sequences
 Input protein sequence(s): tsw:*
 Search pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
-Output report [12s1_arath.fuzzpro]: 
+Output report [12s1_arath.fuzzpro]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Search for patterns in protein sequences
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -126,13 +129,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -153,9 +158,9 @@ Input file format
      * The standard IUPAC one-letter codes for the amino acids are used.
      * The symbol `x' is used for a position where any amino acid is
        accepted.
-     * Ambiguities are indicated by listing the acceptable amino acids
-       for a given position, between square parentheses `[ ]'. For
-       example: [ALT] stands for Ala or Leu or Thr.
+     * Ambiguities are indicated by listing the acceptable amino acids for
+       a given position, between square parentheses `[ ]'. For example:
+       [ALT] stands for Ala or Leu or Thr.
      * Ambiguities are also indicated by listing between a pair of curly
        brackets `{ }' the amino acids that are not accepted at a given
        position. For example: {AM} stands for any amino acid except Ala
@@ -202,7 +207,7 @@ Output file format
 
 ########################################
 # Program: fuzzpro
-# Rundate: Tue 15 Jul 2008 12:00:00
+# Rundate: Fri 15 Jan 2010 12:00:00
 # Commandline: fuzzpro
 #    -sequence "tsw:*"
 #    -pattern "[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G"
@@ -362,7 +367,7 @@ See also
 
 Author(s)
 
-   Alan Bleasby (ajb © ebi.ac.uk)
+   Alan Bleasby (ajb (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

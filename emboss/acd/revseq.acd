@@ -1,6 +1,7 @@
 application: revseq [
   documentation: "Reverse and complement a nucleotide sequence"
   groups: "Edit"
+  relations: "EDAM: Sequence reverse and complement"
 ]
 
 section: input [
@@ -11,6 +12,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "gapdna"
+    relations: "EDAM: DNA sequence record"                                 
   ]
 
 endsection: input
@@ -25,6 +27,7 @@ section: advanced [
     information: "Reverse sequence"
     help: "Set this to be false if you do not wish to reverse the
            output sequence"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: complement [
@@ -32,6 +35,7 @@ section: advanced [
     information: "Complement sequence"
     help: "Set this to be false if you do not wish to complement the
            output sequence"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: advanced
@@ -44,6 +48,7 @@ section: output [
   seqoutall: outseq [
     parameter: "Y"
     extension: "rev"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: output

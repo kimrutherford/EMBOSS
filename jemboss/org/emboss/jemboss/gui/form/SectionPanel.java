@@ -179,7 +179,6 @@ public class SectionPanel
     this.textf = textf;
     this.textInt = textInt;
     this.textFloat = textFloat;
-    //this.rangeField = rangeField;
     this.checkBox = checkBox;
     this.inSeqAttr = inSeqAttr;
     this.fieldOption = fieldOption;
@@ -192,9 +191,7 @@ public class SectionPanel
     this.mysettings = mysettings;
     this.withSoap = withSoap; 
     this.f = f;
-//  this.graphics = graphics;
 
-//using JNI?
     nf = nff;
 
     String att = parseAcd.getParameterAttribute(nf,0).toLowerCase();
@@ -385,6 +382,12 @@ public class SectionPanel
 
           pan2.add(selectMatrix);
           pan2.add(Box.createHorizontalGlue());
+        }
+        else if(att.startsWith("infile"))
+        {
+          String info = parseAcd.getInfoParamValue(nf);
+          Box b = FileChooser.simpleFileChooser(info, textf[h]);
+          pan.add(b);
         }
         else if(att.startsWith("dirlist") || att.startsWith("string") ||
                 att.startsWith("infile")  || att.startsWith("regexp") ||

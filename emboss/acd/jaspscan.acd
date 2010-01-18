@@ -2,6 +2,7 @@ application: jaspscan [
   documentation: "Scans DNA sequences for transcription
                   factors"
   groups: "Nucleic:Transcription"
+  relations: "EDAM: Transcription factor binding site prediction"
 ]
 
 section: input [
@@ -12,6 +13,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "DNA"
+    relations: "EDAM: Sequence record"                                     
   ]
 
   list: menu [
@@ -25,6 +27,7 @@ section: input [
     header: "Jaspar matrix set"
     information: "Matrix set"
     button: "Y"
+    relations: "EDAM: Generic string array"                                
   ]
 
 
@@ -52,6 +55,7 @@ section: input [
            ma0032 \
            ma0053"
     knowntype: "jaspar matrix id"
+    relations:  "EDAM: JASPAR profile identifier"                      
   ]
 
 
@@ -68,6 +72,7 @@ section: required [
     information: "Threshold percentage"
     help: "If the matrix score is greater than or equal to this percentage \
              then a hit will be reported"
+    relations: "EDAM: Generic float"                                       
   ]
 
 endsection: required
@@ -86,6 +91,7 @@ section: additional [
            list. Matrices are specified in the same way as for the \
            selection list."
     knowntype: "jaspar matrix id"
+    relations:  "EDAM: JASPAR profile identifier"                      
   ]
 
   boolean: both [
@@ -93,6 +99,7 @@ section: additional [
     default: "N"
     information: "Scan both strands"
     help: "If set then both the forward and reverse strands are searched"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: additional
@@ -112,6 +119,7 @@ section: output [
               str:exp=Experiment str:pmid=Source_PMID float:info=Info_Content
               str:jaspar=Closest_Jaspar str:transfac=Closest_Transfac
               float:mcs=MCS_Score str:built=Built_From"
+    relations: "EDAM: EMBOSS report"                                       
   ]
 
 endsection: output

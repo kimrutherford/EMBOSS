@@ -1,0 +1,80 @@
+application: edamclean
+[
+  documentation: "Validate and fix EDAM OBO ontology"
+]
+
+
+
+
+
+section: input 
+[
+  information: "Input section"
+  type: "page"
+]
+
+  infile: edamin
+  [
+    parameter: "Y"
+    information: "EDAM input file"
+    default: "/homes/jison/Ontologies/EDAM_beta1.obo"
+  ]
+
+endsection: input
+
+
+
+
+
+section: required 
+[
+  information: "Required section"
+  type: "page"
+]
+
+  selection: mode 
+  [
+    standard: "Y"
+    default: "Report only"
+    values: "Report only;Renumber terms;Fix relations"
+    information: "Mode of operation"
+  ]
+
+endsection: required
+
+
+
+
+
+section: advanced 
+[
+  information: "Advanced section"
+  type: "page"
+]
+endsection: advanced
+
+
+
+
+
+section: output 
+[
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: edamout
+  [
+    parameter: "Y"
+    information: "EDAM output file"
+    default: "EDAM_out.obo"
+  ]
+
+  outfile: log
+  [
+    parameter: "Y"
+    information: "edamclean log file"
+    default: "EDAM_out.log"
+  ]
+
+endsection: output

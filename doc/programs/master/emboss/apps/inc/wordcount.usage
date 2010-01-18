@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>wordcount tembl:u68037 -wordsize=3 </b>
-Count and extract unique words in DNA sequence(s)
+Count and extract unique words in molecular sequence(s)
 Output file [u68037.wordcount]: <b></b>
 
 </pre></td></tr></table><p>

@@ -1,19 +1,27 @@
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Qualifier</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Standard (Mandatory) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td>[-sequence]<br>(Parameter 1)</td>
+<td>seqall</td>
 <td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
 <td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-enzymes</td>
+<td>string</td>
 <td>The name 'all' reads in all enzyme names from the REBASE database. You can specify enzymes by giving their names with commas between then, such as: 'HincII,hinfI,ppiI,hindiii'.
 The case of the names is not important. You can specify a file of enzyme names to read in by giving the name of the file holding the enzyme names with a '@' character in front of it, for example, '@enz.list'.
 Blank lines and lines starting with a hash character or '!' are ignored and all other lines are concatenated together with a comma character ',' and then treated as the list of enzymes to search for.
@@ -24,164 +32,181 @@ HincII, ppiII
 hindiii
 HinfI
 PpiI</td>
-<td>Any string is accepted</td>
+<td>Any string</td>
 <td>all</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-sitelen</td>
+<td>integer</td>
 <td>This sets the minimum length of the restriction enzyme recognition site. Any enzymes with sites shorter than this will be ignored.</td>
 <td>Integer from 2 to 20</td>
 <td>4</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>[-outfile]<br>(Parameter 2)</td>
+<td>outfile</td>
 <td>Output file name</td>
 <td>Output file</td>
 <td><i>&lt;*&gt;</i>.remap</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Additional (Optional) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
+<th align="left" colspan=5>Additional (Optional) qualifiers</th>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-mincuts</td>
+<td>integer</td>
 <td>This sets the minimum number of cuts for any restriction enzyme that will be considered. Any enzymes that cut fewer times than this will be ignored.</td>
 <td>Integer from 1 to 1000</td>
 <td>1</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-maxcuts</td>
+<td>integer</td>
 <td>This sets the maximum number of cuts for any restriction enzyme that will be considered. Any enzymes that cut more times than this will be ignored.</td>
 <td>Integer up to 2000000000</td>
 <td>2000000000</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-single</td>
+<td>boolean</td>
 <td>If this is set then this forces the values of the mincuts and maxcuts qualifiers to both be 1. Any other value you may have set them to will be ignored.</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-[no]blunt</td>
+<td>boolean</td>
 <td>This allows those enzymes which cut at the same position on the forward and reverse strands to be considered.</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-[no]sticky</td>
+<td>boolean</td>
 <td>This allows those enzymes which cut at different positions on the forward and reverse strands, leaving an overhang, to be considered.</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-[no]ambiguity</td>
+<td>boolean</td>
 <td>This allows those enzymes which have one or more 'N' ambiguity codes in their pattern to be considered</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-plasmid</td>
+<td>boolean</td>
 <td>If this is set then this allows searches for restriction enzyme recognition site and cut postions that span the end of the sequence to be considered.</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-methylation</td>
+<td>boolean</td>
 <td>If this is set then RE recognition sites will not match methylated bases.</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-[no]commercial</td>
+<td>boolean</td>
 <td>If this is set, then only those enzymes with a commercial supplier will be searched for. This qualifier is ignored if you have specified an explicit list of enzymes to search for, rather than searching through 'all' the enzymes in the REBASE database. It is assumed that, if you are asking for an explicit enzyme, then you probably know where to get it from and so all enzymes names that you have asked to be searched for, and which cut, will be reported whether or not they have a commercial supplier.</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-table</td>
+<td>list</td>
 <td>Genetic code to use</td>
 <td><table><tr><td>0</td> <td><i>(Standard)</i></td></tr><tr><td>1</td> <td><i>(Standard (with alternative initiation codons))</i></td></tr><tr><td>2</td> <td><i>(Vertebrate Mitochondrial)</i></td></tr><tr><td>3</td> <td><i>(Yeast Mitochondrial)</i></td></tr><tr><td>4</td> <td><i>(Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma)</i></td></tr><tr><td>5</td> <td><i>(Invertebrate Mitochondrial)</i></td></tr><tr><td>6</td> <td><i>(Ciliate Macronuclear and Dasycladacean)</i></td></tr><tr><td>9</td> <td><i>(Echinoderm Mitochondrial)</i></td></tr><tr><td>10</td> <td><i>(Euplotid Nuclear)</i></td></tr><tr><td>11</td> <td><i>(Bacterial)</i></td></tr><tr><td>12</td> <td><i>(Alternative Yeast Nuclear)</i></td></tr><tr><td>13</td> <td><i>(Ascidian Mitochondrial)</i></td></tr><tr><td>14</td> <td><i>(Flatworm Mitochondrial)</i></td></tr><tr><td>15</td> <td><i>(Blepharisma Macronuclear)</i></td></tr><tr><td>16</td> <td><i>(Chlorophycean Mitochondrial)</i></td></tr><tr><td>21</td> <td><i>(Trematode Mitochondrial)</i></td></tr><tr><td>22</td> <td><i>(Scenedesmus obliquus)</i></td></tr><tr><td>23</td> <td><i>(Thraustochytrium Mitochondrial)</i></td></tr></table></td>
 <td>0</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-frame</td>
+<td>list</td>
 <td>This allows you to specify the frames that are translated. If you are not displaying cut sites on the reverse sense, then the reverse sense translations will not be displayed even if you have requested frames 4, 5 or 6. By default, all six frames will be displayed.</td>
 <td><table><tr><td>1</td> <td><i>(1)</i></td></tr><tr><td>2</td> <td><i>(2)</i></td></tr><tr><td>3</td> <td><i>(3)</i></td></tr><tr><td>F</td> <td><i>(Forward three frames)</i></td></tr><tr><td>-1</td> <td><i>(-1)</i></td></tr><tr><td>-2</td> <td><i>(-2)</i></td></tr><tr><td>-3</td> <td><i>(-3)</i></td></tr><tr><td>R</td> <td><i>(Reverse three frames)</i></td></tr><tr><td>6</td> <td><i>(All six frames)</i></td></tr></table></td>
 <td>6</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-[no]cutlist</td>
+<td>boolean</td>
 <td>This produces lists in the output of the enzymes that cut, those that cut but are excluded because that cut fewer times than mincut or more times than maxcut and those enzymes that do not cut.</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-flatreformat</td>
+<td>boolean</td>
 <td>This changes the output format to one where the recognition site is indicated by a row of '===' characters and the cut site is pointed to by a '&gt;' character in the forward sense, or a '&lt;' in the reverse sense strand.</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-[no]limit</td>
+<td>boolean</td>
 <td>This limits the reporting of enzymes to just one enzyme from each group of isoschizomers. The enzyme chosen to represent an isoschizomer group is the prototype indicated in the data file 'embossre.equ', which is created by the program 'rebaseextract'. If you prefer different prototypes to be used, make a copy of embossre.equ in your home directory and edit it. If this value is set to be false then all of the input enzymes will be reported. You might like to set this to false if you are supplying an explicit set of enzymes rather than searching 'all' of them.</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
+<th align="left" colspan=5>Advanced (Unprompted) qualifiers</th>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-mfile</td>
-<td>Restriction enzyme data file (optional)</td>
+<td>datafile</td>
+<td>Restriction enzyme methylation data file</td>
 <td>Data file</td>
 <td>Emethylsites.dat</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-[no]translation</td>
+<td>boolean</td>
 <td>This displays the 6-frame translations of the sequence in the output.</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-[no]reverse</td>
+<td>boolean</td>
 <td>This displays the cut sites and translation of the reverse sense.</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-orfminsize</td>
+<td>integer</td>
 <td>This sets the minimum size of Open Reading Frames (ORFs) to display in the translations. All other translation regions are masked by changing the amino acids to '-' characters.</td>
 <td>Integer 0 or more</td>
 <td>If this value is left as 0 then all of the translation is shown.</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-uppercase</td>
+<td>range</td>
 <td>Regions to put in uppercase.
 If this is left blank, then the sequence case is left alone.
 A set of regions is specified by a set of pairs of positions.
@@ -195,8 +220,9 @@ Examples of region specifications are:
 <td>If this is left blank, then the sequence case is left alone.</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-highlight</td>
+<td>range</td>
 <td>Regions to colour if formatting for HTML.
 If this is left blank, then the sequence is left alone.
 A set of regions is specified by a set of pairs of positions.
@@ -210,67 +236,310 @@ A file of ranges to colour (one range per line) can be specified as '@filename'.
 <td><i>full sequence</i></td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-threeletter</td>
+<td>boolean</td>
 <td>Display protein sequences in three-letter code</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-number</td>
+<td>boolean</td>
 <td>Number the sequences</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-width</td>
+<td>integer</td>
 <td>Width of sequence to display</td>
 <td>Integer 1 or more</td>
 <td>60</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-length</td>
+<td>integer</td>
 <td>Line length of page (0 for indefinite)</td>
 <td>Integer 0 or more</td>
 <td>0</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-margin</td>
+<td>integer</td>
 <td>Margin around sequence for numbering</td>
 <td>Integer 0 or more</td>
 <td>10</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-[no]name</td>
+<td>boolean</td>
 <td>Set this to be false if you do not wish to display the ID name of the sequence</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-[no]description</td>
+<td>boolean</td>
 <td>Set this to be false if you do not wish to display the description of the sequence</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-offset</td>
+<td>integer</td>
 <td>Offset to start numbering the sequence from</td>
 <td>Any integer value</td>
 <td>1</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-html</td>
+<td>boolean</td>
 <td>Use HTML formatting</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-sequence" associated seqall qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sbegin1<br>-sbegin_sequence</td>
+<td>integer</td>
+<td>Start of each sequence to be used</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -send1<br>-send_sequence</td>
+<td>integer</td>
+<td>End of each sequence to be used</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sreverse1<br>-sreverse_sequence</td>
+<td>boolean</td>
+<td>Reverse (if DNA)</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sask1<br>-sask_sequence</td>
+<td>boolean</td>
+<td>Ask for begin/end/reverse</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -snucleotide1<br>-snucleotide_sequence</td>
+<td>boolean</td>
+<td>Sequence is nucleotide</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sprotein1<br>-sprotein_sequence</td>
+<td>boolean</td>
+<td>Sequence is protein</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -slower1<br>-slower_sequence</td>
+<td>boolean</td>
+<td>Make lower case</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -supper1<br>-supper_sequence</td>
+<td>boolean</td>
+<td>Make upper case</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sformat1<br>-sformat_sequence</td>
+<td>string</td>
+<td>Input sequence format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sdbname1<br>-sdbname_sequence</td>
+<td>string</td>
+<td>Database name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sid1<br>-sid_sequence</td>
+<td>string</td>
+<td>Entryname</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ufo1<br>-ufo_sequence</td>
+<td>string</td>
+<td>UFO features</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fformat1<br>-fformat_sequence</td>
+<td>string</td>
+<td>Features format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fopenfile1<br>-fopenfile_sequence</td>
+<td>string</td>
+<td>Features file name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory2<br>-odirectory_outfile</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>General qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -auto</td>
+<td>boolean</td>
+<td>Turn off prompts</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -stdout</td>
+<td>boolean</td>
+<td>Write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -filter</td>
+<td>boolean</td>
+<td>Read first file from standard input, write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -options</td>
+<td>boolean</td>
+<td>Prompt for standard and additional values</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -debug</td>
+<td>boolean</td>
+<td>Write debug output to program.dbg</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -verbose</td>
+<td>boolean</td>
+<td>Report some/full command line options</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -help</td>
+<td>boolean</td>
+<td>Report command line options and exit. More information on associated and general qualifiers can be found with -help -verbose</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -warning</td>
+<td>boolean</td>
+<td>Report warnings</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -error</td>
+<td>boolean</td>
+<td>Report errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fatal</td>
+<td>boolean</td>
+<td>Report fatal errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -die</td>
+<td>boolean</td>
+<td>Report dying program messages</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -version</td>
+<td>boolean</td>
+<td>Report version number and exit</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
 </tr>
 
 </table>

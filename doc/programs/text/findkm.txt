@@ -1,5 +1,4 @@
-
-                                  findkm 
+                                   findkm
 
 
 
@@ -16,28 +15,32 @@ Function
 
 Description
 
-   findkm reads a file of enzymatic reaction data (substrate
-   concentration [S] versus reaction velocity [V]) and draws Michaelis
-   Menten and Hanes Woolf plots of the data. From these it calculates the
-   Michaelis Menten constant (Km) and the maximum velocity (Vmax) of the
-   reaction. An output file with all relevant data is written.
+   findkm reads a file of enzymatic reaction data (substrate concentration
+   [S] versus reaction velocity [V]) and draws Michaelis Menten and Hanes
+   Woolf plots of the data. From these it calculates the Michaelis Menten
+   constant (Km) and the maximum velocity (Vmax) of the reaction. An
+   output file with all relevant data is written.
 
 Usage
 
    Here is a sample session with findkm
 
 
-% findkm -graph cps 
+% findkm -graph cps
 Calculate and plot enzyme reaction data
 Enzyme kinetics data (application-specific) file: enztest.dat
-Output file [enztest.findkm]: 
+Output file [enztest.findkm]:
 
 Created findkm.ps
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Calculate and plot enzyme reaction data
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     Enzyme kinetics data (application-specific)
@@ -45,7 +48,7 @@ Command line arguments
   [-outfile]           outfile    [*.findkm] Output file name
    -graphlb            xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, das, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
@@ -74,13 +77,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -167,7 +172,7 @@ Author(s)
    HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
 
    This application was modified by David Martin
-   (dmartin © rfcgr.mrc.ac.uk)
+   (dmartin (c) rfcgr.mrc.ac.uk)
 
 History
 

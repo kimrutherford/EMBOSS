@@ -1,5 +1,4 @@
-
-                                 fuzztran 
+                                  fuzztran
 
 
 
@@ -16,8 +15,8 @@ Function
 
 Description
 
-   fuzztran searches for a specified PROSITE-style pattern in nucleic
-   acid sequences that are first translated to protein in the specified
+   fuzztran searches for a specified PROSITE-style pattern in nucleic acid
+   sequences that are first translated to protein in the specified
    frame(s) with a specified genetic code. Such patterns are
    specifications of a (typically short) length of sequence to be found.
    They can specify a search for an exact sequence or they can allow
@@ -31,7 +30,7 @@ Usage
    Here is a sample session with fuzztran
 
 
-% fuzztran -opt 
+% fuzztran -opt
 Search for patterns in protein sequences (translated)
 Input nucleotide sequence(s): tembl:Z46957
 Search pattern: RA
@@ -51,8 +50,8 @@ Genetic codes
          1 : Standard (with alternative initiation codons)
          2 : Vertebrate Mitochondrial
          3 : Yeast Mitochondrial
-         4 : Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiropl
-asma
+         4 : Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiropla
+sma
          5 : Invertebrate Mitochondrial
          6 : Ciliate Macronuclear and Dasycladacean
          9 : Echinoderm Mitochondrial
@@ -66,13 +65,17 @@ asma
         21 : Trematode Mitochondrial
         22 : Scenedesmus obliquus
         23 : Thraustochytrium Mitochondrial
-Code to use [0]: 
-Output report [z46957.fuzztran]: 
+Code to use [0]:
+Output report [z46957.fuzztran]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Search for patterns in protein sequences (translated)
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -175,13 +178,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -189,8 +194,8 @@ Input file format
 
   Input files for usage example
 
-   'tembl:Z46957' is a sequence entry in the example nucleic acid
-   database 'tembl'
+   'tembl:Z46957' is a sequence entry in the example nucleic acid database
+   'tembl'
 
   Database entry: tembl:Z46957
 
@@ -206,8 +211,7 @@ XX
 KW   rhodopsin.
 XX
 OS   Rattus norvegicus (Norway rat)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
-;
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
 OC   Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea;
 OC   Muridae; Murinae; Rattus.
 XX
@@ -216,8 +220,7 @@ RP   1-1493
 RX   DOI; 10.1074/jbc.271.20.11710.
 RX   PUBMED; 8662634.
 RA   Huber A., Sander P.H., Paulsen R.;
-RT   "Phosphorylation of the InaD gene product, a photoreceptor membrane protei
-n
+RT   "Phosphorylation of the InaD gene product, a photoreceptor membrane protein
 RT   required for recovery of visual excitation";
 RL   J. Biol. Chem. 271(20):11710-11717(1996).
 XX
@@ -253,72 +256,41 @@ FT                   /db_xref="InterPro:IPR017452"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P51489"
 FT                   /citation=[1]
 FT                   /protein_id="CAA87081.1"
-FT                   /translation="MNGTEGPNFYVPFSNITGVVRSPFEQPQYYLAEPWQFSMLAAYM
-F
-FT                   LLIVLGFPINFLTLYVTVQHKKLRTPLNYILLNLAVADLFMVFGGFTTTLYTSLHGYF
-V
-FT                   FGPTGCNLEGFFATLGGEIGLWSLVVLAIERYVVVCKPMSNFRFGENHAIMGVAFTWV
-M
-FT                   ALACAAPPLVGWSRYIPEGMQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIPMIVIFF
-C
-FT                   YGQLVFTVKEAAAQQQESATTQKAEKEVTRMVIIMVIFFLICWLPYASVAMYIFTHQG
-S
-FT                   NFGPIFMTLPAFFAKTASIYNPIIYIMMNKQFRNCMLTTLCCGKNPLGDDEASATASK
-T
+FT                   /translation="MNGTEGPNFYVPFSNITGVVRSPFEQPQYYLAEPWQFSMLAAYMF
+FT                   LLIVLGFPINFLTLYVTVQHKKLRTPLNYILLNLAVADLFMVFGGFTTTLYTSLHGYFV
+FT                   FGPTGCNLEGFFATLGGEIGLWSLVVLAIERYVVVCKPMSNFRFGENHAIMGVAFTWVM
+FT                   ALACAAPPLVGWSRYIPEGMQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIPMIVIFFC
+FT                   YGQLVFTVKEAAAQQQESATTQKAEKEVTRMVIIMVIFFLICWLPYASVAMYIFTHQGS
+FT                   NFGPIFMTLPAFFAKTASIYNPIIYIMMNKQFRNCMLTTLCCGKNPLGDDEASATASKT
 FT                   ETSQVAPA"
 FT   3'UTR           1128..1493
 XX
 SQ   Sequence 1493 BP; 309 A; 475 C; 365 G; 344 T; 0 other;
-     ggagccgtag gtagctgagc tcgccaggca gccttggtct ctgtctacga acagcccgtg        6
-0
-     gggcagcctc aagggccgca gccatgaacg gcacagaggg ccccaatttt tatgtgccct       12
-0
-     tctccaacat cacgggcgtg gtgcgcagcc cctttgagca gccgcagtac tacctggcgg       18
-0
-     agccatggca gttctccatg ctggcagcct acatgttcct gctcatcgtg ctgggcttcc       24
-0
-     ccatcaactt cctcacgctc tacgtcaccg tacagcacaa gaagctgcgc acaccactca       30
-0
-     actacatcct gctcaacttg gctgtggctg acctcttcat ggtcttcgga ggattcacca       36
-0
-     ccaccctcta cacctcactg catggctact ttgtctttgg gcccacaggc tgcaaccttg       42
-0
-     agggcttctt tgccaccctt ggaggtgaaa tcggcctgtg gtccctggta gtcctggcca       48
-0
-     ttgagcgcta cgtggtggtc tgcaagccca tgagcaactt ccgctttggg gagaatcatg       54
-0
-     ccattatggg tgtggccttc acctgggtca tggcgttggc ctgtgctgct cccccactgg       60
-0
-     ttggctggtc caggtacatc cccgagggca tgcagtgttc atgtgggatt gactactata       66
-0
-     cactcaagcc tgaggtcaac aatgagtcct tcgtcatcta catgttcgtg gtccacttca       72
-0
-     ccatccccat gatcgtcatc ttcttctgct acgggcagct ggtcttcacc gtcaaggagg       78
-0
-     ccgccgccca gcaacaggag tcggctacca ctcagaaggc agagaaggaa gtcacgcgca       84
-0
-     tggtcatcat catggtcatc ttcttcctga tctgctggct tccctatgcc agtgtggcca       90
-0
-     tgtacatctt tacccaccag ggctccaact tcggccccat cttcatgacc cttcccgctt       96
-0
-     tctttgctaa gaccgcctcc atctacaacc caatcatcta catcatgatg aacaagcagt      102
-0
-     tccggaactg catgctcacc acgctctgct gcggcaagaa tccactggga gatgatgagg      108
-0
-     cctctgccac tgcctccaag acggagacca gccaggtggc tccagcctaa gcctggccag      114
-0
-     agactgtggc tgactgtagg agtctcctgt ccccactcac cccagccaca gcccccacca      120
-0
-     ggagcagcac ccgttggaat gaggtcatgc aggctccctc agtgttcttt tctttgtttt      126
-0
-     taatgaattc atgaaagcaa aatgaggctc cccactcaac agggacagcc tgacaaagga      132
-0
-     catccatcca ccaagacccc cagcctggag tccccaattc ccgggggcca gcgggatctg      138
-0
-     tacccctccc ctcagcttgt gtctcaggaa catgacaagt gtcccggctt acggctaagt      144
-0
-     gtctaggaca gaatggaaca catagtagct gattaataaa tgctacctgg atg             149
-3
+     ggagccgtag gtagctgagc tcgccaggca gccttggtct ctgtctacga acagcccgtg        60
+     gggcagcctc aagggccgca gccatgaacg gcacagaggg ccccaatttt tatgtgccct       120
+     tctccaacat cacgggcgtg gtgcgcagcc cctttgagca gccgcagtac tacctggcgg       180
+     agccatggca gttctccatg ctggcagcct acatgttcct gctcatcgtg ctgggcttcc       240
+     ccatcaactt cctcacgctc tacgtcaccg tacagcacaa gaagctgcgc acaccactca       300
+     actacatcct gctcaacttg gctgtggctg acctcttcat ggtcttcgga ggattcacca       360
+     ccaccctcta cacctcactg catggctact ttgtctttgg gcccacaggc tgcaaccttg       420
+     agggcttctt tgccaccctt ggaggtgaaa tcggcctgtg gtccctggta gtcctggcca       480
+     ttgagcgcta cgtggtggtc tgcaagccca tgagcaactt ccgctttggg gagaatcatg       540
+     ccattatggg tgtggccttc acctgggtca tggcgttggc ctgtgctgct cccccactgg       600
+     ttggctggtc caggtacatc cccgagggca tgcagtgttc atgtgggatt gactactata       660
+     cactcaagcc tgaggtcaac aatgagtcct tcgtcatcta catgttcgtg gtccacttca       720
+     ccatccccat gatcgtcatc ttcttctgct acgggcagct ggtcttcacc gtcaaggagg       780
+     ccgccgccca gcaacaggag tcggctacca ctcagaaggc agagaaggaa gtcacgcgca       840
+     tggtcatcat catggtcatc ttcttcctga tctgctggct tccctatgcc agtgtggcca       900
+     tgtacatctt tacccaccag ggctccaact tcggccccat cttcatgacc cttcccgctt       960
+     tctttgctaa gaccgcctcc atctacaacc caatcatcta catcatgatg aacaagcagt      1020
+     tccggaactg catgctcacc acgctctgct gcggcaagaa tccactggga gatgatgagg      1080
+     cctctgccac tgcctccaag acggagacca gccaggtggc tccagcctaa gcctggccag      1140
+     agactgtggc tgactgtagg agtctcctgt ccccactcac cccagccaca gcccccacca      1200
+     ggagcagcac ccgttggaat gaggtcatgc aggctccctc agtgttcttt tctttgtttt      1260
+     taatgaattc atgaaagcaa aatgaggctc cccactcaac agggacagcc tgacaaagga      1320
+     catccatcca ccaagacccc cagcctggag tccccaattc ccgggggcca gcgggatctg      1380
+     tacccctccc ctcagcttgt gtctcaggaa catgacaagt gtcccggctt acggctaagt      1440
+     gtctaggaca gaatggaaca catagtagct gattaataaa tgctacctgg atg             1493
 //
 
   Pattern specification
@@ -331,9 +303,9 @@ SQ   Sequence 1493 BP; 309 A; 475 C; 365 G; 344 T; 0 other;
      * The standard IUPAC one-letter codes for the amino acids are used.
      * The symbol `x' is used for a position where any amino acid is
        accepted.
-     * Ambiguities are indicated by listing the acceptable amino acids
-       for a given position, between square parentheses `[ ]'. For
-       example: [ALT] stands for Ala or Leu or Thr.
+     * Ambiguities are indicated by listing the acceptable amino acids for
+       a given position, between square parentheses `[ ]'. For example:
+       [ALT] stands for Ala or Leu or Thr.
      * Ambiguities are also indicated by listing between a pair of curly
        brackets `{ }' the amino acids that are not accepted at a given
        position. For example: {AM} stands for any amino acid except Ala
@@ -353,6 +325,7 @@ SQ   Sequence 1493 BP; 309 A; 475 C; 365 G; 344 T; 0 other;
    For example, you can look for the pattern:
 
 [DE](2)HS{P}X(2)PX(2,4)C
+
 
    This means: Two Asps or Glus in any order followed by His, Ser, any
    residue other then Pro, then two of any residue followed by Pro
@@ -381,7 +354,7 @@ Output file format
 
 ########################################
 # Program: fuzztran
-# Rundate: Tue 15 Jul 2008 12:00:00
+# Rundate: Fri 15 Jan 2010 12:00:00
 # Commandline: fuzztran
 #    -options
 #    -sequence tembl:Z46957
@@ -403,8 +376,8 @@ Output file format
 #
 #=======================================
 
-  Start     End  Strand   Score Pattern_name Mismatch  Frame PStart   PEnd Tran
-slation
+  Start     End  Strand   Score Pattern_name Mismatch  Frame PStart   PEnd Trans
+lation
      97     102       +       2 pattern             .      1     33     34 RA
 
     133     138       +       2 pattern             .      1     45     46 RA
@@ -464,11 +437,12 @@ Data files
 
 % embossdata -fetch -file Exxx.dat
 
+
    Users can provide their own data files in their own directories.
    Project specific files can be put in the current directory, or for
-   tidier directory listings in a subdirectory called ".embossdata".
-   Files for all EMBOSS runs can be put in the user's home directory, or
-   again in a subdirectory called ".embossdata".
+   tidier directory listings in a subdirectory called ".embossdata". Files
+   for all EMBOSS runs can be put in the user's home directory, or again
+   in a subdirectory called ".embossdata".
 
    The directories are searched in the following order:
      * . (your current directory)
@@ -537,8 +511,8 @@ Data files
 
    The format of these files is very simple.
 
-   It consists of several lines of optional comments, each starting with
-   a '#' character.
+   It consists of several lines of optional comments, each starting with a
+   '#' character.
 
    These are followed the line: 'Genetic Code [n]', where 'n' is the
    number of the genetic code file.
@@ -568,6 +542,7 @@ Base1  = TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG
 Base2  = TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG
 Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
 ------------------------------------------------------------------------------
+
 
 Notes
 
@@ -627,7 +602,7 @@ See also
 
 Author(s)
 
-   Alan Bleasby (ajb © ebi.ac.uk)
+   Alan Bleasby (ajb (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

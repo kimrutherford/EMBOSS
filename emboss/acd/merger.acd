@@ -1,6 +1,8 @@
 application: merger [
   documentation: "Merge two overlapping sequences"
   groups: "Alignment:Consensus"
+  relations: "EDAM: Global sequence alignment"
+  relations: "EDAM: Sequence merging"
 ]
 
 section: input [
@@ -11,11 +13,13 @@ section: input [
   sequence: asequence [
     parameter: "Y"
     type: "any"
+    relations: "EDAM: Sequence"                                            
   ]
 
   sequence: bsequence [
     parameter: "Y"
     type: "@($(acdprotein) ? stopprotein : nucleotide)"
+    relations: "EDAM: Sequence"                                            
   ]
 
   matrixf: datafile [
@@ -26,6 +30,7 @@ section: input [
            sequences. By default it is the file 'EBLOSUM62' (for proteins) or
            the file 'EDNAFULL' (for nucleic sequences). These files are
            found in the 'data' directory of the EMBOSS installation."
+    relations: "EDAM: Float comparison matrix"                             
   ]
 
 endsection: input
@@ -41,6 +46,7 @@ section: additional [
     minimum: "0.0"
     maximum: "100.0"
     default: "@($(acdprotein)? 50.0 : 50.0 )"
+    relations: "EDAM: Generic float"                                       
   ]
 
   float: gapextend [
@@ -49,6 +55,7 @@ section: additional [
     minimum: "0.0"
     maximum: "10.0"
     default: "@($(acdprotein)? 5.0 : 5.0)"
+    relations: "EDAM: Generic float"                                       
   ]
 
 endsection: additional
@@ -64,10 +71,12 @@ section: output [
     minseqs: "2"
     maxseqs: "2"
     aglobal: "Y"
+    relations: "EDAM: Pairwise sequence alignment data"                    
   ]
 
   seqout: outseq [
     parameter: "Y"
+    relations: "EDAM: Sequence"                                            
   ]
 
 endsection: output

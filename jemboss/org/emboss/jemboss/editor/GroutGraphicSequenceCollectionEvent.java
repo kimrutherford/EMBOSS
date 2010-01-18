@@ -14,7 +14,7 @@ import java.beans.PropertyChangeEvent;
 public class GroutGraphicSequenceCollectionEvent extends PropertyChangeEvent
 {
   
-  private GroutGraphicSequenceCollection source;
+  //private GroutGraphicSequenceCollection source;
   
 	 /**
 	 * Creates a new instance of GroutGraphicSequenceCollectionEvent 
@@ -26,7 +26,7 @@ public class GroutGraphicSequenceCollectionEvent extends PropertyChangeEvent
 																						 Object newValue)
   {
     super(source, propertyName, oldValue, newValue);
-    this.source = (GroutGraphicSequenceCollection) source;
+    //this.source = (GroutGraphicSequenceCollection) source;
   }
   
 }

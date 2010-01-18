@@ -2,6 +2,9 @@ application: showorf [
   documentation: "Display a nucleotide sequence and translation in
                   pretty format"
   groups: "Nucleic:Gene finding, Nucleic:Translation"
+  relations: "EDAM: DNA translation"
+  relations: "EDAM: Pretty sequence drawing"
+  relations: "EDAM: Coding region prediction"
 ]
 
 section: input [
@@ -12,6 +15,7 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "DNA"
+    relations: "EDAM: Sequence"                                            
   ]
 
 endsection: input
@@ -32,6 +36,7 @@ section: required [
     codedelimiter: ":"
     information: "Select one or more values"
     button: "Y"
+    relations: "EDAM: Generic string array"                                
   ]
 
 endsection: required
@@ -60,6 +65,7 @@ section: additional [
     delimiter: ";"
     codedelimiter: ":"
     information: "Genetic code to use"
+    relations: "EDAM: Generic string array"                                
   ]
 
 endsection: additional
@@ -72,30 +78,35 @@ section: output [
   outfile: outfile [
     parameter: "Y"
     knowntype: "showorf output"
+    relations:  "EDAM:Nucleotide sequence translation report"              
   ]
 
   boolean: ruler [
     additional: "Y"
     default: "Y"
     information: "Add a ruler"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: plabel [
     additional: "Y"
     default: "Y"
     information: "Number translations"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: nlabel [
     additional: "Y"
     default: "Y"
     information: "Number DNA sequence"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   integer: width [
     minimum: "10"
     default: "50"
     information: "Width of screen"
+    relations: "EDAM: Generic integer"                                     
   ]
 
 endsection: output

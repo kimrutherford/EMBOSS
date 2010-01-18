@@ -115,7 +115,6 @@ public class AuthPopup extends JFrame
 	ufield.setText(mysettings.getServiceUserName());
       
       pfield = new JPasswordField(16);
-      //final JTextField xfield = new JTextField(16);
 
       JLabel ulab = new JLabel(" Username:", SwingConstants.LEFT);
       JLabel plab = new JLabel(" Password:", SwingConstants.LEFT);
@@ -311,7 +310,11 @@ public class AuthPopup extends JFrame
       promptPanel.add(buttonPanel, BorderLayout.SOUTH);
       splashp.add(promptPanel);
     }
+    
 //close login box on carriage return in passwd field
+    
+    //  pfield is defined only when mysettings.getUseAuth() returns true
+    if (pfield!=null)
     pfield.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)

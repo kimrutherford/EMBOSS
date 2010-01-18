@@ -1,10 +1,13 @@
+Retrieve information from REBASE restriction enzyme database
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers:
   [-enzyme]            string     [BamHI] Enter the name of the restriction
                                   enzyme that you wish to get details of. The
                                   names often have a 'I' in them - this is a
                                   capital 'i', not a '1' or an 'l'. The names
                                   are case-independent ('AaeI' is the same as
-                                  'aaei') (Any string is accepted)
+                                  'aaei') (Any string)
   [-outfile]           outfile    [*.redata] Output file name
 
    Additional (Optional) qualifiers: (none)
@@ -27,11 +30,12 @@
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 

@@ -97,7 +97,7 @@ int main(int argc, char **argv)
     isn    = ajAcdGetBoolean("nlabel");
 
     ajStrToInt(codestr, &gcode);
-    codon  = ajCodNewCode(gcode);
+    codon  = ajCodNewCodenum(gcode);
     beg = ajSeqGetBegin(a);
     end = ajSeqGetEnd(a);
 
@@ -174,7 +174,7 @@ static void prettyseq_Translate(ajint beg, ajint end,
     tri[3]='\0';
 
     /* Convert ranges to subsequence values */
-    nr = ajRangeNumber(range);
+    nr = ajRangeGetSize(range);
     for(i=0;i<nr;++i)
     {
 	range->start[i] -= beg;
@@ -196,7 +196,7 @@ static void prettyseq_Translate(ajint beg, ajint end,
     p = ajStrGetuniquePtr(s);
     for(i=0;i<nr;++i)
     {
-	ajRangeValues(range,i,&st,&en);
+	ajRangeElementGetValues(range,i,&st,&en);
 	for(j=st;j<=en;++j)
 	    p[j] = (char)tolower((ajint)p[j]);
     }
@@ -322,7 +322,7 @@ static void prettyseq_calcProteinPos(ajint *ppos, const AjPStr pro, ajint len)
 	{
 	    ppos[pos] = 0;
 	    ++pos;
-	    while(p[pos]==' ')
+	    while(pos<len && p[pos]==' ')
 	    {
 		ppos[pos] = 0;
 		++pos;

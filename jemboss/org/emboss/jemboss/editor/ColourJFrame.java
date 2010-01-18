@@ -33,8 +33,6 @@ import org.emboss.jemboss.gui.ScrollPanel;
 */
 public class ColourJFrame extends JFrame
 {
-  /** Popup menu system                        */
-  private JPopupMenu popup;
   /** Container for the all the residue colour */
   private Box YBox = new Box(BoxLayout.Y_AXIS);
   /** Colour scheme                            */

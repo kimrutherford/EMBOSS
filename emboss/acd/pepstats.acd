@@ -1,6 +1,7 @@
 application: pepstats [
   documentation: "Calculates statistics of protein properties"
   groups: "Protein:Composition"
+  relations: "EDAM: General protein properties calculation"
 ]
 
 section: input [
@@ -11,6 +12,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "protein"
+    relations: "EDAM: Protein sequence record"                             
   ]
 
   datafile: aadata [
@@ -18,6 +20,7 @@ section: input [
     help: "Amino acid properties"
     default: "Eamino.dat"
     knowntype: "amino acid properties"
+    relations:  "EDAM: Amino acid chemical classes data"               
   ]
 
   datafile: mwdata [
@@ -25,6 +28,7 @@ section: input [
     help: "Molecular weight data for amino acids"
     default: "Emolwt.dat"
     knowntype: "molecular weights"
+    relations:  "EDAM: Amino acid molecular weight data"               
   ]
 
 endsection: input
@@ -37,11 +41,13 @@ section: advanced [
   boolean: termini [
     default: "Y"
     information: "Include charge at N and C terminus"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: mono [
     default: "N"
     information: "Use monoisotopic weights"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: advanced
@@ -55,6 +61,7 @@ section: output [
     parameter: "Y"
     knowntype: "pepstats output"
     information: "Pepstats program output file"
+    relations:  "EDAM: Protein physicochemical profile"                
   ]
 
 endsection: output

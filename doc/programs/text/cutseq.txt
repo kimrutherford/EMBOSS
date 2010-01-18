@@ -1,5 +1,4 @@
-
-                                  cutseq 
+                                   cutseq
 
 
 
@@ -30,8 +29,9 @@ Usage
    sequence file 'gatta2.seq':
 
 
-% cutseq tembl:x13776 gatta2.seq -from=10 -to=12 
+% cutseq tembl:x13776 gatta2.seq -from=10 -to=12
 Removes a section from a sequence
+
 
    Go to the input files for this example
    Go to the output files for this example
@@ -42,8 +42,9 @@ Removes a section from a sequence
    'jsh.seq':
 
 
-% cutseq tembl:x13776 -from=1 -to=20 -out=jsh.seq 
+% cutseq tembl:x13776 -from=1 -to=20 -out=jsh.seq
 Removes a section from a sequence
+
 
    Go to the output files for this example
 
@@ -53,14 +54,18 @@ Removes a section from a sequence
    sequence is removed!
 
 
-% cutseq tembl:x13776 starta.seq -sbeg=-1000 -send=1290 
+% cutseq tembl:x13776 starta.seq -sbeg=-1000 -send=1290
 Removes a section from a sequence
-Start of region to delete [1168]: 
-End of region to delete [1290]: 
+Start of region to delete [1168]:
+End of region to delete [1290]:
+
 
    Go to the output files for this example
 
 Command line arguments
+
+Removes a section from a sequence
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   (Gapped) sequence filename and optional
@@ -116,13 +121,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -130,8 +137,8 @@ Input file format
 
   Input files for usage example
 
-   'tembl:x13776' is a sequence entry in the example nucleic acid
-   database 'tembl'
+   'tembl:x13776' is a sequence entry in the example nucleic acid database
+   'tembl'
 
   Database entry: tembl:x13776
 
@@ -155,8 +162,7 @@ RP   1167-2167
 RA   Rice P.M.;
 RT   ;
 RL   Submitted (16-DEC-1988) to the EMBL/GenBank/DDBJ databases.
-RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
-.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
 XX
 RN   [2]
 RP   1167-2167
@@ -181,8 +187,7 @@ RP   1-2167
 RA   Rice P.M.;
 RT   ;
 RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
-RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
-.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
 XX
 DR   GOA; Q51417.
 DR   InterPro; IPR003211; AmiSUreI_transpt.
@@ -197,88 +202,50 @@ FT                   phenotype"
 FT   misc_feature    1
 FT                   /note="last base of an XhoI site"
 FT   misc_feature    648..653
-FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 cause
-s
+FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 causes
 FT                   constitutive expression of amiE"
 FT   conflict        1281
 FT                   /replace="g"
 FT                   /citation=[3]
 XX
 SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
-     ggtaccgctg gccgagcatc tgctcgatca ccaccagccg ggcgacggga actgcacgat        6
-0
-     ctacctggcg agcctggagc acgagcgggt tcgcttcgta cggcgctgag cgacagtcac       12
-0
-     aggagaggaa acggatggga tcgcaccagg agcggccgct gatcggcctg ctgttctccg       18
-0
-     aaaccggcgt caccgccgat atcgagcgct cgcacgcgta tggcgcattg ctcgcggtcg       24
-0
-     agcaactgaa ccgcgagggc ggcgtcggcg gtcgcccgat cgaaacgctg tcccaggacc       30
-0
-     ccggcggcga cccggaccgc tatcggctgt gcgccgagga cttcattcgc aaccgggggg       36
-0
-     tacggttcct cgtgggctgc tacatgtcgc acacgcgcaa ggcggtgatg ccggtggtcg       42
-0
-     agcgcgccga cgcgctgctc tgctacccga ccccctacga gggcttcgag tattcgccga       48
-0
-     acatcgtcta cggcggtccg gcgccgaacc agaacagtgc gccgctggcg gcgtacctga       54
-0
-     ttcgccacta cggcgagcgg gtggtgttca tcggctcgga ctacatctat ccgcgggaaa       60
-0
-     gcaaccatgt gatgcgccac ctgtatcgcc agcacggcgg cacggtgctc gaggaaatct       66
-0
-     acattccgct gtatccctcc gacgacgact tgcagcgcgc cgtcgagcgc atctaccagg       72
-0
-     cgcgcgccga cgtggtcttc tccaccgtgg tgggcaccgg caccgccgag ctgtatcgcg       78
-0
-     ccatcgcccg tcgctacggc gacggcaggc ggccgccgat cgccagcctg accaccagcg       84
-0
-     aggcggaggt ggcgaagatg gagagtgacg tggcagaggg gcaggtggtg gtcgcgcctt       90
-0
-     acttctccag catcgatacg cccgccagcc gggccttcgt ccaggcctgc catggtttct       96
-0
-     tcccggagaa cgcgaccatc accgcctggg ccgaggcggc ctactggcag accttgttgc      102
-0
-     tcggccgcgc cgcgcaggcc gcaggcaact ggcgggtgga agacgtgcag cggcacctgt      108
-0
-     acgacatcga catcgacgcg ccacaggggc cggtccgggt ggagcgccag aacaaccaca      114
-0
-     gccgcctgtc ttcgcgcatc gcggaaatcg atgcgcgcgg cgtgttccag gtccgctggc      120
-0
-     agtcgcccga accgattcgc cccgaccctt atgtcgtcgt gcataacctc gacgactggt      126
-0
-     ccgccagcat gggcggggga ccgctcccat gagcgccaac tcgctgctcg gcagcctgcg      132
-0
-     cgagttgcag gtgctggtcc tcaacccgcc gggggaggtc agcgacgccc tggtcttgca      138
-0
-     gctgatccgc atcggttgtt cggtgcgcca gtgctggccg ccgccggaag ccttcgacgt      144
-0
-     gccggtggac gtggtcttca ccagcatttt ccagaatggc caccacgacg agatcgctgc      150
-0
-     gctgctcgcc gccgggactc cgcgcactac cctggtggcg ctggtggagt acgaaagccc      156
-0
-     cgcggtgctc tcgcagatca tcgagctgga gtgccacggc gtgatcaccc agccgctcga      162
-0
-     tgcccaccgg gtgctgcctg tgctggtatc ggcgcggcgc atcagcgagg aaatggcgaa      168
-0
-     gctgaagcag aagaccgagc agctccagga ccgcatcgcc ggccaggccc ggatcaacca      174
-0
-     ggccaaggtg ttgctgatgc agcgccatgg ctgggacgag cgcgaggcgc accagcacct      180
-0
-     gtcgcgggaa gcgatgaagc ggcgcgagcc gatcctgaag atcgctcagg agttgctggg      186
-0
-     aaacgagccg tccgcctgag cgatccgggc cgaccagaac aataacaaga ggggtatcgt      192
-0
-     catcatgctg ggactggttc tgctgtacgt tggcgcggtg ctgtttctca atgccgtctg      198
-0
-     gttgctgggc aagatcagcg gtcgggaggt ggcggtgatc aacttcctgg tcggcgtgct      204
-0
-     gagcgcctgc gtcgcgttct acctgatctt ttccgcagca gccgggcagg gctcgctgaa      210
-0
-     ggccggagcg ctgaccctgc tattcgcttt tacctatctg tgggtggccg ccaaccagtt      216
-0
-     cctcgag                                                                216
-7
+     ggtaccgctg gccgagcatc tgctcgatca ccaccagccg ggcgacggga actgcacgat        60
+     ctacctggcg agcctggagc acgagcgggt tcgcttcgta cggcgctgag cgacagtcac       120
+     aggagaggaa acggatggga tcgcaccagg agcggccgct gatcggcctg ctgttctccg       180
+     aaaccggcgt caccgccgat atcgagcgct cgcacgcgta tggcgcattg ctcgcggtcg       240
+     agcaactgaa ccgcgagggc ggcgtcggcg gtcgcccgat cgaaacgctg tcccaggacc       300
+     ccggcggcga cccggaccgc tatcggctgt gcgccgagga cttcattcgc aaccgggggg       360
+     tacggttcct cgtgggctgc tacatgtcgc acacgcgcaa ggcggtgatg ccggtggtcg       420
+     agcgcgccga cgcgctgctc tgctacccga ccccctacga gggcttcgag tattcgccga       480
+     acatcgtcta cggcggtccg gcgccgaacc agaacagtgc gccgctggcg gcgtacctga       540
+     ttcgccacta cggcgagcgg gtggtgttca tcggctcgga ctacatctat ccgcgggaaa       600
+     gcaaccatgt gatgcgccac ctgtatcgcc agcacggcgg cacggtgctc gaggaaatct       660
+     acattccgct gtatccctcc gacgacgact tgcagcgcgc cgtcgagcgc atctaccagg       720
+     cgcgcgccga cgtggtcttc tccaccgtgg tgggcaccgg caccgccgag ctgtatcgcg       780
+     ccatcgcccg tcgctacggc gacggcaggc ggccgccgat cgccagcctg accaccagcg       840
+     aggcggaggt ggcgaagatg gagagtgacg tggcagaggg gcaggtggtg gtcgcgcctt       900
+     acttctccag catcgatacg cccgccagcc gggccttcgt ccaggcctgc catggtttct       960
+     tcccggagaa cgcgaccatc accgcctggg ccgaggcggc ctactggcag accttgttgc      1020
+     tcggccgcgc cgcgcaggcc gcaggcaact ggcgggtgga agacgtgcag cggcacctgt      1080
+     acgacatcga catcgacgcg ccacaggggc cggtccgggt ggagcgccag aacaaccaca      1140
+     gccgcctgtc ttcgcgcatc gcggaaatcg atgcgcgcgg cgtgttccag gtccgctggc      1200
+     agtcgcccga accgattcgc cccgaccctt atgtcgtcgt gcataacctc gacgactggt      1260
+     ccgccagcat gggcggggga ccgctcccat gagcgccaac tcgctgctcg gcagcctgcg      1320
+     cgagttgcag gtgctggtcc tcaacccgcc gggggaggtc agcgacgccc tggtcttgca      1380
+     gctgatccgc atcggttgtt cggtgcgcca gtgctggccg ccgccggaag ccttcgacgt      1440
+     gccggtggac gtggtcttca ccagcatttt ccagaatggc caccacgacg agatcgctgc      1500
+     gctgctcgcc gccgggactc cgcgcactac cctggtggcg ctggtggagt acgaaagccc      1560
+     cgcggtgctc tcgcagatca tcgagctgga gtgccacggc gtgatcaccc agccgctcga      1620
+     tgcccaccgg gtgctgcctg tgctggtatc ggcgcggcgc atcagcgagg aaatggcgaa      1680
+     gctgaagcag aagaccgagc agctccagga ccgcatcgcc ggccaggccc ggatcaacca      1740
+     ggccaaggtg ttgctgatgc agcgccatgg ctgggacgag cgcgaggcgc accagcacct      1800
+     gtcgcgggaa gcgatgaagc ggcgcgagcc gatcctgaag atcgctcagg agttgctggg      1860
+     aaacgagccg tccgcctgag cgatccgggc cgaccagaac aataacaaga ggggtatcgt      1920
+     catcatgctg ggactggttc tgctgtacgt tggcgcggtg ctgtttctca atgccgtctg      1980
+     gttgctgggc aagatcagcg gtcgggaggt ggcggtgatc aacttcctgg tcggcgtgct      2040
+     gagcgcctgc gtcgcgttct acctgatctt ttccgcagca gccgggcagg gctcgctgaa      2100
+     ggccggagcg ctgaccctgc tattcgcttt tacctatctg tgggtggccg ccaaccagtt      2160
+     cctcgag                                                                2167
 //
 
 Output file format
@@ -289,8 +256,8 @@ Output file format
 
   File: gatta2.seq
 
->X13776 X13776.1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidas
-e regulation
+>X13776 X13776.1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
+ regulation
 ggtaccgctcgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgatcta
 cctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcacagg
 agaggaaacggatgggatcgcaccaggagcggccgctgatcggcctgctgttctccgaaa
@@ -333,8 +300,8 @@ cgag
 
   File: jsh.seq
 
->X13776 X13776.1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidas
-e regulation
+>X13776 X13776.1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
+ regulation
 tgctcgatcaccaccagccgggcgacgggaactgcacgatctacctggcgagcctggagc
 acgagcgggttcgcttcgtacggcgctgagcgacagtcacaggagaggaaacggatggga
 tcgcaccaggagcggccgctgatcggcctgctgttctccgaaaccggcgtcaccgccgat
@@ -376,8 +343,8 @@ tattcgcttttacctatctgtgggtggccgccaaccagttcctcgag
 
   File: starta.seq
 
->X13776 X13776.1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidas
-e regulation
+>X13776 X13776.1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
+ regulation
 
 Data files
 
@@ -385,9 +352,9 @@ Data files
 
 Notes
 
-   Qualifiers that are in-built for sequence datatypes allow the input
-   and output files to be specified in more detail, for example, the
-   format for the output files.
+   Qualifiers that are in-built for sequence datatypes allow the input and
+   output files to be specified in more detail, for example, the format
+   for the output files.
 
 References
 
@@ -462,7 +429,7 @@ See also
 
 Author(s)
 
-   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   Gary Williams (gwilliam (c) rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 

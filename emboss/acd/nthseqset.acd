@@ -2,6 +2,7 @@ application: nthseqset [
   documentation: "Reads and writes (returns) one set of
                   sequences from many"
   groups: "Edit"
+  relations: "EDAM: Sequence file handling"
 ]
 
 section: input [
@@ -11,6 +12,7 @@ section: input [
 
   boolean: feature [
     information: "Use feature information"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   seqsetall: sequence [
@@ -18,6 +20,7 @@ section: input [
     features: "$(feature)"
     type: "gapany"
     aligned: "N"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: input
@@ -32,6 +35,7 @@ section: required [
     minimum: "1"
     default: "1"
     information: "The number of the sequence set to output"
+    relations: "EDAM: Generic integer"                                     
   ]
 
 endsection: required
@@ -44,6 +48,7 @@ section: output [
   seqoutall: outseq [
     parameter: "Y"
     features: "$(feature)"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: output

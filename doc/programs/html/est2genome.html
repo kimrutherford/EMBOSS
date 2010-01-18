@@ -123,6 +123,9 @@ Output file [h45989.est2genome]: <b></b>
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
+Align EST sequences to genomic DNA sequence
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers:
   [-estsequence]       seqall     Spliced EST nucleotide sequence(s)
   [-genomesequence]    sequence   Unspliced genomic nucleotide sequence
@@ -230,161 +233,533 @@ Output file [h45989.est2genome]: <b></b>
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 
 </pre>
 </td></tr></table>
 <P>
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Qualifier</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Standard (Mandatory) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td>[-estsequence]<br>(Parameter 1)</td>
+<td>seqall</td>
 <td>Spliced EST nucleotide sequence(s)</td>
 <td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>[-genomesequence]<br>(Parameter 2)</td>
+<td>sequence</td>
 <td>Unspliced genomic nucleotide sequence</td>
 <td>Readable sequence</td>
 <td><b>Required</b></td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>[-outfile]<br>(Parameter 3)</td>
+<td>outfile</td>
 <td>Output file name</td>
 <td>Output file</td>
 <td><i>&lt;*&gt;</i>.est2genome</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Additional (Optional) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
+<th align="left" colspan=5>Additional (Optional) qualifiers</th>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-match</td>
+<td>integer</td>
 <td>Score for matching two bases</td>
 <td>Any integer value</td>
 <td>1</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-mismatch</td>
+<td>integer</td>
 <td>Cost for mismatching two bases</td>
 <td>Any integer value</td>
 <td>1</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-gappenalty</td>
+<td>integer</td>
 <td>Cost for deleting a single base in either sequence, excluding introns</td>
 <td>Any integer value</td>
 <td>2</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-intronpenalty</td>
+<td>integer</td>
 <td>Cost for an intron, independent of length.</td>
 <td>Any integer value</td>
 <td>40</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-splicepenalty</td>
+<td>integer</td>
 <td>Cost for an intron, independent of length and starting/ending on donor-acceptor sites</td>
 <td>Any integer value</td>
 <td>20</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-minscore</td>
+<td>integer</td>
 <td>Exclude alignments with scores below this threshold score.</td>
 <td>Any integer value</td>
 <td>30</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
+<th align="left" colspan=5>Advanced (Unprompted) qualifiers</th>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-reverse</td>
+<td>boolean</td>
 <td>Reverse the orientation of the EST sequence</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-[no]usesplice</td>
+<td>boolean</td>
 <td>Use donor and acceptor splice sites. If you want to ignore donor-acceptor sites then set this to be false.</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-mode</td>
+<td>list</td>
 <td>This determines the comparion mode. The default value is 'both', in which case both strands of the est are compared assuming a forward gene direction (ie GT/AG splice sites), and the best comparsion redone assuming a reversed (CT/AC) gene splicing direction. The other allowed modes are 'forward', when just the forward strand is searched, and 'reverse', ditto for the reverse strand.</td>
 <td><table><tr><td>both</td> <td><i>(Both strands)</i></td></tr><tr><td>forward</td> <td><i>(Forward strand only)</i></td></tr><tr><td>reverse</td> <td><i>(Reverse strand only)</i></td></tr></table></td>
 <td>both</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-[no]best</td>
+<td>boolean</td>
 <td>You can print out all comparisons instead of just the best one by setting this to be false.</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-space</td>
+<td>float</td>
 <td>For linear-space recursion. If product of sequence lengths divided by 4 exceeds this then a divide-and-conquer strategy is used to control the memory requirements. In this way very long sequences can be aligned.
 If you have a machine with plenty of memory you can raise this parameter (but do not exceed the machine's physical RAM)</td>
 <td>Any numeric value</td>
 <td>10.0</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-shuffle</td>
+<td>integer</td>
 <td>Shuffle</td>
 <td>Any integer value</td>
 <td>0</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-seed</td>
+<td>integer</td>
 <td>Random number seed</td>
 <td>Any integer value</td>
 <td>20825</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-align</td>
+<td>boolean</td>
 <td>Show the alignment. The alignment includes the first and last 5 bases of each intron, together with the intron width. The direction of splicing is indicated by angle brackets (forward or reverse) or ???? (unknown).</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-width</td>
+<td>integer</td>
 <td>Alignment width</td>
 <td>Any integer value</td>
 <td>50</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-estsequence" associated seqall qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sbegin1<br>-sbegin_estsequence</td>
+<td>integer</td>
+<td>Start of each sequence to be used</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -send1<br>-send_estsequence</td>
+<td>integer</td>
+<td>End of each sequence to be used</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sreverse1<br>-sreverse_estsequence</td>
+<td>boolean</td>
+<td>Reverse (if DNA)</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sask1<br>-sask_estsequence</td>
+<td>boolean</td>
+<td>Ask for begin/end/reverse</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -snucleotide1<br>-snucleotide_estsequence</td>
+<td>boolean</td>
+<td>Sequence is nucleotide</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sprotein1<br>-sprotein_estsequence</td>
+<td>boolean</td>
+<td>Sequence is protein</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -slower1<br>-slower_estsequence</td>
+<td>boolean</td>
+<td>Make lower case</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -supper1<br>-supper_estsequence</td>
+<td>boolean</td>
+<td>Make upper case</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sformat1<br>-sformat_estsequence</td>
+<td>string</td>
+<td>Input sequence format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sdbname1<br>-sdbname_estsequence</td>
+<td>string</td>
+<td>Database name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sid1<br>-sid_estsequence</td>
+<td>string</td>
+<td>Entryname</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ufo1<br>-ufo_estsequence</td>
+<td>string</td>
+<td>UFO features</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fformat1<br>-fformat_estsequence</td>
+<td>string</td>
+<td>Features format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fopenfile1<br>-fopenfile_estsequence</td>
+<td>string</td>
+<td>Features file name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-genomesequence" associated sequence qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sbegin2<br>-sbegin_genomesequence</td>
+<td>integer</td>
+<td>Start of the sequence to be used</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -send2<br>-send_genomesequence</td>
+<td>integer</td>
+<td>End of the sequence to be used</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sreverse2<br>-sreverse_genomesequence</td>
+<td>boolean</td>
+<td>Reverse (if DNA)</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sask2<br>-sask_genomesequence</td>
+<td>boolean</td>
+<td>Ask for begin/end/reverse</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -snucleotide2<br>-snucleotide_genomesequence</td>
+<td>boolean</td>
+<td>Sequence is nucleotide</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sprotein2<br>-sprotein_genomesequence</td>
+<td>boolean</td>
+<td>Sequence is protein</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -slower2<br>-slower_genomesequence</td>
+<td>boolean</td>
+<td>Make lower case</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -supper2<br>-supper_genomesequence</td>
+<td>boolean</td>
+<td>Make upper case</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sformat2<br>-sformat_genomesequence</td>
+<td>string</td>
+<td>Input sequence format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sdbname2<br>-sdbname_genomesequence</td>
+<td>string</td>
+<td>Database name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sid2<br>-sid_genomesequence</td>
+<td>string</td>
+<td>Entryname</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ufo2<br>-ufo_genomesequence</td>
+<td>string</td>
+<td>UFO features</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fformat2<br>-fformat_genomesequence</td>
+<td>string</td>
+<td>Features format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fopenfile2<br>-fopenfile_genomesequence</td>
+<td>string</td>
+<td>Features file name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory3<br>-odirectory_outfile</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>General qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -auto</td>
+<td>boolean</td>
+<td>Turn off prompts</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -stdout</td>
+<td>boolean</td>
+<td>Write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -filter</td>
+<td>boolean</td>
+<td>Read first file from standard input, write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -options</td>
+<td>boolean</td>
+<td>Prompt for standard and additional values</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -debug</td>
+<td>boolean</td>
+<td>Write debug output to program.dbg</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -verbose</td>
+<td>boolean</td>
+<td>Report some/full command line options</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -help</td>
+<td>boolean</td>
+<td>Report command line options and exit. More information on associated and general qualifiers can be found with -help -verbose</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -warning</td>
+<td>boolean</td>
+<td>Report warnings</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -error</td>
+<td>boolean</td>
+<td>Report errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fatal</td>
+<td>boolean</td>
+<td>Report fatal errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -die</td>
+<td>boolean</td>
+<td>Report dying program messages</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -version</td>
+<td>boolean</td>
+<td>Report version number and exit</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
 </tr>
 
 </table>
@@ -819,6 +1194,11 @@ None.
 <tr>
 <td><a href="needle.html">needle</a></td>
 <td>Needleman-Wunsch global alignment of two sequences</td>
+</tr>
+
+<tr>
+<td><a href="needleall.html">needleall</a></td>
+<td>Many-to-many pairwise alignments of two sequence sets</td>
 </tr>
 
 <tr>

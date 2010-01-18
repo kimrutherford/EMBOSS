@@ -1,3 +1,6 @@
+Index a flat file database using b+tree indices
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers:
   [-dbname]            string     Basename for index files (Any string from 2
                                   to 19 characters, matching regular
@@ -9,7 +12,7 @@
                                   SWISS (Swiss-Prot, SpTrEMBL, TrEMBLnew); GB
                                   (Genbank, DDBJ); REFSEQ (Refseq))
    -filenames          string     [*.dat] Wildcard database filename (Any
-                                  string is accepted)
+                                  string)
    -directory          directory  [.] Database directory
    -fields             menu       [id,acc] Index fields (Values: id (ID); acc
                                   (Accession number); sv (Sequence Version and
@@ -22,8 +25,7 @@
    -release            string     [0.0] Release number (Any string up to 9
                                   characters)
    -date               string     [00/00/00] Index date (Date string dd/mm/yy)
-   -exclude            string     Wildcard filename(s) to exclude (Any string
-                                  is accepted)
+   -exclude            string     Wildcard filename(s) to exclude (Any string)
    -indexoutdir        outdir     [.] Index file output directory
 
    Associated qualifiers:
@@ -39,11 +41,12 @@
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 

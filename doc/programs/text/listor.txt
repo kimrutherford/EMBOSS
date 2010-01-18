@@ -1,5 +1,4 @@
-
-                                  listor 
+                                   listor
 
 
 
@@ -17,14 +16,13 @@ Function
 Description
 
    listor reads in two sets of sequences (typically specified as list
-   files) and writes out a list file that result from the logical union
-   of the two sets. A list file is a file with a list of Uniform Sequence
+   files) and writes out a list file that result from the logical union of
+   the two sets. A list file is a file with a list of Uniform Sequence
    Addresses (USAs), for example, a list of file names. When comparing
    sequences from the input sets, no use is made of the ID name or
    accession number; only the sequence itself is compared. The comparison
    of the sequences is case-independent. The logical union is an OR
-   operation by default. Other available operations are: AND, XOR and
-   NOT.
+   operation by default. Other available operations are: AND, XOR and NOT.
 
 Algorithm
 
@@ -39,9 +37,10 @@ Usage
    Write the logical OR of two lists:
 
 
-% listor ../data/file2 
+% listor ../data/file2
 Write a list file of the logical OR of two sets of sequences
-List of USAs output file [file1.list]: 
+List of USAs output file [file1.list]:
+
 
    Go to the input files for this example
    Go to the output files for this example
@@ -51,9 +50,10 @@ List of USAs output file [file1.list]:
    Write the logical AND of two lists:
 
 
-% listor ../data/file2 -operator and 
+% listor ../data/file2 -operator and
 Write a list file of the logical OR of two sets of sequences
-List of USAs output file [file1.list]: 
+List of USAs output file [file1.list]:
+
 
    Go to the output files for this example
 
@@ -62,9 +62,10 @@ List of USAs output file [file1.list]:
    Write the logical XOR of two lists:
 
 
-% listor ../data/file2 -operator xor 
+% listor ../data/file2 -operator xor
 Write a list file of the logical OR of two sets of sequences
-List of USAs output file [file1.list]: 
+List of USAs output file [file1.list]:
+
 
    Go to the output files for this example
 
@@ -73,13 +74,17 @@ List of USAs output file [file1.list]:
    Write the logical NOT of two lists:
 
 
-% listor ../data/file2 -operator not 
+% listor ../data/file2 -operator not
 Write a list file of the logical OR of two sets of sequences
-List of USAs output file [file1.list]: 
+List of USAs output file [file1.list]:
+
 
    Go to the output files for this example
 
 Command line arguments
+
+Write a list file of the logical OR of two sets of sequences
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-firstsequences]    seqset     Sequence set filename and optional format,
@@ -152,13 +157,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -228,7 +235,7 @@ fasta::../../data/file2:four
 
   File: file1.list
 
-   fasta::../../data/file1:one
+fasta::../../data/file1:one
 
 Data files
 
@@ -237,16 +244,16 @@ Data files
 Notes
 
    The inputs can be any valid USA but typically reference a list file.
-   Some other reference such as a wildcarded database entries or file
-   name are equally valid.
+   Some other reference such as a wildcarded database entries or file name
+   are equally valid.
 
    The (default) logical OR of the two sets of sequences is simply the
    result of merging the two sets of sequences. A sequences appearing in
    both input sets is referenced once only in the output file. A logical
    AND simply lists those sequences that occur in both sets of sequences.
 
-   A logical XOR lists those sequences that ONLY occur in the first set
-   or only occur in the second set - sequences occuring in both sets are
+   A logical XOR lists those sequences that ONLY occur in the first set or
+   only occur in the second set - sequences occuring in both sets are
    omitted (the opposite of an AND).
 
    A logical NOT lists all those sequences in the first set except for
@@ -327,7 +334,7 @@ See also
 
 Author(s)
 
-   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   Gary Williams (gwilliam (c) rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 

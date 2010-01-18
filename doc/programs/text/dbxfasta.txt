@@ -1,5 +1,4 @@
-
-                                 dbxfasta 
+                                  dbxfasta
 
 
 
@@ -25,7 +24,7 @@ Usage
    Here is a sample session with dbxfasta
 
 
-% dbxfasta 
+% dbxfasta
 Index a fasta file database using b+tree indices
 Basename for index files: emrod
 Resource name: emblresource
@@ -42,12 +41,16 @@ Wildcard database filename [*.fasta]: emrod
        acc : Accession number
         sv : Sequence Version and GI
        des : Description
-Index fields [id,acc]: 
-General log output file [outfile.dbxfasta]: 
+Index fields [id,acc]:
+General log output file [outfile.dbxfasta]:
+
 
    Go to the output files for this example
 
 Command line arguments
+
+Index a fasta file database using b+tree indices
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     Basename for index files (Any string from 2
@@ -62,7 +65,7 @@ Command line arguments
                                   ID); ncbi (| formats))
    -directory          directory  [.] Database directory
    -filenames          string     [*.fasta] Wildcard database filename (Any
-                                  string is accepted)
+                                  string)
    -fields             menu       [id,acc] Index fields (Values: id (ID); acc
                                   (Accession number); sv (Sequence Version and
                                   GI); des (Description))
@@ -73,8 +76,7 @@ Command line arguments
    -release            string     [0.0] Release number (Any string up to 9
                                   characters)
    -date               string     [00/00/00] Index date (Date string dd/mm/yy)
-   -exclude            string     Wildcard filename(s) to exclude (Any string
-                                  is accepted)
+   -exclude            string     Wildcard filename(s) to exclude (Any string)
    -indexoutdir        outdir     [.] Index file output directory
 
    Associated qualifiers:
@@ -90,13 +92,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -175,8 +179,8 @@ Notes
    indexes. This feature is, however, not implemented in the current
    version. It will be made available in future releases.
 
-   Having created the EMBOSS indexes for this file, a database can then
-   be defined in the file emboss.defaults as something like:
+   Having created the EMBOSS indexes for this file, a database can then be
+   defined in the file emboss.defaults as something like:
 DB emrod [
    type: N
    dbalias: emrod   (see below)
@@ -213,8 +217,8 @@ SET CACHESIZE 200
 
 Resources
 
-   dbxfasta will ask you for the name of a resource definition in the
-   file emboss.defaults. This will be something like:
+   dbxfasta will ask you for the name of a resource definition in the file
+   emboss.defaults. This will be something like:
 RES embl [
    type: Index
    idlen:  15
@@ -260,7 +264,7 @@ See also
 
 Author(s)
 
-   Alan             Bleasby (ajb © ebi.ac.uk)
+   Alan             Bleasby (ajb (c) ebi.ac.uk)
    European         Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton,         Cambridge CB10 1SD, UK
 

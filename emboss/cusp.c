@@ -50,20 +50,20 @@ int main(int argc, char **argv)
 
     ccnt   = 0;
     substr = ajStrNew();
-    codon  = ajCodNewCode(0);
-    ajCodAssName(codon, ajFileGetNameS(outf));
+    codon  = ajCodNewCodenum(0);
+    ajCodSetNameS(codon, ajFileGetNameS(outf));
 
     while(ajSeqallNext(seqall, &seq))
     {
 	beg = ajSeqallGetseqBegin(seqall);
 	end  = ajSeqallGetseqEnd(seqall);
 	ajStrAssignSubS(&substr,ajSeqGetSeqS(seq),beg-1,end-1);
-	ajCodCountTriplets(codon,substr,&ccnt);
+	ajCodSetTripletsS(codon,substr,&ccnt);
     }
 
-    ajCodCalculateUsage(codon,ccnt);
+    ajCodCalcUsage(codon,ccnt);
 
-    ajCodAssDescC(codon, "CUSP codon usage file");
+    ajCodSetDescC(codon, "CUSP codon usage file");
     ajCodWrite(codon, outf);
     ajFileClose(&outf);
 

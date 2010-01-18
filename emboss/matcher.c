@@ -325,8 +325,8 @@ int main(int argc, char **argv)
     s1 = ajStrGetPtr(ajSeqGetSeqS(seq));
     s2 = ajStrGetPtr(ajSeqGetSeqS(seq2));
 
-    sub = ajMatrixArray(matrix);
-    cvt = ajMatrixCvt(matrix);
+    sub = ajMatrixGetMatrix(matrix);
+    cvt = ajMatrixGetCvt(matrix);
 
 
     aa0str = ajStrNewRes(2+ajSeqGetLen(seq)); /* length + blank + trailing null */

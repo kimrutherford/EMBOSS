@@ -1,6 +1,7 @@
 application: embossversion [
   documentation: "Reports the current EMBOSS version number"
   groups: "Utils:Misc"
+  relations: "EDAM: Application information"
 ]
 
 section: additional [
@@ -11,6 +12,7 @@ section: additional [
   boolean: full [
     additional: "Y"
     information: "Show all EMBOSS version information fields"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: additional
@@ -24,6 +26,7 @@ section: output [
     additional: "Y"
     default: "stdout"
     knowntype: "embossversion output"
+    relations:  "EDAM:Application version information"                     
   ]
 
 endsection: output

@@ -1,6 +1,8 @@
 application: seqrettype [
   documentation: "Reads and writes (returns) sequences"
   groups: "Edit"
+  relations: "EDAM: Sequence extraction and generation"
+  relations: "EDAM: Sequence file handling"
 ]
 
 section: input [
@@ -10,6 +12,7 @@ section: input [
 
   boolean: feature [
     information: "Use feature information"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   list: type [
@@ -28,12 +31,14 @@ section: input [
              stopproteinstandard:protein sequence with a possible stop but no
              selenocysteine; gapany:any valid sequence with gaps"
     information: "Sequence type"
+    relations: "EDAM: Generic string array"                                
   ]
 
   seqall: sequence [
     parameter: "Y"
     features: "$(feature)"
     type: "$(type)"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: input
@@ -45,6 +50,7 @@ section: advanced [
 
   boolean: firstonly [
     information: "Read one sequence and stop"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: advanced
@@ -57,6 +63,7 @@ section: output [
   seqoutall: outseq [
     parameter: "Y"
     features: "$(feature)"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: output

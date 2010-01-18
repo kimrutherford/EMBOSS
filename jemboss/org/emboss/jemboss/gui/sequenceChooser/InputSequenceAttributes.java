@@ -281,7 +281,7 @@ public class InputSequenceAttributes
 //  bx.add(Box.createHorizontalGlue());
 
 
-    UFO = new JTextField();                     //sufo
+    UFO = new JTextField();                     //ufo
     UFO.setPreferredSize(new Dimension(100, 30));
     UFO.setMaximumSize(new Dimension(100, 30));
 
@@ -433,8 +433,8 @@ public class InputSequenceAttributes
 
   /**
   *
-  * Determine if there is a default -sufo value
-  * @return     true if -sufo is set
+  * Determine if there is a default -ufo value
+  * @return     true if -ufo is set
   *
   */
   public boolean isUFODefault()
@@ -508,7 +508,7 @@ public class InputSequenceAttributes
 //                                     sID.getText());
 
     if(!isUFODefault())
-      options = options.concat(" -sufo" + seq + " " +
+      options = options.concat(" -ufo" + seq + " " +
                                        UFO.getText());
 
     return options;
@@ -559,7 +559,7 @@ public class InputSequenceAttributes
     }
 
     if(!isUFODefault()){
-      optionsA.add("-sufo"+ seq);
+      optionsA.add("-ufo"+ seq);
       optionsA.add(UFO.getText());
     }
 

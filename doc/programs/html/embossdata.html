@@ -202,6 +202,7 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/
   Efeatures.gffprotein
   Efeatures.pir
   Efeatures.protein
+  Efeatures.refseqp
   Efeatures.swiss
   Efreqs.dat
   Ehet.dat
@@ -214,6 +215,8 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/
   Emolwt.dat
   Emwfilter.dat
   Enakai.dat
+  EnsemblAliases.dat
+  EnsemblIdentifiers.dat
   Epepcoil.dat
   Epk.dat
   Epprofile
@@ -231,6 +234,7 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/
   Etags.gffprotein
   Etags.pir
   Etags.protein
+  Etags.refseqp
   Etags.swiss
   Etcode.dat
   Evdw.dat
@@ -1607,14 +1611,16 @@ File /homes/pmr/local/share/EMBOSS/data/EPAM60                    Exists
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
+Find and retrieve EMBOSS data files
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers:
   [-filename]          string     This specifies the name of the file that
                                   should be fetched into the current directory
                                   or searched for in all of the directories
                                   that EMBOSS programs search when looking for
                                   a data file. The name of the file is not
-                                  altered when it is fetched. (Any string is
-                                  accepted)
+                                  altered when it is fetched. (Any string)
 
    Additional (Optional) qualifiers (* if not always prompted):
    -showall            toggle     Show all potential EMBOSS data files
@@ -1644,69 +1650,194 @@ File /homes/pmr/local/share/EMBOSS/data/EPAM60                    Exists
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 
 </pre>
 </td></tr></table>
 <P>
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Qualifier</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
-</tr>
-
-<tr>
-<td>[-filename]<br>(Parameter 1)</td>
-<td>This specifies the name of the file that should be fetched into the current directory or searched for in all of the directories that EMBOSS programs search when looking for a data file. The name of the file is not altered when it is fetched.</td>
-<td>Any string is accepted</td>
-<td><i>An empty string is accepted</i></td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Additional (Optional) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
+<th align="left" colspan=5>Standard (Mandatory) qualifiers</th>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
+<td>[-filename]<br>(Parameter 1)</td>
+<td>string</td>
+<td>This specifies the name of the file that should be fetched into the current directory or searched for in all of the directories that EMBOSS programs search when looking for a data file. The name of the file is not altered when it is fetched.</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Additional (Optional) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td>-showall</td>
+<td>toggle</td>
 <td>Show all potential EMBOSS data files</td>
 <td>Toggle value Yes/No</td>
 <td>No</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-fetch</td>
+<td>boolean</td>
 <td>Fetch a data file</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-outfile</td>
+<td>outfile</td>
 <td>This specifies the name of the file that the results of a search for a file in the various data directories is written to. By default these results are written to the screen (stdout).</td>
 <td>Output file</td>
 <td>stdout</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
+<th align="left" colspan=5>Advanced (Unprompted) qualifiers</th>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-reject</td>
+<td>selection</td>
 <td>This specifies the names of the sub-directories of the EMBOSS data directory that should be ignored when displaying data directories.</td>
 <td>Choose from selection list of values</td>
 <td>3, 5, 6</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>General qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -auto</td>
+<td>boolean</td>
+<td>Turn off prompts</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -stdout</td>
+<td>boolean</td>
+<td>Write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -filter</td>
+<td>boolean</td>
+<td>Read first file from standard input, write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -options</td>
+<td>boolean</td>
+<td>Prompt for standard and additional values</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -debug</td>
+<td>boolean</td>
+<td>Write debug output to program.dbg</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -verbose</td>
+<td>boolean</td>
+<td>Report some/full command line options</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -help</td>
+<td>boolean</td>
+<td>Report command line options and exit. More information on associated and general qualifiers can be found with -help -verbose</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -warning</td>
+<td>boolean</td>
+<td>Report warnings</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -error</td>
+<td>boolean</td>
+<td>Report errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fatal</td>
+<td>boolean</td>
+<td>Report fatal errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -die</td>
+<td>boolean</td>
+<td>Report dying program messages</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -version</td>
+<td>boolean</td>
+<td>Report version number and exit</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
 </tr>
 
 </table>

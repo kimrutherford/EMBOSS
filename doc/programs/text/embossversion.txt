@@ -1,5 +1,4 @@
-
-                               embossversion 
+                                embossversion
 
 
 
@@ -24,12 +23,16 @@ Usage
    Here is a sample session with embossversion
 
 
-% embossversion 
+% embossversion
 Reports the current EMBOSS version number
 
-6.1.0
+6.2.0
+
 
 Command line arguments
+
+Reports the current EMBOSS version number
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers: (none)
    Additional (Optional) qualifiers:
@@ -50,22 +53,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 
-Standard (Mandatory) qualifiers                    Allowed values       Default
-(none)
-Additional (Optional) qualifiers                   Allowed values       Default
--full    Show all EMBOSS version information fields Boolean value Yes/No
-   No
--outfile Output file name                          Output file          stdout
-Advanced (Unprompted) qualifiers                   Allowed values       Default
-(none)
 
 Input file format
 
@@ -76,8 +72,8 @@ Output file format
    embossversion writes just the version number followed by a newline
    character to end the line.
 
-   The output is written to the screen by default, but can be written to
-   a named file by using the '-outfile' option.
+   The output is written to the screen by default, but can be written to a
+   named file by using the '-outfile' option.
 
    The version number is in three parts, separated by '.'s.
    The first number is the major version number - this only changes when
@@ -94,10 +90,9 @@ Data files
 
 Notes
 
-   embossversion might be called by scripts in automated systems
-   requiring versioning information, or in user-support as a convenient
-   way to ascertain the version of an EMBOSS installation being used
-   remotely.
+   embossversion might be called by scripts in automated systems requiring
+   versioning information, or in user-support as a convenient way to
+   ascertain the version of an EMBOSS installation being used remotely.
 
 References
 
@@ -126,7 +121,7 @@ See also
 
 Author(s)
 
-   Gary             Williams (gwilliam © rfcgr.mrc.ac.uk)
+   Gary             Williams (gwilliam (c) rfcgr.mrc.ac.uk)
    MRC              Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome           Campus, Hinxton, Cambridge, CB10 1SB, UK
 

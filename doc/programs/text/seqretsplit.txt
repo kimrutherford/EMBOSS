@@ -1,5 +1,4 @@
-
-                                seqretsplit 
+                                 seqretsplit
 
 
 
@@ -17,33 +16,37 @@ Function
 Description
 
    seqretsplit is a variant of the standard program for reading and
-   writing sequences, seqret. It performs exactly the same function
-   except that when it reads more than one sequence, it writes each
-   sequence to an individual file. In all other respects, skipseq is the
-   same as seqret. Its main use is therefore to split a file containing
-   multiple sequences into many files, each containing one sequence.
-   There are many options built-in into EMBOSS for detailed specification
-   of the input and output sequences, for example the sequence type and
-   file format. Optionally, feature information will be read and written.
+   writing sequences, seqret. It performs exactly the same function except
+   that when it reads more than one sequence, it writes each sequence to
+   an individual file. In all other respects, skipseq is the same as
+   seqret. Its main use is therefore to split a file containing multiple
+   sequences into many files, each containing one sequence. There are many
+   options built-in into EMBOSS for detailed specification of the input
+   and output sequences, for example the sequence type and file format.
+   Optionally, feature information will be read and written.
 
 Usage
 
    Here is a sample session with seqretsplit
 
 
-% seqretsplit tembl:m1190* 
+% seqretsplit tembl:m1190*
 Reads sequences and writes them to individual files
-output sequence(s) [m11903.fasta]: 
+output sequence(s) [m11903.fasta]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
    The specification of the output file is not used in this case.
 
-   At some point this ought to change and you will not be prompted for
-   the output file at all.
+   At some point this ought to change and you will not be prompted for the
+   output file at all.
 
 Command line arguments
+
+Reads sequences and writes them to individual files
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     (Gapped) sequence(s) filename and optional
@@ -94,13 +97,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -108,8 +113,8 @@ Input file format
 
   Input files for usage example
 
-   'tembl:m1190*' is a sequence entry in the example nucleic acid
-   database 'tembl'
+   'tembl:m1190*' is a sequence entry in the example nucleic acid database
+   'tembl'
 
 Output file format
 
@@ -117,8 +122,8 @@ Output file format
 
   File: m11903.fasta
 
->M11903 M11903.1 Rattus norvegicus androgen-responsive protein precursor (Svf)
-gene, exons 1 and 1A, alternatively spliced.
+>M11903 M11903.1 Rattus norvegicus androgen-responsive protein precursor (Svf) g
+ene, exons 1 and 1A, alternatively spliced.
 cctttcaaatagaaactctcgtgaaggctgtctgagaacacaagctcaaggttgtgactg
 atttcagtgatgccgtcttgaagagggataccgtgctagagaatgactcctgatcaaccc
 tgaagacttctgcaagcccgaagtcgtgcttccccactctgaactgacatatgttcagga
@@ -135,8 +140,8 @@ ttgt
 
   File: m11904.fasta
 
->M11904 M11904.1 Rattus norvegicus androgen-responsive protein precursor (Svf)
-gene, exon 2 and complete cds.
+>M11904 M11904.1 Rattus norvegicus androgen-responsive protein precursor (Svf) g
+ene, exon 2 and complete cds.
 ggtatctccaaacacagcagctggctctcaacagagagtcctcatgcacaactaatccaa
 gatacagaaagtggatatagagaatgagacattgttttctctcaacagaaaaattctcac
 agtcagctgaagacccttatagtgaaaacatgaatctaaagattctggcgagcgggaggg
@@ -150,8 +155,8 @@ aggtatggaaacgacctacaaggcagacaaagatacgagctatactgtgt
 
   File: m11905.fasta
 
->M11905 M11905.1 Rattus norvegicus androgen-responsive protein precursor (Svf)
-gene, exon 3.
+>M11905 M11905.1 Rattus norvegicus androgen-responsive protein precursor (Svf) g
+ene, exon 3.
 ccgtgcaatctcttcctgtgtccacacagccctgttagaagcaactctctcgttctcaag
 gccctacctgcaagaactacctttctcttcctccgcccaacaaaggaggaatgtttctgc
 ttgtgacccaccagagatgaaatatagcagtgtcctgcagtaaaggggggccccagaggc
@@ -166,9 +171,8 @@ ctctggataga
    One file for each input sequence is written out.
 
    The names of the files it creates are derived from the ID name of the
-   sequence, followed by an extension denoting the format of the
-   sequence. You have no control over the names of the files it writes
-   out.
+   sequence, followed by an extension denoting the format of the sequence.
+   You have no control over the names of the files it writes out.
 
    For example, if the files embl:hsfa11* are read in and the output is
    specified as wibble.seq, then the following files are expected to be
@@ -192,8 +196,8 @@ Notes
    you can do when reading and writing sequences.
 
    Some non-EMBOSS programs will accept only single sequences. In such
-   cases seqretsplit is useful for splitting a multiple sequence file
-   into many individual files. Some EMBOSS programs will also read only a
+   cases seqretsplit is useful for splitting a multiple sequence file into
+   many individual files. Some EMBOSS programs will also read only a
    single sequence, which may, however, be one of many in a file. You can
    specify the sequence using the USA filename:sequenceID. Nonetheless,
    some people feel more comfortable handling one sequence per file, so
@@ -201,8 +205,8 @@ Notes
 
    One file for each input sequence is written. The names of the files it
    creates are derived from the ID name of the sequence, followed by an
-   extension denoting the format of the sequence. You have no control
-   over the names of the files it writes out. For example, if the files
+   extension denoting the format of the sequence. You have no control over
+   the names of the files it writes out. For example, if the files
    embl:hsfa11* are read in and the output is specified as wibble.seq,
    then the following files are expected to be created:
 hsfa110.fasta
@@ -289,7 +293,7 @@ See also
 
 Author(s)
 
-   Peter Rice (pmr © ebi.ac.uk)
+   Peter Rice (pmr (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 
@@ -307,5 +311,5 @@ Comments
    The specification of the output file is not used when the output file
    names are generated automatically..
 
-   At some point this ought to change and you will not be prompted for
-   the output file at all.
+   At some point this ought to change and you will not be prompted for the
+   output file at all.

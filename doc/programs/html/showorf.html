@@ -44,7 +44,10 @@ Display a nucleotide sequence and translation in pretty format
 </H2>
 
 
-<p><B>showorf</B> writes an input nucleotide sequence and its protein translation to an output file in a clear format that is suitable for publication. The translation can be done in any frame or combination of frames using an (optionally) specified genetic code.</p>
+<p><B>showorf</B> writes an input nucleotide sequence and its protein
+translation to an output file in a clear format that is suitable for
+publication. The translation can be done in any frame or combination
+of frames using an (optionally) specified genetic code.</p>
 
 
 
@@ -82,6 +85,9 @@ Output file [x13776.showorf]: <b></b>
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
+Display a nucleotide sequence and translation in pretty format
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Nucleotide sequence filename and optional
                                   format, or reference (input USA)
@@ -143,90 +149,335 @@ Output file [x13776.showorf]: <b></b>
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 
 </pre>
 </td></tr></table>
 <P>
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Qualifier</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Standard (Mandatory) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td>[-sequence]<br>(Parameter 1)</td>
+<td>sequence</td>
 <td>Nucleotide sequence filename and optional format, or reference (input USA)</td>
 <td>Readable sequence</td>
 <td><b>Required</b></td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-frames</td>
+<td>list</td>
 <td>Select one or more values</td>
 <td><table><tr><td>0</td> <td><i>(None)</i></td></tr><tr><td>1</td> <td><i>(F1)</i></td></tr><tr><td>2</td> <td><i>(F2)</i></td></tr><tr><td>3</td> <td><i>(F3)</i></td></tr><tr><td>4</td> <td><i>(R1)</i></td></tr><tr><td>5</td> <td><i>(R2)</i></td></tr><tr><td>6</td> <td><i>(R3)</i></td></tr></table></td>
 <td>1,2,3,4,5,6</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>[-outfile]<br>(Parameter 2)</td>
+<td>outfile</td>
 <td>Output file name</td>
 <td>Output file</td>
 <td><i>&lt;*&gt;</i>.showorf</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Additional (Optional) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
+<th align="left" colspan=5>Additional (Optional) qualifiers</th>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-table</td>
+<td>list</td>
 <td>Genetic code to use</td>
 <td><table><tr><td>0</td> <td><i>(Standard)</i></td></tr><tr><td>1</td> <td><i>(Standard (with alternative initiation codons))</i></td></tr><tr><td>2</td> <td><i>(Vertebrate Mitochondrial)</i></td></tr><tr><td>3</td> <td><i>(Yeast Mitochondrial)</i></td></tr><tr><td>4</td> <td><i>(Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma)</i></td></tr><tr><td>5</td> <td><i>(Invertebrate Mitochondrial)</i></td></tr><tr><td>6</td> <td><i>(Ciliate Macronuclear and Dasycladacean)</i></td></tr><tr><td>9</td> <td><i>(Echinoderm Mitochondrial)</i></td></tr><tr><td>10</td> <td><i>(Euplotid Nuclear)</i></td></tr><tr><td>11</td> <td><i>(Bacterial)</i></td></tr><tr><td>12</td> <td><i>(Alternative Yeast Nuclear)</i></td></tr><tr><td>13</td> <td><i>(Ascidian Mitochondrial)</i></td></tr><tr><td>14</td> <td><i>(Flatworm Mitochondrial)</i></td></tr><tr><td>15</td> <td><i>(Blepharisma Macronuclear)</i></td></tr><tr><td>16</td> <td><i>(Chlorophycean Mitochondrial)</i></td></tr><tr><td>21</td> <td><i>(Trematode Mitochondrial)</i></td></tr><tr><td>22</td> <td><i>(Scenedesmus obliquus)</i></td></tr><tr><td>23</td> <td><i>(Thraustochytrium Mitochondrial)</i></td></tr></table></td>
 <td>0</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-[no]ruler</td>
+<td>boolean</td>
 <td>Add a ruler</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-[no]plabel</td>
+<td>boolean</td>
 <td>Number translations</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-[no]nlabel</td>
+<td>boolean</td>
 <td>Number DNA sequence</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
+<th align="left" colspan=5>Advanced (Unprompted) qualifiers</th>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-width</td>
+<td>integer</td>
 <td>Width of screen</td>
 <td>Integer 10 or more</td>
 <td>50</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-sequence" associated sequence qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sbegin1<br>-sbegin_sequence</td>
+<td>integer</td>
+<td>Start of the sequence to be used</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -send1<br>-send_sequence</td>
+<td>integer</td>
+<td>End of the sequence to be used</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sreverse1<br>-sreverse_sequence</td>
+<td>boolean</td>
+<td>Reverse (if DNA)</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sask1<br>-sask_sequence</td>
+<td>boolean</td>
+<td>Ask for begin/end/reverse</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -snucleotide1<br>-snucleotide_sequence</td>
+<td>boolean</td>
+<td>Sequence is nucleotide</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sprotein1<br>-sprotein_sequence</td>
+<td>boolean</td>
+<td>Sequence is protein</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -slower1<br>-slower_sequence</td>
+<td>boolean</td>
+<td>Make lower case</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -supper1<br>-supper_sequence</td>
+<td>boolean</td>
+<td>Make upper case</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sformat1<br>-sformat_sequence</td>
+<td>string</td>
+<td>Input sequence format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sdbname1<br>-sdbname_sequence</td>
+<td>string</td>
+<td>Database name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sid1<br>-sid_sequence</td>
+<td>string</td>
+<td>Entryname</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ufo1<br>-ufo_sequence</td>
+<td>string</td>
+<td>UFO features</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fformat1<br>-fformat_sequence</td>
+<td>string</td>
+<td>Features format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fopenfile1<br>-fopenfile_sequence</td>
+<td>string</td>
+<td>Features file name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory2<br>-odirectory_outfile</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>General qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -auto</td>
+<td>boolean</td>
+<td>Turn off prompts</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -stdout</td>
+<td>boolean</td>
+<td>Write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -filter</td>
+<td>boolean</td>
+<td>Read first file from standard input, write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -options</td>
+<td>boolean</td>
+<td>Prompt for standard and additional values</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -debug</td>
+<td>boolean</td>
+<td>Write debug output to program.dbg</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -verbose</td>
+<td>boolean</td>
+<td>Report some/full command line options</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -help</td>
+<td>boolean</td>
+<td>Report command line options and exit. More information on associated and general qualifiers can be found with -help -verbose</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -warning</td>
+<td>boolean</td>
+<td>Report warnings</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -error</td>
+<td>boolean</td>
+<td>Report errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fatal</td>
+<td>boolean</td>
+<td>Report fatal errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -die</td>
+<td>boolean</td>
+<td>Report dying program messages</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -version</td>
+<td>boolean</td>
+<td>Report version number and exit</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
 </tr>
 
 </table>
@@ -493,36 +744,7 @@ R3       5   W  G  T  G  R   1
 </H2>
 
 
-Showorf uses the codon frequency files to translate the sequence. 
-
-<p>
-The codon usage table is read by default from "Ehum.cut" in the 'data/CODONS'
-directory of the EMBOSS distribution.  If the name of a codon usage file
-is specified on the command line with the '-cfile' option, then this
-file will first be searched for in the current directory and then in the
-'data/CODONS' directory of the EMBOSS distribution. 
-
-<p>
-To see the available EMBOSS codon usage files, run:
-
-
-<pre>
-
-% embossdata -showall
-
-</pre>
-
-<p>
-To fetch one of the codon usage tables (for example 'Emus.cut') into your
-current directory for you to inspect or modify, run:
-
-
-<pre>
-
-% embossdata -fetch -file Emus.cut
-
-</pre>
-
+Showorf uses a genetic code table to translate the sequence. 
 
 
 <H2>
@@ -618,7 +840,7 @@ None.
 
 <tr>
 <td><a href="syco.html">syco</a></td>
-<td>Draw synonymous codon usage statictic plot for a nucleotide sequence</td>
+<td>Draw synonymous codon usage statistic plot for a nucleotide sequence</td>
 </tr>
 
 <tr>

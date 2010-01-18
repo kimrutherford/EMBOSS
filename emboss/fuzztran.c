@@ -22,7 +22,6 @@
 ******************************************************************************/
 
 #include "emboss.h"
-#include "stdlib.h"
 
 
 static void fuzztran_SourceFeature(const AjPFeattable thys, const AjPSeq pseq,
@@ -72,7 +71,7 @@ int main(int argc, char **argv)
     ajPatlistSeqDoc(plist, &tmpstr);
     ajFmtPrintAppS(&tmpstr, "TransTable: %S\n", ajAcdGetValue("table"));
     ajFmtPrintAppS(&tmpstr, "Frames: %S\n", ajAcdGetValue("frame"));
-    ajReportSetHeader(report, tmpstr);
+    ajReportSetHeaderS(report, tmpstr);
 
     ajStrToInt(gcode,&table);
 
@@ -91,7 +90,7 @@ int main(int argc, char **argv)
 	{
 	    tab = ajFeattableNewProt(ajSeqGetNameS(seq));
 	    ajStrAssignC(&pro,"");
-	    ajTrnStrFrame(trantable,text,1,&pro);
+	    ajTrnSeqFrameS(trantable,text,1,&pro);
 	    pseq = ajSeqNewNameS(pro, ajSeqGetNameS(seq));
 	    embPatlistSeqSearch(tab,pseq,plist,ajFalse);
 	    fuzztran_SourceFeature(tab, pseq, begin, 1, seqtab);
@@ -100,7 +99,7 @@ int main(int argc, char **argv)
 
 	    tab = ajFeattableNewProt(ajSeqGetNameS(seq));
 	    ajStrAssignC(&pro,"");
-	    ajTrnStrFrame(trantable,text,2,&pro);
+	    ajTrnSeqFrameS(trantable,text,2,&pro);
 	    pseq = ajSeqNewNameS(pro, ajSeqGetNameS(seq));
 	    embPatlistSeqSearch(tab,pseq,plist,ajFalse);
 	    fuzztran_SourceFeature(tab, pseq, begin, 2, seqtab);
@@ -109,7 +108,7 @@ int main(int argc, char **argv)
 
 	    tab = ajFeattableNewProt(ajSeqGetNameS(seq));
 	    ajStrAssignC(&pro,"");
-	    ajTrnStrFrame(trantable,text,3,&pro);
+	    ajTrnSeqFrameS(trantable,text,3,&pro);
 	    pseq = ajSeqNewNameS(pro, ajSeqGetNameS(seq));
 	    embPatlistSeqSearch(tab,pseq,plist,ajFalse);
 	    fuzztran_SourceFeature(tab, pseq, begin, 3, seqtab);
@@ -120,7 +119,7 @@ int main(int argc, char **argv)
 	{
 	    tab = ajFeattableNewProt(ajSeqGetNameS(seq));
 	    ajStrAssignC(&pro,"");
-	    ajTrnStrFrame(trantable,text,-1,&pro);
+	    ajTrnSeqFrameS(trantable,text,-1,&pro);
 	    pseq = ajSeqNewNameS(pro, ajSeqGetNameS(seq));
 	    embPatlistSeqSearch(tab,pseq,plist,ajFalse);
 	    fuzztran_SourceFeature(tab, pseq, begin, -1, seqtab);
@@ -129,7 +128,7 @@ int main(int argc, char **argv)
 
 	    tab = ajFeattableNewProt(ajSeqGetNameS(seq));
 	    ajStrAssignC(&pro,"");
-	    ajTrnStrFrame(trantable,text,-2,&pro);
+	    ajTrnSeqFrameS(trantable,text,-2,&pro);
 	    pseq = ajSeqNewNameS(pro, ajSeqGetNameS(seq));
 	    embPatlistSeqSearch(tab,pseq,plist,ajFalse);
 	    fuzztran_SourceFeature(tab, pseq, begin, -2, seqtab);
@@ -138,7 +137,7 @@ int main(int argc, char **argv)
 
 	    tab = ajFeattableNewProt(ajSeqGetNameS(seq));
 	    ajStrAssignC(&pro,"");
-	    ajTrnStrFrame(trantable,text,-3,&pro);
+	    ajTrnSeqFrameS(trantable,text,-3,&pro);
 	    pseq = ajSeqNewNameS(pro, ajSeqGetNameS(seq));
 	    embPatlistSeqSearch(tab,pseq,plist,ajFalse);
 	    fuzztran_SourceFeature(tab, pseq, end, -3, seqtab);
@@ -150,7 +149,7 @@ int main(int argc, char **argv)
 	{
 	    tab = ajFeattableNewProt(ajSeqGetNameS(seq));
 	    ajStrAssignC(&pro,"");
-	    ajTrnStrFrame(trantable,text,frameno,&pro);
+	    ajTrnSeqFrameS(trantable,text,frameno,&pro);
 	    pseq = ajSeqNewNameS(pro, ajSeqGetNameS(seq));
 	    embPatlistSeqSearch(tab,pseq,plist,ajFalse);
 	    fuzztran_SourceFeature(tab, pseq, begin, frameno, seqtab);
@@ -158,7 +157,7 @@ int main(int argc, char **argv)
 	    ajSeqDel(&pseq);
 	}
 
-	if(ajFeattableSize(seqtab))
+	if(ajFeattableGetSize(seqtab))
 	    writeok = ajReportWrite(report, seqtab, seq);
 	ajStrDel(&text);
     }

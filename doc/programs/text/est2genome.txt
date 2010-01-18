@@ -1,5 +1,4 @@
-
-                                est2genome 
+                                 est2genome
 
 
 
@@ -16,11 +15,11 @@ Function
 
 Description
 
-   est2genome aids the prediction of genes by sequence homology. It
-   aligns a set of spliced nucleotide sequences (ESTs cDNAs or mRNAs) to
-   an unspliced genomic DNA sequence, inserting introns of arbitrary
-   length when needed. Where feasible introns start and stop at the
-   splice consensus dinucleotides GT and AG.
+   est2genome aids the prediction of genes by sequence homology. It aligns
+   a set of spliced nucleotide sequences (ESTs cDNAs or mRNAs) to an
+   unspliced genomic DNA sequence, inserting introns of arbitrary length
+   when needed. Where feasible introns start and stop at the splice
+   consensus dinucleotides GT and AG.
 
    By default, est2genome makes three alignments: First it compares both
    strands of the spliced sequence against the forward strand of the
@@ -45,18 +44,18 @@ Algorithm
    Smith-Waterman local alignment scan is done to find the start, end and
    score of the maximally scoring segments (including introns of course).
    No other alignment information is retained. 2. Subsequences
-   corresponding to these segments are extracted 3a. If the product of
-   the subsequences' lengths is less than a user-defined threshold
-   (-space parameter), i.e. they will fit in memory, the segments are
-   realigned using the Needleman-Wunsch global alignment algorithm, which
-   will give the same result as the Smith-Waterman since the subsequences
-   are guaranteed to align end-to-end. 3b. If the product of the lengths
+   corresponding to these segments are extracted 3a. If the product of the
+   subsequences' lengths is less than a user-defined threshold (-space
+   parameter), i.e. they will fit in memory, the segments are realigned
+   using the Needleman-Wunsch global alignment algorithm, which will give
+   the same result as the Smith-Waterman since the subsequences are
+   guaranteed to align end-to-end. 3b. If the product of the lengths
    exceeds the threshold (a full alignment will not fit in memory) the
    alignment is made recursively by splitting the spliced (EST) sequence
    in half and finding the genome sequence position which aligns with the
-   EST mid-point. The process is repeated until the product of the
-   lengths is less than the threshold. The problem reduces to aligning
-   the left-hand and right-hand portions of the sequences separately and
+   EST mid-point. The process is repeated until the product of the lengths
+   is less than the threshold. The problem reduces to aligning the
+   left-hand and right-hand portions of the sequences separately and
    merging the result. 4. The genome sequence is searched against the
    forward and reverse strands of the spliced (EST) sequence, assuming a
    forward gene splicing direction (i.e. GT/AG consensus). 5. Then the
@@ -68,8 +67,8 @@ Algorithm
    length so the program runs only about 1.5 times slower.
 
    The algorithm has the following steps:
-    1. A first-pass Smith-Waterman scan is done to locate the score,
-       start and end of the maximal scoring segment (including introns of
+    1. A first-pass Smith-Waterman scan is done to locate the score, start
+       and end of the maximal scoring segment (including introns of
        course). No other alignment information is retained.
     2. Subsequences corresponding to the maximal-scoring segments are
        extracted. If the product of these subsequences' lengths is less
@@ -94,16 +93,20 @@ Usage
    Here is a sample session with est2genome
 
 
-% est2genome 
+% est2genome
 Align EST sequences to genomic DNA sequence
 Spliced EST nucleotide sequence(s): tembl:h45989
 Unspliced genomic nucleotide sequence: tembl:z69719
-Output file [h45989.est2genome]: 
+Output file [h45989.est2genome]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Align EST sequences to genomic DNA sequence
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-estsequence]       seqall     Spliced EST nucleotide sequence(s)
@@ -212,24 +215,26 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
-   est2genome reads two nucleotide sequences. The first is an EST
-   sequence (a single read or a finished cDNA). The second is a genomic
-   finished sequence.
+   est2genome reads two nucleotide sequences. The first is an EST sequence
+   (a single read or a finished cDNA). The second is a genomic finished
+   sequence.
 
   Input files for usage example
 
-   'tembl:h45989' is a sequence entry in the example nucleic acid
-   database 'tembl'
+   'tembl:h45989' is a sequence entry in the example nucleic acid database
+   'tembl'
 
   Database entry: tembl:h45989
 
@@ -246,8 +251,7 @@ XX
 KW   EST.
 XX
 OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
-;
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
 OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
 OC   Homo.
 XX
@@ -312,38 +316,26 @@ FT                   the Not I and Eco RI sites of a modified pT7T3 vector
 FT                   (Pharmacia). Library went through one round of
 FT                   normalization to a Cot = 53. Library constructed by Bento
 FT                   Soares and M.Fatima Bonaldo. The adult brain RNA was
-FT                   provided by Dr. Donald H. Gilden. Tissue was acquired 17-1
-8
+FT                   provided by Dr. Donald H. Gilden. Tissue was acquired 17-18
 FT                   hours after death which occurred in consequence of a
 FT                   ruptured aortic aneurysm. RNA was prepared from a pool of
 FT                   tissues representing the following areas of the brain:
 FT                   frontal, parietal, temporal and occipital cortex from the
-FT                   left and right hemispheres, subcortical white matter, basa
-l
-FT                   ganglia, thalamus, cerebellum, midbrain, pons and medulla.
-"
+FT                   left and right hemispheres, subcortical white matter, basal
+FT                   ganglia, thalamus, cerebellum, midbrain, pons and medulla."
 FT                   /db_xref="taxon:9606"
 FT                   /db_xref="UNILIB:555"
 XX
 SQ   Sequence 495 BP; 73 A; 135 C; 169 G; 104 T; 14 other;
-     ccggnaagct cancttggac caccgactct cgantgnntc gccgcgggag ccggntggan        6
-0
-     aacctgagcg ggactggnag aaggagcaga gggaggcagc acccggcgtg acggnagtgt       12
-0
-     gtggggcact caggccttcc gcagtgtcat ctgccacacg gaaggcacgg ccacgggcag       18
-0
-     gggggtctat gatcttctgc atgcccagct ggcatggccc cacgtagagt ggnntggcgt       24
-0
-     ctcggtgctg gtcagcgaca cgttgtcctg gctgggcagg tccagctccc ggaggacctg       30
-0
-     gggcttcagc ttcccgtagc gctggctgca gtgacggatg ctcttgcgct gccatttctg       36
-0
-     ggtgctgtca ctgtccttgc tcactccaaa ccagttcggc ggtccccctg cggatggtct       42
-0
-     gtgttgatgg acgtttgggc tttgcagcac cggccgccga gttcatggtn gggtnaagag       48
-0
-     atttgggttt tttcn                                                        49
-5
+     ccggnaagct cancttggac caccgactct cgantgnntc gccgcgggag ccggntggan        60
+     aacctgagcg ggactggnag aaggagcaga gggaggcagc acccggcgtg acggnagtgt       120
+     gtggggcact caggccttcc gcagtgtcat ctgccacacg gaaggcacgg ccacgggcag       180
+     gggggtctat gatcttctgc atgcccagct ggcatggccc cacgtagagt ggnntggcgt       240
+     ctcggtgctg gtcagcgaca cgttgtcctg gctgggcagg tccagctccc ggaggacctg       300
+     gggcttcagc ttcccgtagc gctggctgca gtgacggatg ctcttgcgct gccatttctg       360
+     ggtgctgtca ctgtccttgc tcactccaaa ccagttcggc ggtccccctg cggatggtct       420
+     gtgttgatgg acgtttgggc tttgcagcac cggccgccga gttcatggtn gggtnaagag       480
+     atttgggttt tttcn                                                        495
 //
 
   Database entry: tembl:z69719
@@ -360,8 +352,7 @@ XX
 KW   C16orf33; HTG; POLR3K; RHBDF1.
 XX
 OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
-;
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
 OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
 OC   Homo.
 XX
@@ -403,106 +394,56 @@ CC   http://www.sanger.ac.uk/Projects/C_elegans/wormpep
 
   [Part of this file has been deleted for brevity]
 
-     gagacagcag agtgctcagc tcatgaagga ggcaccagcc gccatgcctc tacatccagg     3084
-0
-     tctcctgggg ttcccacctc cacaaaaacc cccactgcta ggagtgcagg caggagggga     3090
-0
-     cctgagaacc gacagttata ggtcctgcgg gtgggcagtg ctgggtgttc tggtctgccc     3096
-0
-     cacccctgtg tgcctagatc cccatctggg cctcaagtgg gtgggattcc aaaggaagag     3102
-0
-     ccggagtagg cgtggggagg ggcaggccca ggctggacaa agagtctggc cagggagcgg     3108
-0
-     cacattgccc tcccagagac agtggctcag tgtccaggcc ttccccaggc gcacagtggg     3114
-0
-     ctcttgttcc cagaaagccc ctcgggggga tccaaacagt gtctccccca ccccgctgac     3120
-0
-     ccctcagtgt atggggaaac cgtggcccac ggaaggcctc actgcctggg gtcacacagc     3126
-0
-     atctgagtca ctgcagcagc ctcacagctg ccagcccagg cccagcccca tcaggagaca     3132
-0
-     cccaaagcca cagtgcatcc caggaccagc tgggggggct gcgggcagga ctctcgatga     3138
-0
-     ggctgaggga cgaggagggt caagggagcc actggcgcca tgcatgctga cgtcccctct     3144
-0
-     ggctgcctgc agagcctggt gtggaagggc tgagtggggg atggtggaga gtcctgttaa     3150
-0
-     ctcaggtttc tgctctgggg atgtctgggc acccatcaag ctggccgcgt gcacaggtgc     3156
-0
-     agggagagcc agaaagcagg agccgatgca gggaggccac tggggacagc ccaggctgat     3162
-0
-     gcttgggccc catgtgtctc caccacctac aaccctaagc aagcctcagc tttcccatct     3168
-0
-     ggaaatcagg ggtcacagca gtgcctggca cagtagcagc ggctgactcc atcacagggt     3174
-0
-     ggtgtagcct gtgggtactt ggcactctct gaggggcagg agctgggggg tgaaaggacc     3180
-0
-     ctagagcata tgcaacaaga gggcagccct ggggacacct ggggacagaa ccctccaaag     3186
-0
-     gtgtcgagtt tgggaagaga ctagagagaa gctctggcca gtccaggcat agacagtggc     3192
-0
-     cacagccagt ggagagctgc atcctcaggt gtgagcagca accacctctg tactcaggcc     3198
-0
-     tgccctgcac actcacagga ccatgctggc agggacaact ggcggcggag ttgactgcca     3204
-0
-     accccggggc cagaaccatc aagcctgggc tctgctccgc ccaaggaact gcctgctgcc     3210
-0
-     gaggtcagct ggagcaaggg gcctcacccc gggacacctt cccagacgtg tcctcagctc     3216
-0
-     acatgagcct catcccaggg ggatgtggct cctccagcat ccccacccac acgctgctct     3222
-0
-     ctgaccctca gtcttctgtt tgactcctaa tctgaagctc aatcctagat ctcccttgag     3228
-0
-     aagggggtca ccagctgtct ggcagcccag cctccaggtc ttctggatta atgaagggaa     3234
-0
-     agtcacctgg cctctctgcc ttgtctatta atggcatcat gctgagaatg atatttgcta     3240
-0
-     ggccctttgc aaaccccaaa gtgctcttca accctcccag tgaagcctct tcttttctgt     3246
-0
-     ggaagaaatg aggttcaggg tggagcaggg caggcctgag acctttgcag ggttctctcc     3252
-0
-     aggtccccag caggacagac tggcaccctg cctcccctca tcaccctaga caaggagaca     3258
-0
-     gaacaagagg ttccctgcta caggccatct gtgagggaag ccgccctagg gcctgtagac     3264
-0
-     acaggaatcc ctgaggacct gacctgtgag ggtagtgcac aaaggggcca gcacttggca     3270
-0
-     ggaggggggg gggcactgcc ccaaggctca gctagcaaat gtggcacagg ggtcaccaga     3276
-0
-     gctaaacccc tgactcagtt gggtctgaca ggggctgaca tggcagacac acccaggaat     3282
-0
-     caggggacac caagtgcagc tcagggcacc tgtccaggcc acacagtcag aaaggggatg     3288
-0
-     gcagcaagga cttagctaca ctagattctg ggggtaaact gcctggtatg ctggtcactg     3294
-0
-     ctagtcccca gtctggagtc tagctgggtc tcaggagtta ggcgaaaaca ccctccccag     3300
-0
-     gctgcaggtg ggagaggccc acatcccctg cacacgtctg gccagaggac agatgggcag     3306
-0
-     cccagtcacc agtcagagcc ctccagaggt gtccctgact gaccctacac acatgcaccc     3312
-0
-     aggtgcccag gcacccttgg gctcagcaac cctgcaaccc cctcccagga cccaccagaa     3318
-0
-     gcaggatagg actagagagg ccacaggagg gaaaccaagt cagagcagaa atggcttcgg     3324
-0
-     tcctcagcag cctggctcag cttcctcaaa ccagatcctg actgatcaca ctggtctgtc     3330
-0
-     taacccctgg gaggggtcct ctgtatccat cttacagata aggaaactga ggctcagaga     3336
-0
-     agcccatcac tgcctaaggt cccagggcct ataagggagc tcaaagcctt gggccaggtc     3342
-0
-     tgcccaggag ctgcagtgga agggaccctg tctgcagacc cccagaagac aaggcagacc     3348
-0
-     acctgggttc ttcagccttg tggctgtgga cggctgtcag acccttctaa gaccccttgc     3354
-0
-     cacctgctcc atcaggggca tctcagttga agaaggaagg actcaccccc aaaatcgtcc     3360
-0
-     aactcagaaa aaaaggcaga agccaaggaa tccaatcact gggcaaaatg tgatcctggc     3366
-0
-     acagacactg aggtggggga actggagccg gtgtggcgga ggccctcaca gccaagagca     3372
-0
-     actgggggtg ccctgggcag ggactgtagc tgggaagatc                           3376
-0
+     gagacagcag agtgctcagc tcatgaagga ggcaccagcc gccatgcctc tacatccagg     30840
+     tctcctgggg ttcccacctc cacaaaaacc cccactgcta ggagtgcagg caggagggga     30900
+     cctgagaacc gacagttata ggtcctgcgg gtgggcagtg ctgggtgttc tggtctgccc     30960
+     cacccctgtg tgcctagatc cccatctggg cctcaagtgg gtgggattcc aaaggaagag     31020
+     ccggagtagg cgtggggagg ggcaggccca ggctggacaa agagtctggc cagggagcgg     31080
+     cacattgccc tcccagagac agtggctcag tgtccaggcc ttccccaggc gcacagtggg     31140
+     ctcttgttcc cagaaagccc ctcgggggga tccaaacagt gtctccccca ccccgctgac     31200
+     ccctcagtgt atggggaaac cgtggcccac ggaaggcctc actgcctggg gtcacacagc     31260
+     atctgagtca ctgcagcagc ctcacagctg ccagcccagg cccagcccca tcaggagaca     31320
+     cccaaagcca cagtgcatcc caggaccagc tgggggggct gcgggcagga ctctcgatga     31380
+     ggctgaggga cgaggagggt caagggagcc actggcgcca tgcatgctga cgtcccctct     31440
+     ggctgcctgc agagcctggt gtggaagggc tgagtggggg atggtggaga gtcctgttaa     31500
+     ctcaggtttc tgctctgggg atgtctgggc acccatcaag ctggccgcgt gcacaggtgc     31560
+     agggagagcc agaaagcagg agccgatgca gggaggccac tggggacagc ccaggctgat     31620
+     gcttgggccc catgtgtctc caccacctac aaccctaagc aagcctcagc tttcccatct     31680
+     ggaaatcagg ggtcacagca gtgcctggca cagtagcagc ggctgactcc atcacagggt     31740
+     ggtgtagcct gtgggtactt ggcactctct gaggggcagg agctgggggg tgaaaggacc     31800
+     ctagagcata tgcaacaaga gggcagccct ggggacacct ggggacagaa ccctccaaag     31860
+     gtgtcgagtt tgggaagaga ctagagagaa gctctggcca gtccaggcat agacagtggc     31920
+     cacagccagt ggagagctgc atcctcaggt gtgagcagca accacctctg tactcaggcc     31980
+     tgccctgcac actcacagga ccatgctggc agggacaact ggcggcggag ttgactgcca     32040
+     accccggggc cagaaccatc aagcctgggc tctgctccgc ccaaggaact gcctgctgcc     32100
+     gaggtcagct ggagcaaggg gcctcacccc gggacacctt cccagacgtg tcctcagctc     32160
+     acatgagcct catcccaggg ggatgtggct cctccagcat ccccacccac acgctgctct     32220
+     ctgaccctca gtcttctgtt tgactcctaa tctgaagctc aatcctagat ctcccttgag     32280
+     aagggggtca ccagctgtct ggcagcccag cctccaggtc ttctggatta atgaagggaa     32340
+     agtcacctgg cctctctgcc ttgtctatta atggcatcat gctgagaatg atatttgcta     32400
+     ggccctttgc aaaccccaaa gtgctcttca accctcccag tgaagcctct tcttttctgt     32460
+     ggaagaaatg aggttcaggg tggagcaggg caggcctgag acctttgcag ggttctctcc     32520
+     aggtccccag caggacagac tggcaccctg cctcccctca tcaccctaga caaggagaca     32580
+     gaacaagagg ttccctgcta caggccatct gtgagggaag ccgccctagg gcctgtagac     32640
+     acaggaatcc ctgaggacct gacctgtgag ggtagtgcac aaaggggcca gcacttggca     32700
+     ggaggggggg gggcactgcc ccaaggctca gctagcaaat gtggcacagg ggtcaccaga     32760
+     gctaaacccc tgactcagtt gggtctgaca ggggctgaca tggcagacac acccaggaat     32820
+     caggggacac caagtgcagc tcagggcacc tgtccaggcc acacagtcag aaaggggatg     32880
+     gcagcaagga cttagctaca ctagattctg ggggtaaact gcctggtatg ctggtcactg     32940
+     ctagtcccca gtctggagtc tagctgggtc tcaggagtta ggcgaaaaca ccctccccag     33000
+     gctgcaggtg ggagaggccc acatcccctg cacacgtctg gccagaggac agatgggcag     33060
+     cccagtcacc agtcagagcc ctccagaggt gtccctgact gaccctacac acatgcaccc     33120
+     aggtgcccag gcacccttgg gctcagcaac cctgcaaccc cctcccagga cccaccagaa     33180
+     gcaggatagg actagagagg ccacaggagg gaaaccaagt cagagcagaa atggcttcgg     33240
+     tcctcagcag cctggctcag cttcctcaaa ccagatcctg actgatcaca ctggtctgtc     33300
+     taacccctgg gaggggtcct ctgtatccat cttacagata aggaaactga ggctcagaga     33360
+     agcccatcac tgcctaaggt cccagggcct ataagggagc tcaaagcctt gggccaggtc     33420
+     tgcccaggag ctgcagtgga agggaccctg tctgcagacc cccagaagac aaggcagacc     33480
+     acctgggttc ttcagccttg tggctgtgga cggctgtcag acccttctaa gaccccttgc     33540
+     cacctgctcc atcaggggca tctcagttga agaaggaagg actcaccccc aaaatcgtcc     33600
+     aactcagaaa aaaaggcaga agccaaggaa tccaatcact gggcaaaatg tgatcctggc     33660
+     acagacactg aggtggggga actggagccg gtgtggcgga ggccctcaca gccaagagca     33720
+     actgggggtg ccctgggcag ggactgtagc tgggaagatc                           33760
 //
 
 Output file format
@@ -512,62 +453,62 @@ Output file format
   File: h45989.est2genome
 
 Note Best alignment is between forward est and forward genome, but splice sites
- imply REVERSED GENE
-Exon       163  91.8 25685 25874 Z69719           1   193 H45989        yo13c02
-.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA
-sequence.
+imply REVERSED GENE
+Exon       163  91.8 25685 25874 Z69719           1   193 H45989        yo13c02.
+s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA se
+quence.
 -Intron    -20   0.0 25875 26278 Z69719
-Exon       207  98.1 26279 26492 Z69719         194   407 H45989        yo13c02
-.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA
-sequence.
+Exon       207  98.1 26279 26492 Z69719         194   407 H45989        yo13c02.
+s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA se
+quence.
 -Intron    -20   0.0 26493 27390 Z69719
-Exon        63  86.4 27391 27476 Z69719         408   494 H45989        yo13c02
-.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA
-sequence.
+Exon        63  86.4 27391 27476 Z69719         408   494 H45989        yo13c02.
+s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA se
+quence.
 
-Span       393  93.6 25685 27476 Z69719           1   494 H45989        yo13c02
-.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA
-sequence.
+Span       393  93.6 25685 27476 Z69719           1   494 H45989        yo13c02.
+s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA se
+quence.
 
-Segment     14  83.3 25685 25702 Z69719           1    18 H45989        yo13c02
-.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA
-sequence.
-Segment     28  85.7 25703 25737 Z69719          20    54 H45989        yo13c02
-.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA
-sequence.
-Segment      4 100.0 25738 25741 Z69719          56    59 H45989        yo13c02
-.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA
-sequence.
-Segment     13 100.0 25742 25754 Z69719          61    73 H45989        yo13c02
-.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA
-sequence.
-Segment      4 100.0 25756 25759 Z69719          74    77 H45989        yo13c02
-.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA
-sequence.
-Segment    110  97.4 25760 25874 Z69719          79   193 H45989        yo13c02
-.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA
-sequence.
-Segment     37 100.0 26279 26315 Z69719         194   230 H45989        yo13c02
-.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA
-sequence.
-Segment    162  98.8 26317 26480 Z69719         231   394 H45989        yo13c02
-.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA
-sequence.
-Segment     12 100.0 26481 26492 Z69719         396   407 H45989        yo13c02
-.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA
-sequence.
-Segment     16 100.0 27391 27406 Z69719         408   423 H45989        yo13c02
-.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA
-sequence.
-Segment     10  91.7 27407 27418 Z69719         425   436 H45989        yo13c02
-.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA
-sequence.
-Segment     19  95.2 27419 27439 Z69719         438   458 H45989        yo13c02
-.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA
-sequence.
-Segment     24  80.6 27441 27476 Z69719         459   494 H45989        yo13c02
-.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA
-sequence.
+Segment     14  83.3 25685 25702 Z69719           1    18 H45989        yo13c02.
+s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA se
+quence.
+Segment     28  85.7 25703 25737 Z69719          20    54 H45989        yo13c02.
+s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA se
+quence.
+Segment      4 100.0 25738 25741 Z69719          56    59 H45989        yo13c02.
+s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA se
+quence.
+Segment     13 100.0 25742 25754 Z69719          61    73 H45989        yo13c02.
+s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA se
+quence.
+Segment      4 100.0 25756 25759 Z69719          74    77 H45989        yo13c02.
+s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA se
+quence.
+Segment    110  97.4 25760 25874 Z69719          79   193 H45989        yo13c02.
+s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA se
+quence.
+Segment     37 100.0 26279 26315 Z69719         194   230 H45989        yo13c02.
+s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA se
+quence.
+Segment    162  98.8 26317 26480 Z69719         231   394 H45989        yo13c02.
+s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA se
+quence.
+Segment     12 100.0 26481 26492 Z69719         396   407 H45989        yo13c02.
+s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA se
+quence.
+Segment     16 100.0 27391 27406 Z69719         408   423 H45989        yo13c02.
+s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA se
+quence.
+Segment     10  91.7 27407 27418 Z69719         425   436 H45989        yo13c02.
+s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA se
+quence.
+Segment     19  95.2 27419 27439 Z69719         438   458 H45989        yo13c02.
+s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA se
+quence.
+Segment     24  80.6 27441 27476 Z69719         459   494 H45989        yo13c02.
+s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA se
+quence.
 
   MSP type segments
 
@@ -632,15 +573,14 @@ space                   10              Space threshold (in  megabytes)
                                         to change this parameter.
 
    There is no gap initiation cost for short gaps, just a penalty
-   proportional to the length of the gap. Thus the cost of inserting a
-   gap of length L in the EST is
+   proportional to the length of the gap. Thus the cost of inserting a gap
+   of length L in the EST is
  L*gap_penalty
 
    and the cost in the genome is
 
 min { L*gap_penalty, intron_penalty } or
-min { L*gap_penalty, splice_penalty } if the gap starts with GT and ends with A
-G
+min { L*gap_penalty, splice_penalty } if the gap starts with GT and ends with AG
                                      (or CT/AC if splice direction reversed)
 
    Introns are not allowed in the EST. The difference between the
@@ -661,8 +601,8 @@ G
 
 References
 
-    1. Mott R. (1997) EST_GENOME: a program to align spliced DNA
-       sequences to unspliced genomic DNA. Comput. Applic. 13:477-478
+    1. Mott R. (1997) EST_GENOME: a program to align spliced DNA sequences
+       to unspliced genomic DNA. Comput. Applic. 13:477-478
     2. Huang X (1994) On global sequence alignment. Comput. Applic.
        Biosci. 10:227-235.
     3. Myers, EW and Miller, W (1988) Optimal alignments in linear space.
@@ -690,12 +630,13 @@ See also
 
                     Program name                       Description
                     needle       Needleman-Wunsch global alignment of two sequences
+                    needleall    Many-to-many pairwise alignments of two sequence sets
                     stretcher    Needleman-Wunsch rapid global alignment of two sequences
 
 Author(s)
 
                     This application was modified for inclusion in EMBOSS by Peter Rice
-                    (pmr © ebi.ac.uk)
+                    (pmr (c) ebi.ac.uk)
    European         Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton,         Cambridge CB10 1SD, UK
 
@@ -723,6 +664,7 @@ mismatch 1 -> 3
 intronpenalty 40 -> 20
 splicepenalty 20 -> 10
 minscore 30 -> 10
+
 Dr. David Bauer
 GenProfile AG, Max-Delbrueck-Center, Erwin-Negelein-Haus
 Robert-Roessle-Str. 10, D-13125 Berlin, Germany

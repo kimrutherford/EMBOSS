@@ -1,5 +1,4 @@
-
-                                   tmap 
+                                    tmap
 
 
 
@@ -32,21 +31,25 @@ Usage
    Here is a sample session with tmap
 
 
-% tmap opsd.msf -out tmap.res -graph cps 
+% tmap opsd.msf -out tmap.res -graph cps
 Predict and plot transmembrane segments in protein sequences
 
 Created tmap.ps
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
 
+Predict and plot transmembrane segments in protein sequences
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers:
   [-sequences]         seqset     File containing a sequence alignment
    -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, das, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif)
   [-outfile]           report     [*.tmap] Output report file name
 
    Additional (Optional) qualifiers: (none)
@@ -100,13 +103,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -157,6 +162,7 @@ OPSD_XENLA YNPVIYIVLNKQFRNCLITTLCCGKNPFGDEDGSSAATSKTEASSVSSSQ
 OPSD_HUMAN ~~~~
 OPSD_XENLA VSPA
 
+
 Output file format
 
   Output files for usage example
@@ -165,7 +171,7 @@ Output file format
 
 ########################################
 # Program: tmap
-# Rundate: Tue 15 Jul 2008 12:00:00
+# Rundate: Fri 15 Jan 2010 12:00:00
 # Commandline: tmap
 #    [-sequences] ../../data/opsd.msf
 #    -outfile tmap.res
@@ -259,9 +265,9 @@ Notes
    Two sets of transmembrane propensity values are then used for the
    calculations: one for the middle, hydrophobic portion and one for the
    terminal regions of the transmembrane sequence spans. Average
-   propensity values are calculated for each position along the
-   alignment, with the contribution from each sequence weighted according
-   to its dissimilarity relative to the other aligned sequences.
+   propensity values are calculated for each position along the alignment,
+   with the contribution from each sequence weighted according to its
+   dissimilarity relative to the other aligned sequences.
 
    Eight-residue segments are considered as potential cores of
    transmembrane segments and elongated if thier middle propensity values
@@ -311,7 +317,7 @@ Author(s)
    Original program by Bengt Persson and Patrick Argos.
 
    This application was modified for inclusion in EMBOSS by Ian Longden
-   (il © sanger.ac.uk)
+   (il (c) sanger.ac.uk)
    Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
    CB10 1SA, UK.
 

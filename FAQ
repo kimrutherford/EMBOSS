@@ -295,9 +295,9 @@ A) Here is how to install PHYLIP given the various ways you can install
        cd embassy/phylipnew
 
        2) make the configuration file
-       aclocal
+       aclocal -I m4
        autoconf
-       automake
+       automake -a
 
        3) configure and compile
        ./configure (use same options as you used to compile emboss,

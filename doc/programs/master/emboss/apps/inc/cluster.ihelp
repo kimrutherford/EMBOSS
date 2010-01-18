@@ -1,7 +1,0 @@
-   Mandatory qualifiers:
-  [-infile]            infile     match file
-   -[no]consensus      bool       make consensus after clustering
-   -outfile            outfile    Output file name
-
-   Optional qualifiers: (none)
-   Advanced qualifiers: (none)

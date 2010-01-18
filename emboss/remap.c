@@ -409,7 +409,7 @@ static void remap_DelTable(AjPTable * table)
 
     if(ajTableGetLength(*table))
     {
-      ajTableToarray(*table, &keyarray, &valarray);
+      ajTableToarrayKeysValues(*table, &keyarray, &valarray);
       for(i = 0; keyarray[i]; i++)
       {
           value = (PValue) valarray[i];
@@ -524,7 +524,6 @@ static void remap_CutList(AjPFile outfile, const AjPTable hittable,
 {
     PValue value;
     void **keyarray = NULL;		/* array for table */
-    void **valarray = NULL;		/* array for table */
     ajint i;
 
     /* print title */
@@ -541,7 +540,7 @@ static void remap_CutList(AjPFile outfile, const AjPTable hittable,
 
     if(ajTableGetLength(hittable))
     {
-        ajTableToarray(hittable, &keyarray, &valarray);
+        ajTableToarrayKeys(hittable, &keyarray);
         qsort(keyarray, ajTableGetLength(hittable), sizeof (*keyarray),
 	      ajStrVcmp);
 
@@ -637,7 +636,6 @@ static void remap_CutList(AjPFile outfile, const AjPTable hittable,
 	    ajFmtPrintF(outfile, "</PRE>\n");
 
 	AJFREE(keyarray);
-	AJFREE(valarray);
     }
 
     return;
@@ -722,7 +720,7 @@ static void remap_NoCutList(AjPFile outfile, const AjPTable hittable,
     nocutlist = ajListstrNew();
 
 
-    ajTableToarray(hittable, &keyarray, &valarray);
+    ajTableToarrayKeysValues(hittable, &keyarray, &valarray);
     for(i = 0; keyarray[i]; i++)
     {
         value = (PValue) valarray[i];

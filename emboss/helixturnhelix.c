@@ -135,7 +135,7 @@ int main(int argc, char **argv)
     ajb=ajListNew();
 
     ajFmtPrintAppS(&tmpStr,"Hits above +%.2f SD (%.2f)", minsd, minscore);
-    ajReportSetHeader(report, tmpStr);
+    ajReportSetHeaderS(report, tmpStr);
 
     while(ajSeqallNext(seqall, &seq))
     {

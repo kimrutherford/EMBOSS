@@ -1,6 +1,7 @@
 application: dotmatcher [
   documentation: "Draw a threshold dotplot of two sequences"
   groups: "Alignment:Dot plots"
+  relations: "EDAM: Dotplot generation"
 ]
 
 section: input [
@@ -11,11 +12,13 @@ section: input [
   sequence: asequence [
     parameter: "y"
     type: "any"
+    relations: "EDAM: Sequence"                                            
   ]
 
   sequence: bsequence [
     parameter: "y"
     type: "@($(acdprotein) ? stopprotein : nucleotide)"
+    relations: "EDAM: Sequence"                                            
   ]
 
   matrix: matrixfile [
@@ -26,6 +29,7 @@ section: input [
            sequences. By default it is the file 'EBLOSUM62' (for proteins) or
            the file 'EDNAFULL' (for nucleic sequences). These files are
            found in the 'data' directory of the EMBOSS installation."
+    relations: "EDAM: Integer comparison matrix"                           
   ]
 
 endsection: input
@@ -37,9 +41,10 @@ section: additional [
 
   integer: windowsize [
     additional: "Y"
-    information: "Window size over which to test threshhold"
+    information: "Window size over which to test threshold"
     default: "10"
     minimum: "3"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: threshold [
@@ -47,6 +52,7 @@ section: additional [
     information: "Threshold"
     default: "23"
     minimum: "0"
+    relations: "EDAM: Generic integer"                                     
   ]
 
 endsection: additional
@@ -60,6 +66,7 @@ section: output [
     default: "N"
     information: "Stretch plot"
     help: "Display a non-proportional graph"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   graph: graph [
@@ -67,6 +74,7 @@ section: output [
     gtitle: "Dotmatcher: $(asequence.usa) vs $(bsequence.usa)"
     gxtitle: "$(asequence.name)"
     gytitle: "$(bsequence.name)"
+    relations: "EDAM: EMBOSS graph file"                                   
   ]
 
   xygraph: xygraph [
@@ -74,6 +82,7 @@ section: output [
     gtitle: "Dotmatcher: $(asequence.usa) vs $(bsequence.usa)"
     gxtitle: "$(asequence.name)"
     gytitle: "$(bsequence.name)"
+    relations: "EDAM: EMBOSS graph file"                                   
   ]
 
 endsection: output

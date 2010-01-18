@@ -1,5 +1,4 @@
-
-                                 patmatdb 
+                                  patmatdb
 
 
 
@@ -18,12 +17,11 @@ Description
 
    patmatdb searches the input protein sequences for the specified
    sequence motif. The output is a standard EMBOSS report file including
-   the number of matches between the motif and each input sequence,
-   length of match, start and end positions of match, and the
-   motif-sequence alignment. Patterns for patmatdb are based on the
-   format of pattern used in the PROSITE database, with the difference
-   that the terminating dot '.' and the hyphens, '-', between the
-   characters are optional.
+   the number of matches between the motif and each input sequence, length
+   of match, start and end positions of match, and the motif-sequence
+   alignment. Patterns for patmatdb are based on the format of pattern
+   used in the PROSITE database, with the difference that the terminating
+   dot '.' and the hyphens, '-', between the characters are optional.
 
 Algorithm
 
@@ -32,25 +30,29 @@ Algorithm
    the hyphens, '-', between the characters are optional. For example:
    [DE](2)HS{P}X(2)PX(2,4)C means two Asps or Glus in any order followed
    by His, Ser, any residue other then Pro, then two of any residue
-   followed by Pro followed by two to four of any residue followed by
-   Cys. The search is case-independent, so AAA matches aaa. (Any string
-   of at least 2 characters).
+   followed by Pro followed by two to four of any residue followed by Cys.
+   The search is case-independent, so AAA matches aaa. (Any string of at
+   least 2 characters).
 
 Usage
 
    Here is a sample session with patmatdb
 
 
-% patmatdb 
+% patmatdb
 Searches protein sequences with a sequence motif
 Input protein sequence(s): tsw:*
 Protein motif to search for: st[ty]s
-Output report [12s1_arath.patmatdb]: 
+Output report [12s1_arath.patmatdb]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Searches protein sequences with a sequence motif
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -109,13 +111,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -135,9 +139,9 @@ Input file format
      * The standard IUPAC one-letter codes for the amino acids are used.
      * The symbol `x' is used for a position where any amino acid is
        accepted.
-     * Ambiguities are indicated by listing the acceptable amino acids
-       for a given position, between square parentheses `[ ]'. For
-       example: [ALT] stands for Ala or Leu or Thr.
+     * Ambiguities are indicated by listing the acceptable amino acids for
+       a given position, between square parentheses `[ ]'. For example:
+       [ALT] stands for Ala or Leu or Thr.
      * Ambiguities are also indicated by listing between a pair of curly
        brackets `{ }' the amino acids that are not accepted at a given
        position. For example: {AM} stands for any amino acid except Ala
@@ -184,7 +188,7 @@ Output file format
 
 ########################################
 # Program: patmatdb
-# Rundate: Tue 15 Jul 2008 12:00:00
+# Rundate: Fri 15 Jan 2010 12:00:00
 # Commandline: patmatdb
 #    -sequence "tsw:*"
 #    -motif "st[ty]s"
@@ -273,8 +277,8 @@ Notes
 
 References
 
-    1. Bairoch, A., Bucher P. (1994) PROSITE: recent developments.
-       Nucleic Acids Research, Vol 22, No.17 3583-3589.
+    1. Bairoch, A., Bucher P. (1994) PROSITE: recent developments. Nucleic
+       Acids Research, Vol 22, No.17 3583-3589.
     2. Bairoch, A., (1992) PROSITE: a dictionary of sites and patterns in
        proteins. Nucleic Acids Research, Vol 20, Supplement, 2013-2018.
     3. Peek, J., O'Reilly, T., Loukides, M., (1997) Unix Power Tools, 2nd

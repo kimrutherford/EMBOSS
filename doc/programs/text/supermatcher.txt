@@ -1,5 +1,4 @@
-
-                               supermatcher 
+                                supermatcher
 
 
 
@@ -30,16 +29,20 @@ Usage
    Here is a sample session with supermatcher
 
 
-% supermatcher @eclac.list tembl:j01636 -word 50  
+% supermatcher @eclac.list tembl:j01636 -word 50
 Calculate approximate local pair-wise alignments of larger sequences
-Gap opening penalty [10.0]: 
+Gap opening penalty [10.0]:
 Gap extension penalty [0.5]: 3.0
-Output alignment [j01636.supermatcher]: 
+Output alignment [j01636.supermatcher]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Calculate approximate local pair-wise alignments of larger sequences
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         seqall     Sequence(s) filename and optional format, or
@@ -123,13 +126,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -138,8 +143,8 @@ Input file format
 
   Input files for usage example
 
-   'tembl:j01636' is a sequence entry in the example nucleic acid
-   database 'tembl'
+   'tembl:j01636' is a sequence entry in the example nucleic acid database
+   'tembl'
 
   File: eclac.list
 
@@ -214,106 +219,56 @@ RP   1146-1282
 
   [Part of this file has been deleted for brevity]
 
-     cgatttggct acatgacatc aaccatatca gcaaaagtga tacgggtatt atttttgccg      456
-0
-     ctatttctct gttctcgcta ttattccaac cgctgtttgg tctgctttct gacaaactcg      462
-0
-     ggctgcgcaa atacctgctg tggattatta ccggcatgtt agtgatgttt gcgccgttct      468
-0
-     ttatttttat cttcgggcca ctgttacaat acaacatttt agtaggatcg attgttggtg      474
-0
-     gtatttatct aggcttttgt tttaacgccg gtgcgccagc agtagaggca tttattgaga      480
-0
-     aagtcagccg tcgcagtaat ttcgaatttg gtcgcgcgcg gatgtttggc tgtgttggct      486
-0
-     gggcgctgtg tgcctcgatt gtcggcatca tgttcaccat caataatcag tttgttttct      492
-0
-     ggctgggctc tggctgtgca ctcatcctcg ccgttttact ctttttcgcc aaaacggatg      498
-0
-     cgccctcttc tgccacggtt gccaatgcgg taggtgccaa ccattcggca tttagcctta      504
-0
-     agctggcact ggaactgttc agacagccaa aactgtggtt tttgtcactg tatgttattg      510
-0
-     gcgtttcctg cacctacgat gtttttgacc aacagtttgc taatttcttt acttcgttct      516
-0
-     ttgctaccgg tgaacagggt acgcgggtat ttggctacgt aacgacaatg ggcgaattac      522
-0
-     ttaacgcctc gattatgttc tttgcgccac tgatcattaa tcgcatcggt gggaaaaacg      528
-0
-     ccctgctgct ggctggcact attatgtctg tacgtattat tggctcatcg ttcgccacct      534
-0
-     cagcgctgga agtggttatt ctgaaaacgc tgcatatgtt tgaagtaccg ttcctgctgg      540
-0
-     tgggctgctt taaatatatt accagccagt ttgaagtgcg tttttcagcg acgatttatc      546
-0
-     tggtctgttt ctgcttcttt aagcaactgg cgatgatttt tatgtctgta ctggcgggca      552
-0
-     atatgtatga aagcatcggt ttccagggcg cttatctggt gctgggtctg gtggcgctgg      558
-0
-     gcttcacctt aatttccgtg ttcacgctta gcggccccgg cccgctttcc ctgctgcgtc      564
-0
-     gtcaggtgaa tgaagtcgct taagcaatca atgtcggatg cggcgcgacg cttatccgac      570
-0
-     caacatatca taacggagtg atcgcattga acatgccaat gaccgaaaga ataagagcag      576
-0
-     gcaagctatt taccgatatg tgcgaaggct taccggaaaa aagacttcgt gggaaaacgt      582
-0
-     taatgtatga gtttaatcac tcgcatccat cagaagttga aaaaagagaa agcctgatta      588
-0
-     aagaaatgtt tgccacggta ggggaaaacg cctgggtaga accgcctgtc tatttctctt      594
-0
-     acggttccaa catccatata ggccgcaatt tttatgcaaa tttcaattta accattgtcg      600
-0
-     atgactacac ggtaacaatc ggtgataacg tactgattgc acccaacgtt actctttccg      606
-0
-     ttacgggaca ccctgtacac catgaattga gaaaaaacgg cgagatgtac tcttttccga      612
-0
-     taacgattgg caataacgtc tggatcggaa gtcatgtggt tattaatcca ggcgtcacca      618
-0
-     tcggggataa ttctgttatt ggcgcgggta gtatcgtcac aaaagacatt ccaccaaacg      624
-0
-     tcgtggcggc tggcgttcct tgtcgggtta ttcgcgaaat aaacgaccgg gataagcact      630
-0
-     attatttcaa agattataaa gttgaatcgt cagtttaaat tataaaaatt gcctgatacg      636
-0
-     ctgcgcttat caggcctaca agttcagcga tctacattag ccgcatccgg catgaacaaa      642
-0
-     gcgcaggaac aagcgtcgca tcatgcctct ttgacccaca gctgcggaaa acgtactggt      648
-0
-     gcaaaacgca gggttatgat catcagccca acgacgcaca gcgcatgaaa tgcccagtcc      654
-0
-     atcaggtaat tgccgctgat actacgcagc acgccagaaa accacggggc aagcccggcg      660
-0
-     atgataaaac cgattccctg cataaacgcc accagcttgc cagcaatagc cggttgcaca      666
-0
-     gagtgatcga gcgccagcag caaacagagc ggaaacgcgc cgcccagacc taacccacac      672
-0
-     accatcgccc acaataccgg caattgcatc ggcagccaga taaagccgca gaaccccacc      678
-0
-     agttgtaaca ccagcgccag cattaacagt ttgcgccgat cctgatggcg agccatagca      684
-0
-     ggcatcagca aagctcctgc ggcttgccca agcgtcatca atgccagtaa ggaaccgctg      690
-0
-     tactgcgcgc tggcaccaat ctcaatatag aaagcgggta accaggcaat caggctggcg      696
-0
-     taaccgccgt taatcagacc gaagtaaaca cccagcgtcc acgcgcgggg agtgaatacc      702
-0
-     acgcgaaccg gagtggttgt tgtcttgtgg gaagaggcga cctcgcgggc gctttgccac      708
-0
-     caccaggcaa agagcgcaac aacggcaggc agcgccacca ggcgagtgtt tgataccagg      714
-0
-     tttcgctatg ttgaactaac cagggcgtta tggcggcacc aagcccaccg ccgcccatca      720
-0
-     gagccgcgga ccacagcccc atcaccagtg gcgtgcgctg ctgaaaccgc cgtttaatca      726
-0
-     ccgaagcatc accgcctgaa tgatgccgat ccccacccca ccaagcagtg cgctgctaag      732
-0
-     cagcagcgca ctttgcgggt aaagctcacg catcaatgca ccgacggcaa tcagcaacag      738
-0
-     actgatggcg acactgcgac gttcgctgac atgctgatga agccagcttc cggccagcgc      744
-0
-     cagcccgccc atggtaacca ccggcagagc ggtcgac                               747
-7
+     cgatttggct acatgacatc aaccatatca gcaaaagtga tacgggtatt atttttgccg      4560
+     ctatttctct gttctcgcta ttattccaac cgctgtttgg tctgctttct gacaaactcg      4620
+     ggctgcgcaa atacctgctg tggattatta ccggcatgtt agtgatgttt gcgccgttct      4680
+     ttatttttat cttcgggcca ctgttacaat acaacatttt agtaggatcg attgttggtg      4740
+     gtatttatct aggcttttgt tttaacgccg gtgcgccagc agtagaggca tttattgaga      4800
+     aagtcagccg tcgcagtaat ttcgaatttg gtcgcgcgcg gatgtttggc tgtgttggct      4860
+     gggcgctgtg tgcctcgatt gtcggcatca tgttcaccat caataatcag tttgttttct      4920
+     ggctgggctc tggctgtgca ctcatcctcg ccgttttact ctttttcgcc aaaacggatg      4980
+     cgccctcttc tgccacggtt gccaatgcgg taggtgccaa ccattcggca tttagcctta      5040
+     agctggcact ggaactgttc agacagccaa aactgtggtt tttgtcactg tatgttattg      5100
+     gcgtttcctg cacctacgat gtttttgacc aacagtttgc taatttcttt acttcgttct      5160
+     ttgctaccgg tgaacagggt acgcgggtat ttggctacgt aacgacaatg ggcgaattac      5220
+     ttaacgcctc gattatgttc tttgcgccac tgatcattaa tcgcatcggt gggaaaaacg      5280
+     ccctgctgct ggctggcact attatgtctg tacgtattat tggctcatcg ttcgccacct      5340
+     cagcgctgga agtggttatt ctgaaaacgc tgcatatgtt tgaagtaccg ttcctgctgg      5400
+     tgggctgctt taaatatatt accagccagt ttgaagtgcg tttttcagcg acgatttatc      5460
+     tggtctgttt ctgcttcttt aagcaactgg cgatgatttt tatgtctgta ctggcgggca      5520
+     atatgtatga aagcatcggt ttccagggcg cttatctggt gctgggtctg gtggcgctgg      5580
+     gcttcacctt aatttccgtg ttcacgctta gcggccccgg cccgctttcc ctgctgcgtc      5640
+     gtcaggtgaa tgaagtcgct taagcaatca atgtcggatg cggcgcgacg cttatccgac      5700
+     caacatatca taacggagtg atcgcattga acatgccaat gaccgaaaga ataagagcag      5760
+     gcaagctatt taccgatatg tgcgaaggct taccggaaaa aagacttcgt gggaaaacgt      5820
+     taatgtatga gtttaatcac tcgcatccat cagaagttga aaaaagagaa agcctgatta      5880
+     aagaaatgtt tgccacggta ggggaaaacg cctgggtaga accgcctgtc tatttctctt      5940
+     acggttccaa catccatata ggccgcaatt tttatgcaaa tttcaattta accattgtcg      6000
+     atgactacac ggtaacaatc ggtgataacg tactgattgc acccaacgtt actctttccg      6060
+     ttacgggaca ccctgtacac catgaattga gaaaaaacgg cgagatgtac tcttttccga      6120
+     taacgattgg caataacgtc tggatcggaa gtcatgtggt tattaatcca ggcgtcacca      6180
+     tcggggataa ttctgttatt ggcgcgggta gtatcgtcac aaaagacatt ccaccaaacg      6240
+     tcgtggcggc tggcgttcct tgtcgggtta ttcgcgaaat aaacgaccgg gataagcact      6300
+     attatttcaa agattataaa gttgaatcgt cagtttaaat tataaaaatt gcctgatacg      6360
+     ctgcgcttat caggcctaca agttcagcga tctacattag ccgcatccgg catgaacaaa      6420
+     gcgcaggaac aagcgtcgca tcatgcctct ttgacccaca gctgcggaaa acgtactggt      6480
+     gcaaaacgca gggttatgat catcagccca acgacgcaca gcgcatgaaa tgcccagtcc      6540
+     atcaggtaat tgccgctgat actacgcagc acgccagaaa accacggggc aagcccggcg      6600
+     atgataaaac cgattccctg cataaacgcc accagcttgc cagcaatagc cggttgcaca      6660
+     gagtgatcga gcgccagcag caaacagagc ggaaacgcgc cgcccagacc taacccacac      6720
+     accatcgccc acaataccgg caattgcatc ggcagccaga taaagccgca gaaccccacc      6780
+     agttgtaaca ccagcgccag cattaacagt ttgcgccgat cctgatggcg agccatagca      6840
+     ggcatcagca aagctcctgc ggcttgccca agcgtcatca atgccagtaa ggaaccgctg      6900
+     tactgcgcgc tggcaccaat ctcaatatag aaagcgggta accaggcaat caggctggcg      6960
+     taaccgccgt taatcagacc gaagtaaaca cccagcgtcc acgcgcgggg agtgaatacc      7020
+     acgcgaaccg gagtggttgt tgtcttgtgg gaagaggcga cctcgcgggc gctttgccac      7080
+     caccaggcaa agagcgcaac aacggcaggc agcgccacca ggcgagtgtt tgataccagg      7140
+     tttcgctatg ttgaactaac cagggcgtta tggcggcacc aagcccaccg ccgcccatca      7200
+     gagccgcgga ccacagcccc atcaccagtg gcgtgcgctg ctgaaaccgc cgtttaatca      7260
+     ccgaagcatc accgcctgaa tgatgccgat ccccacccca ccaagcagtg cgctgctaag      7320
+     cagcagcgca ctttgcgggt aaagctcacg catcaatgca ccgacggcaa tcagcaacag      7380
+     actgatggcg acactgcgac gttcgctgac atgctgatga agccagcttc cggccagcgc      7440
+     cagcccgccc atggtaacca ccggcagagc ggtcgac                               7477
 //
 
 Output file format
@@ -341,11 +296,12 @@ Output file format
 
   File: supermatcher.error
 
+
   File: j01636.supermatcher
 
 ########################################
 # Program: supermatcher
-# Rundate: Tue 15 Jul 2008 12:00:00
+# Rundate: Fri 15 Jan 2010 12:00:00
 # Commandline: supermatcher
 #    [-asequence] @../../data/eclac.list
 #    [-bsequence] tembl:j01636
@@ -472,11 +428,12 @@ Data files
 
 % embossdata -fetch -file Exxx.dat
 
+
    Users can provide their own data files in their own directories.
    Project specific files can be put in the current directory, or for
-   tidier directory listings in a subdirectory called ".embossdata".
-   Files for all EMBOSS runs can be put in the user's home directory, or
-   again in a subdirectory called ".embossdata".
+   tidier directory listings in a subdirectory called ".embossdata". Files
+   for all EMBOSS runs can be put in the user's home directory, or again
+   in a subdirectory called ".embossdata".
 
    The directories are searched in the following order:
      * . (your current directory)
@@ -493,13 +450,12 @@ Notes
    approximate local alignments are calculated for two sequences. These
    give the centre points for more acurate Smith-Waterman type alignments
    in a region of width specified by the user. The use of Smith-Waterman
-   in narrow regions means the alignment overall will be rough, but due
-   to the memory saving much larger sequences can be aligned.
+   in narrow regions means the alignment overall will be rough, but due to
+   the memory saving much larger sequences can be aligned.
 
-   For the Swmith-Waterman alignment, the gap open and extension
-   penalties and substition matrix may be specified, the later by default
-   is EBLOSUM62 for protein sequences and EDNAMAT for nucleotide
-   sequence.
+   For the Swmith-Waterman alignment, the gap open and extension penalties
+   and substition matrix may be specified, the later by default is
+   EBLOSUM62 for protein sequences and EDNAMAT for nucleotide sequence.
 
    For the word-match alignment, the word length may be specified. The
    time required for alignment depends very much on word size. A small
@@ -519,14 +475,21 @@ Warnings
    the sequences and the wider the specified alignment width, the more
    memory will be used. If the program terminates due to lack of memory
    you can try running the UNIX command limit to see if your stack or
-   memory usage have been limited and if so, run unlimit, (e.g.: %
-   unlimit stacksize).
+   memory usage have been limited and if so, run unlimit, (e.g.: % unlimit
+   stacksize).
+
+   supermatcher has two sequence inputs. The first (asequence) is a
+   database or large file which is read one sequence at a time. The second
+   (bsequence) is a "sequence set" which is loaded into memory. If one of
+   the inputs has more number of sequences than the other one, specifying
+   the file with many number of sequences first would be useful to
+   decrease the amount of memory used while supermatcher running.
 
    Because the alignment is made within a narrow area each side of the
    'best' diagonal identified by word-matching, if there are sufficient
-   indels between the two sequences, then the path of the Smith &
-   Waterman alignment can wander outside of this area. Making the width
-   larger can avoid this problem, but you then use more memory.
+   indels between the two sequences, then the path of the Smith & Waterman
+   alignment can wander outside of this area. Making the width larger can
+   avoid this problem, but you then use more memory.
 
 Diagnostic Error Messages
 
@@ -551,7 +514,7 @@ See also
 
 Author(s)
 
-   Ian              Longden (il © sanger.ac.uk)
+   Ian              Longden (il (c) sanger.ac.uk)
    Sanger           Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
                     CB10 1SA, UK.
 

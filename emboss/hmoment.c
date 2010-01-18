@@ -74,7 +74,7 @@ int main(int argc, char **argv)
     const char *sname;
 
 
-    ajGraphInit("hmoment", argc, argv);
+    embInit("hmoment", argc, argv);
 
     seqall    = ajAcdGetSeqall("seqall");
     plot      = ajAcdGetToggle("plot");
@@ -158,7 +158,7 @@ int main(int argc, char **argv)
 	    else
 		ajGraphSetMulti(graph,1);
 
-	    ajGraphxySetOverLap(graph,ajFalse);
+	    ajGraphxySetflagOverlay(graph,ajFalse);
 
 	    hmoment_addgraph(graph,limit,x,ya,ymax,BLACK,aangle,window,
 			     baseline, sname);
@@ -178,7 +178,7 @@ int main(int argc, char **argv)
 	}
     }
 
-    ajGraphClose();
+    ajGraphicsClose();
     ajGraphxyDel(&graph);
     ajFileClose(&outf);
 
@@ -220,14 +220,14 @@ static void hmoment_addgraph(AjPGraph graph, ajint limit,
 {
     ajint i;
 
-    AjPGraphPlpData data;
+    AjPGraphdata data;
     AjPStr st = NULL;
 
     if(limit<1)
 	return;
 
 
-    data = ajGraphPlpDataNewI(limit);
+    data = ajGraphdataNewI(limit);
 
     st = ajStrNew();
 
@@ -237,22 +237,22 @@ static void hmoment_addgraph(AjPGraph graph, ajint limit,
 	data->y[i] = y[i];
     }
 
-    ajGraphPlpDataSetColour(data,colour);
-    ajGraphPlpDataSetMaxMin(data,x[0],x[limit-1],0.,ymax);
-    ajGraphPlpDataSetMaxima(data,x[0],x[limit-1],0.,ymax);
+    ajGraphdataSetColour(data,colour);
+    ajGraphdataSetMinmax(data,x[0],x[limit-1],0.,ymax);
+    ajGraphdataSetTruescale(data,x[0],x[limit-1],0.,ymax);
 
-    ajGraphPlpDataSetTypeC(data,"2D Plot Float");
+    ajGraphdataSetTypeC(data,"2D Plot Float");
 
     ajFmtPrintS(&st,"HMOMENT of %s. Window:%d",sname,window);
-    ajGraphPlpDataSetTitle(data,st);
+    ajGraphdataSetTitleS(data,st);
 
     ajFmtPrintS(&st,"uH (%d deg)",angle);
-    ajGraphPlpDataSetYTitle(data,st);
+    ajGraphdataSetYlabelS(data,st);
 
     ajFmtPrintS(&st,"Position (w=%d)",window);
-    ajGraphPlpDataSetXTitle(data,st);
+    ajGraphdataSetXlabelS(data,st);
 
-    ajGraphPlpDataAddLine(data,x[0],baseline,x[limit-1],baseline,BLUE);
+    ajGraphdataAddposLine(data,x[0],baseline,x[limit-1],baseline,BLUE);
 
     ajGraphDataAdd(graph,data);
 
@@ -310,8 +310,8 @@ static float hmoment_calchm(const char *p, int pos, int window, ajint angle)
 	res = p[pos+i];
 	h   = hydata[ajBasecodeToInt(res)];
 
-	sumsin  += (h * sin(ajDegToRad((float)tangle)));
-	sumcos  += (h * cos(ajDegToRad((float)tangle)));
+	sumsin  += (h * sin(ajCvtDegToRad((float)tangle)));
+	sumcos  += (h * cos(ajCvtDegToRad((float)tangle)));
 	tangle = (double) (((ajint)tangle+angle) % 360);
     }
 

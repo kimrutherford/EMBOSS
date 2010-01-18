@@ -124,7 +124,7 @@ static void maskfeat_FeatSeqMask(AjPSeq seq, const AjPStr type,
 
     /* For all features... */
 
-    if(feat && ajFeattableSize(feat))
+    if(feat && ajFeattableGetSize(feat))
     {
 	iter = ajListIterNewread(feat->Features) ;
 	while(!ajListIterDone(iter))

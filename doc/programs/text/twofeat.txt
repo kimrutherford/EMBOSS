@@ -1,5 +1,4 @@
-
-                                  twofeat 
+                                   twofeat
 
 
 
@@ -35,14 +34,13 @@ Algorithm
    Minimum and maximum distance between each feature.
 
    Distance measurement (measure from the nearest ends of the two
-   features, from the left ends, from right ends, from the furthest
-   ends.)
+   features, from the left ends, from right ends, from the furthest ends.)
 
    Type of overlap (any type of overlap or no overlap is allowed, Overlap
    required, No overlaps are allowed, Overlap required but one feature
    must not be completely within the other, Feature A must be completely
-   enclosed within feature B, Feature B must be completely enclosed
-   within feature A).
+   enclosed within feature B, Feature B must be completely enclosed within
+   feature A).
 
    Feature sense (any sense, in the same sense or in opposite senses)
 
@@ -55,10 +53,10 @@ Algorithm
    they satisfy the requirements output them to the report file
 
    By default the resulting pairs of features found are then written to a
-   report file as a single feature from the first postion of the
-   left-most feature to the last position of the right-most feature. You
-   can modify the output to report the pairs of features with no changes
-   made to them.
+   report file as a single feature from the first postion of the left-most
+   feature to the last position of the right-most feature. You can modify
+   the output to report the pairs of features with no changes made to
+   them.
 
 Usage
 
@@ -68,13 +66,14 @@ Usage
    for every pair of features found.
 
 
-% twofeat tembl:x65923 
+% twofeat tembl:x65923
 Finds neighbouring pairs of features in sequence(s)
 Type of first feature [*]: polyA_signal
 Type of second feature [*]: polyA_site
 The minimum distance between the features [0]: 10
 The maximum distance between the features [0]: 50
-Output report [x65923.twofeat]: 
+Output report [x65923.twofeat]:
+
 
    Go to the input files for this example
    Go to the output files for this example
@@ -86,17 +85,21 @@ Output report [x65923.twofeat]:
    full original pairs of features in GFF format.
 
 
-% twofeat -twoout -rformat gff tembl:x65923 
+% twofeat -twoout -rformat gff tembl:x65923
 Finds neighbouring pairs of features in sequence(s)
 Type of first feature [*]: polyA_signal
 Type of second feature [*]: polyA_site
 The minimum distance between the features [0]: 10
 The maximum distance between the features [0]: 50
-Output report [x65923.twofeat]: 
+Output report [x65923.twofeat]:
+
 
    Go to the output files for this example
 
 Command line arguments
+
+Finds neighbouring pairs of features in sequence(s)
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -113,7 +116,7 @@ Command line arguments
                                   If you wish to allow more than one type,
                                   separate their names with the character '|',
                                   eg:
-                                  *UTR | intron (Any string is accepted)
+                                  *UTR | intron (Any string)
    -btype              string     [*] By default every feature in the feature
                                   table is allowed. You can set this to be any
                                   feature type you wish to allow.
@@ -126,7 +129,7 @@ Command line arguments
                                   If you wish to allow more than one type,
                                   separate their names with the character '|',
                                   eg:
-                                  *UTR | intron (Any string is accepted)
+                                  *UTR | intron (Any string)
    -minrange           integer    [0] If this is greater or equal to
                                   'maxrange', then no min or max range is
                                   specified (Any integer value)
@@ -148,7 +151,7 @@ Command line arguments
                                   If you wish to allow more than one source,
                                   separate their names with the character '|',
                                   eg:
-                                  gene* | embl (Any string is accepted)
+                                  gene* | embl (Any string)
    -asense             menu       [0] By default any feature sense is allowed.
                                   You can set this to match the required
                                   sense. (Values: 0 (Any sense); + (Forward
@@ -179,7 +182,7 @@ Command line arguments
                                   If you wish to allow more than one tag,
                                   separate their names with the character '|',
                                   eg:
-                                  gene | label (Any string is accepted)
+                                  gene | label (Any string)
    -avalue             string     [*] Tag values are the values associated
                                   with a feature tag. Tags are the types of
                                   extra values that a feature may have. For
@@ -203,7 +206,7 @@ Command line arguments
                                   If you wish to allow more than one tag
                                   value, separate their names with the
                                   character '|', eg:
-                                  pax* | 10 (Any string is accepted)
+                                  pax* | 10 (Any string)
    -bsource            string     [*] By default any feature source in the
                                   feature table is allowed. You can set this
                                   to match any feature source you wish to
@@ -216,7 +219,7 @@ Command line arguments
                                   If you wish to allow more than one source,
                                   separate their names with the character '|',
                                   eg:
-                                  gene* | embl (Any string is accepted)
+                                  gene* | embl (Any string)
    -bsense             menu       [0] By default any feature sense is allowed.
                                   You can set this to match the required
                                   sense. (Values: 0 (Any sense); + (Forward
@@ -247,7 +250,7 @@ Command line arguments
                                   If you wish to allow more than one tag,
                                   separate their names with the character '|',
                                   eg:
-                                  gene | label (Any string is accepted)
+                                  gene | label (Any string)
    -bvalue             string     [*] Tag values are the values associated
                                   with a feature tag. Tags are the types of
                                   extra values that a feature may have. For
@@ -271,7 +274,7 @@ Command line arguments
                                   If you wish to allow more than one tag
                                   value, separate their names with the
                                   character '|', eg:
-                                  pax* | 10 (Any string is accepted)
+                                  pax* | 10 (Any string)
    -overlap            menu       [A] This allows you to specify the allowed
                                   overlaps of the features A and B.
                                   You can allow any or no overlaps, specify
@@ -318,7 +321,7 @@ Command line arguments
                                   list of the Swissprot feature types. If you
                                   specify an invalid feature type name, then
                                   the default name 'misc_feature' is used.
-                                  (Any string is accepted)
+                                  (Any string)
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
@@ -360,13 +363,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -374,8 +379,8 @@ Input file format
 
   Input files for usage example
 
-   'tembl:x65923' is a sequence entry in the example nucleic acid
-   database 'tembl'
+   'tembl:x65923' is a sequence entry in the example nucleic acid database
+   'tembl'
 
   Database entry: tembl:x65923
 
@@ -391,8 +396,7 @@ XX
 KW   fau gene.
 XX
 OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
-;
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
 OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
 OC   Homo.
 XX
@@ -436,10 +440,8 @@ FT                   /db_xref="HSSP:1GJZ"
 FT                   /db_xref="InterPro:IPR006846"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
 FT                   /protein_id="CAA46716.1"
-FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLA
-G
-FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKT
-G
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
 FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
 FT   misc_feature    98..102
 FT                   /note="nucleolar localization signal"
@@ -449,24 +451,15 @@ FT   polyA_signal    484..489
 FT   polyA_site      509
 XX
 SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
-     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        6
-0
-     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       12
-0
-     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       18
-0
-     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       24
-0
-     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       30
-0
-     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       36
-0
-     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       42
-0
-     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       48
-0
-     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               51
-8
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        60
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       120
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       180
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       240
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       300
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       360
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       420
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       480
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               518
 //
 
 Output file format
@@ -490,7 +483,7 @@ Output file format
 
 ########################################
 # Program: twofeat
-# Rundate: Tue 15 Jul 2008 12:00:00
+# Rundate: Fri 15 Jan 2010 12:00:00
 # Commandline: twofeat
 #    [-sequence] tembl:x65923
 #    -atype polyA_signal
@@ -526,13 +519,13 @@ Output file format
 
 ##gff-version 3
 ##sequence-region X65923 1 518
-#!Date 2008-07-15
+#!Date 2010-01-15
 #!Type DNA
-#!Source-version EMBOSS 6.1.0
+#!Source-version EMBOSS 6.2.0
 X65923  EMBL    polyA_signal_sequence   484     489     0.000   +       .
 ID="X65923.6"
-X65923  EMBL    polyA_site      509     509     0.000   +       .       ID="X65
-923.7";featflags="0x40"
+X65923  EMBL    polyA_site      509     509     0.000   +       .       ID="X659
+23.7";featflags="0x40"
 
 Data files
 
@@ -575,7 +568,7 @@ See also
 
 Author(s)
 
-   Gary             Williams (gwilliam © rfcgr.mrc.ac.uk)
+   Gary             Williams (gwilliam (c) rfcgr.mrc.ac.uk)
    MRC              Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome           Campus, Hinxton, Cambridge, CB10 1SB, UK
 

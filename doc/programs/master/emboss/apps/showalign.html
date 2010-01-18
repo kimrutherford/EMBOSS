@@ -135,7 +135,7 @@ An example highlight range file is:
     Data files
 </H2>
 
-<b>showalign</b> reads in scoring matrices to determine the consesnus
+<b>showalign</b> reads in scoring matrices to determine the consensus
 sequence and to determine which matches are similar or not. 
 
 <p>
@@ -146,17 +146,17 @@ sequence and to determine which matches are similar or not.
     Notes
 </H2>
 
-<p><b>showalign</b> reads in a scoring matrix to determine the consesnus sequence and to determine which matches are similar or not.</p>
+<p><b>showalign</b> reads in a scoring matrix to determine the consensus sequence and to determine which matches are similar or not.</p>
 
 <p>By using the <tt>-show</tt> option, the displayed sequences can be shown as:</p>
 <ul>
-    <li> complete (-show=All),
-    <li> only identical matches between the sequence and the reference sequence, all other positions being replaced by '.' characters (-show=Identities)
-    <li> non-identical matches, with identical matches being replaced by '.' characters, similar matches are shown in lower case (-show=Non-identities)
-    <li> similar matches, with non-similar matches being replaced by '.' characters, similar matches are shown in lower case (-show=Similarities)
-    <li> dissimilar matches, with identical or similar matches being replaced by '.' characters (-show=Dissimilarities) 
+    <li> complete <tt>(-show=All)</tt>,
+    <li> only identical matches between the sequence and the reference sequence, all other positions being replaced by '.' characters <tt>(-show=Identities)</tt>
+    <li> non-identical matches, with identical matches being replaced by '.' characters, similar matches are shown in lower case <tt>(-show=Non-identities)</tt>
+    <li> similar matches, with non-similar matches being replaced by '.' characters, similar matches are shown in lower case <tt>(-show=Similarities)</tt>
+    <li> dissimilar matches, with identical or similar matches being replaced by '.' characters <tt>(-show=Dissimilarities)</tt> 
 </ul>
-<p>Changing the similar matches to lowercase can optionally be disable by using the option -nosimilarcase.</p>
+<p>Changing the similar matches to lowercase can optionally be disabled by using the option <tt>-nosimilarcase.</tt></p>
 
 <p>A small table of the way these alignments are displayed illustrates this. If we have a reference protein sequence of "III" and a sequence aligned to this of "ILW", then we have an identical matching residue, then a similar one, then a dissimilar one. The different methods of display would give the following:
 <pre>Reference       III
@@ -168,7 +168,7 @@ Similar         Il.
 Dissimilar      ..W</pre>
 </p>
 
-<p>The consensus line can be displayed in a mixture of uppercase and lowercase symbols. Uppercase indicates a strong consensus and lowercase a weak one. The cutoff for setting the consensus case is set by the qualifier <tt>-setcase</tt>. If the number of residues at that position that match the consensus value is greater than this, then the symbol is in uppercase, otherwise the symbol is in lowercase. By default, the value of <tt>-setcase</tt> is set so that if there are more than 50% of residues identical to the consunsus at that position, then the consensus is in uppercase. To put all of the consensus symbols into uppercase or lowercase, make <tt>-setcase</tt> zero or very large (try 100000 ?). </p>
+<p>The consensus line can be displayed in a mixture of uppercase and lowercase symbols. Uppercase indicates a strong consensus and lowercase a weak one. The cutoff for setting the consensus case is set by the qualifier <tt>-setcase</tt>. If the number of residues at that position that match the consensus value is greater than this, then the symbol is in uppercase, otherwise the symbol is in lowercase. By default, the value of <tt>-setcase</tt> is set so that if there are more than 50% of residues identical to the consensus at that position, then the consensus is in uppercase. To put all of the consensus symbols into uppercase or lowercase, make <tt>-setcase</tt> zero or very large (try 100000 ?). </p>
 
 <p>Other display options include 
 Sequence numbering ruler with ticks above the sequence.

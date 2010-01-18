@@ -1,6 +1,7 @@
 application: codcmp [
   documentation: "Codon usage table comparison"
   groups: "Nucleic:Codon usage"
+  relations: "EDAM: Codon usage analysis"
 ]
 
 section: input [
@@ -11,11 +12,13 @@ section: input [
   codon: first [
     parameter: "Y"
     help: "First codon usage file"
+    relations: "EDAM: Codon usage table"                                   
   ]
 
   codon: second [
     parameter: "Y"
     help: "Second codon usage file for comparison"
+    relations: "EDAM: Codon usage table"                                   
   ]
 
 endsection: input
@@ -28,6 +31,7 @@ section: output [
   outfile: outfile [
     parameter: "Y"
     knowntype: "codcmp output"
+    relations:  "EDAM:Codon usage fraction difference"                     
   ]
 
 endsection: output

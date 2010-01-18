@@ -58,6 +58,11 @@ int main(int argc, char **argv)
 	    ajStrAssignC(&tmpstr, "(unknown)");
 	ajFmtPrintF(outfile, "LibraryVersion: %S\n", tmpstr);
 
+        ajStrAssignS(&tmpstr, ajNamValueSystem());
+	if (!ajStrGetLen(tmpstr))
+	    ajStrAssignC(&tmpstr, "(unknown)");
+	ajFmtPrintF(outfile, "System: %S\n", tmpstr);
+
         ajStrAssignS(&tmpstr, ajNamValueInstalldir());
 	if (!ajStrGetLen(tmpstr))
 	    ajStrAssignC(&tmpstr, "(unknown)");

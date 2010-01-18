@@ -1,9 +1,12 @@
+Draw a sequence alignment with pretty formatting
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers:
   [-sequences]         seqset     (Aligned) sequence set filename and optional
                                   format, or reference (input USA)
    -graph              graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, das, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif)
 
    Additional (Optional) qualifiers:
    -matrixfile         matrix     [EBLOSUM62 for protein, EDNAFULL for DNA]
@@ -20,11 +23,11 @@
    -[no]ccolours       boolean    [Y] Colour residues by their consensus
                                   value.
    -cidentity          string     [RED] Colour to display identical residues
-                                  (RED) (Any string is accepted)
+                                  (RED) (Any string)
    -csimilarity        string     [GREEN] Colour to display similar residues
-                                  (GREEN) (Any string is accepted)
+                                  (GREEN) (Any string)
    -cother             string     [BLACK] Colour to display other residues
-                                  (BLACK) (Any string is accepted)
+                                  (BLACK) (Any string)
    -docolour           boolean    [N] Colour residues by table oily, amide
                                   etc.
    -shade              string     Set to BPLW for normal shading
@@ -46,7 +49,7 @@
    -[no]box            boolean    [Y] Display prettyboxes
    -boxcol             boolean    [N] Colour the background in the boxes
    -boxuse             string     [GREY] Colour to be used for background.
-                                  (GREY) (Any string is accepted)
+                                  (GREY) (Any string)
    -[no]name           boolean    [Y] Display the sequence names
    -maxnamelen         integer    [10] Margin size for the sequence name. (Any
                                   integer value)
@@ -123,11 +126,12 @@
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 

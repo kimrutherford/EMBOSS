@@ -7,7 +7,7 @@ SET emboss_tempdata /homes/pmr/local/share/EMBOSS/test
 # Used to make the output consistent where an application reports
 # today's date
 
-SET emboss_timetoday "2008-07-15 12:00:00"
+SET emboss_timetoday "2010-01-15 12:00:00"
 
 #######################################
 # Standard test databases

@@ -1,73 +1,83 @@
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Qualifier</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Standard (Mandatory) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td>[-sequence]<br>(Parameter 1)</td>
+<td>seqset</td>
 <td>The sequence alignment to be displayed.</td>
 <td>Readable set of sequences</td>
 <td><b>Required</b></td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>[-outfile]<br>(Parameter 2)</td>
+<td>outfile</td>
 <td>If you enter the name of a file here then this program will write the sequence details into that file.</td>
 <td>Output file</td>
 <td><i>&lt;*&gt;</i>.infoalign</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Additional (Optional) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
+<th align="left" colspan=5>Additional (Optional) qualifiers</th>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-matrix</td>
+<td>matrix</td>
 <td>This is the scoring matrix file used when comparing sequences. By default it is the file 'EBLOSUM62' (for proteins) or the file 'EDNAFULL' (for nucleic sequences). These files are found in the 'data' directory of the EMBOSS installation.</td>
 <td>Comparison matrix file in EMBOSS data path</td>
 <td>EBLOSUM62 for protein<br>EDNAFULL for DNA</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-refseq</td>
+<td>string</td>
 <td>If you give the number in the alignment or the name of a sequence, it will be taken to be the reference sequence. The reference sequence is the one against which all the other sequences are compared. If this is set to 0 then the consensus sequence will be used as the reference sequence. By default the consensus sequence is used as the reference sequence.</td>
-<td>Any string is accepted</td>
+<td>Any string</td>
 <td>0</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-html</td>
+<td>boolean</td>
 <td>Format output as an HTML table</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
+<th align="left" colspan=5>Advanced (Unprompted) qualifiers</th>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-plurality</td>
+<td>float</td>
 <td>Set a cut-off for the % of positive scoring matches below which there is no consensus. The default plurality is taken as 50% of the total weight of all the sequences in the alignment.</td>
 <td>Number from 0.000 to 100.000</td>
 <td>50.0</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-identity</td>
+<td>float</td>
 <td>Provides the facility of setting the required number of identities at a position for it to give a consensus. Therefore, if this is set to 100% only columns of identities contribute to the consensus.</td>
 <td>Number from 0.000 to 100.000</td>
 <td>0.0</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-only</td>
+<td>boolean</td>
 <td>This is a way of shortening the command line if you only want a few things to be displayed. Instead of specifying:
 '-nohead -nousa -noname -noalign -nogaps -nogapcount -nosimcount -noidcount -nodiffcount -noweight'
 to get only the sequence length output, you can specify
@@ -76,95 +86,342 @@ to get only the sequence length output, you can specify
 <td>No</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-heading</td>
+<td>boolean</td>
 <td>Display column headings</td>
 <td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-usa</td>
+<td>boolean</td>
 <td>Display the USA of the sequence</td>
 <td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-name</td>
+<td>boolean</td>
 <td>Display 'name' column</td>
 <td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-seqlength</td>
+<td>boolean</td>
 <td>Display 'seqlength' column</td>
 <td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-alignlength</td>
+<td>boolean</td>
 <td>Display 'alignlength' column</td>
 <td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-gaps</td>
+<td>boolean</td>
 <td>Display number of gaps</td>
 <td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-gapcount</td>
+<td>boolean</td>
 <td>Display number of gap positions</td>
 <td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-idcount</td>
+<td>boolean</td>
 <td>Display number of identical positions</td>
 <td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-simcount</td>
+<td>boolean</td>
 <td>Display number of similar positions</td>
 <td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-diffcount</td>
+<td>boolean</td>
 <td>Display number of different positions</td>
 <td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-change</td>
+<td>boolean</td>
 <td>Display % number of changed positions</td>
 <td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-weight</td>
+<td>boolean</td>
 <td>Display 'weight' column</td>
 <td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-description</td>
+<td>boolean</td>
 <td>Display 'description' column</td>
 <td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-sequence" associated seqset qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sbegin1<br>-sbegin_sequence</td>
+<td>integer</td>
+<td>Start of each sequence to be used</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -send1<br>-send_sequence</td>
+<td>integer</td>
+<td>End of each sequence to be used</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sreverse1<br>-sreverse_sequence</td>
+<td>boolean</td>
+<td>Reverse (if DNA)</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sask1<br>-sask_sequence</td>
+<td>boolean</td>
+<td>Ask for begin/end/reverse</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -snucleotide1<br>-snucleotide_sequence</td>
+<td>boolean</td>
+<td>Sequence is nucleotide</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sprotein1<br>-sprotein_sequence</td>
+<td>boolean</td>
+<td>Sequence is protein</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -slower1<br>-slower_sequence</td>
+<td>boolean</td>
+<td>Make lower case</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -supper1<br>-supper_sequence</td>
+<td>boolean</td>
+<td>Make upper case</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sformat1<br>-sformat_sequence</td>
+<td>string</td>
+<td>Input sequence format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sdbname1<br>-sdbname_sequence</td>
+<td>string</td>
+<td>Database name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sid1<br>-sid_sequence</td>
+<td>string</td>
+<td>Entryname</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ufo1<br>-ufo_sequence</td>
+<td>string</td>
+<td>UFO features</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fformat1<br>-fformat_sequence</td>
+<td>string</td>
+<td>Features format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fopenfile1<br>-fopenfile_sequence</td>
+<td>string</td>
+<td>Features file name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory2<br>-odirectory_outfile</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>General qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -auto</td>
+<td>boolean</td>
+<td>Turn off prompts</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -stdout</td>
+<td>boolean</td>
+<td>Write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -filter</td>
+<td>boolean</td>
+<td>Read first file from standard input, write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -options</td>
+<td>boolean</td>
+<td>Prompt for standard and additional values</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -debug</td>
+<td>boolean</td>
+<td>Write debug output to program.dbg</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -verbose</td>
+<td>boolean</td>
+<td>Report some/full command line options</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -help</td>
+<td>boolean</td>
+<td>Report command line options and exit. More information on associated and general qualifiers can be found with -help -verbose</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -warning</td>
+<td>boolean</td>
+<td>Report warnings</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -error</td>
+<td>boolean</td>
+<td>Report errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fatal</td>
+<td>boolean</td>
+<td>Report fatal errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -die</td>
+<td>boolean</td>
+<td>Report dying program messages</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -version</td>
+<td>boolean</td>
+<td>Report version number and exit</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
 </tr>
 
 </table>

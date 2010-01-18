@@ -1,6 +1,7 @@
 application: newcoils [
   documentation: "Predicts coils protein secondary structure"
   groups: "Protein:2D Structure"
+  relations: "EDAM: Protein secondary structure prediction (coils)"
 ]
 
 section: input [
@@ -11,12 +12,14 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "PureProtein"
+    relations: "EDAM: Sequence record"                                     
   ]
 
   datafile: datafile [
     information: "Program newcoils data file"
     default: "Enewcoils.mat"
     knowntype: "newcoils datafile"
+    relations:                                                 
   ]
 
 endsection: input
@@ -32,6 +35,7 @@ section: required [
     maximum: "$(sequence.end)"
     default: "21"
     information: "Window size"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: weighted [
@@ -39,6 +43,7 @@ section: required [
     minimum: "0"
     default: "0"
     information: "Weighted value"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: verb [
@@ -46,6 +51,7 @@ section: required [
     minimum: "0"
     default: "0"
     information: "Verb - matrix file"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: mode [
@@ -54,6 +60,7 @@ section: required [
     maximum: "2"
     default: "0"
     information: "Display Mode"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: minseg [
@@ -62,6 +69,7 @@ section: required [
     maximum: "10"
     default: "1"
     information: "Minimum number of seqments"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   float: minp [
@@ -70,6 +78,7 @@ section: required [
     maximum: "100."
     default: "0.50"
     information: "Minimum p"
+    relations: "EDAM: Generic float"                                       
   ]
 
 endsection: required
@@ -82,6 +91,7 @@ section: output [
   outfile: outfile [
     parameter: "Y"
     knowntype: "newcoils output"
+    relations:  "EDAM:Protein secondary structure record"                  
   ]
 
 endsection: output

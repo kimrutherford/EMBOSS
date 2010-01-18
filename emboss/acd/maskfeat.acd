@@ -1,6 +1,8 @@
 application: maskfeat [
   documentation: "Write a sequence with masked features"
   groups: "Edit, Feature tables"
+  relations: "EDAM: Sequence file handling"
+  relations: "EDAM: Sequence masking"
 ]
 
 section: input [
@@ -12,6 +14,7 @@ section: input [
     parameter: "Y"
     type: "any"
     features: "Y"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: input
@@ -37,6 +40,7 @@ section: additional [
            spaces or commas, eg: \
            *UTR repeat*"
     knowntype: "feature key list"
+    relations:  "EDAM: List of sequence feature types"                 
   ]
 
   toggle: tolower [
@@ -49,6 +53,7 @@ section: additional [
            from the case change. You might like to ensure that the whole
            sequence is in upper-case before masking the specified regions to
            lower-case by using the '-supper' flag."
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   string: maskchar [
@@ -63,6 +68,7 @@ section: additional [
            lower-case, just as with the '-lowercase' flag."
     expected: "'X' for protein, 'N' for nucleic"
     knowntype: "sequence"
+    relations:  "EDAM: Sequence"                                       
   ]
 
 endsection: additional
@@ -74,6 +80,7 @@ section: output [
 
   seqout: outseq [
     parameter: "Y"
+    relations: "EDAM: Sequence"                                            
   ]
 
 endsection: output

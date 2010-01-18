@@ -1,5 +1,4 @@
-
-                               extractalign 
+                                extractalign
 
 
 
@@ -18,14 +17,14 @@ Description
 
    extractalign allows you to specify one or more regions of a sequence
    alignment to extract sub-sequences from to build up a resulting
-   sub-sequence alignment. extractakign reads in a sequence alignment and
+   sub-sequence alignment. extractalign reads in a sequence alignment and
    a set of regions of that alignment as specified by pairs of start and
-   end positions (either on the command-line or contained in a file)
-   using gapped alignment positions as the coordinates, and writes out
-   the specified regions of the input sequence in the order in which they
-   have been specified. Thus, if the sequence "AAAGGGTTT" has been input
-   and the regions: "7-9, 3-4" have been specified, then the output
-   sequence will be: "TTTAG".
+   end positions (either on the command-line or contained in a file) using
+   gapped alignment positions as the coordinates, and writes out the
+   specified regions of the input sequence in the order in which they have
+   been specified. Thus, if the sequence "AAAGGGTTT" has been input and
+   the regions: "7-9, 3-4" have been specified, then the output sequence
+   will be: "TTTAG".
 
 Usage
 
@@ -34,13 +33,17 @@ Usage
    Extract the region from position 10 to 20:
 
 
-% extractalign dna.msf result.seq -regions '11-30' 
+% extractalign dna.msf result.seq -regions '11-30'
 Extract regions from a sequence alignment
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Extract regions from a sequence alignment
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqset     (Aligned) sequence set filename and optional
@@ -98,13 +101,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -136,9 +141,10 @@ Input file format
         MSFM2  ACGTACGTTG CAACGTACGT
         MSFM3  ACGTACGTAC GTACGTACGT
 
+
    You can specifiy a file of ranges to extract by giving the '-regions'
-   qualifier the value '@' followed by the name of the file containing
-   the ranges. (eg: '-regions @myfile').
+   qualifier the value '@' followed by the name of the file containing the
+   ranges. (eg: '-regions @myfile').
 
    The format of the range file is:
      * Comment lines start with '#' in the first column.
@@ -158,6 +164,7 @@ Input file format
  4   5       this is like 12-23, but smaller
 67   10348   interesting region
 
+
 Output file format
 
    The output is a normal sequence file.
@@ -173,11 +180,11 @@ GTACGTACGT----ACGTAC
 >MSFM3
 GTACGTACGTACGTACGTAC
 
-   If the option '-separate' is used then each specified region is
-   written to the output file as a separate sequence. The name of the
-   sequence is created from the name of the original sequence with the
-   start and end positions of the range appended with underscore
-   characters between them,
+   If the option '-separate' is used then each specified region is written
+   to the output file as a separate sequence. The name of the sequence is
+   created from the name of the original sequence with the start and end
+   positions of the range appended with underscore characters between
+   them,
 
    For example: "XYZ region 2 to 34" is written as: "XYZ_2_34"
 
@@ -268,7 +275,7 @@ See also
 
 Author(s)
 
-   Peter Rice (pmr © ebi.ac.uk)
+   Peter Rice (pmr (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

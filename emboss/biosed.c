@@ -60,7 +60,7 @@ int main(int argc, char **argv)
 
     seqall  = ajAcdGetSeqall("sequence");
     delete  = ajAcdGetToggle("delete");
-    target  = ajAcdGetString("target");
+    target  = ajAcdGetString("targetregion");
     targetpos  = ajAcdGetInt("position");
     replace = ajAcdGetString("replace");
     outseq  = ajAcdGetSeqout("outseq");

@@ -1,5 +1,4 @@
-
-                                   yank 
+                                    yank
 
 
 
@@ -21,10 +20,10 @@ Description
    file is appended to by default but (optionally) is overwritten.A list
    file contains one or more sequence references (USAs). For example, a
    database entry, the name of a file containing sequences, or even the
-   names of another list file. In addition to the name of the sequence,
-   it can write the start and end position of a region within that
-   sequence and, if the sequence is nucleic, if can specify whether the
-   sequence is the reverse complement.
+   names of another list file. In addition to the name of the sequence, it
+   can write the start and end position of a region within that sequence
+   and, if the sequence is nucleic, if can specify whether the sequence is
+   the reverse complement.
 
 Usage
 
@@ -34,18 +33,22 @@ Usage
    between positions 1913 and 1915 to the existing list file 'cds.list':
 
 
-% yank 
+% yank
 Add a sequence reference (a full USA) to a list file
 Input (gapped) sequence: tembl:x65921
      Begin at position [start]: 1913
        End at position [end]: 1915
-        Reverse strand [N]: 
+        Reverse strand [N]:
 List of USAs output file [x65921.yank]: cds.list
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Add a sequence reference (a full USA) to a list file
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   (Gapped) sequence filename and optional
@@ -85,13 +88,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -104,8 +109,8 @@ Input file format
 
   Input files for usage example
 
-   'tembl:x65921' is a sequence entry in the example nucleic acid
-   database 'tembl'
+   'tembl:x65921' is a sequence entry in the example nucleic acid database
+   'tembl'
 
   Database entry: tembl:x65921
 
@@ -121,8 +126,7 @@ XX
 KW   fau 1 gene.
 XX
 OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
-;
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
 OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
 OC   Homo.
 XX
@@ -180,74 +184,40 @@ FT                   /number=5
 FT   polyA_signal    1938..1943
 XX
 SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
-     ctaccatttt ccctctcgat tctatatgta cactcgggac aagttctcct gatcgaaaac        6
-0
-     ggcaaaacta aggccccaag taggaatgcc ttagttttcg gggttaacaa tgattaacac       12
-0
-     tgagcctcac acccacgcga tgccctcagc tcctcgctca gcgctctcac caacagccgt       18
-0
-     agcccgcagc cccgctggac accggttctc catccccgca gcgtagcccg gaacatggta       24
-0
-     gctgccatct ttacctgcta cgccagcctt ctgtgcgcgc aactgtctgg tcccgccccg       30
-0
-     tcctgcgcga gctgctgccc aggcaggttc gccggtgcga gcgtaaaggg gcggagctag       36
-0
-     gactgccttg ggcggtacaa atagcaggga accgcgcggt cgctcagcag tgacgtgaca       42
-0
-     cgcagcccac ggtctgtact gacgcgccct cgcttcttcc tctttctcga ctccatcttc       48
-0
-     gcggtagctg ggaccgccgt tcaggtaaga atggggcctt ggctggatcc gaagggcttg       54
-0
-     tagcaggttg gctgcggggt cagaaggcgc ggggggaacc gaagaacggg gcctgctccg       60
-0
-     tggccctgct ccagtcccta tccgaactcc ttgggaggca ctggccttcc gcacgtgagc       66
-0
-     cgccgcgacc accatcccgt cgcgatcgtt tctggaccgc tttccactcc caaatctcct       72
-0
-     ttatcccaga gcatttcttg gcttctctta caagccgtct tttctttact cagtcgccaa       78
-0
-     tatgcagctc tttgtccgcg cccaggagct acacaccttc gaggtgaccg gccaggaaac       84
-0
-     ggtcgcccag atcaaggtaa ggctgcttgg tgcgccctgg gttccatttt cttgtgctct       90
-0
-     tcactctcgc ggcccgaggg aacgcttacg agccttatct ttccctgtag gctcatgtag       96
-0
-     cctcactgga gggcattgcc ccggaagatc aagtcgtgct cctggcaggc gcgcccctgg      102
-0
-     aggatgaggc cactctgggc cagtgcgggg tggaggccct gactaccctg gaagtagcag      108
-0
-     gccgcatgct tggaggtgag tgagagagga atgttctttg aagtaccggt aagcgtctag      114
-0
-     tgagtgtggg gtgcatagtc ctgacagctg agtgtcacac ctatggtaat agagtacttc      120
-0
-     tcactgtctt cagttcagag tgattcttcc tgtttacatc cctcatgttg aacacagacg      126
-0
-     tccatgggag actgagccag agtgtagttg tatttcagtc acatcacgag atcctagtct      132
-0
-     ggttatcagc ttccacacta aaaattaggt cagaccaggc cccaaagtgc tctataaatt      138
-0
-     agaagctgga agatcctgaa atgaaactta agatttcaag gtcaaatatc tgcaactttg      144
-0
-     ttctcattac ctattgggcg cagcttctct ttaaaggctt gaattgagaa aagaggggtt      150
-0
-     ctgctgggtg gcaccttctt gctcttacct gctggtgcct tcctttccca ctacaggtaa      156
-0
-     agtccatggt tccctggccc gtgctggaaa agtgagaggt cagactccta aggtgagtga      162
-0
-     gagtattagt ggtcatggtg ttaggacttt ttttcctttc acagctaaac caagtccctg      168
-0
-     ggctcttact cggtttgcct tctccctccc tggagatgag cctgagggaa gggatgctag      174
-0
-     gtgtggaaga caggaaccag ggcctgatta accttccctt ctccaggtgg ccaaacagga      180
-0
-     gaagaagaag aagaagacag gtcgggctaa gcggcggatg cagtacaacc ggcgctttgt      186
-0
-     caacgttgtg cccacctttg gcaagaagaa gggccccaat gccaactctt aagtcttttg      192
-0
-     taattctggc tttctctaat aaaaaagcca cttagttcag tcatcgcatt gtttcatctt      198
-0
-     tacttgcaag gcctcaggga gaggtgtgct tctcgg                                201
-6
+     ctaccatttt ccctctcgat tctatatgta cactcgggac aagttctcct gatcgaaaac        60
+     ggcaaaacta aggccccaag taggaatgcc ttagttttcg gggttaacaa tgattaacac       120
+     tgagcctcac acccacgcga tgccctcagc tcctcgctca gcgctctcac caacagccgt       180
+     agcccgcagc cccgctggac accggttctc catccccgca gcgtagcccg gaacatggta       240
+     gctgccatct ttacctgcta cgccagcctt ctgtgcgcgc aactgtctgg tcccgccccg       300
+     tcctgcgcga gctgctgccc aggcaggttc gccggtgcga gcgtaaaggg gcggagctag       360
+     gactgccttg ggcggtacaa atagcaggga accgcgcggt cgctcagcag tgacgtgaca       420
+     cgcagcccac ggtctgtact gacgcgccct cgcttcttcc tctttctcga ctccatcttc       480
+     gcggtagctg ggaccgccgt tcaggtaaga atggggcctt ggctggatcc gaagggcttg       540
+     tagcaggttg gctgcggggt cagaaggcgc ggggggaacc gaagaacggg gcctgctccg       600
+     tggccctgct ccagtcccta tccgaactcc ttgggaggca ctggccttcc gcacgtgagc       660
+     cgccgcgacc accatcccgt cgcgatcgtt tctggaccgc tttccactcc caaatctcct       720
+     ttatcccaga gcatttcttg gcttctctta caagccgtct tttctttact cagtcgccaa       780
+     tatgcagctc tttgtccgcg cccaggagct acacaccttc gaggtgaccg gccaggaaac       840
+     ggtcgcccag atcaaggtaa ggctgcttgg tgcgccctgg gttccatttt cttgtgctct       900
+     tcactctcgc ggcccgaggg aacgcttacg agccttatct ttccctgtag gctcatgtag       960
+     cctcactgga gggcattgcc ccggaagatc aagtcgtgct cctggcaggc gcgcccctgg      1020
+     aggatgaggc cactctgggc cagtgcgggg tggaggccct gactaccctg gaagtagcag      1080
+     gccgcatgct tggaggtgag tgagagagga atgttctttg aagtaccggt aagcgtctag      1140
+     tgagtgtggg gtgcatagtc ctgacagctg agtgtcacac ctatggtaat agagtacttc      1200
+     tcactgtctt cagttcagag tgattcttcc tgtttacatc cctcatgttg aacacagacg      1260
+     tccatgggag actgagccag agtgtagttg tatttcagtc acatcacgag atcctagtct      1320
+     ggttatcagc ttccacacta aaaattaggt cagaccaggc cccaaagtgc tctataaatt      1380
+     agaagctgga agatcctgaa atgaaactta agatttcaag gtcaaatatc tgcaactttg      1440
+     ttctcattac ctattgggcg cagcttctct ttaaaggctt gaattgagaa aagaggggtt      1500
+     ctgctgggtg gcaccttctt gctcttacct gctggtgcct tcctttccca ctacaggtaa      1560
+     agtccatggt tccctggccc gtgctggaaa agtgagaggt cagactccta aggtgagtga      1620
+     gagtattagt ggtcatggtg ttaggacttt ttttcctttc acagctaaac caagtccctg      1680
+     ggctcttact cggtttgcct tctccctccc tggagatgag cctgagggaa gggatgctag      1740
+     gtgtggaaga caggaaccag ggcctgatta accttccctt ctccaggtgg ccaaacagga      1800
+     gaagaagaag aagaagacag gtcgggctaa gcggcggatg cagtacaacc ggcgctttgt      1860
+     caacgttgtg cccacctttg gcaagaagaa gggccccaat gccaactctt aagtcttttg      1920
+     taattctggc tttctctaat aaaaaagcca cttagttcag tcatcgcatt gtttcatctt      1980
+     tacttgcaag gcctcaggga gaggtgtgct tctcgg                                2016
 //
 
 Output file format
@@ -271,26 +241,25 @@ Data files
 
 Notes
 
-   There are many ways of specifying input and output sequences for
-   EMBOSS programs, including wildcarded sequence file names, wildcarded
-   database entry names and list files. List files (files of file names)
-   are the most flexible. Instead of containing the sequences themselves,
-   a list file contains one or more sequence references (USAs). For
-   example, a database entry, the name of a file containing sequences, or
-   even the names of another list file. For example, here's a valid list
-   file:
+   There are many ways of specifying input and output sequences for EMBOSS
+   programs, including wildcarded sequence file names, wildcarded database
+   entry names and list files. List files (files of file names) are the
+   most flexible. Instead of containing the sequences themselves, a list
+   file contains one or more sequence references (USAs). For example, a
+   database entry, the name of a file containing sequences, or even the
+   names of another list file. For example, here's a valid list file:
 opsd_abyko.fasta
 sw:opsd_xenla
 sw:opsd_c*
 @another_list
 
    The file contains:
-    * opsd_abyko.fasta - this is the name of a sequence file. The file is read
-in from the current directory.
-    * sw:opsd_xenla - this is a reference to a specific sequence in the SwissPr
-ot database
-    * sw:opsd_c* - this represents all the sequences in SwissProt whose identif
-iers start with ``opsd_c''
+    * opsd_abyko.fasta - this is the name of a sequence file. The file is read i
+n from the current directory.
+    * sw:opsd_xenla - this is a reference to a specific sequence in the SwissPro
+t database
+    * sw:opsd_c* - this represents all the sequences in SwissProt whose identifi
+ers start with ``opsd_c''
     * another_list - this is the name of a second list file
 
    Notice the @ in front of the last entry. This is the way you tell
@@ -375,7 +344,7 @@ See also
 
 Author(s)
 
-   Peter Rice (pmr © ebi.ac.uk)
+   Peter Rice (pmr (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

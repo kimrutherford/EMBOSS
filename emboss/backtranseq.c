@@ -56,7 +56,7 @@ int main(int argc, char **argv)
         ajStrAssignSubS(&substr,ajSeqGetSeqS(a),beg-1,end-1);
 
         back = ajStrNew();
-        ajCodSetBacktranslate(&codon);
+        ajCodSetBacktranslate(codon);
         ajCodBacktranslate(&back,substr,codon);
 
         ajSeqAssignSeqS (a, back);

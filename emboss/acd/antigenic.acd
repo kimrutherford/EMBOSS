@@ -1,6 +1,7 @@
 application: antigenic [
   documentation: "Finds antigenic sites in proteins"
   groups: "Protein:Motifs"
+  relations: "EDAM: Epitope mapping"
 ]
 
 section: input [
@@ -11,6 +12,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "proteinstandard"
+    relations: "EDAM: Protein sequence record"                             
   ]
 
 endsection: input
@@ -26,6 +28,7 @@ section: required [
     maximum: "50"
     default: "6"
     information: "Minimum length of antigenic region"
+    relations: "EDAM: Generic integer"                                     
   ]
 
 endsection: required
@@ -40,6 +43,7 @@ section: output [
     rformat: "motif"
     multiple: "Y"
     taglist: "int:pos=Max_score_pos"
+    relations: "EDAM: EMBOSS report"                                       
   ]
 
 endsection: output

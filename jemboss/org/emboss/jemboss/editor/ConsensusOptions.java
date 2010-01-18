@@ -49,7 +49,6 @@ public class ConsensusOptions extends JFrame
   private Matrix mat;
   private Cursor cbusy = new Cursor(Cursor.WAIT_CURSOR);
   private Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
-  private JScrollPane jspSequence; // Sequence scrollpane
 
   public ConsensusOptions(JScrollPane jspSequence)
   {

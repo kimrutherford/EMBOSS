@@ -100,7 +100,7 @@ int main(int argc, char **argv)
     ajint ti;
     
 
-    ajGraphInit("dan", argc, argv);
+    embInit("dan", argc, argv);
 
     seqall    = ajAcdGetSeqall("sequence");
     report    = ajAcdGetReport("outfile");
@@ -196,7 +196,7 @@ int main(int argc, char **argv)
     }
 
     /*if(mult)*/
-	ajGraphCloseWin();
+	ajGraphicsClose();
 
     ajGraphxyDel(&mult);
     ajFileClose(&outf);
@@ -289,7 +289,7 @@ static void dan_findgc(const AjPStr strand, ajint begin, ajint end,
 	ajStrAssignSubC(&substr, ajStrGetPtr(strand), ibegin, iend);
 
 	xa[*np]  = (float)(i+1);
-	ta[*np]  = ajTm(substr, (iend-ibegin)+1, shift, salt, dna, isDNA);
+	ta[*np]  = ajMeltTemp(substr, (iend-ibegin)+1, shift, salt, dna, isDNA);
 	cga[*np] = (float)100.0 * ajMeltGC(substr, window);
 
 	if(dothermo)
@@ -425,7 +425,7 @@ static void dan_reportgc(const AjPSeq seq, AjPFeattable TabRpt,
 	ajStrAssignSubS(&substr, ajSeqGetSeqS(seq), ibegin, iend);
 
 	xa[*np]  = (float)(i+1);
-	ta[*np]  = ajTm(substr, (iend-ibegin)+1, shift, salt, dna, isDNA);
+	ta[*np]  = ajMeltTemp(substr, (iend-ibegin)+1, shift, salt, dna, isDNA);
 	cga[*np] = (float) 100.0 * ajMeltGC(substr, window);
 
 	if(dothermo)
@@ -529,7 +529,7 @@ static void dan_plotit(const AjPSeq seq, const float *xa, const float *ta,
 		       ajint npoints, ajint ibegin, ajint iend,
 		       AjPGraph graphs, float mintemp)
 {
-    AjPGraphPlpData tmGraph = NULL;
+    AjPGraphdata tmGraph = NULL;
     float max = -64000.;
     float min = 64000.;
 
@@ -541,28 +541,28 @@ static void dan_plotit(const AjPSeq seq, const float *xa, const float *ta,
 	max = (max>ta[i]) ? max : ta[i];
     }
 
-    tmGraph = ajGraphPlpDataNewI(npoints);
-    ajGraphSetTitleDo(graphs,ajTrue);
-    ajGraphxySetXLabel(graphs,ajTrue);
-    ajGraphxySetYLabel(graphs,ajTrue);
+    tmGraph = ajGraphdataNewI(npoints);
+    ajGraphShowTitle(graphs,ajTrue);
+    ajGraphxyShowXlabel(graphs,ajTrue);
+    ajGraphxyShowYlabel(graphs,ajTrue);
 
-    ajGraphSetTitlePlus(graphs, ajSeqGetUsaS(seq));
-    ajGraphSetXTitleC(graphs,"Base number");
-    ajGraphSetYTitleC(graphs,"Melt temp (C)");
+    ajGraphAppendTitleS(graphs, ajSeqGetUsaS(seq));
+    ajGraphSetXlabelC(graphs,"Base number");
+    ajGraphSetYlabelC(graphs,"Melt temp (C)");
 
-    ajGraphxySetXStart(graphs,(float)ibegin);
-    ajGraphxySetXEnd(graphs,(float)iend);
-    ajGraphxySetYStart(graphs,0.0);
-    ajGraphxySetYEnd(graphs,100.0);
-    ajGraphxySetXRangeII(graphs,ibegin,iend);
-    ajGraphxySetYRangeII(graphs,(ajint)mintemp,100);
+    ajGraphxySetXstartF(graphs,(float)ibegin);
+    ajGraphxySetXendF(graphs,(float)iend);
+    ajGraphxySetYstartF(graphs,0.0);
+    ajGraphxySetYendF(graphs,100.0);
+    ajGraphxySetXrangeII(graphs,ibegin,iend);
+    ajGraphxySetYrangeII(graphs,(ajint)mintemp,100);
 
-    ajGraphPlpDataSetTypeC(tmGraph,"2D Plot");
-    ajGraphPlpDataSetMaxMin(tmGraph,(float)ibegin,(float)iend,min,max);
-    ajGraphPlpDataSetMaxima(tmGraph,(float)ibegin,(float)iend,min,max);
+    ajGraphdataSetTypeC(tmGraph,"2D Plot");
+    ajGraphdataSetMinmax(tmGraph,(float)ibegin,(float)iend,min,max);
+    ajGraphdataSetTruescale(tmGraph,(float)ibegin,(float)iend,min,max);
 
 
-    ajGraphPlpDataSetXY(tmGraph,xa,ta);
+    ajGraphdataAddXY(tmGraph,xa,ta);
     ajGraphDataAdd(graphs,tmGraph);
 
     ajGraphxyDisplay(graphs,AJTRUE);

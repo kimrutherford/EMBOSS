@@ -1,5 +1,4 @@
-
-                                jaspextract 
+                                 jaspextract
 
 
 
@@ -16,10 +15,9 @@ Function
 
 Description
 
-   JASPAR is a collection of transcription factor DNA-binding
-   preferences, modelled as matrices. These can be converted into
-   Position Weight Matrices (PWMs or PSSMs), used for scanning genomic
-   sequences.
+   JASPAR is a collection of transcription factor DNA-binding preferences,
+   modelled as matrices. These can be converted into Position Weight
+   Matrices (PWMs or PSSMs), used for scanning genomic sequences.
 
    JASPAR is the only database with this scope where the data can be used
    with no restrictions (open-source).
@@ -38,13 +36,17 @@ Usage
    Here is a sample session with jaspextract
 
 
-% jaspextract 
+% jaspextract
 Extract data from JASPAR
 JASPAR database directory [.]: jaspar
+
 
    Go to the output files for this example
 
 Command line arguments
+
+Extract data from JASPAR
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-directory]         directory  The directory containing the unzipped and
@@ -62,13 +64,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -86,16 +90,16 @@ Input file format
 
 Output file format
 
-   The output file format is currently the same as the JASPAR
-   distribution format.
+   The output file format is currently the same as the JASPAR distribution
+   format.
 
   Output files for usage example
 
   Directory: JASPAR_CORE
 
-   This directory contains output files, for example MA0070.pfm
-   MA0071.pfm MA0072.pfm MA0073.pfm MA0074.pfm MA0075.pfm MA0076.pfm
-   MA0077.pfm MA0078.pfm MA0079.pfm and matrix_list.txt.
+   This directory contains output files, for example MA0070.pfm MA0071.pfm
+   MA0072.pfm MA0073.pfm MA0074.pfm MA0075.pfm MA0076.pfm MA0077.pfm
+   MA0078.pfm MA0079.pfm and matrix_list.txt.
 
   File: JASPAR_CORE/MA0070.pfm
 
@@ -169,36 +173,36 @@ Output file format
 
   File: JASPAR_CORE/matrix_list.txt
 
-MA0073  22.2782723704014        RREB1   ZN-FINGER, C2H2 ; acc "Q92766" ; medlin
-e "8816445" ; seqdb "SWISSPROT" ; species "Homo sapiens" ; sysgroup "vertebrate
-" ; total_ic "22.2800" ; type "SELEX"
-MA0075  9.06306510239135        Prrx2   HOMEO   ; acc "Q06348" ; medline "79018
-37" ; seqdb "SWISSPROT" ; species "Mus musculus" ; sysgroup "vertebrate" ; tota
-l_ic "9.0620" ; type "SELEX"
-MA0070  14.6408952002356        Pbx     HOMEO   ; acc "P40424" ; medline "79109
-44" ; seqdb "SWISSPROT" ; species "Homo sapiens" ; sysgroup "vertebrate" ; tota
-l_ic "14.6440" ; type "SELEX"
-MA0079  9.7185757452318 SP1     ZN-FINGER, C2H2 ; acc "P08047" ; medline "21923
-57" ; seqdb "SWISSPROT" ; species "Homo sapiens" ; sysgroup "vertebrate" ; tota
-l_ic "9.7160" ; type "SELEX"
-MA0077  9.07881462267179        SOX9    HMG     ; acc "P48436" ; medline "99736
-26" ; seqdb "SWISSPROT" ; species "Homo sapiens" ; sysgroup "vertebrate" ; tota
-l_ic "9.0810" ; type "SELEX"
-MA0078  10.5018372361999        Sox17   HMG     ; acc "Q61473" ; medline "86362
-40" ; seqdb "SWISSPROT" ; species "Mus musculus" ; sysgroup "vertebrate" ; tota
-l_ic "10.5030" ; type "SELEX"
-MA0071  13.1897301896459        RORA    NUCLEAR RECEPTOR        ; acc "P35397"
-; medline "7926749" ; seqdb "SWISSPROT" ; species "Homo sapiens" ; sysgroup "ve
-rtebrate" ; total_ic "13.1920" ; type "SELEX"
-MA0072  17.4248426117905        RORA1   NUCLEAR RECEPTOR        ; acc "P35398"
-; medline "7926749" ; seqdb "SWISSPROT" ; species "Homo sapiens" ; sysgroup "ve
-rtebrate" ; total_ic "17.4230" ; type "SELEX"
-MA0074  20.4511671987138        RXR-VDR NUCLEAR RECEPTOR        ; acc "P11473"
-; medline "8674817" ; seqdb "SWISSPROT" ; species "Homo sapiens" ; sysgroup "ve
-rtebrate" ; total_ic "20.4520" ; type "SELEX"
-MA0076  14.123230134165 ELK4    ETS     ; acc "P28324" ; medline "8524663" ; se
-qdb "SWISSPROT" ; species "Homo sapiens" ; sysgroup "vertebrate" ; total_ic "14
-.1230" ; type "SELEX"
+MA0073  22.2782723704014        RREB1   ZN-FINGER, C2H2 ; acc "Q92766" ; medline
+ "8816445" ; seqdb "SWISSPROT" ; species "Homo sapiens" ; sysgroup "vertebrate"
+; total_ic "22.2800" ; type "SELEX"
+MA0075  9.06306510239135        Prrx2   HOMEO   ; acc "Q06348" ; medline "790183
+7" ; seqdb "SWISSPROT" ; species "Mus musculus" ; sysgroup "vertebrate" ; total_
+ic "9.0620" ; type "SELEX"
+MA0070  14.6408952002356        Pbx     HOMEO   ; acc "P40424" ; medline "791094
+4" ; seqdb "SWISSPROT" ; species "Homo sapiens" ; sysgroup "vertebrate" ; total_
+ic "14.6440" ; type "SELEX"
+MA0079  9.7185757452318 SP1     ZN-FINGER, C2H2 ; acc "P08047" ; medline "219235
+7" ; seqdb "SWISSPROT" ; species "Homo sapiens" ; sysgroup "vertebrate" ; total_
+ic "9.7160" ; type "SELEX"
+MA0077  9.07881462267179        SOX9    HMG     ; acc "P48436" ; medline "997362
+6" ; seqdb "SWISSPROT" ; species "Homo sapiens" ; sysgroup "vertebrate" ; total_
+ic "9.0810" ; type "SELEX"
+MA0078  10.5018372361999        Sox17   HMG     ; acc "Q61473" ; medline "863624
+0" ; seqdb "SWISSPROT" ; species "Mus musculus" ; sysgroup "vertebrate" ; total_
+ic "10.5030" ; type "SELEX"
+MA0071  13.1897301896459        RORA    NUCLEAR RECEPTOR        ; acc "P35397" ;
+ medline "7926749" ; seqdb "SWISSPROT" ; species "Homo sapiens" ; sysgroup "vert
+ebrate" ; total_ic "13.1920" ; type "SELEX"
+MA0072  17.4248426117905        RORA1   NUCLEAR RECEPTOR        ; acc "P35398" ;
+ medline "7926749" ; seqdb "SWISSPROT" ; species "Homo sapiens" ; sysgroup "vert
+ebrate" ; total_ic "17.4230" ; type "SELEX"
+MA0074  20.4511671987138        RXR-VDR NUCLEAR RECEPTOR        ; acc "P11473" ;
+ medline "8674817" ; seqdb "SWISSPROT" ; species "Homo sapiens" ; sysgroup "vert
+ebrate" ; total_ic "20.4520" ; type "SELEX"
+MA0076  14.123230134165 ELK4    ETS     ; acc "P28324" ; medline "8524663" ; seq
+db "SWISSPROT" ; species "Homo sapiens" ; sysgroup "vertebrate" ; total_ic "14.1
+230" ; type "SELEX"
 
   Directory: JASPAR_FAM
 
@@ -246,18 +250,18 @@ See also
 
    Program name     Description
    aaindexextract   Extract amino acid property data from AAINDEX
-   cutgextract      Extract codon usage tables from from CUTG database
+   cutgextract      Extract codon usage tables from CUTG database
    printsextract    Extract data from PRINTS database for use by pscan
    prosextract      Processes the PROSITE motif database for use by
                     patmatmotifs
-   rebaseextract    Process the REBASE database for use by restriction
-                    enzyme applications
+   rebaseextract    Process the REBASE database for use by restriction enzyme
+                    applications
    tfextract        Process TRANSFAC transcription factor database for use by
                     tfscan
 
 Author(s)
 
-   Alan Bleasby (ajb © ebi.ac.uk)
+   Alan Bleasby (ajb (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 
