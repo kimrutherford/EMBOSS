@@ -36,8 +36,8 @@ int main(int argc, char **argv)
     AjPSeqall seqall;
     AjPSeq a;
     AjPSeq b;
-    AjPStr m;
-    AjPStr n;
+    AjPStr alga;
+    AjPStr algb;
     AjPStr ss;
 
     ajuint    lena;
@@ -51,6 +51,9 @@ int main(int argc, char **argv)
 
     float *path;
     ajint *compass;
+    float* ix;
+    float* iy;
+    float* m;
 
     AjPMatrixf matrix;
     AjPSeqCvt cvt = 0;
@@ -58,12 +61,15 @@ int main(int argc, char **argv)
 
     float gapopen;
     float gapextend;
+    float endgapopen;
+    float endgapextend;
     ajulong maxarr = 1000; 	/* arbitrary. realloc'd if needed */
     ajulong len;			
 
     float score;
 
     AjBool dobrief = ajTrue;
+    AjBool endweight = ajFalse; /* whether end gap penalties should be applied */
 
     float id   = 0.;
     float sim  = 0.;
@@ -82,22 +88,28 @@ int main(int argc, char **argv)
     seqall    = ajAcdGetSeqall("bsequence");
     gapopen   = ajAcdGetFloat("gapopen");
     gapextend = ajAcdGetFloat("gapextend");
+    endgapopen   = ajAcdGetFloat("endopen");
+    endgapextend = ajAcdGetFloat("endextend");
     dobrief   = ajAcdGetBoolean("brief");
+    endweight   = ajAcdGetBoolean("endweight");
 
     align     = ajAcdGetAlign("outfile");
 
-    gapopen = ajRoundF(gapopen, 8);
-    gapextend = ajRoundF(gapextend, 8);
+    gapopen = ajRoundFloat(gapopen, 8);
+    gapextend = ajRoundFloat(gapextend, 8);
 
     AJCNEW(path, maxarr);
     AJCNEW(compass, maxarr);
+    AJCNEW(m, maxarr);
+    AJCNEW(ix, maxarr);
+    AJCNEW(iy, maxarr);
 
-    m  = ajStrNew();
-    n  = ajStrNew();
+    alga  = ajStrNew();
+    algb  = ajStrNew();
     ss = ajStrNew();
 
-    sub = ajMatrixfArray(matrix);
-    cvt = ajMatrixfCvt(matrix);
+    sub = ajMatrixfGetMatrix(matrix);
+    cvt = ajMatrixfGetCvt(matrix);
 
     lena = ajSeqGetLen(a);
 
@@ -120,6 +132,15 @@ int main(int argc, char **argv)
 	    AJCRESIZETRY(compass,stlen);
 	    if(!compass)
 		ajDie("Sequences too big. Try 'stretcher'");
+        AJCRESIZETRY(m,stlen);
+        if(!m)
+        ajDie("Sequences too big. Try 'stretcher'");
+        AJCRESIZETRY(ix,stlen);
+        if(!ix)
+        ajDie("Sequences too big. Try 'stretcher'");
+        AJCRESIZETRY(iy,stlen);
+        if(!iy)
+        ajDie("Sequences too big. Try 'stretcher'");
 	    maxarr=len;
 	}
 
@@ -127,21 +148,21 @@ int main(int argc, char **argv)
 	p = ajSeqGetSeqC(a);
 	q = ajSeqGetSeqC(b);
 
-	ajStrAssignC(&m,"");
-	ajStrAssignC(&n,"");
+	ajStrAssignC(&alga,"");
+	ajStrAssignC(&algb,"");
 
-	score = embAlignPathCalc(p,q,lena,lenb,gapopen,gapextend,path,sub,cvt,
-			compass,ajFalse);
-
-	/*score = embAlignScoreNWMatrix(path,compass,gapopen,gapextend,
-                                      a,b,lena,lenb,sub,cvt,
-				      &start1,&start2);*/
+	score = embAlignPathCalcWithEndGapPenalties(p, q, lena, lenb,
+	        gapopen, gapextend, endgapopen, endgapextend,
+	        &start1, &start2, path, sub, cvt,
+	        m, ix, iy, compass, ajTrue, endweight);
 
 
-	embAlignWalkNWMatrix(path,a,b,&m,&n,lena,lenb,&start1,&start2,gapopen,
-			    gapextend,compass);
 
-	embAlignReportGlobal(align, a, b ,m, n,
+	embAlignWalkNWMatrixUsingCompass(p, q, &alga, &algb,
+	        lena, lenb, &start1, &start2,
+	        compass);
+		
+	embAlignReportGlobal(align, a, b, alga, algb,
 			     start1, start2,
 			     gapopen, gapextend,
 			     score, matrix,
@@ -149,7 +170,7 @@ int main(int argc, char **argv)
 
 	if(!dobrief)
 	{
-	  embAlignCalcSimilarity(m,n,sub,cvt,lena,lenb,&id,&sim,&idx,
+	  embAlignCalcSimilarity(alga,algb,sub,cvt,lena,lenb,&id,&sim,&idx,
 				 &simx);
 	  ajFmtPrintS(&tmpstr,"Longest_Identity = %5.2f%%\n",
 			 id);
@@ -175,9 +196,12 @@ int main(int argc, char **argv)
 
     AJFREE(compass);
     AJFREE(path);
+    AJFREE(ix);
+    AJFREE(iy);
+    AJFREE(m);
 
-    ajStrDel(&n);
-    ajStrDel(&m);
+    ajStrDel(&alga);
+    ajStrDel(&algb);
     ajStrDel(&ss);
     ajStrDel(&tmpstr);
 

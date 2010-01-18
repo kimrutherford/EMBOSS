@@ -1,5 +1,4 @@
-
-                                  codcopy 
+                                   codcopy
 
 
 
@@ -29,14 +28,18 @@ Usage
    Here is a sample session with codcopy
 
 
-% codcopy 
+% codcopy
 Copy and reformat a codon usage table
 Codon usage file: Eecoli.cut
-Codon usage output file [eecoli.cut]: 
+Codon usage output file [eecoli.cut]:
+
 
    Go to the output files for this example
 
 Command line arguments
+
+Copy and reformat a codon usage table
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            codon      Codon usage table name
@@ -61,13 +64,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -78,7 +83,7 @@ Output file format
    codcopy writes a codon usage table. The user can choose any supported
    output format. ,p> See the full specification of codon tabel formats
    at:
-   http://emboss.sourceforge.net/docs/themes/CodonUsage.html 
+   http://emboss.sourceforge.net/docs/themes/CodonUsage.html
 
   Output files for usage example
 
@@ -240,7 +245,7 @@ See also
 
 Author(s)
 
-   Peter Rice (pmr © ebi.ac.uk)
+   Peter Rice (pmr (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

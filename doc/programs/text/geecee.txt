@@ -1,5 +1,4 @@
-
-                                  geecee 
+                                   geecee
 
 
 
@@ -26,14 +25,18 @@ Usage
    Here is a sample session with geecee
 
 
-% geecee tembl:L46634 
+% geecee tembl:L46634
 Calculate fractional GC content of nucleic acid sequences
-Output file [l46634.geecee]: 
+Output file [l46634.geecee]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Calculate fractional GC content of nucleic acid sequences
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -71,13 +74,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -85,8 +90,8 @@ Input file format
 
   Input files for usage example
 
-   'tembl:L46634' is a sequence entry in the example nucleic acid
-   database 'tembl'
+   'tembl:L46634' is a sequence entry in the example nucleic acid database
+   'tembl'
 
   Database entry: tembl:L46634
 
@@ -132,50 +137,28 @@ FT   misc_feature    1009
 FT                   /note="right genome terminus (...ACA)"
 XX
 SQ   Sequence 1272 BP; 346 A; 455 C; 222 G; 249 T; 0 other;
-     aagcttaaac tgaggtcaca cacgacttta attacggcaa cgcaacagct gtaagctgca        6
-0
-     ggaaagatac gatcgtaagc aaatgtagtc ctacaatcaa gcgaggttgt agacgttacc       12
-0
-     tacaatgaac tacacctcta agcataacct gtcgggcaca gtgagacacg cagccgtaaa       18
-0
-     ttcaaaactc aacccaaacc gaagtctaag tctcacccta atcgtaacag taaccctaca       24
-0
-     actctaatcc tagtccgtaa ccgtaacccc aatcctagcc cttagcccta accctagccc       30
-0
-     taaccctagc tctaacctta gctctaactc tgaccctagg cctaacccta agcctaaccc       36
-0
-     taaccgtagc tctaagttta accctaaccc taaccctaac catgaccctg accctaaccc       42
-0
-     tagggctgcg gccctaaccc tagccctaac cctaacccta atcctaatcc tagccctaac       48
-0
-     cctagggctg cggccctaac cctagcccta accctaaccc taaccctagg gctgcggccc       54
-0
-     taaccctaac cctagggctg cggcccgaac cctaacccta accctaaccc taaccctagg       60
-0
-     gctgcggccc taaccctaac cctagggctg cggccctaac cctaacccta gggctgcggc       66
-0
-     ccgaacccta accctaaccc taaccctagg gctgcggccc taaccctaac cctagggctg       72
-0
-     cggccctaac cctaacccta actctagggc tgcggcccta accctaaccc taaccctaac       78
-0
-     cctagggctg cggcccgaac cctagcccta accctaaccc tgaccctgac cctaacccta       84
-0
-     accctaaccc taaccctaac cctaacccta accctaaccc taaccctaac cctaacccta       90
-0
-     accctaaccc taaccctaac cctaaccccg cccccactgg cagccaatgt cttgtaatgc       96
-0
-     cttcaaggca ctttttctgc gagccgcgcg cagcactcag tgaaaaacaa gtttgtgcac      102
-0
-     gagaaagacg ctgccaaacc gcagctgcag catgaaggct gagtgcacaa ttttggcttt      108
-0
-     agtcccataa aggcgcggct tcccgtagag tagaaaaccg cagcgcggcg cacagagcga      114
-0
-     aggcagcggc tttcagactg tttgccaagc gcagtctgca tcttaccaat gatgatcgca      120
-0
-     agcaagaaaa atgttctttc ttagcatatg cgtggttaat cctgttgtgg tcatcactaa      126
-0
-     gttttcaagc tt                                                          127
-2
+     aagcttaaac tgaggtcaca cacgacttta attacggcaa cgcaacagct gtaagctgca        60
+     ggaaagatac gatcgtaagc aaatgtagtc ctacaatcaa gcgaggttgt agacgttacc       120
+     tacaatgaac tacacctcta agcataacct gtcgggcaca gtgagacacg cagccgtaaa       180
+     ttcaaaactc aacccaaacc gaagtctaag tctcacccta atcgtaacag taaccctaca       240
+     actctaatcc tagtccgtaa ccgtaacccc aatcctagcc cttagcccta accctagccc       300
+     taaccctagc tctaacctta gctctaactc tgaccctagg cctaacccta agcctaaccc       360
+     taaccgtagc tctaagttta accctaaccc taaccctaac catgaccctg accctaaccc       420
+     tagggctgcg gccctaaccc tagccctaac cctaacccta atcctaatcc tagccctaac       480
+     cctagggctg cggccctaac cctagcccta accctaaccc taaccctagg gctgcggccc       540
+     taaccctaac cctagggctg cggcccgaac cctaacccta accctaaccc taaccctagg       600
+     gctgcggccc taaccctaac cctagggctg cggccctaac cctaacccta gggctgcggc       660
+     ccgaacccta accctaaccc taaccctagg gctgcggccc taaccctaac cctagggctg       720
+     cggccctaac cctaacccta actctagggc tgcggcccta accctaaccc taaccctaac       780
+     cctagggctg cggcccgaac cctagcccta accctaaccc tgaccctgac cctaacccta       840
+     accctaaccc taaccctaac cctaacccta accctaaccc taaccctaac cctaacccta       900
+     accctaaccc taaccctaac cctaaccccg cccccactgg cagccaatgt cttgtaatgc       960
+     cttcaaggca ctttttctgc gagccgcgcg cagcactcag tgaaaaacaa gtttgtgcac      1020
+     gagaaagacg ctgccaaacc gcagctgcag catgaaggct gagtgcacaa ttttggcttt      1080
+     agtcccataa aggcgcggct tcccgtagag tagaaaaccg cagcgcggcg cacagagcga      1140
+     aggcagcggc tttcagactg tttgccaagc gcagtctgca tcttaccaat gatgatcgca      1200
+     agcaagaaaa atgttctttc ttagcatatg cgtggttaat cctgttgtgg tcatcactaa      1260
+     gttttcaagc tt                                                          1272
 //
 
 Output file format
@@ -187,8 +170,8 @@ Output file format
 #Sequence   GC content
 L46634        0.53
 
-   The first non-blank line is the title line. Subsequent lines consist
-   of two columns of data.
+   The first non-blank line is the title line. Subsequent lines consist of
+   two columns of data.
      * The first column is the name of the sequence.
      * The second column is the percentage G+C content of the sequence.
 

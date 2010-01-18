@@ -1,5 +1,4 @@
-
-                                  skipseq 
+                                   skipseq
 
 
 
@@ -17,13 +16,13 @@ Function
 Description
 
    skipseq is a variant of the standard program for reading and writing
-   sequences, seqret. It performs exactly the same function except that
-   it skips the first specified number of sequences from the input stream
-   and writes out the rest of them. In all other respects, skipseq is the
-   same as seqret. There are many options built-in into EMBOSS for
-   detailed specification of the input and output sequences, for example
-   the sequence type and file format. Optionally, feature information
-   will be read and written.
+   sequences, seqret. It performs exactly the same function except that it
+   skips the first specified number of sequences from the input stream and
+   writes out the rest of them. In all other respects, skipseq is the same
+   as seqret. There are many options built-in into EMBOSS for detailed
+   specification of the input and output sequences, for example the
+   sequence type and file format. Optionally, feature information will be
+   read and written.
 
 Usage
 
@@ -32,11 +31,12 @@ Usage
    This does not skip any sequences. It is exactly equivalent to seqret:
 
 
-% skipseq 
+% skipseq
 Reads and writes (returns) sequences, skipping first few
 Input (gapped) sequence(s): @eclac.list
-Number of sequences to skip at start [0]: 
-output sequence(s) [j01636.fasta]: 
+Number of sequences to skip at start [0]:
+output sequence(s) [j01636.fasta]:
+
 
    Go to the input files for this example
    Go to the output files for this example
@@ -46,14 +46,18 @@ output sequence(s) [j01636.fasta]:
    This skips the first input sequence, writing out the others:
 
 
-% skipseq -skip 1 
+% skipseq -skip 1
 Reads and writes (returns) sequences, skipping first few
 Input (gapped) sequence(s): @eclac.list
-output sequence(s) [j01636.fasta]: 
+output sequence(s) [j01636.fasta]:
+
 
    Go to the output files for this example
 
 Command line arguments
+
+Reads and writes (returns) sequences, skipping first few
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     (Gapped) sequence(s) filename and optional
@@ -105,13 +109,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -376,8 +382,8 @@ Notes
    See the documentation for seqret to see the full range of things that
    you can do when reading and writing sequences.
 
-   seqret has an option to allow it to only read the first sequence from
-   a multiple set of sequences (-firstonly). seqret cannot, however, skip
+   seqret has an option to allow it to only read the first sequence from a
+   multiple set of sequences (-firstonly). seqret cannot, however, skip
    the first few sequences from a multiple set of sequence, writing out
    the rest; this is what skipseq is for.
 
@@ -458,7 +464,7 @@ See also
 
 Author(s)
 
-   Peter Rice (pmr © ebi.ac.uk)
+   Peter Rice (pmr (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

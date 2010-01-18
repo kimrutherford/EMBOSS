@@ -21,8 +21,8 @@
 #include "ajax.h"
 #include "embpat.h"
 #include "embmat.h"
-#include "stdlib.h"
-#include "limits.h"
+#include <stdlib.h>
+#include <limits.h>
 
 
 /* @datastatic PatPTypes ***************************************************
@@ -317,7 +317,7 @@ EmbPPatMatch embPatMatchFind(const AjPStr regexp, const AjPStr strng,
 EmbPPatMatch embPatMatchFindC(const AjPStr regexp, const char *sptr,
 			     AjBool left, AjBool right)
 {
-    AjPRegexp regcomp = NULL;
+    AjPRegexp compexp = NULL;
     EmbPPatMatch results;
     AjPList poslist = ajListNew();
     AjPList lenlist = ajListNew();
@@ -352,18 +352,18 @@ EmbPPatMatch embPatMatchFindC(const AjPStr regexp, const char *sptr,
     ajDebug("embPatMatchFindC sptr '%s'\n",
 	    sptr);
 
-    regcomp = ajRegComp(regstr);
+    compexp = ajRegComp(regstr);
 
     ptr = sptr;
 
     AJNEW(results);
 
-    while(*sptr != '\0' && ajRegExecC(regcomp,sptr))
+    while(*sptr != '\0' && ajRegExecC(compexp,sptr))
     {
 	AJNEW(pos);
-	*pos = posi = ajRegOffset(regcomp);
+	*pos = posi = ajRegOffset(compexp);
 	AJNEW(len);
-	*len = ajRegLenI(regcomp,0);
+	*len = ajRegLenI(compexp,0);
 	*pos += (ajuint) (sptr-ptr);
 	ajListPush(poslist, pos);
 	ajListPush(lenlist, len);
@@ -373,7 +373,7 @@ EmbPPatMatch embPatMatchFindC(const AjPStr regexp, const char *sptr,
 	    break;
     }
 
-    ajRegFree(&regcomp);
+    ajRegFree(&compexp);
     results->number  = ajListGetLength(poslist);
 
     ajDebug("embPatMatchFindC '%S' nterm:%B results: %d\n",

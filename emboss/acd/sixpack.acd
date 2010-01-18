@@ -2,6 +2,9 @@ application: sixpack [
   documentation: "Display a DNA sequence with 6-frame
                   translation and ORFs"
   groups: "Display, Nucleic:Gene finding, Nucleic:Translation"
+  relations: "EDAM: DNA translation"
+  relations: "EDAM: Pretty sequence drawing"
+  relations: "EDAM: Coding region prediction"
 ]
 
 section: input [
@@ -12,6 +15,7 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "DNA"
+    relations: "EDAM: Sequence"                                            
   ]
 
 endsection: input
@@ -41,6 +45,7 @@ section: additional [
     codedelimiter: ":"
     information: "Code to use"
     help: "Genetics code used for the translation"
+    relations: "EDAM: Generic string array"                                
   ]
 
   boolean: firstorf [
@@ -49,6 +54,7 @@ section: additional [
     information: "ORF at the beginning of the sequence"
     help: "Count the beginning of a sequence as a possible ORF, even
            if it's inferior to the minimal ORF size."
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: lastorf [
@@ -57,6 +63,7 @@ section: additional [
     information: "ORF at the end of the sequence"
     help: "Count the end of a sequence as a possible ORF, even if it's
            not finishing with a STOP, or inferior to the minimal ORF size."
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: mstart [
@@ -64,6 +71,7 @@ section: additional [
     default: "N"
     information: "ORF start with an M"
     help: "Displays only ORFs starting with an M."
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: additional
@@ -76,12 +84,14 @@ section: output [
   outfile: outfile [
     parameter: "Y"
     knowntype: "sixpack output"
+    relations:  "EDAM:Nucleotide sequence translation report"              
   ]
 
   seqoutall: outseq [
     standard: "Y"
     type: "stopprotein"
     help: "ORF sequence output"
+    relations: "EDAM: Protein sequence record"                             
   ]
 
   boolean: reverse [
@@ -89,6 +99,7 @@ section: output [
     information: "Display translation of reverse sense"
     help: "Display also the translation of the DNA sequence in the 3
            reverse frames"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   integer: orfminsize [
@@ -97,6 +108,7 @@ section: output [
     information: "Minimum size of ORFs"
     help: "Minimum size of Open Reading Frames (ORFs) to display in
            the translations."
+    relations: "EDAM: Generic integer"                                     
   ]
 
   range: uppercase [
@@ -113,6 +125,7 @@ section: output [
            1,5,8,10,23,45,57,99"
     expected: "If this is left blank, then the sequence case is
                left alone."
+    relations: "EDAM: Generic integer range"                               
   ]
 
   range: highlight [
@@ -129,6 +142,7 @@ section: output [
            1-100 green 120-156 red \
            A file of ranges to colour (one range per line) can be specified as
            '@filename'."
+    relations: "EDAM: Generic integer range"                               
   ]
 
   boolean: number [
@@ -136,6 +150,7 @@ section: output [
     information: "Number the sequences"
     help: "Number the sequence at the beginning and the end of each
            line."
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   integer: width [
@@ -143,18 +158,21 @@ section: output [
     minimum: "1"
     information: "Width of sequence to display"
     help: "Number of nucleotides displayed on each line"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: length [
     default: "0"
     minimum: "0"
     information: "Line length of page (0 for indefinite)"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: margin [
     default: "10"
     minimum: "0"
     information: "Margin around sequence for numbering."
+    relations: "EDAM: Generic integer"                                     
   ]
 
   boolean: name [
@@ -162,6 +180,7 @@ section: output [
     information: "Display sequence ID"
     help: "Set this to be false if you do not wish to display the ID
            name of the sequence."
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: description [
@@ -169,6 +188,7 @@ section: output [
     information: "Display description"
     help: "Set this to be false if you do not wish to display the
            description of the sequence."
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   integer: offset [
@@ -176,12 +196,14 @@ section: output [
     information: "Offset to start numbering the sequence from"
     help: "Number from which you want the DNA sequence to be
            numbered."
+    relations: "EDAM: Generic integer"                                     
   ]
 
   boolean: html [
     default: "N"
     information: "Use HTML formatting"
     outputmodifier: "Y"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: output

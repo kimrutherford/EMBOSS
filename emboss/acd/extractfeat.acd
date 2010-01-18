@@ -1,6 +1,8 @@
 application: extractfeat [
   documentation: "Extract features from sequence(s)"
   groups: "Edit, Feature tables"
+  relations: "EDAM: Sequence feature extraction and generation"
+  relations: "EDAM: Sequence file handling"
 ]
 
 section: input [
@@ -12,6 +14,7 @@ section: input [
     parameter: "Y"
     type: "any"
     features: "Y"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: input
@@ -36,6 +39,7 @@ section: additional [
            of the feature. The output sequence will be padded with 'N' or 'X'
            characters if the sequence starts after the required start of the
            extraction."
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: after [
@@ -52,6 +56,7 @@ section: additional [
            extraction 10 bases/residues after the start of the feature. The
            output sequence will be padded with 'N' or 'X' characters if the
            sequence ends before the required end of the extraction."
+    relations: "EDAM: Generic integer"                                     
   ]
 
   string: source [
@@ -69,6 +74,7 @@ section: additional [
            with the character '|', eg: \
            gene* | embl"
     knowntype: "feature source list"
+    relations:  "EDAM: List of sequence feature sources"               
   ]
 
   string: type [
@@ -86,6 +92,7 @@ section: additional [
            with the character '|', eg: \
            *UTR | intron"
     knowntype: "feature key list"
+    relations:  "EDAM: List of sequence feature types"                 
   ]
 
   integer: sense [
@@ -97,6 +104,7 @@ section: additional [
     help: "By default any feature type in the feature table is
            extracted. You can set this to match any feature sense you wish. 0
            - any sense, 1 - forward sense, -1 - reverse sense"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   float: minscore [
@@ -104,6 +112,7 @@ section: additional [
     default: "0.0"
     information: "Minimum score of feature to extract"
     help: "Minimum score of feature to extract (see also maxscore)"
+    relations: "EDAM: Generic float"                                       
   ]
 
   float: maxscore [
@@ -113,6 +122,7 @@ section: additional [
     help: "Maximum score of feature to extract. \
            If both minscore and maxscore are zero (the default),
            then any score is ignored"
+    relations: "EDAM: Generic float"                                       
   ]
 
   string: tag [
@@ -135,6 +145,7 @@ section: additional [
            with the character '|', eg: \
            gene | label"
     knowntype: "feature tag list"
+    relations:  "EDAM: List of sequence feature tags"                  
   ]
 
   string: value [
@@ -151,12 +162,13 @@ section: additional [
            '/transl_table', or '/usedin'. Only some of these tags can have
            values, for example '/gene' can have the value of the gene name.
            By default any feature tag value in the feature table is shown.
-           You can set this to match any feature tag valueyou wish to show. \
+           You can set this to match any feature tag value you wish to show. \
            The tag value may be wildcarded by using '*'. \
            If you wish to show more than one tag value, separate their names
            with a space or the character '|', eg: \
            pax* | 10"
     knowntype: "feature tagvalue list"
+    relations:  "EDAM: Generic string"                                 
   ]
 
 endsection: additional
@@ -177,6 +189,7 @@ section: output [
            output as a single sequence. If the 'before' and 'after'
            qualifiers have been set, then only the sequence before the first
            feature and after the last feature are added."
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: featinname [
@@ -191,6 +204,7 @@ section: output [
            so it is useful for the type to be a part of the sequence ID name.
            If you set this to be TRUE then the name is added to the ID name
            of the output sequence."
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   string: describe [
@@ -219,10 +233,12 @@ section: output [
            with the character '|', eg: \
            gene | label"
     knowntype: "feature tag list"
+    relations:  "EDAM: List of sequence feature tags"                  
   ]
 
   seqout: outseq [
     parameter: "Y"
+    relations: "EDAM: Sequence"                                            
   ]
 
 endsection: output

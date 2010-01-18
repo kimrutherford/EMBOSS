@@ -190,16 +190,19 @@ Created banana9.dat
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
+Plot bending and curvature data for B-DNA
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Nucleotide sequence filename and optional
                                   format, or reference (input USA)
    -graph              graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, das, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif)
 
    Additional (Optional) qualifiers:
-   -anglesfile         datafile   [Eangles_tri.dat] DNA base timer roll angles
-                                  data file
+   -anglesfile         datafile   [Eangles_tri.dat] DNA base trimer roll
+                                  angles data file
    -residuesperline    integer    [50] Number of residues to be displayed on
                                   each line (Any integer value)
    -outfile            outfile    [banana.profile] Output file name
@@ -244,73 +247,384 @@ Created banana9.dat
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 
 </pre>
 </td></tr></table>
 <P>
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Qualifier</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Standard (Mandatory) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td>[-sequence]<br>(Parameter 1)</td>
+<td>sequence</td>
 <td>Nucleotide sequence filename and optional format, or reference (input USA)</td>
 <td>Readable sequence</td>
 <td><b>Required</b></td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-graph</td>
+<td>graph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, das, xterm, png, gif</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Additional (Optional) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
+<th align="left" colspan=5>Additional (Optional) qualifiers</th>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-anglesfile</td>
-<td>DNA base timer roll angles data file</td>
+<td>datafile</td>
+<td>DNA base trimer roll angles data file</td>
 <td>Data file</td>
 <td>Eangles_tri.dat</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-residuesperline</td>
+<td>integer</td>
 <td>Number of residues to be displayed on each line</td>
 <td>Any integer value</td>
 <td>50</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-outfile</td>
+<td>outfile</td>
 <td>Output file name</td>
 <td>Output file</td>
 <td>banana.profile</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
+<th align="left" colspan=5>Advanced (Unprompted) qualifiers</th>
 </tr>
 
 <tr>
-<td colspan=4>(none)</td>
+<td colspan=5>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-sequence" associated sequence qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sbegin1<br>-sbegin_sequence</td>
+<td>integer</td>
+<td>Start of the sequence to be used</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -send1<br>-send_sequence</td>
+<td>integer</td>
+<td>End of the sequence to be used</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sreverse1<br>-sreverse_sequence</td>
+<td>boolean</td>
+<td>Reverse (if DNA)</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sask1<br>-sask_sequence</td>
+<td>boolean</td>
+<td>Ask for begin/end/reverse</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -snucleotide1<br>-snucleotide_sequence</td>
+<td>boolean</td>
+<td>Sequence is nucleotide</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sprotein1<br>-sprotein_sequence</td>
+<td>boolean</td>
+<td>Sequence is protein</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -slower1<br>-slower_sequence</td>
+<td>boolean</td>
+<td>Make lower case</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -supper1<br>-supper_sequence</td>
+<td>boolean</td>
+<td>Make upper case</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sformat1<br>-sformat_sequence</td>
+<td>string</td>
+<td>Input sequence format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sdbname1<br>-sdbname_sequence</td>
+<td>string</td>
+<td>Database name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sid1<br>-sid_sequence</td>
+<td>string</td>
+<td>Entryname</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ufo1<br>-ufo_sequence</td>
+<td>string</td>
+<td>UFO features</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fformat1<br>-fformat_sequence</td>
+<td>string</td>
+<td>Features format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fopenfile1<br>-fopenfile_sequence</td>
+<td>string</td>
+<td>Features file name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-graph" associated graph qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -gprompt</td>
+<td>boolean</td>
+<td>Graph prompting</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -gdesc</td>
+<td>string</td>
+<td>Graph description</td>
+<td>Any string</td>
+<td>Bending and curvature plot</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -gtitle</td>
+<td>string</td>
+<td>Graph title</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -gsubtitle</td>
+<td>string</td>
+<td>Graph subtitle</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -gxtitle</td>
+<td>string</td>
+<td>Graph x axis title</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -gytitle</td>
+<td>string</td>
+<td>Graph y axis title</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -goutfile</td>
+<td>string</td>
+<td>Output file for non interactive displays</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -gdirectory</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>General qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -auto</td>
+<td>boolean</td>
+<td>Turn off prompts</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -stdout</td>
+<td>boolean</td>
+<td>Write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -filter</td>
+<td>boolean</td>
+<td>Read first file from standard input, write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -options</td>
+<td>boolean</td>
+<td>Prompt for standard and additional values</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -debug</td>
+<td>boolean</td>
+<td>Write debug output to program.dbg</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -verbose</td>
+<td>boolean</td>
+<td>Report some/full command line options</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -help</td>
+<td>boolean</td>
+<td>Report command line options and exit. More information on associated and general qualifiers can be found with -help -verbose</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -warning</td>
+<td>boolean</td>
+<td>Report warnings</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -error</td>
+<td>boolean</td>
+<td>Report errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fatal</td>
+<td>boolean</td>
+<td>Report fatal errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -die</td>
+<td>boolean</td>
+<td>Report dying program messages</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -version</td>
+<td>boolean</td>
+<td>Report version number and exit</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
 </tr>
 
 </table>
@@ -551,19 +865,19 @@ a       0.0      0.0
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##Maintitle Bending and curvature plot of tembl-id:U68037
-##Subtitle Tue 15 Jul 2008 12:00:00
+##Subtitle Fri 15 Jan 2010 12:00:00
 ##Graphic
 ##Screen x1 -1.000000 y1 0.000000 x2 60.000000 y2 80.000000
 Text3 x1 3.000000 y1 56.099998 colour 0 size 9.600000 a
 Line x1 2.500000 y1 59.879997 x2 3.500000 y2 59.879997 colour 0
 Text3 x1 4.000000 y1 56.099998 colour 0 size 9.600000 t
-Line x1 3.500000 y1 66.743378 x2 4.500000 y2 66.039986 colour 0
+Line x1 3.500000 y1 66.743378 x2 4.500000 y2 66.039978 colour 0
 Line x1 3.500000 y1 59.879997 x2 4.500000 y2 59.879997 colour 0
 Text3 x1 5.000000 y1 56.099998 colour 0 size 9.600000 g
-Line x1 4.500000 y1 66.039986 x2 5.500000 y2 67.239151 colour 0
+Line x1 4.500000 y1 66.039978 x2 5.500000 y2 67.239143 colour 0
 Line x1 4.500000 y1 59.879997 x2 5.500000 y2 59.879997 colour 0
 Text3 x1 6.000000 y1 56.099998 colour 0 size 9.600000 a
-Line x1 5.500000 y1 67.239151 x2 6.500000 y2 69.829361 colour 0
+Line x1 5.500000 y1 67.239143 x2 6.500000 y2 69.829361 colour 0
 Line x1 5.500000 y1 59.879997 x2 6.500000 y2 59.879997 colour 0
 Text3 x1 7.000000 y1 56.099998 colour 0 size 9.600000 g
 Line x1 6.500000 y1 69.829361 x2 7.500000 y2 69.006195 colour 0
@@ -599,60 +913,60 @@ Text3 x1 17.000000 y1 56.099998 colour 0 size 9.600000 g
 Line x1 16.500000 y1 69.829361 x2 17.500000 y2 67.101654 colour 0
 Line x1 16.500000 y1 59.879997 x2 17.500000 y2 59.879997 colour 0
 Text3 x1 18.000000 y1 56.099998 colour 0 size 9.600000 c
-Line x1 17.500000 y1 67.101654 x2 18.500000 y2 63.978653 colour 0
+Line x1 17.500000 y1 67.101654 x2 18.500000 y2 63.978649 colour 0
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-Line x1 39.500000 y1 30.619976 x2 40.500000 y2 28.755508 colour 0
+Line x1 39.500000 y1 30.619974 x2 40.500000 y2 28.755508 colour 0
 Line x1 39.700001 y1 23.003500 x2 40.299999 y2 23.142790 colour 0
 Line x1 39.500000 y1 22.079996 x2 40.500000 y2 22.079996 colour 0
 Text3 x1 41.000000 y1 18.299995 colour 0 size 9.600000 c
 Line x1 40.500000 y1 28.755508 x2 41.500000 y2 27.544254 colour 0
-Line x1 40.700001 y1 23.142790 x2 41.299999 y2 23.373346 colour 0
+Line x1 40.700001 y1 23.142790 x2 41.299999 y2 23.373348 colour 0
 Line x1 40.500000 y1 22.079996 x2 41.500000 y2 22.079996 colour 0
 Text3 x1 42.000000 y1 18.299995 colour 0 size 9.600000 t
-Line x1 41.500000 y1 27.544254 x2 42.500000 y2 28.590876 colour 0
-Line x1 41.700001 y1 23.373346 x2 42.299999 y2 23.594351 colour 0
+Line x1 41.500000 y1 27.544254 x2 42.500000 y2 28.590874 colour 0
+Line x1 41.700001 y1 23.373348 x2 42.299999 y2 23.594353 colour 0
 Line x1 41.500000 y1 22.079996 x2 42.500000 y2 22.079996 colour 0
 Text3 x1 43.000000 y1 18.299995 colour 0 size 9.600000 g
-Line x1 42.500000 y1 28.590876 x2 43.500000 y2 28.590876 colour 0
-Line x1 42.700001 y1 23.594351 x2 43.299999 y2 23.768496 colour 0
+Line x1 42.500000 y1 28.590874 x2 43.500000 y2 28.590874 colour 0
+Line x1 42.700001 y1 23.594353 x2 43.299999 y2 23.768497 colour 0
 Line x1 42.500000 y1 22.079996 x2 43.500000 y2 22.079996 colour 0
 Text3 x1 44.000000 y1 18.299995 colour 0 size 9.600000 g
-Line x1 43.500000 y1 28.590876 x2 44.500000 y2 28.872763 colour 0
-Line x1 43.700001 y1 23.768496 x2 44.299999 y2 23.897196 colour 0
+Line x1 43.500000 y1 28.590874 x2 44.500000 y2 28.872763 colour 0
+Line x1 43.700001 y1 23.768497 x2 44.299999 y2 23.897196 colour 0
 Line x1 43.500000 y1 22.079996 x2 44.500000 y2 22.079996 colour 0
 Text3 x1 45.000000 y1 18.299995 colour 0 size 9.600000 g
-Line x1 44.500000 y1 28.872763 x2 45.500000 y2 29.220503 colour 0
-Line x1 44.700001 y1 23.897196 x2 45.299999 y2 23.947048 colour 0
+Line x1 44.500000 y1 28.872763 x2 45.500000 y2 29.220501 colour 0
+Line x1 44.700001 y1 23.897196 x2 45.299999 y2 23.947050 colour 0
 Line x1 44.500000 y1 22.079996 x2 45.500000 y2 22.079996 colour 0
 Text3 x1 46.000000 y1 18.299995 colour 0 size 9.600000 t
-Line x1 45.500000 y1 29.220503 x2 46.500000 y2 29.784340 colour 0
-Line x1 45.700001 y1 23.947048 x2 46.299999 y2 23.960222 colour 0
+Line x1 45.500000 y1 29.220501 x2 46.500000 y2 29.784340 colour 0
+Line x1 45.700001 y1 23.947050 x2 46.299999 y2 23.960222 colour 0
 Line x1 45.500000 y1 22.079996 x2 46.500000 y2 22.079996 colour 0
 Text3 x1 47.000000 y1 18.299995 colour 0 size 9.600000 g
 Line x1 46.500000 y1 29.784340 x2 47.500000 y2 28.755508 colour 0
-Line x1 46.700001 y1 23.960222 x2 47.299999 y2 23.933395 colour 0
+Line x1 46.700001 y1 23.960222 x2 47.299999 y2 23.933397 colour 0
 Line x1 46.500000 y1 22.079996 x2 47.500000 y2 22.079996 colour 0
 Text3 x1 48.000000 y1 18.299995 colour 0 size 9.600000 c
-Line x1 47.500000 y1 28.755508 x2 48.500000 y2 27.402790 colour 0
-Line x1 47.700001 y1 23.933395 x2 48.299999 y2 23.842730 colour 0
+Line x1 47.500000 y1 28.755508 x2 48.500000 y2 27.402788 colour 0
+Line x1 47.700001 y1 23.933397 x2 48.299999 y2 23.842731 colour 0
 Line x1 47.500000 y1 22.079996 x2 48.500000 y2 22.079996 colour 0
 Text3 x1 49.000000 y1 18.299995 colour 0 size 9.600000 t
-Line x1 48.500000 y1 27.402790 x2 49.500000 y2 28.734224 colour 0
-Line x1 48.700001 y1 23.842730 x2 49.299999 y2 23.635275 colour 0
+Line x1 48.500000 y1 27.402788 x2 49.500000 y2 28.734222 colour 0
+Line x1 48.700001 y1 23.842731 x2 49.299999 y2 23.635277 colour 0
 Line x1 48.500000 y1 22.079996 x2 49.500000 y2 22.079996 colour 0
 Text3 x1 50.000000 y1 18.299995 colour 0 size 9.600000 g
-Line x1 49.500000 y1 28.734224 x2 50.500000 y2 28.734224 colour 0
-Line x1 49.700001 y1 23.635275 x2 50.299999 y2 23.355328 colour 0
+Line x1 49.500000 y1 28.734222 x2 50.500000 y2 28.734224 colour 0
+Line x1 49.700001 y1 23.635277 x2 50.299999 y2 23.355330 colour 0
 Line x1 49.500000 y1 22.079996 x2 50.500000 y2 22.079996 colour 0
 Text3 x1 51.000000 y1 18.299995 colour 0 size 9.600000 t
 Line x1 50.500000 y1 28.734224 x2 51.500000 y2 28.100136 colour 0
-Line x1 50.700001 y1 23.355328 x2 51.299999 y2 23.095020 colour 0
+Line x1 50.700001 y1 23.355330 x2 51.299999 y2 23.095020 colour 0
 Line x1 50.500000 y1 22.079996 x2 51.500000 y2 22.079996 colour 0
 Text3 x1 52.000000 y1 18.299995 colour 0 size 9.600000 g
-Line x1 51.500000 y1 28.100136 x2 52.500000 y2 27.337488 colour 0
+Line x1 51.500000 y1 28.100136 x2 52.500000 y2 27.337486 colour 0
 Line x1 51.700001 y1 23.095020 x2 52.299999 y2 22.881302 colour 0
 Line x1 51.500000 y1 22.079996 x2 52.500000 y2 22.079996 colour 0
 </pre>
@@ -664,7 +978,7 @@ Line x1 51.500000 y1 22.079996 x2 52.500000 y2 22.079996 colour 0
 ##Screen x1 -1.000000 y1 0.000000 x2 60.000000 y2 80.000000
 Text3 x1 3.000000 y1 56.099998 colour 0 size 9.600000 t
 Line x1 2.500000 y1 65.137489 x2 3.500000 y2 65.137489 colour 0
-Line x1 2.700000 y1 60.681301 x2 3.300000 y2 60.544445 colour 0
+Line x1 2.700000 y1 60.681305 x2 3.300000 y2 60.544445 colour 0
 Line x1 2.500000 y1 59.879997 x2 3.500000 y2 59.879997 colour 0
 Text3 x1 4.000000 y1 56.099998 colour 0 size 9.600000 c
 Line x1 3.500000 y1 65.137489 x2 4.500000 y2 64.863533 colour 0
@@ -679,11 +993,11 @@ Line x1 5.500000 y1 63.870514 x2 6.500000 y2 65.068802 colour 0
 Line x1 5.700000 y1 60.594872 x2 6.300000 y2 60.754246 colour 0
 Line x1 5.500000 y1 59.879997 x2 6.500000 y2 59.879997 colour 0
 Text3 x1 7.000000 y1 56.099998 colour 0 size 9.600000 a
-Line x1 6.500000 y1 65.068802 x2 7.500000 y2 66.039986 colour 0
+Line x1 6.500000 y1 65.068802 x2 7.500000 y2 66.039978 colour 0
 Line x1 6.700000 y1 60.754246 x2 7.300000 y2 60.980507 colour 0
 Line x1 6.500000 y1 59.879997 x2 7.500000 y2 59.879997 colour 0
 Text3 x1 8.000000 y1 56.099998 colour 0 size 9.600000 c
-Line x1 7.500000 y1 66.039986 x2 8.500000 y2 66.672760 colour 0
+Line x1 7.500000 y1 66.039978 x2 8.500000 y2 66.672760 colour 0
 Line x1 7.700000 y1 60.980507 x2 8.300000 y2 61.280891 colour 0
 Line x1 7.500000 y1 59.879997 x2 8.500000 y2 59.879997 colour 0
 Text3 x1 9.000000 y1 56.099998 colour 0 size 9.600000 g
@@ -695,39 +1009,39 @@ Line x1 9.500000 y1 67.020500 x2 10.500000 y2 67.584343 colour 0
 Line x1 9.700000 y1 61.626850 x2 10.300000 y2 61.980312 colour 0
 Line x1 9.500000 y1 59.879997 x2 10.500000 y2 59.879997 colour 0
 Text3 x1 11.000000 y1 56.099998 colour 0 size 9.600000 g
-Line x1 10.500000 y1 67.584343 x2 11.500000 y2 66.555511 colour 0
-Line x1 10.700000 y1 61.980312 x2 11.300000 y2 62.251068 colour 0
+Line x1 10.500000 y1 67.584343 x2 11.500000 y2 66.555504 colour 0
+Line x1 10.700000 y1 61.980312 x2 11.300000 y2 62.251072 colour 0
 Line x1 10.500000 y1 59.879997 x2 11.500000 y2 59.879997 colour 0
 Text3 x1 12.000000 y1 56.099998 colour 0 size 9.600000 c
-Line x1 11.500000 y1 66.555511 x2 12.500000 y2 65.344254 colour 0
-Line x1 11.700000 y1 62.251068 x2 12.300000 y2 62.421207 colour 0
+Line x1 11.500000 y1 66.555504 x2 12.500000 y2 65.344254 colour 0
+Line x1 11.700000 y1 62.251072 x2 12.300000 y2 62.421207 colour 0
 Line x1 11.500000 y1 59.879997 x2 12.500000 y2 59.879997 colour 0
 Text3 x1 13.000000 y1 56.099998 colour 0 size 9.600000 t
 Line x1 12.500000 y1 65.344254 x2 13.500000 y2 68.666405 colour 0
-Line x1 12.700000 y1 62.421207 x2 13.300000 y2 62.520813 colour 0
+Line x1 12.700000 y1 62.421207 x2 13.300000 y2 62.520817 colour 0
 Line x1 12.500000 y1 59.879997 x2 13.500000 y2 59.879997 colour 0
 Text3 x1 14.000000 y1 56.099998 colour 0 size 9.600000 g
 Line x1 13.500000 y1 68.666405 x2 14.500000 y2 69.829361 colour 0
-Line x1 13.700000 y1 62.520813 x2 14.300000 y2 62.609581 colour 0
+Line x1 13.700000 y1 62.520817 x2 14.300000 y2 62.609585 colour 0
 Line x1 13.500000 y1 59.879997 x2 14.500000 y2 59.879997 colour 0
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-Line x1 39.500000 y1 28.239983 x2 40.500000 y2 28.872763 colour 0
-Line x1 39.700001 y1 25.297361 x2 40.299999 y2 25.211924 colour 0
+Line x1 39.500000 y1 28.239981 x2 40.500000 y2 28.872763 colour 0
+Line x1 39.700001 y1 25.297359 x2 40.299999 y2 25.211924 colour 0
 Line x1 39.500000 y1 22.079996 x2 40.500000 y2 22.079996 colour 0
 Text3 x1 41.000000 y1 18.299995 colour 0 size 9.600000 g
-Line x1 40.500000 y1 28.872763 x2 41.500000 y2 29.220503 colour 0
+Line x1 40.500000 y1 28.872763 x2 41.500000 y2 29.220501 colour 0
 Line x1 40.700001 y1 25.211924 x2 41.299999 y2 25.157118 colour 0
 Line x1 40.500000 y1 22.079996 x2 41.500000 y2 22.079996 colour 0
 Text3 x1 42.000000 y1 18.299995 colour 0 size 9.600000 t
-Line x1 41.500000 y1 29.220503 x2 42.500000 y2 29.784340 colour 0
-Line x1 41.700001 y1 25.157118 x2 42.299999 y2 25.166603 colour 0
+Line x1 41.500000 y1 29.220501 x2 42.500000 y2 29.784338 colour 0
+Line x1 41.700001 y1 25.157118 x2 42.299999 y2 25.166607 colour 0
 Line x1 41.500000 y1 22.079996 x2 42.500000 y2 22.079996 colour 0
 Text3 x1 43.000000 y1 18.299995 colour 0 size 9.600000 g
-Line x1 42.500000 y1 29.784340 x2 43.500000 y2 29.301651 colour 0
-Line x1 42.700001 y1 25.166603 x2 43.299999 y2 25.246220 colour 0
+Line x1 42.500000 y1 29.784338 x2 43.500000 y2 29.301651 colour 0
+Line x1 42.700001 y1 25.166607 x2 43.299999 y2 25.246220 colour 0
 Line x1 42.500000 y1 22.079996 x2 43.500000 y2 22.079996 colour 0
 Text3 x1 44.000000 y1 18.299995 colour 0 size 9.600000 c
 Line x1 43.500000 y1 29.301651 x2 44.500000 y2 26.716318 colour 0
@@ -738,32 +1052,32 @@ Line x1 44.500000 y1 26.716318 x2 45.500000 y2 28.517347 colour 0
 Line x1 44.700001 y1 25.346378 x2 45.299999 y2 25.396358 colour 0
 Line x1 44.500000 y1 22.079996 x2 45.500000 y2 22.079996 colour 0
 Text3 x1 46.000000 y1 18.299995 colour 0 size 9.600000 t
-Line x1 45.500000 y1 28.517347 x2 46.500000 y2 31.040913 colour 0
+Line x1 45.500000 y1 28.517347 x2 46.500000 y2 31.040909 colour 0
 Line x1 45.700001 y1 25.396358 x2 46.299999 y2 25.410254 colour 0
 Line x1 45.500000 y1 22.079996 x2 46.500000 y2 22.079996 colour 0
 Text3 x1 47.000000 y1 18.299995 colour 0 size 9.600000 c
-Line x1 46.500000 y1 31.040913 x2 47.500000 y2 32.029358 colour 0
+Line x1 46.500000 y1 31.040909 x2 47.500000 y2 32.029354 colour 0
 Line x1 46.700001 y1 25.410254 x2 47.299999 y2 25.458986 colour 0
 Line x1 46.500000 y1 22.079996 x2 47.500000 y2 22.079996 colour 0
 Text3 x1 48.000000 y1 18.299995 colour 0 size 9.600000 g
-Line x1 47.500000 y1 32.029358 x2 48.500000 y2 30.866404 colour 0
-Line x1 47.700001 y1 25.458986 x2 48.299999 y2 25.576269 colour 0
+Line x1 47.500000 y1 32.029354 x2 48.500000 y2 30.866402 colour 0
+Line x1 47.700001 y1 25.458986 x2 48.299999 y2 25.576271 colour 0
 Line x1 47.500000 y1 22.079996 x2 48.500000 y2 22.079996 colour 0
 Text3 x1 49.000000 y1 18.299995 colour 0 size 9.600000 c
-Line x1 48.500000 y1 30.866404 x2 49.500000 y2 27.544254 colour 0
-Line x1 48.700001 y1 25.576269 x2 49.299999 y2 25.788673 colour 0
+Line x1 48.500000 y1 30.866402 x2 49.500000 y2 27.544254 colour 0
+Line x1 48.700001 y1 25.576271 x2 49.299999 y2 25.788673 colour 0
 Line x1 48.500000 y1 22.079996 x2 49.500000 y2 22.079996 colour 0
 Text3 x1 50.000000 y1 18.299995 colour 0 size 9.600000 c
-Line x1 49.500000 y1 27.544254 x2 50.500000 y2 27.402790 colour 0
+Line x1 49.500000 y1 27.544254 x2 50.500000 y2 27.402788 colour 0
 Line x1 49.700001 y1 25.788673 x2 50.299999 y2 26.104589 colour 0
 Line x1 49.500000 y1 22.079996 x2 50.500000 y2 22.079996 colour 0
 Text3 x1 51.000000 y1 18.299995 colour 0 size 9.600000 t
-Line x1 50.500000 y1 27.402790 x2 51.500000 y2 27.126646 colour 0
-Line x1 50.700001 y1 26.104589 x2 51.299999 y2 26.532801 colour 0
+Line x1 50.500000 y1 27.402788 x2 51.500000 y2 27.126644 colour 0
+Line x1 50.700001 y1 26.104589 x2 51.299999 y2 26.532803 colour 0
 Line x1 50.500000 y1 22.079996 x2 51.500000 y2 22.079996 colour 0
 Text3 x1 52.000000 y1 18.299995 colour 0 size 9.600000 g
-Line x1 51.500000 y1 27.126646 x2 52.500000 y2 25.793066 colour 0
-Line x1 51.700001 y1 26.532801 x2 52.299999 y2 26.954660 colour 0
+Line x1 51.500000 y1 27.126644 x2 52.500000 y2 25.793066 colour 0
+Line x1 51.700001 y1 26.532803 x2 52.299999 y2 26.954662 colour 0
 Line x1 51.500000 y1 22.079996 x2 52.500000 y2 22.079996 colour 0
 </pre>
 </td></tr></table><p>
@@ -774,11 +1088,11 @@ Line x1 51.500000 y1 22.079996 x2 52.500000 y2 22.079996 colour 0
 ##Screen x1 -1.000000 y1 0.000000 x2 60.000000 y2 80.000000
 Text3 x1 3.000000 y1 56.099998 colour 0 size 9.600000 t
 Line x1 2.500000 y1 63.593067 x2 3.500000 y2 63.099991 colour 0
-Line x1 2.700000 y1 64.754662 x2 3.300000 y2 65.133415 colour 0
+Line x1 2.700000 y1 64.754662 x2 3.300000 y2 65.133423 colour 0
 Line x1 2.500000 y1 59.879997 x2 3.500000 y2 59.879997 colour 0
 Text3 x1 4.000000 y1 56.099998 colour 0 size 9.600000 a
 Line x1 3.500000 y1 63.099991 x2 4.500000 y2 63.593067 colour 0
-Line x1 3.700000 y1 65.133415 x2 4.300000 y2 65.494942 colour 0
+Line x1 3.700000 y1 65.133423 x2 4.300000 y2 65.494942 colour 0
 Line x1 3.500000 y1 59.879997 x2 4.500000 y2 59.879997 colour 0
 Text3 x1 5.000000 y1 56.099998 colour 0 size 9.600000 t
 Line x1 4.500000 y1 63.593067 x2 5.500000 y2 65.282478 colour 0
@@ -798,82 +1112,82 @@ Line x1 7.700000 y1 66.623062 x2 8.300000 y2 66.775955 colour 0
 Line x1 7.500000 y1 59.879997 x2 8.500000 y2 59.879997 colour 0
 Text3 x1 9.000000 y1 56.099998 colour 0 size 9.600000 g
 Line x1 8.500000 y1 66.739983 x2 9.500000 y2 65.699013 colour 0
-Line x1 8.700000 y1 66.775955 x2 9.300000 y2 66.715889 colour 0
+Line x1 8.700000 y1 66.775955 x2 9.300000 y2 66.715897 colour 0
 Line x1 8.500000 y1 59.879997 x2 9.500000 y2 59.879997 colour 0
 Text3 x1 10.000000 y1 56.099998 colour 0 size 9.600000 c
 Line x1 9.500000 y1 65.699013 x2 10.500000 y2 65.344254 colour 0
-Line x1 9.700000 y1 66.715889 x2 10.300000 y2 66.529877 colour 0
+Line x1 9.700000 y1 66.715897 x2 10.300000 y2 66.529877 colour 0
 Line x1 9.500000 y1 59.879997 x2 10.500000 y2 59.879997 colour 0
 Text3 x1 11.000000 y1 56.099998 colour 0 size 9.600000 a
 Line x1 10.500000 y1 65.344254 x2 11.500000 y2 65.137489 colour 0
-Line x1 10.700000 y1 66.529877 x2 11.300000 y2 66.281395 colour 0
+Line x1 10.700000 y1 66.529877 x2 11.300000 y2 66.281403 colour 0
 Line x1 10.500000 y1 59.879997 x2 11.500000 y2 59.879997 colour 0
 Text3 x1 12.000000 y1 56.099998 colour 0 size 9.600000 g
 Line x1 11.500000 y1 65.137489 x2 12.500000 y2 65.137489 colour 0
-Line x1 11.700000 y1 66.281395 x2 12.300000 y2 65.988609 colour 0
+Line x1 11.700000 y1 66.281403 x2 12.300000 y2 65.988609 colour 0
 Line x1 11.500000 y1 59.879997 x2 12.500000 y2 59.879997 colour 0
 Text3 x1 13.000000 y1 56.099998 colour 0 size 9.600000 g
-Line x1 12.500000 y1 65.137489 x2 13.500000 y2 66.039986 colour 0
+Line x1 12.500000 y1 65.137489 x2 13.500000 y2 66.039978 colour 0
 Line x1 12.700000 y1 65.988609 x2 13.300000 y2 65.580658 colour 0
 Line x1 12.500000 y1 59.879997 x2 13.500000 y2 59.879997 colour 0
 Text3 x1 14.000000 y1 56.099998 colour 0 size 9.600000 a
-Line x1 13.500000 y1 66.039986 x2 14.500000 y2 66.039986 colour 0
+Line x1 13.500000 y1 66.039978 x2 14.500000 y2 66.039986 colour 0
 Line x1 13.700000 y1 65.580658 x2 14.300000 y2 65.121658 colour 0
 Line x1 13.500000 y1 59.879997 x2 14.500000 y2 59.879997 colour 0
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-Line x1 39.500000 y1 27.337502 x2 40.500000 y2 28.872780 colour 0
-Line x1 39.700001 y1 23.195293 x2 40.299999 y2 23.514277 colour 0
+Line x1 39.500000 y1 27.337502 x2 40.500000 y2 28.872778 colour 0
+Line x1 39.700001 y1 23.195297 x2 40.299999 y2 23.514282 colour 0
 Line x1 39.500000 y1 22.079996 x2 40.500000 y2 22.079996 colour 0
 Text3 x1 41.000000 y1 18.299995 colour 0 size 9.600000 c
-Line x1 40.500000 y1 28.872780 x2 41.500000 y2 28.872780 colour 0
-Line x1 40.700001 y1 23.514277 x2 41.299999 y2 23.725180 colour 0
+Line x1 40.500000 y1 28.872778 x2 41.500000 y2 28.872780 colour 0
+Line x1 40.700001 y1 23.514282 x2 41.299999 y2 23.725180 colour 0
 Line x1 40.500000 y1 22.079996 x2 41.500000 y2 22.079996 colour 0
 Text3 x1 42.000000 y1 18.299995 colour 0 size 9.600000 a
-Line x1 41.500000 y1 28.872780 x2 42.500000 y2 29.439165 colour 0
-Line x1 41.700001 y1 23.725180 x2 42.299999 y2 23.913559 colour 0
+Line x1 41.500000 y1 28.872780 x2 42.500000 y2 29.439163 colour 0
+Line x1 41.700001 y1 23.725180 x2 42.299999 y2 23.913563 colour 0
 Line x1 41.500000 y1 22.079996 x2 42.500000 y2 22.079996 colour 0
 Text3 x1 43.000000 y1 18.299995 colour 0 size 9.600000 c
-Line x1 42.500000 y1 29.439165 x2 43.500000 y2 30.619995 colour 0
-Line x1 42.700001 y1 23.913559 x2 43.299999 y2 24.094633 colour 0
+Line x1 42.500000 y1 29.439163 x2 43.500000 y2 30.619995 colour 0
+Line x1 42.700001 y1 23.913563 x2 43.299999 y2 24.094639 colour 0
 Line x1 42.500000 y1 22.079996 x2 43.500000 y2 22.079996 colour 0
 Text3 x1 44.000000 y1 18.299995 colour 0 size 9.600000 g
 Line x1 43.500000 y1 30.619995 x2 44.500000 y2 29.027782 colour 0
-Line x1 43.700001 y1 24.094633 x2 44.299999 y2 24.189123 colour 0
+Line x1 43.700001 y1 24.094639 x2 44.299999 y2 24.189131 colour 0
 Line x1 43.500000 y1 22.079996 x2 44.500000 y2 22.079996 colour 0
 Text3 x1 45.000000 y1 18.299995 colour 0 size 9.600000 c
-Line x1 44.500000 y1 29.027782 x2 45.500000 y2 30.461622 colour 0
-Line x1 44.700001 y1 24.189123 x2 45.299999 y2 24.257391 colour 0
+Line x1 44.500000 y1 29.027782 x2 45.500000 y2 30.461620 colour 0
+Line x1 44.700001 y1 24.189131 x2 45.299999 y2 24.257393 colour 0
 Line x1 44.500000 y1 22.079996 x2 45.500000 y2 22.079996 colour 0
 Text3 x1 46.000000 y1 18.299995 colour 0 size 9.600000 g
-Line x1 45.500000 y1 30.461622 x2 46.500000 y2 32.029381 colour 0
-Line x1 45.700001 y1 24.257391 x2 46.299999 y2 24.323919 colour 0
+Line x1 45.500000 y1 30.461620 x2 46.500000 y2 32.029377 colour 0
+Line x1 45.700001 y1 24.257393 x2 46.299999 y2 24.323923 colour 0
 Line x1 45.500000 y1 22.079996 x2 46.500000 y2 22.079996 colour 0
 Text3 x1 47.000000 y1 18.299995 colour 0 size 9.600000 g
-Line x1 46.500000 y1 32.029381 x2 47.500000 y2 30.619997 colour 0
-Line x1 46.700001 y1 24.323919 x2 47.299999 y2 24.341711 colour 0
+Line x1 46.500000 y1 32.029377 x2 47.500000 y2 30.619995 colour 0
+Line x1 46.700001 y1 24.323923 x2 47.299999 y2 24.341715 colour 0
 Line x1 46.500000 y1 22.079996 x2 47.500000 y2 22.079996 colour 0
 Text3 x1 48.000000 y1 18.299995 colour 0 size 9.600000 c
-Line x1 47.500000 y1 30.619997 x2 48.500000 y2 30.619995 colour 0
-Line x1 47.700001 y1 24.341711 x2 48.299999 y2 24.317751 colour 0
+Line x1 47.500000 y1 30.619995 x2 48.500000 y2 30.619995 colour 0
+Line x1 47.700001 y1 24.341715 x2 48.299999 y2 24.317759 colour 0
 Line x1 47.500000 y1 22.079996 x2 48.500000 y2 22.079996 colour 0
 Text3 x1 49.000000 y1 18.299995 colour 0 size 9.600000 g
-Line x1 48.500000 y1 30.619995 x2 49.500000 y2 30.619995 colour 0
-Line x1 48.700001 y1 24.317751 x2 49.299999 y2 24.263824 colour 0
+Line x1 48.500000 y1 30.619995 x2 49.500000 y2 30.619993 colour 0
+Line x1 48.700001 y1 24.317759 x2 49.299999 y2 24.263830 colour 0
 Line x1 48.500000 y1 22.079996 x2 49.500000 y2 22.079996 colour 0
 Text3 x1 50.000000 y1 18.299995 colour 0 size 9.600000 c
-Line x1 49.500000 y1 30.619995 x2 50.500000 y2 30.619995 colour 0
-Line x1 49.700001 y1 24.263824 x2 50.299999 y2 24.170179 colour 0
+Line x1 49.500000 y1 30.619993 x2 50.500000 y2 30.619995 colour 0
+Line x1 49.700001 y1 24.263830 x2 50.299999 y2 24.170185 colour 0
 Line x1 49.500000 y1 22.079996 x2 50.500000 y2 22.079996 colour 0
 Text3 x1 51.000000 y1 18.299995 colour 0 size 9.600000 g
 Line x1 50.500000 y1 30.619995 x2 51.500000 y2 29.439163 colour 0
-Line x1 50.700001 y1 24.170179 x2 51.299999 y2 24.108042 colour 0
+Line x1 50.700001 y1 24.170185 x2 51.299999 y2 24.108047 colour 0
 Line x1 50.500000 y1 22.079996 x2 51.500000 y2 22.079996 colour 0
 Text3 x1 52.000000 y1 18.299995 colour 0 size 9.600000 c
-Line x1 51.500000 y1 29.439163 x2 52.500000 y2 28.872782 colour 0
-Line x1 51.700001 y1 24.108042 x2 52.299999 y2 24.028461 colour 0
+Line x1 51.500000 y1 29.439163 x2 52.500000 y2 28.872780 colour 0
+Line x1 51.700001 y1 24.108047 x2 52.299999 y2 24.028463 colour 0
 Line x1 51.500000 y1 22.079996 x2 52.500000 y2 22.079996 colour 0
 </pre>
 </td></tr></table><p>
@@ -884,105 +1198,105 @@ Line x1 51.500000 y1 22.079996 x2 52.500000 y2 22.079996 colour 0
 ##Screen x1 -1.000000 y1 0.000000 x2 60.000000 y2 80.000000
 Text3 x1 3.000000 y1 56.099998 colour 0 size 9.600000 g
 Line x1 2.500000 y1 66.672783 x2 3.500000 y2 66.534241 colour 0
-Line x1 2.700000 y1 61.828465 x2 3.300000 y2 61.655918 colour 0
+Line x1 2.700000 y1 61.828465 x2 3.300000 y2 61.655922 colour 0
 Line x1 2.500000 y1 59.879997 x2 3.500000 y2 59.879997 colour 0
 Text3 x1 4.000000 y1 56.099998 colour 0 size 9.600000 t
-Line x1 3.500000 y1 66.534241 x2 4.500000 y2 65.900154 colour 0
-Line x1 3.700000 y1 61.655918 x2 4.300000 y2 61.406971 colour 0
+Line x1 3.500000 y1 66.534241 x2 4.500000 y2 65.900146 colour 0
+Line x1 3.700000 y1 61.655922 x2 4.300000 y2 61.406979 colour 0
 Line x1 3.500000 y1 59.879997 x2 4.500000 y2 59.879997 colour 0
 Text3 x1 5.000000 y1 56.099998 colour 0 size 9.600000 g
-Line x1 4.500000 y1 65.900154 x2 5.500000 y2 65.137497 colour 0
-Line x1 4.700000 y1 61.406971 x2 5.300000 y2 61.120125 colour 0
+Line x1 4.500000 y1 65.900146 x2 5.500000 y2 65.137497 colour 0
+Line x1 4.700000 y1 61.406979 x2 5.300000 y2 61.120132 colour 0
 Line x1 4.500000 y1 59.879997 x2 5.500000 y2 59.879997 colour 0
 Text3 x1 6.000000 y1 56.099998 colour 0 size 9.600000 t
 Line x1 5.500000 y1 65.137497 x2 6.500000 y2 64.712364 colour 0
-Line x1 5.700000 y1 61.120125 x2 6.300000 y2 60.966141 colour 0
+Line x1 5.700000 y1 61.120132 x2 6.300000 y2 60.966145 colour 0
 Line x1 5.500000 y1 59.879997 x2 6.500000 y2 59.879997 colour 0
 Text3 x1 7.000000 y1 56.099998 colour 0 size 9.600000 c
 Line x1 6.500000 y1 64.712364 x2 7.500000 y2 65.621460 colour 0
-Line x1 6.700000 y1 60.966141 x2 7.300000 y2 61.082630 colour 0
+Line x1 6.700000 y1 60.966145 x2 7.300000 y2 61.082634 colour 0
 Line x1 6.500000 y1 59.879997 x2 7.500000 y2 59.879997 colour 0
 Text3 x1 8.000000 y1 56.099998 colour 0 size 9.600000 c
 Line x1 7.500000 y1 65.621460 x2 8.500000 y2 65.068817 colour 0
-Line x1 7.700000 y1 61.082630 x2 8.300000 y2 61.373486 colour 0
+Line x1 7.700000 y1 61.082634 x2 8.300000 y2 61.373489 colour 0
 Line x1 7.500000 y1 59.879997 x2 8.500000 y2 59.879997 colour 0
 Text3 x1 9.000000 y1 56.099998 colour 0 size 9.600000 g
-Line x1 8.500000 y1 65.068817 x2 9.500000 y2 63.249981 colour 0
-Line x1 8.700000 y1 61.373486 x2 9.300000 y2 61.680435 colour 0
+Line x1 8.500000 y1 65.068817 x2 9.500000 y2 63.249977 colour 0
+Line x1 8.700000 y1 61.373489 x2 9.300000 y2 61.680435 colour 0
 Line x1 8.500000 y1 59.879997 x2 9.500000 y2 59.879997 colour 0
 Text3 x1 10.000000 y1 56.099998 colour 0 size 9.600000 t
-Line x1 9.500000 y1 63.249981 x2 10.500000 y2 65.487465 colour 0
-Line x1 9.700000 y1 61.680435 x2 10.300000 y2 61.938324 colour 0
+Line x1 9.500000 y1 63.249977 x2 10.500000 y2 65.487457 colour 0
+Line x1 9.700000 y1 61.680435 x2 10.300000 y2 61.938332 colour 0
 Line x1 9.500000 y1 59.879997 x2 10.500000 y2 59.879997 colour 0
 Text3 x1 11.000000 y1 56.099998 colour 0 size 9.600000 a
-Line x1 10.500000 y1 65.487465 x2 11.500000 y2 69.829384 colour 0
-Line x1 10.700000 y1 61.938324 x2 11.300000 y2 62.114063 colour 0
+Line x1 10.500000 y1 65.487457 x2 11.500000 y2 69.829376 colour 0
+Line x1 10.700000 y1 61.938332 x2 11.300000 y2 62.114067 colour 0
 Line x1 10.500000 y1 59.879997 x2 11.500000 y2 59.879997 colour 0
 Text3 x1 12.000000 y1 56.099998 colour 0 size 9.600000 g
-Line x1 11.500000 y1 69.829384 x2 12.500000 y2 69.006210 colour 0
-Line x1 11.700000 y1 62.114063 x2 12.300000 y2 62.217667 colour 0
+Line x1 11.500000 y1 69.829376 x2 12.500000 y2 69.006210 colour 0
+Line x1 11.700000 y1 62.114067 x2 12.300000 y2 62.217670 colour 0
 Line x1 11.500000 y1 59.879997 x2 12.500000 y2 59.879997 colour 0
 Text3 x1 13.000000 y1 56.099998 colour 0 size 9.600000 c
 Line x1 12.500000 y1 69.006210 x2 13.500000 y2 65.974632 colour 0
-Line x1 12.700000 y1 62.217667 x2 13.300000 y2 62.395542 colour 0
+Line x1 12.700000 y1 62.217670 x2 13.300000 y2 62.395550 colour 0
 Line x1 12.500000 y1 59.879997 x2 13.500000 y2 59.879997 colour 0
 Text3 x1 14.000000 y1 56.099998 colour 0 size 9.600000 c
 Line x1 13.500000 y1 65.974632 x2 14.500000 y2 66.827782 colour 0
-Line x1 13.700000 y1 62.395542 x2 14.300000 y2 62.722473 colour 0
+Line x1 13.700000 y1 62.395550 x2 14.300000 y2 62.722477 colour 0
 Line x1 13.500000 y1 59.879997 x2 14.500000 y2 59.879997 colour 0
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-Line x1 39.500000 y1 27.337500 x2 40.500000 y2 27.337502 colour 0
-Line x1 39.700001 y1 23.704889 x2 40.299999 y2 23.752373 colour 0
+Line x1 39.500000 y1 27.337498 x2 40.500000 y2 27.337502 colour 0
+Line x1 39.700001 y1 23.704887 x2 40.299999 y2 23.752375 colour 0
 Line x1 39.500000 y1 22.079996 x2 40.500000 y2 22.079996 colour 0
 Text3 x1 41.000000 y1 18.299995 colour 0 size 9.600000 c
 Line x1 40.500000 y1 27.337502 x2 41.500000 y2 27.544268 colour 0
-Line x1 40.700001 y1 23.752373 x2 41.299999 y2 23.564180 colour 0
+Line x1 40.700001 y1 23.752375 x2 41.299999 y2 23.564182 colour 0
 Line x1 40.500000 y1 22.079996 x2 41.500000 y2 22.079996 colour 0
 Text3 x1 42.000000 y1 18.299995 colour 0 size 9.600000 c
 Line x1 41.500000 y1 27.544268 x2 42.500000 y2 27.544266 colour 0
-Line x1 41.700001 y1 23.564180 x2 42.299999 y2 23.118820 colour 0
+Line x1 41.700001 y1 23.564182 x2 42.299999 y2 23.118820 colour 0
 Line x1 41.500000 y1 22.079996 x2 42.500000 y2 22.079996 colour 0
 Text3 x1 43.000000 y1 18.299995 colour 0 size 9.600000 t
 Line x1 42.500000 y1 27.544266 x2 43.500000 y2 27.337500 colour 0
 Line x1 42.700001 y1 23.118820 x2 43.299999 y2 22.534410 colour 0
 Line x1 42.500000 y1 22.079996 x2 43.500000 y2 22.079996 colour 0
 Text3 x1 44.000000 y1 18.299995 colour 0 size 9.600000 g
-Line x1 43.500000 y1 27.337500 x2 44.500000 y2 27.337500 colour 0
-Line x1 43.700001 y1 22.534410 x2 44.299999 y2 22.310280 colour 0
+Line x1 43.500000 y1 27.337500 x2 44.500000 y2 27.337498 colour 0
+Line x1 43.700001 y1 22.534410 x2 44.299999 y2 22.310282 colour 0
 Line x1 43.500000 y1 22.079996 x2 44.500000 y2 22.079996 colour 0
 Text3 x1 45.000000 y1 18.299995 colour 0 size 9.600000 g
-Line x1 44.500000 y1 27.337500 x2 45.500000 y2 28.239996 colour 0
-Line x1 44.700001 y1 22.310280 x2 45.299999 y2 22.911076 colour 0
+Line x1 44.500000 y1 27.337498 x2 45.500000 y2 28.239996 colour 0
+Line x1 44.700001 y1 22.310282 x2 45.299999 y2 22.911077 colour 0
 Line x1 44.500000 y1 22.079996 x2 45.500000 y2 22.079996 colour 0
 Text3 x1 46.000000 y1 18.299995 colour 0 size 9.600000 a
-Line x1 45.500000 y1 28.239996 x2 46.500000 y2 28.239998 colour 0
-Line x1 45.700001 y1 22.911076 x2 46.299999 y2 23.363279 colour 0
+Line x1 45.500000 y1 28.239996 x2 46.500000 y2 28.239996 colour 0
+Line x1 45.700001 y1 22.911077 x2 46.299999 y2 23.363279 colour 0
 Line x1 45.500000 y1 22.079996 x2 46.500000 y2 22.079996 colour 0
 Text3 x1 47.000000 y1 18.299995 colour 0 size 9.600000 g
-Line x1 46.500000 y1 28.239998 x2 47.500000 y2 27.268816 colour 0
-Line x1 46.700001 y1 23.363279 x2 47.299999 y2 23.501678 colour 0
+Line x1 46.500000 y1 28.239996 x2 47.500000 y2 27.268816 colour 0
+Line x1 46.700001 y1 23.363279 x2 47.299999 y2 23.501680 colour 0
 Line x1 46.500000 y1 22.079996 x2 47.500000 y2 22.079996 colour 0
 Text3 x1 48.000000 y1 18.299995 colour 0 size 9.600000 g
 Line x1 47.500000 y1 27.268816 x2 48.500000 y2 26.070522 colour 0
-Line x1 47.700001 y1 23.501678 x2 48.299999 y2 23.429628 colour 0
+Line x1 47.700001 y1 23.501680 x2 48.299999 y2 23.429630 colour 0
 Line x1 47.500000 y1 22.079996 x2 48.500000 y2 22.079996 colour 0
 Text3 x1 49.000000 y1 18.299995 colour 0 size 9.600000 t
 Line x1 48.500000 y1 26.070522 x2 49.500000 y2 27.063545 colour 0
-Line x1 48.700001 y1 23.429628 x2 49.299999 y2 23.272099 colour 0
+Line x1 48.700001 y1 23.429630 x2 49.299999 y2 23.272100 colour 0
 Line x1 48.500000 y1 22.079996 x2 49.500000 y2 22.079996 colour 0
 Text3 x1 50.000000 y1 18.299995 colour 0 size 9.600000 t
-Line x1 49.500000 y1 27.063545 x2 50.500000 y2 30.866423 colour 0
-Line x1 49.700001 y1 23.272099 x2 50.299999 y2 23.060772 colour 0
+Line x1 49.500000 y1 27.063545 x2 50.500000 y2 30.866421 colour 0
+Line x1 49.700001 y1 23.272100 x2 50.299999 y2 23.060772 colour 0
 Line x1 49.500000 y1 22.079996 x2 50.500000 y2 22.079996 colour 0
 Text3 x1 51.000000 y1 18.299995 colour 0 size 9.600000 g
-Line x1 50.500000 y1 30.866423 x2 51.500000 y2 32.029377 colour 0
+Line x1 50.500000 y1 30.866421 x2 51.500000 y2 32.029373 colour 0
 Line x1 50.700001 y1 23.060772 x2 51.299999 y2 22.790617 colour 0
 Line x1 50.500000 y1 22.079996 x2 51.500000 y2 22.079996 colour 0
 Text3 x1 52.000000 y1 18.299995 colour 0 size 9.600000 g
-Line x1 51.500000 y1 32.029377 x2 52.500000 y2 30.619995 colour 0
+Line x1 51.500000 y1 32.029373 x2 52.500000 y2 30.619993 colour 0
 Line x1 51.700001 y1 22.790617 x2 52.299999 y2 22.560194 colour 0
 Line x1 51.500000 y1 22.079996 x2 52.500000 y2 22.079996 colour 0
 </pre>
@@ -997,103 +1311,103 @@ Line x1 2.500000 y1 68.419998 x2 3.500000 y2 69.829384 colour 0
 Line x1 2.700000 y1 60.360195 x2 3.300000 y2 60.585083 colour 0
 Line x1 2.500000 y1 59.879997 x2 3.500000 y2 59.879997 colour 0
 Text3 x1 4.000000 y1 56.099998 colour 0 size 9.600000 g
-Line x1 3.500000 y1 69.829384 x2 4.500000 y2 68.666428 colour 0
-Line x1 3.700000 y1 60.585083 x2 4.300000 y2 61.013470 colour 0
+Line x1 3.500000 y1 69.829384 x2 4.500000 y2 68.666420 colour 0
+Line x1 3.700000 y1 60.585083 x2 4.300000 y2 61.013474 colour 0
 Line x1 3.500000 y1 59.879997 x2 4.500000 y2 59.879997 colour 0
 Text3 x1 5.000000 y1 56.099998 colour 0 size 9.600000 c
-Line x1 4.500000 y1 68.666428 x2 5.500000 y2 65.344269 colour 0
-Line x1 4.700000 y1 61.013470 x2 5.300000 y2 61.481304 colour 0
+Line x1 4.500000 y1 68.666420 x2 5.500000 y2 65.344269 colour 0
+Line x1 4.700000 y1 61.013474 x2 5.300000 y2 61.481312 colour 0
 Line x1 4.500000 y1 59.879997 x2 5.500000 y2 59.879997 colour 0
 Text3 x1 6.000000 y1 56.099998 colour 0 size 9.600000 c
 Line x1 5.500000 y1 65.344269 x2 6.500000 y2 65.344269 colour 0
-Line x1 5.700000 y1 61.481304 x2 6.300000 y2 61.902313 colour 0
+Line x1 5.700000 y1 61.481312 x2 6.300000 y2 61.902317 colour 0
 Line x1 5.500000 y1 59.879997 x2 6.500000 y2 59.879997 colour 0
 Text3 x1 7.000000 y1 56.099998 colour 0 size 9.600000 a
 Line x1 6.500000 y1 65.344269 x2 7.500000 y2 68.666420 colour 0
-Line x1 6.700000 y1 61.902313 x2 7.300000 y2 62.285793 colour 0
+Line x1 6.700000 y1 61.902317 x2 7.300000 y2 62.285797 colour 0
 Line x1 6.500000 y1 59.879997 x2 7.500000 y2 59.879997 colour 0
 Text3 x1 8.000000 y1 56.099998 colour 0 size 9.600000 g
-Line x1 7.500000 y1 68.666420 x2 8.500000 y2 69.829384 colour 0
-Line x1 7.700000 y1 62.285793 x2 8.300000 y2 62.709625 colour 0
+Line x1 7.500000 y1 68.666420 x2 8.500000 y2 69.829376 colour 0
+Line x1 7.700000 y1 62.285797 x2 8.300000 y2 62.709629 colour 0
 Line x1 7.500000 y1 59.879997 x2 8.500000 y2 59.879997 colour 0
 Text3 x1 9.000000 y1 56.099998 colour 0 size 9.600000 g
-Line x1 8.500000 y1 69.829384 x2 9.500000 y2 67.239166 colour 0
-Line x1 8.700000 y1 62.709625 x2 9.300000 y2 63.136959 colour 0
+Line x1 8.500000 y1 69.829376 x2 9.500000 y2 67.239166 colour 0
+Line x1 8.700000 y1 62.709629 x2 9.300000 y2 63.136963 colour 0
 Line x1 8.500000 y1 59.879997 x2 9.500000 y2 59.879997 colour 0
 Text3 x1 10.000000 y1 56.099998 colour 0 size 9.600000 c
 Line x1 9.500000 y1 67.239166 x2 10.500000 y2 65.068817 colour 0
-Line x1 9.700000 y1 63.136959 x2 10.300000 y2 63.549583 colour 0
+Line x1 9.700000 y1 63.136963 x2 10.300000 y2 63.549591 colour 0
 Line x1 9.500000 y1 59.879997 x2 10.500000 y2 59.879997 colour 0
 Text3 x1 11.000000 y1 56.099998 colour 0 size 9.600000 g
 Line x1 10.500000 y1 65.068817 x2 11.500000 y2 63.870525 colour 0
-Line x1 10.700000 y1 63.549583 x2 11.300000 y2 63.774982 colour 0
+Line x1 10.700000 y1 63.549591 x2 11.300000 y2 63.774986 colour 0
 Line x1 10.500000 y1 59.879997 x2 11.500000 y2 59.879997 colour 0
 Text3 x1 12.000000 y1 56.099998 colour 0 size 9.600000 t
 Line x1 11.500000 y1 63.870525 x2 12.500000 y2 65.221176 colour 0
-Line x1 11.700000 y1 63.774982 x2 12.300000 y2 63.695026 colour 0
+Line x1 11.700000 y1 63.774986 x2 12.300000 y2 63.695034 colour 0
 Line x1 11.500000 y1 59.879997 x2 12.500000 y2 59.879997 colour 0
 Text3 x1 13.000000 y1 56.099998 colour 0 size 9.600000 t
 Line x1 12.500000 y1 65.221176 x2 13.500000 y2 67.584358 colour 0
-Line x1 12.700000 y1 63.695026 x2 13.300000 y2 63.577515 colour 0
+Line x1 12.700000 y1 63.695034 x2 13.300000 y2 63.577522 colour 0
 Line x1 12.500000 y1 59.879997 x2 13.500000 y2 59.879997 colour 0
 Text3 x1 14.000000 y1 56.099998 colour 0 size 9.600000 g
 Line x1 13.500000 y1 67.584358 x2 14.500000 y2 67.101669 colour 0
-Line x1 13.700000 y1 63.577515 x2 14.300000 y2 63.684265 colour 0
+Line x1 13.700000 y1 63.577522 x2 14.300000 y2 63.684277 colour 0
 Line x1 13.500000 y1 59.879997 x2 14.500000 y2 59.879997 colour 0
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-Line x1 39.500000 y1 25.650585 x2 40.500000 y2 25.862221 colour 0
-Line x1 39.700001 y1 26.883871 x2 40.299999 y2 26.705711 colour 0
+Line x1 39.500000 y1 25.650585 x2 40.500000 y2 25.862219 colour 0
+Line x1 39.700001 y1 26.883873 x2 40.299999 y2 26.705715 colour 0
 Line x1 39.500000 y1 22.079996 x2 40.500000 y2 22.079996 colour 0
 Text3 x1 41.000000 y1 18.299995 colour 0 size 9.600000 a
-Line x1 40.500000 y1 25.862221 x2 41.500000 y2 27.268818 colour 0
-Line x1 40.700001 y1 26.705711 x2 41.299999 y2 26.361605 colour 0
+Line x1 40.500000 y1 25.862219 x2 41.500000 y2 27.268816 colour 0
+Line x1 40.700001 y1 26.705715 x2 41.299999 y2 26.361605 colour 0
 Line x1 40.500000 y1 22.079996 x2 41.500000 y2 22.079996 colour 0
 Text3 x1 42.000000 y1 18.299995 colour 0 size 9.600000 a
-Line x1 41.500000 y1 27.268818 x2 42.500000 y2 29.439165 colour 0
-Line x1 41.700001 y1 26.361605 x2 42.299999 y2 25.989439 colour 0
+Line x1 41.500000 y1 27.268816 x2 42.500000 y2 29.439163 colour 0
+Line x1 41.700001 y1 26.361605 x2 42.299999 y2 25.989441 colour 0
 Line x1 41.500000 y1 22.079996 x2 42.500000 y2 22.079996 colour 0
 Text3 x1 43.000000 y1 18.299995 colour 0 size 9.600000 c
-Line x1 42.500000 y1 29.439165 x2 43.500000 y2 29.784359 colour 0
-Line x1 42.700001 y1 25.989439 x2 43.299999 y2 25.613720 colour 0
+Line x1 42.500000 y1 29.439163 x2 43.500000 y2 29.784357 colour 0
+Line x1 42.700001 y1 25.989441 x2 43.299999 y2 25.613720 colour 0
 Line x1 42.500000 y1 22.079996 x2 43.500000 y2 22.079996 colour 0
 Text3 x1 44.000000 y1 18.299995 colour 0 size 9.600000 g
-Line x1 43.500000 y1 29.784359 x2 44.500000 y2 27.899025 colour 0
+Line x1 43.500000 y1 29.784357 x2 44.500000 y2 27.899023 colour 0
 Line x1 43.700001 y1 25.613720 x2 44.299999 y2 25.178097 colour 0
 Line x1 43.500000 y1 22.079996 x2 44.500000 y2 22.079996 colour 0
 Text3 x1 45.000000 y1 18.299995 colour 0 size 9.600000 c
-Line x1 44.500000 y1 27.899025 x2 45.500000 y2 27.544268 colour 0
-Line x1 44.700001 y1 25.178097 x2 45.299999 y2 24.749298 colour 0
+Line x1 44.500000 y1 27.899023 x2 45.500000 y2 27.544266 colour 0
+Line x1 44.700001 y1 25.178097 x2 45.299999 y2 24.749300 colour 0
 Line x1 44.500000 y1 22.079996 x2 45.500000 y2 22.079996 colour 0
 Text3 x1 46.000000 y1 18.299995 colour 0 size 9.600000 a
-Line x1 45.500000 y1 27.544268 x2 46.500000 y2 28.239996 colour 0
-Line x1 45.700001 y1 24.749298 x2 46.299999 y2 24.392622 colour 0
+Line x1 45.500000 y1 27.544266 x2 46.500000 y2 28.239996 colour 0
+Line x1 45.700001 y1 24.749300 x2 46.299999 y2 24.392624 colour 0
 Line x1 45.500000 y1 22.079996 x2 46.500000 y2 22.079996 colour 0
 Text3 x1 47.000000 y1 18.299995 colour 0 size 9.600000 g
 Line x1 46.500000 y1 28.239996 x2 47.500000 y2 28.239998 colour 0
-Line x1 46.700001 y1 24.392622 x2 47.299999 y2 24.093618 colour 0
+Line x1 46.700001 y1 24.392624 x2 47.299999 y2 24.093620 colour 0
 Line x1 46.500000 y1 22.079996 x2 47.500000 y2 22.079996 colour 0
 Text3 x1 48.000000 y1 18.299995 colour 0 size 9.600000 g
-Line x1 47.500000 y1 28.239998 x2 48.500000 y2 27.337502 colour 0
-Line x1 47.700001 y1 24.093618 x2 48.299999 y2 23.838957 colour 0
+Line x1 47.500000 y1 28.239998 x2 48.500000 y2 27.337500 colour 0
+Line x1 47.700001 y1 24.093620 x2 48.299999 y2 23.838955 colour 0
 Line x1 47.500000 y1 22.079996 x2 48.500000 y2 22.079996 colour 0
 Text3 x1 49.000000 y1 18.299995 colour 0 size 9.600000 t
-Line x1 48.500000 y1 27.337502 x2 49.500000 y2 27.693478 colour 0
-Line x1 48.700001 y1 23.838957 x2 49.299999 y2 23.746647 colour 0
+Line x1 48.500000 y1 27.337500 x2 49.500000 y2 27.693478 colour 0
+Line x1 48.700001 y1 23.838955 x2 49.299999 y2 23.746645 colour 0
 Line x1 48.500000 y1 22.079996 x2 49.500000 y2 22.079996 colour 0
 Text3 x1 50.000000 y1 18.299995 colour 0 size 9.600000 c
 Line x1 49.500000 y1 27.693478 x2 50.500000 y2 28.174627 colour 0
-Line x1 49.700001 y1 23.746647 x2 50.299999 y2 23.926149 colour 0
+Line x1 49.700001 y1 23.746645 x2 50.299999 y2 23.926151 colour 0
 Line x1 49.500000 y1 22.079996 x2 50.500000 y2 22.079996 colour 0
 Text3 x1 51.000000 y1 18.299995 colour 0 size 9.600000 c
 Line x1 50.500000 y1 28.174627 x2 51.500000 y2 29.456642 colour 0
-Line x1 50.700001 y1 23.926149 x2 51.299999 y2 24.253155 colour 0
+Line x1 50.700001 y1 23.926151 x2 51.299999 y2 24.253151 colour 0
 Line x1 50.500000 y1 22.079996 x2 51.500000 y2 22.079996 colour 0
 Text3 x1 52.000000 y1 18.299995 colour 0 size 9.600000 c
 Line x1 51.500000 y1 29.456642 x2 52.500000 y2 29.797428 colour 0
-Line x1 51.700001 y1 24.253155 x2 52.299999 y2 24.528038 colour 0
+Line x1 51.700001 y1 24.253151 x2 52.299999 y2 24.528040 colour 0
 Line x1 51.500000 y1 22.079996 x2 52.500000 y2 22.079996 colour 0
 </pre>
 </td></tr></table><p>
@@ -1103,15 +1417,15 @@ Line x1 51.500000 y1 22.079996 x2 52.500000 y2 22.079996 colour 0
 ##Graphic
 ##Screen x1 -1.000000 y1 0.000000 x2 60.000000 y2 80.000000
 Text3 x1 3.000000 y1 56.099998 colour 0 size 9.600000 g
-Line x1 2.500000 y1 67.597427 x2 3.500000 y2 66.674156 colour 0
-Line x1 2.700000 y1 62.328037 x2 3.300000 y2 62.416805 colour 0
+Line x1 2.500000 y1 67.597427 x2 3.500000 y2 66.674149 colour 0
+Line x1 2.700000 y1 62.328041 x2 3.300000 y2 62.416805 colour 0
 Line x1 2.500000 y1 59.879997 x2 3.500000 y2 59.879997 colour 0
 Text3 x1 4.000000 y1 56.099998 colour 0 size 9.600000 a
-Line x1 3.500000 y1 66.674156 x2 4.500000 y2 66.743401 colour 0
+Line x1 3.500000 y1 66.674149 x2 4.500000 y2 66.743393 colour 0
 Line x1 3.700000 y1 62.416805 x2 4.300000 y2 62.254288 colour 0
 Line x1 3.500000 y1 59.879997 x2 4.500000 y2 59.879997 colour 0
 Text3 x1 5.000000 y1 56.099998 colour 0 size 9.600000 t
-Line x1 4.500000 y1 66.743401 x2 5.500000 y2 65.970032 colour 0
+Line x1 4.500000 y1 66.743393 x2 5.500000 y2 65.970032 colour 0
 Line x1 4.700000 y1 62.254288 x2 5.300000 y2 61.970638 colour 0
 Line x1 4.500000 y1 59.879997 x2 5.500000 y2 59.879997 colour 0
 Text3 x1 6.000000 y1 56.099998 colour 0 size 9.600000 g
@@ -1119,20 +1433,20 @@ Line x1 5.500000 y1 65.970032 x2 6.500000 y2 65.899994 colour 0
 Line x1 5.700000 y1 61.970638 x2 6.300000 y2 61.661148 colour 0
 Line x1 5.500000 y1 59.879997 x2 6.500000 y2 59.879997 colour 0
 Text3 x1 7.000000 y1 56.099998 colour 0 size 9.600000 a
-Line x1 6.500000 y1 65.899994 x2 7.500000 y2 67.597435 colour 0
+Line x1 6.500000 y1 65.899994 x2 7.500000 y2 67.597427 colour 0
 Line x1 6.700000 y1 61.661148 x2 7.300000 y2 61.432491 colour 0
 Line x1 6.500000 y1 59.879997 x2 7.500000 y2 59.879997 colour 0
 Text3 x1 8.000000 y1 56.099998 colour 0 size 9.600000 t
-Line x1 7.500000 y1 67.597435 x2 8.500000 y2 68.840935 colour 0
-Line x1 7.700000 y1 61.432491 x2 8.300000 y2 61.330070 colour 0
+Line x1 7.500000 y1 67.597427 x2 8.500000 y2 68.840935 colour 0
+Line x1 7.700000 y1 61.432491 x2 8.300000 y2 61.330074 colour 0
 Line x1 7.500000 y1 59.879997 x2 8.500000 y2 59.879997 colour 0
 Text3 x1 9.000000 y1 56.099998 colour 0 size 9.600000 c
-Line x1 8.500000 y1 68.840935 x2 9.500000 y2 69.829384 colour 0
-Line x1 8.700000 y1 61.330070 x2 9.300000 y2 61.328545 colour 0
+Line x1 8.500000 y1 68.840935 x2 9.500000 y2 69.829376 colour 0
+Line x1 8.700000 y1 61.330074 x2 9.300000 y2 61.328548 colour 0
 Line x1 8.500000 y1 59.879997 x2 9.500000 y2 59.879997 colour 0
 Text3 x1 10.000000 y1 56.099998 colour 0 size 9.600000 g
-Line x1 9.500000 y1 69.829384 x2 10.500000 y2 68.261620 colour 0
-Line x1 9.700000 y1 61.328545 x2 10.300000 y2 61.365147 colour 0
+Line x1 9.500000 y1 69.829376 x2 10.500000 y2 68.261620 colour 0
+Line x1 9.700000 y1 61.328548 x2 10.300000 y2 61.365147 colour 0
 Line x1 9.500000 y1 59.879997 x2 10.500000 y2 59.879997 colour 0
 Text3 x1 11.000000 y1 56.099998 colour 0 size 9.600000 c
 Line x1 10.500000 y1 68.261620 x2 11.500000 y2 65.199997 colour 0
@@ -1140,70 +1454,70 @@ Line x1 10.700000 y1 61.365147 x2 11.300000 y2 61.341957 colour 0
 Line x1 10.500000 y1 59.879997 x2 11.500000 y2 59.879997 colour 0
 Text3 x1 12.000000 y1 56.099998 colour 0 size 9.600000 c
 Line x1 11.500000 y1 65.199997 x2 12.500000 y2 68.261627 colour 0
-Line x1 11.700000 y1 61.341957 x2 12.300000 y2 61.208694 colour 0
+Line x1 11.700000 y1 61.341957 x2 12.300000 y2 61.208698 colour 0
 Line x1 11.500000 y1 59.879997 x2 12.500000 y2 59.879997 colour 0
 Text3 x1 13.000000 y1 56.099998 colour 0 size 9.600000 g
-Line x1 12.500000 y1 68.261627 x2 13.500000 y2 69.829384 colour 0
-Line x1 12.700000 y1 61.208694 x2 13.300000 y2 61.004723 colour 0
+Line x1 12.500000 y1 68.261627 x2 13.500000 y2 69.829376 colour 0
+Line x1 12.700000 y1 61.208698 x2 13.300000 y2 61.004723 colour 0
 Line x1 12.500000 y1 59.879997 x2 13.500000 y2 59.879997 colour 0
 Text3 x1 14.000000 y1 56.099998 colour 0 size 9.600000 g
-Line x1 13.500000 y1 69.829384 x2 14.500000 y2 68.419998 colour 0
-Line x1 13.700000 y1 61.004723 x2 14.300000 y2 60.776642 colour 0
+Line x1 13.500000 y1 69.829376 x2 14.500000 y2 68.419998 colour 0
+Line x1 13.700000 y1 61.004723 x2 14.300000 y2 60.776646 colour 0
 Line x1 13.500000 y1 59.879997 x2 14.500000 y2 59.879997 colour 0
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
 Line x1 39.500000 y1 27.337502 x2 40.500000 y2 25.932964 colour 0
-Line x1 39.700001 y1 26.760599 x2 40.299999 y2 26.561565 colour 0
+Line x1 39.700001 y1 26.760599 x2 40.299999 y2 26.561569 colour 0
 Line x1 39.500000 y1 22.079996 x2 40.500000 y2 22.079996 colour 0
 Text3 x1 41.000000 y1 18.299995 colour 0 size 9.600000 g
 Line x1 40.500000 y1 25.932964 x2 41.500000 y2 23.838167 colour 0
-Line x1 40.700001 y1 26.561565 x2 41.299999 y2 26.351305 colour 0
+Line x1 40.700001 y1 26.561569 x2 41.299999 y2 26.351309 colour 0
 Line x1 40.500000 y1 22.079996 x2 41.500000 y2 22.079996 colour 0
 Text3 x1 42.000000 y1 18.299995 colour 0 size 9.600000 a
 Line x1 41.500000 y1 23.838167 x2 42.500000 y2 22.519539 colour 0
-Line x1 41.700001 y1 26.351305 x2 42.299999 y2 26.186651 colour 0
+Line x1 41.700001 y1 26.351309 x2 42.299999 y2 26.186653 colour 0
 Line x1 41.500000 y1 22.079996 x2 42.500000 y2 22.079996 colour 0
 Text3 x1 43.000000 y1 18.299995 colour 0 size 9.600000 a
 Line x1 42.500000 y1 22.519539 x2 43.500000 y2 26.406086 colour 0
-Line x1 42.700001 y1 26.186651 x2 43.299999 y2 26.055754 colour 0
+Line x1 42.700001 y1 26.186653 x2 43.299999 y2 26.055756 colour 0
 Line x1 42.500000 y1 22.079996 x2 43.500000 y2 22.079996 colour 0
 Text3 x1 44.000000 y1 18.299995 colour 0 size 9.600000 a
-Line x1 43.500000 y1 26.406086 x2 44.500000 y2 28.943396 colour 0
-Line x1 43.700001 y1 26.055754 x2 44.299999 y2 25.993534 colour 0
+Line x1 43.500000 y1 26.406086 x2 44.500000 y2 28.943394 colour 0
+Line x1 43.700001 y1 26.055756 x2 44.299999 y2 25.993536 colour 0
 Line x1 43.500000 y1 22.079996 x2 44.500000 y2 22.079996 colour 0
 Text3 x1 45.000000 y1 18.299995 colour 0 size 9.600000 t
-Line x1 44.500000 y1 28.943396 x2 45.500000 y2 28.239996 colour 0
-Line x1 44.700001 y1 25.993534 x2 45.299999 y2 25.990919 colour 0
+Line x1 44.500000 y1 28.943394 x2 45.500000 y2 28.239994 colour 0
+Line x1 44.700001 y1 25.993536 x2 45.299999 y2 25.990919 colour 0
 Line x1 44.500000 y1 22.079996 x2 45.500000 y2 22.079996 colour 0
 Text3 x1 46.000000 y1 18.299995 colour 0 size 9.600000 g
-Line x1 45.500000 y1 28.239996 x2 46.500000 y2 28.872778 colour 0
+Line x1 45.500000 y1 28.239994 x2 46.500000 y2 28.872778 colour 0
 Line x1 45.700001 y1 25.990919 x2 46.299999 y2 26.011547 colour 0
 Line x1 45.500000 y1 22.079996 x2 46.500000 y2 22.079996 colour 0
 Text3 x1 47.000000 y1 18.299995 colour 0 size 9.600000 g
 Line x1 46.500000 y1 28.872778 x2 47.500000 y2 28.872778 colour 0
-Line x1 46.700001 y1 26.011547 x2 47.299999 y2 25.996107 colour 0
+Line x1 46.700001 y1 26.011547 x2 47.299999 y2 25.996109 colour 0
 Line x1 46.500000 y1 22.079996 x2 47.500000 y2 22.079996 colour 0
 Text3 x1 48.000000 y1 18.299995 colour 0 size 9.600000 t
-Line x1 47.500000 y1 28.872778 x2 48.500000 y2 28.590893 colour 0
-Line x1 47.700001 y1 25.996107 x2 48.299999 y2 25.948639 colour 0
+Line x1 47.500000 y1 28.872778 x2 48.500000 y2 28.590891 colour 0
+Line x1 47.700001 y1 25.996109 x2 48.299999 y2 25.948637 colour 0
 Line x1 47.500000 y1 22.079996 x2 48.500000 y2 22.079996 colour 0
 Text3 x1 49.000000 y1 18.299995 colour 0 size 9.600000 g
-Line x1 48.500000 y1 28.590893 x2 49.500000 y2 31.206213 colour 0
-Line x1 48.700001 y1 25.948639 x2 49.299999 y2 25.882645 colour 0
+Line x1 48.500000 y1 28.590891 x2 49.500000 y2 31.206211 colour 0
+Line x1 48.700001 y1 25.948637 x2 49.299999 y2 25.882650 colour 0
 Line x1 48.500000 y1 22.079996 x2 49.500000 y2 22.079996 colour 0
 Text3 x1 50.000000 y1 18.299995 colour 0 size 9.600000 g
-Line x1 49.500000 y1 31.206213 x2 50.500000 y2 33.419998 colour 0
-Line x1 49.700001 y1 25.882645 x2 50.299999 y2 25.782410 colour 0
+Line x1 49.500000 y1 31.206211 x2 50.500000 y2 33.419994 colour 0
+Line x1 49.700001 y1 25.882650 x2 50.299999 y2 25.782412 colour 0
 Line x1 49.500000 y1 22.079996 x2 50.500000 y2 22.079996 colour 0
 Text3 x1 51.000000 y1 18.299995 colour 0 size 9.600000 g
-Line x1 50.500000 y1 33.419998 x2 51.500000 y2 30.866423 colour 0
-Line x1 50.700001 y1 25.782410 x2 51.299999 y2 25.683741 colour 0
+Line x1 50.500000 y1 33.419994 x2 51.500000 y2 30.866421 colour 0
+Line x1 50.700001 y1 25.782412 x2 51.299999 y2 25.683743 colour 0
 Line x1 50.500000 y1 22.079996 x2 51.500000 y2 22.079996 colour 0
 Text3 x1 52.000000 y1 18.299995 colour 0 size 9.600000 c
-Line x1 51.500000 y1 30.866423 x2 52.500000 y2 27.544268 colour 0
-Line x1 51.700001 y1 25.683741 x2 52.299999 y2 25.548004 colour 0
+Line x1 51.500000 y1 30.866421 x2 52.500000 y2 27.544268 colour 0
+Line x1 51.700001 y1 25.683743 x2 52.299999 y2 25.548004 colour 0
 Line x1 51.500000 y1 22.079996 x2 52.500000 y2 22.079996 colour 0
 </pre>
 </td></tr></table><p>
@@ -1230,19 +1544,19 @@ Line x1 5.700000 y1 62.678192 x2 6.300000 y2 62.539165 colour 0
 Line x1 5.500000 y1 59.879997 x2 6.500000 y2 59.879997 colour 0
 Text3 x1 7.000000 y1 56.099998 colour 0 size 9.600000 t
 Line x1 6.500000 y1 67.665863 x2 7.500000 y2 67.665863 colour 0
-Line x1 6.700000 y1 62.539165 x2 7.300000 y2 62.422813 colour 0
+Line x1 6.700000 y1 62.539165 x2 7.300000 y2 62.422817 colour 0
 Line x1 6.500000 y1 59.879997 x2 7.500000 y2 59.879997 colour 0
 Text3 x1 8.000000 y1 56.099998 colour 0 size 9.600000 c
-Line x1 7.500000 y1 67.665863 x2 8.500000 y2 66.672783 colour 0
-Line x1 7.700000 y1 62.422813 x2 8.300000 y2 62.339989 colour 0
+Line x1 7.500000 y1 67.665863 x2 8.500000 y2 66.672775 colour 0
+Line x1 7.700000 y1 62.422817 x2 8.300000 y2 62.339989 colour 0
 Line x1 7.500000 y1 59.879997 x2 8.500000 y2 59.879997 colour 0
 Text3 x1 9.000000 y1 56.099998 colour 0 size 9.600000 g
-Line x1 8.500000 y1 66.672783 x2 9.500000 y2 66.672775 colour 0
-Line x1 8.700000 y1 62.339989 x2 9.300000 y2 62.321423 colour 0
+Line x1 8.500000 y1 66.672775 x2 9.500000 y2 66.672775 colour 0
+Line x1 8.700000 y1 62.339989 x2 9.300000 y2 62.321426 colour 0
 Line x1 8.500000 y1 59.879997 x2 9.500000 y2 59.879997 colour 0
 Text3 x1 10.000000 y1 56.099998 colour 0 size 9.600000 t
 Line x1 9.500000 y1 66.672775 x2 10.500000 y2 66.390892 colour 0
-Line x1 9.700000 y1 62.321423 x2 10.300000 y2 62.246059 colour 0
+Line x1 9.700000 y1 62.321426 x2 10.300000 y2 62.246059 colour 0
 Line x1 9.500000 y1 59.879997 x2 10.500000 y2 59.879997 colour 0
 Text3 x1 11.000000 y1 56.099998 colour 0 size 9.600000 g
 Line x1 10.500000 y1 66.390892 x2 11.500000 y2 69.006210 colour 0
@@ -1257,63 +1571,63 @@ Line x1 12.500000 y1 69.006210 x2 13.500000 y2 67.090805 colour 0
 Line x1 12.700000 y1 61.625458 x2 13.300000 y2 61.247803 colour 0
 Line x1 12.500000 y1 59.879997 x2 13.500000 y2 59.879997 colour 0
 Text3 x1 14.000000 y1 56.099998 colour 0 size 9.600000 c
-Line x1 13.500000 y1 67.090805 x2 14.500000 y2 66.674156 colour 0
+Line x1 13.500000 y1 67.090805 x2 14.500000 y2 66.674149 colour 0
 Line x1 13.700000 y1 61.247803 x2 14.300000 y2 60.848763 colour 0
 Line x1 13.500000 y1 59.879997 x2 14.500000 y2 59.879997 colour 0
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-Line x1 39.500000 y1 28.239998 x2 40.500000 y2 27.544270 colour 0
-Line x1 39.700001 y1 23.841955 x2 40.299999 y2 24.126343 colour 0
+Line x1 39.500000 y1 28.239996 x2 40.500000 y2 27.544268 colour 0
+Line x1 39.700001 y1 23.841951 x2 40.299999 y2 24.126341 colour 0
 Line x1 39.500000 y1 22.079996 x2 40.500000 y2 22.079996 colour 0
 Text3 x1 41.000000 y1 18.299995 colour 0 size 9.600000 c
-Line x1 40.500000 y1 27.544270 x2 41.500000 y2 26.352673 colour 0
-Line x1 40.700001 y1 24.126343 x2 41.299999 y2 24.351053 colour 0
+Line x1 40.500000 y1 27.544268 x2 41.500000 y2 26.352673 colour 0
+Line x1 40.700001 y1 24.126341 x2 41.299999 y2 24.351051 colour 0
 Line x1 40.500000 y1 22.079996 x2 41.500000 y2 22.079996 colour 0
 Text3 x1 42.000000 y1 18.299995 colour 0 size 9.600000 a
-Line x1 41.500000 y1 26.352673 x2 42.500000 y2 26.992170 colour 0
-Line x1 41.700001 y1 24.351053 x2 42.299999 y2 24.436802 colour 0
+Line x1 41.500000 y1 26.352673 x2 42.500000 y2 26.992168 colour 0
+Line x1 41.700001 y1 24.351051 x2 42.299999 y2 24.436800 colour 0
 Line x1 41.500000 y1 22.079996 x2 42.500000 y2 22.079996 colour 0
 Text3 x1 43.000000 y1 18.299995 colour 0 size 9.600000 g
-Line x1 42.500000 y1 26.992170 x2 43.500000 y2 28.099997 colour 0
-Line x1 42.700001 y1 24.436802 x2 43.299999 y2 24.436804 colour 0
+Line x1 42.500000 y1 26.992168 x2 43.500000 y2 28.099997 colour 0
+Line x1 42.700001 y1 24.436800 x2 43.299999 y2 24.436804 colour 0
 Line x1 42.500000 y1 22.079996 x2 43.500000 y2 22.079996 colour 0
 Text3 x1 44.000000 y1 18.299995 colour 0 size 9.600000 a
-Line x1 43.500000 y1 28.099997 x2 44.500000 y2 27.266478 colour 0
+Line x1 43.500000 y1 28.099997 x2 44.500000 y2 27.266476 colour 0
 Line x1 43.700001 y1 24.436804 x2 44.299999 y2 24.455681 colour 0
 Line x1 43.500000 y1 22.079996 x2 44.500000 y2 22.079996 colour 0
 Text3 x1 45.000000 y1 18.299995 colour 0 size 9.600000 t
-Line x1 44.500000 y1 27.266478 x2 45.500000 y2 27.337502 colour 0
-Line x1 44.700001 y1 24.455681 x2 45.299999 y2 24.478355 colour 0
+Line x1 44.500000 y1 27.266476 x2 45.500000 y2 27.337500 colour 0
+Line x1 44.700001 y1 24.455681 x2 45.299999 y2 24.478352 colour 0
 Line x1 44.500000 y1 22.079996 x2 45.500000 y2 22.079996 colour 0
 Text3 x1 46.000000 y1 18.299995 colour 0 size 9.600000 c
-Line x1 45.500000 y1 27.337502 x2 46.500000 y2 27.544266 colour 0
-Line x1 45.700001 y1 24.478355 x2 46.299999 y2 24.473019 colour 0
+Line x1 45.500000 y1 27.337500 x2 46.500000 y2 27.544266 colour 0
+Line x1 45.700001 y1 24.478352 x2 46.299999 y2 24.473017 colour 0
 Line x1 45.500000 y1 22.079996 x2 46.500000 y2 22.079996 colour 0
 Text3 x1 47.000000 y1 18.299995 colour 0 size 9.600000 c
-Line x1 46.500000 y1 27.544266 x2 47.500000 y2 27.544268 colour 0
-Line x1 46.700001 y1 24.473019 x2 47.299999 y2 24.396660 colour 0
+Line x1 46.500000 y1 27.544266 x2 47.500000 y2 27.544266 colour 0
+Line x1 46.700001 y1 24.473017 x2 47.299999 y2 24.396658 colour 0
 Line x1 46.500000 y1 22.079996 x2 47.500000 y2 22.079996 colour 0
 Text3 x1 48.000000 y1 18.299995 colour 0 size 9.600000 t
-Line x1 47.500000 y1 27.544268 x2 48.500000 y2 27.337502 colour 0
-Line x1 47.700001 y1 24.396660 x2 48.299999 y2 24.241009 colour 0
+Line x1 47.500000 y1 27.544266 x2 48.500000 y2 27.337502 colour 0
+Line x1 47.700001 y1 24.396658 x2 48.299999 y2 24.241009 colour 0
 Line x1 47.500000 y1 22.079996 x2 48.500000 y2 22.079996 colour 0
 Text3 x1 49.000000 y1 18.299995 colour 0 size 9.600000 g
 Line x1 48.500000 y1 27.337502 x2 49.500000 y2 27.337500 colour 0
 Line x1 48.700001 y1 24.241009 x2 49.299999 y2 24.069206 colour 0
 Line x1 48.500000 y1 22.079996 x2 49.500000 y2 22.079996 colour 0
 Text3 x1 50.000000 y1 18.299995 colour 0 size 9.600000 g
-Line x1 49.500000 y1 27.337500 x2 50.500000 y2 28.239998 colour 0
+Line x1 49.500000 y1 27.337500 x2 50.500000 y2 28.239994 colour 0
 Line x1 49.700001 y1 24.069206 x2 50.299999 y2 23.893618 colour 0
 Line x1 49.500000 y1 22.079996 x2 50.500000 y2 22.079996 colour 0
 Text3 x1 51.000000 y1 18.299995 colour 0 size 9.600000 a
-Line x1 50.500000 y1 28.239998 x2 51.500000 y2 28.590893 colour 0
-Line x1 50.700001 y1 23.893618 x2 51.299999 y2 23.721313 colour 0
+Line x1 50.500000 y1 28.239994 x2 51.500000 y2 28.590889 colour 0
+Line x1 50.700001 y1 23.893618 x2 51.299999 y2 23.721315 colour 0
 Line x1 50.500000 y1 22.079996 x2 51.500000 y2 22.079996 colour 0
 Text3 x1 52.000000 y1 18.299995 colour 0 size 9.600000 c
-Line x1 51.500000 y1 28.590893 x2 52.500000 y2 28.590891 colour 0
-Line x1 51.700001 y1 23.721313 x2 52.299999 y2 23.592621 colour 0
+Line x1 51.500000 y1 28.590889 x2 52.500000 y2 28.590889 colour 0
+Line x1 51.700001 y1 23.721315 x2 52.299999 y2 23.592623 colour 0
 Line x1 51.500000 y1 22.079996 x2 52.500000 y2 22.079996 colour 0
 </pre>
 </td></tr></table><p>
@@ -1323,12 +1637,12 @@ Line x1 51.500000 y1 22.079996 x2 52.500000 y2 22.079996 colour 0
 ##Graphic
 ##Screen x1 -1.000000 y1 0.000000 x2 60.000000 y2 80.000000
 Text3 x1 3.000000 y1 56.099998 colour 0 size 9.600000 c
-Line x1 2.500000 y1 66.390892 x2 3.500000 y2 66.743401 colour 0
-Line x1 2.700000 y1 61.392624 x2 3.300000 y2 61.275394 colour 0
+Line x1 2.500000 y1 66.390892 x2 3.500000 y2 66.743393 colour 0
+Line x1 2.700000 y1 61.392624 x2 3.300000 y2 61.275398 colour 0
 Line x1 2.500000 y1 59.879997 x2 3.500000 y2 59.879997 colour 0
 Text3 x1 4.000000 y1 56.099998 colour 0 size 9.600000 c
-Line x1 3.500000 y1 66.743401 x2 4.500000 y2 67.439995 colour 0
-Line x1 3.700000 y1 61.275394 x2 4.300000 y2 61.149536 colour 0
+Line x1 3.500000 y1 66.743393 x2 4.500000 y2 67.439995 colour 0
+Line x1 3.700000 y1 61.275398 x2 4.300000 y2 61.149536 colour 0
 Line x1 3.500000 y1 59.879997 x2 4.500000 y2 59.879997 colour 0
 Text3 x1 5.000000 y1 56.099998 colour 0 size 9.600000 a
 Line x1 4.500000 y1 67.439995 x2 5.500000 y2 66.743401 colour 0
@@ -1336,15 +1650,15 @@ Line x1 4.700000 y1 61.149536 x2 5.300000 y2 61.106289 colour 0
 Line x1 4.500000 y1 59.879997 x2 5.500000 y2 59.879997 colour 0
 Text3 x1 6.000000 y1 56.099998 colour 0 size 9.600000 t
 Line x1 5.500000 y1 66.743401 x2 6.500000 y2 66.390892 colour 0
-Line x1 5.700000 y1 61.106289 x2 6.300000 y2 61.153751 colour 0
+Line x1 5.700000 y1 61.106289 x2 6.300000 y2 61.153755 colour 0
 Line x1 5.500000 y1 59.879997 x2 6.500000 y2 59.879997 colour 0
 Text3 x1 7.000000 y1 56.099998 colour 0 size 9.600000 g
 Line x1 6.500000 y1 66.390892 x2 7.500000 y2 66.390892 colour 0
-Line x1 6.700000 y1 61.153751 x2 7.300000 y2 61.233421 colour 0
+Line x1 6.700000 y1 61.153755 x2 7.300000 y2 61.233425 colour 0
 Line x1 6.500000 y1 59.879997 x2 7.500000 y2 59.879997 colour 0
 Text3 x1 8.000000 y1 56.099998 colour 0 size 9.600000 g
 Line x1 7.500000 y1 66.390892 x2 8.500000 y2 66.672783 colour 0
-Line x1 7.700000 y1 61.233421 x2 8.300000 y2 61.397869 colour 0
+Line x1 7.700000 y1 61.233425 x2 8.300000 y2 61.397869 colour 0
 Line x1 7.500000 y1 59.879997 x2 8.500000 y2 59.879997 colour 0
 Text3 x1 9.000000 y1 56.099998 colour 0 size 9.600000 g
 Line x1 8.500000 y1 66.672783 x2 9.500000 y2 66.534241 colour 0
@@ -1356,62 +1670,62 @@ Line x1 9.700000 y1 61.571949 x2 10.300000 y2 61.715958 colour 0
 Line x1 9.500000 y1 59.879997 x2 10.500000 y2 59.879997 colour 0
 Text3 x1 11.000000 y1 56.099998 colour 0 size 9.600000 g
 Line x1 10.500000 y1 64.926659 x2 11.500000 y2 64.079994 colour 0
-Line x1 10.700000 y1 61.715958 x2 11.300000 y2 61.911018 colour 0
+Line x1 10.700000 y1 61.715958 x2 11.300000 y2 61.911022 colour 0
 Line x1 10.500000 y1 59.879997 x2 11.500000 y2 59.879997 colour 0
 Text3 x1 12.000000 y1 56.099998 colour 0 size 9.600000 t
 Line x1 11.500000 y1 64.079994 x2 12.500000 y2 64.926659 colour 0
-Line x1 11.700000 y1 61.911018 x2 12.300000 y2 62.111980 colour 0
+Line x1 11.700000 y1 61.911022 x2 12.300000 y2 62.111980 colour 0
 Line x1 11.500000 y1 59.879997 x2 12.500000 y2 59.879997 colour 0
 Text3 x1 13.000000 y1 56.099998 colour 0 size 9.600000 a
 Line x1 12.500000 y1 64.926659 x2 13.500000 y2 66.604996 colour 0
-Line x1 12.700000 y1 62.111980 x2 13.300000 y2 62.277493 colour 0
+Line x1 12.700000 y1 62.111980 x2 13.300000 y2 62.277496 colour 0
 Line x1 12.500000 y1 59.879997 x2 13.500000 y2 59.879997 colour 0
 Text3 x1 14.000000 y1 56.099998 colour 0 size 9.600000 c
-Line x1 13.500000 y1 66.604996 x2 14.500000 y2 66.674156 colour 0
-Line x1 13.700000 y1 62.277493 x2 14.300000 y2 62.375381 colour 0
+Line x1 13.500000 y1 66.604996 x2 14.500000 y2 66.674149 colour 0
+Line x1 13.700000 y1 62.277496 x2 14.300000 y2 62.375381 colour 0
 Line x1 13.500000 y1 59.879997 x2 14.500000 y2 59.879997 colour 0
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
 Text3 x1 39.000000 y1 18.299995 colour 0 size 9.600000 g
-Line x1 38.500000 y1 30.619995 x2 39.500000 y2 29.439165 colour 0
-Line x1 38.700001 y1 26.183287 x2 39.299999 y2 25.984793 colour 0
+Line x1 38.500000 y1 30.619995 x2 39.500000 y2 29.439163 colour 0
+Line x1 38.700001 y1 26.183289 x2 39.299999 y2 25.984795 colour 0
 Line x1 38.500000 y1 22.079996 x2 39.500000 y2 22.079996 colour 0
 Text3 x1 40.000000 y1 18.299995 colour 0 size 9.600000 c
-Line x1 39.500000 y1 29.439165 x2 40.500000 y2 27.337502 colour 0
-Line x1 39.700001 y1 25.984793 x2 40.299999 y2 25.732311 colour 0
+Line x1 39.500000 y1 29.439163 x2 40.500000 y2 27.337500 colour 0
+Line x1 39.700001 y1 25.984795 x2 40.299999 y2 25.732313 colour 0
 Line x1 39.500000 y1 22.079996 x2 40.500000 y2 22.079996 colour 0
 Text3 x1 41.000000 y1 18.299995 colour 0 size 9.600000 t
-Line x1 40.500000 y1 27.337502 x2 41.500000 y2 27.693478 colour 0
-Line x1 40.700001 y1 25.732311 x2 41.299999 y2 25.440313 colour 0
+Line x1 40.500000 y1 27.337500 x2 41.500000 y2 27.693478 colour 0
+Line x1 40.700001 y1 25.732313 x2 41.299999 y2 25.440315 colour 0
 Line x1 40.500000 y1 22.079996 x2 41.500000 y2 22.079996 colour 0
 Text3 x1 42.000000 y1 18.299995 colour 0 size 9.600000 c
 Line x1 41.500000 y1 27.693478 x2 42.500000 y2 28.174629 colour 0
-Line x1 41.700001 y1 25.440313 x2 42.299999 y2 25.244444 colour 0
+Line x1 41.700001 y1 25.440315 x2 42.299999 y2 25.244444 colour 0
 Line x1 41.500000 y1 22.079996 x2 42.500000 y2 22.079996 colour 0
 Text3 x1 43.000000 y1 18.299995 colour 0 size 9.600000 c
-Line x1 42.500000 y1 28.174629 x2 43.500000 y2 27.399996 colour 0
+Line x1 42.500000 y1 28.174629 x2 43.500000 y2 27.399994 colour 0
 Line x1 42.700001 y1 25.244444 x2 43.299999 y2 25.109406 colour 0
 Line x1 42.500000 y1 22.079996 x2 43.500000 y2 22.079996 colour 0
 Text3 x1 44.000000 y1 18.299995 colour 0 size 9.600000 c
-Line x1 43.500000 y1 27.399996 x2 44.500000 y2 30.461622 colour 0
+Line x1 43.500000 y1 27.399994 x2 44.500000 y2 30.461620 colour 0
 Line x1 43.700001 y1 25.109406 x2 44.299999 y2 24.874926 colour 0
 Line x1 43.500000 y1 22.079996 x2 44.500000 y2 22.079996 colour 0
 Text3 x1 45.000000 y1 18.299995 colour 0 size 9.600000 g
-Line x1 44.500000 y1 30.461622 x2 45.500000 y2 31.206211 colour 0
+Line x1 44.500000 y1 30.461620 x2 45.500000 y2 31.206211 colour 0
 Line x1 44.700001 y1 24.874926 x2 45.299999 y2 24.621588 colour 0
 Line x1 44.500000 y1 22.079996 x2 45.500000 y2 22.079996 colour 0
 Text3 x1 46.000000 y1 18.299995 colour 0 size 9.600000 g
-Line x1 45.500000 y1 31.206211 x2 46.500000 y2 29.220520 colour 0
-Line x1 45.700001 y1 24.621588 x2 46.299999 y2 24.433867 colour 0
+Line x1 45.500000 y1 31.206211 x2 46.500000 y2 29.220516 colour 0
+Line x1 45.700001 y1 24.621588 x2 46.299999 y2 24.433865 colour 0
 Line x1 45.500000 y1 22.079996 x2 46.500000 y2 22.079996 colour 0
 Text3 x1 47.000000 y1 18.299995 colour 0 size 9.600000 c
-Line x1 46.500000 y1 29.220520 x2 47.500000 y2 28.734240 colour 0
-Line x1 46.700001 y1 24.433867 x2 47.299999 y2 24.306047 colour 0
+Line x1 46.500000 y1 29.220516 x2 47.500000 y2 28.734238 colour 0
+Line x1 46.700001 y1 24.433865 x2 47.299999 y2 24.306046 colour 0
 Line x1 46.500000 y1 22.079996 x2 47.500000 y2 22.079996 colour 0
 Text3 x1 48.000000 y1 18.299995 colour 0 size 9.600000 a
-Line x1 47.500000 y1 28.734240 x2 48.500000 y2 27.402800 colour 0
+Line x1 47.500000 y1 28.734238 x2 48.500000 y2 27.402800 colour 0
 Line x1 47.500000 y1 22.079996 x2 48.500000 y2 22.079996 colour 0
 Text3 x1 49.000000 y1 18.299995 colour 0 size 9.600000 c
 Line x1 48.500000 y1 27.402800 x2 49.500000 y2 27.756945 colour 0
@@ -1423,7 +1737,7 @@ Text3 x1 51.000000 y1 18.299995 colour 0 size 9.600000 g
 Line x1 50.500000 y1 29.081196 x2 51.500000 y2 28.872778 colour 0
 Line x1 50.500000 y1 22.079996 x2 51.500000 y2 22.079996 colour 0
 Text3 x1 52.000000 y1 18.299995 colour 0 size 9.600000 t
-Line x1 51.500000 y1 28.872778 x2 52.500000 y2 30.866423 colour 0
+Line x1 51.500000 y1 28.872778 x2 52.500000 y2 30.866421 colour 0
 Line x1 51.500000 y1 22.079996 x2 52.500000 y2 22.079996 colour 0
 </pre>
 </td></tr></table><p>
@@ -1433,10 +1747,10 @@ Line x1 51.500000 y1 22.079996 x2 52.500000 y2 22.079996 colour 0
 ##Graphic
 ##Screen x1 -1.000000 y1 0.000000 x2 60.000000 y2 80.000000
 Text3 x1 3.000000 y1 56.099998 colour 0 size 9.600000 g
-Line x1 2.500000 y1 68.666420 x2 3.500000 y2 69.829384 colour 0
+Line x1 2.500000 y1 68.666420 x2 3.500000 y2 69.829376 colour 0
 Line x1 2.500000 y1 59.879997 x2 3.500000 y2 59.879997 colour 0
 Text3 x1 4.000000 y1 56.099998 colour 0 size 9.600000 g
-Line x1 3.500000 y1 69.829384 x2 4.500000 y2 67.101669 colour 0
+Line x1 3.500000 y1 69.829376 x2 4.500000 y2 67.101669 colour 0
 Line x1 3.500000 y1 59.879997 x2 4.500000 y2 59.879997 colour 0
 Text3 x1 5.000000 y1 56.099998 colour 0 size 9.600000 c
 Line x1 4.500000 y1 67.101669 x2 5.500000 y2 64.516327 colour 0
@@ -1448,19 +1762,19 @@ Text3 x1 7.000000 y1 56.099998 colour 0 size 9.600000 t
 Line x1 6.500000 y1 64.659561 x2 7.500000 y2 65.344269 colour 0
 Line x1 6.500000 y1 59.879997 x2 7.500000 y2 59.879997 colour 0
 Text3 x1 8.000000 y1 56.099998 colour 0 size 9.600000 c
-Line x1 7.500000 y1 65.344269 x2 8.500000 y2 66.555527 colour 0
+Line x1 7.500000 y1 65.344269 x2 8.500000 y2 66.555519 colour 0
 Line x1 7.500000 y1 59.879997 x2 8.500000 y2 59.879997 colour 0
 Text3 x1 9.000000 y1 56.099998 colour 0 size 9.600000 a
-Line x1 8.500000 y1 66.555527 x2 9.500000 y2 69.829384 colour 0
+Line x1 8.500000 y1 66.555519 x2 9.500000 y2 69.829376 colour 0
 Line x1 8.500000 y1 59.879997 x2 9.500000 y2 59.879997 colour 0
 Text3 x1 10.000000 y1 56.099998 colour 0 size 9.600000 g
-Line x1 9.500000 y1 69.829384 x2 10.500000 y2 68.666420 colour 0
+Line x1 9.500000 y1 69.829376 x2 10.500000 y2 68.666420 colour 0
 Line x1 9.500000 y1 59.879997 x2 10.500000 y2 59.879997 colour 0
 Text3 x1 11.000000 y1 56.099998 colour 0 size 9.600000 c
-Line x1 10.500000 y1 68.666420 x2 11.500000 y2 66.672783 colour 0
+Line x1 10.500000 y1 68.666420 x2 11.500000 y2 66.672775 colour 0
 Line x1 10.500000 y1 59.879997 x2 11.500000 y2 59.879997 colour 0
 Text3 x1 12.000000 y1 56.099998 colour 0 size 9.600000 c
-Line x1 11.500000 y1 66.672783 x2 12.500000 y2 66.881195 colour 0
+Line x1 11.500000 y1 66.672775 x2 12.500000 y2 66.881195 colour 0
 Line x1 11.500000 y1 59.879997 x2 12.500000 y2 59.879997 colour 0
 Text3 x1 13.000000 y1 56.099998 colour 0 size 9.600000 a
 Line x1 12.500000 y1 66.881195 x2 13.500000 y2 66.110931 colour 0
@@ -1475,10 +1789,10 @@ Text3 x1 16.000000 y1 56.099998 colour 0 size 9.600000 t
 Line x1 15.500000 y1 64.720856 x2 16.500000 y2 66.534241 colour 0
 Line x1 15.500000 y1 59.879997 x2 16.500000 y2 59.879997 colour 0
 Text3 x1 17.000000 y1 56.099998 colour 0 size 9.600000 g
-Line x1 16.500000 y1 66.534241 x2 17.500000 y2 66.672783 colour 0
+Line x1 16.500000 y1 66.534241 x2 17.500000 y2 66.672775 colour 0
 Line x1 16.500000 y1 59.879997 x2 17.500000 y2 59.879997 colour 0
 Text3 x1 18.000000 y1 56.099998 colour 0 size 9.600000 t
-Line x1 17.500000 y1 66.672783 x2 18.500000 y2 59.879997 colour 0
+Line x1 17.500000 y1 66.672775 x2 18.500000 y2 59.879997 colour 0
 Line x1 17.500000 y1 59.879997 x2 18.500000 y2 59.879997 colour 0
 Text3 x1 19.000000 y1 56.099998 colour 0 size 9.600000 g
 Line x1 18.500000 y1 59.879997 x2 19.500000 y2 59.879997 colour 0
@@ -1747,7 +2061,7 @@ None.
 
 <tr>
 <td><a href="wordcount.html">wordcount</a></td>
-<td>Count and extract unique words in DNA sequence(s)</td>
+<td>Count and extract unique words in molecular sequence(s)</td>
 </tr>
 
 </table>

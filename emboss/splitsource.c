@@ -274,7 +274,7 @@ static void splitsource_AddSubSeqFeat(AjPFeattable ftable,
         continue;
     }
 
-    copy = ajFeatCopy(gf);
+    copy = ajFeatNewFeat(gf);
     copy->Start = copy->Start - start;
     copy->End = copy->End - start;
 

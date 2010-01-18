@@ -1,5 +1,4 @@
-
-                                   union 
+                                    union
 
 
 
@@ -16,28 +15,37 @@ Function
 
 Description
 
-   union reads in several sequences, concatenates them and writes them
-   out as a single sequence. The input is typically a list file
-   containing references to multiple sequences or subsequences (regions
-   of a sequence). Optionally, feature information will be used.
+   union reads in several sequences, concatenates them and writes them out
+   as a single sequence. The input is typically a list file containing
+   references to multiple sequences or subsequences (regions of a
+   sequence). Optionally, feature information will be used.
+
+   The output can have source features generated which document composite
+   sequences in the EMBL/GenBank feature table. The -findoverlap optin
+   checks for overlaps between adjacent joined regions and reports them in
+   the overlap file.
 
 Usage
 
    Here is a sample session with union
 
-   The file 'cds.list' contains a list of the regions making up the
-   coding sequence of 'embl:x65923':
+   The file 'cds.list' contains a list of the regions making up the coding
+   sequence of 'embl:x65923':
 
 
-% union 
+% union
 Concatenate multiple sequences into a single sequence
 Input (gapped) sequence(s): @cds.list
-output sequence [x65921.fasta]: 
+output sequence [x65921.fasta]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Concatenate multiple sequences into a single sequence
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     (Gapped) sequence(s) filename and optional
@@ -95,13 +103,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -146,11 +156,11 @@ Notes
 
    union is most useful when the input sequences are specified in a "list
    file". A list file contain references to any number of sequences which
-   are retrieved from some other file or database. Each sequence
-   reference is a Uniform Sequence Address (USA) which can include the
-   specification of sub-regions of the sequence, eg. em:x65923[20:55]).
-   Specifying several such subregions in a sequence or sequences allows
-   you to enter disjoint sequences to be joined.
+   are retrieved from some other file or database. Each sequence reference
+   is a Uniform Sequence Address (USA) which can include the specification
+   of sub-regions of the sequence, eg. em:x65923[20:55]). Specifying
+   several such subregions in a sequence or sequences allows you to enter
+   disjoint sequences to be joined.
 
 References
 
@@ -226,7 +236,7 @@ See also
 
 Author(s)
 
-   Peter Rice (pmr © ebi.ac.uk)
+   Peter Rice (pmr (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

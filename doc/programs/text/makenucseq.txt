@@ -1,5 +1,4 @@
-
-                                makenucseq 
+                                 makenucseq
 
 
 
@@ -18,10 +17,10 @@ Description
 
    makenucseq writes an output file with a set of random nucleotide
    sequences. The sequence composition is defined from reading a codon
-   usage file: the sequences are created with triplet frequencies
-   matching those given in the file, with the end trimmed to be in the
-   correct reading frame. The number of sequences to create and length of
-   each sequence is specified. Optionally, a user-defined string may be
+   usage file: the sequences are created with triplet frequencies matching
+   those given in the file, with the end trimmed to be in the correct
+   reading frame. The number of sequences to create and length of each
+   sequence is specified. Optionally, a user-defined string may be
    inserted into each output sequence at a specified position
 
 Algorithm
@@ -31,12 +30,13 @@ Usage
    Here is a sample session with makenucseq
 
 
-% makenucseq 
+% makenucseq
 Create random nucleotide sequences
-Codon usage file (optional): 
-Number of sequences created [100]: 
-Length of each sequence [100]: 
-nucleotide output sequence(s) [makeseq.fasta]: 
+Codon usage file (optional):
+Number of sequences created [100]:
+Length of each sequence [100]:
+nucleotide output sequence(s) [makeseq.fasta]:
+
 
    Go to the output files for this example
 
@@ -46,16 +46,20 @@ nucleotide output sequence(s) [makeseq.fasta]:
    Pseudomonas aeruginosa file specifies a high GC content.
 
 
-% makenucseq 
+% makenucseq
 Create random nucleotide sequences
 Codon usage file (optional): Epseae.cut
-Number of sequences created [100]: 
-Length of each sequence [100]: 
-nucleotide output sequence(s) [makeseq.fasta]: 
+Number of sequences created [100]:
+Length of each sequence [100]:
+nucleotide output sequence(s) [makeseq.fasta]:
+
 
    Go to the output files for this example
 
 Command line arguments
+
+Create random nucleotide sequences
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
    -codonfile          codon      Optional codon usage file. Nucleotide
@@ -68,7 +72,7 @@ Command line arguments
    -length             integer    [100] Length of each sequence (Integer 1 or
                                   more)
 *  -insert             string     String that is inserted into sequence (Any
-                                  string is accepted)
+                                  string)
 *  -start              integer    [1] Start point of inserted sequence
                                   (Integer 1 or more)
   [-outseq]            seqoutall  [.] Nucleotide sequence
@@ -104,13 +108,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -419,8 +425,8 @@ See also
 
 Author(s)
 
-   This application was contributed by Henrikki Almusa, Medicel,
-   Helsinki, Finland
+   This application was contributed by Henrikki Almusa, Medicel, Helsinki,
+   Finland
 
 History
 

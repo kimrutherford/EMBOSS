@@ -1,3 +1,6 @@
+Displays sequences with features in pretty format
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     (Gapped) nucleotide sequence(s) filename and
                                   optional format, or reference (input USA)
@@ -119,7 +122,7 @@
                                   ! other enzymes
                                   hindiii
                                   HinfI
-                                  PpiI (Any string is accepted)
+                                  PpiI (Any string)
    -table              menu       [0] Genetic code to use (Values: 0
                                   (Standard); 1 (Standard (with alternative
                                   initiation codons)); 2 (Vertebrate
@@ -147,7 +150,7 @@
                                   If you wish to show more than one source,
                                   separate their names with the character '|',
                                   eg:
-                                  gene* | embl (Any string is accepted)
+                                  gene* | embl (Any string)
    -typematch          string     [*] By default any feature type in the
                                   feature table is shown. You can set this to
                                   match any feature type you wish to show.
@@ -160,7 +163,7 @@
                                   If you wish to show more than one type,
                                   separate their names with the character '|',
                                   eg:
-                                  *UTR | intron (Any string is accepted)
+                                  *UTR | intron (Any string)
    -sensematch         integer    [0 - any sense, 1 - forward sense, -1 -
                                   reverse sense] By default any feature type
                                   in the feature table is shown. You can set
@@ -193,7 +196,7 @@
                                   If you wish to show more than one tag,
                                   separate their names with the character '|',
                                   eg:
-                                  gene | label (Any string is accepted)
+                                  gene | label (Any string)
    -valuematch         string     [*] Tag values are the values associated
                                   with a feature tag. Tags are the types of
                                   extra values that a feature may have. For
@@ -216,7 +219,7 @@
                                   If you wish to show more than one tag value,
                                   separate their names with the character
                                   '|', eg:
-                                  pax* | 10 (Any string is accepted)
+                                  pax* | 10 (Any string)
    -stricttags         boolean    [N] By default if any tag/value pair in a
                                   feature matches the specified tag and value,
                                   then all the tags/value pairs of that
@@ -226,8 +229,8 @@
                                   value will be displayed.
 
    Advanced (Unprompted) qualifiers:
-   -mfile              datafile   [Emethylsites.dat] Restriction enzyme data
-                                  file (optional)
+   -mfile              datafile   [Emethylsites.dat] Restriction enzyme
+                                  methylation data file (optional)
    -flatreformat       boolean    [N] This changes the output format to one
                                   where the recognition site is indicated by a
                                   row of '===' characters and the cut site is
@@ -346,11 +349,12 @@
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 

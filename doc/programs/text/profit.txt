@@ -1,5 +1,4 @@
-
-                                  profit 
+                                   profit
 
 
 
@@ -19,10 +18,10 @@ Description
    profit scans one or more sequences with a simple frequency matrix and
    writes an output file with any high-scoring matches. All possible
    ungapped alignments of each sequence to the matrix are scored and any
-   matches with a score higher than the specified threshold are written
-   to the output file. The output file includes the name of any matching
-   sequence found, the start position in the sequence of the match and
-   the percentage of the maximum possible score.
+   matches with a score higher than the specified threshold are written to
+   the output file. The output file includes the name of any matching
+   sequence found, the start position in the sequence of the match and the
+   percentage of the maximum possible score.
 
 Algorithm
 
@@ -34,10 +33,10 @@ Algorithm
 
    The score for a match is simply the sum of scores at each position of
    the matrix for the corresponding residue from the sequence. The
-   percentage of the maximum possible score reported in the output file
-   is the sum of the highest value at each position in the frequency
-   matrix. Where the match score is above the threshold percentage of the
-   maximum possible score for that matrix, then a hit is reported.
+   percentage of the maximum possible score reported in the output file is
+   the sum of the highest value at each position in the frequency matrix.
+   Where the match score is above the threshold percentage of the maximum
+   possible score for that matrix, then a hit is reported.
 
 Usage
 
@@ -73,16 +72,20 @@ Output file [outfile.prophecy]:
    Here is a sample session with profit
 
 
-% profit 
+% profit
 Scan one or more sequences with a simple frequency matrix
 Profile or weight matrix file: outfile.prophecy
 Input sequence(s): tsw:*
-Output file [outfile.profit]: 
+Output file [outfile.profit]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Scan one or more sequences with a simple frequency matrix
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     Profile or weight matrix file
@@ -121,19 +124,20 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
-   profit reads a simple frequency matrix produced by prophecy and uses
-   it to search searches one or more protein or nucleic acid sequence
-   USAs.
+   profit reads a simple frequency matrix produced by prophecy and uses it
+   to search searches one or more protein or nucleic acid sequence USAs.
 
   Input files for usage example
 
@@ -190,6 +194,7 @@ Consensus       DEVGGEALGRLLVVYPWTQR
 
 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0
 
+
 Output file format
 
   Output files for usage example
@@ -217,11 +222,11 @@ Data files
 
 Notes
 
-   A 'simple frequency matrix' is simply a table containing a count of
-   the number of times any particular amino acid occurs at each position
-   in the sequence alignment from which it was derived. Simple frequency
-   matrices are created using the program prophecy with the option -type
-   F to create the correct type of matrix. The input alignment should not
+   A 'simple frequency matrix' is simply a table containing a count of the
+   number of times any particular amino acid occurs at each position in
+   the sequence alignment from which it was derived. Simple frequency
+   matrices are created using the program prophecy with the option -type F
+   to create the correct type of matrix. The input alignment should not
    have gaps in it.
 
 References
@@ -254,7 +259,7 @@ See also
 
 Author(s)
 
-   Alan             Bleasby (ajb © ebi.ac.uk)
+   Alan             Bleasby (ajb (c) ebi.ac.uk)
    European         Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton,         Cambridge CB10 1SD, UK
 

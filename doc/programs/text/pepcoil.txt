@@ -1,5 +1,4 @@
-
-                                  pepcoil 
+                                   pepcoil
 
 
 
@@ -18,28 +17,31 @@ Description
 
    pepcoil calculates the probability of a coiled-coil structure for
    windows of (by default) 28 residues through a protein sequence using
-   the method of Lupas A, van Dyke M & Stock J (1991); Science
-   252:1162-4. It reads one or more sequences and writes a standard
-   EMBOSS report file including the location and score of the putative
-   coiled-coil structures and their score for each input sequence.
-   Optionally, coiled coil regions, non-coiled coil regions and coil
-   frameshifts are reported.
+   the method of Lupas A, van Dyke M & Stock J (1991); Science 252:1162-4.
+   It reads one or more sequences and writes a standard EMBOSS report file
+   including the location and score of the putative coiled-coil structures
+   and their score for each input sequence. Optionally, coiled coil
+   regions, non-coiled coil regions and coil frameshifts are reported.
 
 Usage
 
    Here is a sample session with pepcoil
 
 
-% pepcoil 
+% pepcoil
 Predicts coiled coil regions in protein sequences
 Input protein sequence(s): tsw:gcn4_yeast
-Window size [28]: 
-Output report [gcn4_yeast.pepcoil]: 
+Window size [28]:
+Output report [gcn4_yeast.pepcoil]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Predicts coiled coil regions in protein sequences
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -92,13 +94,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -229,7 +233,7 @@ Output file format
 
 ########################################
 # Program: pepcoil
-# Rundate: Tue 15 Jul 2008 12:00:00
+# Rundate: Fri 15 Jan 2010 12:00:00
 # Commandline: pepcoil
 #    -sequence tsw:gcn4_yeast
 # Report_format: motif
@@ -278,8 +282,8 @@ Notes
 
 References
 
-    1. Lupas A, van Dyke M & Stock J; Predicting Coiled Coils from
-       Protein Sequences. Science 252:1162-4 (1991)
+    1. Lupas A, van Dyke M & Stock J; Predicting Coiled Coils from Protein
+       Sequences. Science 252:1162-4 (1991)
 
 Warnings
 
@@ -323,7 +327,7 @@ See also
 
 Author(s)
 
-   Alan Bleasby (ajb © ebi.ac.uk)
+   Alan Bleasby (ajb (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

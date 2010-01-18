@@ -2,6 +2,7 @@
 application: maskambigprot [
   documentation: "Masks all ambiguity characters in protein sequences with X"
   groups: "Edit"
+  relations: "EDAM: Sequence masking"
 ]
 
 section: input [
@@ -11,12 +12,14 @@ section: input [
 
   boolean: feature [
     information: "Use feature information"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   seqall: sequence [
     parameter: "Y"
     type: "gapproteinsimple"
     features: "$(feature)"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: input
@@ -36,6 +39,7 @@ section: output [
   seqoutall: outseq [
     parameter: "Y"
     features: "$(feature)"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: output

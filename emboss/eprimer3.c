@@ -27,6 +27,7 @@
 #include <io.h>
 #include <fcntl.h>
 #include <windows.h>
+#define fdopen _fdopen
 #endif
 
 
@@ -186,7 +187,7 @@ int main(int argc, char **argv)
     ajint end;
     FILE* stream;
     AjPStr taskstr  = NULL;
-    AjPStr program  = NULL;
+    const AjPStr program = NULL;
 
     /* fork/pipe variables */
 #ifndef WIN32
@@ -209,7 +210,7 @@ int main(int argc, char **argv)
     /* "Sequence" Input Tags */
     sequence        = ajAcdGetSeqall("sequence");
     included_region = ajAcdGetRange("includedregion");
-    target          = ajAcdGetRange("target");
+    target          = ajAcdGetRange("targetregion");
     excluded_region = ajAcdGetRange("excludedregion");
     left_input      = ajAcdGetString("forwardinput");
     right_input     = ajAcdGetString("reverseinput");
@@ -337,22 +338,12 @@ int main(int argc, char **argv)
             close(pipefrom[0]);
             close(pipefrom[1]);
     
-            program = ajStrNew();
-            ajStrAssignC(&program, "primer3_core");
+            program = ajAcdGetpathC("primer3_core");
     
-            if(ajSysFileWhich(&program))
-            {
-    	        execlp( "primer3_core", "primer3_core", NULL );
-    	        ajDie("There was a problem while executing primer3");
-            }
-            else
-    	        ajDie("The program 'primer3_core' must be on the path.\n"
-		      "It is part of the 'primer3' package, version 1.1,\n"
-		      "available from the Whitehead Institute.\n"
-		      "See: http://primer3.sourceforge.net/");
-    
-            ajStrDel(&program);
+            if(program)
+                execlp(ajStrGetPtr(program), "primer3_core", NULL);
 
+            ajDie("There was a problem while executing primer3");
         }
         else
         {
@@ -369,11 +360,13 @@ int main(int argc, char **argv)
 
 #else	// WIN32
 	    {
-		HANDLE hChildStdinRd, hChildStdinWr, hChildStdinWrDup, 
-		hChildStdoutRd, hChildStdoutWr, hChildStdoutRdDup, 
+		HANDLE hChildStdinRd, hChildStdinWr, 
+		hChildStdoutRd, hChildStdoutWr, 
 		hSaveStdin, hSaveStdout;
 		BOOL fSuccess;
 		SECURITY_ATTRIBUTES saAttr;
+		HANDLE hChildStdinWrDup, hChildStdoutRdDup;
+
 		saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
 		saAttr.bInheritHandle = TRUE;
 		saAttr.lpSecurityDescriptor = NULL;
@@ -465,8 +458,10 @@ int main(int argc, char **argv)
 		  ajFatal("Re-redirecting Stdout failed\n");
 
 	      CloseHandle(hChildStdoutWr);
-	      pipeto[1] = _open_osfhandle(hChildStdinWrDup, _O_APPEND);
-	      pipefrom[0] = _open_osfhandle(hChildStdoutRdDup, _O_RDONLY);
+	      pipeto[1] = _open_osfhandle((intptr_t) hChildStdinWrDup,
+					  _O_APPEND);
+	      pipefrom[0] = _open_osfhandle((intptr_t) hChildStdoutRdDup,
+					    _O_RDONLY);
 #endif	// WIN32
 
             stream = eprimer3_start_write(pipeto[1]);
@@ -605,9 +600,9 @@ int main(int argc, char **argv)
 
             /* send flags to turn on using optimal product size */
             eprimer3_send_float(stream, "PRIMER_PAIR_WT_PRODUCT_SIZE_GT",
-                                0.05);
+                                (float)0.05);
             eprimer3_send_float(stream, "PRIMER_PAIR_WT_PRODUCT_SIZE_LT",
-                                0.05);
+                                (float)0.05);
 
             /* send primer3 Primer "Sequence" parameters */
             eprimer3_send_string(stream, "SEQUENCE", substr);
@@ -765,15 +760,15 @@ static void eprimer3_send_range(FILE * stream, const char * tag,
 
     str = ajStrNew();
 
-    if(ajRangeNumber(value))
+    if(ajRangeGetSize(value))
     {
         ajFmtPrintS(&str, "%s=", tag);
         eprimer3_write(str, stream);
         ajStrSetClear(&str);
 
-        for(n=0; n < ajRangeNumber(value); n++)
+        for(n=0; n < ajRangeGetSize(value); n++)
         {
-            ajRangeValues(value, n, &start, &end);
+            ajRangeElementGetValues(value, n, &start, &end);
             start -= begin;
             end   -= begin;
             ajFmtPrintS(&str, "%d,%d ", start, end-start+1);
@@ -814,15 +809,15 @@ static void eprimer3_send_range2(FILE * stream, const char * tag,
 
     str=ajStrNew();
 
-    if(ajRangeNumber(value))
+    if(ajRangeGetSize(value))
     {
         ajFmtPrintS(&str, "%s=", tag);
         eprimer3_write(str, stream);
         ajStrSetClear(&str);
 
-        for(n=0; n < ajRangeNumber(value); n++)
+        for(n=0; n < ajRangeGetSize(value); n++)
         {
-            ajRangeValues(value, n, &start, &end);
+            ajRangeElementGetValues(value, n, &start, &end);
             ajFmtPrintS(&str, "%d-%d ", start, end);
             eprimer3_write(str, stream);
             ajStrSetClear(&str);

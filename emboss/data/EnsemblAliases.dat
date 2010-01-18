@@ -1,0 +1,260 @@
+# Configuration of additional alias names for scientific species names
+# in the Ensembl Registry. The first line of a block indicates the species,
+# subsequent lines list aliases. Currently, registry lookups are case
+# insentitive.
+#
+# The ensRegistryLoadFromServer function atutomatically registers the
+# scientific species name, as it is included in the Ensembl database name.
+
+# FIXME: There are two problems in the Bio::EnsEMBL::Registry file.
+# One spelling and one spurious quote!
+# Ciona savignyi is missing!
+
+"Pan troglodytes"
+"chimp"
+"PanTro1"
+"Pan"
+"P_troglodytes"
+
+"Caenorhabditis elegans"
+"elegans"
+"worm"
+
+"Tetraodon nigroviridis"
+"tetraodon"
+
+"Homo sapiens"
+# FIXME: This is for testing only!
+"Homo sapiens"
+"H_Sapiens"
+"homo sapiens"
+"Homo_Sapiens"
+"Homo"
+"human"
+"Hg17"
+"ensHS"
+"9606"
+
+"Mus musculus"
+"M_Musculus"
+"mus musculus"
+"Mus_Musculus"
+"Mus"
+"mouse"
+"Mm5"
+"ensMM"
+"10090"
+
+"Rattus norvegicus"
+"R_Norvegicus"
+"rattus norvegicus"
+"Rattus_Norvegicus"
+"Rattus"
+"rat"
+"Rn3"
+"10116"
+
+"Takifugu rubripes"
+"T_Rubripes"
+"fugu"
+"takifugu"
+
+"Gallus gallus"
+"G_Gallus"
+"gallus gallus"
+"Chicken"
+"GalGal2"
+
+"Danio rerio"
+"D_Rerio"
+"danio rerio"
+"Danio_Rerio"
+"Danio"
+"zebrafish"
+"zfish"
+
+"Xenopus tropicalis"
+"X_Tropicalis"
+"xenopus tropicalis"
+"Xenopus_tropicalis"
+"Xenopus"
+
+"Anopheles gambiae"
+"A_Gambiae"
+"Anopheles Gambiae"
+"Anopheles_gambiae"
+"Anopheles"
+"mosquito"
+
+"Drosophila melanogaster"
+"D_Melanogaster"
+"drosophila melanogaster"
+"Drosophila_melanogaster"
+"drosophila"
+"fly"
+
+"Saccharomyces cerevisiae"
+"S_Cerevisiae"
+"Saccharomyces Cerevisiae"
+"Saccharomyces_cerevisiae"
+"Saccharomyces"
+"yeast"
+
+"Canis familiaris"
+"C_Familiaris"
+"Canis Familiaris"
+"Canis_familiaris"
+"Canis"
+"dog"
+
+"Ciona intestinalis"
+"ciona"
+
+"Ciona savignyi"
+"savignyi"
+
+"Bos taurus"
+"cow"
+"bos_taurus"
+
+"Macaca mulatta"
+"rhesus"
+"rhesus_monkey"
+"macaque"
+"macaca mulatta"
+
+"Otolemur garnettii"
+"bushbaby"
+"galago"
+"Otolemur garnettii"
+
+"Oryctolagus cuniculus"
+"rabbit"
+"Oryctolagus cuniculus"
+
+"Felis catus"
+"cat"
+"felis catus"
+
+"Sus scrofa"
+"pig"
+"sus scrofa"
+
+"Sorex araneus"
+"shrew"
+"ground_shrew"
+"european_shrew"
+"Sorex araneus"
+
+"Erinaceus europaeus"
+"western_european_hedgehog"
+"Erinaceus europaeus"
+
+"Myotis lucifugus"
+"microbat"
+"little_brown_bat"
+
+"Dasypus novemcinctus"
+"armadillo"
+"arma"
+"Dasypus novemcinctu"
+
+"Loxodonta africana"
+"african_elephant"
+"elephant"
+"Loxodonta africana"
+
+"Echinops telfairi"
+"tenrec"
+"madagascar_hedgehog"
+"lesser_hedgehog"
+"Echinops telfairi"
+
+"Monodelphis domestica"
+"opossum"
+"Monodelphis domestica"
+
+"Ornithorhynchus anatinus"
+"platypus"
+"Ornithorhynchus anatinus"
+
+"Gasterosteus aculeatus"
+"stickleback"
+"Gasterosteus aculeatus"
+
+"Oryzias latipes"
+"medaka",
+"Oryzias latipes"
+
+"Cavia porcellus"
+"guinea_pig"
+""Cavia porcellus"
+
+"Aedes aegypti"
+"aedes"
+"Aedes aegypti"
+
+"Spermophilus tridecemlineatus"
+"squirrel"
+"Spermophilus tridecemlineatus"
+
+"Tupaia belangeri"
+"tree_shrew"
+"Tupaia belangeri"
+
+"Culex pipiens"
+"culex"
+"Culex Pipiens"
+
+"Ochotona princeps"
+"pika"
+"Ochotona princeps"
+
+"Anolis carolinensis"
+"anolis"
+"anolis_lizard"
+"Anolis carolinensis"
+
+"Microcebus murinus"
+"mouse_lemur"
+"Microcebus murinus"
+
+"Pongo pygmaeus"
+"orang"
+"orang_utan"
+"orangutan"
+"Pongo pygmaeus"
+
+"Equus caballus"
+"horse"
+"Equuscaballus"
+
+"Tursiops truncatus"
+"dolphin"
+"Tursiopstruncatus"
+
+"Procavia capensis"
+"rock_hyrax"
+"hyrax"
+"Procaviacapensis"
+
+"Dipodomys ordii"
+"kangaroo_rat"
+"Dipodomysordii"
+
+"Pteropus vampyrus"
+"megabat"
+"Pteropusvampyrus"
+
+"Tarsius syrichta"
+"philippine tarsier"
+"tarsier"
+"Tarsiussyrichta"
+
+"Vicugna pacos"
+"alpaca"
+"vicugnapacos"
+
+"multi"
+"compara"
+"go"

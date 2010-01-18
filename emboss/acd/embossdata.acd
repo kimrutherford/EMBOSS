@@ -1,6 +1,8 @@
 application: embossdata [
   documentation: "Find and retrieve EMBOSS data files"
   groups: "Utils:Misc"
+  relations: "EDAM: Database information"
+  relations: "EDAM: Database processing"
 ]
 
 section: input [
@@ -11,11 +13,13 @@ section: input [
   toggle: showall [
     additional: "Y"
     information: "Show all potential EMBOSS data files"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: fetch [
     additional: "@(!$(showall))"
     information: "Fetch a data file"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   string: filename [
@@ -27,6 +31,7 @@ section: input [
            directories that EMBOSS programs search when looking for a data
            file. The name of the file is not altered when it is fetched."
     knowntype: "filename"
+    relations:  "EDAM: File name"                                      
   ]
 
 endsection: input
@@ -48,6 +53,7 @@ section: advanced [
            EMBOSS data directory that should be ignored when displaying data
            directories."
     button: "Y"
+    relations: "EDAM: Generic string array"                                
   ]
 
 endsection: advanced
@@ -65,6 +71,7 @@ section: output [
            By default these results are written to the screen (stdout)."
     knowntype: "emboss datafile"
     information: "EMBOSS datafile output file"
+    relations:  "EDAM: EMBOSS data file"                               
   ]
 
 endsection: output

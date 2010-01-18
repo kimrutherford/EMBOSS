@@ -1,5 +1,4 @@
-
-                                newcpgseek 
+                                 newcpgseek
 
 
 
@@ -16,10 +15,10 @@ Function
 
 Description
 
-   newcpgseek identifies in a nucleotide sequence regions with higher
-   than expected frequency of the dinucleotide CG. Each position in the
-   sequence is scored using a running sum calculated from all positions
-   in the sequence. This is a different method to that typically used for
+   newcpgseek identifies in a nucleotide sequence regions with higher than
+   expected frequency of the dinucleotide CG. Each position in the
+   sequence is scored using a running sum calculated from all positions in
+   the sequence. This is a different method to that typically used for
    identifying CpG islands, for example by newcpgreport and cpgplot. This
    method overpredicts islands but finds the smaller ones around primary
    exons. An output file is written with information on the CpG-rich
@@ -42,16 +41,20 @@ Usage
    Here is a sample session with newcpgseek
 
 
-% newcpgseek 
+% newcpgseek
 Identify and report CpG-rich regions in nucleotide sequence(s)
 Input nucleotide sequence(s): tembl:u68037
-CpG score [17]: 
-Output file [u68037.newcpgseek]: 
+CpG score [17]:
+Output file [u68037.newcpgseek]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Identify and report CpG-rich regions in nucleotide sequence(s)
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -90,13 +93,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -104,8 +109,8 @@ Input file format
 
   Input files for usage example
 
-   'tembl:u68037' is a sequence entry in the example nucleic acid
-   database 'tembl'
+   'tembl:u68037' is a sequence entry in the example nucleic acid database
+   'tembl'
 
   Database entry: tembl:u68037
 
@@ -121,8 +126,7 @@ XX
 KW   .
 XX
 OS   Rattus norvegicus (Norway rat)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
-;
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
 OC   Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea;
 OC   Muridae; Murinae; Rattus.
 XX
@@ -159,65 +163,37 @@ FT                   /db_xref="GOA:P70597"
 FT                   /db_xref="InterPro:IPR017452"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P70597"
 FT                   /protein_id="AAB07735.1"
-FT                   /translation="MSPYGLNLSLVDEATTCVTPRVPNTSVVLPTGGNGTSPALPIFS
-M
-FT                   TLGAVSNVLALALLAQVAGRLRRRRSTATFLLFVASLLAIDLAGHVIPGALVLRLYTA
-G
-FT                   RAPAGGACHFLGGCMVFFGLCPLLLGCGMAVERCVGVTQPLIHAARVSVARARLALAL
-L
-FT                   AAMALAVALLPLVHVGHYELQYPGTWCFISLGPPGGWRQALLAGLFAGLGLAALLAAL
-V
-FT                   CNTLSGLALLRARWRRRRSRRFRENAGPDDRRRWGSRGLRLASASSASSITSTTAALR
-S
-FT                   SRGGGSARRVHAHDVEMVGQLVGIMVVSCICWSPLLVLVVLAIGGWNSNSLQRPLFLA
-V
-FT                   RLASWNQILDPWVYILLRQAMLRQLLRLLPLRVSAKGGPTELSLTKSAWEASSLRSSR
-H
+FT                   /translation="MSPYGLNLSLVDEATTCVTPRVPNTSVVLPTGGNGTSPALPIFSM
+FT                   TLGAVSNVLALALLAQVAGRLRRRRSTATFLLFVASLLAIDLAGHVIPGALVLRLYTAG
+FT                   RAPAGGACHFLGGCMVFFGLCPLLLGCGMAVERCVGVTQPLIHAARVSVARARLALALL
+FT                   AAMALAVALLPLVHVGHYELQYPGTWCFISLGPPGGWRQALLAGLFAGLGLAALLAALV
+FT                   CNTLSGLALLRARWRRRRSRRFRENAGPDDRRRWGSRGLRLASASSASSITSTTAALRS
+FT                   SRGGGSARRVHAHDVEMVGQLVGIMVVSCICWSPLLVLVVLAIGGWNSNSLQRPLFLAV
+FT                   RLASWNQILDPWVYILLRQAMLRQLLRLLPLRVSAKGGPTELSLTKSAWEASSLRSSRH
 FT                   SGFSHL"
 XX
 SQ   Sequence 1218 BP; 162 A; 397 C; 387 G; 272 T; 0 other;
-     atgagcccct acgggcttaa cctgagccta gtggatgagg caacaacgtg tgtaacaccc        6
-0
-     agggtcccca atacatctgt ggtgctgcca acaggcggta acggcacatc accagcgctg       12
-0
-     cctatcttct ccatgacgct gggtgctgtg tccaacgtgc tggcgctggc gctgctggcc       18
-0
-     caggttgcag gcagactgcg gcgccgccgc tcgactgcca ccttcctgtt gttcgtcgcc       24
-0
-     agcctgcttg ccatcgacct agcaggccat gtgatcccgg gcgccttggt gcttcgcctg       30
-0
-     tatactgcag gacgtgcgcc cgctggcggg gcctgtcatt tcctgggcgg ctgtatggtc       36
-0
-     ttctttggcc tgtgcccact tttgcttggc tgtggcatgg ccgtggagcg ctgcgtgggt       42
-0
-     gtcacgcagc cgctgatcca cgcggcgcgc gtgtccgtag cccgcgcacg cctggcacta       48
-0
-     gccctgctgg ccgccatggc tttggcagtg gcgctgctgc cactagtgca cgtgggtcac       54
-0
-     tacgagctac agtaccctgg cacttggtgt ttcattagcc ttgggcctcc tggaggttgg       60
-0
-     cgccaggcgt tgcttgcggg cctcttcgcc ggccttggcc tggctgcgct ccttgccgca       66
-0
-     ctagtgtgta atacgctcag cggcctggcg ctccttcgtg cccgctggag gcggcgtcgc       72
-0
-     tctcgacgtt tccgagagaa cgcaggtccc gatgatcgcc ggcgctgggg gtcccgtgga       78
-0
-     ctccgcttgg cctccgcctc gtctgcgtca tccatcactt caaccacagc tgccctccgc       84
-0
-     agctctcggg gaggcggctc cgcgcgcagg gttcacgcac acgacgtgga aatggtgggc       90
-0
-     cagctcgtgg gcatcatggt ggtgtcgtgc atctgctgga gccccctgct ggtattggtg       96
-0
-     gtgttggcca tcgggggctg gaactctaac tccctgcagc ggccgctctt tctggctgta      102
-0
-     cgcctcgcgt cgtggaacca gatcctggac ccatgggtgt acatcctgct gcgccaggct      108
-0
-     atgctgcgcc aacttcttcg cctcctaccc ctgagggtta gtgccaaggg tggtccaacg      114
-0
-     gagctgagcc taaccaagag tgcctgggag gccagttcac tgcgtagctc ccggcacagt      120
-0
-     ggcttcagcc acttgtga                                                    121
-8
+     atgagcccct acgggcttaa cctgagccta gtggatgagg caacaacgtg tgtaacaccc        60
+     agggtcccca atacatctgt ggtgctgcca acaggcggta acggcacatc accagcgctg       120
+     cctatcttct ccatgacgct gggtgctgtg tccaacgtgc tggcgctggc gctgctggcc       180
+     caggttgcag gcagactgcg gcgccgccgc tcgactgcca ccttcctgtt gttcgtcgcc       240
+     agcctgcttg ccatcgacct agcaggccat gtgatcccgg gcgccttggt gcttcgcctg       300
+     tatactgcag gacgtgcgcc cgctggcggg gcctgtcatt tcctgggcgg ctgtatggtc       360
+     ttctttggcc tgtgcccact tttgcttggc tgtggcatgg ccgtggagcg ctgcgtgggt       420
+     gtcacgcagc cgctgatcca cgcggcgcgc gtgtccgtag cccgcgcacg cctggcacta       480
+     gccctgctgg ccgccatggc tttggcagtg gcgctgctgc cactagtgca cgtgggtcac       540
+     tacgagctac agtaccctgg cacttggtgt ttcattagcc ttgggcctcc tggaggttgg       600
+     cgccaggcgt tgcttgcggg cctcttcgcc ggccttggcc tggctgcgct ccttgccgca       660
+     ctagtgtgta atacgctcag cggcctggcg ctccttcgtg cccgctggag gcggcgtcgc       720
+     tctcgacgtt tccgagagaa cgcaggtccc gatgatcgcc ggcgctgggg gtcccgtgga       780
+     ctccgcttgg cctccgcctc gtctgcgtca tccatcactt caaccacagc tgccctccgc       840
+     agctctcggg gaggcggctc cgcgcgcagg gttcacgcac acgacgtgga aatggtgggc       900
+     cagctcgtgg gcatcatggt ggtgtcgtgc atctgctgga gccccctgct ggtattggtg       960
+     gtgttggcca tcgggggctg gaactctaac tccctgcagc ggccgctctt tctggctgta      1020
+     cgcctcgcgt cgtggaacca gatcctggac ccatgggtgt acatcctgct gcgccaggct      1080
+     atgctgcgcc aacttcttcg cctcctaccc ctgagggtta gtgccaaggg tggtccaacg      1140
+     gagctgagcc taaccaagag tgcctgggag gccagttcac tgcgtagctc ccggcacagt      1200
+     ggcttcagcc acttgtga                                                    1218
 //
 
 Output file format
@@ -246,17 +222,17 @@ Notes
    "CpG" refers to a C nucleotide immediately followed by a G. The 'p' in
    'CpG' refers to the phosphate group linking the two bases. Regions of
    genomic sequences rich in the CpG pattern or "CpG islands" are
-   resistant to methylation and tend to be associated with genes which
-   are frequently switched on. It's been estimated that about half of all
+   resistant to methylation and tend to be associated with genes which are
+   frequently switched on. It's been estimated that about half of all
    mammalian genes, and, possibly all mammalian house-keeping genes, have
    a CpG-rich region around their 5' end. Non-mammalian vertebrates have
    some CpG islands that are associated with genes, but the association
    gets equivocal in the farther taxonomic groups. The detection of CpG
-   island upstream of predicted exons or genes is evidence in support of
-   a highly expressed gene.
+   island upstream of predicted exons or genes is evidence in support of a
+   highly expressed gene.
 
-   As there is no official definition of what is a CpG island is or how
-   to identify where they begin and end, we work with two definitions and
+   As there is no official definition of what is a CpG island is or how to
+   identify where they begin and end, we work with two definitions and
    thus two methods. These are:
 
    1. cpgplot and newcpgreport use a sliding window within which the
@@ -268,12 +244,12 @@ Notes
 
    2. newcpgseek and cpgreport use a running sum calculated from all
    positions in a sequence rather than a window to produce a score. If
-   there is not a CG dinucleotide at a position, the score is
-   decremented, if there is one, the score is incremented by a constant
-   (user-defined) value. If the score for a region in the sequence is
-   higher than a threshold (17 at the moment) then a putative island is
-   declared. Sequence regions scoring above the threshold are searched
-   for recursively.
+   there is not a CG dinucleotide at a position, the score is decremented,
+   if there is one, the score is incremented by a constant (user-defined)
+   value. If the score for a region in the sequence is higher than a
+   threshold (17 at the moment) then a putative island is declared.
+   Sequence regions scoring above the threshold are searched for
+   recursively.
 
    This method overpredicts islands but finds the smaller ones around
    primary exons. newcpgseek uses the same method as cpgreport but the
@@ -282,13 +258,13 @@ Notes
    the human cpgisland database you can find on the EBI's ftp server as
    well as on the EBI's SRS server.
 
-   newcpgseek and cpgreport both now display the actual CpG count, the
-   (%C + %G) and the Observed/Expected ratio in the region where the
-   score is above the threshold.
+   newcpgseek and cpgreport both now display the actual CpG count, the (%C
+   + %G) and the Observed/Expected ratio in the region where the score is
+   above the threshold.
 
-   The geecee program measures CG content in the entire input sequence
-   and is not to be used to detect CpG islands. It can be useful for
-   detecting sequences that MIGHT contain an island.
+   The geecee program measures CG content in the entire input sequence and
+   is not to be used to detect CpG islands. It can be useful for detecting
+   sequences that MIGHT contain an island.
 
 References
 
@@ -321,7 +297,7 @@ See also
 
 Author(s)
 
-   Rodrigo Lopez (rls © ebi.ac.uk)
+   Rodrigo Lopez (rls (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

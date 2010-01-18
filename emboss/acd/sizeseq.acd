@@ -5,6 +5,7 @@ application: sizeseq
   gui: "yes"
   batch: "yes"
   cpu: "low"
+  relations: "EDAM: Sequence file handling"
 ]
 
 
@@ -21,6 +22,7 @@ boolean: feature
 [
     information: "Use feature information"
     help: "Sequence feature information will be retained if this option is set."
+    relations: "EDAM: Generic boolean"                                     
 ]
 
 seqset: sequences 
@@ -29,6 +31,7 @@ seqset: sequences
     type: "gapany"
     features: "$(feature)"
     aligned: "N"
+    relations: "EDAM: Sequence record"                                     
 ]
 
 endsection: input
@@ -49,6 +52,7 @@ boolean: descending
     default: "N"
     information: "Return longest sequence first"
     help: "By default the shortest sequence is given first."
+    relations: "EDAM: Generic boolean"                                     
 ]
 
 endsection: required
@@ -89,6 +93,7 @@ seqoutall: outseq
 [
     parameter: "Y"
     features: "$(feature)"
+    relations: "EDAM: Sequence record"                                     
 ]
 
 endsection: output

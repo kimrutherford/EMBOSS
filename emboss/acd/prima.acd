@@ -2,6 +2,7 @@ application: prima [
   documentation: "Selects primers for PCR and DNA
                   amplification."
   groups: "Nucleic:Primers"
+  relations: "EDAM: PCR primer design"
 ]
 
 section: input [
@@ -12,6 +13,7 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "dna"
+    relations: "EDAM: Pure DNA sequence"                                   
   ]
 
 endsection: input
@@ -30,6 +32,7 @@ section: required [
       parameter: "Y"
       default: "N"
       information: "Specify a Target Range?"
+    relations: "EDAM: Generic boolean"                                     
     ]
 
     integer: targetstart [
@@ -37,6 +40,7 @@ section: required [
       default: "$(sequence.begin)"
       information: "Target start position."
       expected: "Start of sequence"
+    relations: "EDAM: Generic integer"                                     
     ]
 
     integer: targetend [
@@ -44,6 +48,7 @@ section: required [
       default: "$(sequence.length)"
       information: "Target end position."
       expected: "End of sequence"
+    relations: "EDAM: Generic integer"                                     
     ]
 
   endsection: targetsection
@@ -52,12 +57,14 @@ section: required [
     standard: "Y"
     default: "53"
     information: "Minimum Primer Tm (deg Celsius)"
+    relations: "EDAM: Generic float"                                       
   ]
 
   float: maxtmprimer [
     standard: "Y"
     default: "58"
     information: "Maximum Primer Tm (deg Celsius)"
+    relations: "EDAM: Generic float"                                       
   ]
 
 endsection: required
@@ -76,12 +83,14 @@ section: additional [
       additional: "@(!$(targetrange))"
       default: "100"
       information: "Minimum product length"
+    relations: "EDAM: Generic integer"                                     
     ]
 
     integer: maxplen [
       additional: "@(!$(targetrange))"
       default: "300"
       information: "Maximum product length"
+    relations: "EDAM: Generic integer"                                     
     ]
 
     float: minpgccont [
@@ -90,6 +99,7 @@ section: additional [
       maximum: ".70"
       default: ".40"
       information: "Minimum product GC fraction"
+    relations: "EDAM: Generic float"                                       
     ]
 
     float: maxpgccont [
@@ -98,6 +108,7 @@ section: additional [
       maximum: ".70"
       default: ".55"
       information: "Maximum product GC fraction"
+    relations: "EDAM: Generic float"                                       
     ]
 
   endsection: productsection
@@ -112,18 +123,21 @@ section: additional [
       information: "Pick PCR primer(s)"
       default: "Y"
       help: "Specify primer properties"
+    relations: "EDAM: Generic boolean"                                     
     ]
 
     integer: minprimerlen [
       additional: "$(primer)"
       default: "18"
       information: "Minimum primer length"
+    relations: "EDAM: Generic integer"                                     
     ]
 
     integer: maxprimerlen [
       additional: "$(primer)"
       default: "22"
       information: "Maximum primer length"
+    relations: "EDAM: Generic integer"                                     
     ]
 
     float: minpmgccont [
@@ -132,6 +146,7 @@ section: additional [
       maximum: ".70"
       default: ".40"
       information: "Minimum primer GC fraction"
+    relations: "EDAM: Generic float"                                       
     ]
 
     float: maxpmgccont [
@@ -140,6 +155,7 @@ section: additional [
       maximum: ".70"
       default: ".55"
       information: "Maximum primer GC fraction"
+    relations: "EDAM: Generic float"                                       
     ]
 
   endsection: primersection
@@ -154,6 +170,7 @@ section: advanced [
   integer: overlap [
     default: "50"
     information: "Minimum overlap of sequences"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   float: saltconc [
@@ -161,6 +178,7 @@ section: advanced [
     maximum: "100"
     default: "50"
     information: "Salt concentration (mM)"
+    relations: "EDAM: Generic float"                                       
   ]
 
   float: dnaconc [
@@ -168,11 +186,13 @@ section: advanced [
     maximum: "100"
     default: "50"
     information: "DNA concentration (mM)"
+    relations: "EDAM: Generic float"                                       
   ]
 
   boolean: list [
     default: "N"
     information: "Force list-style output"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: advanced
@@ -185,6 +205,7 @@ section: output [
   outfile: outfile [
     parameter: "Y"
     knowntype: "prima output"
+    relations:  "EDAM:Primer report"                                       
   ]
 
 endsection: output

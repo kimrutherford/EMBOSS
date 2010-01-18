@@ -5,6 +5,7 @@ application: aligncopy
   gui: "yes"
   batch: "yes"
   cpu: "low"
+  relations: "EDAM: Sequence file handling"
 ]
 
 
@@ -23,6 +24,7 @@ seqset: sequences
     type: "gapany"
     aligned: "Y"
     help: "File containing a sequence alignment."
+    relations: "EDAM: Sequence alignment data"                             
 ]
 
 endsection: input
@@ -53,6 +55,7 @@ section: additional
     default: ""
     information: "Name of the alignment"
     knowntype: "sequence id output"
+    relations:  "EDAM: Sequence unique identifier"                     
   ]
 
   string: comment 
@@ -61,6 +64,7 @@ section: additional
     default: ""
     information: "Comment on the alignment"
     knowntype: "string"
+    relations:  "EDAM: Generic string"                                 
   ]
 
   boolean: append
@@ -70,6 +74,7 @@ section: additional
     information: "Append to the existing alignment header"
     help: "This allows you to append the name and comments you have given 
            on to the end of the existing alignment header."
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: additional
@@ -101,6 +106,7 @@ align: outfile
     minseqs: "$(sequences.count)" #limits choice of formats to match input
     maxseqs: "$(sequences.count)" #limits choice of formats to match input
     aformat: "simple"
+    relations: "EDAM: Sequence alignment data"                             
 ]
 
 endsection: output

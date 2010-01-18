@@ -34,6 +34,17 @@
 #define DOWN 2
 
 
+
+
+static void printPathMatrix(const float* path, const ajint* compass,
+                            ajuint lena, ajuint lenb);
+
+static float embAlignGetScoreNWMatrix(const float *path, ajint lena,
+        ajint lenb, ajint *xpos, ajint *ypos, AjBool endweight);
+
+
+
+
 /* @func embAlignPathCalc *****************************************************
 **
 ** Create path matrix for Needleman-Wunsch
@@ -216,6 +227,248 @@ float embAlignPathCalc(const char *a, const char *b,
     return ret;
 }
 
+
+
+
+/* @func embAlignPathCalcWithEndGapPenalties *********************************
+**
+** Create path matrix for Needleman-Wunsch alignment of two sequences.
+** Nucleotides or proteins as needed. Supports end gap penalties.
+**
+** @param [r] a [const char *] first sequence
+** @param [r] b [const char *] second sequence
+** @param [r] lena [ajuint] length of first sequence
+** @param [r] lenb [ajuint] length of second sequence
+** @param [r] gapopen [float] gap opening penalty
+** @param [r] gapextend [float] gap extension penalty
+** @param [r] endgapopen [float] end gap opening penalty
+** @param [r] endgapextend [float] end gap extension penalty
+** @param [w] start1 [ajint *] start of alignment in first sequence
+** @param [w] start2 [ajint *] start of alignment in second sequence
+** @param [w] path [float *] path matrix
+** @param [r] sub [float * const *] substitution matrix from AjPMatrixf
+** @param [r] cvt [const AjPSeqCvt] Conversion array for AjPMatrixf
+** @param [w] m [float*] Match scores array
+** @param [w] ix [float*] X path
+** @param [w] iy [float*] Y path
+** @param [w] compass [ajint *] Path direction pointer array
+** @param [r] show [AjBool] Display path matrix
+** @param [r] endweight [AjBool] Use end gap weights
+**
+** @return [float] Score
+** @@
+**
+******************************************************************************/
+
+float embAlignPathCalcWithEndGapPenalties(const char *a, const char *b,
+                       ajuint lena, ajuint lenb,
+                       float gapopen, float gapextend,
+                       float endgapopen, float endgapextend,
+                       ajint *start1, ajint *start2,
+                       float *path, float * const *sub, const AjPSeqCvt cvt,
+                       float *m, float *ix, float *iy,
+                       ajint *compass, AjBool show,
+                       AjBool endweight)
+{
+    ajuint xpos;
+    ajuint ypos;
+    ajuint i;
+    ajuint j;
+    ajint bconvcode;
+    
+    float match;
+    float ixp;
+    float iyp;
+    float mp;
+    ajint cursor;
+    ajint cursorp;
+    
+    float testog;
+    float testeg;
+    float testdg;
+    float score;
+    
+    ajDebug("embAlignPathCalcWithEndGapPenalties\n");
+    
+    match = sub[ajSeqcvtGetCodeK(cvt, a[0])][ajSeqcvtGetCodeK(cvt, b[0])];
+    compass[0] = 0;
+    path[0] = (float) match;
+
+    if(endweight && -endgapopen > match)
+        path[0] = endgapopen;
+
+    ix[0] = INT_MIN;
+    iy[0] = INT_MIN;
+    m[0] = path[0];
+
+    /* First initialise the first column and row */
+    for (i = 1; i < lena; ++i)
+    {
+        match = sub[ajSeqcvtGetCodeK(cvt, a[i])][ajSeqcvtGetCodeK(cvt, b[0])];
+
+        if(!endweight)
+        {
+            path[i * lenb] = (float) match;
+            compass[i * lenb] = 0;
+            m[i*lenb] = (float)match;
+            ix[i*lenb] = INT_MIN;
+            iy[i*lenb] = INT_MIN;
+        }
+        else
+        {
+            ypos=i;
+            cursor = ypos * lenb;
+            cursorp = (ypos-1) * lenb;
+            testog = m[cursorp] - endgapopen;
+            testeg = iy[cursorp] - endgapextend;
+
+            if(testog >= testeg)
+                iy[cursor] = testog;
+            else
+                iy[cursor] = testeg;
+
+            m[cursor] = match - (endgapopen + (i - 1) * endgapextend);
+            ix[cursor] = INT_MIN;
+
+            if(m[cursor]>iy[cursor])
+            {
+                path[cursor] = m[cursor];
+                compass[cursor] = 0;
+            }
+            else
+            {
+                path[cursor] = iy[cursor];
+                compass[cursor] = 2;
+            }
+        }
+    }
+
+    for (j = 1; j < lenb; ++j)
+    {
+        match = sub[ajSeqcvtGetCodeK(cvt, a[0])][ajSeqcvtGetCodeK(cvt, b[j])];
+
+        if(!endweight)
+        {
+            path[j] = (float) match;
+            compass[j] = 0;
+            ix[j] = INT_MIN;
+            iy[j] = INT_MIN;
+            m[j] = (float) match;
+        }
+        else
+        {
+            xpos=j;
+            cursor = xpos;
+            cursorp = xpos -1;
+            testog = m[cursorp] - endgapopen;
+            testeg = iy[cursorp] - endgapextend;
+
+            if(testog >= testeg)
+                ix[cursor] = testog;
+            else
+                ix[cursor] = testeg;
+
+            m[cursor] = match - (endgapopen + (j - 1) * endgapextend);
+            iy[cursor] = INT_MIN;
+
+            if(m[cursor]>ix[cursor])
+            {
+                path[cursor] = m[cursor];
+                compass[cursor] = 0;
+            }
+            else
+            {
+                path[cursor] = ix[cursor];
+                compass[cursor] = 1;
+            }
+        }
+    }
+
+    /* xpos and ypos are the diagonal steps so start at 1 */
+    xpos = 1;
+
+    while (xpos != lenb)
+    {
+        ypos = 1;
+        bconvcode = ajSeqcvtGetCodeK(cvt, *++b);
+
+        while (ypos < lena)
+        {
+            /* get match for current xpos/ypos */
+            match = sub[ajSeqcvtGetCodeK(cvt, a[ypos])][bconvcode];
+
+            /* coordinates of the cells being processed */
+            cursorp = (ypos-1) * lenb + xpos-1;
+            cursor = ypos * lenb + xpos;
+            
+            mp = m[cursorp];
+            ixp = ix[cursorp];
+            iyp = iy[cursorp];
+
+            if(mp >= ixp && mp >= iyp)
+                m[cursor] = mp+match;                     
+            else if(ixp > iyp)
+                m[cursor] = ixp+match;
+            else
+                m[cursor] = iyp+match;
+
+            testog = m[++cursorp] - gapopen;
+            testeg = iy[cursorp] - gapextend;
+            testdg = ix[cursorp] - gapopen;
+            
+            if(testog >= testeg && testog >= testdg)
+                iy[cursor] = testog;
+            else if(testeg >testdg)
+                iy[cursor] = testeg;
+            else
+                iy[cursor] = testdg;
+
+            cursorp += lenb;
+            
+            testog = m[--cursorp] - gapopen;
+            testeg = ix[cursorp] - gapextend;
+            testdg = iy[cursorp] - gapopen;
+            
+            if(testog >= testeg && testog >= testdg)
+                ix[cursor] = testog;
+            else if(testeg >testdg)
+                ix[cursor] = testeg;
+            else
+                ix[cursor] = testdg;
+
+            
+            mp = m[cursor];
+            
+            if(mp >= ix[cursor] && mp>=iy[cursor])
+            {
+                path[cursor] = mp;
+                compass[cursor] = 0;
+            }
+            else if(ix[cursor]>=iy[cursor])
+            {
+                path[cursor] = ix[cursor];
+                compass[cursor] = 1;
+            }
+            else
+            {
+                path[cursor] = iy[cursor];
+                compass[cursor] = 2;
+            }
+
+            ++ypos;
+        }
+
+        ++xpos;
+    }
+
+    if(show)
+        printPathMatrix(path, compass, lena, lenb);
+
+    score = embAlignGetScoreNWMatrix(path, lena, lenb,
+            start1, start2, endweight);
+    
+    return score;
+}
 
 
 
@@ -713,6 +966,106 @@ void embAlignWalkNWMatrix(const float *path, const AjPSeq a, const AjPSeq b,
 
 
 
+/* @func embAlignWalkNWMatrixUsingCompass *************************************
+**
+** Walk down a matrix for Needleman Wunsch which was constructed using end gap
+** penalties. Form aligned strings. Nucleotides or proteins as needed.
+**
+** @param [r] p [const char*] first sequence
+** @param [r] q [const char*] second sequence
+** @param [w] m [AjPStr *] alignment for first sequence
+** @param [w] n [AjPStr *] alignment for second sequence
+** @param [r] lena [ajuint] length of first sequence
+** @param [r] lenb [ajuint] length of second sequence
+** @param [w] start1 [ajint *] start of alignment in first sequence
+** @param [w] start2 [ajint *] start of alignment in second sequence
+** @param [r] compass [ajint const *] Path direction pointer array
+**
+** @return [void]
+** @@
+**
+******************************************************************************/
+
+void embAlignWalkNWMatrixUsingCompass(const char* p, const char* q,
+                                 AjPStr *m, AjPStr *n,
+                                 ajuint lena, ajuint lenb,
+                                 ajint *start1, ajint *start2,
+                                 ajint const *compass)
+{
+    ajint xpos = *start2;
+    ajint ypos = *start1;
+    ajint i;
+    ajint j;
+    ajuint cursor;
+
+    ajDebug("embAlignWalkNWMatrixUsingCompass\n");
+
+    ajStrAssignClear(m);
+    ajStrAssignClear(n);
+    
+    for (i=lenb-1; i>xpos;)
+    {
+        ajStrAppendK(n, q[i--]);
+        ajStrAppendK(m, '.');
+    }
+
+    for (j=lena-1; j>ypos; )
+    {
+        ajStrAppendK(m, p[j--]);
+        ajStrAppendK(n, '.');
+    }
+
+    while (xpos >= 0 && ypos >= 0)
+    {
+        cursor = ypos * lenb + xpos;
+        if(!compass[cursor]) /* diagonal */
+        {
+            ajStrAppendK(m, p[ypos--]);
+            ajStrAppendK(n, q[xpos--]);
+            continue;
+        }
+        else if(compass[cursor] == 1) /* Left, gap(s) in vertical */
+        {
+            ajStrAppendK(m, '.');
+            ajStrAppendK(n, q[xpos--]);
+            continue;
+        }
+        else if(compass[cursor] == 2) /* Down, gap(s) in horizontal */
+        {
+            ajStrAppendK(m, p[ypos--]);
+            ajStrAppendK(n, '.');
+
+            continue;
+        } else
+            ajFatal("Walk Error in NW");
+    }
+
+    for (;xpos>=0;xpos--)
+    {
+        ajStrAppendK(n, q[xpos]);
+        ajStrAppendK(m, '.');
+    }
+
+    for (;ypos>=0;ypos--)
+    {
+        ajStrAppendK(m, p[ypos]);
+        ajStrAppendK(n, '.');
+    }
+
+    *start2 = xpos+1;
+    *start1 = ypos+1;
+
+    ajStrReverse(m); /* written with append, need to reverse */
+    ajStrReverse(n);
+
+    ajDebug("first sequence extended with gaps  (m): %S\n", *m);
+    ajDebug("second sequence extended with gaps (n): %S\n", *n);
+    
+    return;
+}
+
+
+
 /* @func embAlignPrintGlobal **************************************************
 **
 ** Print a global alignment
@@ -1071,29 +1424,11 @@ void embAlignPrintGlobal(AjPFile outf, const char *a, const char *b,
 
 
 
-/* @func embAlignPrintLocal ***************************************************
-**
-** Print a local alignment
-** Nucleotides or proteins as needed.
-**
-** @param [u] outf [AjPFile] output stream
-** @param [r] m [const AjPStr] Walk alignment for first sequence
-** @param [r] n [const AjPStr] Walk alignment for second sequence
-** @param [r] start1 [ajint] start of alignment in first sequence
-** @param [r] start2 [ajint] start of alignment in second sequence
-** @param [r] score [float] alignment score from AlignScoreX
-** @param [r] mark [AjBool] mark matches and conservatives
-** @param [r] sub [float * const *] substitution matrix
-** @param [r] cvt [const AjPSeqCvt] conversion table for matrix
-** @param [r] namea [const char*] name of first sequence
-** @param [r] nameb [const char*] name of second sequence
-** @param [r] begina [ajint] first sequence offset
-** @param [r] beginb [ajint] second sequence offset
-**
-** @return [void]
-******************************************************************************/
+/* @obsolete embAlignPrintLocal
+** @remove not used, see ajAlignWrite
+*/
 
-void embAlignPrintLocal(AjPFile outf,
+__deprecated void embAlignPrintLocal(AjPFile outf,
 			const AjPStr m, const AjPStr n,
 			ajint start1, ajint start2, float score, AjBool mark,
 			float * const *sub, const AjPSeqCvt cvt,
@@ -2091,6 +2426,8 @@ void embAlignWalkProfileMatrix(const float *path, const ajint *compass,
 	    ajStrAppendK(m,p[row--]);
 	    ajStrAppendK(n,q[column--]);
 
+            if(row < 0 || column < 0)
+                break;
 	    if(path[(row)*seqlen+(column)]<=0.)
 		break;
 
@@ -2502,6 +2839,61 @@ void embAlignCalcSimilarity(const AjPStr m, const AjPStr n,
 
 
 
+/* @funcstatic embAlignGetScoreNWMatrix ***************************************
+**
+** Returns score of the optimal global or overlap alignment for
+** the specified path matrix for Needleman Wunsch
+**
+** @param [r] path [const float*] path matrix
+** @param [r] lena [ajint] length of first sequence
+** @param [r] lenb [ajint] length of second sequence
+** @param [w] start1 [ajint *] start of alignment in first sequence
+** @param [w] start2 [ajint *] start of alignment in second sequence
+** @param [r] endweight [AjBool] whether the matrix was built for
+**                               a global or overlap alignment
+**
+** @return [float] optimal score
+******************************************************************************/
+
+static float embAlignGetScoreNWMatrix(const float *path,
+        ajint lena, ajint lenb,
+        ajint *start1, ajint *start2,
+        AjBool endweight)
+{
+    ajint i,j;
+    float score = FLT_MIN;
+    *start1 = lena-1;
+    *start2 = lenb-1;
+    
+    if(endweight)
+    {
+        /* when using end gap penalties the score of the optimal global
+         * alignment is stored in the final cell of the path matrix */
+        score = path[lena * lenb - 1];
+    }
+    else {
+
+        for (i = 0; i < lenb; ++i)
+            if(path[(lena - 1) * lenb + i] > score)
+            {
+                *start2 = i;
+                score = path[(lena - 1) * lenb + i];
+            }
+
+        for (j = 0; j < lena; ++j)
+            if(path[j * lenb + lenb - 1] > score)
+            {
+                *start1 = j;
+                *start2 = lenb-1;
+                score = path[j * lenb + lenb - 1];
+            }
+    }
+    return score;
+}
+
+
+
+
 /* @func embAlignReportGlobal *************************************************
 **
 ** Print a global alignment
@@ -2830,6 +3222,62 @@ void embAlignReportProfile(AjPAlign align,
     ajSeqDel(&seqm);
     ajSeqDel(&seqn);
     ajStrDel(&seqname);
+
+    return;
+}
+
+
+
+
+/* @funcstatic printPathMatrix ************************************************
+**
+** Prints path matrix for Needleman-Wunsch
+**
+** @param [r] path [const float*] Alignment path matrix to be printed 
+** @param [r] compass [const ajint*] Path direction pointer array
+** @param [r] lena [ajuint] length of first sequence
+** @param [r] lenb [ajuint] length of second sequence
+** 
+** @return [void]
+******************************************************************************/
+
+static void printPathMatrix(const float* path, const ajint* compass,
+                            ajuint lena, ajuint lenb)
+{
+    char compasschar;
+    ajuint i;
+    ajuint j;
+    AjPStr outstr = NULL;
+
+    ajDebug("path matrix:\n%S\n", outstr);
+
+    for(i = 0; i < lena; i++)
+    {
+        ajFmtPrintS(&outstr, "%6d ", i);
+
+        for(j = 0; j < lenb; j++)
+        {
+            if(compass[i * lenb + j] == 1)
+                compasschar = '<';
+            else if(compass[i * lenb + j] == 2)
+                compasschar = '^';
+            else
+                compasschar = ' ';
+
+            ajFmtPrintAppS(&outstr, "%6.2f%c ", path[i * lenb + j],
+                    compasschar);
+        }
+
+        ajDebug("%S\n", outstr);
+    }
+
+    ajFmtPrintS(&outstr, "       ");
+
+    for (j = 0; j < lenb; ++j)
+        ajFmtPrintAppS(&outstr, "%6d  ", j);
+
+    ajDebug("%S\n", outstr);
+    ajStrDel(&outstr);
 
     return;
 }

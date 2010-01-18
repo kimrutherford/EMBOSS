@@ -16,7 +16,7 @@ pkgdata_DATA =  aaindexextract.txt abiview.txt acdc.txt acdlog.txt \
 	equicktandem.txt est2genome.txt etandem.txt extractalign.txt \
 	extractfeat.txt extractseq.txt \
 	featcopy.txt featreport.txt \
-	findkm.txt freak.txt frestdist.txt fuzznuc.txt fuzzpro.txt \
+	findkm.txt freak.txt fuzznuc.txt fuzzpro.txt \
 	fuzztran.txt \
 	garnier.txt geecee.txt getorf.txt \
 	helixturnhelix.txt hmoment.txt \
@@ -28,7 +28,7 @@ pkgdata2_DATA = lindna.txt listor.txt \
 	maskambignuc.txt maskambigprot.txt maskfeat.txt \
 	maskseq.txt matcher.txt megamerger.txt merger.txt msbar.txt \
 	mwcontam.txt mwfilter.txt \
-	needle.txt newcpgreport.txt newcpgseek.txt newseq.txt \
+	needle.txt needleall.txt newcpgreport.txt newcpgseek.txt newseq.txt \
 	nohtml.txt noreturn.txt notseq.txt nospace.txt notab.txt \
 	nthseq.txt nthseqset.txt \
 	octanol.txt oddcomp.txt \

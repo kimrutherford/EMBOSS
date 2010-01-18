@@ -1,6 +1,7 @@
 application: histogramtest [
   documentation: "Test of graphics"
   groups: "Test"
+  relations: "EDAM: File debugging"
 ]
 
 section: input [
@@ -14,6 +15,7 @@ section: input [
     minimum: "1"
     maximum: "10"
     information: "Number of sets of data"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: points [
@@ -22,6 +24,7 @@ section: input [
     minimum: "1"
     maximum: "200"
     information: "Number of data points per set"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: bins [
@@ -30,12 +33,14 @@ section: input [
     minimum: "1"
     maximum: "$(points)"
     information: "Number of bars"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: xstart [
     additional: "y"
     default: "0"
     information: "Start value for x axis"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: xend [
@@ -44,6 +49,7 @@ section: input [
     minimum: "@($(xstart)+1)"
     information: "End value for x axis"
     expected: "Start value plus number of data points"
+    relations: "EDAM: Generic integer"                                     
   ]
 
 endsection: input
@@ -55,6 +61,7 @@ section: output [
 
   xygraph: graph [
     standard: "Y"
+    relations: "EDAM: EMBOSS graph file"                                   
   ]
 
 endsection: output

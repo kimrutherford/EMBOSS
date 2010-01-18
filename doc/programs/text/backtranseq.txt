@@ -1,5 +1,4 @@
-
-                                backtranseq 
+                                 backtranseq
 
 
 
@@ -21,10 +20,10 @@ Description
 
 Algorithm
 
-   backtranseq uses a codon usage table which gives the frequency of
-   usage of each codon for each amino acid. For each amino acid in the
-   input sequence, the corresponding most frequently occuring codon is
-   used in the nucleic acid sequence that is output.
+   backtranseq uses a codon usage table which gives the frequency of usage
+   of each codon for each amino acid. For each amino acid in the input
+   sequence, the corresponding most frequently occuring codon is used in
+   the nucleic acid sequence that is output.
 
 Usage
 
@@ -34,10 +33,11 @@ Usage
    frequency file is used ie. is not specified
 
 
-% backtranseq 
+% backtranseq
 Back-translate a protein sequence to a nucleotide sequence
 Input (gapped) protein sequence(s): tsw:opsd_human
-(gapped) nucleotide output sequence(s) [opsd_human.fasta]: 
+(gapped) nucleotide output sequence(s) [opsd_human.fasta]:
+
 
    Go to the input files for this example
    Go to the output files for this example
@@ -47,15 +47,19 @@ Input (gapped) protein sequence(s): tsw:opsd_human
    This uses a drosophila sequence and codon table.
 
 
-% backtranseq -cfile Edrome.cut 
+% backtranseq -cfile Edrome.cut
 Back-translate a protein sequence to a nucleotide sequence
 Input (gapped) protein sequence(s): tsw:ach2_drome
-(gapped) nucleotide output sequence(s) [ach2_drome.fasta]: 
+(gapped) nucleotide output sequence(s) [ach2_drome.fasta]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Back-translate a protein sequence to a nucleotide sequence
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     (Gapped) protein sequence(s) filename and
@@ -109,13 +113,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -294,8 +300,8 @@ RA   Abril J.F., Agbayani A., An H.-J., Andrews-Pfannkoch C., Baldwin D.,
 
 DR   GO; GO:0045211; C:postsynaptic membrane; IEA:UniProtKB-SubCell.
 DR   GO; GO:0030594; F:neurotransmitter receptor activity; IEA:InterPro.
-DR   GO; GO:0004889; F:nicotinic acetylcholine-activated cation-se...; IEA:Inte
-rPro.
+DR   GO; GO:0004889; F:nicotinic acetylcholine-activated cation-se...; IEA:Inter
+Pro.
 DR   GO; GO:0005515; F:protein binding; IPI:IntAct.
 DR   GO; GO:0006811; P:ion transport; IEA:UniProtKB-KW.
 DR   InterPro; IPR006029; Neu_channel_TM.
@@ -431,11 +437,12 @@ Data files
 
 % embossdata -fetch -file Exxx.dat
 
+
    Users can provide their own data files in their own directories.
    Project specific files can be put in the current directory, or for
-   tidier directory listings in a subdirectory called ".embossdata".
-   Files for all EMBOSS runs can be put in the user's home directory, or
-   again in a subdirectory called ".embossdata".
+   tidier directory listings in a subdirectory called ".embossdata". Files
+   for all EMBOSS runs can be put in the user's home directory, or again
+   in a subdirectory called ".embossdata".
 
    The directories are searched in the following order:
      * . (your current directory)
@@ -446,8 +453,8 @@ Data files
 Notes
 
    backtranseq reads a data file containing the codon usage table. The
-   default file is Ehum.cut - the human codon usage table. Many others
-   are available and can be set by name with the -cfile qualifier. It is
+   default file is Ehum.cut - the human codon usage table. Many others are
+   available and can be set by name with the -cfile qualifier. It is
    important to use one that is appropriate for the species that your
    protein comes from. The specified data file must exist in the EMBOSS
    data directory (see below for more information).
@@ -480,8 +487,8 @@ Known bugs
 See also
 
    Program name     Description
-   backtranambig    Back-translate a protein sequence to ambiguous
-                    nucleotide sequence
+   backtranambig    Back-translate a protein sequence to ambiguous nucleotide
+                    sequence
    charge           Draw a protein charge plot
    checktrans       Reports STOP codons and ORF statistics of a protein
    coderet          Extract CDS, mRNA and translations from feature tables
@@ -499,17 +506,16 @@ See also
                     alignment
    plotorf          Plot potential open reading frames in a nucleotide sequence
    prettyseq        Write a nucleotide sequence and its translation to file
-   remap            Display restriction enzyme binding sites in a nucleotide
-                    sequence
+   remap            Display restriction enzyme binding sites in a nucleotide sequence
    showorf          Display a nucleotide sequence and translation in pretty format
    showseq          Displays sequences with features in pretty format
    sixpack          Display a DNA sequence with 6-frame translation and ORFs
    transeq          Translate nucleic acid sequences
-   wordcount        Count and extract unique words in DNA sequence(s)
+   wordcount        Count and extract unique words in molecular sequence(s)
 
 Author(s)
 
-   Alan Bleasby (ajb © ebi.ac.uk)
+   Alan Bleasby (ajb (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

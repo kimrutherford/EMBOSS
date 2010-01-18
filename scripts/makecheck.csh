@@ -3,9 +3,6 @@
 
 set app = $argv[1]
 
-#set embosshome = ~/cvsemboss
-#set embossinst = ~/local
-
 foreach embosshome (`embossversion -full -auto| grep '^BaseDirectory'`)
 #  echo "$embosshome"
 end

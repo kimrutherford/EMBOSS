@@ -1,6 +1,7 @@
 application: matcher [
   documentation: "Waterman-Eggert local alignment of two sequences"
   groups: "Alignment:Local"
+  relations: "EDAM: Local sequence alignment"
 ]
 
 section: input [
@@ -11,11 +12,13 @@ section: input [
   sequence: asequence [
     parameter: "Y"
     type: "any"
+    relations: "EDAM: Sequence"                                            
   ]
 
   sequence: bsequence [
     parameter: "Y"
     type: "@($(acdprotein) ? stopprotein : nucleotide)"
+    relations: "EDAM: Sequence"                                            
   ]
 
   matrix: datafile [
@@ -26,6 +29,7 @@ section: input [
            sequences. By default it is the file 'EBLOSUM62' (for proteins) or
            the file 'EDNAFULL' (for nucleic sequences). These files are
            found in the 'data' directory of the EMBOSS installation."
+    relations: "EDAM: Integer comparison matrix"                           
   ]
 
 endsection: input
@@ -45,6 +49,7 @@ section: additional [
            gives you other reasonable alignments. In some cases, for example
            multidomain proteins of cDNA and genomic DNA comparisons, there
            may be other interesting and significant alignments."
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: gapopen [
@@ -59,6 +64,7 @@ section: additional [
            matrix. The default value of 14 assumes you are using the
            EBLOSUM62 matrix for protein sequences, or a value of 16 and the
            EDNAFULL matrix for nucleotide sequences."
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: gapextend [
@@ -77,6 +83,7 @@ section: additional [
            in which case you would expect many single base gaps. You can get
            this result by setting the gap penalty to zero (or very low) and
            using the gap extension penalty to control gap scoring."
+    relations: "EDAM: Generic integer"                                     
   ]
 
 endsection: additional
@@ -91,6 +98,7 @@ section: output [
     aformat: "markx0"
     minseqs: "2"
     maxseqs: "2"
+    relations: "EDAM: Pairwise sequence alignment data"                    
   ]
 
 endsection: output

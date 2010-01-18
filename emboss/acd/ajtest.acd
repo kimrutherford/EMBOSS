@@ -1,6 +1,7 @@
 application: ajtest [
   documentation: "Test file for ACD parsing"
   groups: "Test"
+  relations: "EDAM: File debugging"
 ]
 
 section: input [
@@ -11,12 +12,14 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "any"
+    relations: "EDAM: Sequence record"                                     
   ]
 
   seqset: bsequence [
     parameter: "Y"
     type: "any"
     aligned: "N"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: input
@@ -32,6 +35,7 @@ section: output [
     nulldefault: "Y"
     extension: "nulloutfile"
     knowntype: "ajtest output"
+    relations: "EDAM: Free text file"                                      
   ]
 
   seqout: outseq [
@@ -39,6 +43,7 @@ section: output [
     nullok: "Y"
     nulldefault: "Y"
     type: "any"
+    relations: "EDAM: Sequence"                                            
   ]
 
   featout: outfeat [
@@ -46,12 +51,14 @@ section: output [
     nullok: "Y"
     nulldefault: "Y"
     type: "any"
+    relations: "EDAM: Sequence feature table"                              
   ]
 
   outdir: outdir [
     information: "Temporary working file output directory"
     default: "/tmp"
     knowntype: "temporary"
+    relations:  "EDAM: Generic file"                                   
   ]
 
 endsection: output

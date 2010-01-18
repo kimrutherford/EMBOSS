@@ -108,7 +108,7 @@ int main(int argc, char **argv)
     ajFileClose(&outf);
 
     ajFeatSortByStart(feattable);
-    ajFeatWrite(featout, feattable);
+    ajFeattableWrite(featout, feattable);
     ajFeattableDel(&feattable);
 
     ajFeattabOutDel(&featout);

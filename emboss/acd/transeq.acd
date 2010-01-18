@@ -1,6 +1,7 @@
 application: transeq [
   documentation: "Translate nucleic acid sequences"
   groups: "Nucleic:Translation"
+  relations: "EDAM: DNA translation"
 ]
 
 section: input [
@@ -11,6 +12,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "nucleotide"
+    relations: "EDAM: Nucleotide sequence record"                          
   ]
 
 endsection: input
@@ -31,6 +33,7 @@ section: additional [
     delimiter: ","
     codedelimiter: ":"
     information: "Frame(s) to translate"
+    relations: "EDAM: Generic string array"                                
   ]
 
   list: table [
@@ -53,6 +56,7 @@ section: additional [
     codedelimiter: ":"
     information: "Code to use"
     knowntype: "genetic code"
+    relations:  "EDAM: Genetic code"                                   
   ]
 
   range: regions [
@@ -71,6 +75,7 @@ section: additional [
            Note: you should not try to use this option with any other frame
            than the default, -frame=1"
     expected: "Whole sequence"
+    relations: "EDAM: Generic integer range"                               
   ]
 
   boolean: trim [
@@ -80,6 +85,7 @@ section: additional [
     help: "This removes all 'X' and '*' characters from the right end
            of the translation. The trimming process starts at the end and
            continues until the next character is not a 'X' or a '*'"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: clean [
@@ -90,6 +96,7 @@ section: additional [
            character to 'X' (an unknown residue). This is useful because some
            programs will not accept protein sequences with '*' characters in
            them."
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: additional
@@ -110,6 +117,7 @@ section: advanced [
            programs. If you prefer to define frame '-1' as using the set of
            codons starting with the last codon of the sequence, then set this
            to be true."
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: advanced
@@ -123,6 +131,7 @@ section: output [
     parameter: "Y"
     extension: "pep"
     type: "stopprotein"
+    relations: "EDAM: Protein sequence record"                             
   ]
 
 endsection: output

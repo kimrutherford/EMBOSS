@@ -123,17 +123,15 @@ static void cirdna_InterBlocks(float xDraw, float yDraw, float RealLength,
 			       float Radius, float BlockHeight, float From,
 			       float To, float OriginAngle,
 			       AjBool InterSymbol, ajint Colour);
-static void cirdna_DrawArrowHeadsOnCurve(float xDraw, float yDraw,
+static void cirdna_DrawArrowHeadsOncurve(float xDraw, float yDraw,
 					 float RealLength, float Height,
 					 float Length, float Radius,
-					 float Angle, float OriginAngle,
-					 ajint Way);
-static void cirdna_DrawBracketsOnCurve(float xDraw, float yDraw,
+					 float Angle, ajint Way);
+static void cirdna_DrawBracketsOncurve(float xDraw, float yDraw,
 				       float RealLength, float Height,
 				       float Length, float Radius,
-				       float Angle, float OriginAngle,
-				       ajint Way);
-static void cirdna_DrawBarsOnCurve(float xDraw, float yDraw,
+				       float Angle, ajint Way);
+static void cirdna_DrawBarsOncurve(float xDraw, float yDraw,
 				       float Height, float Radius,
 				       float Angle);
 static void cirdna_HorTextPile(float x, float y, float Radius,
@@ -144,7 +142,7 @@ static float cirdna_HorTextPileHeight(float postext, ajint NumNames);
 static float cirdna_HorTextPileLengthMax(const AjPStr Name2, ajint NumNames);
 static float cirdna_ComputeAngle(float RealLength, float Length,
 				 float OriginAngle);
-
+static float cirdna_ComputeArc(float RealLength, float Length);
 
 
 
@@ -237,7 +235,7 @@ int main(int argc, char **argv)
     ajint maxlabels;
 
     /* read the ACD file for graphical programs */
-    ajGraphInit("cirdna", argc, argv);
+    embInit("cirdna", argc, argv);
 
     /* array size limits */
     maxgroups = ajAcdGetInt("maxgroups");
@@ -297,8 +295,8 @@ int main(int argc, char **argv)
     /* length and height of text */
     /*TextHeight = 10;
     TextLength = TextHeight+25;*/
-    TextHeight = 20*ajAcdGetFloat("textheight");
-    TextLength = 40*ajAcdGetFloat("textlength");
+    TextHeight = 2*ajAcdGetFloat("textheight");
+    TextLength = 7*ajAcdGetFloat("textlength");
 
 
     /* read the start and end positions */
@@ -309,42 +307,36 @@ int main(int argc, char **argv)
     RealLength = (End - Start) + 1;
 
     /* height of a tick, a block, and a range */
-    TickHeight = 10*ajAcdGetFloat("tickheight");
+    TickHeight = 3*ajAcdGetFloat("tickheight");
     if( ajStrMatchCaseC(PosBlocks, "Out") )
-	BlockHeight = 10*ajAcdGetFloat("blockheight");
+	BlockHeight = 3*ajAcdGetFloat("blockheight");
     else
     {
-	BlockHeight = (TextHeight+10)*ajAcdGetFloat("blockheight");
-	if(BlockHeight<(TextHeight+10) )
-	    BlockHeight = (TextHeight+10);
+	BlockHeight = (TextHeight+3)*ajAcdGetFloat("blockheight");
+	if(BlockHeight<(TextHeight+3) )
+	    BlockHeight = (TextHeight+3);
     }
-    RangeHeight = 10*ajAcdGetFloat("rangeheight");
+    RangeHeight = 3*ajAcdGetFloat("rangeheight");
 
     /* set the relative positions of elements of a group */
     posblock = 0;
     posrange = 0;
-    GapGroup = 10*ajAcdGetFloat("gapgroup");
+    GapGroup = 3*ajAcdGetFloat("gapgroup");
+
+    ajGraphAppendTitleS(graph, ajFileGetNameS(infile));
 
     /* open the window in which the graphics will be drawn */
-    DrawLength = 800;
-    Border = TickHeight+50+TextLength;
-    Width = DrawLength + (float)2*Border;
-    Width *= (float)(640.0/480.0*1.1);	   /* to get a circle, not an oval */
-    Height = DrawLength + 2*Border;
+    ajGraphOpenMm(graph, &Width, &Height);
 
-    ajGraphSetTitlePlus(graph, ajFileGetNameS(infile));
-
-/*    ajGraphOpenWin(graph, -5.0, Width+5.0, -5.0, Height+5.0);*/
-/*    ajGraphOpenWin(graph, 0, Width, 0, Height);*/
-
-    ajGraphOpenWin(graph, 0, Width, 0, Height*(float)1.1);
+    Border = (float) 2.0 * (TickHeight+TextLength);
+    DrawLength = Height - 2*Border;
 
     /* coordinates of the circle's center */
     xDraw = Width/(float)2.0;
     yDraw = Height/(float)2.0;
+
     /* radius of the outermost circle */
     Radius = RadiusMax = DrawLength/(float)2.0;
-
 
     /* read the contents of the groups */
     line = ajStrNew();
@@ -430,12 +422,12 @@ int main(int argc, char **argv)
 	if( charsize<minsize )
 	    minsize = charsize;
     }
-    ajGraphSetDefCharSize(minsize);
+    ajGraphicsSetDefcharsize(minsize);
     ajDebug("Initial charsize: %f\n", minsize);
 
 
     /* find whether horizontal text strings overlap within a group */
-    postext = (ajGraphTextHeight(0, 0, 1, 1)+3)*ajAcdGetFloat("postext");
+    postext = (ajGraphicsCalcTextheight()+1)*ajAcdGetFloat("postext");
     for(i=0; i<NumGroups; i++)
 	AdjustMax[i] = cirdna_OverlapTextGroup(Name[i], Style[i], NumLabels[i],
 					       From[i], To[i], Start, End,
@@ -502,7 +494,7 @@ int main(int argc, char **argv)
 	if(charsize<minsize)
 	    minsize = charsize;
     }
-    ajGraphSetDefCharSize(minsize);
+    ajGraphicsSetDefcharsize(minsize);
     ajDebug("Resized charsize: %f\n", minsize);
 
 
@@ -554,7 +546,7 @@ int main(int argc, char **argv)
     ajStrDel(&BlockType);
 
     /* close the graphical window */
-    ajGraphCloseWin();
+    ajGraphicsClose();
     ajGraphxyDel(&graph);
 
     for(i=0;i<NumGroups;i++)
@@ -633,8 +625,8 @@ static float cirdna_TextRuler(float Start, float End, ajint GapSize,
     string = ajStrNew();
 
     ajStrFromInt(&string, (ajint)Start);
-    charsize = ajGraphFitTextOnLine(0, 0, TextLength, TextLength,
-				    ajStrGetPtr(string), TextHeight );
+    charsize = ajGraphicsCalcCharsize(0, 0, TextLength, TextLength,
+                                      ajStrGetPtr(string), TextHeight );
     if(charsize < minsize)
 	minsize = charsize;
 
@@ -642,8 +634,8 @@ static float cirdna_TextRuler(float Start, float End, ajint GapSize,
 	if(i>Start)
 	{
 	    ajStrFromInt(&string, i);
-	    charsize = ajGraphFitTextOnLine(0, 0, TextLength, TextLength,
-					    ajStrGetPtr(string), TextHeight );
+	    charsize = ajGraphicsCalcCharsize(0, 0, TextLength, TextLength,
+                                              ajStrGetPtr(string), TextHeight );
 	    if(charsize < minsize)
 		minsize = charsize;
 	}
@@ -654,9 +646,10 @@ static float cirdna_TextRuler(float Start, float End, ajint GapSize,
 	       ajStrMatchCaseC(PosTicks, "Out") )
 	    {
 		token = ajStrParseC(Name[i][j], ";");
-		charsize = ajGraphFitTextOnLine( 0, 0, TextLength,
-						TextLength, ajStrGetPtr(token),
-						TextHeight );
+		charsize = ajGraphicsCalcCharsize( 0, 0, TextLength,
+                                                   TextLength,
+                                                   ajStrGetPtr(token),
+                                                   TextHeight );
 		if(charsize < minsize)
 		    minsize = charsize;
 	    }
@@ -701,23 +694,24 @@ static float cirdna_TextRulerStr(float Start, float End, ajint GapSize,
     string = ajStrNew();
 
     ajStrFromInt(&string, (ajint)Start);
-    stringLength = ajGraphTextLength(0, 0, 1, 1, ajStrGetPtr(string) );
-    stringHeight = ajGraphTextHeight(0, 0, 1, 1);
-    charsize = ajGraphFitTextOnLine(0, 0, stringLength/TextCoef,
-				    stringLength/TextCoef, ajStrGetPtr(string),
-				    stringHeight/TextCoef );
+    stringLength = ajGraphicsCalcTextlengthS(string);
+    stringHeight = ajGraphicsCalcTextheight();
+    charsize = ajGraphicsCalcCharsize(0, 0, stringLength/TextCoef,
+                                      stringLength/TextCoef,
+                                      ajStrGetPtr(string),
+                                      stringHeight/TextCoef );
     if( charsize < minsize ) minsize = charsize;
 
     for(i=GapSize; i<End; i+=GapSize)
 	if(i>Start)
 	{
 	    ajStrFromInt(&string, i);
-	    stringLength = ajGraphTextLength(0, 0, 1, 1, ajStrGetPtr(string) );
-	    stringHeight = ajGraphTextHeight(0, 0, 1, 1);
-	    charsize = ajGraphFitTextOnLine(0, 0, stringLength/TextCoef,
-					    stringLength/TextCoef,
-					    ajStrGetPtr(string),
-					    stringHeight/TextCoef);
+	    stringLength = ajGraphicsCalcTextlengthS(string);
+	    stringHeight = ajGraphicsCalcTextheight();
+	    charsize = ajGraphicsCalcCharsize(0, 0, stringLength/TextCoef,
+                                              stringLength/TextCoef,
+                                              ajStrGetPtr(string),
+                                              stringHeight/TextCoef);
 	    if(charsize < minsize)
 		minsize = charsize;
 	}
@@ -729,13 +723,12 @@ static float cirdna_TextRulerStr(float Start, float End, ajint GapSize,
 	       ajStrMatchCaseC(PosTicks, "Out") )
 	    {
 		token = ajStrParseC(Name[i][j], ";");
-		stringLength = ajGraphTextLength(0, 0, 1, 1,
-						 ajStrGetPtr(token));
-		stringHeight = ajGraphTextHeight(0, 0, 1, 1);
-		charsize = ajGraphFitTextOnLine(0, 0, stringLength/TextCoef,
-						stringLength/TextCoef,
-						ajStrGetPtr(token),
-						stringHeight/TextCoef );
+		stringLength = ajGraphicsCalcTextlengthS(token);
+		stringHeight = ajGraphicsCalcTextheight();
+		charsize = ajGraphicsCalcCharsize(0, 0, stringLength/TextCoef,
+                                                  stringLength/TextCoef,
+                                                  ajStrGetPtr(token),
+                                                  stringHeight/TextCoef );
 		if(charsize < minsize)
 		    minsize = charsize;
 	    }
@@ -783,7 +776,7 @@ static float cirdna_HeightRuler(float Start, float End, ajint GapSize,
     RulerHeight = TickHeight+postext;
 
     ajStrFromInt(&string, (ajint)Start);
-    stringLength = ajGraphTextLength( 0, 0, 1, 0, ajStrGetPtr(string) );
+    stringLength = ajGraphicsCalcTextlengthS(string);
     if(stringLength>maxLength)
 	maxLength = stringLength;
 
@@ -791,7 +784,7 @@ static float cirdna_HeightRuler(float Start, float End, ajint GapSize,
 	if(i>Start)
 	{
 	    ajStrFromInt(&string, i);
-	    stringLength = ajGraphTextLength(0, 0, 1, 0, ajStrGetPtr(string));
+	    stringLength = ajGraphicsCalcTextlengthS(string);
 	    if(stringLength>maxLength)
 		maxLength = stringLength;
 	}
@@ -802,8 +795,7 @@ static float cirdna_HeightRuler(float Start, float End, ajint GapSize,
 	       ajStrMatchCaseC(PosTicks, "Out") )
 	    {
 		token = ajStrParseC(Name[i][j], ";");
-		stringLength = ajGraphTextLength( 0, 0, 1, 0,
-						 ajStrGetPtr(token) );
+		stringLength = ajGraphicsCalcTextlengthS(token);
 		if( stringLength>maxLength )
 		    maxLength = stringLength;
 	    }
@@ -858,9 +850,9 @@ static void cirdna_DrawRuler(float xDraw, float yDraw, float Start, float End,
     string   = ajStrNew();
     posticks = ajStrNew();
 
-    ajGraphSetFore(Colour);
+    ajGraphicsSetFgcolour(Colour);
 
-    ajGraphCircle( xDraw, yDraw, Radius );
+    ajGraphicsDrawposCircle( xDraw, yDraw, Radius );
 
     ajStrAssignEmptyC(&posticks, "Out");
 
@@ -869,8 +861,8 @@ static void cirdna_DrawRuler(float xDraw, float yDraw, float Start, float End,
     if(TickLines)
     {
 	Angle = cirdna_ComputeAngle(RealLength, 0, OriginAngle);
-	xy = ajComputeCoord(xDraw, yDraw, Radius, Angle);
-	ajGraphDrawLine(xDraw, yDraw, xy[0], xy[1]);
+	xy = ajGraphicsCalcCoord(xDraw, yDraw, Radius, Angle);
+	ajGraphicsDrawposLine(xDraw, yDraw, xy[0], xy[1]);
 	AJFREE(xy);
     }
 
@@ -888,8 +880,8 @@ static void cirdna_DrawRuler(float xDraw, float yDraw, float Start, float End,
 	    if( TickLines )
 	    {
 		Angle = cirdna_ComputeAngle(RealLength, i-Start, OriginAngle);
-		xy = ajComputeCoord(xDraw, yDraw, Radius, Angle);
-		ajGraphDrawLine(xDraw, yDraw, xy[0], xy[1]);
+		xy = ajGraphicsCalcCoord(xDraw, yDraw, Radius, Angle);
+		ajGraphicsDrawposLine(xDraw, yDraw, xy[0], xy[1]);
 		AJFREE(xy);
 	    }
 	    if(!cirdna_OverlapTickRuler(NumGroups, NumLabels, From, PosTicks,
@@ -946,20 +938,24 @@ static void cirdna_DrawTicks(float xDraw, float yDraw, float RealLength,
     float r1Ticks = Radius;
     float r2Ticks = r1Ticks+TickHeight;
     const AjPStr token;
+    float mmtolen;
 
-    ajGraphSetFore(Colour);
+    /* radius is 2pi*radius in mm, RealLength in bases */
+    mmtolen = RealLength/(Radius * (float) 2.0 * (float) 3.1416);
+
+    ajGraphicsSetFgcolour(Colour);
 
     Angle = cirdna_ComputeAngle(RealLength, From, OriginAngle);
 
-    xy1 = ajComputeCoord(xDraw, yDraw, r1Ticks, Angle);
-    xy2 = ajComputeCoord(xDraw, yDraw, r2Ticks, Angle);
-    ajGraphDrawLine(xy1[0], xy1[1], xy2[0], xy2[1] );
+    xy1 = ajGraphicsCalcCoord(xDraw, yDraw, r1Ticks, Angle);
+    xy2 = ajGraphicsCalcCoord(xDraw, yDraw, r2Ticks, Angle);
+    ajGraphicsDrawposLine(xy1[0], xy1[1], xy2[0], xy2[1] );
     AJFREE(xy1);
     AJFREE(xy2);
 
     if(ajStrMatchCaseC(PosTicks, "In") )
     {
-	stringLength = cirdna_HorTextPileLengthMax(Name2, NumNames);
+	stringLength = mmtolen * cirdna_HorTextPileLengthMax(Name2, NumNames);
 	StartAngle = cirdna_ComputeAngle(RealLength, From+stringLength/2,
 					 OriginAngle);
 	EndAngle = cirdna_ComputeAngle(RealLength, From-stringLength/2,
@@ -971,19 +967,19 @@ static void cirdna_DrawTicks(float xDraw, float yDraw, float RealLength,
     {
 	token = ajStrParseC(Name2, ";");
 	/*ajStrExchangeCC(&Name2, ";", " ");*/
-	stringLength = ajGraphTextLength(0, 0, 1, 1, ajStrGetPtr(token) );
-	xy1 = ajComputeCoord(xDraw, yDraw, r2Ticks+postext, Angle);
-	xy2 = ajComputeCoord(xDraw, yDraw, r2Ticks+postext+stringLength,
+	stringLength = ajGraphicsCalcTextlengthS(token);
+	xy1 = ajGraphicsCalcCoord(xDraw, yDraw, r2Ticks+postext, Angle);
+	xy2 = ajGraphicsCalcCoord(xDraw, yDraw, r2Ticks+postext+stringLength,
 			     Angle);
-	xy3 = ajComputeCoord(xDraw, yDraw, r2Ticks+postext-stringLength,
+	xy3 = ajGraphicsCalcCoord(xDraw, yDraw, r2Ticks+postext-stringLength,
 			     Angle);
 	if((Angle>=0.0 && Angle<=90.0) || (Angle>=270.0 && Angle<=360.0) ||
 	   (Angle>=360.0 && Angle<=450.0) || (Angle>=630.0 && Angle<=720.0) )
-	    ajGraphDrawTextOnLine( xy1[0], xy1[1], xy2[0], xy2[1],
-				  ajStrGetPtr(token), 0.0 );
+	    ajGraphicsDrawposTextAtlineJustify( xy1[0], xy1[1], xy2[0], xy2[1],
+                                                ajStrGetPtr(token), 0.0 );
 	else
-	    ajGraphDrawTextOnLine( xy1[0], xy1[1], xy3[0], xy3[1],
-				  ajStrGetPtr(token), 1.0 );
+	    ajGraphicsDrawposTextAtlineJustify( xy1[0], xy1[1], xy3[0], xy3[1],
+                                                ajStrGetPtr(token), 1.0 );
 	AJFREE(xy1);
 	AJFREE(xy2);
 	AJFREE(xy3);
@@ -1037,25 +1033,25 @@ static void cirdna_DrawBlocks(float xDraw, float yDraw, float RealLength,
     StartAngle = cirdna_ComputeAngle(RealLength, From, OriginAngle);
     EndAngle = cirdna_ComputeAngle(RealLength, To, OriginAngle);
 
-    ajGraphSetFore(Colour);
+    ajGraphicsSetFgcolour(Colour);
     if(ajCharCmpCase(ajStrGetPtr(BlockType), "Open")==0 )
-	ajGraphRectangleOnCurve(xDraw, yDraw, r2Blocks, (float)BlockHeight,
-				StartAngle, EndAngle);
+	ajGraphicsDrawarcRect(xDraw, yDraw, r2Blocks,
+                              StartAngle, EndAngle, (float)BlockHeight);
     else if( ajCharCmpCase(ajStrGetPtr(BlockType), "Filled")==0 )
-	ajGraphFillRectangleOnCurve(xDraw, yDraw, r2Blocks, (float)BlockHeight,
-				    StartAngle, EndAngle);
+	ajGraphicsDrawarcRectFill(xDraw, yDraw, r2Blocks,
+                                  StartAngle, EndAngle, (float)BlockHeight);
     else
     {
-	ajGraphFillRectangleOnCurve(xDraw, yDraw, r2Blocks, (float)BlockHeight,
-				    StartAngle, EndAngle);
-	ajGraphSetFore(0);
-	ajGraphRectangleOnCurve(xDraw, yDraw, r2Blocks, (float)BlockHeight,
-				StartAngle, EndAngle);
-	ajGraphSetFore(Colour);
+	ajGraphicsDrawarcRectFill(xDraw, yDraw, r2Blocks,
+                                  StartAngle, EndAngle, (float)BlockHeight);
+	ajGraphicsSetFgcolour(0);
+	ajGraphicsDrawarcRect(xDraw, yDraw, r2Blocks,
+                              StartAngle, EndAngle, (float)BlockHeight);
+	ajGraphicsSetFgcolour(Colour);
     }
 
     stringLength = cirdna_HorTextPileLengthMax(Name2, NumNames);
-    stringHeight = ajGraphTextHeight(0, 0, 1, 1);
+    stringHeight = ajGraphicsCalcTextheight();
     StartAngle   = cirdna_ComputeAngle(RealLength, (To+From)/2+stringLength/2,
 				       OriginAngle);
     EndAngle = cirdna_ComputeAngle(RealLength, (To+From)/2-stringLength/2,
@@ -1110,15 +1106,18 @@ static void cirdna_DrawRanges(float xDraw, float yDraw, float RealLength,
     float rRanges = Radius;
     float rupper;
     float BoundaryLength;
+    float mmtolen;
 
+    /* radius is 2pi*radius in mm, RealLength in bases */
+    mmtolen = RealLength/(Radius * (float) 2.0 * (float) 3.1416);
 
     rupper = rRanges+((float)1.0*RangeHeight/(float)2);
 
-    ajGraphSetFore(Colour);
+    ajGraphicsSetFgcolour(Colour);
 
     StartAngle = cirdna_ComputeAngle(RealLength, From, OriginAngle);
     EndAngle   = cirdna_ComputeAngle(RealLength, To, OriginAngle);
-    ajGraphPartCircle(xDraw, yDraw, rRanges, StartAngle, EndAngle);
+    ajGraphicsDrawarcArc(xDraw, yDraw, rRanges, StartAngle, EndAngle);
 
     if( RangeHeight>(From-To)/3 )
 	BoundaryLength = (From-To)/3;
@@ -1126,46 +1125,46 @@ static void cirdna_DrawRanges(float xDraw, float yDraw, float RealLength,
 	BoundaryLength = RangeHeight;
 
     if(FromSymbol=='<')
-	cirdna_DrawArrowHeadsOnCurve(xDraw, yDraw, RealLength, RangeHeight,
+	cirdna_DrawArrowHeadsOncurve(xDraw, yDraw, RealLength, RangeHeight,
 				     BoundaryLength, rRanges, StartAngle,
-				     OriginAngle, +1);
+				     +1);
     if(FromSymbol=='>')
-	cirdna_DrawArrowHeadsOnCurve(xDraw, yDraw, RealLength, RangeHeight,
+	cirdna_DrawArrowHeadsOncurve(xDraw, yDraw, RealLength, RangeHeight,
 				     BoundaryLength, rRanges, StartAngle,
-				     OriginAngle, -1);
+				     -1);
     if(FromSymbol=='[')
-	cirdna_DrawBracketsOnCurve(xDraw, yDraw, RealLength, RangeHeight,
+	cirdna_DrawBracketsOncurve(xDraw, yDraw, RealLength, RangeHeight,
 				   BoundaryLength, rRanges, StartAngle,
-				   OriginAngle, +1);
+				   +1);
     if(FromSymbol==']')
-	cirdna_DrawBracketsOnCurve(xDraw, yDraw, RealLength, RangeHeight,
+	cirdna_DrawBracketsOncurve(xDraw, yDraw, RealLength, RangeHeight,
 				   BoundaryLength, rRanges, StartAngle,
-				   OriginAngle, -1);
+				   -1);
     if(FromSymbol=='|')
-	cirdna_DrawBarsOnCurve(xDraw, yDraw, RangeHeight,
+	cirdna_DrawBarsOncurve(xDraw, yDraw, RangeHeight,
 				   rRanges, StartAngle);
 
     if(ToSymbol=='<')
-	cirdna_DrawArrowHeadsOnCurve(xDraw, yDraw, RealLength, RangeHeight,
+	cirdna_DrawArrowHeadsOncurve(xDraw, yDraw, RealLength, RangeHeight,
 				     BoundaryLength, rRanges, EndAngle,
-				     OriginAngle, +1);
+				     +1);
     if(ToSymbol=='>')
-	cirdna_DrawArrowHeadsOnCurve(xDraw, yDraw, RealLength, RangeHeight,
+	cirdna_DrawArrowHeadsOncurve(xDraw, yDraw, RealLength, RangeHeight,
 				     BoundaryLength, rRanges, EndAngle,
-				     OriginAngle, -1);
+				     -1);
     if(ToSymbol=='[')
-	cirdna_DrawBracketsOnCurve(xDraw, yDraw, RealLength, RangeHeight,
+	cirdna_DrawBracketsOncurve(xDraw, yDraw, RealLength, RangeHeight,
 				   BoundaryLength, rRanges, EndAngle,
-				   OriginAngle, +1);
+				   +1);
     if(ToSymbol==']')
-	cirdna_DrawBracketsOnCurve(xDraw, yDraw, RealLength, RangeHeight,
+	cirdna_DrawBracketsOncurve(xDraw, yDraw, RealLength, RangeHeight,
 				   BoundaryLength, rRanges, EndAngle,
-				   OriginAngle, -1);
+				   -1);
     if(ToSymbol=='|')
-	cirdna_DrawBarsOnCurve(xDraw, yDraw, RangeHeight,
+	cirdna_DrawBarsOncurve(xDraw, yDraw, RangeHeight,
 			       rRanges, EndAngle);
 
-    stringLength = cirdna_HorTextPileLengthMax(Name2, NumNames);
+    stringLength = mmtolen * cirdna_HorTextPileLengthMax(Name2, NumNames);
     StartAngle   = cirdna_ComputeAngle(RealLength, (To+From)/2+stringLength/2,
 				       OriginAngle);
     EndAngle = cirdna_ComputeAngle(RealLength, (To+From)/2-stringLength/2,
@@ -1210,14 +1209,14 @@ static void cirdna_InterBlocks(float xDraw, float yDraw, float RealLength,
     r1Inter = Radius+((float)1.0*BlockHeight/(float)2);
     r2Inter = r1Inter-BlockHeight;
 
-    ajGraphSetFore(Colour);
+    ajGraphicsSetFgcolour(Colour);
 
     StartAngle = cirdna_ComputeAngle(RealLength, To, OriginAngle);
     EndAngle   = cirdna_ComputeAngle(RealLength, From, OriginAngle);
 
     if(InterSymbol)
-	ajGraphPartCircle(xDraw, yDraw, (r1Inter+r2Inter)/2, StartAngle,
-			  EndAngle);
+	ajGraphicsDrawarcArc(xDraw, yDraw, (r1Inter+r2Inter)/2, StartAngle,
+                             EndAngle);
 
     return;
 }
@@ -1227,7 +1226,7 @@ static void cirdna_InterBlocks(float xDraw, float yDraw, float RealLength,
 
 /* @funcstatic cirdna_ComputeAngle ********************************************
 **
-** compute the angle knowing the length
+** compute the angle at the Length position
 **
 ** @param [r] RealLength [float] Undocumented
 ** @param [r] Length [float] Undocumented
@@ -1250,8 +1249,31 @@ static float cirdna_ComputeAngle(float RealLength, float Length,
 
 
 
+/* @funcstatic cirdna_ComputeArc ********************************************
+**
+** compute the angle covering the length as a fraction of the real length
+**
+** @param [r] RealLength [float] Undocumented
+** @param [r] Length [float] Undocumented
+** @return [float] Undocumented
+** @@
+******************************************************************************/
 
-/* @funcstatic cirdna_DrawArrowHeadsOnCurve ***********************************
+static float cirdna_ComputeArc(float RealLength, float Length)
+{
+    float i;
+    float j;
+
+    i = Length/RealLength;
+    j = i * 360;
+
+    return j;
+}
+
+
+
+
+/* @funcstatic cirdna_DrawArrowHeadsOncurve ***********************************
 **
 ** draw arrowheads on a curve
 **
@@ -1262,50 +1284,47 @@ static float cirdna_ComputeAngle(float RealLength, float Length,
 ** @param [r] Length [float] Undocumented
 ** @param [r] Radius [float] Undocumented
 ** @param [r] Angle [float] Undocumented
-** @param [r] OriginAngle [float] Undocumented
 ** @param [r] Way [ajint] Undocumented
 ** @@
 ******************************************************************************/
 
-static void cirdna_DrawArrowHeadsOnCurve(float xDraw, float yDraw,
+static void cirdna_DrawArrowHeadsOncurve(float xDraw, float yDraw,
 					 float RealLength, float Height,
 					 float Length, float Radius,
-					 float Angle, float OriginAngle,
-					 ajint Way)
+					 float Angle, ajint Way)
 {
     float *xy1;
     float *xy2;
-    float StartAngle;
-    float EndAngle;
     float pos;
     float middle;
 
+
     middle = (float)1.0*Height/(float)2;
 
-    StartAngle = cirdna_ComputeAngle(RealLength, 0, OriginAngle);
-    EndAngle   = cirdna_ComputeAngle(RealLength, Length, OriginAngle);
-    pos = EndAngle-StartAngle;
+    pos = cirdna_ComputeArc(RealLength, Length);
+    if(pos < 1.0)
+        pos = 1.0;
 
     if(Way==1)
     {
-	xy1 = ajComputeCoord(xDraw, yDraw, Radius, Angle);
-	xy2 = ajComputeCoord(xDraw, yDraw, Radius+middle, Angle+pos);
-	ajGraphDrawLine( xy1[0], xy1[1], xy2[0], xy2[1] );
+	xy1 = ajGraphicsCalcCoord(xDraw, yDraw, Radius, Angle);
+	xy2 = ajGraphicsCalcCoord(xDraw, yDraw, Radius+middle, Angle+pos);
+	ajGraphicsDrawposLine( xy1[0], xy1[1], xy2[0], xy2[1] );
 	AJFREE(xy2);
-	xy2 = ajComputeCoord(xDraw, yDraw, Radius-middle, Angle+pos);
-	ajGraphDrawLine( xy1[0], xy1[1], xy2[0], xy2[1] );
+	xy2 = ajGraphicsCalcCoord(xDraw, yDraw, Radius-middle, Angle+pos);
+	ajGraphicsDrawposLine( xy1[0], xy1[1], xy2[0], xy2[1] );
 	AJFREE(xy1);
 	AJFREE(xy2);
     }
 
     if(Way==-1)
     {
-	xy1 = ajComputeCoord(xDraw, yDraw, Radius, Angle);
-	xy2 = ajComputeCoord(xDraw, yDraw, Radius+middle, Angle-pos);
-	ajGraphDrawLine( xy1[0], xy1[1], xy2[0], xy2[1] );
-	AJFREE(xy2);
-	xy2 = ajComputeCoord(xDraw, yDraw, Radius-middle, Angle-pos);
-	ajGraphDrawLine( xy1[0], xy1[1], xy2[0], xy2[1] );
+	xy1 = ajGraphicsCalcCoord(xDraw, yDraw, Radius+middle, Angle-pos);
+	xy2 = ajGraphicsCalcCoord(xDraw, yDraw, Radius, Angle);
+	ajGraphicsDrawposLine( xy1[0], xy1[1], xy2[0], xy2[1] );
+	AJFREE(xy1);
+	xy1 = ajGraphicsCalcCoord(xDraw, yDraw, Radius-middle, Angle-pos);
+	ajGraphicsDrawposLine( xy1[0], xy1[1], xy2[0], xy2[1] );
 	AJFREE(xy1);
 	AJFREE(xy2);
     }
@@ -1316,7 +1335,7 @@ static void cirdna_DrawArrowHeadsOnCurve(float xDraw, float yDraw,
 
 
 
-/* @funcstatic cirdna_DrawBracketsOnCurve *************************************
+/* @funcstatic cirdna_DrawBracketsOncurve *************************************
 **
 ** draw brackets on a curve
 **
@@ -1327,51 +1346,47 @@ static void cirdna_DrawArrowHeadsOnCurve(float xDraw, float yDraw,
 ** @param [r] Length [float] Undocumented
 ** @param [r] Radius [float] Undocumented
 ** @param [r] Angle [float] Undocumented
-** @param [r] OriginAngle [float] Undocumented
 ** @param [r] Way [ajint] Undocumented
 ** @@
 ******************************************************************************/
 
-static void cirdna_DrawBracketsOnCurve(float xDraw, float yDraw,
+static void cirdna_DrawBracketsOncurve(float xDraw, float yDraw,
 				       float RealLength, float Height,
 				       float Length, float Radius,
-				       float Angle, float OriginAngle,
-				       ajint Way)
+				       float Angle, ajint Way)
 {
     float *xy1;
     float *xy2;
-    float StartAngle;
-    float EndAngle;
     float pos;
     float middle;
 
     middle = (float)1.0*Height/(float)2;
 
-    StartAngle = cirdna_ComputeAngle(RealLength, 0, OriginAngle);
-    EndAngle   = cirdna_ComputeAngle(RealLength, Length, OriginAngle);
-    pos = EndAngle-StartAngle;
+    pos = cirdna_ComputeArc(RealLength, Length);
+    if(pos < 1.0)
+        pos = 1.0;
 
     if(Way==1)
     {
-	xy1 = ajComputeCoord(xDraw, yDraw, Radius+middle, Angle);
-	xy2 = ajComputeCoord(xDraw, yDraw, Radius-middle, Angle);
-	ajGraphDrawLine(xy1[0], xy1[1], xy2[0], xy2[1]);
+	xy1 = ajGraphicsCalcCoord(xDraw, yDraw, Radius+middle, Angle);
+	xy2 = ajGraphicsCalcCoord(xDraw, yDraw, Radius-middle, Angle);
+	ajGraphicsDrawposLine(xy1[0], xy1[1], xy2[0], xy2[1]);
 	AJFREE(xy1);
 	AJFREE(xy2);
 
-	ajGraphPartCircle(xDraw, yDraw, Radius+middle, Angle, Angle+pos);
-	ajGraphPartCircle(xDraw, yDraw, Radius-middle, Angle, Angle+pos);
+	ajGraphicsDrawarcArc(xDraw, yDraw, Radius+middle, Angle-pos, Angle);
+	ajGraphicsDrawarcArc(xDraw, yDraw, Radius-middle, Angle-pos, Angle);
     }
 
     if(Way==-1)
     {
-	xy1 = ajComputeCoord(xDraw, yDraw, Radius+middle, Angle);
-	xy2 = ajComputeCoord(xDraw, yDraw, Radius-middle, Angle);
-	ajGraphDrawLine(xy1[0], xy1[1], xy2[0], xy2[1]);
+	xy1 = ajGraphicsCalcCoord(xDraw, yDraw, Radius+middle, Angle);
+	xy2 = ajGraphicsCalcCoord(xDraw, yDraw, Radius-middle, Angle);
+	ajGraphicsDrawposLine(xy1[0], xy1[1], xy2[0], xy2[1]);
 	AJFREE(xy1);
 	AJFREE(xy2);
-	ajGraphPartCircle(xDraw, yDraw, Radius+middle, Angle, Angle-pos);
-	ajGraphPartCircle(xDraw, yDraw, Radius-middle, Angle, Angle-pos);
+	ajGraphicsDrawarcArc(xDraw, yDraw, Radius+middle, Angle, Angle+pos);
+	ajGraphicsDrawarcArc(xDraw, yDraw, Radius-middle, Angle, Angle+pos);
     }
 
     return;
@@ -1380,7 +1395,7 @@ static void cirdna_DrawBracketsOnCurve(float xDraw, float yDraw,
 
 
 
-/* @funcstatic cirdna_DrawBarsOnCurve *****************************************
+/* @funcstatic cirdna_DrawBarsOncurve *****************************************
 **
 ** draw bars on a curve
 **
@@ -1393,7 +1408,7 @@ static void cirdna_DrawBracketsOnCurve(float xDraw, float yDraw,
 ** @@
 ******************************************************************************/
 
-static void cirdna_DrawBarsOnCurve(float xDraw, float yDraw,
+static void cirdna_DrawBarsOncurve(float xDraw, float yDraw,
 				   float Height, float Radius,
 				   float Angle)
 {
@@ -1403,9 +1418,9 @@ static void cirdna_DrawBarsOnCurve(float xDraw, float yDraw,
     
     middle = (float)1.0*Height/(float)2;
 
-    xy1 = ajComputeCoord(xDraw, yDraw, Radius+middle, Angle);
-    xy2 = ajComputeCoord(xDraw, yDraw, Radius-middle, Angle);
-    ajGraphDrawLine( xy1[0], xy1[1], xy2[0], xy2[1] );
+    xy1 = ajGraphicsCalcCoord(xDraw, yDraw, Radius+middle, Angle);
+    xy2 = ajGraphicsCalcCoord(xDraw, yDraw, Radius-middle, Angle);
+    ajGraphicsDrawposLine( xy1[0], xy1[1], xy2[0], xy2[1] );
     AJFREE(xy1);
     AJFREE(xy2);
 
@@ -1448,11 +1463,12 @@ static void cirdna_HorTextPile(float x, float y, float Radius,
 	    token = ajStrParseC(Name2, ";");
 	else
 	    token = ajStrParseC(NULL, ";");
-	stringHeight = ajGraphTextHeight(0, 0, 1, 1);
+	stringHeight = ajGraphicsCalcTextheight();
 	rupper = totalHeight+stringHeight;
 	if(token && ajStrGetPtr(token))
-	    ajGraphDrawTextOnCurve(x, y, (totalHeight+rupper)/2, StartAngle,
-				   EndAngle, ajStrGetPtr(token), 0.5);
+	    ajGraphicsDrawarcTextJustify(x, y,
+                                         (totalHeight+rupper)/2, StartAngle,
+                                         EndAngle, ajStrGetPtr(token), 0.5);
 	totalHeight+=(stringHeight+postext);
     }
 
@@ -1481,7 +1497,7 @@ static float cirdna_HorTextPileHeight(float postext, ajint NumNames)
     totalHeight = 0.0;
     for(i=0; i<NumNames; i++)
     {
-	stringHeight = ajGraphTextHeight(0, 0, 1, 1);
+	stringHeight = ajGraphicsCalcTextheight();
 	totalHeight += (stringHeight+postext);
     }
 
@@ -1516,7 +1532,7 @@ static float cirdna_HorTextPileLengthMax(const AjPStr Name2, ajint NumNames)
 	    token = ajStrParseC(Name2, ";");
 	else
 	    token = ajStrParseC(NULL, ";");
-	stringLength = ajGraphTextLength( 0, 0, 1, 1, ajStrGetPtr(token) );
+	stringLength = ajGraphicsCalcTextlengthS(token);
 
 	if(stringLength>maxLength)
 	    maxLength = stringLength;
@@ -1771,15 +1787,15 @@ static float cirdna_TextGroup(float TextHeight, float TextLength,
 		    token = ajStrParseC(NULL, ";");
 		if(ajStrMatchCaseC(Style2[i], "Block") &&
 		   ((From[i]-To[i])<TextLength))
-		    charsize = ajGraphFitTextOnLine(0, 0, From[i]-To[i],
-						    From[i]-To[i],
-						    ajStrGetPtr(token),
-						    TextHeight);
+		    charsize = ajGraphicsCalcCharsize(0, 0, From[i]-To[i],
+                                                      From[i]-To[i],
+                                                      ajStrGetPtr(token),
+                                                      TextHeight);
 		else
-		    charsize = ajGraphFitTextOnLine(0, 0, TextLength,
-						    TextLength,
-						    ajStrGetPtr(token),
-						    TextHeight);
+		    charsize = ajGraphicsCalcCharsize(0, 0, TextLength,
+                                                      TextLength,
+                                                      ajStrGetPtr(token),
+                                                      TextHeight);
 		if(charsize < minsize)
 		    minsize = charsize;
 	    }
@@ -1832,22 +1848,21 @@ static float cirdna_TextGroupStr(AjPStr const *Name2, ajint NumLabels,
 		    token = ajStrParseC(Name2[i], ";");
 		else
 		    token = ajStrParseC(NULL, ";");
-		stringLength = ajGraphTextLength(0, 0, 1, 1,
-						 ajStrGetPtr(token));
-		stringHeight = ajGraphTextHeight(0, 0, 1, 1);
+		stringLength = ajGraphicsCalcTextlengthS(token);
+		stringHeight = ajGraphicsCalcTextheight();
 		if(ajStrMatchCaseC(Style2[i], "Block") &&
 		   ((From[i]-To[i])<stringLength))
-		    charsize = ajGraphFitTextOnLine(0, 0,
-						    (From[i]-To[i])/TextCoef,
-						    (From[i]-To[i])/TextCoef,
-						    ajStrGetPtr(token),
-						    stringHeight/TextCoef);
+		    charsize = ajGraphicsCalcCharsize(0, 0,
+                                                      (From[i]-To[i])/TextCoef,
+                                                      (From[i]-To[i])/TextCoef,
+                                                      ajStrGetPtr(token),
+                                                      stringHeight/TextCoef);
 		else
-		    charsize = ajGraphFitTextOnLine(0, 0,
-						    stringLength/TextCoef,
-						    stringLength/TextCoef,
-						    ajStrGetPtr(token),
-						    stringHeight/TextCoef);
+		    charsize = ajGraphicsCalcCharsize(0, 0,
+                                                      stringLength/TextCoef,
+                                                      stringLength/TextCoef,
+                                                      ajStrGetPtr(token),
+                                                      stringHeight/TextCoef);
 		if(charsize < minsize)
 		    minsize = charsize;
 	    }
@@ -1988,7 +2003,7 @@ static ajint cirdna_OverlapTextGroup(AjPStr const *Name2, AjPStr const *Style2,
 	   ajStrMatchCaseC(PosTicks, "In"))
 	{
 	    token = ajStrParseC(Name2[i], ";");
-	    stringLength = ajGraphTextLength(0, 0, 1, 1, ajStrGetPtr(token));
+	    stringLength = ajGraphicsCalcTextlengthS(token);
 	    ulim = From[i]+stringLength/2;
 	    if(ulim>(End-Start-1))
 		ulim = End-Start-1-ulim;
@@ -2007,7 +2022,7 @@ static ajint cirdna_OverlapTextGroup(AjPStr const *Name2, AjPStr const *Style2,
 	else if(ajStrMatchCaseC(Style2[i], "Block"))
 	{
 	    token = ajStrParseC(Name2[i], ";");
-	    stringLength = ajGraphTextLength( 0, 0, 1, 1, ajStrGetPtr(token) );
+	    stringLength = ajGraphicsCalcTextlengthS(token);
 	    ulim = (To[i]+From[i])/2+stringLength/2;
 	    if(ulim>(End-Start-1))
 		ulim = End-Start-1-ulim;
@@ -2026,7 +2041,7 @@ static ajint cirdna_OverlapTextGroup(AjPStr const *Name2, AjPStr const *Style2,
 	else if(ajStrMatchCaseC(Style2[i], "Range"))
 	{
 	    token = ajStrParseC(Name2[i], ";");
-	    stringLength = ajGraphTextLength(0, 0, 1, 1, ajStrGetPtr(token));
+	    stringLength = ajGraphicsCalcTextlengthS(token);
 	    ulim = (To[i]+From[i])/2+stringLength/2;
 	    if(ulim>(End-Start-1))
 		ulim = End-Start-1-ulim;
@@ -2217,7 +2232,7 @@ static void cirdna_DrawGroup(float xDraw, float yDraw, float posblock,
 				 postext, PosTicks, NumNames[i],
 				 Adjust[i], Colour[i]);
 		if(InterTicks)
-		    ajGraphCircle(xDraw, yDraw, Radius);
+		    ajGraphicsDrawposCircle(xDraw, yDraw, Radius);
 	    }
 	    else
 		cirdna_DrawTicks(xDraw, yDraw, RealLength, RadiusMax,

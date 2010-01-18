@@ -1,0 +1,87 @@
+application: idtell
+[
+  documentation: "Identify the type of a data identifier / query term"
+  groups: "Information"
+  gui: "yes"
+  batch: "yes"
+  cpu: "low"
+  relations: "EDAM: Database information"
+]
+
+section: input 
+[
+  information: "Input section"
+  type: "page"
+]
+
+  string: identifier
+  [
+      default: ""
+      additional: "Y"
+      information: "Identifier to identify."
+      knowntype: "database category name"
+    relations: "EDAM: Generic string"                                      
+  ]
+
+  datafile: dbref
+  [
+      information: "Database information datafile"
+      help: "File of database information including identifier, description, type, URL etc."
+      default: "dbref.dat"
+      knowntype: "database info"
+    relations:  "EDAM: Database bibliographic information"             
+  ]
+
+endsection: input
+
+
+
+
+section: required 
+[
+  information: "Required section"
+  type: "page"
+]
+
+endsection: required
+
+
+
+
+
+
+
+section: additional
+[
+  information: "Additional section"
+  type: "page"
+]
+endsection: additional
+
+
+
+
+
+section: advanced
+[
+  information: "Advanced section"
+  type: "page"
+]
+endsection: advanced
+
+
+
+
+
+
+
+
+
+section: output 
+[
+  information: "Output section"
+  type: "page"
+]
+
+endsection: output
+

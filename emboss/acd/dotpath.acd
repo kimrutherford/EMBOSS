@@ -4,6 +4,7 @@ application: dotpath [
   gui: "yes"
   batch: "yes"
   cpu: "high"
+  relations: "EDAM: Dotplot generation"
 ]
 
 section: input [
@@ -14,11 +15,13 @@ section: input [
   sequence: asequence [
     parameter: "y"
     type: "any"
+    relations: "EDAM: Sequence"                                            
   ]
 
   sequence: bsequence [
     parameter: "y"
     type: "@($(acdprotein) ? stopprotein : nucleotide)"
+    relations: "EDAM: Sequence"                                            
   ]
 
 endsection: input
@@ -33,6 +36,7 @@ section: required [
     default: "4"
     minimum: "2"
     information: "Word size"
+    relations: "EDAM: Generic integer"                                     
   ]
 
 endsection: required
@@ -48,12 +52,14 @@ section: output [
     information: "Display the overlapping matches"
     help: "Displays the overlapping matches (in red) as well as the
            minimal set of non-overlapping matches"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: boxit [
     default: "Y"
     additional: "Y"
     information: "Draw a box around dotplot"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   graph: graph [
@@ -61,6 +67,7 @@ section: output [
     gtitle: "Dotpath: $(asequence.usa) vs $(bsequence.usa)"
     gxtitle: "$(bsequence.name)"
     gytitle: "$(asequence.name)"
+    relations: "EDAM: EMBOSS graph file"                                   
   ]
 
 endsection: output

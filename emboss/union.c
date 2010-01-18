@@ -247,7 +247,7 @@ static void union_CopyFeatures (const AjPFeattable old_feattable,
 	gf = ajListIterGet(iter);
 	type = ajFeatGetType(gf);
 
-	copy = ajFeatCopy (gf);
+	copy = ajFeatNewFeat(gf);
     
 	/* FIXME */
 	copy->Start += (ajuint) offset;

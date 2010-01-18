@@ -1,5 +1,4 @@
-
-                                 nthseqset 
+                                  nthseqset
 
 
 
@@ -17,25 +16,29 @@ Function
 Description
 
    nthseqset writes to file a single sequence alignment (set) from an
-   input stream of sequence sets. The sequence set is specified by
-   number, which is the order it appears in the input file. The output
-   file name may be specified.
+   input stream of sequence sets. The sequence set is specified by number,
+   which is the order it appears in the input file. The output file name
+   may be specified.
 
 Usage
 
    Here is a sample session with nthseqset
 
 
-% nthseqset -osf phylip 
+% nthseqset -osf phylip
 Reads and writes (returns) one set of sequences from many
 Input sequence set(s): globins-all.phy
 The number of the sequence set to output [1]: 2
-output sequence(s) [globins-all.phylip]: 
+output sequence(s) [globins-all.phylip]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Reads and writes (returns) one set of sequences from many
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqsetall  Sequence set(s) filename and optional
@@ -87,13 +90,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -172,8 +177,8 @@ Output file format
 
    The output is the specified ordinal sequence from the input USA.
 
-   In the example, the second sequence from the input file will be
-   written out to the specified output file.
+   In the example, the second sequence from the input file will be written
+   out to the specified output file.
 
   Output files for usage example
 
@@ -300,7 +305,7 @@ See also
 
 Author(s)
 
-   Peter Rice (pmr © ebi.ac.uk)
+   Peter Rice (pmr (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

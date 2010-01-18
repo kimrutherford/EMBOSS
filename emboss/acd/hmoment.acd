@@ -1,6 +1,7 @@
 application: hmoment [
   documentation: "Calculate and plot hydrophobic moment for protein sequence(s)"
   groups: "Protein:2D Structure"
+  relations: "EDAM: Protein hydrophobic moment calculation"
 ]
 
 section: input [
@@ -11,6 +12,7 @@ section: input [
   seqall: seqall [
     parameter: "Y"
     type: "protein"
+    relations: "EDAM: Protein sequence record"                             
   ]
 
 endsection: input
@@ -24,18 +26,21 @@ section: additional [
     additional: "Y"
     default: "10"
     information: "Window"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: aangle [
     additional: "Y"
     default: "100"
     information: "Alpha helix angle (degrees)"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: bangle [
     additional: "Y"
     default: "160"
     information: "Beta sheet angle (degrees)"
+    relations: "EDAM: Generic integer"                                     
   ]
 
 endsection: additional
@@ -48,6 +53,7 @@ section: advanced [
   float: baseline [
     default: "0.35"
     information: "Graph marker line"
+    relations: "EDAM: Generic float"                                       
   ]
 
 endsection: advanced
@@ -60,15 +66,18 @@ section: output [
   toggle: plot [
     default: "N"
     information: "Produce graphic"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: double [
     default: "N"
     information: "Plot two graphs"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   xygraph: graph [
     standard: "$(plot)"
+    relations: "EDAM: EMBOSS graph file"                                   
   ]
 
   outfile: outfile [
@@ -76,6 +85,7 @@ section: output [
     knowntype: "hmoment output"
     nullok: "$(plot)"
     nulldefault: "$(plot)"
+    relations:  "EDAM:Peptide hydrophobic moment report"                   
   ]
 
 endsection: output

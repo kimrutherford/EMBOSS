@@ -1,0 +1,24 @@
+application: sqltest [
+  documentation: "Demonstration of SQL server access"
+  groups: "Test"
+  embassy: "myemboss"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile  [
+    parameter: "Y"
+    knowntype: "sqltest output"
+  ]
+
+endsection: output

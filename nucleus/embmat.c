@@ -20,8 +20,8 @@
 
 #include "ajax.h"
 #include "embmat.h"
-#include "stdlib.h"
-#include "limits.h"
+#include <stdlib.h>
+#include <limits.h>
 
 
 static void matPushHitInt(const AjPStr n, const EmbPMatPrints m,

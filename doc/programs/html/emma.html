@@ -131,6 +131,9 @@ GCG-Alignment file created      [12345678A]
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
+Multiple sequence alignment (ClustalW wrapper)
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     (Gapped) sequence(s) filename and optional
                                   format, or reference (input USA)
@@ -144,6 +147,19 @@ GCG-Alignment file created      [12345678A]
 *  -dend               toggle     [N] Do alignment using an old dendrogram
 *  -dendfile           infile     Dendrogram (tree file) from clustalw file
                                   (optional)
+   -[no]slow           toggle     [Y] A distance is calculated between every
+                                  pair of sequences and these are used to
+                                  construct the dendrogram which guides the
+                                  final multiple alignment. The scores are
+                                  calculated from separate pairwise
+                                  alignments. These can be calculated using 2
+                                  methods: dynamic programming (slow but
+                                  accurate) or by the method of Wilbur and
+                                  Lipman (extremely fast but approximate).
+                                  The slow-accurate method is fine for short
+                                  sequences but will be VERY SLOW for many
+                                  (e.g. >100) long (e.g. >1000 residue)
+                                  sequences.
 *  -pwmatrix           menu       [b] The scoring table which describes the
                                   similarity of each amino acid to each other.
                                   There are three 'in-built' series of weight
@@ -238,20 +254,7 @@ GCG-Alignment file created      [12345678A]
 *  -dnamatrix          menu       [i] This gives a menu where a single matrix
                                   (not a series) can be selected. (Values: i
                                   (iub); c (clustalw); o (own))
-*  -mamatrixfile       infile     Comparison matrix file (optional)'
-   -[no]slow           toggle     [Y] A distance is calculated between every
-                                  pair of sequences and these are used to
-                                  construct the dendrogram which guides the
-                                  final multiple alignment. The scores are
-                                  calculated from separate pairwise
-                                  alignments. These can be calculated using 2
-                                  methods: dynamic programming (slow but
-                                  accurate) or by the method of Wilbur and
-                                  Lipman (extremely fast but approximate).
-                                  The slow-accurate method is fine for short
-                                  sequences but will be VERY SLOW for many
-                                  (e.g. >100) long (e.g. >1000 residue)
-                                  sequences.
+*  -mamatrixfile       infile     Comparison matrix file (optional)
 *  -pwgapopen          float      [10.0] The penalty for opening a gap in the
                                   pairwise alignments. (Number 0.000 or more)
 *  -pwgapextend        float      [0.1] The penalty for extending a gap by 1
@@ -286,11 +289,11 @@ GCG-Alignment file created      [12345678A]
    -gapopen            float      [10.0] The penalty for opening a gap in the
                                   alignment. Increasing the gap opening
                                   penalty will make gaps less frequent.
-                                  (Positive foating point number)
+                                  (Positive floating point number)
    -gapextend          float      [5.0] The penalty for extending a gap by 1
                                   residue. Increasing the gap extension
                                   penalty will make gaps shorter. Terminal
-                                  gaps are not penalised. (Positive foating
+                                  gaps are not penalised. (Positive floating
                                   point number)
    -[no]endgaps        boolean    [Y] End gap separation: treats end gaps just
                                   like internal gaps for the purposes of
@@ -318,7 +321,7 @@ GCG-Alignment file created      [12345678A]
 *  -hgapres            string     [GPSNDQEKR] This is a set of the residues
                                   'considered' to be hydrophilic. It is used
                                   when introducing Hydrophilic gap penalties.
-                                  (Any string is accepted)
+                                  (Any string)
 *  -nohgap             boolean    [N] Hydrophilic gap penalties: used to
                                   increase the chances of a gap within a run
                                   (5 or more residues) of hydrophilic amino
@@ -378,74 +381,95 @@ GCG-Alignment file created      [12345678A]
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 
 </pre>
 </td></tr></table>
 <P>
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Qualifier</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Standard (Mandatory) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td>[-sequence]<br>(Parameter 1)</td>
+<td>seqall</td>
 <td>(Gapped) sequence(s) filename and optional format, or reference (input USA)</td>
 <td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>[-outseq]<br>(Parameter 2)</td>
+<td>seqoutset</td>
 <td>Sequence set filename and optional format (output USA)</td>
 <td>Writeable sequences</td>
 <td><i>&lt;*&gt;</i>.<i>format</i></td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>[-dendoutfile]<br>(Parameter 3)</td>
+<td>outfile</td>
 <td>Dendrogram (tree file) from clustalw output file</td>
 <td>Output file</td>
 <td><i>&lt;*&gt;</i>.emma</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Additional (Optional) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
+<th align="left" colspan=5>Additional (Optional) qualifiers</th>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-onlydend</td>
+<td>toggle</td>
 <td>Only produce dendrogram file</td>
 <td>Toggle value Yes/No</td>
 <td>No</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-dend</td>
+<td>toggle</td>
 <td>Do alignment using an old dendrogram</td>
 <td>Toggle value Yes/No</td>
 <td>No</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-dendfile</td>
+<td>infile</td>
 <td>Dendrogram (tree file) from clustalw file (optional)</td>
 <td>Input file</td>
 <td><b>Required</b></td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
+<td>-[no]slow</td>
+<td>toggle</td>
+<td>A distance is calculated between every pair of sequences and these are used to construct the dendrogram which guides the final multiple alignment. The scores are calculated from separate pairwise alignments. These can be calculated using 2 methods: dynamic programming (slow but accurate) or by the method of Wilbur and Lipman (extremely fast but approximate).
+The slow-accurate method is fine for short sequences but will be VERY SLOW for many (e.g. &gt;100) long (e.g. &gt;1000 residue) sequences.</td>
+<td>Toggle value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td>-pwmatrix</td>
+<td>list</td>
 <td>The scoring table which describes the similarity of each amino acid to each other.
 There are three 'in-built' series of weight matrices offered. Each consists of several matrices which work differently at different evolutionary distances. To see the exact details, read the documentation. Crudely, we store several matrices in memory, spanning the full range of amino acid distance (from almost identical sequences to highly divergent ones). For very similar sequences, it is best to use a strict weight matrix which only gives a high score to identities and the most favoured conservative substitutions. For more divergent sequences, it is appropriate to use 'softer' matrices which give a high score to many other frequent substitutions.
 1) BLOSUM (Henikoff). These matrices appear to be the best available for carrying out data base similarity (homology searches). The matrices used are: Blosum80, 62, 45 and 30.
@@ -456,22 +480,25 @@ We also supply an identity matrix which gives a score of 1.0 to two identical am
 <td>b</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-pwdnamatrix</td>
+<td>list</td>
 <td>The scoring table which describes the scores assigned to matches and mismatches (including IUB ambiguity codes).</td>
 <td><table><tr><td>i</td> <td><i>(iub)</i></td></tr><tr><td>c</td> <td><i>(clustalw)</i></td></tr><tr><td>o</td> <td><i>(own)</i></td></tr></table></td>
 <td>i</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-pairwisedatafile</td>
+<td>infile</td>
 <td>Comparison matrix file (optional)</td>
 <td>Input file</td>
 <td><b>Required</b></td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-matrix</td>
+<td>list</td>
 <td>This gives a menu where you are offered a choice of weight matrices. The default for proteins is the PAM series derived by Gonnet and colleagues. Note, a series is used! The actual matrix that is used depends on how similar the sequences to be aligned at this alignment step are. Different matrices work differently at each evolutionary distance.
 There are three 'in-built' series of weight matrices offered. Each consists of several matrices which work differently at different evolutionary distances. To see the exact details, read the documentation. Crudely, we store several matrices in memory, spanning the full range of amino acid distance (from almost identical sequences to highly divergent ones). For very similar sequences, it is best to use a strict weight matrix which only gives a high score to identities and the most favoured conservative substitutions. For more divergent sequences, it is appropriate to use 'softer' matrices which give a high score to many other frequent substitutions.
 1) BLOSUM (Henikoff). These matrices appear to be the best available for carrying out data base similarity (homology searches). The matrices used are: Blosum80, 62, 45 and 30.
@@ -482,141 +509,467 @@ We also supply an identity matrix which gives a score of 1.0 to two identical am
 <td>b</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-dnamatrix</td>
+<td>list</td>
 <td>This gives a menu where a single matrix (not a series) can be selected.</td>
 <td><table><tr><td>i</td> <td><i>(iub)</i></td></tr><tr><td>c</td> <td><i>(clustalw)</i></td></tr><tr><td>o</td> <td><i>(own)</i></td></tr></table></td>
 <td>i</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-mamatrixfile</td>
-<td>Comparison matrix file (optional)'</td>
+<td>infile</td>
+<td>Comparison matrix file (optional)</td>
 <td>Input file</td>
 <td><b>Required</b></td>
 </tr>
 
-<tr>
-<td>-[no]slow</td>
-<td>A distance is calculated between every pair of sequences and these are used to construct the dendrogram which guides the final multiple alignment. The scores are calculated from separate pairwise alignments. These can be calculated using 2 methods: dynamic programming (slow but accurate) or by the method of Wilbur and Lipman (extremely fast but approximate).
-The slow-accurate method is fine for short sequences but will be VERY SLOW for many (e.g. &gt;100) long (e.g. &gt;1000 residue) sequences.</td>
-<td>Toggle value Yes/No</td>
-<td>Yes</td>
-</tr>
-
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-pwgapopen</td>
+<td>float</td>
 <td>The penalty for opening a gap in the pairwise alignments.</td>
 <td>Number 0.000 or more</td>
 <td>10.0</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-pwgapextend</td>
+<td>float</td>
 <td>The penalty for extending a gap by 1 residue in the pairwise alignments.</td>
 <td>Number 0.000 or more</td>
 <td>0.1</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-ktup</td>
+<td>integer</td>
 <td>This is the size of exactly matching fragment that is used. INCREASE for speed (max= 2 for proteins; 4 for DNA), DECREASE for sensitivity. For longer sequences (e.g. &gt;1000 residues) you may need to increase the default.</td>
 <td>integer from 0 to 4</td>
 <td>1 for protein, 2 for nucleic</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-gapw</td>
+<td>integer</td>
 <td>This is a penalty for each gap in the fast alignments. It has little affect on the speed or sensitivity except for extreme values.</td>
 <td>Positive integer</td>
 <td>3 for protein, 5 for nucleic</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-topdiags</td>
+<td>integer</td>
 <td>The number of k-tuple matches on each diagonal (in an imaginary dot-matrix plot) is calculated. Only the best ones (with most matches) are used in the alignment. This parameter specifies how many. Decrease for speed; increase for sensitivity.</td>
 <td>Positive integer</td>
 <td>5 for protein, 4 for nucleic</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-window</td>
+<td>integer</td>
 <td>This is the number of diagonals around each of the 'best' diagonals that will be used. Decrease for speed; increase for sensitivity.</td>
 <td>Positive integer</td>
 <td>5 for protein, 4 for nucleic</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-nopercent</td>
+<td>boolean</td>
 <td>Fast pairwise alignment: similarity scores: suppresses percentage score</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-gapopen</td>
+<td>float</td>
 <td>The penalty for opening a gap in the alignment. Increasing the gap opening penalty will make gaps less frequent.</td>
-<td>Positive foating point number</td>
+<td>Positive floating point number</td>
 <td>10.0</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-gapextend</td>
+<td>float</td>
 <td>The penalty for extending a gap by 1 residue. Increasing the gap extension penalty will make gaps shorter. Terminal gaps are not penalised.</td>
-<td>Positive foating point number</td>
+<td>Positive floating point number</td>
 <td>5.0</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-[no]endgaps</td>
+<td>boolean</td>
 <td>End gap separation: treats end gaps just like internal gaps for the purposes of avoiding gaps that are too close (set by 'gap separation distance'). If you turn this off, end gaps will be ignored for this purpose. This is useful when you wish to align fragments where the end gaps are not biologically meaningful.</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-gapdist</td>
+<td>integer</td>
 <td>Gap separation distance: tries to decrease the chances of gaps being too close to each other. Gaps that are less than this distance apart are penalised more than other gaps. This does not prevent close gaps; it makes them less frequent, promoting a block-like appearance of the alignment.</td>
 <td>Positive integer</td>
 <td>8</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-norgap</td>
+<td>boolean</td>
 <td>Residue specific penalties: amino acid specific gap penalties that reduce or increase the gap opening penalties at each position in the alignment or sequence. As an example, positions that are rich in glycine are more likely to have an adjacent gap than positions that are rich in valine.</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-hgapres</td>
+<td>string</td>
 <td>This is a set of the residues 'considered' to be hydrophilic. It is used when introducing Hydrophilic gap penalties.</td>
-<td>Any string is accepted</td>
+<td>Any string</td>
 <td>GPSNDQEKR</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-nohgap</td>
+<td>boolean</td>
 <td>Hydrophilic gap penalties: used to increase the chances of a gap within a run (5 or more residues) of hydrophilic amino acids; these are likely to be loop or random coil regions where gaps are more common. The residues that are 'considered' to be hydrophilic are set by '-hgapres'.</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-maxdiv</td>
+<td>integer</td>
 <td>This switch, delays the alignment of the most distantly related sequences until after the most closely related sequences have been aligned. The setting shows the percent identity level required to delay the addition of a sequence; sequences that are less identical than this level to any other sequences will be aligned later.</td>
 <td>Integer from 0 to 100</td>
 <td>30</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
+<th align="left" colspan=5>Advanced (Unprompted) qualifiers</th>
 </tr>
 
 <tr>
-<td colspan=4>(none)</td>
+<td colspan=5>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-sequence" associated seqall qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sbegin1<br>-sbegin_sequence</td>
+<td>integer</td>
+<td>Start of each sequence to be used</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -send1<br>-send_sequence</td>
+<td>integer</td>
+<td>End of each sequence to be used</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sreverse1<br>-sreverse_sequence</td>
+<td>boolean</td>
+<td>Reverse (if DNA)</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sask1<br>-sask_sequence</td>
+<td>boolean</td>
+<td>Ask for begin/end/reverse</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -snucleotide1<br>-snucleotide_sequence</td>
+<td>boolean</td>
+<td>Sequence is nucleotide</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sprotein1<br>-sprotein_sequence</td>
+<td>boolean</td>
+<td>Sequence is protein</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -slower1<br>-slower_sequence</td>
+<td>boolean</td>
+<td>Make lower case</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -supper1<br>-supper_sequence</td>
+<td>boolean</td>
+<td>Make upper case</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sformat1<br>-sformat_sequence</td>
+<td>string</td>
+<td>Input sequence format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sdbname1<br>-sdbname_sequence</td>
+<td>string</td>
+<td>Database name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -sid1<br>-sid_sequence</td>
+<td>string</td>
+<td>Entryname</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ufo1<br>-ufo_sequence</td>
+<td>string</td>
+<td>UFO features</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fformat1<br>-fformat_sequence</td>
+<td>string</td>
+<td>Features format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fopenfile1<br>-fopenfile_sequence</td>
+<td>string</td>
+<td>Features file name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-outseq" associated seqoutset qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -osformat2<br>-osformat_outseq</td>
+<td>string</td>
+<td>Output seq format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -osextension2<br>-osextension_outseq</td>
+<td>string</td>
+<td>File name extension</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -osname2<br>-osname_outseq</td>
+<td>string</td>
+<td>Base file name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -osdirectory2<br>-osdirectory_outseq</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -osdbname2<br>-osdbname_outseq</td>
+<td>string</td>
+<td>Database name to add</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ossingle2<br>-ossingle_outseq</td>
+<td>boolean</td>
+<td>Separate file for each entry</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -oufo2<br>-oufo_outseq</td>
+<td>string</td>
+<td>UFO features</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -offormat2<br>-offormat_outseq</td>
+<td>string</td>
+<td>Features format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ofname2<br>-ofname_outseq</td>
+<td>string</td>
+<td>Features file name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ofdirectory2<br>-ofdirectory_outseq</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-dendoutfile" associated outfile qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory3<br>-odirectory_dendoutfile</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>General qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -auto</td>
+<td>boolean</td>
+<td>Turn off prompts</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -stdout</td>
+<td>boolean</td>
+<td>Write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -filter</td>
+<td>boolean</td>
+<td>Read first file from standard input, write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -options</td>
+<td>boolean</td>
+<td>Prompt for standard and additional values</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -debug</td>
+<td>boolean</td>
+<td>Write debug output to program.dbg</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -verbose</td>
+<td>boolean</td>
+<td>Report some/full command line options</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -help</td>
+<td>boolean</td>
+<td>Report command line options and exit. More information on associated and general qualifiers can be found with -help -verbose</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -warning</td>
+<td>boolean</td>
+<td>Report warnings</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -error</td>
+<td>boolean</td>
+<td>Report errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fatal</td>
+<td>boolean</td>
+<td>Report fatal errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -die</td>
+<td>boolean</td>
+<td>Report dying program messages</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -version</td>
+<td>boolean</td>
+<td>Report version number and exit</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
 </tr>
 
 </table>
@@ -1646,7 +1999,7 @@ None.
 not been set up on your site or is not in your environment (i.e.  is
 not on your path). The solutions are to (1) install clustalw in the
 path so that emma can find it with the command "clustalw", or (2)
-define a variable (an environment variable of in emboss.defaults or
+define a variable (an environment variable or in emboss.defaults or
 your .embossrc file) called EMBOSS_CLUSTALW containing the command
 (program name or full path) to run clustalw if you have it elsewhere
 on your system.

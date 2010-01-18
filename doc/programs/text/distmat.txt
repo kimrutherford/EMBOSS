@@ -1,5 +1,4 @@
-
-                                  distmat 
+                                   distmat
 
 
 
@@ -27,8 +26,8 @@ Description
 Algorithm
 
    For more divergent sequences, the probability of there being multiple
-   substitutions at an alignment site increases. The distance will then
-   be misestimate the true evolutionary distance between the sequences. A
+   substitutions at an alignment site increases. The distance will then be
+   misestimate the true evolutionary distance between the sequences. A
    number of methods are available in distmat to correct the observed
    substitution rate to more accurately reflect the true evolutionary
    distance.
@@ -54,8 +53,8 @@ D = uncorrected distance = p-distance = 1-S          (2)
    flag "-ambiguous" is used then partial matches are included in the
    score. For example, a match of M (A or C) with A will increment m by
    0.5 (0.5*1.0). Gaps are not included in the calculation unless a non
-   zero value is given with "-gapweight". It should be noted that end
-   gaps and internal gaps will be weighted by the same amount. So it is
+   zero value is given with "-gapweight". It should be noted that end gaps
+   and internal gaps will be weighted by the same amount. So it is
    recommended that this be used with "-sbegin"and "-send" to specify the
    start and end of the region to calculate the distance from.
 
@@ -80,17 +79,16 @@ b - constant. b= 3/4 for nucleotides and 19/20 for proteins.
 
   Tajima-Nei
 
-   This method is only for nucleotide sequences. It uses the same
-   equation as Jukes-Cantor, but the b-parameter is not constant. Also,
-   only exact matches are considered in the calculation of the match
-   score and gap positions are ignored.
+   This method is only for nucleotide sequences. It uses the same equation
+   as Jukes-Cantor, but the b-parameter is not constant. Also, only exact
+   matches are considered in the calculation of the match score and gap
+   positions are ignored.
 
 A = 1, T = 2, C = 3, G = 4
 
 b = 0.5(1.- Sum(i=A,G)(fraction[i]^2  + D^2/h)
 
-h = Sum(i=A,C)Sum(k=T,G) (0.5 * pair_frequency[i,k]^2/(fraction[i]*fraction[k])
-)
+h = Sum(i=A,C)Sum(k=T,G) (0.5 * pair_frequency[i,k]^2/(fraction[i]*fraction[k]))
 
 distance = -b ln(1.-D/b)
 
@@ -104,8 +102,8 @@ fraction[i]           - average content of the base i in both sequences
   Kimura Two-Parameter distance
 
    This method is only for nucleotide sequences. This uses the principle
-   that transition substitutions (purine-purine and pyrimidine-purine)
-   are more likely than transversion substitutions (purine-pyprimidine).
+   that transition substitutions (purine-purine and pyrimidine-purine) are
+   more likely than transversion substitutions (purine-pyprimidine).
    Purine being the nucleic acid constituent of A and G, and pyrimidine
    being the nucleic acid derivative of the bases C, T and U. Gaps are
    ignored and abiguous symbols other than R (purine) and Y (pyrimidine)
@@ -144,11 +142,11 @@ distance = -C ln(1-P/C-Q) - 0.5(1-C) ln(1-2Q)
 
   Jin-Nei Gamma distance
 
-   This method applies to nucleotides only. This again uses transition
-   and transversion rates. As with the Kimura two parameter method, gaps
-   and ambiguous symbols other than R and Y are not oncluded in the
-   score. The shape parameter, i.e. "a", is the square of the inverse of
-   the coefficient of variation of the average substitution,
+   This method applies to nucleotides only. This again uses transition and
+   transversion rates. As with the Kimura two parameter method, gaps and
+   ambiguous symbols other than R and Y are not oncluded in the score. The
+   shape parameter, i.e. "a", is the square of the inverse of the
+   coefficient of variation of the average substitution,
 
 L = average substituition = transition_rate + 2 * transversion_rate
 a = (average L)^2/(variance of L)
@@ -182,27 +180,31 @@ D = 1-S
 distance = -ln(1 - D - 0.2D^2)
 
    Reference:
-   M. Kimura, The Neutral Theory of Molecular Evolution, Camb. Uni.
-   Press, Camb., 1983.
+   M. Kimura, The Neutral Theory of Molecular Evolution, Camb. Uni. Press,
+   Camb., 1983.
 
 Usage
 
    Here is a sample session with distmat
 
 
-% distmat pax.align 
+% distmat pax.align
 Create a distance matrix from a multiple sequence alignment
 Multiple substitution correction methods for proteins
          0 : Uncorrected
          1 : Jukes-Cantor
          2 : Kimura Protein
 Method to use [0]: 2
-Phylip distance matrix output file [pax.distmat]: 
+Phylip distance matrix output file [pax.distmat]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Create a distance matrix from a multiple sequence alignment
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqset     File containing a sequence alignment.
@@ -267,13 +269,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -391,12 +395,13 @@ PAX5_HUMAN      ...
 PX8A_HUMAN      ...
 PX8D_HUMAN      ...
 
+
 Output file format
 
    The output from the program is a file containing a matrix of the
    calculated distances between each of the input aligned sequences. The
-   distances are expressed in terms of the number of substitutions per
-   100 bases or amino acids.
+   distances are expressed in terms of the number of substitutions per 100
+   bases or amino acids.
 
   Output files for usage example
 
@@ -442,8 +447,8 @@ Notes
    obtaining meaningful information from this analysis.
 
    For nucleotides, the -position flag selects base positions to analyse
-   in each codon, i.e. 123 (all bases), 12 (the first two bases), 1, 2,
-   or 3 individual bases.
+   in each codon, i.e. 123 (all bases), 12 (the first two bases), 1, 2, or
+   3 individual bases.
 
 References
 
@@ -481,7 +486,7 @@ See also
 
 Author(s)
 
-   Tim Carver (tcarver © rfcgr.mrc.ac.uk)
+   Tim Carver (tcarver (c) rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 

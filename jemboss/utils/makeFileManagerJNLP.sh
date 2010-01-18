@@ -110,10 +110,15 @@ fi
 #
 # Create FileManager jar file
 
-jar cf FileManager.jar images/* org/emboss/jemboss/*class resources/client.jar \
+jar cf FileManager.jar images/* \
         resources/resources.jar \
-        resources/version resources/jemboss.properties resources/readme.txt \
-        resources/*html org/emboss/jemboss/*/*class org/emboss/jemboss/*/*/*class 
+        resources/version resources/jemboss.properties resources/readme.html \
+        resources/*html 
+
+if [ -f "resources/client.jar" ]; then
+  jar uf FileManager.jar resources/client.jar
+fi
+
 mv FileManager.jar jnlp_fm
 cp lib/*jar jnlp_fm
 cp lib/axis/*jar jnlp_fm
@@ -211,7 +216,7 @@ for i in s*.jar; do
 done;
 
 echo '         </resources>'                            >> $JNLP
-echo '         <application-desc main-class="org/emboss/jemboss/FileManager"/>' \
+echo '         <application-desc main-class="org.emboss.jemboss.FileManager"/>' \
                                                         >> $JNLP
 echo '       </jnlp>'                                   >> $JNLP
  

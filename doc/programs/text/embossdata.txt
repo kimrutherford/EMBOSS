@@ -1,5 +1,4 @@
-
-                                embossdata 
+                                 embossdata
 
 
 
@@ -30,9 +29,9 @@ Usage
    Display the directories searched for EMBOSS data files:
 
 
-% embossdata 
+% embossdata
 Find and retrieve EMBOSS data files
-Data file name: 
+Data file name:
 
 # The following directories can contain EMBOSS data files.
 # They are searched in the following order until the file is found.
@@ -45,16 +44,17 @@ Data file name:
 /homes/pmr/.embossdata                                       Does not exist
 /homes/pmr/local/share/EMBOSS/data/                          Exists
 
+
    Example 2
 
    Display the names of data files in all of the possible data
-   directories: This is run on a small test system and so the results
-   will probably be different when you run this.
+   directories: This is run on a small test system and so the results will
+   probably be different when you run this.
 
 
-% embossdata -showall 
+% embossdata -showall
 Find and retrieve EMBOSS data files
-Data file name: 
+Data file name:
 
 
 
@@ -172,6 +172,7 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/
   Efeatures.gffprotein
   Efeatures.pir
   Efeatures.protein
+  Efeatures.refseqp
   Efeatures.swiss
   Efreqs.dat
   Ehet.dat
@@ -184,6 +185,8 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/
   Emolwt.dat
   Emwfilter.dat
   Enakai.dat
+  EnsemblAliases.dat
+  EnsemblIdentifiers.dat
   Epepcoil.dat
   Epk.dat
   Epprofile
@@ -201,6 +204,7 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/
   Etags.gffprotein
   Etags.pir
   Etags.protein
+  Etags.refseqp
   Etags.swiss
   Etcode.dat
   Evdw.dat
@@ -1524,16 +1528,18 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_CNE
 
   dummyfile
 
+
    Example 3
 
    Make a copy of an EMBOSS data file in the current directory:
 
 
-% embossdata -fetch Epepcoil.dat 
+% embossdata -fetch Epepcoil.dat
 Find and retrieve EMBOSS data files
 
-File '/homes/pmr/local/share/EMBOSS/data/Epepcoil.dat' has been copied successf
-ully.
+File '/homes/pmr/local/share/EMBOSS/data/Epepcoil.dat' has been copied successfu
+lly.
+
 
    Go to the output files for this example
 
@@ -1542,7 +1548,7 @@ ully.
    Display the directories which contain a particular EMBOSS data file:
 
 
-% embossdata EPAM60 
+% embossdata EPAM60
 Find and retrieve EMBOSS data files
 
 # The following directories can contain EMBOSS data files.
@@ -1550,17 +1556,17 @@ Find and retrieve EMBOSS data files
 # If the directory does not exist, then this is noted below.
 # '.' is the UNIX name for your current working directory.
 
-File ./EPAM60                                                     Does not exis
-t
-File .embossdata/EPAM60                                           Does not exis
-t
-File /homes/pmr/EPAM60                                            Does not exis
-t
-File /homes/pmr/.embossdata/EPAM60                                Does not exis
-t
+File ./EPAM60                                                     Does not exist
+File .embossdata/EPAM60                                           Does not exist
+File /homes/pmr/EPAM60                                            Does not exist
+File /homes/pmr/.embossdata/EPAM60                                Does not exist
 File /homes/pmr/local/share/EMBOSS/data/EPAM60                    Exists
 
+
 Command line arguments
+
+Find and retrieve EMBOSS data files
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-filename]          string     This specifies the name of the file that
@@ -1568,8 +1574,7 @@ Command line arguments
                                   or searched for in all of the directories
                                   that EMBOSS programs search when looking for
                                   a data file. The name of the file is not
-                                  altered when it is fetched. (Any string is
-                                  accepted)
+                                  altered when it is fetched. (Any string)
 
    Additional (Optional) qualifiers (* if not always prompted):
    -showall            toggle     Show all potential EMBOSS data files
@@ -1599,13 +1604,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -1651,10 +1658,10 @@ Data files
 
 Notes
 
-   Many EMBOSS programs use a data file. The data files are typically
-   kept in a standard directory in the EMBOSS installation
-   (.../emboss/emboss/data/). When an EMBOSS programs require a data
-   file, it search for it in the following order of directories:
+   Many EMBOSS programs use a data file. The data files are typically kept
+   in a standard directory in the EMBOSS installation
+   (.../emboss/emboss/data/). When an EMBOSS programs require a data file,
+   it search for it in the following order of directories:
      * The current directory
      * .embossdata subdirectory in the current directory
      * Your home directory
@@ -1666,25 +1673,25 @@ Notes
    in preference to a file of the same name in the EMBOSS standard data
    directory.
 
-   It is sometimes necessary to modify a data file to change the
-   behaviour of an EMBOSS program. To do this safely, you should copy the
-   data file from the EMBOSS standard data directory to one of the other
+   It is sometimes necessary to modify a data file to change the behaviour
+   of an EMBOSS program. To do this safely, you should copy the data file
+   from the EMBOSS standard data directory to one of the other
    directories, such as the current directory or your home directory,
    before editing it. embossdata helps here by displaying the names of
    data files in all the directories which could hold them, and copying a
    data file from the EMBOSS standard data directory to the current
    directory.
 
-   By convention, all EMBOSS data file names start with the character
-   'E', to distinguish them from other files on your system. For example
-   genetic codes to translate codons to amino acids are held in data
-   files called "EGC.0", "EGC.1", "EGC.2", etc.
+   By convention, all EMBOSS data file names start with the character 'E',
+   to distinguish them from other files on your system. For example
+   genetic codes to translate codons to amino acids are held in data files
+   called "EGC.0", "EGC.1", "EGC.2", etc.
 
   -filename option
 
-   Name of data file to search for or copy into the current directory
-   from the EMBOSS standard data directory. The name of the file is not
-   altered when it is fetched. (Any string is accepted).
+   Name of data file to search for or copy into the current directory from
+   the EMBOSS standard data directory. The name of the file is not altered
+   when it is fetched. (Any string is accepted).
 
   -outfile option
 
@@ -1725,7 +1732,7 @@ See also
 
 Author(s)
 
-   Gary             Williams (gwilliam © rfcgr.mrc.ac.uk)
+   Gary             Williams (gwilliam (c) rfcgr.mrc.ac.uk)
    MRC              Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome           Campus, Hinxton, Cambridge, CB10 1SB, UK
 

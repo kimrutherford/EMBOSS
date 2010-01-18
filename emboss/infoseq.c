@@ -101,7 +101,7 @@ int main(int argc, char **argv)
     doname    = ajAcdGetBoolean("name");
     doacc     = ajAcdGetBoolean("accession");
     dogi      = ajAcdGetBoolean("gi");
-    dosv      = ajAcdGetBoolean("version");
+    dosv      = ajAcdGetBoolean("seqversion");
     dotype    = ajAcdGetBoolean("type");
     dolength  = ajAcdGetBoolean("length");
     dopgc     = ajAcdGetBoolean("pgc");

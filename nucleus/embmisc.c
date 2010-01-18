@@ -20,30 +20,34 @@
 
 
 
-/* @func embMiscMatchPattern **************************************************
+/* @func embMiscMatchPatternDelimC *********************************************
 **
 ** Does a simple OR'd test of matches to (possibly wildcarded) words.
 ** The words are tested one at a time until a match is found.
-** Whitespace and , ; | characters can separate the words in the pattern.
+** Whitespace and additional delimiter characters can separate the
+** words in the pattern.
 **
 ** @param [r] str [const AjPStr] string to test
 ** @param [r] pattern [const AjPStr] pattern to match with
+** @param [r] delim [const char*] additional delimiters
 **
 ** @return [AjBool] ajTrue = found a match
 ** @@
 ******************************************************************************/
 
-AjBool embMiscMatchPattern (const AjPStr str, const AjPStr pattern)
+AjBool embMiscMatchPatternDelimC (const AjPStr str, const AjPStr pattern,
+                                 const char* delim)
 {
 
-    /* pmr: allow '|' which can appear in NCBI style IDs */
-
-    char whiteSpace[] = " \t\n\r,;";  /* skip whitespace and , ; */
+    char whiteSpace[] = " \t\n\r";  /* skip whitespace */
     AjPStrTok tokens;
+    AjPStr delimstr = NULL;
     AjPStr key = NULL;
     AjBool val = ajFalse;
 
-    tokens = ajStrTokenNewC(pattern, whiteSpace);
+    delimstr = ajStrNewC(whiteSpace);
+    ajStrAppendC(&delimstr, delim);
+    tokens = ajStrTokenNewS(pattern, delimstr);
 
     while (ajStrTokenNextParse( &tokens, &key))
 	if (ajStrMatchWildCaseS(str, key))
@@ -54,6 +58,7 @@ AjBool embMiscMatchPattern (const AjPStr str, const AjPStr pattern)
 
     ajStrTokenDel( &tokens);
     ajStrDel(&key);
+    ajStrDel(&delimstr);
 
     return val;
 

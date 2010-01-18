@@ -1,11 +1,13 @@
+Create a sequence file from a typed-in sequence
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers:
   [-name]              string     The name of of the sequence should be a
                                   single word that you will use to identify
                                   the sequence. It should have no (or few)
-                                  punctuation characters in it. (Any string is
-                                  accepted)
+                                  punctuation characters in it. (Any string)
   [-description]       string     Enter any description of the sequence that
-                                  you require. (Any string is accepted)
+                                  you require. (Any string)
   [-type]              menu       [N] Type of sequence (Values: N (Nucleic); P
                                   (Protein))
   [-sequence]          string     The sequence itself.
@@ -16,8 +18,7 @@
                                   The keyboard will beep at you when you have
                                   reached this limit and you will not be able
                                   to press the RETURN/ENTER key until you have
-                                  deleted a few characters. (Any string is
-                                  accepted)
+                                  deleted a few characters. (Any string)
   [-outseq]            seqout     [<sequence>.<format>] Sequence filename and
                                   optional format (output USA)
 
@@ -45,11 +46,12 @@
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 

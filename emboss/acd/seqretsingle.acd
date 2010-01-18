@@ -2,6 +2,8 @@ application: seqretsingle [
   documentation: "Reads and writes (returns) a single
                   sequence"
   groups: "Test"
+  relations: "EDAM: Sequence extraction and generation"
+  relations: "EDAM: Sequence file handling"  
 ]
 
 section: input [
@@ -11,12 +13,14 @@ section: input [
 
   boolean: feature [
     information: "Use feature information"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   sequence: sequence [
     parameter: "Y"
     features: "$(feature)"
     type: "gapany"
+    relations: "EDAM: Sequence"                                            
   ]
 
 endsection: input
@@ -29,6 +33,7 @@ section: output [
   seqout: outseq [
     parameter: "Y"
     features: "$(feature)"
+    relations: "EDAM: Sequence"                                            
   ]
 
 endsection: output

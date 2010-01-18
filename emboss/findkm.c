@@ -50,8 +50,8 @@ int main(int argc, char **argv)
     AjPFile outfile = NULL;
     AjPStr line;
     AjPGraph graphLB = NULL;
-    AjPGraphPlpData xygraph  = NULL;
-    AjPGraphPlpData xygraph2 = NULL;
+    AjPGraphdata xygraph  = NULL;
+    AjPGraphdata xygraph2 = NULL;
     AjBool doplot;
 
     ajint N=0;
@@ -90,7 +90,7 @@ int main(int argc, char **argv)
     float bmax = 0.;
 
 
-    ajGraphInit("findkm", argc, argv);
+    embInit("findkm", argc, argv);
 
     infile  = ajAcdGetInfile("infile");
     outfile = ajAcdGetOutfile ("outfile");
@@ -224,55 +224,55 @@ int main(int argc, char **argv)
 
     if(doplot)
     {
-	xygraph = ajGraphPlpDataNewI(N);
-	ajGraphPlpDataSetXY(xygraph, S, V);
+	xygraph = ajGraphdataNewI(N);
+	ajGraphdataAddXY(xygraph, S, V);
 	ajGraphDataAdd(graphLB, xygraph);
-	ajGraphPlpDataSetTitleC(xygraph, "Michaelis Menten Plot");
-	ajGraphPlpDataSetXTitleC(xygraph, "[S]");
-	ajGraphPlpDataSetYTitleC(xygraph, "V");
+	ajGraphdataSetTitleC(xygraph, "Michaelis Menten Plot");
+	ajGraphdataSetXlabelC(xygraph, "[S]");
+	ajGraphdataSetYlabelC(xygraph, "V");
 
-	ajGraphxySetXStart(graphLB, 0.0);
-	ajGraphxySetXEnd(graphLB, xmax2);
-	ajGraphxySetYStart(graphLB, 0.0);
-	ajGraphxySetYEnd(graphLB, ymax2);
-	ajGraphxySetXRangeII(graphLB, (ajint)0.0, (ajint)xmax2);
-	ajGraphxySetYRangeII(graphLB, (ajint)0.0, (ajint)ymax2);
-	ajGraphPlpDataAddLine(xygraph, 0.0, 0.0, S[0], V[0], (ajint)BLACK);
-	ajGraphxySetCirclePoints(graphLB, ajTrue);
-	ajGraphPlpDataSetMaxMin(xygraph,0.0,xmax2,0.0,ymax2);
+	ajGraphxySetXstartF(graphLB, 0.0);
+	ajGraphxySetXendF(graphLB, xmax2);
+	ajGraphxySetYstartF(graphLB, 0.0);
+	ajGraphxySetYendF(graphLB, ymax2);
+	ajGraphxySetXrangeII(graphLB, (ajint)0.0, (ajint)xmax2);
+	ajGraphxySetYrangeII(graphLB, (ajint)0.0, (ajint)ymax2);
+	ajGraphdataAddposLine(xygraph, 0.0, 0.0, S[0], V[0], (ajint)BLACK);
+	ajGraphxyShowPointsCircle(graphLB, ajTrue);
+	ajGraphdataSetMinmax(xygraph,0.0,xmax2,0.0,ymax2);
 
 
-	ajGraphArrayMaxMin(S,N,&amin,&amax);
-	ajGraphArrayMaxMin(V,N,&bmin,&bmax);
-	ajGraphPlpDataSetMaxima(xygraph,amin,amax,bmin,bmax);
-	ajGraphPlpDataSetTypeC(xygraph,"2D Plot Float");
+	ajGraphicsCalcRange(S,N,&amin,&amax);
+	ajGraphicsCalcRange(V,N,&bmin,&bmax);
+	ajGraphdataSetTruescale(xygraph,amin,amax,bmin,bmax);
+	ajGraphdataSetTypeC(xygraph,"2D Plot Float");
 
-	xygraph2 = ajGraphPlpDataNewI(N);
-	ajGraphPlpDataSetXY(xygraph2, xdata, ydata);
+	xygraph2 = ajGraphdataNewI(N);
+	ajGraphdataAddXY(xygraph2, xdata, ydata);
 	ajGraphDataAdd(graphLB, xygraph2);
 
-	ajGraphPlpDataSetTitleC(xygraph2, "Hanes Woolf Plot");
-	ajGraphPlpDataSetXTitleC(xygraph2, "[S]");
-	ajGraphPlpDataSetYTitleC(xygraph2, "[S]/V");
+	ajGraphdataSetTitleC(xygraph2, "Hanes Woolf Plot");
+	ajGraphdataSetXlabelC(xygraph2, "[S]");
+	ajGraphdataSetYlabelC(xygraph2, "[S]/V");
 
-	ajGraphxySetXStart(graphLB, cutx);
-	ajGraphxySetXEnd(graphLB, upperXlimit);
-	ajGraphxySetYStart(graphLB, 0.0);
-	ajGraphxySetYEnd(graphLB, upperYlimit);
-	ajGraphxySetXRangeII(graphLB, (ajint)cutx, (ajint)upperXlimit);
-	ajGraphxySetYRangeII(graphLB, (ajint)0.0, (ajint)upperYlimit);
+	ajGraphxySetXstartF(graphLB, cutx);
+	ajGraphxySetXendF(graphLB, upperXlimit);
+	ajGraphxySetYstartF(graphLB, 0.0);
+	ajGraphxySetYendF(graphLB, upperYlimit);
+	ajGraphxySetXrangeII(graphLB, (ajint)cutx, (ajint)upperXlimit);
+	ajGraphxySetYrangeII(graphLB, (ajint)0.0, (ajint)upperYlimit);
 
-	ajGraphxySetCirclePoints(graphLB, ajTrue);
-	ajGraphPlpDataSetMaxMin(xygraph2, cutx,upperXlimit,0.0,upperYlimit);
-	ajGraphArrayMaxMin(xdata,N,&amin,&amax);
-	ajGraphArrayMaxMin(ydata,N,&bmin,&bmax);
-	ajGraphPlpDataSetMaxima(xygraph2,amin,amax,bmin,bmax);
-	ajGraphPlpDataSetTypeC(xygraph2,"2D Plot");
+	ajGraphxyShowPointsCircle(graphLB, ajTrue);
+	ajGraphdataSetMinmax(xygraph2, cutx,upperXlimit,0.0,upperYlimit);
+	ajGraphicsCalcRange(xdata,N,&amin,&amax);
+	ajGraphicsCalcRange(ydata,N,&bmin,&bmax);
+	ajGraphdataSetTruescale(xygraph2,amin,amax,bmin,bmax);
+	ajGraphdataSetTypeC(xygraph2,"2D Plot");
 
 
 
 	ajGraphSetTitleC(graphLB,"FindKm");
-	ajGraphxySetOverLap(graphLB,ajFalse);
+	ajGraphxySetflagOverlay(graphLB,ajFalse);
 	ajGraphxyDisplay(graphLB, ajTrue);
     }
 

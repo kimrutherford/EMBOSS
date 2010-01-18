@@ -76,7 +76,7 @@ int main(int argc, char **argv)
 		for(j=i+1;j<ajSeqsetGetSize(seqset);j++)
 		{
 		    iseq2 = j;
-		    if(ajSeqGetLen(seqs[j]) > statwordlen)
+		    if(ajSeqGetLen(seqs[j]) >= statwordlen)
 		    {
 			matchlist = embWordBuildMatchTable(seq1MatchTable,
 							   seqs[j], ajTrue);

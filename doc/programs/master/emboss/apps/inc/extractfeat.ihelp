@@ -1,3 +1,6 @@
+Extract features from sequence(s)
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
                                   reference (input USA)
@@ -48,7 +51,7 @@
                                   If you wish to show more than one source,
                                   separate their names with the character '|',
                                   eg:
-                                  gene* | embl (Any string is accepted)
+                                  gene* | embl (Any string)
    -type               string     [*] By default every feature in the feature
                                   table is extracted. You can set this to be
                                   any feature type you wish to extract.
@@ -61,7 +64,7 @@
                                   If you wish to extract more than one type,
                                   separate their names with the character '|',
                                   eg:
-                                  *UTR | intron (Any string is accepted)
+                                  *UTR | intron (Any string)
    -sense              integer    [0 - any sense, 1 - forward sense, -1 -
                                   reverse sense] By default any feature type
                                   in the feature table is extracted. You can
@@ -94,7 +97,7 @@
                                   If you wish to extract more than one tag,
                                   separate their names with the character '|',
                                   eg:
-                                  gene | label (Any string is accepted)
+                                  gene | label (Any string)
    -value              string     [*] Tag values are the values associated
                                   with a feature tag. Tags are the types of
                                   extra values that a feature may have. For
@@ -117,7 +120,7 @@
                                   If you wish to show more than one tag value,
                                   separate their names with a space or the
                                   character '|', eg:
-                                  pax* | 10 (Any string is accepted)
+                                  pax* | 10 (Any string)
    -join               boolean    [N] Some features, such as CDS (coding
                                   sequence) and mRNA are composed of introns
                                   concatenated together. There may be other
@@ -168,7 +171,7 @@
                                   If you wish to extract more than one tag,
                                   separate their names with the character '|',
                                   eg:
-                                  gene | label (Any string is accepted)
+                                  gene | label (Any string)
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
@@ -209,11 +212,12 @@
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 

@@ -31,7 +31,7 @@ primersection additional Primer options
 primerweights advanced Primer penalty weights
 programsection additional Program options
 productsection additional Product options
-protalignsection input Protein align options
+pairwisealignsection input Pairwise align options
 remapsection advanced Restriction map options
 seqinsection input Sequence input options
 seqoptsection additional Sequence options

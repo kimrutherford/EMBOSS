@@ -1,6 +1,7 @@
 application: abiview [
   documentation: "Display the trace in an ABI sequencer file"
   groups: "Display"
+  relations: "EDAM: Sequence visualisation"
 ]
 
 section: input [
@@ -14,6 +15,7 @@ section: input [
     binary: "Y"
     knowntype: "abi trace"
     information: "ABI sequencing trace file"
+    relations:  "EDAM: ABI sequencing trace"                           
   ]
 
 endsection: input
@@ -26,11 +28,13 @@ section: output [
   seqout: outseq [
     parameter: "Y"
     type: "dna"
+    relations: "EDAM: Pure DNA sequence"                                   
   ]
 
   xygraph: graph [
     standard: "Y"
     gxtitle: "Residue Position"
+    relations: "EDAM: EMBOSS graph file"                                   
   ]
 
   integer: startbase [
@@ -38,6 +42,7 @@ section: output [
     default: "0"
     minimum: "0"
     information: "First base to report or display"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: endbase [
@@ -47,29 +52,34 @@ section: output [
     help: "Last sequence base to report or display. If the default is
            set to zero then the value of this is taken as the maximum number
            of bases."
+    relations: "EDAM: Generic integer"                                     
   ]
 
   boolean: separate [
     default: "N"
     information: "Separate the trace graphs for the 4 bases"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: yticks [
     additional: "Y"
     default: "N"
     information: "Display y-axis ticks"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: sequence [
     additional: "Y"
     default: "Y"
     information: "Display the sequence on the graph"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   integer: window [
     additional: "Y"
     default: "40"
     information: "Sequence display window size"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   string: bases [
@@ -78,6 +88,7 @@ section: output [
     information: "Base graphs to be displayed"
     pattern: "[GATC]+"
     knowntype: "nucleotide codes"
+    relations:  "EDAM: Nucleotide code string"                         
   ]
 
 endsection: output

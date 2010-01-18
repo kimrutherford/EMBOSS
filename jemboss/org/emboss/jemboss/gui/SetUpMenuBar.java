@@ -137,24 +137,21 @@ public class SetUpMenuBar
       fileMenu.addSeparator();
     }
 
-//  final AdvancedOptions ao = new AdvancedOptions(mysettings);
     ao = new AdvancedOptions(mysettings);
     JMenuItem fileMenuExit = new JMenuItem("Exit");
     fileMenuExit.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e) 
       {
-    	  f.getWindowListeners()[0].windowClosing(null);
-    	  // listener above, defined in Jemboss class, calls exitJemboss() method here
-    	  
-//      if(ao.isSaveUserHomeSelected())
-//        ao.userHomeSave();
-
-//      if(seqList.isStoreSequenceList())  //create a SequenceList file
-//        saveSequenceList();
-
-//      deleteTmp(new File(cwd), ".jembosstmp");
-//      System.exit(0);
+          // one expected listener below is defined in class Jemboss
+          // its windowClosing method calls exitJemboss() method defined here
+          WindowListener[] l = f.getWindowListeners();
+          
+          for(int i=0; i<l.length; i++)
+              l[i].windowClosing(null);
+          
+          if (l.length==0)
+              exitJemboss();
       }
     });
     fileMenu.add(fileMenuExit);
@@ -389,7 +386,8 @@ public class SetUpMenuBar
         return name.endsWith(suffix);
       };
     });
-
+    
+    if (tmpFiles!=null)
     for(int h =0;h<tmpFiles.length;h++)
     {
       File tf = new File(tmpFiles[h]);

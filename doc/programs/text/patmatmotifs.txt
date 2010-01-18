@@ -1,5 +1,4 @@
-
-                               patmatmotifs 
+                                patmatmotifs
 
 
 
@@ -24,8 +23,8 @@ Description
    not reported. PROSITE must be processed by running prosextract before
    running patmatmotifs.
 
-   The home web page of PROSITE is: http://www.expasy.ch/prosite/.
-   Quoting from the PROSITE user's documentation:
+   The home web page of PROSITE is: http://www.expasy.ch/prosite/. Quoting
+   from the PROSITE user's documentation:
    "PROSITE is a method of determining what is the function of
    uncharacterized proteins translated from genomic or cDNA sequences. It
    consists of a database of biologically significant sites and patterns
@@ -49,14 +48,13 @@ Description
    The use of protein sequence patterns (or motifs) to determine the
    function(s) of proteins is becoming very rapidly one of the essential
    tools of sequence analysis. This reality has been recognized by many
-   authors, as it can be illustrated from the following citations from
-   two of the most well known experts of protein sequence analysis, R.F.
+   authors, as it can be illustrated from the following citations from two
+   of the most well known experts of protein sequence analysis, R.F.
    Doolittle and A.M. Lesk:
 
    "There are many short sequences that are often (but not always)
-   diagnostics of certain binding properties or active sites. These can
-   be set into a small subcollection and searched against your sequence
-   (1)".
+   diagnostics of certain binding properties or active sites. These can be
+   set into a small subcollection and searched against your sequence (1)".
 
    "In some cases, the structure and function of an unknown protein which
    is too distantly related to any protein of known structure to detect
@@ -71,23 +69,27 @@ Description
    indicative of the post-translational modification sites, such as
    glycolsylation, myristylation and phosphorylation sites. These reports
    are often unwanted and are not normally reported. You can turn
-   reporting of these short motifs on by giving the -noprune option on
-   the command-line.
+   reporting of these short motifs on by giving the -noprune option on the
+   command-line.
 
 Usage
 
    Here is a sample session with patmatmotifs
 
 
-% patmatmotifs -full 
+% patmatmotifs -full
 Scan a protein sequence with motifs from the PROSITE database
 Input protein sequence: tsw:opsd_human
-Output report [opsd_human.patmatmotifs]: 
+Output report [opsd_human.patmatmotifs]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Scan a protein sequence with motifs from the PROSITE database
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Protein sequence filename and optional
@@ -144,13 +146,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -290,7 +294,7 @@ Output file format
 
 ########################################
 # Program: patmatmotifs
-# Rundate: Tue 15 Jul 2008 12:00:00
+# Rundate: Fri 15 Jan 2010 12:00:00
 # Commandline: patmatmotifs
 #    -full
 #    -sequence tsw:opsd_human
@@ -348,52 +352,34 @@ PIFMTIPAFFAKSAAIYNPVIYIMMNK
 # * Visual pigments (opsins) retinal binding site *
 # *************************************************
 #
-# Visual pigments [1,2] are the light-absorbing  molecules that  mediate vision
-.
-# They consist of  an apoprotein, opsin,  covalently  linked  to the chromophor
-e
-# cis-retinal.  Vision is  effected through  the absorption of a  photon by cis
--
-# retinal  which is isomerized to  trans-retinal.  This isomerization leads to
-a
-# change  of conformation  of the protein. Opsins are integral membrane protein
-s
-# with  seven transmembrane regions that belong to family 1 of G-protein couple
-d
+# Visual pigments [1,2] are the light-absorbing  molecules that  mediate vision.
+# They consist of  an apoprotein, opsin,  covalently  linked  to the chromophore
+# cis-retinal.  Vision is  effected through  the absorption of a  photon by cis-
+# retinal  which is isomerized to  trans-retinal.  This isomerization leads to a
+# change  of conformation  of the protein. Opsins are integral membrane proteins
+# with  seven transmembrane regions that belong to family 1 of G-protein coupled
 # receptors (see <PDOC00210>).
 #
-# In vertebrates four different pigments are generally found.   Rod cells, whic
-h
-# mediate vision in dim light, contain the pigment rhodopsin.  Cone cells, whic
-h
-# function in bright light, are responsible  for  color vision and contain thre
-e
+# In vertebrates four different pigments are generally found.   Rod cells, which
+# mediate vision in dim light, contain the pigment rhodopsin.  Cone cells, which
+# function in bright light, are responsible  for  color vision and contain three
 # or more color pigments (for example, in mammals: red, blue and green).
 #
-# In Drosophila, the  eye   is composed   of 800   facets  or   ommatidia.  Eac
-h
-# ommatidium contains eight photoreceptor cells (R1-R8):  the R1 to R6 cells ar
-e
-# outer cells,  R7  and R8 inner cells. Each of the three types of cells (R1-R6
-,
+# In Drosophila, the  eye   is composed   of 800   facets  or   ommatidia.  Each
+# ommatidium contains eight photoreceptor cells (R1-R8):  the R1 to R6 cells are
+# outer cells,  R7  and R8 inner cells. Each of the three types of cells (R1-R6,
 # R7 and R8) expresses a specific opsin.
 #
-# Proteins evolutionary related to opsins include squid retinochrome, also know
-n
-# as retinal  photoisomerase, which converts various isomers of retinal into 11
--
-# cis retinal and mammalian retinal pigment  epithelium (RPE) RGR [3], a protei
-n
+# Proteins evolutionary related to opsins include squid retinochrome, also known
+# as retinal  photoisomerase, which converts various isomers of retinal into 11-
+# cis retinal and mammalian retinal pigment  epithelium (RPE) RGR [3], a protein
 # that may also act in retinal isomerization.
 #
-# The attachment  site  for  retinal in the above proteins is a conserved lysin
-e
-# residue in  the  middle  of  the  seventh  transmembrane helix. The pattern w
-e
+# The attachment  site  for  retinal in the above proteins is a conserved lysine
+# residue in  the  middle  of  the  seventh  transmembrane helix. The pattern we
 # developed includes this residue.
 #
-# -Consensus pattern: [LIVMWAC]-[PGAC]-x(3)-[SAC]-K-[STALIMR]-[GSACPNV]-[STACP]
--
+# -Consensus pattern: [LIVMWAC]-[PGAC]-x(3)-[SAC]-K-[STALIMR]-[GSACPNV]-[STACP]-
 #                     x(2)-[DENF]-[AP]-x(2)-[IY]
 #                     [K is the retinal binding site]
 # -Sequences known to belong to this class detected by the pattern: ALL.
@@ -432,8 +418,8 @@ References
 
    Other references:
 
-    1. Bairoch, A., Bucher P. (1994) PROSITE: recent developments.
-       Nucleic Acids Research, Vol 22, No.17 3583-3589.
+    1. Bairoch, A., Bucher P. (1994) PROSITE: recent developments. Nucleic
+       Acids Research, Vol 22, No.17 3583-3589.
     2. Bairoch, A., (1992) PROSITE: a dictionary of sites and patterns in
        proteins. Nucleic Acids Research, Vol 20, Supplement, 2013-2018.
     3. Peek, J., O'Reilly, T., Loukides, M., (1997) Unix Power Tools, 2nd

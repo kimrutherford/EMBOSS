@@ -276,6 +276,10 @@ while ($source =~ m"[\/][*][^*]*[*]+([^\/*][^*]*[*]+)*[\/]"gos) {
 	    print SRS "LB $lib\n";
 	    print SRS "XX\n";
 
+	    if(!defined($dtypedefname)) {
+		print STDERR "dtypedefname undefined for $infile\n";
+	    }
+
 	    if ($dtypedefname ne $name) {
 		print "bad data type name '$name' typedef is '$dtypedefname'\n";
 	    }

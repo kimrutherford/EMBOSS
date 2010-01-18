@@ -1,157 +1,351 @@
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Qualifier</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Standard (Mandatory) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td>[-infile]<br>(Parameter 1)</td>
+<td>infile</td>
 <td>Commands to the lindna drawing program file</td>
 <td>Input file</td>
 <td>inputfile</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-[no]ruler</td>
+<td>boolean</td>
 <td>Draw a ruler</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-blocktype</td>
+<td>list</td>
 <td>Type of blocks</td>
 <td><table><tr><td>Open</td> <td><i>(Open blocks)</i></td></tr><tr><td>Filled</td> <td><i>(Filled blocks)</i></td></tr><tr><td>Outline</td> <td><i>(Black border)</i></td></tr></table></td>
 <td>Filled</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-graphout</td>
+<td>graph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, das, xterm, png, gif</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Additional (Optional) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
+<th align="left" colspan=5>Additional (Optional) qualifiers</th>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-maxgroups</td>
+<td>integer</td>
 <td>Maximum number of groups</td>
 <td>Integer 1 or more</td>
 <td>20</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-maxlabels</td>
+<td>integer</td>
 <td>Maximum number of labels</td>
 <td>Integer 1 or more</td>
 <td>10000</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-intersymbol</td>
+<td>selection</td>
 <td>Type of junctions between blocks</td>
 <td>Choose from selection list of values</td>
 <td>Straight</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-intercolour</td>
+<td>integer</td>
 <td>Colour of junctions between blocks (enter a colour number)</td>
 <td>Integer from 0 to 15</td>
 <td>1</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-interticks</td>
+<td>boolean</td>
 <td>Horizontal junctions between ticks</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-gapsize</td>
+<td>integer</td>
 <td>Interval between ticks in the ruler</td>
 <td>Integer 0 or more</td>
 <td>500</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-ticklines</td>
+<td>boolean</td>
 <td>Vertical lines at the ruler's ticks</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-textheight</td>
+<td>float</td>
 <td>Height of text. Enter a number &lt;1.0 or &gt;1.0 to decrease or increase the size, respectively</td>
 <td>Number 0.000 or more</td>
 <td>1.0</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-textlength</td>
+<td>float</td>
 <td>Length of text. Enter a number &lt;1.0 or &gt;1.0 to decrease or increase the size, respectively</td>
 <td>Number 0.000 or more</td>
 <td>1.0</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-margin</td>
+<td>float</td>
 <td>Width of left margin. This is the region left to the groups where the names of the groups are displayed. Enter a number &lt;1.0 or &gt;1.0 to decrease or increase the size, respectively</td>
 <td>Number 0.000 or more</td>
 <td>1.0</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-tickheight</td>
+<td>float</td>
 <td>Height of ticks. Enter a number &lt;1.0 or &gt;1.0 to decrease or increase the size, respectively</td>
 <td>Number 0.000 or more</td>
 <td>1.0</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-blockheight</td>
+<td>float</td>
 <td>Height of blocks. Enter a number &lt;1.0 or &gt;1.0 to decrease or increase the size, respectively</td>
 <td>Number 0.000 or more</td>
 <td>1</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-rangeheight</td>
+<td>float</td>
 <td>Height of range ends. Enter a number &lt;1.0 or &gt;1.0 to decrease or increase the size, respectively</td>
 <td>Number 0.000 or more</td>
 <td>1.0</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-gapgroup</td>
+<td>float</td>
 <td>Space between groups. Enter a number &lt;1.0 or &gt;1.0 to decrease or increase the size, respectively</td>
 <td>Number 0.000 or more</td>
 <td>1.0</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-postext</td>
+<td>float</td>
 <td>Space between text and ticks, blocks, and ranges. Enter a number &lt;1.0 or &gt;1.0 to decrease or increase the size, respectively</td>
 <td>Number 0.000 or more</td>
 <td>1.0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
+<th align="left" colspan=5>Advanced (Unprompted) qualifiers</th>
 </tr>
 
 <tr>
-<td colspan=4>(none)</td>
+<td colspan=5>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-graphout" associated graph qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -gprompt</td>
+<td>boolean</td>
+<td>Graph prompting</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -gdesc</td>
+<td>string</td>
+<td>Graph description</td>
+<td>Any string</td>
+<td>Linear DNA map</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -gtitle</td>
+<td>string</td>
+<td>Graph title</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -gsubtitle</td>
+<td>string</td>
+<td>Graph subtitle</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -gxtitle</td>
+<td>string</td>
+<td>Graph x axis title</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -gytitle</td>
+<td>string</td>
+<td>Graph y axis title</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -goutfile</td>
+<td>string</td>
+<td>Output file for non interactive displays</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -gdirectory</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>General qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -auto</td>
+<td>boolean</td>
+<td>Turn off prompts</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -stdout</td>
+<td>boolean</td>
+<td>Write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -filter</td>
+<td>boolean</td>
+<td>Read first file from standard input, write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -options</td>
+<td>boolean</td>
+<td>Prompt for standard and additional values</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -debug</td>
+<td>boolean</td>
+<td>Write debug output to program.dbg</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -verbose</td>
+<td>boolean</td>
+<td>Report some/full command line options</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -help</td>
+<td>boolean</td>
+<td>Report command line options and exit. More information on associated and general qualifiers can be found with -help -verbose</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -warning</td>
+<td>boolean</td>
+<td>Report warnings</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -error</td>
+<td>boolean</td>
+<td>Report errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fatal</td>
+<td>boolean</td>
+<td>Report fatal errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -die</td>
+<td>boolean</td>
+<td>Report dying program messages</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -version</td>
+<td>boolean</td>
+<td>Report version number and exit</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
 </tr>
 
 </table>

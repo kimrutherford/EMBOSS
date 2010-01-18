@@ -3879,6 +3879,17 @@ under each output type. The acdvalid utility will check all <i>knowntype</i>
 values in an ACD file, and report any missing values for data types
 that require a knowntype.</p>
 
+<p><i>relations:</i></p>
+
+<p>The <i>relations</i> attribute is a strict definition of the
+datatype using the EMBRACE Dataypes and Methods (EDAM) ontology. The
+string value is in the form:</p>
+
+<pre>
+    relations: "EDAM:0123456 Edam term name"
+</pre>
+
+
 <p><i>prompt:</i></p>
 
 <p>The string used if the user has to be queried
@@ -5229,7 +5240,7 @@ they can fix the value, or provide parsers for each alternative.
   <p>characters: <i>string<i></p>
   </td>
   <td>
-  <p>Allowed property characters (default is '' for all non-space characters)<br>Default: ""</p>
+  <p>Allowed property characters (default is '' for all non-space)<br>Default: ""</p>
   </td>
  </tr>
 

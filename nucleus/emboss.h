@@ -3,6 +3,11 @@
 
 #include "ajax.h"
 #include "ajgraph.h"
+#include "ajgraphstruct.h"
+#include "ajhist.h"
+#include "ensembl.h"
+#include "ajseqdb.h"
+#include "ajacd.h"
 #include "embaln.h"
 #include "embcom.h"
 #include "embcons.h"
@@ -27,10 +32,6 @@
 #include "embdmx.h"
 #include "embexit.h"
 #include "embindex.h"
-
-#ifdef WIN32
-#define VERSION "6.1.0"
-#endif
-
+#include "embest.h"
 
 #endif

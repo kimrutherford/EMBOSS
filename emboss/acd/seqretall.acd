@@ -2,6 +2,8 @@ application: seqretall [
   documentation: "Reads and writes (returns) a set of
                   sequences one at a time"
   groups: "Edit"
+  relations: "EDAM: Sequence extraction and generation"
+  relations: "EDAM: Sequence file handling"  
 ]
 
 section: input [
@@ -12,6 +14,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "gapany"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: input
@@ -23,6 +26,7 @@ section: output [
 
   seqoutall: outseq [
     parameter: "Y"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: output

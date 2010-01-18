@@ -2,6 +2,7 @@ application: polydot [
   documentation: "Draw dotplots for all-against-all comparison of a
                   sequence set"
   groups: "Alignment:Dot plots"
+  relations: "EDAM: Dotplot generation"
 ]
 
 section: input [
@@ -14,6 +15,7 @@ section: input [
     type: "any"
     help: "File containing a sequence alignment"
     aligned: "N"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: input
@@ -28,6 +30,7 @@ section: required [
     default: "6"
     minimum: "2"
     information: "Word size"
+    relations: "EDAM: Generic integer"                                     
   ]
 
 endsection: required
@@ -44,29 +47,34 @@ section: output [
     help: "This specifies the size of the gap that is used to separate
            the individual dotplots in the display. The size is measured in
            residues, as displayed in the output."
+    relations: "EDAM: Generic integer"                                     
   ]
 
   boolean: boxit [
     default: "Y"
     additional: "Y"
     information: "Draw a box around each dotplot"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   toggle: dumpfeat [
     default: "N"
     additional: "Y"
     information: "Dump all matches as feature files"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   featout: outfeat [
     standard: "$(dumpfeat)"
     nullok: "@(!$(dumpfeat))"
     nulldefault: "@(!$(dumpfeat))"
+    relations: "EDAM: Sequence feature table"                              
   ]
 
   graph: graph [
     standard: "Y"
     gdesc: "Poly dotplot"
+    relations: "EDAM: EMBOSS graph file"                                   
   ]
 
 endsection: output

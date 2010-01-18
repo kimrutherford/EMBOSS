@@ -107,8 +107,6 @@ int main(int argc, char **argv)
     AjBool iscoil;
     AjPFloat2d rdat = NULL;
     AjPList framelist = NULL;
-    AjIList iter = NULL;
-
 
     embInit("pepcoil", argc, argv);
 
@@ -140,7 +138,7 @@ int main(int argc, char **argv)
     ajStrAssignC(&ftmiss, "region");
 
     ajFmtPrintS(&tmpstr,"Window size: %d residues\n",window);
-    ajReportSetHeader(report, tmpstr);
+    ajReportSetHeaderS(report, tmpstr);
     framelist = ajListstrNew();
     
     while(ajSeqallNext(seqall, &seq))
@@ -189,7 +187,7 @@ int main(int argc, char **argv)
 			ajFloatPut(&scores,j,ajFloat2dGet(rdat,rescode,k++));
 			if(k>7) k=1;
 		    }
-		    score = ajGeoMean(ajFloatFloat(scores),window);
+		    score = ajMathGmean(ajFloatFloat(scores),window);
 
 		    if(score>maxscore)
 		    {
@@ -220,7 +218,7 @@ int main(int argc, char **argv)
 	    /*
 	    ajFmtPrintS(&tmpstr,"Prediction starts at %d\n",
 			startcoil + begin);
-	    ajReportAppendSubHeader(report, tmpstr);
+	    ajReportAppendSubheaderS(report, tmpstr);
 	    */
 	}
 
@@ -297,7 +295,7 @@ int main(int argc, char **argv)
 			/*
 			ajFmtPrintS(&tmpstr,"Prediction starts at %d\n",
 				    startcoil + begin);
-			ajReportAppendSubHeader(report, tmpstr);
+			ajReportAppendSubheaderS(report, tmpstr);
 			ajFmtPrintF(outf,"\nPrediction starts at %d\n",
 			startcoil+begin);
 			*/
@@ -341,13 +339,10 @@ int main(int argc, char **argv)
 			ajFmtPrintS(&tmpstr, "*pos %d",
 				    coilpos);
 			ajFeatTagAdd(gf,  NULL, tmpstr);
-                        iter = ajListIterNew(framelist);
-                        while(!ajListIterDone(iter))
+                        while(ajListstrPop(framelist, &tmpframe))
                         {
-                            tmpframe = ajListstrIterGet(iter);
 			    ajFeatTagAdd(gf,  NULL, tmpframe);
                         }
-                        ajListIterDel(&iter);
 			/*
 			ajFmtPrintF(outf,
 			  "probable coiled-coil from %d to %d (%d residues)\n",
@@ -395,13 +390,10 @@ int main(int argc, char **argv)
 		ajFmtPrintS(&tmpstr, "*pos %d",
 			    coilpos);
 		ajFeatTagAdd(gf,  NULL, tmpstr);
-                iter = ajListIterNew(framelist);
-                while(!ajListIterDone(iter))
+                while(ajListstrPop(framelist, &tmpframe))
                 {
-                    tmpframe = ajListstrIterGet(iter);
                     ajFeatTagAdd(gf,  NULL, tmpframe);
                 }
-                ajListIterDel(&iter);
 	    /*
 		ajFmtPrintF(outf,
 			 "Probable coiled-coil from %d to %d (%d residues)\n",
@@ -537,9 +529,9 @@ static float pepcoil_probcoil(float score)
     float gg;
     double td;
     
-    td = ajGaussProb((float)1.63,(float)0.24,score);
+    td = ajCvtGaussToProb((float)1.63,(float)0.24,score);
     gcc = (float) td;
-    td  = ajGaussProb((float)0.77,(float)0.20,score);
+    td  = ajCvtGaussToProb((float)0.77,(float)0.20,score);
     gg  = (float) td;
 
     return gcc/((float)30.0*gg + gcc);
@@ -562,5 +554,5 @@ static float pepcoil_probcoil(float score)
 
 static ajint pepcoil_inframe(ajint start, ajint pos, ajint frame, ajint len)
 {
-    return 1+ajPosMod(frame-pos+start-1,len);
+    return 1+ajMathModulo(frame-pos+start-1,len);
 }

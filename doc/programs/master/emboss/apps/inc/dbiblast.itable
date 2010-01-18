@@ -1,136 +1,271 @@
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Qualifier</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Standard (Mandatory) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td>[-dbname]<br>(Parameter 1)</td>
+<td>string</td>
 <td>Database name</td>
 <td>Any string from 2 to 19 characters, matching regular expression /[A-z][A-z0-9_]+/</td>
 <td><b>Required</b></td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-directory</td>
+<td>directory</td>
 <td>Database directory</td>
 <td>Directory</td>
 <td>.</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-filenames</td>
+<td>string</td>
 <td>Wildcard database filename</td>
-<td>Any string is accepted</td>
+<td>Any string</td>
 <td>Database name</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-release</td>
+<td>string</td>
 <td>Release number</td>
 <td>Any string up to 9 characters</td>
 <td>0.0</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-date</td>
+<td>string</td>
 <td>Index date</td>
 <td>Date string dd/mm/yy</td>
 <td>00/00/00</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-seqtype</td>
+<td>list</td>
 <td>Sequence type</td>
 <td><table><tr><td>N</td> <td><i>(nucleic)</i></td></tr><tr><td>P</td> <td><i>(protein)</i></td></tr><tr><td>?</td> <td><i>(unknown)</i></td></tr></table></td>
 <td>unknown</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-blastversion</td>
+<td>list</td>
 <td>Blast index version</td>
 <td><table><tr><td>1</td> <td><i>(wublast and setdb/pressdb)</i></td></tr><tr><td>2</td> <td><i>(formatdb)</i></td></tr><tr><td>0</td> <td><i>(unknown)</i></td></tr></table></td>
 <td>unknown</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-outfile</td>
+<td>outfile</td>
 <td>General log output file</td>
 <td>Output file</td>
 <td><i>&lt;*&gt;</i>.dbiblast</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Additional (Optional) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
+<th align="left" colspan=5>Additional (Optional) qualifiers</th>
 </tr>
 
 <tr>
-<td colspan=4>(none)</td>
+<td colspan=5>(none)</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
+<th align="left" colspan=5>Advanced (Unprompted) qualifiers</th>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-fields</td>
+<td>list</td>
 <td>Index fields</td>
 <td><table><tr><td>acc</td> <td><i>(acnum accession number index)</i></td></tr><tr><td>sv</td> <td><i>(seqvn sequence version and gi number index)</i></td></tr><tr><td>des</td> <td><i>(des description index)</i></td></tr></table></td>
 <td>acc</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-exclude</td>
+<td>string</td>
 <td>Wildcard filename(s) to exclude</td>
-<td>Any string is accepted</td>
-<td><i>An empty string is accepted</i></td>
+<td>Any string</td>
+<td>&nbsp;</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-sortoptions</td>
+<td>string</td>
 <td>Sort options, typically '-T .' to use current directory for work files and '-k 1,1' to force GNU sort to use the first field</td>
-<td>Any string is accepted</td>
+<td>Any string</td>
 <td>-T . -k 1,1</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-maxindex</td>
+<td>integer</td>
 <td>Maximum index length</td>
 <td>Integer 0 or more</td>
 <td>0</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-[no]systemsort</td>
+<td>boolean</td>
 <td>Use system sort utility</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-[no]cleanup</td>
+<td>boolean</td>
 <td>Clean up temporary files</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-sourcefile</td>
+<td>boolean</td>
 <td>Use FASTA source file</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-indexoutdir</td>
+<td>outdir</td>
 <td>Index file output directory</td>
 <td>Output directory</td>
 <td>.</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>General qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -auto</td>
+<td>boolean</td>
+<td>Turn off prompts</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -stdout</td>
+<td>boolean</td>
+<td>Write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -filter</td>
+<td>boolean</td>
+<td>Read first file from standard input, write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -options</td>
+<td>boolean</td>
+<td>Prompt for standard and additional values</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -debug</td>
+<td>boolean</td>
+<td>Write debug output to program.dbg</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -verbose</td>
+<td>boolean</td>
+<td>Report some/full command line options</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -help</td>
+<td>boolean</td>
+<td>Report command line options and exit. More information on associated and general qualifiers can be found with -help -verbose</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -warning</td>
+<td>boolean</td>
+<td>Report warnings</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -error</td>
+<td>boolean</td>
+<td>Report errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fatal</td>
+<td>boolean</td>
+<td>Report fatal errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -die</td>
+<td>boolean</td>
+<td>Report dying program messages</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -version</td>
+<td>boolean</td>
+<td>Report version number and exit</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
 </tr>
 
 </table>

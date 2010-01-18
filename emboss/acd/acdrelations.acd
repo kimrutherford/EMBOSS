@@ -1,0 +1,80 @@
+application: acdrelations 
+[
+  documentation: "Add relations: attribute to ACD files"
+  groups: "Acd"
+]
+
+
+
+
+
+section: input 
+[
+  information: "Input section"
+  type: "page"
+]
+
+  dirlist: indir
+  [
+    parameter: "Y"
+    information: "ACD file input directory"
+    default: "acdin"
+    extension: "acd"
+  ]
+
+  datafile: infileedam 
+  [
+    parameter: "Y"
+    information: "EDAM relations: file"
+    default: "edamtoacd.dat"
+  ]
+
+  infile: infiletype 
+  [
+    parameter: "Y"
+    information: "knowntypes.standard file"
+    default: "/homes/jison/emboss/emboss/emboss/acd/knowntypes.standard"
+  ]
+
+endsection: input
+
+
+
+
+
+section: required 
+[
+  information: "Required section"
+  type: "page"
+]
+endsection: required
+
+
+
+
+
+section: advanced 
+[
+  information: "Advanced section"
+  type: "page"
+]
+endsection: advanced
+
+
+
+
+
+section: output 
+[
+  information: "Output section"
+  type: "page"
+]
+  outdir: outdir 
+  [
+    parameter: "Y"
+    information: "ACD file output directory"
+    extension: "acd"
+    default: "acdout"
+  ]
+
+endsection: output

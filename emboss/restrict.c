@@ -539,7 +539,7 @@ static void restrict_reportHits(AjPReport report, const AjPSeq seq,
 	fx = AJALLOC(hits*2*sizeof(ajint));
     }
 
-    ajReportSetHeader(report, tmpStr);
+    ajReportSetHeaderS(report, tmpStr);
 
 
     if(limit)
@@ -786,7 +786,7 @@ static void restrict_reportHits(AjPReport report, const AjPSeq seq,
     if(ifrag)
 	ajStrAppendS(&tmpStr,fragStr);
     
-    ajReportAppendTail (report, tmpStr);
+    ajReportAppendTailS(report, tmpStr);
     
 
     for(i=0;i<hits;++i)

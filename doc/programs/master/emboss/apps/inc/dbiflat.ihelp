@@ -1,3 +1,6 @@
+Index a flat file database
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers:
   [-dbname]            string     Database name (Any string from 2 to 19
                                   characters, matching regular expression
@@ -7,7 +10,7 @@
                                   (Genbank, DDBJ); REFSEQ (Refseq))
    -directory          directory  [.] Database directory
    -filenames          string     [*.dat] Wildcard database filename (Any
-                                  string is accepted)
+                                  string)
    -release            string     [0.0] Release number (Any string up to 9
                                   characters)
    -date               string     [00/00/00] Index date (Date string dd/mm/yy)
@@ -21,13 +24,12 @@
                                   description index); key (keyword keywords
                                   index); org (taxon taxonomy and organism
                                   index))
-   -exclude            string     Wildcard filename(s) to exclude (Any string
-                                  is accepted)
+   -exclude            string     Wildcard filename(s) to exclude (Any string)
    -maxindex           integer    [0] Maximum index length (Integer 0 or more)
    -sortoptions        string     [-T . -k 1,1] Sort options, typically '-T .'
                                   to use current directory for work files and
                                   '-k 1,1' to force GNU sort to use the first
-                                  field (Any string is accepted)
+                                  field (Any string)
    -[no]systemsort     boolean    [Y] Use system sort utility
    -[no]cleanup        boolean    [Y] Clean up temporary files
    -indexoutdir        outdir     [.] Index file output directory
@@ -45,11 +47,12 @@
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 

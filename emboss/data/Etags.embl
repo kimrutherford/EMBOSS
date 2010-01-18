@@ -194,7 +194,7 @@ mobile_element QSPECIAL
 
 mod_base TEXT
 
-# There is a controlled vocabulary in appendix 7.5.2 of
+# There is a controlled vocabulary in appendix 7.4.2 of
 # http://www.ebi.ac.uk/embl/Documentation/FT_definitions/feature_table.html
 # others should have OTHER with /note="name of base"
 

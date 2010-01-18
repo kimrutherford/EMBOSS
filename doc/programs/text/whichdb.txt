@@ -1,5 +1,4 @@
-
-                                  whichdb 
+                                   whichdb
 
 
 
@@ -19,29 +18,32 @@ Description
    whichdb searches all available sequence databases for sequences with a
    specified ID name or accession number. The uniform sequence address
    (USA) of matching database entries is written to an output file.
-   whichdb will, optionally, write out the sequences it finds to files.
-   An "available" database is one that has been defined in the EMBOSS
-   system file (.embossrc or emboss.login) and is available from the
-   system you are running EMBOSS. If you do not know which database(s)
-   contain the entry you are interested in, whichdb will tell you.
+   whichdb will, optionally, write out the sequences it finds to files. An
+   "available" database is one that has been defined in the EMBOSS system
+   file (.embossrc or emboss.login) and is available from the system you
+   are running EMBOSS. If you do not know which database(s) contain the
+   entry you are interested in, whichdb will tell you.
 
 Usage
 
    Here is a sample session with whichdb
 
 
-% whichdb -showall 
+% whichdb -showall
 Search all sequence databases for an entry and retrieve it
 ID or Accession number: x65921
-Output file [outfile.whichdb]: 
+Output file [outfile.whichdb]:
+
 
    Go to the output files for this example
 
 Command line arguments
 
+Search all sequence databases for an entry and retrieve it
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers (* if not always prompted):
-  [-entry]             string     ID or Accession number (Any string is
-                                  accepted)
+  [-entry]             string     ID or Accession number (Any string)
 *  -outfile            outfile    [*.whichdb] Output file name
 
    Additional (Optional) qualifiers: (none)
@@ -62,13 +64,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -196,8 +200,8 @@ tgb:x65921
    always 'Fasta' format. The normal command-line qualifiers for changing
    the output formats etc. will not work in this program.
 
-   The names of the files that the sequences are written to is reported
-   as they are written, for example:
+   The names of the files that the sequences are written to is reported as
+   they are written, for example:
 
 Writing x65923.embl
 Writing x65923.human
@@ -214,30 +218,30 @@ Notes
 
    The Uniform Sequence Addresss (USA) method used by EMBOSS for
    referencing sequences does not allow database entries to be specified
-   by just the ID name or accession number. You must specify both the
-   name of the database and the entry, for example embl:x65923, not just
+   by just the ID name or accession number. You must specify both the name
+   of the database and the entry, for example embl:x65923, not just
    x65923. whichdb is useful where you do not know the database that a
    sequence entry is found in.
 
   IDs and Accessions
 
    An entry in a database must have some way of being uniquely identified
-   in that database. Most sequence databases have two such identifiers
-   for each sequence - an ID name and an Accession number.
+   in that database. Most sequence databases have two such identifiers for
+   each sequence - an ID name and an Accession number.
 
-   Why are there two such identifiers? The ID name was originally
-   intended to be a human-readable name that had some indication of the
-   function of its sequence. In the early years of EMBL and GenBank the
-   first two (or three) letters indicated the species and the rest
-   indicated the function, for example HSFAU was the Homo Sapiens FAU
-   pseudogene. This naming scheme started to be a problem when the number
-   of entries added each day was so vast that people could not make up
-   the ID names fast enough. Instead, the Accession numbers were used as
-   the ID name. Therefore you will now find ID names like X65923, the
-   same as the Accession number for that sequence in EMBL. The protein
-   sequence databases continue to use recognizable names for entries (for
-   example AMIR_PSEAE for the AmiR gene product of Pseudomonas aeruginosa
-   in UniProt/SwissProt).
+   Why are there two such identifiers? The ID name was originally intended
+   to be a human-readable name that had some indication of the function of
+   its sequence. In the early years of EMBL and GenBank the first two (or
+   three) letters indicated the species and the rest indicated the
+   function, for example HSFAU was the Homo Sapiens FAU pseudogene. This
+   naming scheme started to be a problem when the number of entries added
+   each day was so vast that people could not make up the ID names fast
+   enough. Instead, the Accession numbers were used as the ID name.
+   Therefore you will now find ID names like X65923, the same as the
+   Accession number for that sequence in EMBL. The protein sequence
+   databases continue to use recognizable names for entries (for example
+   AMIR_PSEAE for the AmiR gene product of Pseudomonas aeruginosa in
+   UniProt/SwissProt).
 
    ID names are not guaranteed to remain the same between different
    versions of a database (although in practice they usually do). In
@@ -272,33 +276,32 @@ Known bugs
 
 See also
 
-   Program name     Description
-   infoalign        Display basic information about a multiple sequence
-                    alignment
-   infobase         Return information on a given nucleotide base
-   inforesidue      Return information on a given amino acid residue
-   infoseq          Display basic information about sequences
-   seealso          Finds programs with similar function to a specified program
-   showdb           Displays information on configured databases
-   textsearch       Search the textual description of sequence(s)
-   tfm              Displays full documentation for an application
-   wossname         Finds programs by keywords in their short description
+                    Program name                          Description
+                    infoalign    Display basic information about a multiple sequence alignment
+                    infobase     Return information on a given nucleotide base
+                    inforesidue  Return information on a given amino acid residue
+                    infoseq      Display basic information about sequences
+                    seealso      Finds programs with similar function to a specified program
+                    showdb       Displays information on configured databases
+                    textsearch   Search the textual description of sequence(s)
+                    tfm          Displays full documentation for an application
+                    wossname     Finds programs by keywords in their short description
 
 Author(s)
 
-   Alan Bleasby (ajb © ebi.ac.uk)
-   European Bioinformatics Institute, Wellcome Trust Genome Campus,
-   Hinxton, Cambridge CB10 1SD, UK
+   Alan             Bleasby (ajb (c) ebi.ac.uk)
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
 
 History
 
-   Written (Jan 2002) - Alan Bleasby.
+                    Written (Jan 2002) - Alan Bleasby.
 
 Target users
 
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
 
 Comments
 
-   None
+                    None

@@ -52,7 +52,7 @@ int main(int argc, char **argv)
     plist  = ajAcdGetRegexp("pattern");
 
     ajFmtPrintAppS (&tmpstr, "Pattern: %S\n", ajAcdGetValue("pattern"));
-    ajReportSetHeader (report, tmpstr);
+    ajReportSetHeaderS(report, tmpstr);
 
     while(ajSeqallNext(seqall, &seq))
     {

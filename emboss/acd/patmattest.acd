@@ -1,6 +1,7 @@
 application: patmattest [
   documentation: "Test of pattern matching"
   groups: "Test"
+  relations: "EDAM: File debugging"
 ]
 
 section: input [
@@ -11,6 +12,7 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "any"
+    relations: "EDAM: Sequence"                                            
   ]
 
   string: expression [
@@ -19,6 +21,7 @@ section: input [
     minlength: "2"
     information: "Regular expression to search sequence for."
     knowntype: "regular expression"
+    relations:  "EDAM: Regular expression"                             
   ]
 
 endsection: input
@@ -32,6 +35,7 @@ section: output [
     parameter: "Y"
     default: "stdout"
     knowntype: "patmattest output"
+    relations: "EDAM: Free text file"                                      
   ]
 
 endsection: output

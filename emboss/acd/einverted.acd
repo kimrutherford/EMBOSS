@@ -4,6 +4,8 @@ application: einverted [
   gui: "yes"
   batch: "yes"
   cpu: "medium"
+  relations: "EDAM: Repeat sequence finding"
+  relations: "EDAM: RNA secondary structure prediction"
 ]
 
 section: input [
@@ -14,6 +16,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "dna"
+    relations: "EDAM: DNA sequence record"                                 
   ]
 
 endsection: input
@@ -27,24 +30,28 @@ section: required [
     default: "12"
     standard: "Y"
     information: "Gap penalty"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: threshold [
     default: "50"
     standard: "Y"
     information: "Minimum score threshold"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: match [
     default: "3"
     standard: "Y"
     information: "Match score"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: mismatch [
     default: "-4"
     standard: "Y"
     information: "Mismatch score"
+    relations: "EDAM: Generic integer"                                     
   ]
 
 endsection: required
@@ -60,6 +67,7 @@ section: additional [
     information: "Maximum extent of repeats"
     help: "Maximum separation between the start of repeat and the end
            of the inverted repeat (the default is 2000 bases)."
+    relations: "EDAM: Generic integer"                                     
   ]
 
 endsection: additional
@@ -74,6 +82,7 @@ section: output [
     extension: "inv"
     knowntype: "inverted output"
     information: "Sanger Centre program inverted output file"
+    relations: "EDAM: Free text file"                                      
   ]
 
   seqout: outseq [
@@ -83,6 +92,7 @@ section: output [
                   repeats."
     help: "The sequence of the inverted repeat regions without gap
            characters."
+    relations: "EDAM: Sequence"                                            
   ]
 
 endsection: output

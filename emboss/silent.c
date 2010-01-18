@@ -231,7 +231,7 @@ int main(int argc, char **argv)
     }
 
     ajReportSetStatistics(report, 1, ajSeqGetLenTrimmed(seq));
-    ajReportSetTail(report, tailstr);
+    ajReportSetTailS(report, tailstr);
     (void) ajReportWrite (report,feat,seq);
     ajFeattableDel(&feat);
 
@@ -333,7 +333,7 @@ static AjPList silent_mismatch(const AjPStr sstr, AjPList relist,
     start = 1;
     if(!rev)                           /* forward strand */
     {
-	ajTrnStrFrame(table,sstr,1,&pep); /*1 stands for frame number*/
+	ajTrnSeqFrameS(table,sstr,1,&pep); /*1 stands for frame number*/
     	if(tshow)
     	{
                 silent_fmt_sequence("TRANSLATED SEQUENCE",
@@ -343,7 +343,7 @@ static AjPList silent_mismatch(const AjPStr sstr, AjPList relist,
     else                               /* reverse strand */
     {
 	ajStrAssignC(&tstr,ajStrGetPtr(sstr)+(end-begin+1)%3);
-	ajTrnStrFrame(table,tstr,1,&pep);
+	ajTrnSeqFrameS(table,tstr,1,&pep);
         if(tshow)
 	{
 		silent_fmt_sequence("REVERSE TRANSLATED SEQUENCE",
@@ -605,12 +605,12 @@ static AjPSilent silent_checktrans(const AjPStr seq,const EmbPMatMatch match,
     table = ajTrnNewI(0);
 
     /* translates codon pointed to by s (original seq) */
-    s1 = ajStrNewC(ajStrGetPtr(ajTrnCodonC(table,s)));
+    s1 = ajStrNewK(ajTrnCodonC(table,s));
 
     t[x] = rc;
 
     /*  translates codon pointed to by s (mutated base from RS pattern */
-    s2 = ajStrNewC(ajStrGetPtr(ajTrnCodonC(table,s)));
+    s2 = ajStrNewK(ajTrnCodonC(table,s));
 
     t[x] = c;  /* changes mutated base in seq back to original base */
 

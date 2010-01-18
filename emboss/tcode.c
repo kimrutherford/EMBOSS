@@ -119,14 +119,14 @@ int main(int argc, char **argv)
     AjPInt   to        = NULL;
 
     AjPGraph graph     = NULL;
-    AjPGraphPlpData this  = NULL;
+    AjPGraphdata this  = NULL;
 
     ajint i;
     float ymin = 0.;
     float ymax = 0.;
     
     
-    ajGraphInit("tcode", argc, argv);
+    embInit("tcode", argc, argv);
 
     report   = ajAcdGetReport("outfile");
     seqall   = ajAcdGetSeqall("sequence");
@@ -187,10 +187,10 @@ int main(int argc, char **argv)
 	    tcode_report(report, from, to, testcodes, npoints, ftable, seq);
 	if(plot)
 	{
-	    this = ajGraphPlpDataNewI(npoints);
-	    ajGraphPlpDataSetTypeC(this,"2D plot");
-	    ajGraphxySetOverLap(graph,ajFalse);
-	    ajGraphArrayMaxMin(this->y,npoints,&ymin,&ymax);
+	    this = ajGraphdataNewI(npoints);
+	    ajGraphdataSetTypeC(this,"2D plot");
+	    ajGraphxySetflagOverlay(graph,ajFalse);
+	    ajGraphicsCalcRange(this->y,npoints,&ymin,&ymax);
 
 	    for(i=0;i<npoints;++i)
 	    {
@@ -198,22 +198,22 @@ int main(int argc, char **argv)
 				    / 2);
 		this->y[i] = ajFloatGet(testcodes,i);
 	    }
-	    ajGraphPlpDataSetMaxima(this,this->x[0],this->x[npoints-1],
+	    ajGraphdataSetTruescale(this,this->x[0],this->x[npoints-1],
 				   (float)0.,(float)1.37);
 
 
 
-	    ajGraphSetTitleDo(graph, ajTrue);
-	    ajGraphPlpDataSetYTitleC(this,"TESTCODE value");
-	    ajGraphPlpDataSetXTitleC(this,"Sequence mid position");
-	    ajGraphSetTitlePlus(graph, ajSeqGetUsaS(seq));
+	    ajGraphShowTitle(graph, ajTrue);
+	    ajGraphdataSetYlabelC(this,"TESTCODE value");
+	    ajGraphdataSetXlabelC(this,"Sequence mid position");
+	    ajGraphAppendTitleS(graph, ajSeqGetUsaS(seq));
 
-	    ajGraphPlpDataAddLine(this,this->x[0],(float)0.74,
+	    ajGraphdataAddposLine(this,this->x[0],(float)0.74,
 				  this->x[npoints-1],
-				  (float)0.74,(float)1);
-	    ajGraphPlpDataAddLine(this,this->x[0],(float)0.95,
+				  (float)0.74,1);
+	    ajGraphdataAddposLine(this,this->x[0],(float)0.95,
 				  this->x[npoints-1],
-				  (float)0.95,(float)3);
+				  (float)0.95,3);
 
 	    ajGraphDataAdd(graph,this);
 	    ajGraphxyDisplay(graph,ajTrue);
@@ -706,7 +706,7 @@ static void tcode_report(AjPReport report, const AjPInt from, const AjPInt to,
     source = ajStrNew();
     
     ajFmtPrintS(&tmpstr,"Fickett TESTCODE statistic");
-    ajReportSetHeader(report,tmpstr);
+    ajReportSetHeaderS(report,tmpstr);
 
 
     for(i=0;i<npoints;++i)

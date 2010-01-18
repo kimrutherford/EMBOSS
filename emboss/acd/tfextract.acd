@@ -5,6 +5,7 @@ application: tfextract [
   gui: "no"
   batch: "no"
   cpu: "low"
+  relations: "EDAM: Database processing"
 ]
 
 section: input [
@@ -16,6 +17,7 @@ section: input [
     parameter: "Y"
     information: "Transfac database sites file"
     knowntype: "transfac site"
+    relations:  "EDAM: TRANSFAC database"                              
   ]
 
 endsection: input

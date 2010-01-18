@@ -59,7 +59,7 @@ int main(int argc, char **argv)
 	end = ajSeqallGetseqEnd(seqall);
 	ajStrAssignSubS(&substr,ajSeqGetSeqS(seq),beg-1,end-1);
 	ajStrFmtUpper(&substr);
-	cai = (float)ajCodCai(codon,substr);
+	cai = (float)ajCodCalcCaiSeq(codon,substr);
 	ajFmtPrintF(outf,"Sequence: %S CAI: %.3f\n",ajSeqGetNameS(seq), cai);
     }
 

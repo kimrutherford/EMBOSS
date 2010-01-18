@@ -100,8 +100,7 @@ public class BuildJembossForm implements ActionListener
   private boolean withSoap;
   private JFrame f;
   private JPanel p2;
-  private String embossBin;
-
+  
   private int numofFields;
   private JembossParams mysettings;
   
@@ -125,7 +124,6 @@ public class BuildJembossForm implements ActionListener
     this.mysettings = mysettings;
     this.withSoap = withSoap;
 
-    embossBin  = mysettings.getEmbossBin();
     this.envp = envp;
     this.applName = applName;
 
@@ -172,10 +170,12 @@ public class BuildJembossForm implements ActionListener
         {
           String urlEmbassyPrefix = parseAcd.getUrlPrefix();
           url = mysettings.getembURL();
+          String version = GetVersion.getVersion(mysettings);
           if(urlEmbassyPrefix != null)
-            url = url + "apps/release/6.0/embassy/" +applName+ "/" ;
+        	 // get the version from server
+            url = url + "apps/release/"+version+"/embassy/"+urlEmbassyPrefix+"/" ;
           else
-            url = url + "apps/release/6.0/emboss/apps/";
+            url = url + "apps/release/"+version+"/emboss/apps/";
 
           url = url+applName+".html";
         }
@@ -474,7 +474,7 @@ public class BuildJembossForm implements ActionListener
             bsp.start();
             if (prfs.getBoolean(DISPLAY_JOB_SUBMITTED_MSG, true)){
             	final JPanel p = new JPanel(new BorderLayout(1,10));
-            	JLabel jobSubmitted = new JLabel("Your job has been submmitted");
+            	JLabel jobSubmitted = new JLabel("Your job has been submitted");
             	p.add(jobSubmitted, BorderLayout.PAGE_START);
             	JLabel checkResults = new JLabel("Use Batch Job Manager");
             	checkResults.setHorizontalTextPosition(SwingConstants.LEFT);
@@ -893,8 +893,9 @@ public class BuildJembossForm implements ActionListener
       }
       else if ( att.startsWith("float") )
       {
-        if( (textFloat[h].getText() != null) && textFloat[h].isVisible()
-                                             && textFloat[h].isEnabled())
+        if( textFloat[h].getText() != null &&
+        		textFloat[h].getText().length()>0 &&
+        		textFloat[h].isVisible() && textFloat[h].isEnabled())
         {
           options = options.concat(" -" + val + " " + textFloat[h].getValue());
           optionsA.add("-"+val);
@@ -1070,11 +1071,11 @@ public class BuildJembossForm implements ActionListener
           }
           optionsA.add("-" + val);
           optionsA.add(fn);
-          fn = addQuote(fn);
           
           if(withSoap)
             options = filesForSoap(fn,options,val,filesToMove);
           else {
+            fn = addQuote(fn);
             options = options.concat(" -" + val + " " +  fn);
           }
 

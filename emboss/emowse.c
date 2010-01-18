@@ -171,7 +171,7 @@ int main(int argc, char **argv)
     
     mwdata = embPropEmolwtRead(mfptr);
 
-    freqs = ajDoubleNewL(FGUESS);
+    freqs = ajDoubleNewRes(FGUESS);
     emowse_read_freqs(ffile, &freqs);
     ajFileClose(&ffile);
 
@@ -1063,7 +1063,7 @@ static AjBool emowse_comp_search(const AjPStr substr, const char *s)
     p   = ajStrGetPtr(substr);
     len = ajStrGetLen(substr);
 
-    arr = ajIntNewL(256);
+    arr = ajIntNewRes(256);
 
     for(i=0;i<256;++i)
 	ajIntPut(&arr,i,0);

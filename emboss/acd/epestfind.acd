@@ -2,6 +2,7 @@ application: epestfind [
   documentation: "Finds PEST motifs as potential proteolytic
                   cleavage sites"
   groups: "Protein:Motifs"
+  relations: "EDAM: Protein cleavage site prediction"
 ]
 
 section: input [
@@ -13,6 +14,7 @@ section: input [
     parameter: "Y"
     type: "protein"
     help: "Protein sequence USA to be analysed."
+    relations: "EDAM: Pure protein sequence"                               
   ]
 
   datafile: mwdata [
@@ -20,6 +22,7 @@ section: input [
     default: "Emolwt.dat"
     information: "Molecular weights data file"
     knowntype: "molecular weights"
+    relations:  "EDAM: Amino acid molecular weight data"               
   ]
 
 endsection: input
@@ -36,6 +39,7 @@ section: required [
     information: "Window length"
     maximum: "$(sequence.length)"
     minimum: "2"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   selection: order [
@@ -51,6 +55,7 @@ section: required [
     maximum: "1"
     minimum: "1"
     values: "length, position, score"
+    relations: "EDAM: Generic string array"                                
   ]
 
 endsection: required
@@ -73,6 +78,7 @@ section: additional [
     maximum: "+55.0"
     minimum: "-55.0"
     precision: "2"
+    relations: "EDAM: Generic float"                                       
   ]
 
 endsection: additional
@@ -85,30 +91,35 @@ section: advanced [
   boolean: mono [
     default: "N"
     information: "Use monoisotopic weights"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: potential [
     default: "Y"
     help: "Decide whether potential PEST motifs should be printed."
     information: "Display potential PEST motifs"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: poor [
     default: "Y"
     help: "Decide whether poor PEST motifs should be printed."
     information: "Display poor PEST motifs"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: invalid [
     default: "N"
     help: "Decide whether invalid PEST motifs should be printed."
     information: "Display invalid PEST motifs"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: map [
     default: "Y"
     help: "Decide whether PEST motifs should be mapped to sequence."
     information: "Display PEST motifs map"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: advanced
@@ -122,11 +133,13 @@ section: output [
     parameter: "Y"
     help: "Name of file to which results will be written."
     knowntype: "epestfind output"
+    relations:  "EDAM:PEST site report"                                    
   ]
 
   xygraph: graph [
     standard: "Y"
     multiple: "1"
+    relations: "EDAM: EMBOSS graph file"                                   
   ]
 
 endsection: output

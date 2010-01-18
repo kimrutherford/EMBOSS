@@ -1,12 +1,13 @@
 #!/bin/csh -f
 
-if ($#argv != 2) then
+if ($#argv != 3) then
   echo "usage:"
-  echo "embossdoc.csh srctop wwwtop"
+  echo "embossdoc.csh srctop wwwtop booktop"
 endif
 
 set edir = $argv[1]
 set wdir = $argv[2]
+set bdir = $argv[3]
 
 
 \rm -rf x/
@@ -32,18 +33,28 @@ foreach x ($wdir/ajax/*html $wdir/nucleus/*html \
 end
 
 #echo "Ajax functions"
-foreach x ($edir/ajax/*.c)
+# ... skip pcre
+foreach x ($edir/ajax/core/*.c $edir/ajax/graphics/*.c $edir/ajax/ajaxdb/*.c  $edir/ajax/acd/*.c $edir/ajax/ensembl/*.c)
   embossdoccheck.pl $x >> ../efunc.check
   embossdoc.pl $x >> ../efunc.out
 end
 cat *.srs >! ../efunc.dat
 \cp *html $wdir/ajax/
 
+foreach x (*.book)
+  if(-s $x) then
+    \cp $x $bdir/ajax/
+  else
+    echo "$x empty"
+    \rm $x
+  endif
+end
+
 \rm *html
 \rm *.srs
 
 #echo "Ajax static datatypes"
-foreach x ($edir/ajax/*.c)
+foreach x ($edir/ajax/core/*.c $edir/ajax/graphics/*.c $edir/ajax/ajaxdb/*.c  $edir/ajax/acd/*.c $edir/ajax/ensembl/*.c)
   embossdatacheck.pl $x >> ../edata.check
   embossdatadoc.pl $x >> ../edata.out
 end
@@ -117,7 +128,7 @@ end
 \rm *.srsdata
 
 #echo "Ajax datatypes"
-foreach x ($edir/ajax/*.h)
+foreach x ($edir/ajax/core/*.h $edir/ajax/graphics/*.h $edir/ajax/ajaxdb/*.h  $edir/ajax/acd/*.h $edir/ajax/ensembl/*.h)
   embossdatacheck.pl $x >> ../edata.check
   embossdatadoc.pl $x >> ../edata.out
 end
@@ -170,7 +181,7 @@ cat *.srsdata >> ../edata.dat
 \rm *.srsdata
 \rm *.empty
 
-cp deprecated.new ~/cvsemboss/deprecated.txt
+cp deprecated.new ~/devemboss/deprecated.txt
 cd ..
 \rm -rf x/
 

@@ -1,5 +1,4 @@
-
-                                  newseq 
+                                   newseq
 
 
 
@@ -27,7 +26,7 @@ Usage
    Type in a short sequence to the file 'mycc.pep' in SWISSPROT format:
 
 
-% newseq 
+% newseq
 Create a sequence file from a typed-in sequence
 Name of the sequence: cytoc
 Description of the sequence: fragment of cytochrome c
@@ -38,18 +37,21 @@ Type of sequence [N]: p
 Enter the sequence: KKKEERADLIAY
 output sequence [outfile.fasta]: swiss::mycc.pep
 
+
    Go to the output files for this example
 
 Command line arguments
+
+Create a sequence file from a typed-in sequence
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-name]              string     The name of of the sequence should be a
                                   single word that you will use to identify
                                   the sequence. It should have no (or few)
-                                  punctuation characters in it. (Any string is
-                                  accepted)
+                                  punctuation characters in it. (Any string)
   [-description]       string     Enter any description of the sequence that
-                                  you require. (Any string is accepted)
+                                  you require. (Any string)
   [-type]              menu       [N] Type of sequence (Values: N (Nucleic); P
                                   (Protein))
   [-sequence]          string     The sequence itself.
@@ -60,8 +62,7 @@ Command line arguments
                                   The keyboard will beep at you when you have
                                   reached this limit and you will not be able
                                   to press the RETURN/ENTER key until you have
-                                  deleted a few characters. (Any string is
-                                  accepted)
+                                  deleted a few characters. (Any string)
   [-outseq]            seqout     [.] Sequence filename and
                                   optional format (output USA)
 
@@ -89,13 +90,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -134,11 +137,11 @@ Warnings
    of the sequence that may be entered. This is not a property of the
    EMBOSS package but of the computer system you are using. Whenever you
    type something in at the command-line, the text is stored in a buffer
-   before being passed to the program. There is often a limit of less
-   than 255 characters on the size of the buffer and so also the size of
-   the sequence you can specify to newseq. The computer will normally
-   issue a beep when the end of buffer is reached, and allow no more
-   character input.
+   before being passed to the program. There is often a limit of less than
+   255 characters on the size of the buffer and so also the size of the
+   sequence you can specify to newseq. The computer will normally issue a
+   beep when the end of buffer is reached, and allow no more character
+   input.
 
 Diagnostic Error Messages
 
@@ -204,7 +207,7 @@ See also
 
 Author(s)
 
-   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   Gary Williams (gwilliam (c) rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 

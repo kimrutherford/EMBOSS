@@ -1,6 +1,7 @@
 application: showpep [
   documentation: "Displays protein sequences with features in pretty format"
   groups: "Display"
+  relations: "EDAM: Pretty sequence drawing"
 ]
 
 section: input [
@@ -12,6 +13,7 @@ section: input [
     parameter: "Y"
     features: "Y"
     type: "gapprotein"
+    relations: "EDAM: Protein sequence record"                             
   ]
 
 endsection: input
@@ -33,6 +35,7 @@ section: required [
     delimiter: ","
     codedelimiter: ":"
     information: "Display format"
+    relations: "EDAM: Generic string array"                                
   ]
 
   list: things [
@@ -51,6 +54,7 @@ section: required [
            the page. For example if you wish to see things displayed in the
            order: sequence, ticks line, blank line; then you should enter
            'S,T,B'."
+    relations: "EDAM: Generic string array"                                
   ]
 
 endsection: required
@@ -75,6 +79,7 @@ section: additional [
            1,5,8,10,23,45,57,99"
     expected: "If this is left blank, then the sequence case is
                left alone."
+    relations: "EDAM: Generic integer range"                               
   ]
 
   range: highlight [
@@ -92,6 +97,7 @@ section: additional [
            1-100 green 120-156 red \
            A file of ranges to colour (one range per line) can be specified
            as '@filename'."
+    relations: "EDAM: Generic integer range"                               
   ]
 
   range: annotation [
@@ -113,6 +119,7 @@ section: additional [
            as '@filename'."
     expected: "If this is left blank, then no annotation is
                added."
+    relations: "EDAM: Generic integer range"                               
   ]
 
   section: featuresection [
@@ -135,6 +142,7 @@ section: additional [
              with the character '|', eg: \
              gene* | embl"
       knowntype: "feature source list"
+    relations:  "EDAM: List of sequence feature sources"               
     ]
 
     string: typematch [
@@ -153,6 +161,7 @@ section: additional [
              with the character '|', eg: \
              *UTR | intron"
       knowntype: "feature key list"
+    relations:  "EDAM: List of sequence feature types"                 
     ]
 
     float: minscore [
@@ -160,6 +169,7 @@ section: additional [
       default: "0.0"
       information: "Minimum score of feature to display"
       help: "Minimum score of feature to display (see also maxscore)"
+    relations: "EDAM: Generic float"                                       
     ]
 
     float: maxscore [
@@ -169,6 +179,7 @@ section: additional [
       help: "Maximum score of feature to display. \
              If both minscore and maxscore are zero (the default),
              then any score is ignored"
+    relations: "EDAM: Generic float"                                       
     ]
 
     string: tagmatch [
@@ -184,6 +195,7 @@ section: additional [
              the character '|', eg: \
              gene | label"
       knowntype: "feature tag list"
+    relations:  "EDAM: List of sequence feature tags"                  
     ]
 
     string: valuematch [
@@ -194,12 +206,13 @@ section: additional [
              Tags are the types of extra values that a feature may have.
              By default any feature tag value in the
              feature table is shown. You can set this to match any feature
-             tag valueyou wish to show. \
+             tag value you wish to show. \
              The tag value may be wildcarded by using '*'. \
              If you wish to show more than one tag value, separate their
              names with the character '|', eg: \
              pax* | 10"
       knowntype: "feature tagvalue list"
+    relations:  "EDAM: Generic string"                                 
     ]
 
     boolean: stricttags [
@@ -211,6 +224,7 @@ section: additional [
              feature will be displayed. If this is set to be true, then only
              those tag/value pairs in a feature that match the specified tag
              and value will be displayed."
+    relations: "EDAM: Generic boolean"                                     
     ]
 
   endsection: featuresection
@@ -226,29 +240,34 @@ section: advanced [
     default: "N"
     information: "Display protein sequences in three-letter
                   code"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: number [
     default: "N"
     information: "Number the sequences"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   integer: width [
     default: "60"
     minimum: "1"
     information: "Width of sequence to display"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: length [
     default: "0"
     minimum: "0"
     information: "Line length of page (0 for indefinite)"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: margin [
     default: "10"
     minimum: "0"
     information: "Margin around sequence for numbering"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   boolean: name [
@@ -256,6 +275,7 @@ section: advanced [
     information: "Show sequence ID"
     help: "Set this to be false if you do not wish to display the ID
            name of the sequence"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: description [
@@ -263,17 +283,20 @@ section: advanced [
     information: "Show description"
     help: "Set this to be false if you do not wish to display the
            description of the sequence"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   integer: offset [
     default: "1"
     information: "Offset to start numbering the sequence from"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   boolean: html [
     default: "N"
     information: "Use HTML formatting"
     outputmodifier: "Y"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: advanced
@@ -286,6 +309,7 @@ section: output [
   outfile: outfile [
     parameter: "Y"
     knowntype: "showpep output"
+    relations:  "EDAM:Protein sequence features report"                    
   ]
 
 endsection: output

@@ -1,6 +1,7 @@
 application: noreturn [
   documentation: "Remove carriage return from ASCII files"
   groups: "Edit"
+  relations: "EDAM: Text file handling"
 ]
 
 section: input [
@@ -12,6 +13,7 @@ section: input [
     parameter: "Y"
     knowntype: "ascii text"
     information: "ASCII text file"
+    relations:  "EDAM: Free text file"                                 
   ]
 
 endsection: input
@@ -29,6 +31,7 @@ section: advanced [
     default: "unix"
     minimum: "1"
     maximum: "1"
+    relations: "EDAM: Generic string array"                                
   ]
 
 endsection: advanced
@@ -42,6 +45,7 @@ section: output [
     parameter: "Y"
     knowntype: "ascii text"
     information: "ASCII text output file"
+    relations:  "EDAM: Free text file"                                 
   ]
 
 endsection: output

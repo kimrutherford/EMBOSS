@@ -9,7 +9,7 @@
 ###################################################################
 
 # where the CVS tree ChangeLog file is
-my $cvsfile = "$ENV{HOME}/cvsemboss/ChangeLog";
+my $cvsfile = "$ENV{HOME}/devemboss/ChangeLog";
 
 # where the web page file is
 my $htmlfile = "$ENV{HOME}/sfdoc/developers/changelog.html";

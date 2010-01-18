@@ -2,4 +2,5 @@ application: acdc [
   documentation: "Test an application ACD file"
   gui: "no"
   groups: "Acd"
+  relations: "EDAM: File debugging"
 ]

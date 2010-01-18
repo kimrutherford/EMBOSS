@@ -1,0 +1,35 @@
+application: entrailshtml [
+  documentation: "Reports the internal structures in HTML"
+  groups: "Utils:Misc"
+]
+
+section: required [
+  information: "required section"
+  type: "page"
+]
+
+  list: tables [
+    standard: "Y"
+    default: "all"
+    minimum: "1"
+    value: "all: All tables;
+           inseq: Input sequence formats;
+           outseq: Output sequence formats"
+    information: "Tables to be written"
+    relations: "EDAM: Generic string array"                                
+  ]
+
+endsection: required
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    knowntype: "html"
+    relations: "EDAM: Free text file"                                      
+  ]
+
+endsection: output

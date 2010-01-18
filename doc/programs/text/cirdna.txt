@@ -1,5 +1,4 @@
-
-                                  cirdna 
+                                   cirdna
 
 
 
@@ -19,9 +18,9 @@ Description
    cirdna draws circular maps of DNA constructs. It uses graphical shapes
    including ticks, ranges, and blocks to represent genetic markers (e.g,
    genes and ESTs) and places them according to their position in a DNA
-   fragment. The markers can be organized in different groups. A group
-   may contain up to 10000 markers, so the program is suitable for
-   drawing circular representations of genomic sequences.
+   fragment. The markers can be organized in different groups. A group may
+   contain up to 10000 markers, so the program is suitable for drawing
+   circular representations of genomic sequences.
 
    The program reads an input file containing the names and positions of
    the genetic markers. You must write this file yourself (see Input File
@@ -33,30 +32,34 @@ Usage
    Here is a sample session with cirdna
 
 
-% cirdna -graph cps 
+% cirdna -graph cps
 Draws circular maps of DNA constructs
-Commands to the lindna drawing program file [inputfile]: data.cirp
-Draw a ruler [Y]: 
+Commands to the cirdna drawing program file [inputfile]: data.cirp
+Draw a ruler [Y]:
       Open : Open blocks
     Filled : Filled blocks
    Outline : Black border
-Type of blocks [Filled]: 
+Type of blocks [Filled]:
       1 : In
       2 : Out
-Ticks inside or outside the circle [Out]: 
+Ticks inside or outside the circle [Out]:
       1 : In
       2 : Out
-Text inside or outside the blocks [In]: 
+Text inside or outside the blocks [In]:
 
 Created cirdna.ps
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
 
+Draws circular maps of DNA constructs
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers:
-  [-infile]            infile     [inputfile] Commands to the lindna drawing
+  [-infile]            infile     [inputfile] Commands to the cirdna drawing
                                   program file
    -[no]ruler          boolean    [Y] Draw a ruler
    -blocktype          menu       [Filled] Type of blocks (Values: Open (Open
@@ -66,7 +69,7 @@ Command line arguments
    -posblocks          selection  [In] Text inside or outside the blocks
    -graphout           graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, das, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif)
 
    Additional (Optional) qualifiers:
    -maxgroups          integer    [20] Maximum number of groups (Integer 1 or
@@ -128,13 +131,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -147,17 +152,16 @@ Input file format
    to be drawn after the keyword 'Start'. The end position is on the
    second line following the keyword 'End'.
 
-   Then, one or more groups (up to a maximum of 20) of genetic markers
-   are defined. Each group begins with a line consisting of the keyword
+   Then, one or more groups (up to a maximum of 20) of genetic markers are
+   defined. Each group begins with a line consisting of the keyword
    'group' and ends with a line consisting of the keyword 'endgroup'.
 
    If desired, a group name can be given on the very next line but will
    not be displayed (only for compatibilty with lindna).
 
-   Next, the individual markers (up to a maximum of 1000) of the group
-   are described. Each marker begins with a line consisting of the
-   keyword 'label' and ends with a line consisting of the keyword
-   'endlabel'.
+   Next, the individual markers (up to a maximum of 1000) of the group are
+   described. Each marker begins with a line consisting of the keyword
+   'label' and ends with a line consisting of the keyword 'endlabel'.
 
    Do not start a new marker (by using a 'label' line) before you have
    closed the previous marker (by using an 'endlabel' line). You must end
@@ -165,8 +169,7 @@ Input file format
    overlap marker specifications in the input file.
 
    For each marker, the line following the 'label' line describes the
-   marker. Three types of markers can be drawn: ticks, blocks, and
-   ranges.
+   marker. Three types of markers can be drawn: ticks, blocks, and ranges.
 
    For a tick, the descriptive line begins with the keyword 'Tick',
    followed by the position of the tick in the DNA fragment, and a number
@@ -193,8 +196,8 @@ Input file format
    given on the next line. If more than one name are given (one name per
    line), only the first one will be displayed.
 
-   For any type of markers, names will be written in the same color as
-   the marker. Also, try to avoid long names.
+   For any type of markers, names will be written in the same color as the
+   marker. Also, try to avoid long names.
 
    The colors defined in the PLPLOT graphics library are:
 
@@ -288,39 +291,38 @@ Known bugs
 
 See also
 
-   Program name     Description
-   abiview          Display the trace in an ABI sequencer file
-   lindna           Draws linear maps of DNA constructs
-   pepnet           Draw a helical net for a protein sequence
-   pepwheel         Draw a helical wheel diagram for a protein sequence
-   prettyplot       Draw a sequence alignment with pretty formatting
-   prettyseq        Write a nucleotide sequence and its translation to file
-   remap            Display restriction enzyme binding sites in a nucleotide
-                    sequence
-   seealso          Finds programs with similar function to a specified program
-   showalign        Display a multiple sequence alignment in pretty format
-   showdb           Displays information on configured databases
-   showfeat         Display features of a sequence in pretty format
-   showpep          Displays protein sequences with features in pretty format
-   showseq          Displays sequences with features in pretty format
-   sixpack          Display a DNA sequence with 6-frame translation and ORFs
-   textsearch       Search the textual description of sequence(s)
+                   Program name                            Description
+                   abiview      Display the trace in an ABI sequencer file
+                   lindna       Draws linear maps of DNA constructs
+                   pepnet       Draw a helical net for a protein sequence
+                   pepwheel     Draw a helical wheel diagram for a protein sequence
+                   prettyplot   Draw a sequence alignment with pretty formatting
+                   prettyseq    Write a nucleotide sequence and its translation to file
+                   remap        Display restriction enzyme binding sites in a nucleotide sequence
+                   seealso      Finds programs with similar function to a specified program
+                   showalign    Display a multiple sequence alignment in pretty format
+                   showdb       Displays information on configured databases
+                   showfeat     Display features of a sequence in pretty format
+                   showpep      Displays protein sequences with features in pretty format
+                   showseq      Displays sequences with features in pretty format
+                   sixpack      Display a DNA sequence with 6-frame translation and ORFs
+                   textsearch   Search the textual description of sequence(s)
 
 Author(s)
 
-   Nicolas Tourasse (nicolas.tourasse © biotek.uio.no)
-   Biotechnology Center of Oslo
+   Nicolas          Tourasse (nicolas.tourasse (c) biotek.uio.no)
+   Biotechnology    Center of Oslo
 
 History
 
-   Written 1999 - Nicolas Tourasse
-   Updated (2002) - Nicolas Tourasse
+                    Written 1999 - Nicolas Tourasse
+                    Updated (2002) - Nicolas Tourasse
 
 Target users
 
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
 
 Comments
 
-   None
+                    None

@@ -47,7 +47,7 @@ int main(int argc, char **argv)
     float min;
 
     AjPGraph graph = NULL;
-    AjPGraphPlpData this = NULL;
+    AjPGraphdata this = NULL;
 
     const char *frames[]=
     {
@@ -85,9 +85,9 @@ int main(int argc, char **argv)
     ajint end;
     ajint window;
 
-    ajGraphInit("syco", argc, argv);
+    embInit("syco", argc, argv);
 
-    ajGraphSetPage(960, 960);
+    ajGraphicsSetPagesize(960, 960);
 
     a      = ajAcdGetSeq("sequence");
     codon  = ajAcdGetCodon("cfile");
@@ -100,11 +100,11 @@ int main(int argc, char **argv)
     
     if(plot)
     {
-	ajGraphSetCharScale((float)0.60);
+	ajGraphicsSetCharscale((float)0.60);
     }
     
     
-    cdup = ajCodDup(codon);
+    cdup = ajCodNewCod(codon);
     
     substr = ajStrNew();
     tmp    = ajStrNew();
@@ -177,17 +177,17 @@ int main(int argc, char **argv)
 
 	if(plot)
 	{
-	    this = ajGraphPlpDataNewI(count);
-	    ajGraphPlpDataSetTypeC(this,"Multi 2D plot");
+	    this = ajGraphdataNewI(count);
+	    ajGraphdataSetTypeC(this,"Multi 2D plot");
 
-	    ajGraphxySetOverLap(graph,ajFalse);
+	    ajGraphxySetflagOverlay(graph,ajFalse);
 	    for(i=0;i<count;++i)
 	    {
 		this->x[i]=xarr[base][i];
 		this->y[i]=farr[base][i];
 	    }
-	    ajGraphArrayMaxMin(this->y,count,&amin,&amax);
-	    ajGraphPlpDataSetMaxima(this,(float)beg,(float)end,amin,amax);
+	    ajGraphicsCalcRange(this->y,count,&amin,&amax);
+	    ajGraphdataSetTruescale(this,(float)beg,(float)end,amin,amax);
 
 	    ajGraphDataAdd(graph,this);
 	    if(show)
@@ -203,15 +203,15 @@ int main(int argc, char **argv)
 
 		for(i=0;i<count;++i)
 		    if(unc[base][i])
-			ajGraphPlpDataAddLine(this,xarr[base][i],1.,
+			ajGraphdataAddposLine(this,xarr[base][i],1.,
 					      xarr[base][i],(float)1.005,3);
 	    }
 
 
-	    ajGraphPlpDataSetYTitleC(this,"Gribskov value");
-	    ajGraphPlpDataSetXTitleC(this,"Sequence position");
-	    ajGraphPlpDataSetSubTitleC(this,frames[base]);
-	    ajGraphPlpDataAddLine(this,(float)beg,1.0,(float)end,
+	    ajGraphdataSetYlabelC(this,"Gribskov value");
+	    ajGraphdataSetXlabelC(this,"Sequence position");
+	    ajGraphdataSetSubtitleC(this,frames[base]);
+	    ajGraphdataAddposLine(this,(float)beg,1.0,(float)end,
 				  1.0,4);
 	}
 	if(outf)
@@ -226,12 +226,12 @@ int main(int argc, char **argv)
     
     if(plot)
     {
-	ajGraphSetTitleDo(graph, ajTrue);
-	ajGraphxySetMaxMin(graph,(float)beg,(float)end,miny,maxy);
-	ajGraphxySetYStart(graph,0.0);
-	ajGraphxySetYEnd(graph,2.0);
+	ajGraphShowTitle(graph, ajTrue);
+	ajGraphxySetMinmax(graph,(float)beg,(float)end,miny,maxy);
+	ajGraphxySetYstartF(graph,0.0);
+	ajGraphxySetYendF(graph,2.0);
 	/* ajGraphSetTitleC(graph,"Gribskov Codon Plot"); */
-	ajGraphSetTitlePlus(graph, ajSeqGetUsaS(a));
+	ajGraphAppendTitleS(graph, ajSeqGetUsaS(a));
 	ajGraphxyDisplay(graph,ajTrue);
     }
     

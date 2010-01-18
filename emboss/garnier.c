@@ -758,7 +758,7 @@ static void garnier_report(AjPReport report, AjPFeattable TabRpt,
 		   dch,dcs);
     ajFmtPrintAppS(&tmpStr, "%s\n",refstr);
     
-    ajReportSetHeader(report, tmpStr);
+    ajReportSetHeaderS(report, tmpStr);
     
     
     testch = ' ';
@@ -816,7 +816,7 @@ static void garnier_report(AjPReport report, AjPFeattable TabRpt,
 		   (float)iarr[0]/fn0,(float)iarr[1]/fn0,(float)iarr[2]/fn0,
 		   (float)iarr[3]/fn0);
     
-    ajReportSetTail(report, tmpStr);
+    ajReportSetTailS(report, tmpStr);
     
     AJFREE(type);
     ajStrDel(&tmpStr);

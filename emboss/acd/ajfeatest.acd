@@ -2,6 +2,7 @@ application: ajfeatest [
   documentation: "Reads and writes (returns) a sequence and
                   its features"
   groups: "Test"
+  relations: "EDAM: File debugging"
 ]
 
 section: input [
@@ -13,6 +14,7 @@ section: input [
     parameter: "Y"
     type: "any"
     features: "Y"
+    relations: "EDAM: Sequence"                                            
   ]
 
 endsection: input
@@ -24,6 +26,7 @@ section: output [
 
   seqout: outseq [
     parameter: "Y"
+    relations: "EDAM: Sequence"                                            
   ]
 
 endsection: output

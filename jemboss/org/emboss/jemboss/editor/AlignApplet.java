@@ -32,8 +32,8 @@ public class AlignApplet extends JApplet
   private JScrollPane jspSequence;
   private Vector seqs;
   private String matrix;
-  private Cursor cbusy = new Cursor(Cursor.WAIT_CURSOR);
-  private Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
+  //private Cursor cbusy = new Cursor(Cursor.WAIT_CURSOR);
+  //private Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
 
   public void init()
   {

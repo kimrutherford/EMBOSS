@@ -1,6 +1,8 @@
 application: patmatmotifs [
   documentation: "Scan a protein sequence with motifs from the PROSITE database"
   groups: "Protein:Motifs"
+  relations: "EDAM: Protein motif searching"
+  relations: "EDAM: Protein secondary database search"
 ]
 
 section: input [
@@ -11,6 +13,7 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "Protein"
+    relations: "EDAM: Sequence"                                            
   ]
 
 endsection: input
@@ -25,6 +28,7 @@ section: additional [
     default: "N"
     information: "Provide full documentation for matching
                   patterns"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: prune [
@@ -35,6 +39,7 @@ section: additional [
            post-translational modification sites are not reported: myristyl,
            asn_glycosylation, camp_phospho_site, pkc_phospho_site,
            ck2_phospho_site, and tyr_phospho_site."
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: additional
@@ -49,6 +54,7 @@ section: output [
     rformat: "dbmotif"
     taglist: "str:motif=Motif"
     precision: "0"
+    relations: "EDAM: EMBOSS report"                                       
   ]
 
 endsection: output

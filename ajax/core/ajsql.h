@@ -1,0 +1,347 @@
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+#ifndef ajsql_h
+#define ajsql_h
+
+
+
+
+/* @data AjPVoid **************************************************************
+**
+** Ajax address object.
+**
+** Holds a void array with additional data.
+** The length is known and held internally.
+**
+** Saves on length calculation, and allows growth in reserved memory without
+** changing the pointer in the calling routine.
+**
+** AjPVoid is implemented as a pointer to a C data structure.
+**
+** @alias AjSVoid
+** @alias AjOVoid
+**
+** @new    ajVoidNew Default constructor
+** @new    ajVoidNewRes Constructor with reserved size
+** @delete ajVoidDel Default destructor
+** @cast   ajVoidGet Retrieve a pointer from an array
+** @modify ajVoidPut Load a pointer array element
+**
+** @attr Res [ajuint] Reserved space in case of extension
+** @attr Len [ajuint] Actual length used
+** @attr Ptr [void**] Array of void pointers
+** @@
+******************************************************************************/
+
+typedef struct AjSVoid
+{
+  ajuint Res;
+  ajuint Len;
+  void **Ptr;
+} AjOVoid;
+#define AjPVoid AjOVoid*
+
+
+
+
+/******************************************************************************
+**
+** AJAX SQL Client enumeration.
+**
+******************************************************************************/
+
+enum AjESqlClient
+{
+    ajESqlClientNULL,
+    ajESqlClientMySQL,
+    ajESqlClientPostgreSQL
+};
+
+
+
+
+/* @data AjPSqlconnection *****************************************************
+**
+** AJAX SQL Connection.
+**
+** Holds the client type and a pointer to a SQL client library-specific
+** connection object.
+**
+** @alias AjSSqlconnection
+** @alias AjOSqlconnection
+**
+** @attr Pconnection [void*]  SQL client library-specific connection object
+**                            (MYSQL*) for the MySQL client library
+**                            (PGconn*) for the PostgreSQL client library
+** @attr Client [AjEnum] SQL client type (ajESqlMySQL, ajESqlPostgreSQL, ...)
+** @attr Use [ajuint] Use counter
+** @@
+******************************************************************************/
+
+typedef struct AjSSqlconnection
+{
+    void *Pconnection;
+    AjEnum Client;
+    ajuint Use;
+} AjOSqlconnection;
+
+#define AjPSqlconnection AjOSqlconnection*
+
+
+
+
+/* @data AjPSqlstatement ******************************************************
+**
+** AJAX SQL Statement.
+**
+** Holds pointers to an AJAX SQL Connection and to a client library-specific
+** result object.
+**
+** @alias AjSSqlstatement
+** @alias AjOSqlstatement
+**
+** @attr Sqlconnection [AjPSqlconnection] AJAX SQL Connection.
+** @attr Presult [void*] SQL client library-specific result object
+**                        (MYSQL_RES*) for the MySQL client library
+**                        (PGresult*) for the PostgreSQL client library
+** @attr AffectedRows [ajulong] Number of rows affected by non-SELECT SQL
+**                              statements
+** @attr SelectedRows [ajulong] Number of rows selected by SELECT-like SQL
+**                              statements
+** @attr Columns [ajuint] Number of columns returned by SELECT-like statements
+** @attr Use [ajuint] Use counter
+** @@
+******************************************************************************/
+
+typedef struct AjSSqlstatement
+{
+    AjPSqlconnection Sqlconnection;
+    void *Presult;
+    ajulong AffectedRows;
+    ajulong SelectedRows;
+    ajuint Columns;
+    ajuint Use;
+} AjOSqlstatement;
+
+#define AjPSqlstatement AjOSqlstatement*
+
+
+
+
+/* @data AjPSqlrow ************************************************************
+**
+** AJAX SQL Result Row.
+**
+** Holds an AjPChar array of C-type character strings and an AjLong array of
+** data lengths for each column data values in SQL client library-specific
+** result objects.
+**
+** @alias AjSSqlrow
+** @alias AjOSqlrow
+**
+** @attr Values [AjPVoid] AJAX Character Array of SQL column values
+** @attr Lengths [AjPLong] AJAX Long Integer Array of SQL column value lengths
+** @attr Columns [ajuint] Number of columns per row
+** @attr Current [ajuint] Current column in column interations
+** @@
+******************************************************************************/
+
+typedef struct AjSSqlrow
+{
+    AjPVoid Values;
+    AjPLong Lengths;
+    ajuint Columns;
+    ajuint Current;
+} AjOSqlrow;
+
+#define AjPSqlrow AjOSqlrow*
+
+
+
+
+/* @data AjISqlrow ************************************************************
+**
+** AJAX SQL Row Iterator.
+**
+** Allows iteration over AJAX SQL Rows of an AJAX SQL Statement.
+**
+** @alias AjSSqlrowiter
+** @alias AjOSqlrowiter
+** @alias AjPSqlrowiter
+**
+** @attr Sqlstatement [AjPSqlstatement] AJAX SQL Statement
+** @attr Sqlrow [AjPSqlrow] AJAX SQL Result Row
+** @attr Current [ajulong] Current row number
+** @@
+******************************************************************************/
+
+typedef struct AjSSqlrowiter
+{
+    AjPSqlstatement Sqlstatement;
+    AjPSqlrow Sqlrow;
+    ajulong Current;
+} AjOSqlrowiter;
+
+#define AjPSqlrowiter AjOSqlrowiter*
+
+#define AjISqlrow AjOSqlrowiter*
+
+
+
+
+/*
+** Prototype definitions
+*/
+
+AjBool ajSqlInit(void);
+
+void ajSqlExit(void);
+
+/* AJAX SQL Connection */
+
+AjPSqlconnection ajSqlconnectionNewData(const AjEnum client,
+                                        const AjPStr user,
+                                        const AjPStr password,
+                                        const AjPStr host,
+                                        const AjPStr port,
+                                        const AjPStr socket,
+                                        const AjPStr database);
+
+AjPSqlconnection ajSqlconnectionNewRef(AjPSqlconnection sqlc);
+
+void ajSqlconnectionDel(AjPSqlconnection* Psqlc);
+
+AjEnum ajSqlconnectionGetClient(const AjPSqlconnection sqlc);
+
+AjBool ajSqlconnectionTrace(const AjPSqlconnection sqlc, ajuint level);
+
+AjBool ajSqlconnectionEscapeC(const AjPSqlconnection sqlc,
+                              char **Ptxt,
+                              const AjPStr str);
+
+AjBool ajSqlconnectionEscapeS(const AjPSqlconnection sqlc,
+                              AjPStr *Pstr,
+                              const AjPStr str);
+
+/* AJAX SQL Statement */
+
+AjPSqlstatement ajSqlstatementNewRun(AjPSqlconnection sqlc,
+                                     const AjPStr statement);
+
+AjPSqlstatement ajSqlstatementNewRef(AjPSqlstatement sqls);
+
+void ajSqlstatementDel(AjPSqlstatement* Psqls);
+
+ajulong ajSqlstatementGetAffectedrows(const AjPSqlstatement sqls);
+
+ajulong ajSqlstatementGetSelectedrows(const AjPSqlstatement sqls);
+
+ajuint ajSqlstatementGetColumns(const AjPSqlstatement sqls);
+
+ajuint ajSqlstatementGetIdentifier(const AjPSqlstatement sqls);
+
+/* AJAX SQL Row Iterator */
+
+AjISqlrow ajSqlrowiterNew(AjPSqlstatement sqls);
+
+void ajSqlrowiterDel(AjISqlrow *Psqli);
+
+AjBool ajSqlrowiterDone(const AjISqlrow sqli);
+
+AjPSqlrow ajSqlrowiterGet(AjISqlrow sqli);
+
+AjBool ajSqlrowiterRewind(AjISqlrow sqli);
+
+/* AJAX SQL Row */
+
+AjPSqlrow ajSqlrowNew(ajuint columns);
+
+void ajSqlrowDel(AjPSqlrow *Psqlr);
+
+AjPVoid ajSqlrowGetValues(const AjPSqlrow sqlr);
+
+AjPLong ajSqlrowGetLengths(const AjPSqlrow sqlr);
+
+ajuint ajSqlrowGetColumns(const AjPSqlrow sqlr);
+
+ajuint ajSqlrowGetCurrent(const AjPSqlrow sqlr);
+
+AjBool ajSqlcolumnGetValue(AjPSqlrow sqlr, void **Pvalue,
+                           ajulong *Plength);
+
+AjBool ajSqlcolumnToStr(AjPSqlrow sqlr, AjPStr *Pvalue);
+
+AjBool ajSqlcolumnToInt( AjPSqlrow sqlr, ajint *Pvalue);
+
+AjBool ajSqlcolumnToUint(AjPSqlrow sqlr, ajuint *Pvalue);
+
+AjBool ajSqlcolumnToLong(AjPSqlrow sqlr, ajlong *Pvalue);
+
+AjBool ajSqlcolumnToFloat(AjPSqlrow sqlr, float *Pvalue);
+
+AjBool ajSqlcolumnToDouble( AjPSqlrow sqlr, double *Pvalue);
+
+AjBool ajSqlcolumnToBool(AjPSqlrow sqlr, AjBool *Pvalue);
+
+AjBool ajSqlcolumnToTime(AjPSqlrow sqlr, AjPTime *Pvalue);
+
+AjBool ajSqlcolumnRewind(AjPSqlrow sqlr);
+
+AjBool ajSqlcolumnNumberGetValue(const AjPSqlrow sqlr,
+                                 ajuint column,
+                                 void **Pvalue,
+                                 ajulong *Plength);
+
+AjBool ajSqlcolumnNumberToStr(const AjPSqlrow sqlr, ajuint column,
+                              AjPStr *Pvalue);
+
+AjBool ajSqlcolumnNumberToInt(const AjPSqlrow sqlr, ajuint column,
+                              ajint *Pvalue);
+
+AjBool ajSqlcolumnNumberToUint(const AjPSqlrow sqlr, ajuint column,
+                               ajuint *Pvalue);
+
+AjBool ajSqlcolumnNumberToLong(const AjPSqlrow sqlr, ajuint column,
+                               ajlong *Pvalue);
+
+AjBool ajSqlcolumnNumberToFloat(const AjPSqlrow sqlr, ajuint column,
+                                float *Pvalue);
+
+AjBool ajSqlcolumnNumberToDouble(const AjPSqlrow sqlr, ajuint column,
+                                 double *Pvalue);
+
+AjBool ajSqlcolumnNumberToBool(const AjPSqlrow sqlr, ajuint column,
+                               AjBool *Pvalue);
+
+AjBool ajSqlcolumnNumberToTime(const AjPSqlrow sqlr, ajuint column,
+                               AjPTime *Pvalue);
+
+AjBool ajSqlcolumnNumberIsDefined(const AjPSqlrow sqlr, ajuint column);
+
+/* AJAX Void Array */
+
+AjPVoid ajVoidNew(void);
+
+AjPVoid ajVoidNewRes(ajuint size);
+
+void ajVoidDel(AjPVoid *thys);
+
+void *ajVoidGet(const AjPVoid thys, ajuint elem);
+
+AjBool ajVoidPut(AjPVoid *thys, ajuint elem, void *v);
+
+/*
+** End of prototype definitions
+*/
+
+
+
+
+#endif
+
+#ifdef __cplusplus
+}
+#endif

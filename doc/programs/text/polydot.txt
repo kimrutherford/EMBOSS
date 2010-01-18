@@ -1,5 +1,4 @@
-
-                                  polydot 
+                                   polydot
 
 
 
@@ -20,37 +19,41 @@ Description
    of a set of sequences. The dotplots are rendered on a single diagram.
    The dotplot is an intuitive graphical representation of the regions of
    similarity between two sequences. All positions from the first input
-   sequence are compared with all positions from the second input
-   sequence searching for exact matches between sequence regions
-   ("words"). The two sequences are the axes of the rectangular dotplot.
-   Wherever there is "similarity" between a word from each sequences a
-   dot is plotted. The wordsize is specified by the user. Optionally,
-   information on the sequence and location of all the exact matching
-   regions may be written to file as a feature file.
+   sequence are compared with all positions from the second input sequence
+   searching for exact matches between sequence regions ("words"). The two
+   sequences are the axes of the rectangular dotplot. Wherever there is
+   "similarity" between a word from each sequences a dot is plotted. The
+   wordsize is specified by the user. Optionally, information on the
+   sequence and location of all the exact matching regions may be written
+   to file as a feature file.
 
 Algorithm
 
    All sequence words of the specified size from the first input sequence
    are compared with all words from the second input sequence and exact
    matches identified. A line is plotted on the dotplot corresponding to
-   any exact matching words. Thus any local regions of identity
-   correspond to diagonals in the dotplot.
+   any exact matching words. Thus any local regions of identity correspond
+   to diagonals in the dotplot.
 
 Usage
 
    Here is a sample session with polydot
 
 
-% polydot globins.fasta -gtitle='Polydot of globins.fasta' -graph cps 
+% polydot globins.fasta -gtitle='Polydot of globins.fasta' -graph cps
 Draw dotplots for all-against-all comparison of a sequence set
-Word size [6]: 
+Word size [6]:
 
 Created polydot.ps
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Draw dotplots for all-against-all comparison of a sequence set
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequences]         seqset     File containing a sequence alignment
@@ -58,7 +61,7 @@ Command line arguments
 *  -outfeat            featout    [unknown.gff] Output features UFO
    -graph              graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, das, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif)
 
    Additional (Optional) qualifiers:
    -[no]boxit          boolean    [Y] Draw a box around each dotplot
@@ -115,13 +118,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -181,9 +186,8 @@ Notes
    Where the two sequences have substantial regions of identity, longer
    diagonal lines appear in the plot. It is possible to see at a glance
    such local regions of identity. It is also easy to see other features
-   such as repeats (which form parallel diagonal lines), and insertions
-   or deletions (which form breaks or discontinuities in the diagonal
-   lines).
+   such as repeats (which form parallel diagonal lines), and insertions or
+   deletions (which form breaks or discontinuities in the diagonal lines).
 
 References
 
@@ -214,7 +218,7 @@ See also
 
 Author(s)
 
-   Ian              Longden (il © sanger.ac.uk)
+   Ian              Longden (il (c) sanger.ac.uk)
    Sanger           Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
                     CB10 1SA, UK.
 

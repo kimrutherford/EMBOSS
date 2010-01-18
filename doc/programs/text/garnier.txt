@@ -1,5 +1,4 @@
-
-                                  garnier 
+                                   garnier
 
 
 
@@ -18,36 +17,40 @@ Description
 
    garnier is an implementation of the original Garnier Osguthorpe Robson
    algorithm (GOR I) for predicting protein secondary structure. It reads
-   an input protein sequence and writes a standard EMBOSS report file
-   with the predicted secondary structure. The Garnier method is not
-   regarded as the most accurate prediction, but is simple to calculate
-   on most workstations.
+   an input protein sequence and writes a standard EMBOSS report file with
+   the predicted secondary structure. The Garnier method is not regarded
+   as the most accurate prediction, but is simple to calculate on most
+   workstations.
 
 Algorithm
 
    The '-idc' option sets offsets to the weights applied to the helix and
    sheet terms used in the GOR algorithm to assign a residue to a
    secondary structure state. The option has a value from 0 - 6. This
-   gives an index into a set of arrays, dharr[] and dsarr[], which
-   provide 'decision constants' (dch, dcs), which are offsets that are
-   applied to the weights for the helix and sheet (extend) terms. So,
-   idc=0 says don't use the decision constant offsets, and idc=1 to 6
-   indicates that various combinations of dch,dcs offsets should be used.
+   gives an index into a set of arrays, dharr[] and dsarr[], which provide
+   'decision constants' (dch, dcs), which are offsets that are applied to
+   the weights for the helix and sheet (extend) terms. So, idc=0 says
+   don't use the decision constant offsets, and idc=1 to 6 indicates that
+   various combinations of dch,dcs offsets should be used.
 
 Usage
 
    Here is a sample session with garnier
 
 
-% garnier 
+% garnier
 Predicts protein secondary structure using GOR method
 Input protein sequence(s): tsw:amic_pseae
-Output report [amic_pseae.garnier]: 
+Output report [amic_pseae.garnier]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Predicts protein secondary structure using GOR method
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -109,13 +112,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -255,7 +260,7 @@ Output file format
 
 ########################################
 # Program: garnier
-# Rundate: Tue 15 Jul 2008 12:00:00
+# Rundate: Fri 15 Jan 2010 12:00:00
 # Commandline: garnier
 #    -sequence tsw:amic_pseae
 # Report_format: tagseq
@@ -344,8 +349,8 @@ Data files
 
 Notes
 
-   The Garnier method is not regarded as the most accurate prediction,
-   but is simple to calculate on most workstations.
+   The Garnier method is not regarded as the most accurate prediction, but
+   is simple to calculate on most workstations.
 
    The Web servers for PHD, DSC, and others are generally preferred.
 
@@ -387,6 +392,7 @@ Notes
   341    345   E beta sheet
   351    356   E beta sheet
 
+
 References
 
     1. Garnier J, Osguthorpe DJ, Robson B Analysis of the accuracy and
@@ -401,8 +407,8 @@ Warnings
    alogorithm is one of the first semi-successful methods, and will
    probably not predict with much better than about 65% accuracy. Do not
    rely on this (or any other) program alone to make your predictions
-   with. Use several programs and take a consensus of the results. The
-   Web servers for PHD, DSC, and others are generally preferred.
+   with. Use several programs and take a consensus of the results. The Web
+   servers for PHD, DSC, and others are generally preferred.
 
 Diagnostic Error Messages
 
@@ -433,7 +439,7 @@ Author(s)
    (wrp@virginia.edu) and released as part of his FASTA package.
 
    This application was modified for inclusion in EMBOSS by Rodrigo Lopez
-   (rls © ebi.ac.uk)
+   (rls (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

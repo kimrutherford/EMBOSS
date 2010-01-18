@@ -22,12 +22,14 @@
 ******************************************************************************/
 
 #include "emboss.h"
-#include "stdlib.h"
 
 
-static AjPStr makenucseq_random_sequence (AjPStr const* seqchar,
-					  ajint scmax, ajint length);
-static void makenucseq_default_chars (AjPList* list);
+static AjPStr makenucseq_random_sequence(AjPStr const* seqchar,
+                                         ajint scmax, ajint length);
+static void makenucseq_default_chars(AjPList* list);
+
+
+
 
 /* @prog makenucseq ***********************************************************
 **
@@ -52,85 +54,87 @@ int main(int argc, char **argv)
 
     embInit("makenucseq", argc, argv);
 
-    codondata= ajAcdGetCodon ("codonfile");
-    insert   = ajAcdGetString ("insert");
-    start    = ajAcdGetInt ("start");
-    length   = ajAcdGetInt ("length");
-    amount   = ajAcdGetInt ("amount");
-    outseq   = ajAcdGetSeqoutall ("outseq");
+    codondata= ajAcdGetCodon("codonfile");
+    insert   = ajAcdGetString("insert");
+    start    = ajAcdGetInt("start");
+    length   = ajAcdGetInt("length");
+    amount   = ajAcdGetInt("amount");
+    outseq   = ajAcdGetSeqoutall("outseq");
 
     list = ajListstrNew();
 
     /* this is checked by acd
-    if (amount <=0 || length <= 0)
-	ajFatal ("Amount or length is 0 or less. "
+    if(amount <=0 || length <= 0)
+	ajFatal("Amount or length is 0 or less. "
 	         "Unable to create any sequences"); */
 
     /* if insert, make sure sequence is large enough */
-    if (ajStrGetLen(insert))
+    if(ajStrGetLen(insert))
     {
 	length -= ajStrGetLen(insert);
 	/* start= start <= 1 ? 0 : --start; */ /* checked in acd */
 	start--;
-	if (length <= 0)
-	    ajFatal ("Sequence smaller than inserted part. "
+	if(length <= 0)
+	    ajFatal("Sequence smaller than inserted part. "
 		     "Unable to create sequences.");
     }
 
     /* make the list of AjPStr to be used in sequence creation */
-    if (codondata)
+    if(codondata)
     {
 	ajCodGetCodonlist(codondata, list);
 	    /* length is length in nucleotides, random sequence is
                made of triplets */
 	extra = length % 3;
 	length /= 3;
-	if (extra)
+	if(extra)
 	{
 	    length++;
 	    extra = 0 - (3 - extra);
 	}
     }
     else
-    {
-	makenucseq_default_chars (&list);
-    }
+	makenucseq_default_chars(&list);
 
+    
     /* if insert, make sure type is correct */
     /* typechecking code is not working, uncomment and test after it is
-    if (ajStrGetLen(insert))
+    if(ajStrGetLen(insert))
     {
 	seqstr = ajStrNew();
 	ajStrAssignC(&seqstr,"purenucleotide");
-	if (!ajSeqTypeCheckS(&insert,seqstr))
-	    ajFatal ("Insert not the same sequence type as sequence itself.");
+	if(!ajSeqTypeCheckS(&insert,seqstr))
+	    ajFatal("Insert not the same sequence type as sequence itself.");
 	ajStrDel(&seqstr);
     } */
 
     /* array allows fast creation of a sequences */
     scmax = ajListstrToarray(list,&seqr);
-    if (!scmax)
-	ajFatal ("No strings in list. No characters to make the sequence.");
+
+    if(!scmax)
+	ajFatal("No strings in list. No characters to make the sequence.");
 
     ajRandomSeed();
 
-    while (amount-- > 0)
+    while(amount-- > 0)
     {
-	seqstr = makenucseq_random_sequence (seqr,scmax,length);
-	if (ajStrGetLen(insert))
+	seqstr = makenucseq_random_sequence(seqr,scmax,length);
+	if(ajStrGetLen(insert))
 	    ajStrInsertS(&seqstr,start,insert);
 	ajStrFmtLower(&seqstr);
 	seq = ajSeqNew();
 
 	ajStrExchangeSetCC(&seqstr,"u","t");
-	if (extra < 0)
-	    ajStrCutEnd(&seqstr,-extra);
-	ajSeqAssignSeqS(seq, seqstr);
-	ajSeqSetNuc (seq);
 
-	ajSeqoutWriteSeq (outseq, seq);
-	ajSeqDel (&seq);
-	ajStrDel (&seqstr);
+	if(extra < 0)
+	    ajStrCutEnd(&seqstr,-extra);
+
+	ajSeqAssignSeqS(seq, seqstr);
+	ajSeqSetNuc(seq);
+
+	ajSeqoutWriteSeq(outseq, seq);
+	ajSeqDel(&seq);
+	ajStrDel(&seqstr);
     }
 
     ajSeqoutClose(outseq);
@@ -142,8 +146,12 @@ int main(int argc, char **argv)
     AJFREE(seqr);
 
     embExit();
+
     return 0;
 }
+
+
+
 
 /* @funcstatic makenucseq_random_sequence *************************************
 **
@@ -155,21 +163,24 @@ int main(int argc, char **argv)
 ** @return [AjPStr] Sequence string
 ** @@
 ******************************************************************************/
-static AjPStr makenucseq_random_sequence (AjPStr const* seqchar,
-					  ajint scmax, ajint length)
+static AjPStr makenucseq_random_sequence(AjPStr const* seqchar,
+                                         ajint scmax, ajint length)
 {
     AjPStr seq = ajStrNew();
     ajint idx  = 0;
     ajint len  = length;
 
-    while (len-- > 0)
+    while(len-- > 0)
     {
-	idx = (ajint) (ajRandomNumberD()*scmax);
+	idx = (ajint) (ajRandomDouble()*scmax);
 	ajStrAppendS(&seq,seqchar[idx]);
     }
 
     return seq;
 }
+
+
+
 
 /* @funcstatic makenucseq_default_chars ***************************************
 **
@@ -179,7 +190,7 @@ static AjPStr makenucseq_random_sequence (AjPStr const* seqchar,
 ** @return [void]
 ** @@
 ******************************************************************************/
-static void makenucseq_default_chars (AjPList* list)
+static void makenucseq_default_chars(AjPList* list)
 {
     int i;
     int max;
@@ -191,10 +202,10 @@ static void makenucseq_default_chars (AjPList* list)
     chars = seqCharNucPure;
     max = seqCharNucPureLength;
 
-    for (i = 0; i < max; i++)
+    for(i = 0; i < max; i++)
     {
 	tmp = ajStrNew();
-	tmp = ajFmtStr ("%c",chars[i]);
+	tmp = ajFmtStr("%c",chars[i]);
 	ajListstrPushAppend(*list,tmp);
     }
 

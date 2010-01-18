@@ -1,0 +1,90 @@
+application: ensembltest [
+  documentation: "Demonstration of the Ensembl API to be."
+  groups: "Test"
+  embassy: "myemboss"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+endsection: required
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  boolean: large [
+    # additional: "N"
+    default: "N"
+    help: "Set this to 'Y' to download large test data sets."
+    information: "Process large data sets"
+    # parameter: "N"
+    # standard: "N"
+  ]
+
+  integer: maxnum [
+    # parameter: "N"
+    information: "Maximum number of genes to process or -1 for all."
+    default: 25
+    standard: $(large)
+  ]
+  
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile  [
+    standard: "Y"
+    knowntype: "ensembltest output"
+  ]
+
+  seqoutall: outseq [
+    standard: "Y"
+    extension: "seq"
+    type: "nucleotide"
+  ]
+
+  seqoutall: exonsoutseq [
+    # parameter: "N"
+    information: "Output file for Ensembl Exons"
+    name: "exons"
+    extension: "fa"
+    features: "N"
+    standard: $(large)
+    type: "nucleotide"
+  ]
+
+  seqoutall: transcriptsoutseq [
+    # parameter: "N"
+    information: "Output file for Ensembl Transcripts"
+    name: "transcripts"
+    extension: "fa"
+    features: "N"
+    standard: $(large)
+    type: "nucleotide"
+  ]
+
+  seqoutall: translationsoutseq [
+    # parameter: "N"
+    information: "Output file for Ensembl Translations"
+    name: "translations"
+    extension: "fa"
+    features: "N"
+    standard: $(large)
+    type: "nucleotide"
+  ]
+
+endsection: output

@@ -5,22 +5,25 @@ EXTRA_DIST = emboss.default.template
 
 if ISSHARED
 if ISAIXIA64
-AM_CFLAGS = -Wl,-bdynamic -Wl,-brtl -L../ajax/.libs -lajax
-else
-AM_CFLAGS =
+AIX_CFLAGS = -Wl,-bdynamic -Wl,-brtl -L../ajax/pcre/.libs \
+-L../ajax/expat/.libs -L../ajax/zlib/.libs -L../ajax/core/.libs \
+-L../ajax/graphics/.libs -L../ajax/ensembl/.libs -L../ajax/ajaxdb/.libs \
+-L../ajax/acd/.libs \
+ -lacd -lajaxdb -lensembl -lajaxg -lajax -leexpat -lepcre -lezlib
 endif
 endif
 
+AM_CFLAGS =  $(AIX_CFLAGS) $(WARN_CFLAGS) $(DEVWARN_CFLAGS)
 
-check_PROGRAMS = acdlog acdxsd ajtest \
-complex corbatest \
-entrails giep histogramtest intconv \
+check_PROGRAMS = acdlog acdrelations acdxsd ajtest \
+complex corbatest edamclean ensembltest \
+entrails entrailsbook entrailshtml entrailswiki histogramtest intconv \
 origsplitter origunion \
 newcoils \
 patmattest \
 prima primers \
 seqinfo seqretall seqretallfeat \
-seqretset seqretsingle seqrettype \
+seqretset seqretsingle seqrettype sqltest \
 testplot treetypedisplay
 
 bin_PROGRAMS = aaindexextract abiview \
@@ -47,7 +50,7 @@ makenucseq makeprotseq marscan \
 maskambignuc maskambigprot maskfeat maskseq \
 matcher megamerger merger msbar \
 mwcontam mwfilter \
-needle newcpgreport newcpgseek newseq \
+needle needleall newcpgreport newcpgseek newseq \
 nohtml noreturn nospace notab notseq nthseq nthseqset \
 octanol oddcomp \
 palindrome pasteseq patmatdb patmatmotifs \
@@ -72,7 +75,13 @@ water whichdb wobble \
 wordcount wordfinder wordmatch wossname \
 yank
 
-INCLUDES = -I$(top_srcdir)/nucleus -I$(top_srcdir)/ajax -I$(top_srcdir)/plplot
+
+INCLUDES = -I$(top_srcdir)/nucleus -I$(top_srcdir)/ajax/pcre \
+	-I$(top_srcdir)/ajax/expat -I$(top_srcdir)/ajax/zlib \
+	-I$(top_srcdir)/ajax/core -I$(top_srcdir)/ajax/graphics \
+	-I$(top_srcdir)/ajax/ensembl -I$(top_srcdir)/ajax/ajaxdb \
+	-I$(top_srcdir)/ajax/acd -I$(top_srcdir)/plplot
+
 
 aaindexextract_SOURCES = aaindexextract.c
 abiview_SOURCES = abiview.c
@@ -81,6 +90,7 @@ acdpretty_SOURCES = acdpretty.c
 acdtable_SOURCES = acdtable.c
 acdtrace_SOURCES = acdtrace.c
 acdvalid_SOURCES = acdvalid.c
+acdrelations_SOURCES = acdrelations.c
 acdxsd_SOURCES = acdxsd.c
 aligncopy_SOURCES = aligncopy.c
 aligncopypair_SOURCES = aligncopypair.c
@@ -174,6 +184,7 @@ merger_SOURCES = merger.c
 mwcontam_SOURCES = mwcontam.c
 mwfilter_SOURCES = mwfilter.c
 needle_SOURCES = needle.c
+needleall_SOURCES = needleall.c
 newcpgreport_SOURCES = newcpgreport.c
 newcpgseek_SOURCES = newcpgseek.c
 newseq_SOURCES = newseq.c
@@ -270,7 +281,12 @@ acdlog_SOURCES = acdlog.c
 ajtest_SOURCES = ajtest.c
 complex_SOURCES = complex.c
 corbatest_SOURCES = corbatest.c
+edamclean_SOURCES = edamclean.c
+ensembltest_SOURCES = ensembltest.c
 entrails_SOURCES = entrails.c
+entrailsbook_SOURCES = entrailsbook.c
+entrailshtml_SOURCES = entrailshtml.c
+entrailswiki_SOURCES = entrailswiki.c
 histogramtest_SOURCES = histogramtest.c
 intconv_SOURCES = intconv.c
 origsplitter_SOURCES = origsplitter.c
@@ -285,15 +301,16 @@ seqretallfeat_SOURCES = seqretallfeat.c
 seqretset_SOURCES = seqretset.c
 seqretsingle_SOURCES = seqretsingle.c
 seqrettype_SOURCES = seqrettype.c
+sqltest_SOURCES = sqltest.c
 testplot_SOURCES = testplot.c
 treetypedisplay_SOURCES = treetypedisplay.c
 
-# Uncomment to use dual libraries
-if ISCYGWIN
-LDADD = ../nucleus/libnucleus.la ../ajax/libajax.la ../plplot/libeplplot.la $(XLIB)
-else
-LDADD = ../nucleus/libnucleus.la ../ajax/libajaxg.la ../ajax/libajax.la ../plplot/libeplplot.la $(XLIB)
-endif
+LDADD = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
+	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
+	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
+	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
+	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(XLIB)
 
 pkgdata_DATA = emboss.default.template
 pkgdatadir=$(prefix)/share/$(PACKAGE)
@@ -303,5 +320,3 @@ pkgdatadir=$(prefix)/share/$(PACKAGE)
 #else
 #
 #endif
-
-

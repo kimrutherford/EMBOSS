@@ -55,7 +55,7 @@ int main(int argc, char **argv)
     ajReportPrintFormat(outf, full);
     ajCodPrintFormat(outf, full);
 
-    ajGraphPrintType(outf, full);
+    ajGraphicsPrintType(outf, full);
 
     ajFileClose(&outf);
 

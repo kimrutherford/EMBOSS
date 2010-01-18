@@ -1,4 +1,4 @@
-/* $Id: pldtik.c,v 1.3 2007/05/08 09:09:37 rice Exp $
+/* $Id: pldtik.c,v 1.5 2009/09/15 16:56:55 rice Exp $
 
 	Determines tick spacing and mode (fixed or floating) of
 	numeric axis labels.
@@ -43,7 +43,7 @@ pldtik(PLFLT vmin, PLFLT vmax, PLFLT *tick, PLINT *nsubt)
 /* Magnitude of min/max difference to get tick spacing */
 
     t1 = (PLFLT) log10(ABS(vmax - vmin));
-    np = (PLINT) floor(t1);
+    np = (float) floor(t1);
     t1 = t1 - np;
 
 /* Get tick spacing. */
@@ -153,17 +153,17 @@ pldprec(PLFLT vmin, PLFLT vmax, PLFLT tick, PLINT lf,
     if(ABS(chosen) > 0.) {
         vmod = ABS(chosen);
         t0 = (PLFLT) log10(vmod);
-        msd = (PLINT) floor(t0);
+        msd = (float) floor(t0);
     }
     else {
 /* this branch occurs only when 0. --- 0. range put in */
         vmod = 1.;
         t0 = (PLFLT) log10(vmod);
-        msd = (PLINT) floor(t0);
+        msd = (float) floor(t0);
     }
 
     if(ABS(notchosen) > 0.)
-	notmsd = (PLINT) floor( (PLFLT) log10(ABS(notchosen)));
+      notmsd = (float) floor( (PLFLT) log10(ABS(notchosen)));
     else
 	notmsd = msd;
 /* Autoselect the mode flag */

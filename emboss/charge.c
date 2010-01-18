@@ -79,7 +79,7 @@ int main(int argc, char **argv)
     EmbPPropAmino *adata = NULL;
     
 
-    ajGraphInit("charge", argc, argv);
+    embInit("charge", argc, argv);
 
     seqall    = ajAcdGetSeqall("seqall");
     plot      = ajAcdGetToggle("plot");
@@ -96,7 +96,7 @@ int main(int argc, char **argv)
 
     str = ajStrNew();
 
-    ajGraphSetTitlePlus(graph, ajSeqallGetUsa(seqall));
+    ajGraphAppendTitleS(graph, ajSeqallGetUsa(seqall));
     while(ajSeqallNext(seqall, &seq))
     {
 	beg = ajSeqallGetseqBegin(seqall);
@@ -153,9 +153,9 @@ int main(int argc, char **argv)
 	if(plot)
 	{
 	    ajGraphSetMulti(graph,1);
-	    ajGraphxySetOverLap(graph,ajFalse);
-	    ajGraphSetXTitleC(graph,"Position");
-	    ajGraphSetYTitleC(graph,"Charge");
+	    ajGraphxySetflagOverlay(graph,ajFalse);
+	    ajGraphSetXlabelC(graph,"Position");
+	    ajGraphSetYlabelC(graph,"Charge");
 	    charge_addgraph(graph,limit,x,y,ymax,ymin,window);
 	    if(limit > 1)
 		ajGraphxyDisplay(graph,ajFalse);
@@ -169,7 +169,7 @@ int main(int argc, char **argv)
     }
 
     if(plot)
-        ajGraphClose();
+        ajGraphicsClose();
 
     ajSeqDel(&seq);
     ajSeqallDel(&seqall);
@@ -208,14 +208,14 @@ static void charge_addgraph(AjPGraph graph, ajint limit, const float *x,
 {
     ajint i;
 
-    AjPGraphPlpData data;
+    AjPGraphdata data;
     AjPStr st = NULL;
     float baseline = 0.;
 
     if(limit<1)
 	return;
 
-    data = ajGraphPlpDataNewI(limit);
+    data = ajGraphdataNewI(limit);
 
     st = ajStrNew();
 
@@ -225,21 +225,21 @@ static void charge_addgraph(AjPGraph graph, ajint limit, const float *x,
 	data->y[i] = y[i];
     }
 
-    ajGraphPlpDataSetColour(data,BLACK);
-    ajGraphPlpDataSetMaxMin(data,x[0],x[limit-1],ymin,ymax);
-    ajGraphPlpDataSetMaxima(data,x[0],x[limit-1],ymin,ymax);
+    ajGraphdataSetColour(data,BLACK);
+    ajGraphdataSetMinmax(data,x[0],x[limit-1],ymin,ymax);
+    ajGraphdataSetTruescale(data,x[0],x[limit-1],ymin,ymax);
 
     ajFmtPrintS(&st,"Window:%d",window);
-    ajGraphPlpDataSetSubTitle(data,st);
+    ajGraphdataSetSubtitleS(data,st);
 
-    ajGraphPlpDataSetTypeC(data,"2D Plot Float");
+    ajGraphdataSetTypeC(data,"2D Plot Float");
     ajFmtPrintS(&st,"Charge");
-    ajGraphPlpDataSetYTitle(data,st);
+    ajGraphdataSetYlabelS(data,st);
 
     ajFmtPrintS(&st,"Position");
-    ajGraphPlpDataSetXTitle(data,st);
+    ajGraphdataSetXlabelS(data,st);
 
-    ajGraphPlpDataAddLine(data,x[0],baseline,x[limit-1],baseline,BLUE);
+    ajGraphdataAddposLine(data,x[0],baseline,x[limit-1],baseline,BLUE);
 
     ajGraphDataAdd(graph,data);
 

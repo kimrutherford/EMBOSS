@@ -45,7 +45,6 @@
 ******************************************************************************/
 
 #include "emboss.h"
-#include "ajtime.h"
 
 
 
@@ -117,13 +116,13 @@ int main(int argc, char **argv)
     ajint bin;
     ajint bin2;
     AjPGraph graphs = NULL;
-    AjPGraphPlpData gdata;
+    AjPGraphdata gdata;
     AjPList list = NULL;
     float flen;
     ajuint tui;
     void *freeptr;
     
-    ajGraphInit("plotcon", argc, argv);
+    embInit("plotcon", argc, argv);
 
     seqset = ajAcdGetSeqset("sequences");
 
@@ -144,8 +143,8 @@ int main(int argc, char **argv)
     ajTimeSetLocal(&ajtime, tim);
     ajtime.format = 0;
 
-    matrix  = ajMatrixArray(cmpmatrix);
-    cvt     = ajMatrixCvt(cmpmatrix);	/* Returns conversion table */
+    matrix  = ajMatrixGetMatrix(cmpmatrix);
+    cvt     = ajMatrixGetCvt(cmpmatrix);	/* Returns conversion table */
 
 
     /****************** Memory allocation *****************/
@@ -216,8 +215,8 @@ int main(int argc, char **argv)
 
     /*************** End of Loop ***************/
 
-    ajGraphSetCharScale(0.50);
-    gdata = ajGraphPlpDataNewI(lenseq);
+    ajGraphicsSetCharscale(0.50);
+    gdata = ajGraphdataNewI(lenseq);
 
 
     for(bin=0;bin<numbins;bin++)
@@ -233,18 +232,18 @@ int main(int argc, char **argv)
     }
 
 
-    ajGraphArrayMaxMin(gdata->y,(ajint)flen,&ymin,&ymax);
-    ajGraphPlpDataSetMaxima(gdata,0,flen,ymin,ymax);
+    ajGraphicsCalcRange(gdata->y,(ajint)flen,&ymin,&ymax);
+    ajGraphdataSetTruescale(gdata,0,flen,ymin,ymax);
     
-    ajGraphPlpDataSetTypeC(gdata,"2D Plot");
+    ajGraphdataSetTypeC(gdata,"2D Plot");
     ajGraphDataAdd(graphs,gdata);
-    ajGraphxySetYTick(graphs, ajTrue);
+    ajGraphxyShowYtick(graphs, ajTrue);
     ajGraphSetTitleC(graphs,"Similarity Plot of Aligned Sequences");
-    ajGraphSetYTitleC(graphs,"Similarity");
+    ajGraphSetYlabelC(graphs,"Similarity");
     
     ajGraphxyDisplay(graphs,ajTrue);
     
-    ajGraphCloseWin();
+    ajGraphicsClose();
     ajGraphxyDel(&graphs);
 
     AJFREE(x);

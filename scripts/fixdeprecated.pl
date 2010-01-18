@@ -5,7 +5,7 @@ use English;
 $basefile = $ARGV[0];
 $basefile =~ s/[.]c$//;
 
-open (DEP, "$ENV{HOME}/cvsemboss/deprecated.txt") || die "Cannot open deprecated.txt";
+open (DEP, "$ENV{HOME}/devemboss/deprecated.txt") || die "Cannot open deprecated.txt";
 open (SRC, "$basefile.c") || die "Cannot open $basefile.c";
 open (OLDSRC, ">$basefile.save") || die "Cannot open $basefile.save";
 #open (DBG, ">fixdeprecated.dbg") || die "Cannot open fixdeprecated.dbg";

@@ -2,6 +2,7 @@
 application: featcopy [
   documentation: "Reads and writes a feature table"
   groups: "Edit"
+  relations: "EDAM: Sequence file handling"
 ]
 
 section: input [
@@ -12,6 +13,7 @@ section: input [
   features: features [
     parameter: "Y"
     type: "any"
+    relations: "EDAM: Sequence feature table"                              
   ]
 
 endsection: input
@@ -24,6 +26,7 @@ section: output [
   featout: outfeat [
     parameter: "Y"
     type: "$(features.type)"
+    relations: "EDAM: Sequence feature table"                              
   ]
 
 endsection: output

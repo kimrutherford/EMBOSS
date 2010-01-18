@@ -24,6 +24,10 @@ Tim Carver   tjc@sanger.ac.uk
 
 Change Log:
 ---------------------------------------------------
+January 2010
+
+ * Integrated Jalview editor upgraded to the latest JalviewLite (version 2.4)
+  
 30-June-2009
  
  * better integration with EMBOSS makefiles,
@@ -48,18 +52,11 @@ Change Log:
 
   * "Save between Jemboss sessions" option is now selected by default
   
-  * fixed the problem with saving the "results.home" property
+  * fixed a problem with saving the "results.home" property
         
   * loading and storing jemboss.properties files was updated by
     using functions from java.util.Properties class
-    
-  * links on this page was updated and we started to have a changelog here
-         
-  * RunEmbossApplication2 class now records IO errors when starting application jobs 
-     
-  * SequnceList class now uses the same environment settings used by the
-    BuildProgramMenu class when launching EMBOSS applications
-    
+             
   * replaced the "Calculate sequence attributes" menu option
     by "Get sequence lengths automatically" checkbox in SequenceList frame,
     (sequence lengths are not calculated if the entry is an existing file)

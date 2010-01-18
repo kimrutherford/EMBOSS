@@ -39,20 +39,36 @@ typedef struct EmbSWordMatch {
 ** NUCLEUS data structure for words
 **
 ** @attr fword [const char*] Original word
-** @attr list [AjPList] List of word positions
-** @attr count [ajint] Size of list
+** @attr seqlocs [AjPTable] Table of word start positions in multiple sequences
+** @attr count [ajint] Total number of locations in all sequences
 ** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
 typedef struct EmbSWord {
   const char *fword;
-  AjPList list;
+  AjPTable seqlocs;
   ajint count;
   char Padding[4];
 } EmbOWord;
 #define EmbPWord EmbOWord*
 
+
+
+/* @data EmbPWordSeqLocs ******************************************************
+**
+** NUCLEUS data structure for word locations in a given sequence
+**
+** @attr seq [const AjPSeq] Sequence for word start positions
+** @attr locs [AjPList] List of word start positions in the sequence
+** @@
+******************************************************************************/
+
+typedef struct EmbSWordSeqLocs {
+  const AjPSeq seq;
+  AjPList locs;
+} EmbOWordSeqLocs;
+#define EmbPWordSeqLocs EmbOWordSeqLocs*
 
 
 
@@ -68,7 +84,9 @@ void    embWordFreeTable(AjPTable *table);
 AjBool  embWordGetTable (AjPTable *table, const AjPSeq seq);
 void    embWordLength (ajint wordlen);
 AjBool  embWordMatchIter (AjIList iter, ajint* start1, ajint* start2,
-			  ajint* len);
+			  ajint* len, const AjPSeq* seq);
+EmbPWordMatch embWordMatchListAppend(AjPList hitlist, const AjPSeq seq,
+        const ajuint seq1start, ajuint seq2start, ajint length);
 void    embWordMatchListDelete (AjPList* plist);
 void    embWordMatchListPrint (AjPFile file, const AjPList list);
 void    embWordPrintTable  (const AjPTable table);

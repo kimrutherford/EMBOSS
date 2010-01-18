@@ -1,5 +1,4 @@
-
-                                  infoseq 
+                                   infoseq
 
 
 
@@ -18,9 +17,9 @@ Description
 
    infoseq displays on screen basic information about one or more input
    sequences. This includes the Uniform Sequence Address (USA), name,
-   accession number, type (nucleic or protein), length, percentage C+G
-   and description. Any combination of these records is easily selected
-   or unselected for display. The same information may be written to an
+   accession number, type (nucleic or protein), length, percentage C+G and
+   description. Any combination of these records is easily selected or
+   unselected for display. The same information may be written to an
    output file which (optionally) may be formatted in an HTML table.
 
 Usage
@@ -30,14 +29,15 @@ Usage
    Display information on a sequence:
 
 
-% infoseq tembl:x13776 
+% infoseq tembl:x13776
 Display basic information about sequences
 
-USA                      Database  Name           Accession      Type Length %G
-C    Description
+USA                      Database  Name           Accession      Type Length %GC
+    Description
 tembl-id:X13776          tembl          X13776         X13776         N    2167
-   66.54  Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
-ation
+  66.54  Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulat
+ion
+
 
    Go to the input files for this example
 
@@ -46,63 +46,71 @@ ation
    Don't display the USA of a sequence:
 
 
-% infoseq tembl:x13776 -nousa 
+% infoseq tembl:x13776 -nousa
 Display basic information about sequences
 
 Database  Name           Accession      Type Length %GC    Description
-tembl          X13776         X13776         N    2167   66.54  Pseudomonas aer
-uginosa amiC and amiR gene for aliphatic amidase regulation
+tembl          X13776         X13776         N    2167   66.54  Pseudomonas aeru
+ginosa amiC and amiR gene for aliphatic amidase regulation
+
 
    Example 3
 
    Display only the name and length of a sequence:
 
 
-% infoseq tembl:x13776 -only -name -length 
+% infoseq tembl:x13776 -only -name -length
 Display basic information about sequences
 
 Name           Length
 X13776         2167
+
 
    Example 4
 
    Display only the description of a sequence:
 
 
-% infoseq tembl:x13776 -only -desc 
+% infoseq tembl:x13776 -only -desc
 Display basic information about sequences
 
 Description
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+
 
    Example 5
 
    Display the type of a sequence:
 
 
-% infoseq tembl:x13776 -only -type 
+% infoseq tembl:x13776 -only -type
 Display basic information about sequences
 
 Type
 N
+
 
    Example 6
 
    Display information formatted with HTML:
 
 
-% infoseq tembl:x13776 -html 
+% infoseq tembl:x13776 -html
 Display basic information about sequences
 
 
  USA Database Name Accession Type Length %GC Description
 
- tembl-id:X13776 tembl X13776 X13776 N 2167 66.54 Pseudomonas aeruginosa amiC a
-nd amiR gene for aliphatic amidase regulation
+ tembl-id:X13776 tembl X13776 X13776 N 2167 66.54 Pseudomonas aeruginosa amiC an
+d amiR gene for aliphatic amidase regulation
+
 
 
 
 Command line arguments
+
+Display basic information about sequences
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     (Gapped) sequence(s) filename and optional
@@ -129,8 +137,7 @@ Command line arguments
                                   individual records in the text output file.
                                   It could be a space character, a tab
                                   character, a pipe character or any other
-                                  character or string. (Any string is
-                                  accepted)
+                                  character or string. (Any string)
    -only               boolean    [N] This is a way of shortening the command
                                   line if you only want a few things to be
                                   displayed. Instead of specifying:
@@ -146,7 +153,7 @@ Command line arguments
    -name               boolean    [@(!$(only))] Display 'name' column
    -accession          boolean    [@(!$(only))] Display 'accession' column
    -gi                 boolean    [N] Display 'GI' column
-   -version            boolean    [N] Display 'version' column
+   -seqversion         boolean    [N] Display 'version' column
    -type               boolean    [@(!$(only))] Display 'type' column
    -length             boolean    [@(!$(only))] Display 'length' column
    -pgc                boolean    [@(!$(only))] Display 'percent GC content'
@@ -182,13 +189,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -196,8 +205,8 @@ Input file format
 
   Input files for usage example
 
-   'tembl:x13776' is a sequence entry in the example nucleic acid
-   database 'tembl'
+   'tembl:x13776' is a sequence entry in the example nucleic acid database
+   'tembl'
 
   Database entry: tembl:x13776
 
@@ -221,8 +230,7 @@ RP   1167-2167
 RA   Rice P.M.;
 RT   ;
 RL   Submitted (16-DEC-1988) to the EMBL/GenBank/DDBJ databases.
-RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
-.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
 XX
 RN   [2]
 RP   1167-2167
@@ -247,8 +255,7 @@ RP   1-2167
 RA   Rice P.M.;
 RT   ;
 RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
-RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
-.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
 XX
 DR   GOA; Q51417.
 DR   InterPro; IPR003211; AmiSUreI_transpt.
@@ -263,88 +270,50 @@ FT                   phenotype"
 FT   misc_feature    1
 FT                   /note="last base of an XhoI site"
 FT   misc_feature    648..653
-FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 cause
-s
+FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 causes
 FT                   constitutive expression of amiE"
 FT   conflict        1281
 FT                   /replace="g"
 FT                   /citation=[3]
 XX
 SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
-     ggtaccgctg gccgagcatc tgctcgatca ccaccagccg ggcgacggga actgcacgat        6
-0
-     ctacctggcg agcctggagc acgagcgggt tcgcttcgta cggcgctgag cgacagtcac       12
-0
-     aggagaggaa acggatggga tcgcaccagg agcggccgct gatcggcctg ctgttctccg       18
-0
-     aaaccggcgt caccgccgat atcgagcgct cgcacgcgta tggcgcattg ctcgcggtcg       24
-0
-     agcaactgaa ccgcgagggc ggcgtcggcg gtcgcccgat cgaaacgctg tcccaggacc       30
-0
-     ccggcggcga cccggaccgc tatcggctgt gcgccgagga cttcattcgc aaccgggggg       36
-0
-     tacggttcct cgtgggctgc tacatgtcgc acacgcgcaa ggcggtgatg ccggtggtcg       42
-0
-     agcgcgccga cgcgctgctc tgctacccga ccccctacga gggcttcgag tattcgccga       48
-0
-     acatcgtcta cggcggtccg gcgccgaacc agaacagtgc gccgctggcg gcgtacctga       54
-0
-     ttcgccacta cggcgagcgg gtggtgttca tcggctcgga ctacatctat ccgcgggaaa       60
-0
-     gcaaccatgt gatgcgccac ctgtatcgcc agcacggcgg cacggtgctc gaggaaatct       66
-0
-     acattccgct gtatccctcc gacgacgact tgcagcgcgc cgtcgagcgc atctaccagg       72
-0
-     cgcgcgccga cgtggtcttc tccaccgtgg tgggcaccgg caccgccgag ctgtatcgcg       78
-0
-     ccatcgcccg tcgctacggc gacggcaggc ggccgccgat cgccagcctg accaccagcg       84
-0
-     aggcggaggt ggcgaagatg gagagtgacg tggcagaggg gcaggtggtg gtcgcgcctt       90
-0
-     acttctccag catcgatacg cccgccagcc gggccttcgt ccaggcctgc catggtttct       96
-0
-     tcccggagaa cgcgaccatc accgcctggg ccgaggcggc ctactggcag accttgttgc      102
-0
-     tcggccgcgc cgcgcaggcc gcaggcaact ggcgggtgga agacgtgcag cggcacctgt      108
-0
-     acgacatcga catcgacgcg ccacaggggc cggtccgggt ggagcgccag aacaaccaca      114
-0
-     gccgcctgtc ttcgcgcatc gcggaaatcg atgcgcgcgg cgtgttccag gtccgctggc      120
-0
-     agtcgcccga accgattcgc cccgaccctt atgtcgtcgt gcataacctc gacgactggt      126
-0
-     ccgccagcat gggcggggga ccgctcccat gagcgccaac tcgctgctcg gcagcctgcg      132
-0
-     cgagttgcag gtgctggtcc tcaacccgcc gggggaggtc agcgacgccc tggtcttgca      138
-0
-     gctgatccgc atcggttgtt cggtgcgcca gtgctggccg ccgccggaag ccttcgacgt      144
-0
-     gccggtggac gtggtcttca ccagcatttt ccagaatggc caccacgacg agatcgctgc      150
-0
-     gctgctcgcc gccgggactc cgcgcactac cctggtggcg ctggtggagt acgaaagccc      156
-0
-     cgcggtgctc tcgcagatca tcgagctgga gtgccacggc gtgatcaccc agccgctcga      162
-0
-     tgcccaccgg gtgctgcctg tgctggtatc ggcgcggcgc atcagcgagg aaatggcgaa      168
-0
-     gctgaagcag aagaccgagc agctccagga ccgcatcgcc ggccaggccc ggatcaacca      174
-0
-     ggccaaggtg ttgctgatgc agcgccatgg ctgggacgag cgcgaggcgc accagcacct      180
-0
-     gtcgcgggaa gcgatgaagc ggcgcgagcc gatcctgaag atcgctcagg agttgctggg      186
-0
-     aaacgagccg tccgcctgag cgatccgggc cgaccagaac aataacaaga ggggtatcgt      192
-0
-     catcatgctg ggactggttc tgctgtacgt tggcgcggtg ctgtttctca atgccgtctg      198
-0
-     gttgctgggc aagatcagcg gtcgggaggt ggcggtgatc aacttcctgg tcggcgtgct      204
-0
-     gagcgcctgc gtcgcgttct acctgatctt ttccgcagca gccgggcagg gctcgctgaa      210
-0
-     ggccggagcg ctgaccctgc tattcgcttt tacctatctg tgggtggccg ccaaccagtt      216
-0
-     cctcgag                                                                216
-7
+     ggtaccgctg gccgagcatc tgctcgatca ccaccagccg ggcgacggga actgcacgat        60
+     ctacctggcg agcctggagc acgagcgggt tcgcttcgta cggcgctgag cgacagtcac       120
+     aggagaggaa acggatggga tcgcaccagg agcggccgct gatcggcctg ctgttctccg       180
+     aaaccggcgt caccgccgat atcgagcgct cgcacgcgta tggcgcattg ctcgcggtcg       240
+     agcaactgaa ccgcgagggc ggcgtcggcg gtcgcccgat cgaaacgctg tcccaggacc       300
+     ccggcggcga cccggaccgc tatcggctgt gcgccgagga cttcattcgc aaccgggggg       360
+     tacggttcct cgtgggctgc tacatgtcgc acacgcgcaa ggcggtgatg ccggtggtcg       420
+     agcgcgccga cgcgctgctc tgctacccga ccccctacga gggcttcgag tattcgccga       480
+     acatcgtcta cggcggtccg gcgccgaacc agaacagtgc gccgctggcg gcgtacctga       540
+     ttcgccacta cggcgagcgg gtggtgttca tcggctcgga ctacatctat ccgcgggaaa       600
+     gcaaccatgt gatgcgccac ctgtatcgcc agcacggcgg cacggtgctc gaggaaatct       660
+     acattccgct gtatccctcc gacgacgact tgcagcgcgc cgtcgagcgc atctaccagg       720
+     cgcgcgccga cgtggtcttc tccaccgtgg tgggcaccgg caccgccgag ctgtatcgcg       780
+     ccatcgcccg tcgctacggc gacggcaggc ggccgccgat cgccagcctg accaccagcg       840
+     aggcggaggt ggcgaagatg gagagtgacg tggcagaggg gcaggtggtg gtcgcgcctt       900
+     acttctccag catcgatacg cccgccagcc gggccttcgt ccaggcctgc catggtttct       960
+     tcccggagaa cgcgaccatc accgcctggg ccgaggcggc ctactggcag accttgttgc      1020
+     tcggccgcgc cgcgcaggcc gcaggcaact ggcgggtgga agacgtgcag cggcacctgt      1080
+     acgacatcga catcgacgcg ccacaggggc cggtccgggt ggagcgccag aacaaccaca      1140
+     gccgcctgtc ttcgcgcatc gcggaaatcg atgcgcgcgg cgtgttccag gtccgctggc      1200
+     agtcgcccga accgattcgc cccgaccctt atgtcgtcgt gcataacctc gacgactggt      1260
+     ccgccagcat gggcggggga ccgctcccat gagcgccaac tcgctgctcg gcagcctgcg      1320
+     cgagttgcag gtgctggtcc tcaacccgcc gggggaggtc agcgacgccc tggtcttgca      1380
+     gctgatccgc atcggttgtt cggtgcgcca gtgctggccg ccgccggaag ccttcgacgt      1440
+     gccggtggac gtggtcttca ccagcatttt ccagaatggc caccacgacg agatcgctgc      1500
+     gctgctcgcc gccgggactc cgcgcactac cctggtggcg ctggtggagt acgaaagccc      1560
+     cgcggtgctc tcgcagatca tcgagctgga gtgccacggc gtgatcaccc agccgctcga      1620
+     tgcccaccgg gtgctgcctg tgctggtatc ggcgcggcgc atcagcgagg aaatggcgaa      1680
+     gctgaagcag aagaccgagc agctccagga ccgcatcgcc ggccaggccc ggatcaacca      1740
+     ggccaaggtg ttgctgatgc agcgccatgg ctgggacgag cgcgaggcgc accagcacct      1800
+     gtcgcgggaa gcgatgaagc ggcgcgagcc gatcctgaag atcgctcagg agttgctggg      1860
+     aaacgagccg tccgcctgag cgatccgggc cgaccagaac aataacaaga ggggtatcgt      1920
+     catcatgctg ggactggttc tgctgtacgt tggcgcggtg ctgtttctca atgccgtctg      1980
+     gttgctgggc aagatcagcg gtcgggaggt ggcggtgatc aacttcctgg tcggcgtgct      2040
+     gagcgcctgc gtcgcgttct acctgatctt ttccgcagca gccgggcagg gctcgctgaa      2100
+     ggccggagcg ctgaccctgc tattcgcttt tacctatctg tgggtggccg ccaaccagtt      2160
+     cctcgag                                                                2167
 //
 
 Output file format
@@ -369,10 +338,10 @@ Output file format
    name, accession, type, description.
 
    When the -html qualifier is specified, then the output will be wrapped
-   in HTML tags, ready for inclusion in a Web page. Note that tags such
-   as <HTML> and <BODY> are not output by this program as the table of
-   databases is expected to form only part of the contents of a web page
-   - the rest of the web page must be supplier by the user.
+   in HTML tags, ready for inclusion in a Web page. Note that tags such as
+   <HTML> and <BODY> are not output by this program as the table of
+   databases is expected to form only part of the contents of a web page -
+   the rest of the web page must be supplier by the user.
 
    The lines of out information are guaranteed not to have trailing
    white-space at the end.
@@ -386,14 +355,14 @@ Notes
    There are many qualifiers to control exactly what information on the
    sequence is output and how it is formatted. If you only want a few
    fields in the output file, the command line may be shortended by
-   preceding the appropriate qualifier with -only. For example, instead
-   of specifying -nohead -noname -noacc -notype -nopgc -nodesc to get
-   only the length output, you can specify -only -length.
+   preceding the appropriate qualifier with -only. For example, instead of
+   specifying -nohead -noname -noacc -notype -nopgc -nodesc to get only
+   the length output, you can specify -only -length.
 
    By default, the output file starts each line with the USA of the
-   sequence being described, so the output file is a list file that can
-   be manually edited and read in by any other EMBOSS program that can
-   read in one or more sequence to be analysed.
+   sequence being described, so the output file is a list file that can be
+   manually edited and read in by any other EMBOSS program that can read
+   in one or more sequence to be analysed.
 
 References
 
@@ -417,34 +386,33 @@ Known bugs
 
 See also
 
-   Program name     Description
-   infoalign        Display basic information about a multiple sequence
-                    alignment
-   infobase         Return information on a given nucleotide base
-   inforesidue      Return information on a given amino acid residue
-   seealso          Finds programs with similar function to a specified program
-   showdb           Displays information on configured databases
-   textsearch       Search the textual description of sequence(s)
-   tfm              Displays full documentation for an application
-   whichdb          Search all sequence databases for an entry and retrieve it
-   wossname         Finds programs by keywords in their short description
+                    Program name                          Description
+                    infoalign    Display basic information about a multiple sequence alignment
+                    infobase     Return information on a given nucleotide base
+                    inforesidue  Return information on a given amino acid residue
+                    seealso      Finds programs with similar function to a specified program
+                    showdb       Displays information on configured databases
+                    textsearch   Search the textual description of sequence(s)
+                    tfm          Displays full documentation for an application
+                    whichdb      Search all sequence databases for an entry and retrieve it
+                    wossname     Finds programs by keywords in their short description
 
-     * geecee - Calculates the fractional GC content of a nucleic acid
-       sequence
+                      * geecee - Calculates the fractional GC content of a nucleic acid
+                        sequence
 
 Author(s)
 
-   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
-   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
-   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+   Gary             Williams (gwilliam (c) rfcgr.mrc.ac.uk)
+   MRC              Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome           Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 History
 
 Target users
 
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
 
 Comments
 
-   None
+                    None

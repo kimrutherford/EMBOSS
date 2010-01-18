@@ -152,20 +152,23 @@ void embPatternRegexSearch (AjPFeattable ftable, const AjPSeq seq,
     AjPSeq revseq;
     ajint seqlen;
 
+    seqlen = ajSeqGetLen(seq);
+    if(!seqlen)
+        return;
+
+    isreversed = ajSeqIsReversedTrue(seq);
+
+    if(isreversed)
+	seqlen += ajSeqGetOffset(seq);
+
+    pos = ajSeqGetBeginTrue(seq);
+    adj = ajSeqGetEndTrue(seq);
+
     if(!ajStrGetLen(featMotifProt))
         ajStrAssignC(&featMotifProt, "SO:0001067");
 
     if(!ajStrGetLen(featMotifNuc))
         ajStrAssignC(&featMotifNuc, "SO:0000714");
-
-    pos = ajSeqGetBeginTrue(seq);
-    adj = ajSeqGetEndTrue(seq);
-
-    seqlen = ajSeqGetLen(seq);
-    isreversed = ajSeqIsReversedTrue(seq);
-
-    if(isreversed)
-	seqlen += ajSeqGetOffset(seq);
 
     /*ajDebug("embPatternRegexSearch pos: %d adj: %d reverse: %B\n",
 	   pos, adj, reverse, isreversed);*/
@@ -277,6 +280,18 @@ void embPatternSeqSearch (AjPFeattable ftable, const AjPSeq seq,
     AjBool isreversed;
     ajint seqlen;
 
+    seqlen = ajSeqGetLen(seq);
+    if(!seqlen)
+        return;
+
+    isreversed = ajSeqIsReversedTrue(seq);
+
+    if(isreversed)
+	seqlen += ajSeqGetOffset(seq);
+
+    begin = ajSeqGetBeginTrue(seq);
+    adj = ajSeqGetEndTrue(seq);
+
     if(!ajStrGetLen(featMotifProt))
         ajStrAssignC(&featMotifProt, "SO:0001067");
 
@@ -285,15 +300,6 @@ void embPatternSeqSearch (AjPFeattable ftable, const AjPSeq seq,
 
     ajStrAssignS(&seqname,ajSeqGetNameS(seq));
     pattern = ajPatternSeqGetCompiled(pat);
-
-    begin = ajSeqGetBeginTrue(seq);
-    adj = ajSeqGetEndTrue(seq);
-
-    seqlen = ajSeqGetLen(seq);
-    isreversed = ajSeqIsReversedTrue(seq);
-
-    if(isreversed)
-	seqlen += ajSeqGetOffset(seq);
 
     if (reverse)
     {

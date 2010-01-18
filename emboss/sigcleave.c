@@ -190,7 +190,7 @@ int main(int argc, char **argv)
 	ajStrAssignC(&headStr, "");
 	ajFmtPrintAppS(&headStr, "Reporting scores over %.2f", minweight);
 
-	ajReportSetHeader(report, headStr);
+	ajReportSetHeaderS(report, headStr);
 
 	if(outf)
 	    ajFmtPrintF(outf,"\n\nSIGCLEAVE of %s from %d to %d\n\n",
@@ -203,7 +203,7 @@ int main(int argc, char **argv)
 	    if(outf)
 		ajFmtPrintF(outf,"\nNo scores over %.2f\n",minweight);
 	    ajFmtPrintS(&tailStr,"\nNo scores over %.2f\n",minweight);
-	    ajReportSetSubTail(report, tailStr);
+	    ajReportSetSubtailS(report, tailStr);
 	}
 	else
 	{

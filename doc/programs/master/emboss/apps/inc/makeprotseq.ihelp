@@ -1,3 +1,6 @@
+Create random protein sequences
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers (* if not always prompted):
    -pepstatsfile       infile     This file should be a pepstats output file.
                                   Protein sequences will be created with the
@@ -7,7 +10,7 @@
    -length             integer    [100] Length of each sequence (Integer 1 or
                                   more)
 *  -insert             string     String that is inserted into sequence (Any
-                                  string is accepted)
+                                  string)
 *  -start              integer    [1] Start point of inserted sequence
                                   (Integer 1 or more)
   [-outseq]            seqoutall  [<sequence>.<format>] Protein sequence
@@ -40,11 +43,12 @@
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 

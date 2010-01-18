@@ -2,6 +2,7 @@ application: yank [
   documentation: "Add a sequence reference (a full USA) to a list file
 "
   groups: "Edit"
+  relations: "EDAM: Sequence file handling"
 ]
 
 section: input [
@@ -13,6 +14,7 @@ section: input [
     parameter: "Y"
     sask: "Y"
     type: "gapany"
+    relations: "EDAM: Sequence"                                            
   ]
 
 endsection: input
@@ -25,6 +27,7 @@ section: output [
   boolean: newfile [
     default: "N"
     information: "Overwrite existing output file"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   outfile: outfile [
@@ -32,6 +35,7 @@ section: output [
     append: "@(!$(newfile))"
     knowntype: "USA list"
     information: "List of USAs output file"
+    relations: "EDAM: Free text file"                                      
   ]
 
 endsection: output

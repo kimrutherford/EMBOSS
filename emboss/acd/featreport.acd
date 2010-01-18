@@ -2,6 +2,7 @@
 application: featreport [
   documentation: "Reads and writes a feature table"
   groups: "Edit"
+  relations: "EDAM: Sequence file handling"
 ]
 
 section: input [
@@ -12,10 +13,12 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "any"
+    relations: "EDAM: Sequence"                                            
   ]
 
   features: features [
     parameter: "Y"
+    relations: "EDAM: Sequence feature table"                              
   ]
 
 endsection: input
@@ -28,6 +31,7 @@ section: output [
   report: outfile [
     parameter: "Y"
     rformat: "gff"
+    relations: "EDAM: Sequence feature table"                              
   ]
 
 endsection: output

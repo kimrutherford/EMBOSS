@@ -1,20 +1,30 @@
-   Standard (Mandatory) qualifiers:
-  [-asequence]         sequence   Sequence filename and optional format, or
-                                  reference (input USA)
-  [-bsequence]         sequence   Sequence filename and optional format, or
+Finds regions of identity (exact matches) of two sequences
+Version: EMBOSS:6.2.0
+
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-asequence]         seqset     Sequence set filename and optional format,
+                                  or reference (input USA)
+  [-bsequence]         seqall     Sequence(s) filename and optional format, or
                                   reference (input USA)
    -wordsize           integer    [4] Word size (Integer 2 or more)
-  [-outfile]           align      [*.wordmatch] Output alignment file name
-  [-aoutfeat]          featout    [unknown.gff] Output features UFO
-  [-boutfeat]          featout    [unknown.gff] Output features UFO
+*  -outfile            align      [*.wordmatch] Output alignment file name
+*  -aoutfeat           featout    [unknown.gff] Output features UFO
+*  -boutfeat           featout    [unknown.gff] Output features UFO
 
-   Additional (Optional) qualifiers: (none)
+   Additional (Optional) qualifiers:
+   -[no]dumpalign      toggle     [Y] Dump all matches as alignments
+   -logfile            outfile    [wordmatch.log] Log file reports statistics
+                                  on kmer frequency distribution and number of
+                                  matches in the seqall sequences for each
+                                  sequence in the seqset
+   -[no]dumpfeat       toggle     [Y] Dump all matches as feature files
+
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-asequence" associated qualifiers
-   -sbegin1            integer    Start of the sequence to be used
-   -send1              integer    End of the sequence to be used
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
    -sreverse1          boolean    Reverse (if DNA)
    -sask1              boolean    Ask for begin/end/reverse
    -snucleotide1       boolean    Sequence is nucleotide
@@ -29,8 +39,8 @@
    -fopenfile1         string     Features file name
 
    "-bsequence" associated qualifiers
-   -sbegin2            integer    Start of the sequence to be used
-   -send2              integer    End of the sequence to be used
+   -sbegin2            integer    Start of each sequence to be used
+   -send2              integer    End of each sequence to be used
    -sreverse2          boolean    Reverse (if DNA)
    -sask2              boolean    Ask for begin/end/reverse
    -snucleotide2       boolean    Sequence is nucleotide
@@ -45,31 +55,34 @@
    -fopenfile2         string     Features file name
 
    "-outfile" associated qualifiers
-   -aformat3           string     Alignment format
-   -aextension3        string     File name extension
-   -adirectory3        string     Output directory
-   -aname3             string     Base file name
-   -awidth3            integer    Alignment width
-   -aaccshow3          boolean    Show accession number in the header
-   -adesshow3          boolean    Show description in the header
-   -ausashow3          boolean    Show the full USA in the alignment
-   -aglobal3           boolean    Show the full sequence in alignment
+   -aformat            string     Alignment format
+   -aextension         string     File name extension
+   -adirectory         string     Output directory
+   -aname              string     Base file name
+   -awidth             integer    Alignment width
+   -aaccshow           boolean    Show accession number in the header
+   -adesshow           boolean    Show description in the header
+   -ausashow           boolean    Show the full USA in the alignment
+   -aglobal            boolean    Show the full sequence in alignment
+
+   "-logfile" associated qualifiers
+   -odirectory         string     Output directory
 
    "-aoutfeat" associated qualifiers
-   -offormat4          string     Output feature format
-   -ofopenfile4        string     Features file name
-   -ofextension4       string     File name extension
-   -ofdirectory4       string     Output directory
-   -ofname4            string     Base file name
-   -ofsingle4          boolean    Separate file for each entry
+   -offormat           string     Output feature format
+   -ofopenfile         string     Features file name
+   -ofextension        string     File name extension
+   -ofdirectory        string     Output directory
+   -ofname             string     Base file name
+   -ofsingle           boolean    Separate file for each entry
 
    "-boutfeat" associated qualifiers
-   -offormat5          string     Output feature format
-   -ofopenfile5        string     Features file name
-   -ofextension5       string     File name extension
-   -ofdirectory5       string     Output directory
-   -ofname5            string     Base file name
-   -ofsingle5          boolean    Separate file for each entry
+   -offormat           string     Output feature format
+   -ofopenfile         string     Features file name
+   -ofextension        string     File name extension
+   -ofdirectory        string     Output directory
+   -ofname             string     Base file name
+   -ofsingle           boolean    Separate file for each entry
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -79,11 +92,12 @@
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 

@@ -1,5 +1,4 @@
-
-                                splitsource 
+                                 splitsource
 
 
 
@@ -29,14 +28,18 @@ Usage
    Split a sequence into original subsequences
 
 
-% splitsource qasrswww:A01139 
+% splitsource qasrswww:A01139
 Split sequence(s) into original source sequences
-output sequence(s) [a01139.fasta]: 
+output sequence(s) [a01139.fasta]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Split sequence(s) into original source sequences
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -86,13 +89,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -109,8 +114,7 @@ XX
 DT   16-MAR-1994 (Rel. 38, Created)
 DT   14-FEB-2001 (Rel. 66, Last updated, Version 5)
 XX
-DE   Fusion DNA (L.lactis MSP signal sequence and H.medicinalis desulfatohirudi
-n
+DE   Fusion DNA (L.lactis MSP signal sequence and H.medicinalis desulfatohirudin
 DE   coding sequence)
 XX
 KW   .
@@ -145,8 +149,7 @@ FT   CDS             1..279
 FT                   /transl_table=11
 FT                   /note="fusion of MSP signal peptide and hirudin"
 FT                   /protein_id="CAA00134.1"
-FT                   /translation="MKKKIISAILMSTVILSAAAPLSGVYAVVYTDCTESGQNLCLCE
-G
+FT                   /translation="MKKKIISAILMSTVILSAAAPLSGVYAVVYTDCTESGQNLCLCEG
 FT                   SNVCGQGNKCILGSDGEKNQCVTGEGTPKPQSHNDGDFEEIPEEYLQ"
 FT   mat_peptide     82..279
 FT                   /product="desulfatohirudin"
@@ -154,33 +157,28 @@ FT   sig_peptide     1..81
 FT                   /product="MSP signal peptide"
 XX
 SQ   Sequence 279 BP; 76 A; 66 C; 68 G; 69 T; 0 other;
-     atgaaaaaaa agattatctc agctatttta atgtctacag tgatactttc tgctgcagcc        6
-0
-     ccgttgtcag gtgtttacgc tgttgtttac accgactgca ccgaatctgg tcagaacctg       12
-0
-     tgcctgtgcg aaggttctaa cgtttgcggt cagggtaaca aatgcatcct gggttctgac       18
-0
-     ggtgaaaaaa accagtgcgt taccggcgaa ggtaccccga aaccgcagtc tcacaacgac       24
-0
-     ggtgacttcg aagaaatccc ggaagaatac ctgcagtag                              27
-9
+     atgaaaaaaa agattatctc agctatttta atgtctacag tgatactttc tgctgcagcc        60
+     ccgttgtcag gtgtttacgc tgttgtttac accgactgca ccgaatctgg tcagaacctg       120
+     tgcctgtgcg aaggttctaa cgtttgcggt cagggtaaca aatgcatcct gggttctgac       180
+     ggtgaaaaaa accagtgcgt taccggcgaa ggtaccccga aaccgcagtc tcacaacgac       240
+     ggtgacttcg aagaaatccc ggaagaatac ctgcagtag                              279
 //
 
 Output file format
 
-   splitsource outputs a graph to the specified graphics device. outputs
-   a report format file. The default format is ...
+   splitsource outputs a graph to the specified graphics device. outputs a
+   report format file. The default format is ...
 
   Output files for usage example
 
   File: a01139.fasta
 
->A01139_1_1-81 organism="Lactococcus lactis" strain="LM0230" Fusion DNA (L.lact
-is MSP signal sequence and H.medicinalis desulfatohirudin coding sequence)
+>A01139_1_1-81 organism="Lactococcus lactis" strain="LM0230" Fusion DNA (L.lacti
+s MSP signal sequence and H.medicinalis desulfatohirudin coding sequence)
 atgaaaaaaaagattatctcagctattttaatgtctacagtgatactttctgctgcagcc
 ccgttgtcaggtgtttacgct
->A01139_2_82-279 organism="Hirudo medicinalis" Fusion DNA (L.lactis MSP signal
-sequence and H.medicinalis desulfatohirudin coding sequence)
+>A01139_2_82-279 organism="Hirudo medicinalis" Fusion DNA (L.lactis MSP signal s
+equence and H.medicinalis desulfatohirudin coding sequence)
 gttgtttacaccgactgcaccgaatctggtcagaacctgtgcctgtgcgaaggttctaac
 gtttgcggtcagggtaacaaatgcatcctgggttctgacggtgaaaaaaaccagtgcgtt
 accggcgaaggtaccccgaaaccgcagtctcacaacgacggtgacttcgaagaaatcccg

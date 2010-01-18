@@ -55,7 +55,7 @@ int main(int argc, char **argv)
     ajint nstops;
 
     AjPGraph graph;
-    AjPGraphPlpData data;
+    AjPGraphdata data;
 
     float *x[6] = {NULL,NULL,NULL,NULL,NULL,NULL};
     float *y[6] = {NULL,NULL,NULL,NULL,NULL,NULL};
@@ -72,8 +72,8 @@ int main(int argc, char **argv)
     };
 
 
-    ajGraphInit("plotorf", argc, argv);
-    ajGraphSetPage(960, 960);
+    embInit("plotorf", argc, argv);
+    ajGraphicsSetPagesize(960, 960);
 
     seq       = ajAcdGetSeq("sequence");
     graph     = ajAcdGetGraphxy("graph");
@@ -102,30 +102,30 @@ int main(int argc, char **argv)
     {
 	plotorf_norfs(ajStrGetPtr(str),ajStrGetPtr(rev),i,x,y,&cnt,beg,starts,
 		      nstarts,stops,nstops);
-	data = ajGraphPlpDataNewI(2);
+	data = ajGraphdataNewI(2);
 	data->numofpoints = 0;
 
 
 	ajGraphDataAdd(graph,data);
-	ajGraphxySetOverLap(graph,ajFalse);
-	ajGraphxySetYTick(graph, ajFalse);
-	ajGraphPlpDataSetMaxima(data,(float)beg,(float)end,0.0,1.0);
-	ajGraphPlpDataSetTypeC(data,"Multi 2D Plot Small");
-	ajGraphPlpDataSetYTitleC(data,"Orf");
-	ajGraphPlpDataSetXTitleC(data,"Sequence");
-	ajGraphPlpDataSetTitleC(data,ftit[i]);
+	ajGraphxySetflagOverlay(graph,ajFalse);
+	ajGraphxyShowYtick(graph, ajFalse);
+	ajGraphdataSetTruescale(data,(float)beg,(float)end,0.0,1.0);
+	ajGraphdataSetTypeC(data,"Multi 2D Plot Small");
+	ajGraphdataSetYlabelC(data,"Orf");
+	ajGraphdataSetXlabelC(data,"Sequence");
+	ajGraphdataSetTitleC(data,ftit[i]);
 
 	for(j=0;j<ajIntGet(cnt,i);++j)
-	    ajGraphPlpDataAddRect(data,y[i][j],0.0,
+	    ajGraphdataAddposRect(data,y[i][j],0.0,
 					      x[i][j],1.0,4,1);
     }
 
 
-    ajGraphSetTitleDo(graph, ajTrue);
-    ajGraphxySetMaxMin(graph,(float)beg,(float)end,0.0,1.0);
+    ajGraphShowTitle(graph, ajTrue);
+    ajGraphxySetMinmax(graph,(float)beg,(float)end,0.0,1.0);
 
-    ajGraphxySetYStart(graph,0.0);
-    ajGraphxySetYEnd(graph,2.0);
+    ajGraphxySetYstartF(graph,0.0);
+    ajGraphxySetYendF(graph,2.0);
     ajGraphSetTitleC(graph,"Potential codons (rectangles)");
     ajGraphxyDisplay(graph,ajTrue);
     ajGraphxyDel(&graph);

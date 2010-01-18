@@ -1,0 +1,169 @@
+application: needleall [
+  documentation: "Many-to-many pairwise alignments of two sequence sets"
+  groups: "Alignment:Global"
+  gui: "yes"
+  batch: "yes"
+  cpu: "medium"
+  relations: "EDAM: Pairwise sequence alignment"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqset: asequence [
+    parameter: "Y"
+    type: "any"
+    aligned: "N"
+    relations: "EDAM: Sequence record"                                     
+  ]
+
+  seqall: bsequence [
+    parameter: "Y"
+    type: "@($(acdprotein) ? stopprotein : nucleotide)"
+    relations: "EDAM: Sequence record"                                     
+  ]
+
+  matrixf: datafile [
+    additional: "Y"
+    information: "Matrix file"
+    protein: "$(acdprotein)"
+    help: "This is the scoring matrix file used when comparing
+           sequences. By default it is the file 'EBLOSUM62' (for proteins) or
+           the file 'EDNAFULL' (for nucleic sequences). These files are
+           found in the 'data' directory of the EMBOSS installation."
+    relations: "EDAM: Float comparison matrix"                             
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  float: gapopen [
+    standard: "Y"
+    information: "Gap opening penalty"
+    minimum: "0.0"
+    maximum: "100.0"
+    default: "@($(acdprotein)? 10.0 : 10.0 )"
+    valid: "Floating point number from 1.0 to 100.0"
+    expected: "10.0 for any sequence"
+    help: "The gap open penalty is the score taken away when a gap is
+           created. The best value depends on the choice of comparison
+           matrix. The default value assumes you are using the EBLOSUM62
+           matrix for protein sequences, and the EDNAFULL matrix for
+           nucleotide sequences."
+    relations: "EDAM: Generic float"                                       
+  ]
+
+  float: gapextend [
+    standard: "Y"
+    information: "Gap extension penalty"
+    minimum: "0.0"
+    maximum: "10.0"
+    default: "@($(acdprotein)? 0.5 : 0.5 )"
+    valid: "Floating point number from 0.0 to 10.0"
+    expected: "0.5 for any sequence"
+    help: "The gap extension, penalty is added to the standard gap
+           penalty for each base or residue in the gap. This is how long gaps
+           are penalized. Usually you will expect a few long gaps rather
+           than many short gaps, so the gap extension penalty should be lower
+           than the gap penalty. An exception is where one or both sequences
+           are single reads with possible sequencing errors in which case
+           you would expect many single base gaps. You can get this result by
+           setting the gap open penalty to zero (or very low) and using the
+           gap extension penalty to control gap scoring."
+    relations: "EDAM: Generic float"                                       
+  ]
+
+endsection: required
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  boolean: endweight [
+    additional: "Y"
+    default: "N"
+    information: "Apply end gap penalties."
+    relations: "EDAM: Generic boolean"                                     
+  ]
+
+  float: endopen [
+    additional: "Y"
+    information: "End gap opening penalty"
+    minimum: "0.0"
+    maximum: "100.0"
+    default: "@($(acdprotein)? 10.0 : 10.0 )"
+    valid: "Floating point number from 1.0 to 100.0"
+    expected: "10.0 for any sequence"
+    help: "The end gap open penalty is the score taken away when an end gap is
+           created. The best value depends on the choice of comparison
+           matrix. The default value assumes you are using the EBLOSUM62
+           matrix for protein sequences, and the EDNAFULL matrix for
+           nucleotide sequences."
+    relations: "EDAM: Generic float"                                       
+  ]
+
+  float: endextend [
+    additional: "Y"
+    information: "End gap extension penalty"
+    minimum: "0.0"
+    maximum: "10.0"
+    default: "@($(acdprotein)? 0.5 : 0.5 )"
+    valid: "Floating point number from 0.0 to 10.0"
+    expected: "0.5 for any sequence"
+    help: "The end gap extension, penalty is added to the end gap
+           penalty for each base or residue in the end gap."
+    relations: "EDAM: Generic float"                                       
+  ]
+
+  float: minscore [
+    additional: "Y"
+    information: "Minimum alignment score"
+    minimum: "-10.0"
+    maximum: "100.0"
+    default: "0"
+    valid: "Floating point number from -10.0 to 100.0"
+     expected: "1.0 for any sequence"
+    help: "Minimum alignment score to report an alignment."
+    relations: "EDAM: Generic float"                                       
+  ]
+
+endsection: additional
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  boolean: brief [
+    default: "Y"
+    information: "Brief identity and similarity"
+    help: "Brief identity and similarity"
+    relations: "EDAM: Generic boolean"                                     
+  ]
+
+  align: outfile [
+    parameter: "Y"
+    aformat: "score"
+    minseqs: "2"
+    maxseqs: "2"
+    aglobal: "Y"
+    relations: "EDAM: Pairwise sequence alignment data"                    
+  ]
+
+  outfile: errorfile [
+    additional: "Y"
+    default: "needleall.error"
+    help: "Error file to be written to"
+    knowntype: "needleall error"
+    information: "Program needleall errors output file"
+    relations:  "EDAM: EMBOSS needleall error file"                 
+  ]
+
+endsection: output

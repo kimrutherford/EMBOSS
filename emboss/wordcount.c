@@ -1,6 +1,6 @@
 /* @source wordcount application
 **
-** Counts words of a specified size in a DNA sequence
+** Counts words of a specified size in a molecular sequence
 **
 ** @author
 ** @@
@@ -21,14 +21,13 @@
 ******************************************************************************/
 
 #include "emboss.h"
-#include "ajtable.h"
 
 
 
 
 /* @prog wordcount ************************************************************
 **
-** Counts words of a specified size in a DNA sequence
+** Counts words of a specified size in a molecular sequence
 **
 ******************************************************************************/
 

@@ -1,5 +1,4 @@
-
-                                  showdb 
+                                   showdb
 
 
 
@@ -26,13 +25,13 @@ Usage
    Display information on the currently available databases:
 
 
-% showdb 
+% showdb
 Displays information on configured databases
 
 # Name           Type ID  Qry All Comment
 # ============== ==== ==  === === =======
-twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM in
-dex
+twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM ind
+ex
 qapblast         P    OK  OK  OK  BLAST swissnew
 qapblastall      P    OK  OK  OK  BLAST swissnew, all fields indexed
 qapblastsplit    P    OK  OK  OK  BLAST swissnew split in 5 files
@@ -50,10 +49,9 @@ qaxpir           P    OK  OK  OK  PIR
 qaxpirall        P    OK  OK  OK  PIR
 qaxpirinc        P    OK  OK  OK  PIR
 tpir             P    OK  OK  OK  PIR using NBRF access for 4 files
-tsw              P    OK  OK  OK  Swissprot native format with EMBL CD-ROM inde
-x
-tswnew           P    OK  OK  OK  SpTrEmbl as 3 files in native format with EMB
-L CD-ROM index
+tsw              P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
+tswnew           P    OK  OK  OK  SpTrEmbl as 3 files in native format with EMBL
+ CD-ROM index
 genbanksrs       N    OK  -   -   Genbank IDs
 qanfasta         N    OK  OK  OK  FASTA file EMBL rodents
 qanfastaall      N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
@@ -86,16 +84,18 @@ temblrest        N    -   -   OK  EMBL in native format with EMBL CD-ROM index
 temblvrt         N    -   -   OK  EMBL in native format with EMBL CD-ROM index
 testdb           N    OK  OK  OK  test sequence data
 tgb              N    OK  -   -   Genbank IDs
-tgenbank         N    OK  OK  OK  GenBank in native format with EMBL CD-ROM ind
-ex
+tgenbank         N    OK  OK  OK  GenBank in native format with EMBL CD-ROM inde
+x
+
 
    Example 2
 
    Write the results to a file:
 
 
-% showdb -outfile showdb.out 
+% showdb -outfile showdb.out
 Displays information on configured databases
+
 
    Go to the output files for this example
 
@@ -104,12 +104,13 @@ Displays information on configured databases
    Display information on one explicit database:
 
 
-% showdb -database tsw 
+% showdb -database tsw
 Displays information on configured databases
 
 # Name         Type ID  Qry All Comment
 # ============ ==== ==  === === =======
 tsw            P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
+
 
    Go to the input files for this example
 
@@ -118,7 +119,7 @@ tsw            P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
    Display information on the databases formatted in HTML:
 
 
-% showdb -html 
+% showdb -html
 Displays information on configured databases
 
 
@@ -134,8 +135,7 @@ Displays information on configured databases
 
  qapblastsplitexc P OK   OK   OK   BLAST swissnew split in 5 files, not file 02
 
- qapblastsplitinc P OK   OK   OK   BLAST swissnew split in 5 files, only file 0
-2
+ qapblastsplitinc P OK   OK   OK   BLAST swissnew split in 5 files, only file 02
 
  qapfasta P OK   OK   OK   FASTA file swissnew entries
 
@@ -163,8 +163,8 @@ Displays information on configured databases
 
  tsw P OK   OK   OK   Swissprot native format with EMBL CD-ROM index
 
- tswnew P OK   OK   OK   SpTrEmbl as 3 files in native format with EMBL CD-ROM
-index
+ tswnew P OK   OK   OK   SpTrEmbl as 3 files in native format with EMBL CD-ROM i
+ndex
 
  genbanksrs N OK   -    -    Genbank IDs
 
@@ -234,18 +234,19 @@ index
 
 
 
+
    Example 5
 
    Display protein databases only:
 
 
-% showdb -nonucleic 
+% showdb -nonucleic
 Displays information on configured databases
 
 # Name           Type ID  Qry All Comment
 # ============== ==== ==  === === =======
-twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM in
-dex
+twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM ind
+ex
 qapblast         P    OK  OK  OK  BLAST swissnew
 qapblastall      P    OK  OK  OK  BLAST swissnew, all fields indexed
 qapblastsplit    P    OK  OK  OK  BLAST swissnew split in 5 files
@@ -263,21 +264,21 @@ qaxpir           P    OK  OK  OK  PIR
 qaxpirall        P    OK  OK  OK  PIR
 qaxpirinc        P    OK  OK  OK  PIR
 tpir             P    OK  OK  OK  PIR using NBRF access for 4 files
-tsw              P    OK  OK  OK  Swissprot native format with EMBL CD-ROM inde
-x
-tswnew           P    OK  OK  OK  SpTrEmbl as 3 files in native format with EMB
-L CD-ROM index
+tsw              P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
+tswnew           P    OK  OK  OK  SpTrEmbl as 3 files in native format with EMBL
+ CD-ROM index
+
 
    Example 6
 
    Display the information with no headings:
 
 
-% showdb -noheading 
+% showdb -noheading
 Displays information on configured databases
 
-twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM in
-dex
+twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM ind
+ex
 qapblast         P    OK  OK  OK  BLAST swissnew
 qapblastall      P    OK  OK  OK  BLAST swissnew, all fields indexed
 qapblastsplit    P    OK  OK  OK  BLAST swissnew split in 5 files
@@ -295,10 +296,9 @@ qaxpir           P    OK  OK  OK  PIR
 qaxpirall        P    OK  OK  OK  PIR
 qaxpirinc        P    OK  OK  OK  PIR
 tpir             P    OK  OK  OK  PIR using NBRF access for 4 files
-tsw              P    OK  OK  OK  Swissprot native format with EMBL CD-ROM inde
-x
-tswnew           P    OK  OK  OK  SpTrEmbl as 3 files in native format with EMB
-L CD-ROM index
+tsw              P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
+tswnew           P    OK  OK  OK  SpTrEmbl as 3 files in native format with EMBL
+ CD-ROM index
 genbanksrs       N    OK  -   -   Genbank IDs
 qanfasta         N    OK  OK  OK  FASTA file EMBL rodents
 qanfastaall      N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
@@ -331,15 +331,16 @@ temblrest        N    -   -   OK  EMBL in native format with EMBL CD-ROM index
 temblvrt         N    -   -   OK  EMBL in native format with EMBL CD-ROM index
 testdb           N    OK  OK  OK  test sequence data
 tgb              N    OK  -   -   Genbank IDs
-tgenbank         N    OK  OK  OK  GenBank in native format with EMBL CD-ROM ind
-ex
+tgenbank         N    OK  OK  OK  GenBank in native format with EMBL CD-ROM inde
+x
+
 
    Example 7
 
    Display just a list of the available database names:
 
 
-% showdb -noheading -notype -noid -noquery -noall -nocomment -auto 
+% showdb -noheading -notype -noid -noquery -noall -nocomment -auto
 
 twp
 qapblast
@@ -395,12 +396,13 @@ testdb
 tgb
 tgenbank
 
+
    Example 8
 
    Display only the names and types:
 
 
-% showdb -only -type 
+% showdb -only -type
 Displays information on configured databases
 
 twp              P
@@ -457,131 +459,136 @@ testdb           N
 tgb              N
 tgenbank         N
 
+
    Example 9
 
    Display everything
 
 
-% showdb -full 
+% showdb -full
 Displays information on configured databases
 
-# Name           Type ID  Qry All Method    Fields            Defined Release C
-omment
-# ============== ==== ==  === === ========= ================= ======= ======= =
-======
-twp              P    OK  OK  OK  emblcd    des               global  16      E
-MBL new in native format with EMBL CD-ROM index
-qapblast         P    OK  OK  OK  blast     -                 special         B
-LAST swissnew
-qapblastall      P    OK  OK  OK  blast     sv,des            special         B
-LAST swissnew, all fields indexed
-qapblastsplit    P    OK  OK  OK  blast     -                 special         B
-LAST swissnew split in 5 files
-qapblastsplitexc P    OK  OK  OK  blast     -                 special         B
-LAST swissnew split in 5 files, not file 02
-qapblastsplitinc P    OK  OK  OK  blast     -                 special         B
-LAST swissnew split in 5 files, only file 02
-qapfasta         P    OK  OK  OK  emblcd    -                 special         F
-ASTA file swissnew entries
-qapflat          P    OK  OK  OK  emblcd    -                 special         S
-pTrEmbl flatfile
-qapflatall       P    OK  OK  OK  emblcd    sv,des,org,key    special         S
-pTrEmbl flatfiles, all fields indexed
-qapir            P    OK  OK  OK  gcg       -                 special         P
-IR
-qapirall         P    OK  OK  OK  gcg       des,org,key       special         P
-IR
-qapirinc         P    OK  OK  OK  gcg       -                 special         P
-IR
-qapxfasta        P    OK  OK  OK  emboss    -                 special         F
-ASTA file swissnew entries
-qapxflat         P    OK  OK  OK  emboss    -                 special         S
-wissnew flatfiles
-qaxpir           P    OK  OK  OK  embossgcg -                 special         P
-IR
-qaxpirall        P    OK  OK  OK  embossgcg des,org,key       special         P
-IR
-qaxpirinc        P    OK  OK  OK  embossgcg -                 special         P
-IR
-tpir             P    OK  OK  OK  gcg       des,org,key       special         P
-IR using NBRF access for 4 files
-tsw              P    OK  OK  OK  emblcd    sv,des,org,key    special 36      S
-wissprot native format with EMBL CD-ROM index
-tswnew           P    OK  OK  OK  emblcd    sv,des,org,key    special 37      S
-pTrEmbl as 3 files in native format with EMBL CD-ROM index
-genbanksrs       N    OK  -   -   srswww    gi,sv,des,org,key global          G
-enbank IDs
-qanfasta         N    OK  OK  OK  emblcd    -                 special         F
-ASTA file EMBL rodents
-qanfastaall      N    OK  OK  OK  emblcd    sv,des            special         F
-ASTA file EMBL rodents, all fields indexed
-qanflat          N    OK  OK  OK  emblcd    -                 special         E
-MBL flatfiles
-qanflatall       N    OK  OK  OK  emblcd    -                 special         E
-MBL flatfiles
-qanflatexc       N    OK  OK  OK  emblcd    -                 special         E
-MBL flatfiles, no rodent file
-qanflatinc       N    OK  OK  OK  emblcd    -                 special         E
-MBL flatfiles, only rodent file
-qangcg           N    OK  OK  OK  gcg       -                 special         G
-CG format EMBL
-qangcgall        N    OK  OK  OK  gcg       sv,des,org,key    special         G
-CG format EMBL
-qangcgexc        N    OK  OK  OK  gcg       -                 special         G
-CG format EMBL without prokaryotes
-qangcginc        N    OK  OK  OK  gcg       -                 special         G
-CG format EMBL only prokaryotes
-qanxfasta        N    OK  OK  OK  emboss    -                 special         F
-ASTA file EMBL rodents
-qanxfastaall     N    OK  OK  OK  emboss    sv,des            special         F
-ASTA file EMBL rodents, all fields indexed
-qanxflat         N    OK  OK  OK  emboss    -                 special         E
-MBL flatfiles
-qanxflatall      N    OK  OK  OK  emboss    des,org,key       special         E
-MBL flatfiles, all fields indexed
-qanxflatexc      N    OK  OK  OK  emboss    -                 special         E
-MBL flatfiles, no rodent file
-qanxflatinc      N    OK  OK  OK  emboss    -                 special         E
-MBL flatfiles, only rodent file
-qanxgcg          N    OK  OK  OK  embossgcg -                 special         G
-CG format EMBL
-qanxgcgall       N    OK  OK  OK  embossgcg sv,des,org,key    special         G
-CG format EMBL
-qanxgcgexc       N    OK  OK  OK  embossgcg -                 special         G
-CG format EMBL without prokaryotes
-qanxgcginc       N    OK  OK  OK  embossgcg -                 special         G
-CG format EMBL only prokaryotes
-qapirexc         N    OK  OK  OK  gcg       -                 special         P
-IR
-qasrswww         N    OK  -   -   srswww    sv,des,org,key    special         R
-emote SRS web server
-qawfasta         N    OK  OK  OK  emblcd    -                 special         F
-ASTA file wormpep entries
-qawxfasta        N    OK  OK  OK  emboss    -                 special         F
-ASTA file wormpep entries
-qaxpirexc        N    OK  OK  OK  embossgcg -                 special         P
-IR
-tembl            N    OK  OK  OK  emblcd    sv,des,org,key    special 57      E
-MBL in native format with EMBL CD-ROM index
-temblall         N    -   -   OK  direct    sv,des,org,key    special 57      E
-MBL in native format with EMBL CD-ROM index
-temblrest        N    -   -   OK  direct    sv,des,org,key    special 57      E
-MBL in native format with EMBL CD-ROM index
-temblvrt         N    -   -   OK  direct    sv,des,org,key    special 57      E
-MBL in native format with EMBL CD-ROM index
-testdb           N    OK  OK  OK  emblcd    des               special 01      t
-est sequence data
-tgb              N    OK  -   -   srswww    sv,des,org,key    special         G
-enbank IDs
-tgenbank         N    OK  OK  OK  emblcd    sv,des,org,key    special 01      G
-enBank in native format with EMBL CD-ROM index
+# Name           Type ID  Qry All Method    Fields            Defined Release Co
+mment
+# ============== ==== ==  === === ========= ================= ======= ======= ==
+=====
+twp              P    OK  OK  OK  emblcd    des               global  16      EM
+BL new in native format with EMBL CD-ROM index
+qapblast         P    OK  OK  OK  blast     -                 special         BL
+AST swissnew
+qapblastall      P    OK  OK  OK  blast     sv,des            special         BL
+AST swissnew, all fields indexed
+qapblastsplit    P    OK  OK  OK  blast     -                 special         BL
+AST swissnew split in 5 files
+qapblastsplitexc P    OK  OK  OK  blast     -                 special         BL
+AST swissnew split in 5 files, not file 02
+qapblastsplitinc P    OK  OK  OK  blast     -                 special         BL
+AST swissnew split in 5 files, only file 02
+qapfasta         P    OK  OK  OK  emblcd    -                 special         FA
+STA file swissnew entries
+qapflat          P    OK  OK  OK  emblcd    -                 special         Sp
+TrEmbl flatfile
+qapflatall       P    OK  OK  OK  emblcd    sv,des,org,key    special         Sp
+TrEmbl flatfiles, all fields indexed
+qapir            P    OK  OK  OK  gcg       -                 special         PI
+R
+qapirall         P    OK  OK  OK  gcg       des,org,key       special         PI
+R
+qapirinc         P    OK  OK  OK  gcg       -                 special         PI
+R
+qapxfasta        P    OK  OK  OK  emboss    -                 special         FA
+STA file swissnew entries
+qapxflat         P    OK  OK  OK  emboss    -                 special         Sw
+issnew flatfiles
+qaxpir           P    OK  OK  OK  embossgcg -                 special         PI
+R
+qaxpirall        P    OK  OK  OK  embossgcg des,org,key       special         PI
+R
+qaxpirinc        P    OK  OK  OK  embossgcg -                 special         PI
+R
+tpir             P    OK  OK  OK  gcg       des,org,key       special         PI
+R using NBRF access for 4 files
+tsw              P    OK  OK  OK  emblcd    sv,des,org,key    special 36      Sw
+issprot native format with EMBL CD-ROM index
+tswnew           P    OK  OK  OK  emblcd    sv,des,org,key    special 37      Sp
+TrEmbl as 3 files in native format with EMBL CD-ROM index
+genbanksrs       N    OK  -   -   srswww    gi,sv,des,org,key global          Ge
+nbank IDs
+qanfasta         N    OK  OK  OK  emblcd    -                 special         FA
+STA file EMBL rodents
+qanfastaall      N    OK  OK  OK  emblcd    sv,des            special         FA
+STA file EMBL rodents, all fields indexed
+qanflat          N    OK  OK  OK  emblcd    -                 special         EM
+BL flatfiles
+qanflatall       N    OK  OK  OK  emblcd    -                 special         EM
+BL flatfiles
+qanflatexc       N    OK  OK  OK  emblcd    -                 special         EM
+BL flatfiles, no rodent file
+qanflatinc       N    OK  OK  OK  emblcd    -                 special         EM
+BL flatfiles, only rodent file
+qangcg           N    OK  OK  OK  gcg       -                 special         GC
+G format EMBL
+qangcgall        N    OK  OK  OK  gcg       sv,des,org,key    special         GC
+G format EMBL
+qangcgexc        N    OK  OK  OK  gcg       -                 special         GC
+G format EMBL without prokaryotes
+qangcginc        N    OK  OK  OK  gcg       -                 special         GC
+G format EMBL only prokaryotes
+qanxfasta        N    OK  OK  OK  emboss    -                 special         FA
+STA file EMBL rodents
+qanxfastaall     N    OK  OK  OK  emboss    sv,des            special         FA
+STA file EMBL rodents, all fields indexed
+qanxflat         N    OK  OK  OK  emboss    -                 special         EM
+BL flatfiles
+qanxflatall      N    OK  OK  OK  emboss    des,org,key       special         EM
+BL flatfiles, all fields indexed
+qanxflatexc      N    OK  OK  OK  emboss    -                 special         EM
+BL flatfiles, no rodent file
+qanxflatinc      N    OK  OK  OK  emboss    -                 special         EM
+BL flatfiles, only rodent file
+qanxgcg          N    OK  OK  OK  embossgcg -                 special         GC
+G format EMBL
+qanxgcgall       N    OK  OK  OK  embossgcg sv,des,org,key    special         GC
+G format EMBL
+qanxgcgexc       N    OK  OK  OK  embossgcg -                 special         GC
+G format EMBL without prokaryotes
+qanxgcginc       N    OK  OK  OK  embossgcg -                 special         GC
+G format EMBL only prokaryotes
+qapirexc         N    OK  OK  OK  gcg       -                 special         PI
+R
+qasrswww         N    OK  -   -   srswww    sv,des,org,key    special         Re
+mote SRS web server
+qawfasta         N    OK  OK  OK  emblcd    -                 special         FA
+STA file wormpep entries
+qawxfasta        N    OK  OK  OK  emboss    -                 special         FA
+STA file wormpep entries
+qaxpirexc        N    OK  OK  OK  embossgcg -                 special         PI
+R
+tembl            N    OK  OK  OK  emblcd    sv,des,org,key    special 57      EM
+BL in native format with EMBL CD-ROM index
+temblall         N    -   -   OK  direct    sv,des,org,key    special 57      EM
+BL in native format with EMBL CD-ROM index
+temblrest        N    -   -   OK  direct    sv,des,org,key    special 57      EM
+BL in native format with EMBL CD-ROM index
+temblvrt         N    -   -   OK  direct    sv,des,org,key    special 57      EM
+BL in native format with EMBL CD-ROM index
+testdb           N    OK  OK  OK  emblcd    des               special 01      te
+st sequence data
+tgb              N    OK  -   -   srswww    sv,des,org,key    special         Ge
+nbank IDs
+tgenbank         N    OK  OK  OK  emblcd    sv,des,org,key    special 01      Ge
+nBank in native format with EMBL CD-ROM index
+
 
 Command line arguments
+
+Displays information on configured databases
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers: (none)
    Additional (Optional) qualifiers:
    -database           string     Name of a single database to give
-                                  information on (Any string is accepted)
+                                  information on (Any string)
    -html               boolean    [N] Format output as an HTML table
    -[no]protein        boolean    [Y] Display protein databases
    -[no]nucleic        boolean    [Y] Display nucleic acid databases
@@ -625,13 +632,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -649,8 +658,8 @@ Output file format
 
 # Name           Type ID  Qry All Comment
 # ============== ==== ==  === === =======
-twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM in
-dex
+twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM ind
+ex
 qapblast         P    OK  OK  OK  BLAST swissnew
 qapblastall      P    OK  OK  OK  BLAST swissnew, all fields indexed
 qapblastsplit    P    OK  OK  OK  BLAST swissnew split in 5 files
@@ -668,10 +677,9 @@ qaxpir           P    OK  OK  OK  PIR
 qaxpirall        P    OK  OK  OK  PIR
 qaxpirinc        P    OK  OK  OK  PIR
 tpir             P    OK  OK  OK  PIR using NBRF access for 4 files
-tsw              P    OK  OK  OK  Swissprot native format with EMBL CD-ROM inde
-x
-tswnew           P    OK  OK  OK  SpTrEmbl as 3 files in native format with EMB
-L CD-ROM index
+tsw              P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
+tswnew           P    OK  OK  OK  SpTrEmbl as 3 files in native format with EMBL
+ CD-ROM index
 genbanksrs       N    OK  -   -   Genbank IDs
 qanfasta         N    OK  OK  OK  FASTA file EMBL rodents
 qanfastaall      N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
@@ -704,8 +712,8 @@ temblrest        N    -   -   OK  EMBL in native format with EMBL CD-ROM index
 temblvrt         N    -   -   OK  EMBL in native format with EMBL CD-ROM index
 testdb           N    OK  OK  OK  test sequence data
 tgb              N    OK  -   -   Genbank IDs
-tgenbank         N    OK  OK  OK  GenBank in native format with EMBL CD-ROM ind
-ex
+tgenbank         N    OK  OK  OK  GenBank in native format with EMBL CD-ROM inde
+x
 
    The output is a simple table.
 
@@ -713,23 +721,22 @@ ex
 
    Type 'N' indicates that this is a Nucleic database.
 
-   'OK' under ID, Qry or All indicates that that access method can be
-   used on this database. A '-' indicates that you cannot access this
-   database in that way.
+   'OK' under ID, Qry or All indicates that that access method can be used
+   on this database. A '-' indicates that you cannot access this database
+   in that way.
 
-   Note that 'OK' does not mean that the database is working correctly.
-   It simply means that showdb has read the database definition correctly
-   and that this method of access to the database should be possible.
+   Note that 'OK' does not mean that the database is working correctly. It
+   simply means that showdb has read the database definition correctly and
+   that this method of access to the database should be possible.
 
    If you are setting up a new database, then you should check that it
    works correctly by extracting entries from it using seqret.
 
    When the -html qualifier is specified, then the output will be wrapped
-   in HTML tags, ready for inclusion in a Web page. Note that tags such
-   as <HTML>, <BODY>, </BODY> and </HTML> are not output by this program
-   as the table of databases is expected to form only part of the
-   contents of a web page - the rest of the web page must be supplied by
-   the user.
+   in HTML tags, ready for inclusion in a Web page. Note that tags such as
+   <HTML>, <BODY>, </BODY> and </HTML> are not output by this program as
+   the table of databases is expected to form only part of the contents of
+   a web page - the rest of the web page must be supplied by the user.
 
 Data files
 
@@ -754,10 +761,10 @@ Notes
    database and access method must be configured for it to be available
    for use. This involves editing one of the EMBOSS configuration files,
    either your own personal .embossrc or the installation-wide
-   emboss.default file. The emboss.default file will typically contain
-   the definitions of the test databases (tsw, tembl, tpir, etc) used in
-   the usage examples for the application documentation and serve as
-   example database definitions. For more information, see the EMBOSS
+   emboss.default file. The emboss.default file will typically contain the
+   definitions of the test databases (tsw, tembl, tpir, etc) used in the
+   usage examples for the application documentation and serve as example
+   database definitions. For more information, see the EMBOSS
    Administrators Manual. You can run showdb to see the databases and
    access methods that have been configured successfully.
 
@@ -778,8 +785,8 @@ Warnings
 Diagnostic Error Messages
 
    "The database 'xyz' does not exist" You have supplied the name of a
-   database with the -database qualifier, but that database does not
-   exist as far as EMBOSS is concerned.
+   database with the -database qualifier, but that database does not exist
+   as far as EMBOSS is concerned.
 
 Exit status
 
@@ -792,47 +799,45 @@ Known bugs
 
 See also
 
-   Program name     Description
-   abiview          Display the trace in an ABI sequencer file
-   cirdna           Draws circular maps of DNA constructs
-   infoalign        Display basic information about a multiple sequence
-                    alignment
-   infobase         Return information on a given nucleotide base
-   inforesidue      Return information on a given amino acid residue
-   infoseq          Display basic information about sequences
-   lindna           Draws linear maps of DNA constructs
-   pepnet           Draw a helical net for a protein sequence
-   pepwheel         Draw a helical wheel diagram for a protein sequence
-   prettyplot       Draw a sequence alignment with pretty formatting
-   prettyseq        Write a nucleotide sequence and its translation to file
-   remap            Display restriction enzyme binding sites in a nucleotide
-                    sequence
-   seealso          Finds programs with similar function to a specified program
-   showalign        Display a multiple sequence alignment in pretty format
-   showfeat         Display features of a sequence in pretty format
-   showpep          Displays protein sequences with features in pretty format
-   showseq          Displays sequences with features in pretty format
-   sixpack          Display a DNA sequence with 6-frame translation and ORFs
-   textsearch       Search the textual description of sequence(s)
-   tfm              Displays full documentation for an application
-   whichdb          Search all sequence databases for an entry and retrieve it
-   wossname         Finds programs by keywords in their short description
+                   Program name                            Description
+                   abiview      Display the trace in an ABI sequencer file
+                   cirdna       Draws circular maps of DNA constructs
+                   infoalign    Display basic information about a multiple sequence alignment
+                   infobase     Return information on a given nucleotide base
+                   inforesidue  Return information on a given amino acid residue
+                   infoseq      Display basic information about sequences
+                   lindna       Draws linear maps of DNA constructs
+                   pepnet       Draw a helical net for a protein sequence
+                   pepwheel     Draw a helical wheel diagram for a protein sequence
+                   prettyplot   Draw a sequence alignment with pretty formatting
+                   prettyseq    Write a nucleotide sequence and its translation to file
+                   remap        Display restriction enzyme binding sites in a nucleotide sequence
+                   seealso      Finds programs with similar function to a specified program
+                   showalign    Display a multiple sequence alignment in pretty format
+                   showfeat     Display features of a sequence in pretty format
+                   showpep      Displays protein sequences with features in pretty format
+                   showseq      Displays sequences with features in pretty format
+                   sixpack      Display a DNA sequence with 6-frame translation and ORFs
+                   textsearch   Search the textual description of sequence(s)
+                   tfm          Displays full documentation for an application
+                   whichdb      Search all sequence databases for an entry and retrieve it
+                   wossname     Finds programs by keywords in their short description
 
 Author(s)
 
-   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
-   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
-   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+   Gary             Williams (gwilliam (c) rfcgr.mrc.ac.uk)
+   MRC              Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome           Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 History
 
-   Completed 6th August 1999.
+                    Completed 6th August 1999.
 
 Target users
 
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
 
 Comments
 
-   None
+                    None

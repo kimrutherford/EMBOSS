@@ -64,7 +64,7 @@ int main(int argc, char **argv)
     double sum;
     double charge;
 
-    AjPGraphPlpData phGraph = NULL;
+    AjPGraphdata phGraph = NULL;
     AjPStr title = NULL;
     AjPStr tmp = NULL;
 
@@ -78,7 +78,7 @@ int main(int argc, char **argv)
     ajint en;
     ajint i;
 
-    ajGraphInit("iep", argc, argv);
+    embInit("iep", argc, argv);
 
     all       = ajAcdGetSeqall("sequence");
     doplot    = ajAcdGetToggle("plot");
@@ -178,22 +178,22 @@ int main(int argc, char **argv)
 	    ajStrAppendS(&title,tmp);
 
 
-	    phGraph = ajGraphPlpDataNewI(npoints);
-	    ajGraphSetTitle(graph,title);
-	    ajGraphSetXTitleC(graph,"pH");
-	    ajGraphSetYTitleC(graph,"Charge");
+	    phGraph = ajGraphdataNewI(npoints);
+	    ajGraphSetTitleS(graph,title);
+	    ajGraphSetXlabelC(graph,"pH");
+	    ajGraphSetYlabelC(graph,"Charge");
 
-	    ajGraphPlpDataSetTypeC(phGraph,"2D Plot Float");
-	    ajGraphPlpDataSetMaxMin(phGraph,1.0,14.0,minchg,maxchg);
-	    ajGraphPlpDataSetMaxima(phGraph,1.0,14.0,minchg,maxchg);
-	    ajGraphxySetXStart(graph,1.0);
-	    ajGraphxySetXEnd(graph,14.0);
-	    ajGraphxySetYStart(graph,minchg);
-	    ajGraphxySetYEnd(graph,maxchg);
-	    ajGraphxySetXRangeII(graph,1,14);
-	    ajGraphxySetYRangeII(graph,(ajint)minchg,(ajint)maxchg);
+	    ajGraphdataSetTypeC(phGraph,"2D Plot Float");
+	    ajGraphdataSetMinmax(phGraph,1.0,14.0,minchg,maxchg);
+	    ajGraphdataSetTruescale(phGraph,1.0,14.0,minchg,maxchg);
+	    ajGraphxySetXstartF(graph,1.0);
+	    ajGraphxySetXendF(graph,14.0);
+	    ajGraphxySetYstartF(graph,minchg);
+	    ajGraphxySetYendF(graph,maxchg);
+	    ajGraphxySetXrangeII(graph,1,14);
+	    ajGraphxySetYrangeII(graph,(ajint)minchg,(ajint)maxchg);
 
-	    ajGraphPlpDataSetXY(phGraph,xa,ya);
+	    ajGraphdataAddXY(phGraph,xa,ya);
 	    ajGraphDataReplace(graph,phGraph);
 
 
@@ -204,7 +204,7 @@ int main(int argc, char **argv)
 	    AJFREE(xa);
 	}
     }
-    ajGraphClose();
+    ajGraphicsClose();
     ajGraphxyDel(&graph);
 
     embIeppKDel(pK);

@@ -1,6 +1,7 @@
 application: extractseq [
   documentation: "Extract regions from a sequence"
   groups: "Edit"
+  relations: "EDAM: Sequence extraction and generation"
 ]
 
 section: input [
@@ -11,6 +12,7 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "any"
+    relations: "EDAM: Sequence"                                            
   ]
 
 endsection: input
@@ -33,6 +35,7 @@ section: required [
            1:45, 67=99;765..888 \
            1,5,8,10,23,45,57,99"
     expected: "Whole sequence"
+    relations: "EDAM: Generic integer range"                               
   ]
 
 endsection: required
@@ -51,6 +54,7 @@ section: additional [
            from the name of the original sequence with the start and end
            positions of the range appended with underscore characters between
            them, eg: XYZ region 2 to 34 is written as: XYZ_2_34"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: additional
@@ -62,6 +66,7 @@ section: output [
 
   seqoutall: outseq [
     parameter: "Y"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: output

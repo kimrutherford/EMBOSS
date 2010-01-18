@@ -897,7 +897,7 @@ static AjPStr grpParseValueRB(AjPStrTok* tokenhandle, const char* delim)
 /* @funcstatic grpSplitList ***************************************************
 **
 ** Split a string containing group names into a list on the delimiters
-** ',' or ';' to form the primary names of the groups.
+** ',' or ';' or '|' to form the primary names of the groups.
 ** Any names containing a colon ':' are optionally expanded in a call to
 ** grpSubSplitList() to form many combinations of group names.
 **
@@ -918,7 +918,7 @@ static void grpSplitList(AjPList groups, const AjPStr value, AjBool explode,
 {
     AjPStrTok colontokenhandle;
     AjPStrTok tokenhandle;
-    char delim[]       = ",;";
+    char delim[]       = ",;|";
     char colonstring[] = ":";
     AjPList subnames;
     AjPStr tmpstr  = NULL;

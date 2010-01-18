@@ -1,11 +1,13 @@
+Find and retrieve EMBOSS data files
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers:
   [-filename]          string     This specifies the name of the file that
                                   should be fetched into the current directory
                                   or searched for in all of the directories
                                   that EMBOSS programs search when looking for
                                   a data file. The name of the file is not
-                                  altered when it is fetched. (Any string is
-                                  accepted)
+                                  altered when it is fetched. (Any string)
 
    Additional (Optional) qualifiers (* if not always prompted):
    -showall            toggle     Show all potential EMBOSS data files
@@ -35,11 +37,12 @@
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 

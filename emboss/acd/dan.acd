@@ -1,6 +1,7 @@
 application: dan [
   documentation: "Calculates nucleic acid melting temperature"
   groups: "Nucleic:Composition"
+  relations: "EDAM: Nucleic acid thermal property calculation"
 ]
 
 section: input [
@@ -11,6 +12,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "DNA"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: input
@@ -32,6 +34,7 @@ section: required [
            the sequence in that window. The window is incrementally moved
            along the sequence with the properties being calculated at each
            new position."
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: shiftincrement [
@@ -43,6 +46,7 @@ section: required [
     help: "This is the amount by which the window is moved at each
            increment in order to find the melting point and other properties
            along the sequence."
+    relations: "EDAM: Generic integer"                                     
   ]
 
   float: dnaconc [
@@ -51,6 +55,7 @@ section: required [
     maximum: "100000."
     default: "50."
     information: "Enter DNA concentration (nM)"
+    relations: "EDAM: Generic float"                                       
   ]
 
   float: saltconc [
@@ -59,6 +64,7 @@ section: required [
     maximum: "1000."
     default: "50."
     information: "Enter salt concentration (mM)"
+    relations: "EDAM: Generic float"                                       
   ]
 
 endsection: required
@@ -78,6 +84,7 @@ section: additional [
       information: "Prompt for product values"
       help: "This prompts for percent formamide, percent of mismatches
              allowed and product length."
+    relations: "EDAM: Generic boolean"                                     
     ]
 
     float: formamide [
@@ -88,6 +95,7 @@ section: additional [
       information: "Enter percentage of formamide"
       help: "This specifies the percent formamide to be used in
              calculations (it is ignored unless -product is used)."
+    relations: "EDAM: Generic float"                                       
     ]
 
     float: mismatch [
@@ -98,6 +106,7 @@ section: additional [
       information: "Enter percent mismatch"
       help: "This specifies the percent mismatch to be used in
              calculations (it is ignored unless -product is used)."
+    relations: "EDAM: Generic float"                                       
     ]
 
     integer: prodlen [
@@ -108,6 +117,7 @@ section: additional [
       expected: "Window size (20)"
       help: "This specifies the product length to be used in
              calculations (it is ignored unless -product is used)."
+    relations: "EDAM: Generic integer"                                     
     ]
 
   endsection: productsection
@@ -122,6 +132,7 @@ section: additional [
       information: "Thermodynamic calculations"
       help: "Output the DeltaG, DeltaH and DeltaS values of the
              sequence windows to the output data file."
+    relations: "EDAM: Generic boolean"                                     
     ]
 
     float: temperature [
@@ -133,6 +144,7 @@ section: additional [
       help: "If -thermo has been specified then this specifies the
              temperature at which to calculate the DeltaG, DeltaH and DeltaS
              values."
+    relations: "EDAM: Generic float"                                       
     ]
 
   endsection: thermosection
@@ -148,6 +160,7 @@ section: advanced [
     information: "Use RNA data values"
     help: "This specifies that the sequence is an RNA sequence and not
            a DNA sequence."
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: advanced
@@ -162,6 +175,7 @@ section: output [
     help: "If this is not specified then the file of output data is
            produced, else a plot of the melting point along the sequence is
            produced."
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   float: mintemp [
@@ -172,12 +186,14 @@ section: output [
     information: "Enter minimum temperature"
     help: "Enter a minimum value for the temperature scale (y-axis) of
            the plot."
+    relations: "EDAM: Generic float"                                       
   ]
 
   xygraph: graph [
     standard: "$(plot)"
     multiple: "1"
     gdesc: "DNA melting plot"
+    relations: "EDAM: EMBOSS graph file"                                   
   ]
 
   report: outfile [
@@ -190,6 +206,7 @@ section: output [
               float:dh=DeltaH float:ds=DeltaS float:tmprod=TmProd"
     nullok: "$(plot)"
     nulldefault: "$(plot)"
+    relations: "EDAM: EMBOSS report"                                       
   ]
 
 endsection: output

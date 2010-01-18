@@ -1,5 +1,4 @@
-
-                                  seqret 
+                                   seqret
 
 
 
@@ -17,17 +16,17 @@ Function
 Description
 
    seqret reads in one or more sequences and writes them out again. The
-   sequence input may be a literal sequence or read from a database,
-   file, file of sequence names, or even the command-line or the output
-   of another programs. The sequence output can be written to screen, to
+   sequence input may be a literal sequence or read from a database, file,
+   file of sequence names, or even the command-line or the output of
+   another programs. The sequence output can be written to screen, to
    file, or passed to another program. A wide range of standard sequence
-   formats may be specified for input and output. If you don't specify
-   the input format, seqret will try a set of possible formats until it
-   reads it in successfully. The sequence input and output, as for all
-   EMBOSS programs, is described by a Uniform Sequence Address. This is
-   is a very flexible way of specifying one or more sequences from a
-   variety of sources and includes sequence files, database queries and
-   external applications.
+   formats may be specified for input and output. If you don't specify the
+   input format, seqret will try a set of possible formats until it reads
+   it in successfully. The sequence input and output, as for all EMBOSS
+   programs, is described by a Uniform Sequence Address. This is is a very
+   flexible way of specifying one or more sequences from a variety of
+   sources and includes sequence files, database queries and external
+   applications.
 
    There are many options built-in into EMBOSS for detailed specification
    of the input and output sequences, for example the sequence type, file
@@ -36,11 +35,11 @@ Description
    output seqret can change the case of the sequence to upper or to lower
    case.
 
-   seqret is useful for a variety of tasks, including extracting
-   sequences from databases, displaying sequences, reformatting
-   sequences, producing the reverse complement of a sequence, extracting
-   fragments of a sequence, sequence case conversion or any combination
-   of the above functions.
+   seqret is useful for a variety of tasks, including extracting sequences
+   from databases, displaying sequences, reformatting sequences, producing
+   the reverse complement of a sequence, extracting fragments of a
+   sequence, sequence case conversion or any combination of the above
+   functions.
 
 Usage
 
@@ -49,24 +48,26 @@ Usage
    Extract an entry from a database and write it to a file:
 
 
-% seqret 
+% seqret
 Reads and writes (returns) sequences
 Input (gapped) sequence(s): tembl:x65923
-output sequence(s) [x65923.fasta]: 
+output sequence(s) [x65923.fasta]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
    Example 2
 
-   Read all entries in the database 'tembl' that start with 'ab' and
-   write them to a file. In this example the specification is all done in
-   the command line and to stop Unix getting confused by the '*'
-   character, it has to have a backslash ('\') before it:
+   Read all entries in the database 'tembl' that start with 'ab' and write
+   them to a file. In this example the specification is all done in the
+   command line and to stop Unix getting confused by the '*' character, it
+   has to have a backslash ('\') before it:
 
 
-% seqret 'tembl:ab*'  aball.seq 
+% seqret 'tembl:ab*'  aball.seq
 Reads and writes (returns) sequences
+
 
    Go to the output files for this example
 
@@ -80,10 +81,11 @@ Reads and writes (returns) sequences
    format 'fasta' reports the features in gff (file "<seqname>.gff")
 
 
-% seqret -feature 
+% seqret -feature
 Reads and writes (returns) sequences
 Input (gapped) sequence(s): tembl:x65923
 output sequence(s) [x65923.fasta]: embl::x65923.embl
+
 
    Go to the output files for this example
 
@@ -92,7 +94,7 @@ output sequence(s) [x65923.fasta]: embl::x65923.embl
    Display the contents of the sequence on the screen:
 
 
-% seqret 
+% seqret
 Reads and writes (returns) sequences
 Input (gapped) sequence(s): tembl:x65923
 output sequence(s) [x65923.fasta]: stdout
@@ -108,15 +110,17 @@ agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
 cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
 tctaataaaaaagccacttagttcagtcaaaaaaaaaa
 
+
    Example 5
 
    Write the result in GCG format by using the qualifier '-osformat'.
 
 
-% seqret -osf gcg 
+% seqret -osf gcg
 Reads and writes (returns) sequences
 Input (gapped) sequence(s): tembl:x65923
-output sequence(s) [x65923.gcg]: 
+output sequence(s) [x65923.gcg]:
+
 
    Go to the output files for this example
 
@@ -126,9 +130,10 @@ output sequence(s) [x65923.gcg]:
    USA on the command line.
 
 
-% seqret -outseq gcg::x65923.gcg 
+% seqret -outseq gcg::x65923.gcg
 Reads and writes (returns) sequences
 Input (gapped) sequence(s): tembl:x65923
+
 
    Example 7
 
@@ -136,33 +141,35 @@ Input (gapped) sequence(s): tembl:x65923
    USA at the prompt.
 
 
-% seqret 
+% seqret
 Reads and writes (returns) sequences
 Input (gapped) sequence(s): tembl:x65923
 output sequence(s) [x65923.fasta]: gcg::x65923.gcg
+
 
    Example 8
 
    Write the reverse-complement of a sequence:
 
 
-% seqret -srev 
+% seqret -srev
 Reads and writes (returns) sequences
 Input (gapped) sequence(s): tembl:x65923
-output sequence(s) [x65923.fasta]: 
+output sequence(s) [x65923.fasta]:
+
 
    Go to the output files for this example
 
    Example 9
 
-   Extract the bases between the positions starting at 5 and ending at
-   25:
+   Extract the bases between the positions starting at 5 and ending at 25:
 
 
-% seqret -sbegin 5 -send 25 
+% seqret -sbegin 5 -send 25
 Reads and writes (returns) sequences
 Input (gapped) sequence(s): tembl:x65923
-output sequence(s) [x65923.fasta]: 
+output sequence(s) [x65923.fasta]:
+
 
    Go to the output files for this example
 
@@ -172,10 +179,11 @@ output sequence(s) [x65923.fasta]:
    bases before the end of the sequence:
 
 
-% seqret -sbegin 5 -send -5 
+% seqret -sbegin 5 -send -5
 Reads and writes (returns) sequences
 Input (gapped) sequence(s): tembl:x65923
-output sequence(s) [x65923.fasta]: 
+output sequence(s) [x65923.fasta]:
+
 
    Go to the output files for this example
 
@@ -185,14 +193,18 @@ output sequence(s) [x65923.fasta]:
    them to a file:
 
 
-% seqret 
+% seqret
 Reads and writes (returns) sequences
 Input (gapped) sequence(s): tembl:h*
 output sequence(s) [h45989.fasta]: hall.seq
 
+
    Go to the output files for this example
 
 Command line arguments
+
+Reads and writes (returns) sequences
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     (Gapped) sequence(s) filename and optional
@@ -243,13 +255,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -257,8 +271,8 @@ Input file format
 
   Input files for usage example
 
-   'tembl:x65923' is a sequence entry in the example nucleic acid
-   database 'tembl'
+   'tembl:x65923' is a sequence entry in the example nucleic acid database
+   'tembl'
 
   Database entry: tembl:x65923
 
@@ -274,8 +288,7 @@ XX
 KW   fau gene.
 XX
 OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
-;
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
 OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
 OC   Homo.
 XX
@@ -319,10 +332,8 @@ FT                   /db_xref="HSSP:1GJZ"
 FT                   /db_xref="InterPro:IPR006846"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
 FT                   /protein_id="CAA46716.1"
-FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLA
-G
-FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKT
-G
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
 FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
 FT   misc_feature    98..102
 FT                   /note="nucleolar localization signal"
@@ -332,30 +343,21 @@ FT   polyA_signal    484..489
 FT   polyA_site      509
 XX
 SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
-     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        6
-0
-     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       12
-0
-     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       18
-0
-     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       24
-0
-     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       30
-0
-     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       36
-0
-     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       42
-0
-     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       48
-0
-     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               51
-8
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        60
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       120
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       180
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       240
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       300
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       360
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       420
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       480
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               518
 //
 
 Output file format
 
-   The output from seqret is one or more sequences, and by default will
-   be written in FASTA format.
+   The output from seqret is one or more sequences, and by default will be
+   written in FASTA format.
 
    If the '-firstonly' qualifier is used then only the first sequence of
    the input USA specification will be written out.
@@ -363,9 +365,8 @@ Output file format
    In some cases the output filename will be the same as the input
    filename, but as seqret reads only the first sequence before opening
    the output file it may try to overwrite the input. Note that this is
-   not true of seqretset which reads all sequences into memory at
-   startup, but which can need a large amount of memory for many
-   sequences.
+   not true of seqretset which reads all sequences into memory at startup,
+   but which can need a large amount of memory for many sequences.
 
   Output files for usage example
 
@@ -386,8 +387,8 @@ tctaataaaaaagccacttagttcagtcaaaaaaaaaa
 
   File: aball.seq
 
->AB009602 AB009602.1 Schizosaccharomyces pombe mRNA for MET1 homolog, partial c
-ds.
+>AB009602 AB009602.1 Schizosaccharomyces pombe mRNA for MET1 homolog, partial cd
+s.
 gttcgatgcctaaaataccttcttttgtccctacacagaccacagttttcctaatggctt
 tacaccgactagaaattcttgtgcaagcactaattgaaagcggttggcctagagtgttac
 cggtttgtatagctgagcgcgtctcttgccctgatcaaaggttcattttctctactttgg
@@ -398,8 +399,8 @@ ctcaatgttcatgttcttaggttgttttggataatatgcggtcagtttaatcttcgttgt
 ttcttcttaaaatatttattcatggtttaatttttggtttgtacttgttcaggggccagt
 tcattatttactctgtttgtatacagcagttcttttatttttagtatgattttaatttaa
 aacaattctaatggtcaaaaa
->AB000095 AB000095.1 Homo sapiens mRNA for hepatocyte growth factor activator i
-nhibitor, complete cds.
+>AB000095 AB000095.1 Homo sapiens mRNA for hepatocyte growth factor activator in
+hibitor, complete cds.
 cggccgagcccagctctccgagcaccgggtcggaagccgcgacccgagccgcgcaggaag
 ctgggaccggaacctcggcggacccggccccacccaactcacctgcgcaggtcaccagca
 ccctcggaacccagaggcccgcgctctgaaggtgacccccctggggaggaaggcgatggc
@@ -510,8 +511,7 @@ XX
 KW   fau gene.
 XX
 OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
-;
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
 OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
 OC   Homo.
 XX
@@ -555,10 +555,8 @@ FT                   /db_xref="HSSP:1GJZ"
 FT                   /db_xref="InterPro:IPR006846"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
 FT                   /protein_id="CAA46716.1"
-FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLA
-G
-FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKT
-G
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
 FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
 FT   misc_feature    98..102
 FT                   /note="nucleolar localization signal"
@@ -568,24 +566,15 @@ FT   polyA_signal    484..489
 FT   polyA_site      509
 XX
 SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
-     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        6
-0
-     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       12
-0
-     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       18
-0
-     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       24
-0
-     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       30
-0
-     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       36
-0
-     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       42
-0
-     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       48
-0
-     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               51
-8
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        60
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       120
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       180
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       240
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       300
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       360
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       420
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       480
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               518
 //
 
   Output files for usage example 5
@@ -619,6 +608,7 @@ X65923  Length: 518  Type: N  Check: 2981 ..
  451 actcttaagt cttttgtaat tctggctttc tctaataaaa aagccactta
 
  501 gttcagtcaa aaaaaaaa
+
 
   Output files for usage example 8
 
@@ -661,8 +651,8 @@ ataaaaaagccacttagttcagtcaaaaaa
 
   File: hall.seq
 
->H45989 H45989.1 yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clon
-e IMAGE:177794 3', mRNA sequence.
+>H45989 H45989.1 yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone
+ IMAGE:177794 3', mRNA sequence.
 ccggnaagctcancttggaccaccgactctcgantgnntcgccgcgggagccggntggan
 aacctgagcgggactggnagaaggagcagagggaggcagcacccggcgtgacggnagtgt
 gtggggcactcaggccttccgcagtgtcatctgccacacggaaggcacggccacgggcag
@@ -708,8 +698,8 @@ Notes
    programs and then can write them to files, the screen or pass them to
    other programs. Because it can read in a sequence from a database and
    write it to a file, seqret is a program for extracting sequences from
-   databases. Because it can write the sequence to the screen, seqret is
-   a program for displaying sequences.
+   databases. Because it can write the sequence to the screen, seqret is a
+   program for displaying sequences.
 
    seqret can read sequences in any of a wide range of standard sequence
    formats. You can specify the input and output formats being used. If
@@ -725,9 +715,8 @@ Notes
    specified and write out that fragment. It is therefore a utility for
    doing simple extraction of a region of a sequence.
 
-   seqret can change the case of the sequence being read in to upper or
-   to lower case. It is therefore a simple sequence beautification
-   utility.
+   seqret can change the case of the sequence being read in to upper or to
+   lower case. It is therefore a simple sequence beautification utility.
 
    seqret can do any combination of the above functions.
 
@@ -738,12 +727,12 @@ Notes
    reference to a URL-style sequence naming used by all EMBOSS
    applications.
 
-   The USA is a very flexible way of specifying one or more sequences
-   from a variety of sources and includes sequence files, database
-   queries and external applications.
+   The USA is a very flexible way of specifying one or more sequences from
+   a variety of sources and includes sequence files, database queries and
+   external applications.
 
    See the full specification of USA syntax at:
-   http://emboss.sourceforge.net/docs/themes/UniformSequenceAddress.html 
+   http://emboss.sourceforge.net/docs/themes/UniformSequenceAddress.html
 
    The basic USA syntax is one of:
      * "file"
@@ -759,10 +748,10 @@ Notes
    also separates the name of a database from an entry in that database
 
    Note also that '::' separates the specified format of a file from the
-   name of the file. Normally the format can be omitted, in which case
-   the program will attempt to identify the correct format when reading
-   the sequence in and will default to using FASTA format when writing
-   the sequence out.
+   name of the file. Normally the format can be omitted, in which case the
+   program will attempt to identify the correct format when reading the
+   sequence in and will default to using FASTA format when writing the
+   sequence out.
 
    Valid names of the databases set up in your local implementation of
    EMBOSS can be seen by using the program 'showdb'.
@@ -794,19 +783,18 @@ Notes
    entry name (K01793 is a secondary accession number in this case for
    entry J01636)
    embl-acc:K01793 EMBL entry X13776, using whatever access method is
-   defined locally for the EMBL database and searching by accession
-   number only
+   defined locally for the EMBL database and searching by accession number
+   only
    embl-id:x13776 EMBL entry x13776, using whatever access method is
    defined locally for the EMBL database, and searching by ID only
    embl:v0029* EMBL entries V00290, V00291, and so on, usually in
-   alphabetical order, using whatever access method is defined locally
-   for the EMBL database
+   alphabetical order, using whatever access method is defined locally for
+   the EMBL database
    embl or EMBL:* All sequences in the EMBL database
-   @mylist Reads file mylist and uses each line as a separate USA. This
-   is standard VMS list file syntax, also used in SRS 4.0 but missing in
-   SRS 5.0 onwards. The list file is a list of USAs (one per line). List
-   files can contain references to other lists files or any other
-   standard USA.
+   @mylist Reads file mylist and uses each line as a separate USA. This is
+   standard VMS list file syntax, also used in SRS 4.0 but missing in SRS
+   5.0 onwards. The list file is a list of USAs (one per line). List files
+   can contain references to other lists files or any other standard USA.
    list::mylist Same as "@mylist" above
    'getz -e [embl-id:x13776] |' The pipe character "|" causes EMBOSS to
    fire up getz (SRS) to extract entry x13776 from EMBL in EMBL format.
@@ -814,8 +802,8 @@ Notes
    can be used in this way.
    asis::atacgcagttatctgaccat So far the shortest USA we could invent. In
    'asis' format the name is the sequence so no file needs to be opened.
-   This is a special case. It was intended as a joke, but has proved
-   quite useful for generating command lines when testing.
+   This is a special case. It was intended as a joke, but has proved quite
+   useful for generating command lines when testing.
 
   Input sequence formats
 
@@ -827,12 +815,12 @@ Notes
    Input Format Comments
    gcg GCG 9.x and 10.x format with the format and sequence type
    identified on the first line of the file
-   gcg8 GCG 8.x format where anything up to the first line containing
-   ".." is considered as heading, and the remainder is sequence data.
-   This format is complicated by the header appearing to be in other
-   formats such as EMBL, and by the possibility of reading a large amount
-   of data in the wrong format before discovering that there is no ".."
-   line because it is not GCG format after all.
+   gcg8 GCG 8.x format where anything up to the first line containing ".."
+   is considered as heading, and the remainder is sequence data. This
+   format is complicated by the header appearing to be in other formats
+   such as EMBL, and by the possibility of reading a large amount of data
+   in the wrong format before discovering that there is no ".." line
+   because it is not GCG format after all.
    embl
    em EMBL entry format, or at least a minimal subset of the fields. The
    Staden package and others use EMBL or similar formats for sequence
@@ -877,8 +865,8 @@ Notes
    staden
    experiment The experiment file format used by the "gap" program in the
    Staden package, where the sequence identifier is optional and the
-   remainer is plain text. Some alternative nucleotide ambiguity codes
-   are used and must be converted.
+   remainer is plain text. Some alternative nucleotide ambiguity codes are
+   used and must be converted.
    unknown
    text
    plain Plain text. This is the format with no format. The whole of the
@@ -886,14 +874,14 @@ Notes
    contents in any way. Anything is acceptable in this format.
    raw Like unknown/text/plain format except that it accepts only
    alphanumeric and whitespace characters and rejects anything else.
-   asis This is not so much a sequence format as a quick way of entering
-   a sequence on the command line, but it is included here for
-   completeness. Where a filename would normally be given, in asis format
-   there is the sequence itself. An example would be:
+   asis This is not so much a sequence format as a quick way of entering a
+   sequence on the command line, but it is included here for completeness.
+   Where a filename would normally be given, in asis format there is the
+   sequence itself. An example would be:
    asis::atacgcagttatctgaccat
    In 'asis' format the name is the sequence so no file needs to be
-   opened. This is a special case. It was intended as a joke, but could
-   be quite useful for generating command lines.
+   opened. This is a special case. It was intended as a joke, but could be
+   quite useful for generating command lines.
 
   Output sequence formats
 
@@ -901,28 +889,27 @@ Notes
 
    Some sequence formats can hold multiple sequences in one file, these
    are marked as multiple in the following table. The details of how many
-   sequences are held in one file differs between formats, but they
-   either allow many sequences to be concatenated one after the other, or
-   they hold the sequences together in some sort of aligned set of
-   sequences.
+   sequences are held in one file differs between formats, but they either
+   allow many sequences to be concatenated one after the other, or they
+   hold the sequences together in some sort of aligned set of sequences.
 
    Other formats, such as GCG, plain and staden formats can only hold one
    sequence per file, these are marked as single. An attempt to
    concatenate several sequences in one file leaves the results as a mess
-   that makes it impossible to decide where the sequences start and end
-   or what is annotation and what is sequence.
+   that makes it impossible to decide where the sequences start and end or
+   what is annotation and what is sequence.
 
    These single formats therefore cause problems when there are multiple
    sequences to write out because a single file containing multiple
    sequences in that format is invalid. When these formats are specified
-   for output, an EMBOSS program will allow you to write many sequences
-   to one file, but EMBOSS programs will not be able to reliably read in
-   the resulting mess.
+   for output, an EMBOSS program will allow you to write many sequences to
+   one file, but EMBOSS programs will not be able to reliably read in the
+   resulting mess.
 
    N.B This behaviour changed in EMBOSS version 1.7.0. (31 Oct 2000)
-   Previously, EMBOSS programs that were asked to write multiple
-   sequences in a single format would ignore the requested output file
-   name and would write each sequence into a separate file whose name was
+   Previously, EMBOSS programs that were asked to write multiple sequences
+   in a single format would ignore the requested output file name and
+   would write each sequence into a separate file whose name was
    constructed from the sequence name and the name of the format. This
    resulted in ouput to files whose names could not be reliably
    controlled. A decision was taken that EMBOSS users were intelligent
@@ -946,8 +933,8 @@ Notes
    gcg single Wisconsin Package GCG 9.x and 10.x format with the sequence
    type on the first line of the file.
    gcg8 single GCG 8.x format where anything up to the first line
-   containing ".." is considered as heading, and the remainder is
-   sequence data.
+   containing ".." is considered as heading, and the remainder is sequence
+   data.
    embl
    em multiple EMBL entry format with available fields filled in and
    others with no infomation omitted. The EMBOSS command line allows
@@ -1038,8 +1025,8 @@ Notes
    -options  Prompt for optional qualifiers
    -help     Display a table of the command-line options
 
-   The set of associated qualifiers for sequences behave in different
-   ways depending on where they appear.
+   The set of associated qualifiers for sequences behave in different ways
+   depending on where they appear.
 
    If these qualifiers immediately follow a parameter they apply only to
    that parameter and not to all cases. If they occur before any
@@ -1048,45 +1035,45 @@ Notes
    If there are no two parameters of equal type, the order of parameters
    and their qualifiers is irrelevant.
 
-   Where a qualifier is defined more than once, for example "-sformat"
-   for 2 input sequences to be aligned, the qualifier name can have a
-   number to indicate which sequence is meant. "-sbegin2=25" will apply
-   only to the second sequence, no matter where it appears on the command
-   line.
+   Where a qualifier is defined more than once, for example "-sformat" for
+   2 input sequences to be aligned, the qualifier name can have a number
+   to indicate which sequence is meant. "-sbegin2=25" will apply only to
+   the second sequence, no matter where it appears on the command line.
 
    The -sbegin and -send qualifiers take an integer number specifying the
-   position to begin or end reading a sequence. If the number is
-   positive, the number is the position counting from the first base or
-   residue of the sequence. If the number is negative the position is
-   counted from the end of the sequence, so position -1 is the last base
-   or residue of the sequence. (If -sbegin 0 is used, it is assumed to be
-   the same as -sbegin 1 and -send 0 is the same as -send -1.)
+   position to begin or end reading a sequence. If the number is positive,
+   the number is the position counting from the first base or residue of
+   the sequence. If the number is negative the position is counted from
+   the end of the sequence, so position -1 is the last base or residue of
+   the sequence. (If -sbegin 0 is used, it is assumed to be the same as
+   -sbegin 1 and -send 0 is the same as -send -1.)
 
    The filter qualifier makes the program behave like a filter, reading
    its (first) input 'file' from the standard input, and writing its
    (first) output 'file' to the standard output. The -filter qualifier
-   will also invoke the -auto qualifier, so the user is never prompted
-   for any missing values.
+   will also invoke the -auto qualifier, so the user is never prompted for
+   any missing values.
 
    Example:
 
 % cat sequence.seq | seqret -filter | lpr
 
+
    The example shows the application seqret being run with the -filter
    qualifier. The input file is 'piped' into the program using the unix
-   command cat and the output is 'piped' directly to the unix program
-   lpr, which will print it on the printer.
+   command cat and the output is 'piped' directly to the unix program lpr,
+   which will print it on the printer.
 
    When the -options qualifier is used and not all the parameters are
-   given on the command line, it will query the user for those
-   parameters. It will not only query the user for the required
-   parameters as it would do without the -options qualifier, but it will
-   also query the user for the optional parameters.
+   given on the command line, it will query the user for those parameters.
+   It will not only query the user for the required parameters as it would
+   do without the -options qualifier, but it will also query the user for
+   the optional parameters.
 
-   When the -stdout qualifier is used, the user will still be prompted
-   for all the info that is required, but will write to standard output
-   by default. The user will also still be prompted for an output
-   filename, in case the user wants to save the output to a file.
+   When the -stdout qualifier is used, the user will still be prompted for
+   all the info that is required, but will write to standard output by
+   default. The user will also still be prompted for an output filename,
+   in case the user wants to save the output to a file.
 
 References
 
@@ -1163,7 +1150,7 @@ See also
 
 Author(s)
 
-   Peter Rice (pmr © ebi.ac.uk)
+   Peter Rice (pmr (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

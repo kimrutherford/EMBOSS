@@ -420,10 +420,14 @@ static AjBool showpep_MatchFeature(const AjPFeature gf, AjPFeature newgf,
 				   const AjPStr tag, const AjPStr value,
 				   AjBool *tagsmatch, AjBool stricttags)
 {
-     /*
-     ** is this a child of a join() ?
-     ** if it is a child, then we use the previous result of MatchPatternTags
-     */
+    AjPStrTok tokens = NULL;
+    AjPStr key = NULL;
+    AjBool val = ajFalse;
+
+    /*
+    ** is this a child of a join() ?
+    ** if it is a child, then we use the previous result of MatchPatternTags
+    */
     if(!ajFeatIsMultiple(gf) || !ajFeatIsChild(gf))
 	*tagsmatch = showpep_MatchPatternTags(gf, newgf, tag, value,
 					      stricttags);
@@ -438,13 +442,32 @@ static AjBool showpep_MatchFeature(const AjPFeature gf, AjPFeature newgf,
      **      for sense, 0
      **      for score, maxscore <= minscore
      */
-    if(!embMiscMatchPattern(ajFeatGetSource(gf), source) ||
-       !embMiscMatchPattern(ajFeatGetType(gf), type) ||
+    if(!embMiscMatchPatternDelimC(ajFeatGetSource(gf), source,",;|") ||
        (testscore && ajFeatGetScore(gf) < minscore) ||
        (testscore && ajFeatGetScore(gf) > maxscore) ||
        !*tagsmatch)
 	return ajFalse;
 
+    if(ajStrGetLen(type))
+    {
+        val = ajFalse;
+        tokens = ajStrTokenNewC(type, " \t\n\r,;|");
+
+        while (ajStrTokenNextParse( &tokens, &key))
+        {
+            if (ajFeatTypeMatchWildS(gf, key))
+            {
+                val = ajTrue;
+                break;
+            }
+        }
+
+        ajStrTokenDel( &tokens);
+        ajStrDel(&key);
+        if(!val)
+            return ajFalse;
+    }
+            
     return ajTrue;
 }
 
@@ -495,7 +518,7 @@ static AjBool showpep_MatchPatternTags(const AjPFeature gf,
     titer = ajFeatTagIter(gf);
     while(ajFeatTagval(titer, &tagnam, &tagval))
     {
-        tval = embMiscMatchPattern(tagnam, tpattern);
+        tval = embMiscMatchPatternDelimC(tagnam, tpattern,",;|");
         /*
         ** If tag has no value then
         **   If vpattern is '*' the value pattern is a match
@@ -516,7 +539,7 @@ static AjBool showpep_MatchPatternTags(const AjPFeature gf,
 	    ** of the whole of vpattern without spitting it up into words.
             */
             vval = (ajStrMatchS(tagval, vpattern) ||
-		    embMiscMatchPattern(tagval, vpattern));
+		    embMiscMatchPatternDelimC(tagval, vpattern,",;|"));
 
 
         if(tval && vval)

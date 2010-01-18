@@ -266,7 +266,7 @@ static void getorf_FindORFs(const AjPSeq seq, ajint len, const AjPTrn trnTable,
 
     for(pos=0; pos<seqlen-2; pos++)
     {
-	codon = ajTrnStartStopC(trnTable, &chrseq[pos], &aa);
+	codon = ajTrnCodonstrTypeC(trnTable, &chrseq[pos], &aa);
 	frame = pos % 3;
 	ajDebug("len=%d, Pos=%d, Frame=%d start/stop=%d, aa=%c",
 		len, pos, frame, codon, aa);

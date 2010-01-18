@@ -1,4 +1,4 @@
-/* $Id: gd.c,v 1.4 2008/01/31 16:56:18 rice Exp $
+/* $Id: gd.c,v 1.5 2009/12/01 14:49:05 rice Exp $
 
          PNG, GIF, and JPEG device driver based on libgd
 
@@ -631,6 +631,7 @@ void plD_init_gif(PLStream *pls)
     pls->bytecnt = 0;
     pls->page = 0;
     pls->dev_fill0 = 1;         /* Can do solid fills */
+    pls->family = 1;            /* pmr:  allow multiple pages. */
 
     if (!pls->colorset)
 	pls->color = 1;         /* Is a color device */

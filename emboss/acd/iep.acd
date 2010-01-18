@@ -1,6 +1,7 @@
 application: iep [
   documentation: "Calculate the isoelectric point of proteins"
   groups: "Protein:Composition"
+  relations: "EDAM: Protein isoelectric point calculation"
 ]
 
 section: input [
@@ -11,6 +12,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "protein"
+    relations: "EDAM: Protein sequence record"                             
   ]
 
 endsection: input
@@ -25,6 +27,7 @@ section: additional [
     information: "Number of N-termini"
     default: "1"
     minimum: "0"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: carboxyl [
@@ -32,12 +35,14 @@ section: additional [
     information: "Number of C-termini"
     default: "1"
     minimum: "0"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   boolean: termini [
     additional: "Y"
     information: "Include charge at N and C terminus"
     default: "Y"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   integer: lysinemodified [
@@ -45,6 +50,7 @@ section: additional [
     information: "Number of modified lysines"
     default: "0"
     minimum: "0"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: disulphides [
@@ -52,6 +58,7 @@ section: additional [
     information: "Number of disulphide bridges"
     default: "0"
     minimum: "0"
+    relations: "EDAM: Generic integer"                                     
   ]
 
 endsection: additional
@@ -66,6 +73,7 @@ section: advanced [
     minimum: ".01"
     maximum: "1."
     default: ".5"
+    relations: "EDAM: Generic float"                                       
   ]
 
 endsection: advanced
@@ -78,15 +86,18 @@ section: output [
   toggle: plot [
     default: "N"
     information: "Plot charge vs pH"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   toggle: report [
     default: "Y"
     information: "Write results to a file"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   xygraph: graph [
     standard: "$(plot)"
+    relations: "EDAM: EMBOSS graph file"                                   
   ]
 
   outfile: outfile [
@@ -94,6 +105,7 @@ section: output [
     knowntype: "iep output"
     nullok: "@(!$(report))"
     nulldefault: "@(!$(report))"
+    relations:  "EDAM:Protein isoelectric point report"                    
   ]
 
 endsection: output

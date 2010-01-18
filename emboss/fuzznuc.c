@@ -21,8 +21,6 @@
 ******************************************************************************/
 
 #include "emboss.h"
-#include "stdlib.h"
-
 
 
 
@@ -55,7 +53,7 @@ int main(int argc, char **argv)
  
     ajPatlistSeqDoc(plist, &tmpstr);
     ajFmtPrintAppS(&tmpstr, "\nComplement: %B\n", sc);
-    ajReportSetHeader(report, tmpstr);
+    ajReportSetHeaderS(report, tmpstr);
 
     writeok=ajTrue;
     while (writeok && ajSeqallNext(seqall,&seq))
@@ -64,7 +62,7 @@ int main(int argc, char **argv)
         embPatlistSeqSearch(tab,seq,plist,ajFalse);
         if (sc)
             embPatlistSeqSearch (tab,seq,plist,ajTrue);
-        if(ajFeattableSize(tab))
+        if(ajFeattableGetSize(tab))
 	    writeok = ajReportWrite(report,tab,seq);
         ajFeattableDel(&tab);
     }

@@ -107,7 +107,7 @@ int main(int argc, char **argv)
     isn       = ajAcdGetBoolean("nlabel");
 
     ajStrToInt(codestr, &gcode);
-    codon     = ajCodNewCode(gcode);
+    codon     = ajCodNewCodenum(gcode);
 
     for(i=0;i<6;++i)
 	mark[i]=0;

@@ -4,6 +4,7 @@ application: prosextract [
   gui: "no"
   batch: "no"
   cpu: "low"
+  relations: "EDAM: Database processing"
 ]
 
 section: input [
@@ -15,6 +16,7 @@ section: input [
     parameter: "Y"
     information: "PROSITE database directory"
     knowntype: "prosite database"
+    relations:  "EDAM: Prosite database"                               
   ]
 
 endsection: input

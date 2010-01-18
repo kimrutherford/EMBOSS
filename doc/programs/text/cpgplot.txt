@@ -1,5 +1,4 @@
-
-                                  cpgplot 
+                                   cpgplot
 
 
 
@@ -16,28 +15,28 @@ Function
 
 Description
 
-   cpgplot identifies CpG islands in one or more nucleotide sequences.
-   The ratio of observered to expected number of GC dinucleotides
-   patterns is calculated over a window (sequence region) which is moved
-   along the sequence. The calculated ratios are plotted graphically,
-   together with the regions which match this program's definition of a
-   "CpG island" (a CG dinucleotide rich area). A report file is written
-   giving the input sequence name, CpG island parameters and data on any
-   CpG islands that are found.
+   cpgplot identifies CpG islands in one or more nucleotide sequences. The
+   ratio of observered to expected number of GC dinucleotides patterns is
+   calculated over a window (sequence region) which is moved along the
+   sequence. The calculated ratios are plotted graphically, together with
+   the regions which match this program's definition of a "CpG island" (a
+   CG dinucleotide rich area). A report file is written giving the input
+   sequence name, CpG island parameters and data on any CpG islands that
+   are found.
 
-   The ratio of observered to expected number of GC dinucleotides
-   patterns is calculated over a window of user-specified size (-window
-   parameter). The window is slid along the sequence and the ratio
-   recalculated until the end of the sequence is reached.
+   The ratio of observered to expected number of GC dinucleotides patterns
+   is calculated over a window of user-specified size (-window parameter).
+   The window is slid along the sequence and the ratio recalculated until
+   the end of the sequence is reached.
 
    By default, cpgplot defines a CpG island as a region where, over an
-   average of 10 windows and not less than 200 bases, the calculated (%G
-   + %C) content is over 50% and the calculated Observed/Expected ratio
-   is over 0.6. These conditions can be modified by setting the values of
-   the appropriate parameters.
+   average of 10 windows and not less than 200 bases, the calculated (%G +
+   %C) content is over 50% and the calculated Observed/Expected ratio is
+   over 0.6. These conditions can be modified by setting the values of the
+   appropriate parameters.
 
-   The Observed number of CpG patterns in a window is simply the number
-   of times a 'C' is found followed immediately by a 'G'.
+   The Observed number of CpG patterns in a window is simply the number of
+   times a 'C' is found followed immediately by a 'G'.
 
    The Expected number of CpG patterns is calculated for each window as
    the number of CpG dinucleotides you would expect to see in that window
@@ -52,21 +51,25 @@ Usage
    Here is a sample session with cpgplot
 
 
-% cpgplot tembl:u68037 -graph cps 
+% cpgplot tembl:u68037 -graph cps
 Identify and plot CpG islands in nucleotide sequence(s)
-Window size [100]: 
-Minimum length of an island [200]: 
-Minimum observed/expected [0.6]: 
-Minimum percentage [50.]: 
-Output file [u68037.cpgplot]: 
-Features output [u68037.gff]: 
+Window size [100]:
+Minimum length of an island [200]:
+Minimum observed/expected [0.6]:
+Minimum percentage [50.]:
+Output file [u68037.cpgplot]:
+Features output [u68037.gff]:
 
 Created cpgplot.ps
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Identify and plot CpG islands in nucleotide sequence(s)
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -96,7 +99,7 @@ Command line arguments
                                   details of any CpG islands that are found.
 *  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, das, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif)
   [-outfeat]           featout    [unknown.gff] File for output features
 
    Additional (Optional) qualifiers: (none)
@@ -159,13 +162,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -173,8 +178,8 @@ Input file format
 
   Input files for usage example
 
-   'tembl:u68037' is a sequence entry in the example nucleic acid
-   database 'tembl'
+   'tembl:u68037' is a sequence entry in the example nucleic acid database
+   'tembl'
 
   Database entry: tembl:u68037
 
@@ -190,8 +195,7 @@ XX
 KW   .
 XX
 OS   Rattus norvegicus (Norway rat)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
-;
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
 OC   Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea;
 OC   Muridae; Murinae; Rattus.
 XX
@@ -228,65 +232,37 @@ FT                   /db_xref="GOA:P70597"
 FT                   /db_xref="InterPro:IPR017452"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P70597"
 FT                   /protein_id="AAB07735.1"
-FT                   /translation="MSPYGLNLSLVDEATTCVTPRVPNTSVVLPTGGNGTSPALPIFS
-M
-FT                   TLGAVSNVLALALLAQVAGRLRRRRSTATFLLFVASLLAIDLAGHVIPGALVLRLYTA
-G
-FT                   RAPAGGACHFLGGCMVFFGLCPLLLGCGMAVERCVGVTQPLIHAARVSVARARLALAL
-L
-FT                   AAMALAVALLPLVHVGHYELQYPGTWCFISLGPPGGWRQALLAGLFAGLGLAALLAAL
-V
-FT                   CNTLSGLALLRARWRRRRSRRFRENAGPDDRRRWGSRGLRLASASSASSITSTTAALR
-S
-FT                   SRGGGSARRVHAHDVEMVGQLVGIMVVSCICWSPLLVLVVLAIGGWNSNSLQRPLFLA
-V
-FT                   RLASWNQILDPWVYILLRQAMLRQLLRLLPLRVSAKGGPTELSLTKSAWEASSLRSSR
-H
+FT                   /translation="MSPYGLNLSLVDEATTCVTPRVPNTSVVLPTGGNGTSPALPIFSM
+FT                   TLGAVSNVLALALLAQVAGRLRRRRSTATFLLFVASLLAIDLAGHVIPGALVLRLYTAG
+FT                   RAPAGGACHFLGGCMVFFGLCPLLLGCGMAVERCVGVTQPLIHAARVSVARARLALALL
+FT                   AAMALAVALLPLVHVGHYELQYPGTWCFISLGPPGGWRQALLAGLFAGLGLAALLAALV
+FT                   CNTLSGLALLRARWRRRRSRRFRENAGPDDRRRWGSRGLRLASASSASSITSTTAALRS
+FT                   SRGGGSARRVHAHDVEMVGQLVGIMVVSCICWSPLLVLVVLAIGGWNSNSLQRPLFLAV
+FT                   RLASWNQILDPWVYILLRQAMLRQLLRLLPLRVSAKGGPTELSLTKSAWEASSLRSSRH
 FT                   SGFSHL"
 XX
 SQ   Sequence 1218 BP; 162 A; 397 C; 387 G; 272 T; 0 other;
-     atgagcccct acgggcttaa cctgagccta gtggatgagg caacaacgtg tgtaacaccc        6
-0
-     agggtcccca atacatctgt ggtgctgcca acaggcggta acggcacatc accagcgctg       12
-0
-     cctatcttct ccatgacgct gggtgctgtg tccaacgtgc tggcgctggc gctgctggcc       18
-0
-     caggttgcag gcagactgcg gcgccgccgc tcgactgcca ccttcctgtt gttcgtcgcc       24
-0
-     agcctgcttg ccatcgacct agcaggccat gtgatcccgg gcgccttggt gcttcgcctg       30
-0
-     tatactgcag gacgtgcgcc cgctggcggg gcctgtcatt tcctgggcgg ctgtatggtc       36
-0
-     ttctttggcc tgtgcccact tttgcttggc tgtggcatgg ccgtggagcg ctgcgtgggt       42
-0
-     gtcacgcagc cgctgatcca cgcggcgcgc gtgtccgtag cccgcgcacg cctggcacta       48
-0
-     gccctgctgg ccgccatggc tttggcagtg gcgctgctgc cactagtgca cgtgggtcac       54
-0
-     tacgagctac agtaccctgg cacttggtgt ttcattagcc ttgggcctcc tggaggttgg       60
-0
-     cgccaggcgt tgcttgcggg cctcttcgcc ggccttggcc tggctgcgct ccttgccgca       66
-0
-     ctagtgtgta atacgctcag cggcctggcg ctccttcgtg cccgctggag gcggcgtcgc       72
-0
-     tctcgacgtt tccgagagaa cgcaggtccc gatgatcgcc ggcgctgggg gtcccgtgga       78
-0
-     ctccgcttgg cctccgcctc gtctgcgtca tccatcactt caaccacagc tgccctccgc       84
-0
-     agctctcggg gaggcggctc cgcgcgcagg gttcacgcac acgacgtgga aatggtgggc       90
-0
-     cagctcgtgg gcatcatggt ggtgtcgtgc atctgctgga gccccctgct ggtattggtg       96
-0
-     gtgttggcca tcgggggctg gaactctaac tccctgcagc ggccgctctt tctggctgta      102
-0
-     cgcctcgcgt cgtggaacca gatcctggac ccatgggtgt acatcctgct gcgccaggct      108
-0
-     atgctgcgcc aacttcttcg cctcctaccc ctgagggtta gtgccaaggg tggtccaacg      114
-0
-     gagctgagcc taaccaagag tgcctgggag gccagttcac tgcgtagctc ccggcacagt      120
-0
-     ggcttcagcc acttgtga                                                    121
-8
+     atgagcccct acgggcttaa cctgagccta gtggatgagg caacaacgtg tgtaacaccc        60
+     agggtcccca atacatctgt ggtgctgcca acaggcggta acggcacatc accagcgctg       120
+     cctatcttct ccatgacgct gggtgctgtg tccaacgtgc tggcgctggc gctgctggcc       180
+     caggttgcag gcagactgcg gcgccgccgc tcgactgcca ccttcctgtt gttcgtcgcc       240
+     agcctgcttg ccatcgacct agcaggccat gtgatcccgg gcgccttggt gcttcgcctg       300
+     tatactgcag gacgtgcgcc cgctggcggg gcctgtcatt tcctgggcgg ctgtatggtc       360
+     ttctttggcc tgtgcccact tttgcttggc tgtggcatgg ccgtggagcg ctgcgtgggt       420
+     gtcacgcagc cgctgatcca cgcggcgcgc gtgtccgtag cccgcgcacg cctggcacta       480
+     gccctgctgg ccgccatggc tttggcagtg gcgctgctgc cactagtgca cgtgggtcac       540
+     tacgagctac agtaccctgg cacttggtgt ttcattagcc ttgggcctcc tggaggttgg       600
+     cgccaggcgt tgcttgcggg cctcttcgcc ggccttggcc tggctgcgct ccttgccgca       660
+     ctagtgtgta atacgctcag cggcctggcg ctccttcgtg cccgctggag gcggcgtcgc       720
+     tctcgacgtt tccgagagaa cgcaggtccc gatgatcgcc ggcgctgggg gtcccgtgga       780
+     ctccgcttgg cctccgcctc gtctgcgtca tccatcactt caaccacagc tgccctccgc       840
+     agctctcggg gaggcggctc cgcgcgcagg gttcacgcac acgacgtgga aatggtgggc       900
+     cagctcgtgg gcatcatggt ggtgtcgtgc atctgctgga gccccctgct ggtattggtg       960
+     gtgttggcca tcgggggctg gaactctaac tccctgcagc ggccgctctt tctggctgta      1020
+     cgcctcgcgt cgtggaacca gatcctggac ccatgggtgt acatcctgct gcgccaggct      1080
+     atgctgcgcc aacttcttcg cctcctaccc ctgagggtta gtgccaaggg tggtccaacg      1140
+     gagctgagcc taaccaagag tgcctgggag gccagttcac tgcgtagctc ccggcacagt      1200
+     ggcttcagcc acttgtga                                                    1218
 //
 
 Output file format
@@ -312,9 +288,9 @@ U68037 from 1 to 1218
 
 ##gff-version 3
 ##sequence-region U68037 1 924
-#!Date 2008-07-15
+#!Date 2010-01-15
 #!Type DNA
-#!Source-version EMBOSS 6.1.0
+#!Source-version EMBOSS 6.2.0
 U68037  cpgplot sequence_feature        104     509     0.000   +       .
 ID="U68037.1"
 U68037  cpgplot sequence_feature        596     924     0.000   +       .
@@ -329,17 +305,17 @@ Notes
    "CpG" refers to a C nucleotide immediately followed by a G. The 'p' in
    'CpG' refers to the phosphate group linking the two bases. Regions of
    genomic sequences rich in the CpG pattern or "CpG islands" are
-   resistant to methylation and tend to be associated with genes which
-   are frequently switched on. It's been estimated that about half of all
+   resistant to methylation and tend to be associated with genes which are
+   frequently switched on. It's been estimated that about half of all
    mammalian genes, and, possibly all mammalian house-keeping genes, have
    a CpG-rich region around their 5' end. Non-mammalian vertebrates have
    some CpG islands that are associated with genes, but the association
    gets equivocal in the farther taxonomic groups. The detection of CpG
-   island upstream of predicted exons or genes is evidence in support of
-   a highly expressed gene.
+   island upstream of predicted exons or genes is evidence in support of a
+   highly expressed gene.
 
-   As there is no official definition of what is a CpG island is or how
-   to identify where they begin and end, we work with two definitions and
+   As there is no official definition of what is a CpG island is or how to
+   identify where they begin and end, we work with two definitions and
    thus two methods. These are:
 
    1. cpgplot and newcpgreport use a sliding window within which the
@@ -351,12 +327,12 @@ Notes
 
    2. newcpgseek and cpgreport use a running sum calculated from all
    positions in a sequence rather than a window to produce a score. If
-   there is not a CG dinucleotide at a position, the score is
-   decremented, if there is one, the score is incremented by a constant
-   (user-defined) value. If the score for a region in the sequence is
-   higher than a threshold (17 at the moment) then a putative island is
-   declared. Sequence regions scoring above the threshold are searched
-   for recursively.
+   there is not a CG dinucleotide at a position, the score is decremented,
+   if there is one, the score is incremented by a constant (user-defined)
+   value. If the score for a region in the sequence is higher than a
+   threshold (17 at the moment) then a putative island is declared.
+   Sequence regions scoring above the threshold are searched for
+   recursively.
 
    This method overpredicts islands but finds the smaller ones around
    primary exons. newcpgseek uses the same method as cpgreport but the
@@ -365,13 +341,13 @@ Notes
    the human cpgisland database you can find on the EBI's ftp server as
    well as on the EBI's SRS server.
 
-   newcpgseek and cpgreport both now display the actual CpG count, the
-   (%C + %G) and the Observed/Expected ratio in the region where the
-   score is above the threshold.
+   newcpgseek and cpgreport both now display the actual CpG count, the (%C
+   + %G) and the Observed/Expected ratio in the region where the score is
+   above the threshold.
 
-   The geecee program measures CG content in the entire input sequence
-   and is not to be used to detect CpG islands. It can be useful for
-   detecting sequences that might contain an island.
+   The geecee program measures CG content in the entire input sequence and
+   is not to be used to detect CpG islands. It can be useful for detecting
+   sequences that might contain an island.
 
 References
 
@@ -418,9 +394,9 @@ See also
    as cpgreport but the output is different and more readable.
 
    2. newcpgreport and cpgplot use a sliding window within which the
-   Obs/Exp ratio of CpG is calculated. The important thing to note in
-   this method is that an island, in order to be reported, is defined as
-   a region that satisfies the following contraints:
+   Obs/Exp ratio of CpG is calculated. The important thing to note in this
+   method is that an island, in order to be reported, is defined as a
+   region that satisfies the following contraints:
 
    Obs/Exp ratio > 0.6
    % C + % G > 50%
@@ -436,7 +412,7 @@ See also
 
 Author(s)
 
-   Alan Bleasby (ajb © ebi.ac.uk)
+   Alan Bleasby (ajb (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

@@ -1,5 +1,4 @@
-
-                                seqmatchall 
+                                 seqmatchall
 
 
 
@@ -31,16 +30,20 @@ Usage
    matches:
 
 
-% seqmatchall 
+% seqmatchall
 All-against-all word comparison of a sequence set
 Input sequence set: @eclac.list
 Word size [4]: 15
-Output alignment [j01636.seqmatchall]: 
+Output alignment [j01636.seqmatchall]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+All-against-all word comparison of a sequence set
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqset     Sequence set filename and optional format,
@@ -87,13 +90,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -128,7 +133,7 @@ Output file format
 
 ########################################
 # Program: seqmatchall
-# Rundate: Tue 15 Jul 2008 12:00:00
+# Rundate: Fri 15 Jan 2010 12:00:00
 # Commandline: seqmatchall
 #    -sequence @../../data/eclac.list
 #    -wordsize 15
@@ -194,13 +199,12 @@ Output file format
 #---------------------------------------
 
    J01636 (the complete E.coli lac operon) matches V00294 V00295 V00296
-   and X51872 (the individual genes), and there is a short overlap
-   between V00295 (lacY) and the flanking genes V00296 (lacZ) and X51872
-   (lacA)
+   and X51872 (the individual genes), and there is a short overlap between
+   V00295 (lacY) and the flanking genes V00296 (lacZ) and X51872 (lacA)
 
-   The output is a list of regions of identity in pairs of sequences,
-   each consisting of one line with 7 columns of data separated by TABs
-   or space characters.
+   The output is a list of regions of identity in pairs of sequences, each
+   consisting of one line with 7 columns of data separated by TABs or
+   space characters.
 
    The columns of data consist of:
 
@@ -248,8 +252,8 @@ See also
 
    Program name     Description
    matcher          Waterman-Eggert local alignment of two sequences
-   supermatcher     Calculate approximate local pair-wise alignments of
-                    larger sequences
+   supermatcher     Calculate approximate local pair-wise alignments of larger
+                    sequences
    water            Smith-Waterman local alignment of sequences
    wordfinder       Match large sequences against one or more other sequences
    wordmatch        Finds regions of identity (exact matches) of two sequences
@@ -258,7 +262,7 @@ See also
 
 Author(s)
 
-   Ian Longden (il © sanger.ac.uk)
+   Ian Longden (il (c) sanger.ac.uk)
    Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
    CB10 1SA, UK.
 

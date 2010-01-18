@@ -116,6 +116,7 @@ ALIGNMENT GLOBAL
 esim4      Align an mRNA to a genomic DNA sequence
 est2genome Align EST sequences to genomic DNA sequence
 needle     Needleman-Wunsch global alignment of two sequences
+needleall  Many-to-many pairwise alignments of two sequence sets
 stretcher  Needleman-Wunsch rapid global alignment of two sequences
 
 ALIGNMENT LOCAL
@@ -274,7 +275,7 @@ cai    Calculate codon adaptation index
 chips  Calculates Nc codon usage statistic
 codcmp Codon usage table comparison
 cusp   Create a codon usage table from nucleotide sequence(s)
-syco   Draw synonymous codon usage statictic plot for a nucleotide sequence
+syco   Draw synonymous codon usage statistic plot for a nucleotide sequence
 
 NUCLEIC COMPOSITION
 banana    Plot bending and curvature data for B-DNA
@@ -286,7 +287,7 @@ density   Draw a nucleic acid density plot
 freak     Generate residue/base frequency table or plot
 isochore  Plots isochores in DNA sequences
 sirna     Finds siRNA duplexes in mRNA
-wordcount Count and extract unique words in DNA sequence(s)
+wordcount Count and extract unique words in molecular sequence(s)
 
 NUCLEIC CPG ISLANDS
 cpgplot      Identify and plot CpG islands in nucleotide sequence(s)
@@ -301,7 +302,7 @@ marscan Finds matrix/scaffold recognition (MRS) signatures in DNA sequences
 plotorf Plot potential open reading frames in a nucleotide sequence
 showorf Display a nucleotide sequence and translation in pretty format
 sixpack Display a DNA sequence with 6-frame translation and ORFs
-syco    Draw synonymous codon usage statictic plot for a nucleotide sequence
+syco    Draw synonymous codon usage statistic plot for a nucleotide sequence
 tcode   Identify protein-coding regions using Fickett TESTCODE statistic
 wobble  Plot third base position variability in a nucleotide sequence
 
@@ -500,7 +501,7 @@ pepinfo       Plot amino acid properties of a protein sequence in parallel
 pepstats      Calculates statistics of protein properties
 pepwindow     Draw a hydropathy plot for a protein sequence
 pepwindowall  Draw Kyte-Doolittle hydropathy plot for a protein alignment
-wordcount     Count and extract unique words in DNA sequence(s)
+wordcount     Count and extract unique words in molecular sequence(s)
 
 PROTEIN MOTIFS
 antigenic      Finds antigenic sites in proteins
@@ -542,12 +543,14 @@ prophet  Scan one or more sequences with a Gribskov or Henikoff profile
 
 TEST
 crystalball Answers every drug discovery question about a sequence
+ensembltest Demonstration of the Ensembl API to be
+sqltest     Demonstration of SQL server access
 
 UTILS DATABASE CREATION
 aaindexextract Extract amino acid property data from AAINDEX
 allversusall   Sequence similarity data from all-versus-all comparison
 cathparse      Generates DCF file from raw CATH files
-cutgextract    Extract codon usage tables from from CUTG database
+cutgextract    Extract codon usage tables from CUTG database
 domainer       Generates domain CCF files from protein CCF files
 domainnr       Removes redundant domains from a DCF file
 domainseqs     Adds sequence records to a DCF file
@@ -630,7 +633,7 @@ cpgplot        Identify and plot CpG islands in nucleotide sequence(s)
 cpgreport      Identify and report CpG-rich regions in nucleotide sequence(s)
 crystalball    Answers every drug discovery question about a sequence
 cusp           Create a codon usage table from nucleotide sequence(s)
-cutgextract    Extract codon usage tables from from CUTG database
+cutgextract    Extract codon usage tables from CUTG database
 cutseq         Removes a section from a sequence
 dan            Calculates nucleic acid melting temperature
 dbiblast       Index a BLAST database
@@ -703,6 +706,7 @@ eneighbor      Phylogenies from distance matrix by N-J or UPGMA method
 enetnglyc      Reports N-glycosylation sites in human proteins
 enetoglyc      Reports mucin type GalNAc O-glycosylation sites in mammalian proteins
 enetphos       Reports ser, thr and tyr phosphorylation sites in eukaryotic proteins
+ensembltest    Demonstration of the Ensembl API to be
 entret         Retrieves sequence entries from flatfile databases and files
 epenny         Penny algorithm, branch-and-bound
 epestfind      Finds PEST motifs as potential proteolytic cleavage sites
@@ -803,6 +807,7 @@ mse            Multiple Sequence Editor
 mwcontam       Find weights common to multiple molecular weights files
 mwfilter       Filter noisy data from molecular weights file
 needle         Needleman-Wunsch global alignment of two sequences
+needleall      Many-to-many pairwise alignments of two sequence sets
 newcpgreport   Identify CpG islands in nucleotide sequence(s)
 newcpgseek     Identify and report CpG-rich regions in nucleotide sequence(s)
 newseq         Create a sequence file from a typed-in sequence
@@ -896,11 +901,12 @@ skipredundant  Remove redundant sequences from an input set
 skipseq        Reads and writes (returns) sequences, skipping first few
 splitsource    Split sequence(s) into original source sequences
 splitter       Split sequence(s) into smaller sequences
+sqltest        Demonstration of SQL server access
 ssematch       Search a DCF file for secondary structure matches
 stretcher      Needleman-Wunsch rapid global alignment of two sequences
 stssearch      Search a DNA database for matches with a set of STS primers
 supermatcher   Calculate approximate local pair-wise alignments of larger sequences
-syco           Draw synonymous codon usage statictic plot for a nucleotide sequence
+syco           Draw synonymous codon usage statistic plot for a nucleotide sequence
 tcode          Identify protein-coding regions using Fickett TESTCODE statistic
 textsearch     Search the textual description of sequence(s)
 tfextract      Process TRANSFAC transcription factor database for use by tfscan
@@ -935,7 +941,7 @@ vrnasubopt     Calculate RNA suboptimals
 water          Smith-Waterman local alignment of sequences
 whichdb        Search all sequence databases for an entry and retrieve it
 wobble         Plot third base position variability in a nucleotide sequence
-wordcount      Count and extract unique words in DNA sequence(s)
+wordcount      Count and extract unique words in molecular sequence(s)
 wordfinder     Match large sequences against one or more other sequences
 wordmatch      Finds regions of identity (exact matches) of two sequences
 wossname       Finds programs by keywords in their short description
@@ -1029,13 +1035,16 @@ Finds programs by keywords in their short description
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
+Finds programs by keywords in their short description
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers:
   [-search]            string     Enter a word or words here and a
                                   case-independent search for it will be made
                                   in the one-line documentation, group names
                                   and keywords of all of the EMBOSS programs.
                                   If no keyword is specified, all programs
-                                  will be listed. (Any string is accepted)
+                                  will be listed. (Any string)
 
    Additional (Optional) qualifiers:
    -explode            boolean    [N] The groups that EMBOSS applications
@@ -1093,8 +1102,7 @@ Finds programs by keywords in their short description
                                   libraries and share the same look and feel,
                                   but are generally developed by people who
                                   wish the programs to be outside of the GNU
-                                  Public Licence scheme (Any string is
-                                  accepted)
+                                  Public Licence scheme (Any string)
    -colon              boolean    [N] The groups that EMBOSS applications
                                   belong to up to two levels, for example the
                                   primary group 'ALIGNMENT' has several
@@ -1130,125 +1138,258 @@ Finds programs by keywords in their short description
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 
 </pre>
 </td></tr></table>
 <P>
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Qualifier</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
-</tr>
-
-<tr>
-<td>[-search]<br>(Parameter 1)</td>
-<td>Enter a word or words here and a case-independent search for it will be made in the one-line documentation, group names and keywords of all of the EMBOSS programs. If no keyword is specified, all programs will be listed.</td>
-<td>Any string is accepted</td>
-<td><i>An empty string is accepted</i></td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Additional (Optional) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
+<th align="left" colspan=5>Standard (Mandatory) qualifiers</th>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
+<td>[-search]<br>(Parameter 1)</td>
+<td>string</td>
+<td>Enter a word or words here and a case-independent search for it will be made in the one-line documentation, group names and keywords of all of the EMBOSS programs. If no keyword is specified, all programs will be listed.</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Additional (Optional) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td>-explode</td>
+<td>boolean</td>
 <td>The groups that EMBOSS applications belong to have two forms, exploded and not exploded. The exploded group names are more numerous and often vaguely phrased than the non-exploded ones. The exploded names are formed from definitions of the group names that start like NAME1:NAME2 and which are then expanded into many combinations of the names as: 'NAME1', 'NAME2', 'NAME1 NAME2', NAME2 NAME1'. The non-expanded names are simply like: 'NAME1 NAME2'.</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-[no]allmatch</td>
+<td>boolean</td>
 <td>By default, all words in the search string must match. This option searches for a match to any word in a list of possibilities</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-showkeywords</td>
+<td>boolean</td>
 <td>Show keywords with program documentation</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-outfile</td>
+<td>outfile</td>
 <td>Output file name</td>
 <td>Output file</td>
 <td>stdout</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-html</td>
+<td>toggle</td>
 <td>If you are sending the output to a file, this will format it for displaying as a table in a WWW document.</td>
 <td>Toggle value Yes/No</td>
 <td>No</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-groups</td>
+<td>boolean</td>
 <td>If you use this option, then only the group names will output to the file</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-alphabetic</td>
+<td>boolean</td>
 <td>If you use this option, then you will get a single list of the program names and descriptions instead of the programs being listed in their functional groups.</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
+<th align="left" colspan=5>Advanced (Unprompted) qualifiers</th>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-[no]emboss</td>
+<td>boolean</td>
 <td>If you use this option then EMBOSS program documentation will be searched. If this option is set to be false, then only the EMBASSY programs will be searched (if the -embassy option is true). EMBASSY programs are not strictly part of EMBOSS, but use the same code libraries and share the same look and feel, but are generally developed by people who wish the programs to be outside of the GNU Public Licence scheme</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-[no]embassy</td>
+<td>boolean</td>
 <td>If you use this option then EMBASSY program documentation will be searched. If this option is set to be false, then only the EMBOSS programs will be searched (if the -emboss option is true). EMBASSY programs are not strictly part of EMBOSS, but use the same code libraries and share the same look and feel, but are generally developed by people who wish the programs to be outside of the GNU Public Licence scheme</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-showembassy</td>
+<td>string</td>
 <td>If you use this option then this EMBASSY package program documentation will be searched. EMBASSY programs are not strictly part of EMBOSS, but use the same code libraries and share the same look and feel, but are generally developed by people who wish the programs to be outside of the GNU Public Licence scheme</td>
-<td>Any string is accepted</td>
-<td><i>An empty string is accepted</i></td>
+<td>Any string</td>
+<td>&nbsp;</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-colon</td>
+<td>boolean</td>
 <td>The groups that EMBOSS applications belong to up to two levels, for example the primary group 'ALIGNMENT' has several sub-groups, or second-level groups, e.g.: CONSENSUS, DIFFERENCES, DOT PLOTS, GLOBAL, LOCAL, MULTIPLE. To aid programs that parse the output of wossname that require the names of these subgroups, a colon ':' will be placed between the first and second level of the group name if this option is true. Note: This does not apply if the group names have been exploded with the 'explode' option.</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
-<tr>
+<tr bgcolor="#FFFFCC">
 <td>-gui</td>
+<td>boolean</td>
 <td>This option is intended to help those who are designing Graphical User Interfaces to the EMBOSS applications. Some EMBOSS programs are inappropriate for running in a GUI, these include other menu programs and interactive editors. This option allows you to only report those programs that can be run from a GUI</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>General qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -auto</td>
+<td>boolean</td>
+<td>Turn off prompts</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -stdout</td>
+<td>boolean</td>
+<td>Write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -filter</td>
+<td>boolean</td>
+<td>Read first file from standard input, write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -options</td>
+<td>boolean</td>
+<td>Prompt for standard and additional values</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -debug</td>
+<td>boolean</td>
+<td>Write debug output to program.dbg</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -verbose</td>
+<td>boolean</td>
+<td>Report some/full command line options</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -help</td>
+<td>boolean</td>
+<td>Report command line options and exit. More information on associated and general qualifiers can be found with -help -verbose</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -warning</td>
+<td>boolean</td>
+<td>Report warnings</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -error</td>
+<td>boolean</td>
+<td>Report errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fatal</td>
+<td>boolean</td>
+<td>Report fatal errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -die</td>
+<td>boolean</td>
+<td>Report dying program messages</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -version</td>
+<td>boolean</td>
+<td>Report version number and exit</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
 </tr>
 
 </table>

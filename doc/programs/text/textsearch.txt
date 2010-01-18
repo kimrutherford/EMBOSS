@@ -1,5 +1,4 @@
-
-                                textsearch 
+                                 textsearch
 
 
 
@@ -37,9 +36,10 @@ Usage
    Search for 'lactose':
 
 
-% textsearch 'tsw:*' 'lactose' 
+% textsearch 'tsw:*' 'lactose'
 Search the textual description of sequence(s)
-Output file [12s1_arath.textsearch]: 
+Output file [12s1_arath.textsearch]:
+
 
    Go to the output files for this example
 
@@ -48,9 +48,10 @@ Output file [12s1_arath.textsearch]:
    Search for 'lactose' or 'permease' in E.coli proteins:
 
 
-% textsearch 'tsw:*_ecoli' 'lactose | permease' 
+% textsearch 'tsw:*_ecoli' 'lactose | permease'
 Search the textual description of sequence(s)
-Output file [bgal_ecoli.textsearch]: 
+Output file [bgal_ecoli.textsearch]:
+
 
    Go to the input files for this example
    Go to the output files for this example
@@ -60,12 +61,16 @@ Output file [bgal_ecoli.textsearch]:
    Output a search for 'lacz' formatted with HTML to a file:
 
 
-% textsearch 'tembl:*' 'lacz' -html -outfile embl.lacz.html 
+% textsearch 'tembl:*' 'lacz' -html -outfile embl.lacz.html
 Search the textual description of sequence(s)
+
 
    Go to the output files for this example
 
 Command line arguments
+
+Search the textual description of sequence(s)
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     (Gapped) sequence(s) filename and optional
@@ -75,7 +80,7 @@ Command line arguments
                                   For example:
                                   human|mouse
                                   will find text with either 'human' OR
-                                  'mouse' in the text (Any string is accepted)
+                                  'mouse' in the text (Any string)
   [-outfile]           outfile    [*.textsearch] Output file name
 
    Additional (Optional) qualifiers:
@@ -125,13 +130,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -149,8 +156,8 @@ Output file format
 
 # Search for: lactose
 tsw-id:LACI_ECOLI LACI_ECOLI    P03023  Lactose operon repressor
-tsw-id:LACY_ECOLI LACY_ECOLI    P02920  Lactose permease (Lactose-proton sympor
-t)
+tsw-id:LACY_ECOLI LACY_ECOLI    P02920  Lactose permease (Lactose-proton symport
+)
 
   Output files for usage example 2
 
@@ -158,8 +165,8 @@ t)
 
 # Search for: lactose | permease
 tsw-id:LACI_ECOLI LACI_ECOLI    P03023  Lactose operon repressor
-tsw-id:LACY_ECOLI LACY_ECOLI    P02920  Lactose permease (Lactose-proton sympor
-t)
+tsw-id:LACY_ECOLI LACY_ECOLI    P02920  Lactose permease (Lactose-proton symport
+)
 
   Output files for usage example 3
 
@@ -171,15 +178,14 @@ t)
    tembl-id:V00296 V00296 V00296 E. coli gene lacZ coding for
    beta-galactosidase (EC 3.2.1.23).
 
-   The first column in the name or ID of each sequence. The remaining
-   text is the description line of the sequence.
+   The first column in the name or ID of each sequence. The remaining text
+   is the description line of the sequence.
 
    When the -html qualifier is specified, then the output will be wrapped
-   in HTML tags, ready for inclusion in a Web page. Note that tags such
-   as <HTML>, <BODY>, </BODY> and </HTML> are not output by this program
-   as the table of databases is expected to form only part of the
-   contents of a web page - the rest of the web page must be supplier by
-   the user.
+   in HTML tags, ready for inclusion in a Web page. Note that tags such as
+   <HTML>, <BODY>, </BODY> and </HTML> are not output by this program as
+   the table of databases is expected to form only part of the contents of
+   a web page - the rest of the web page must be supplier by the user.
 
    The lines of out information are guaranteed not to have trailing
    white-space at the end. So if '-nodesc' is used, there will not be any
@@ -216,45 +222,43 @@ Known bugs
 
 See also
 
-   Program name     Description
-   abiview          Display the trace in an ABI sequencer file
-   cirdna           Draws circular maps of DNA constructs
-   infoalign        Display basic information about a multiple sequence
-                    alignment
-   infobase         Return information on a given nucleotide base
-   inforesidue      Return information on a given amino acid residue
-   infoseq          Display basic information about sequences
-   lindna           Draws linear maps of DNA constructs
-   pepnet           Draw a helical net for a protein sequence
-   pepwheel         Draw a helical wheel diagram for a protein sequence
-   prettyplot       Draw a sequence alignment with pretty formatting
-   prettyseq        Write a nucleotide sequence and its translation to file
-   remap            Display restriction enzyme binding sites in a nucleotide
-                    sequence
-   seealso          Finds programs with similar function to a specified program
-   showalign        Display a multiple sequence alignment in pretty format
-   showdb           Displays information on configured databases
-   showfeat         Display features of a sequence in pretty format
-   showpep          Displays protein sequences with features in pretty format
-   showseq          Displays sequences with features in pretty format
-   sixpack          Display a DNA sequence with 6-frame translation and ORFs
-   tfm              Displays full documentation for an application
-   whichdb          Search all sequence databases for an entry and retrieve it
-   wossname         Finds programs by keywords in their short description
+                   Program name                            Description
+                   abiview      Display the trace in an ABI sequencer file
+                   cirdna       Draws circular maps of DNA constructs
+                   infoalign    Display basic information about a multiple sequence alignment
+                   infobase     Return information on a given nucleotide base
+                   inforesidue  Return information on a given amino acid residue
+                   infoseq      Display basic information about sequences
+                   lindna       Draws linear maps of DNA constructs
+                   pepnet       Draw a helical net for a protein sequence
+                   pepwheel     Draw a helical wheel diagram for a protein sequence
+                   prettyplot   Draw a sequence alignment with pretty formatting
+                   prettyseq    Write a nucleotide sequence and its translation to file
+                   remap        Display restriction enzyme binding sites in a nucleotide sequence
+                   seealso      Finds programs with similar function to a specified program
+                   showalign    Display a multiple sequence alignment in pretty format
+                   showdb       Displays information on configured databases
+                   showfeat     Display features of a sequence in pretty format
+                   showpep      Displays protein sequences with features in pretty format
+                   showseq      Displays sequences with features in pretty format
+                   sixpack      Display a DNA sequence with 6-frame translation and ORFs
+                   tfm          Displays full documentation for an application
+                   whichdb      Search all sequence databases for an entry and retrieve it
+                   wossname     Finds programs by keywords in their short description
 
 Author(s)
 
-   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
-   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
-   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+   Gary             Williams (gwilliam (c) rfcgr.mrc.ac.uk)
+   MRC              Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome           Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 History
 
 Target users
 
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
 
 Comments
 
-   None
+                    None

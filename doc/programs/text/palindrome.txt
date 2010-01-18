@@ -1,5 +1,4 @@
-
-                                palindrome 
+                                 palindrome
 
 
 
@@ -16,32 +15,36 @@ Function
 
 Description
 
-   palindrome finds inverted repeats (stem loops) in nucleotide
-   sequences. It will find inverted repeats that include a proportion of
-   mismatches and gaps, that correspond to bulges in the stem loop. It
-   finds all possible inverted matches satisfying the specified
-   conditions of minimum and maximum length of palindrome, maximum gap
-   between repeated regions and number of mismatches allowed.
+   palindrome finds inverted repeats (stem loops) in nucleotide sequences.
+   It will find inverted repeats that include a proportion of mismatches
+   and gaps, that correspond to bulges in the stem loop. It finds all
+   possible inverted matches satisfying the specified conditions of
+   minimum and maximum length of palindrome, maximum gap between repeated
+   regions and number of mismatches allowed.
 
 Usage
 
    Here is a sample session with palindrome
 
 
-% palindrome 
+% palindrome
 Finds inverted repeats in nucleotide sequence(s)
 Input nucleotide sequence(s): tembl:d00596
 Enter minimum length of palindrome [10]: 15
-Enter maximum length of palindrome [100]: 
-Enter maximum gap between repeated regions [100]: 
-Number of mismatches allowed [0]: 
-Output file [d00596.pal]: 
-Report overlapping matches [Y]: 
+Enter maximum length of palindrome [100]:
+Enter maximum gap between repeated regions [100]:
+Number of mismatches allowed [0]:
+Output file [d00596.pal]:
+Report overlapping matches [Y]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Finds inverted repeats in nucleotide sequence(s)
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -88,13 +91,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -102,8 +107,8 @@ Input file format
 
   Input files for usage example
 
-   'tembl:d00596' is a sequence entry in the example nucleic acid
-   database 'tembl'
+   'tembl:d00596' is a sequence entry in the example nucleic acid database
+   'tembl'
 
   Database entry: tembl:d00596
 
@@ -119,8 +124,7 @@ XX
 KW   .
 XX
 OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
-;
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
 OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
 OC   Homo.
 XX
@@ -162,106 +166,56 @@ FT                   /note="thymidylate synthase mRNA and introns"
 
   [Part of this file has been deleted for brevity]
 
-     ttttgttttt agcttcagcg agaacccaga cctttcccaa agctcaggat tcttcgaaaa     1566
-0
-     gttgagaaaa ttgatgactt caaagctgaa gactttcaga ttgaagggta caatccgcat     1572
-0
-     ccaactatta aaatggaaat ggctgtttag ggtgctttca aaggagctcg aaggatattg     1578
-0
-     tcagtcttta ggggttgggc tggatgccga ggtaaaagtt ctttttgctc taaaagaaaa     1584
-0
-     aggaactagg tcaaaaatct gtccgtgacc tatcagttat taatttttaa ggatgttgcc     1590
-0
-     actggcaaat gtaactgtgc cagttctttc cataataaaa ggctttgagt taactcactg     1596
-0
-     agggtatctg acaatgctga ggttatgaac aaagtgagga gaatgaaatg tatgtgctct     1602
-0
-     tagcaaaaac atgtatgtgc atttcaatcc cacgtactta taaagaaggt tggtgaattt     1608
-0
-     cacaagctat ttttggaata tttttagaat attttaagaa tttcacaagc tattccctca     1614
-0
-     aatctgaggg agctgagtaa caccatcgat catgatgtag agtgtggtta tgaactttaa     1620
-0
-     agttatagtt gttttatatg ttgctataat aaagaagtgt tctgcattcg tccacgcttt     1626
-0
-     gttcattctg tactgccact tatctgctca gttccttcct aaaatagatt aaagaactct     1632
-0
-     ccttaagtaa acatgtgctg tattctggtt tggatgctac ttaaaagagt atattttaga     1638
-0
-     aataatagtg aatatatttt gccctatttt tctcatttta actgcatctt atcctcaaaa     1644
-0
-     tataatgacc atttaggata gagttttttt tttttttttt taaactttta taaccttaaa     1650
-0
-     gggttatttt aaaataatct atggactacc attttgccct cattagcttc agcatggtgt     1656
-0
-     gacttctcta ataatatgct tagattaagc aaggaaaaga tgcaaaacca cttcggggtt     1662
-0
-     aatcagtgaa atatttttcc cttcgttgca taccagatac ccccggtgtt gcacgactat     1668
-0
-     ttttattctg ctaatttatg acaagtgtta aacagaacaa ggaattattc caacaagtta     1674
-0
-     tgcaacatgt tgcttatttt caaattacag tttaatgtct aggtgccagc ccttgatata     1680
-0
-     gctatttttg taagaacatc ctcctggact ttgggttagt taaatctaaa cttatttaag     1686
-0
-     gattaagtag gataacgtgc attgatttgc taaaagaatc aagtaataat tacttagctg     1692
-0
-     attcctgagg gtggtatgac ttctagctga actcatcttg atcggtagga ttttttaaat     1698
-0
-     ccatttttgt aaaactattt ccaagaaatt ttaagccctt tcacttcaga aagaaaaaag     1704
-0
-     ttgttggggc tgagcactta attttcttga gcaggaagga gtttcttcca aacttcacca     1710
-0
-     tctggagact ggtgtttctt tacagattcc tccttcattt ctgttgagta gccgggatcc     1716
-0
-     tatcaaagac caaaaaaatg agtcctgtta acaaccacct ggaacaaaaa cagattttat     1722
-0
-     gcatttatgc tgctccaaga aatgctttta cgtctaagcc agaggcaatt aattaatttt     1728
-0
-     tttttttttg acatggagtc actgtccgtt gcccaggctg cagtgcagtg gcgcaatctt     1734
-0
-     ggctcactgc aacctccacc tcccaggttc aagtgattct cctgcctcag cctcccatgt     1740
-0
-     agctgggatc acaggcacct gccaccatgc ccggctaatt ttttgtattt tttgtagaga     1746
-0
-     cagggtttca ccatgttggc caggctggtc tcaaacacct gacctcaaat gatccacctg     1752
-0
-     cctcagcctc ccaaagtgtt gggattacag gcgtaagcca ccatgcccag ccctgaatta     1758
-0
-     atatttttaa aataagtttg gagactgttg gaaataatag ggcagaggaa catattttac     1764
-0
-     tggctacttg ccagagttag ttaactcatc aaactctttg ataatagttt gacctctgtt     1770
-0
-     ggtgaaaatg agccatgatc tcttgaacat gatcagaata aatgccccag ccacacaatt     1776
-0
-     gtagtccaaa ctttttaggt cactaacttg ctagatggtg ccaggttttt ttgcacaagg     1782
-0
-     agtgcaaatg ttaagatctc cactagtgag gaaaggctag tattacagaa gccttgtcag     1788
-0
-     aggcaattga acctccaagc cctggccctc aggcctgagg attttgatac agacaaactg     1794
-0
-     aagaaccgtt tgttagtgga tattgcaaac aaacaggagt caaagcttgg tgctccacag     1800
-0
-     tctagttcac gagacaggcg tggcagtggc tggcagcatc tcttctcaca ggggccctca     1806
-0
-     ggcacagctt accttgggag gcatgtagga agcccgctgg atcatcacgg gatacttgaa     1812
-0
-     atgctcatgc aggtggtcaa catactcaca caccctagga ggagggaatc agatcggggc     1818
-0
-     aatgatgcct gaagtcagat tattcacgtg gtgctaactt aaagcagaag gagcgagtac     1824
-0
-     cactcaattg acagtgttgg ccaaggctta gctgtgttac catgcgtttc taggcaagtc     1830
-0
-     cctaaacctc tgtgcctcag gtccttttct tctaaaatat agcaatgtga ggtggggact     1836
-0
-     ttgatgacat gaacacacga agtccctctg agaggttttg tggtgccctt taaaagggat     1842
-0
-     caattcagac tctgtaaata tccagaatta tttgggttcc tctggtcaaa agtcagatga     1848
-0
-     atagattaaa atcaccacat tttgtgatct atttttcaag aagcgtttgt attttttcat     1854
-0
-     atggctgcag cagctgccag gggcttgggg tttttttggc aggtagggtt gggagg         1859
-6
+     ttttgttttt agcttcagcg agaacccaga cctttcccaa agctcaggat tcttcgaaaa     15660
+     gttgagaaaa ttgatgactt caaagctgaa gactttcaga ttgaagggta caatccgcat     15720
+     ccaactatta aaatggaaat ggctgtttag ggtgctttca aaggagctcg aaggatattg     15780
+     tcagtcttta ggggttgggc tggatgccga ggtaaaagtt ctttttgctc taaaagaaaa     15840
+     aggaactagg tcaaaaatct gtccgtgacc tatcagttat taatttttaa ggatgttgcc     15900
+     actggcaaat gtaactgtgc cagttctttc cataataaaa ggctttgagt taactcactg     15960
+     agggtatctg acaatgctga ggttatgaac aaagtgagga gaatgaaatg tatgtgctct     16020
+     tagcaaaaac atgtatgtgc atttcaatcc cacgtactta taaagaaggt tggtgaattt     16080
+     cacaagctat ttttggaata tttttagaat attttaagaa tttcacaagc tattccctca     16140
+     aatctgaggg agctgagtaa caccatcgat catgatgtag agtgtggtta tgaactttaa     16200
+     agttatagtt gttttatatg ttgctataat aaagaagtgt tctgcattcg tccacgcttt     16260
+     gttcattctg tactgccact tatctgctca gttccttcct aaaatagatt aaagaactct     16320
+     ccttaagtaa acatgtgctg tattctggtt tggatgctac ttaaaagagt atattttaga     16380
+     aataatagtg aatatatttt gccctatttt tctcatttta actgcatctt atcctcaaaa     16440
+     tataatgacc atttaggata gagttttttt tttttttttt taaactttta taaccttaaa     16500
+     gggttatttt aaaataatct atggactacc attttgccct cattagcttc agcatggtgt     16560
+     gacttctcta ataatatgct tagattaagc aaggaaaaga tgcaaaacca cttcggggtt     16620
+     aatcagtgaa atatttttcc cttcgttgca taccagatac ccccggtgtt gcacgactat     16680
+     ttttattctg ctaatttatg acaagtgtta aacagaacaa ggaattattc caacaagtta     16740
+     tgcaacatgt tgcttatttt caaattacag tttaatgtct aggtgccagc ccttgatata     16800
+     gctatttttg taagaacatc ctcctggact ttgggttagt taaatctaaa cttatttaag     16860
+     gattaagtag gataacgtgc attgatttgc taaaagaatc aagtaataat tacttagctg     16920
+     attcctgagg gtggtatgac ttctagctga actcatcttg atcggtagga ttttttaaat     16980
+     ccatttttgt aaaactattt ccaagaaatt ttaagccctt tcacttcaga aagaaaaaag     17040
+     ttgttggggc tgagcactta attttcttga gcaggaagga gtttcttcca aacttcacca     17100
+     tctggagact ggtgtttctt tacagattcc tccttcattt ctgttgagta gccgggatcc     17160
+     tatcaaagac caaaaaaatg agtcctgtta acaaccacct ggaacaaaaa cagattttat     17220
+     gcatttatgc tgctccaaga aatgctttta cgtctaagcc agaggcaatt aattaatttt     17280
+     tttttttttg acatggagtc actgtccgtt gcccaggctg cagtgcagtg gcgcaatctt     17340
+     ggctcactgc aacctccacc tcccaggttc aagtgattct cctgcctcag cctcccatgt     17400
+     agctgggatc acaggcacct gccaccatgc ccggctaatt ttttgtattt tttgtagaga     17460
+     cagggtttca ccatgttggc caggctggtc tcaaacacct gacctcaaat gatccacctg     17520
+     cctcagcctc ccaaagtgtt gggattacag gcgtaagcca ccatgcccag ccctgaatta     17580
+     atatttttaa aataagtttg gagactgttg gaaataatag ggcagaggaa catattttac     17640
+     tggctacttg ccagagttag ttaactcatc aaactctttg ataatagttt gacctctgtt     17700
+     ggtgaaaatg agccatgatc tcttgaacat gatcagaata aatgccccag ccacacaatt     17760
+     gtagtccaaa ctttttaggt cactaacttg ctagatggtg ccaggttttt ttgcacaagg     17820
+     agtgcaaatg ttaagatctc cactagtgag gaaaggctag tattacagaa gccttgtcag     17880
+     aggcaattga acctccaagc cctggccctc aggcctgagg attttgatac agacaaactg     17940
+     aagaaccgtt tgttagtgga tattgcaaac aaacaggagt caaagcttgg tgctccacag     18000
+     tctagttcac gagacaggcg tggcagtggc tggcagcatc tcttctcaca ggggccctca     18060
+     ggcacagctt accttgggag gcatgtagga agcccgctgg atcatcacgg gatacttgaa     18120
+     atgctcatgc aggtggtcaa catactcaca caccctagga ggagggaatc agatcggggc     18180
+     aatgatgcct gaagtcagat tattcacgtg gtgctaactt aaagcagaag gagcgagtac     18240
+     cactcaattg acagtgttgg ccaaggctta gctgtgttac catgcgtttc taggcaagtc     18300
+     cctaaacctc tgtgcctcag gtccttttct tctaaaatat agcaatgtga ggtggggact     18360
+     ttgatgacat gaacacacga agtccctctg agaggttttg tggtgccctt taaaagggat     18420
+     caattcagac tctgtaaata tccagaatta tttgggttcc tctggtcaaa agtcagatga     18480
+     atagattaaa atcaccacat tttgtgatct atttttcaag aagcgtttgt attttttcat     18540
+     atggctgcag cagctgccag gggcttgggg tttttttggc aggtagggtt gggagg         18596
 //
 
 Output file format
@@ -337,6 +291,7 @@ Palindromes:
 
 
 
+
 Data files
 
    None.
@@ -360,8 +315,8 @@ References
 
    Some references on inverted repeats:
     1. Pearson CE, Zorbas H, Price GB, Zannis-Hadjopoulos M Inverted
-       repeats, stem-loops, and cruciforms: significance for initiation
-       of DNA replication. J Cell Biochem 1996 Oct;63(1):1-22
+       repeats, stem-loops, and cruciforms: significance for initiation of
+       DNA replication. J Cell Biochem 1996 Oct;63(1):1-22
     2. Waldman AS, Tran H, Goldsmith EC, Resnick MA. q Long inverted
        repeats are an at-risk motif for recombination in mammalian cells.
        Genetics. 1999 Dec;153(4):1873-83. PMID: 10581292; UI: 20050682

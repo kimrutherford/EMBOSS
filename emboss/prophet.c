@@ -105,8 +105,8 @@ int main(int argc, char **argv)
     extendcoeff = ajAcdGetFloat("gapextend");
     align       = ajAcdGetAlign("outfile");  /*JISON replacing outfile */
 
-    opencoeff   = ajRoundF(opencoeff, 8);
-    extendcoeff = ajRoundF(extendcoeff, 8);
+    opencoeff   = ajRoundFloat(opencoeff, 8);
+    extendcoeff = ajRoundFloat(extendcoeff, 8);
 
     substr = ajStrNew();
     name   = ajStrNew();

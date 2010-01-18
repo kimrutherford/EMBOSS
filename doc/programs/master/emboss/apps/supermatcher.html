@@ -107,6 +107,8 @@ None.
 </H2>
 <p><b>supermatcher</b> performs a Smith & Waterman alignment (albeit in a narrow best-matching regions identified by simple word-match) and therefore can use huge amounts of memory if the sequences are large.  The longer the sequences and the wider the specified alignment width, the more memory will be used.  If the program terminates due to lack of memory you can try running the UNIX command <tt>limit</tt> to see if your stack or memory usage have been limited and if so, run <tt>unlimit</tt>, (e.g.: <tt>% unlimit stacksize</tt>).</p>
 
+<p><b>supermatcher</b> has two sequence inputs. The first (<tt>asequence</tt>) is a database or large file which is read one sequence at a time. The second (<tt>bsequence</tt>) is a "sequence set" which is loaded into memory. If one of the inputs has more number of sequences than the other one, specifying the file with many number of sequences first would be useful to decrease the amount of memory used while supermatcher running.</p>
+
 <p>Because the alignment is made within a narrow area each side of the 'best' diagonal identified by word-matching, if there are sufficient indels between the two sequences, then the path of the Smith & Waterman alignment can wander outside of this area. Making the width larger can avoid this problem, but you then use more memory.</p>
 
 

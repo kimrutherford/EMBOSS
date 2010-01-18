@@ -99,11 +99,8 @@ int main(int argc, char **argv)
     AjPStr mtrg = 0;
     AjPStr nqry = 0;
 
-    AjPFile outf = NULL;
     AjPFile errorf;
     AjBool show = ajFalse;
-    AjBool scoreonly = ajFalse;
-    AjBool showalign = ajTrue;
 
     ajint    trglen = 0;
     ajint    qrylen = 0;
@@ -160,21 +157,12 @@ int main(int argc, char **argv)
     errorf    = ajAcdGetOutfile("errorfile");
     width     = ajAcdGetInt("width");	/* not the same as awidth */
 
-    /* obsolete. Can be uncommented in acd file and here to reuse */
+    gapopen   = ajRoundFloat(gapopen, 8);
+    gapextend = ajRoundFloat(gapextend, 8);
 
-    /* outf      = ajAcdGetOutfile("originalfile"); */
-    /* show      = ajAcdGetBoolean("showinternals");*/
-    /* scoreonly = ajAcdGetBoolean("scoreonly"); */
-    /* showalign = ajAcdGetBoolean("showalign"); */
 
-    gapopen   = ajRoundF(gapopen, 8);
-    gapextend = ajRoundF(gapextend, 8);
-
-    if(!showalign)
-	scoreonly = ajTrue;
-
-    sub = ajMatrixfArray(matrix);
-    cvt = ajMatrixfCvt(matrix);
+    sub = ajMatrixfGetMatrix(matrix);
+    cvt = ajMatrixfGetCvt(matrix);
 
     embWordLength(wordlen);
 
@@ -201,15 +189,7 @@ int main(int argc, char **argv)
 		qrylen   = ajSeqGetLen(qryseq);
 		qrybegin = 1 + ajSeqGetOffset(qryseq);
 
-		nqry=ajStrNewRes(1+ajSeqGetLen(qryseq));
-
 		ajDebug("Processing '%S'\n", ajSeqGetNameS(qryseq));
-		ptrg = ajSeqGetSeqC(trgseq);
-		qqry = ajSeqGetSeqC(qryseq);
-
-		ajStrAssignC(&mtrg,"");
-		ajStrAssignC(&nqry,"");
-
 
 		matchscore = wordfinder_findstartpoints(seq1MatchTable,
 							qryseq, trgseq,
@@ -221,21 +201,22 @@ int main(int argc, char **argv)
 		{
 		    if(matchscore)
 		    {
-			ajUser("Match limits (%d..%d) exclude '%S' '%S' %d\n",
+			ajFmtPrintF(errorf,"Match limits (%d..%d) exclude '%S' '%S' %d\n",
 			       lowmatch, limitmatch,
 			       ajSeqGetNameS(qryseq),
 			       ajSeqGetNameS(trgseq),
 			       matchscore);
 		    }
-
-		    trgstart = 0;
-		    trgend   = trglen-1;
-		    qrystart = (ajint)(width/2);
-		    qryend   = qrylen-1;
-
-		    ajStrDel(&nqry);
 		    continue;
 		}
+		
+		nqry=ajStrNewRes(1+ajSeqGetLen(qryseq));
+		ptrg = ajSeqGetSeqC(trgseq);
+		qqry = ajSeqGetSeqC(qryseq);
+
+		ajStrAssignC(&mtrg,"");
+		ajStrAssignC(&nqry,"");
+
 		ajDebug("++ %S v %S start:%d %d end:%d %d\n",
 			ajSeqGetNameS(qryseq), ajSeqGetNameS(trgseq),
 			qrystart, trgstart, qryend, trgend);
@@ -266,57 +247,36 @@ int main(int argc, char **argv)
                                                gapopen,gapextend,path,sub,cvt,
                                                compass,show);
 
-
-		/*ajDebug("Calling embAlignScoreSWMatrixFast\n");
-
-		score = embAlignScoreSWMatrixFast(path,compass,
-						  gapopen,gapextend,
-						  qryseq,trgseq,
-						  qryend-qrystart+1,
-						  trgend-trgstart+1,
-						  sub,cvt,
-						  &qrystart,&trgstart,
-						  width);*/
-
-		if(scoreonly)
-		{
-		    if(outf)
-		      ajFmtPrintF(outf,"%S %S %.2f\n",
-				  ajSeqGetNameS(qryseq),ajSeqGetNameS(trgseq),
-				  score);
-		}
-		else
-		{
-		    ajDebug("Calling embAlignWalkSWMatrixFast\n");
 		    embAlignWalkSWMatrixFast(path,compass,gapopen,gapextend,
 					     qryseq,trgseq,
 					     &nqry,&mtrg,
 					     qryend-qrystart+1,
 					     trgend-trgstart+1,
 					     0, width,
-                                             &qrystart,&trgstart);
+					     &qrystart,&trgstart);
+		    
+            if(!ajAlignFormatShowsSequences(align))
+            {
+                ajAlignDefineCC(align, ajStrGetPtr(mtrg),
+                        ajStrGetPtr(nqry), ajSeqGetNameC(trgseq),
+                        ajSeqGetNameC(qryseq));
+                ajAlignSetScoreR(align, score);
+            }
+            else
+                embAlignReportLocal(align,
+                        qryseq, trgseq,
+                        nqry,mtrg,
+                        qrystart,trgstart,
+                        gapopen, gapextend,
+                        score,matrix,
+                        qrybegin, trgbegin);
 
-		    ajDebug("Calling embAlignPrintLocal\n");
-		    if(outf)
-		      embAlignPrintLocal(outf,
-					 nqry,mtrg,
-					 qrystart,trgstart,
-					 score,1,sub,cvt,
-					 ajSeqGetNameC(qryseq),
-					 ajSeqGetNameC(trgseq),
-					 qrybegin,trgbegin);
-		    embAlignReportLocal(align,
-					qryseq, trgseq,
-					nqry,mtrg,
-					qrystart,trgstart,
-					gapopen, gapextend,
-					score,matrix,
-					qrybegin, trgbegin);
+
 		    if((limitalign && (ajAlignGetLen(align) > limitalign)) ||
 		       (ajAlignGetLen(align) < lowalign))
 		    {
 			imatches--;
-			ajUser("Align limits (%d..%d) excludes '%S' '%S' %d\n",
+			ajFmtPrintF(errorf,"Align limits (%d..%d) excludes '%S' '%S' %d\n",
 			       lowalign, limitalign,
 			       ajSeqGetNameS(qryseq),
 			       ajSeqGetNameS(trgseq),
@@ -324,17 +284,19 @@ int main(int argc, char **argv)
 		    }
 		    else
 		    {
-			ajFmtPrintS(&tmpstr, "\nWordscore:%d", matchscore);
-			ajAlignSetSubHeader(align, tmpstr);
-			ajFmtPrintS(&tmpstr, "Alignlength:%d",
-				    ajAlignGetLen(align));
-			ajAlignSetSubHeaderApp(align, tmpstr);
-			ajAlignWrite(align);
+		        if(ajAlignFormatShowsSequences(align))
+		          {
+		              ajFmtPrintS(&tmpstr, "\nWordscore:%d", matchscore);
+		              ajAlignSetSubHeader(align, tmpstr);
+		              ajFmtPrintS(&tmpstr, "Alignlength:%d",
+		                      ajAlignGetLen(align));
+		              ajAlignSetSubHeaderApp(align, tmpstr);
+		              ajStrDel(&tmpstr);
+		          }
+		        ajAlignWrite(align);
 		    }
-		    ajAlignReset(align);
-		    ajStrDel(&tmpstr);
-		}
-		ajStrDel(&nqry);
+            ajAlignReset(align);
+            ajStrDel(&nqry);
 	    }
 	}
 	embWordFreeTable(&seq1MatchTable); /* free table of words */
@@ -344,10 +306,15 @@ int main(int argc, char **argv)
 
 	ajDebug("... %d matches", imatches);
 	if(imatches)
-	  ajUser("Target %d %S matches %d",
-		 itrg, ajSeqGetNameS(trgseq), imatches);
+	    ajFmtPrintF(errorf, "Target %d %S matches %d\n",
+	         itrg, ajSeqGetNameS(trgseq), imatches);
     }
 
+    if(!ajAlignFormatShowsSequences(align))
+    {
+        ajMatrixfDel(&matrix);        
+    }
+    
     AJFREE(path);
     AJFREE(compass);
 
@@ -356,7 +323,6 @@ int main(int argc, char **argv)
     ajSeqallDel(&trgseqs);
     ajSeqDel(&trgseq);
     ajSeqsetDel(&qryseqs);
-    ajFileClose(&outf);
     ajFileClose(&errorf);
 
     embExit();

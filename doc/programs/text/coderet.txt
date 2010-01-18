@@ -1,5 +1,4 @@
-
-                                  coderet 
+                                   coderet
 
 
 
@@ -36,14 +35,15 @@ Usage
    translations:
 
 
-% coderet 
+% coderet
 Extract CDS, mRNA and translations from feature tables
 Input nucleotide sequence(s): tembl:x03487
-Output file [x03487.coderet]: 
-Coding nucleotide output sequence(s) (optional) [x03487.cds]: 
-Messenger RNA nucleotide output sequence(s) (optional) [x03487.mrna]: 
-Translated coding protein output sequence(s) (optional) [x03487.prot]: 
-Non-coding nucleotide output sequence(s) (optional) [x03487.noncoding]: 
+Output file [x03487.coderet]:
+Coding nucleotide output sequence(s) (optional) [x03487.cds]:
+Messenger RNA nucleotide output sequence(s) (optional) [x03487.mrna]:
+Translated coding protein output sequence(s) (optional) [x03487.prot]:
+Non-coding nucleotide output sequence(s) (optional) [x03487.noncoding]:
+
 
    Go to the input files for this example
    Go to the output files for this example
@@ -53,16 +53,20 @@ Non-coding nucleotide output sequence(s) (optional) [x03487.noncoding]:
    To only extract the mRNA sequence:
 
 
-% coderet -nocds -notranslation -norest 
+% coderet -nocds -notranslation -norest
 Extract CDS, mRNA and translations from feature tables
 Input nucleotide sequence(s): tembl:X03487
-Output file [x03487.coderet]: 
-Messenger RNA nucleotide output sequence(s) (optional) [x03487.mrna]: 
+Output file [x03487.coderet]:
+Messenger RNA nucleotide output sequence(s) (optional) [x03487.mrna]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Extract CDS, mRNA and translations from feature tables
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-seqall]            seqall     Nucleotide sequence(s) filename and optional
@@ -156,13 +160,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -171,8 +177,8 @@ Input file format
 
   Input files for usage example
 
-   'tembl:x03487' is a sequence entry in the example nucleic acid
-   database 'tembl'
+   'tembl:x03487' is a sequence entry in the example nucleic acid database
+   'tembl'
 
   Database entry: tembl:x03487
 
@@ -188,8 +194,7 @@ XX
 KW   ferritin.
 XX
 OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
-;
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
 OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
 OC   Homo.
 XX
@@ -231,35 +236,23 @@ FT                   /db_xref="InterPro:IPR014034"
 FT                   /db_xref="PDB:3ES3"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P02794"
 FT                   /protein_id="CAA27205.1"
-FT                   /translation="MTTASTSQVRQNYHQDSEAAINRQINLELYASYVYLSMSYYFDR
-D
-FT                   DVALKNFAKYFLHQSHEEREHAEKLMKLQNQRGGRIFLQDIKKPDCDDWESGLNAMEC
-A
-FT                   LHLEKNVNQSLLELHKLATDKNDPHLCDFIETHYLNEQVKAIKELGDHVTNLRKMGAP
-E
+FT                   /translation="MTTASTSQVRQNYHQDSEAAINRQINLELYASYVYLSMSYYFDRD
+FT                   DVALKNFAKYFLHQSHEEREHAEKLMKLQNQRGGRIFLQDIKKPDCDDWESGLNAMECA
+FT                   LHLEKNVNQSLLELHKLATDKNDPHLCDFIETHYLNEQVKAIKELGDHVTNLRKMGAPE
 FT                   SGLAEYLFDKHTLGDSDNES"
 FT   intron          501..>512
 FT                   /note="intron I"
 XX
 SQ   Sequence 512 BP; 80 A; 212 C; 152 G; 64 T; 4 other;
-     agnncaaacc tnagctccgc cagagcgcgc gaggcctcca gcggccgccc ctcccccaca        6
-0
-     gcaggggcgg ggntcccgcg cccaccggaa ggagcgggct cggggcgggc ggcgctgatt       12
-0
-     ggccggggcg ggcctgacgc cgacgcggct ataagagacc acaagcgacc cgcagggcca       18
-0
-     gacgttcttc gccgagagtc gtcggggttt cctgcttcaa cagtgcttgg acggaacccg       24
-0
-     gcgctcgttc cccaccccgg ccggccgccc atagccagcc ctccgtcgac ctcttcaccg       30
-0
-     caccctcgga ctgccccaag gcccccgccg ccgctccagc gccgcgcagc caccgccgcc       36
-0
-     gccgccgcct ctccttagtc gccgccatga cgaccgcgtc cacctcgcag gtgcgccaga       42
-0
-     actaccacca ggactcagag gccgccatca accgccagat caacctggag ctctacgcct       48
-0
-     cctacgttta cctgtccatg gtgagcgcgg gc                                     51
-2
+     agnncaaacc tnagctccgc cagagcgcgc gaggcctcca gcggccgccc ctcccccaca        60
+     gcaggggcgg ggntcccgcg cccaccggaa ggagcgggct cggggcgggc ggcgctgatt       120
+     ggccggggcg ggcctgacgc cgacgcggct ataagagacc acaagcgacc cgcagggcca       180
+     gacgttcttc gccgagagtc gtcggggttt cctgcttcaa cagtgcttgg acggaacccg       240
+     gcgctcgttc cccaccccgg ccggccgccc atagccagcc ctccgtcgac ctcttcaccg       300
+     caccctcgga ctgccccaag gcccccgccg ccgctccagc gccgcgcagc caccgccgcc       360
+     gccgccgcct ctccttagtc gccgccatga cgaccgcgtc cacctcgcag gtgcgccaga       420
+     actaccacca ggactcagag gccgccatca accgccagat caacctggag ctctacgcct       480
+     cctacgttta cctgtccatg gtgagcgcgg gc                                     512
 //
 
   Input files for usage example 2
@@ -278,8 +271,7 @@ XX
 KW   ferritin.
 XX
 OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
-;
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
 OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
 OC   Homo.
 XX
@@ -321,35 +313,23 @@ FT                   /db_xref="InterPro:IPR014034"
 FT                   /db_xref="PDB:3ES3"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P02794"
 FT                   /protein_id="CAA27205.1"
-FT                   /translation="MTTASTSQVRQNYHQDSEAAINRQINLELYASYVYLSMSYYFDR
-D
-FT                   DVALKNFAKYFLHQSHEEREHAEKLMKLQNQRGGRIFLQDIKKPDCDDWESGLNAMEC
-A
-FT                   LHLEKNVNQSLLELHKLATDKNDPHLCDFIETHYLNEQVKAIKELGDHVTNLRKMGAP
-E
+FT                   /translation="MTTASTSQVRQNYHQDSEAAINRQINLELYASYVYLSMSYYFDRD
+FT                   DVALKNFAKYFLHQSHEEREHAEKLMKLQNQRGGRIFLQDIKKPDCDDWESGLNAMECA
+FT                   LHLEKNVNQSLLELHKLATDKNDPHLCDFIETHYLNEQVKAIKELGDHVTNLRKMGAPE
 FT                   SGLAEYLFDKHTLGDSDNES"
 FT   intron          501..>512
 FT                   /note="intron I"
 XX
 SQ   Sequence 512 BP; 80 A; 212 C; 152 G; 64 T; 4 other;
-     agnncaaacc tnagctccgc cagagcgcgc gaggcctcca gcggccgccc ctcccccaca        6
-0
-     gcaggggcgg ggntcccgcg cccaccggaa ggagcgggct cggggcgggc ggcgctgatt       12
-0
-     ggccggggcg ggcctgacgc cgacgcggct ataagagacc acaagcgacc cgcagggcca       18
-0
-     gacgttcttc gccgagagtc gtcggggttt cctgcttcaa cagtgcttgg acggaacccg       24
-0
-     gcgctcgttc cccaccccgg ccggccgccc atagccagcc ctccgtcgac ctcttcaccg       30
-0
-     caccctcgga ctgccccaag gcccccgccg ccgctccagc gccgcgcagc caccgccgcc       36
-0
-     gccgccgcct ctccttagtc gccgccatga cgaccgcgtc cacctcgcag gtgcgccaga       42
-0
-     actaccacca ggactcagag gccgccatca accgccagat caacctggag ctctacgcct       48
-0
-     cctacgttta cctgtccatg gtgagcgcgg gc                                     51
-2
+     agnncaaacc tnagctccgc cagagcgcgc gaggcctcca gcggccgccc ctcccccaca        60
+     gcaggggcgg ggntcccgcg cccaccggaa ggagcgggct cggggcgggc ggcgctgatt       120
+     ggccggggcg ggcctgacgc cgacgcggct ataagagacc acaagcgacc cgcagggcca       180
+     gacgttcttc gccgagagtc gtcggggttt cctgcttcaa cagtgcttgg acggaacccg       240
+     gcgctcgttc cccaccccgg ccggccgccc atagccagcc ctccgtcgac ctcttcaccg       300
+     caccctcgga ctgccccaag gcccccgccg ccgctccagc gccgcgcagc caccgccgcc       360
+     gccgccgcct ctccttagtc gccgccatga cgaccgcgtc cacctcgcag gtgcgccaga       420
+     actaccacca ggactcagag gccgccatca accgccagat caacctggag ctctacgcct       480
+     cctacgttta cctgtccatg gtgagcgcgg gc                                     512
 //
 
 Output file format
@@ -419,7 +399,7 @@ gtgagcgcgggc
 
    CDS  mRNA non-c Trans Total Sequence
  ===== ===== ===== ===== ===== ========
-     1     1     2     1     5 X03487
+     1     1     6     1     8 X03487
 
   Output files for usage example 2
 
@@ -436,9 +416,9 @@ Data files
 Notes
 
    One or more of CDS, mRNA, translation or non-coding regions can be
-   excluded from output with the appropriate qualifiers; "no" is
-   prepended to the qualifier name, for example -nocds would exclude the
-   coding sequence.
+   excluded from output with the appropriate qualifiers; "no" is prepended
+   to the qualifier name, for example -nocds would exclude the coding
+   sequence.
 
    The translations are not made from the coding sequence, they are
    extracted directly from the translation sequence held in the feature
@@ -447,8 +427,8 @@ Notes
    The regions of the feature table that concern us are shown below.
 
    This specifies that the coding sequence for the gene is constructed by
-   joining several sections of code, many of which are in other entries
-   in this database:
+   joining several sections of code, many of which are in other entries in
+   this database:
 FT   CDS             join(U21925.1:818..987,U21926.1:258..420,
 FT                   U21927.1:428..520,U21928.1:196..336,U21929.1:279..415,
 FT                   U21930.1:895..1014,516..708)
@@ -467,26 +447,16 @@ FT                   M88642.1:4627..4698,M88643.1:39..124,M88644.1:42..197,
 FT                   M88645.1:542..686,M88646.1:75..223,M88647.1:109..285,
 FT                   253..2211)
 
-   This specifies that the translation of the coding region is as
-   follows:
-FT                   /translation="MAQDSVDLSCDYQFWMQKLSVWDQASTLETQQDTCLHVAQFQEF
-L
-FT                   RKMYEALKEMDSNTVIERFPTIGQLLAKACWNPFILAYDESQKILIWCLCCLINKEPQ
-N
-FT                   SGQSKLNSWIQGVLSHILSALRFDKEVALFTQGLGYAPIDYYPGLLKNMVLSLASELR
-E
-FT                   NHLNGFNTQRRMAPERVASLSRVCVPLITLTDVDPLVEALLICHGREPQEILQPEFFE
-A
-FT                   VNEAILLKKISLPMSAVVCLWLRHLPSLEKAMLHLFEKLISSERNCLRRIECFIKDSS
-L
-FT                   PQAACHPAIFRVDEMFRCALLETDGALEIIATIQVFTQCFVEALEKASKQLRFALKTY
-F
-FT                   PYTSPSLAMVLLQDPQDIPRGHWLQTLKHISELLREAVEDQTHGSCGGPFESWFLFIH
-F
-FT                   GGWAEMVAEQLLMSAAEPPTALLWLLAFYYGPRDGRQQRAQTMVQVKAVLGHLLAMSR
-S
-FT                   SSLSAQDLQTVAGQGTDTDLRAPAQQLIRHLLLNFLLWAPGGHTIAWDVITLMAHTAE
-I
+   This specifies that the translation of the coding region is as follows:
+FT                   /translation="MAQDSVDLSCDYQFWMQKLSVWDQASTLETQQDTCLHVAQFQEFL
+FT                   RKMYEALKEMDSNTVIERFPTIGQLLAKACWNPFILAYDESQKILIWCLCCLINKEPQN
+FT                   SGQSKLNSWIQGVLSHILSALRFDKEVALFTQGLGYAPIDYYPGLLKNMVLSLASELRE
+FT                   NHLNGFNTQRRMAPERVASLSRVCVPLITLTDVDPLVEALLICHGREPQEILQPEFFEA
+FT                   VNEAILLKKISLPMSAVVCLWLRHLPSLEKAMLHLFEKLISSERNCLRRIECFIKDSSL
+FT                   PQAACHPAIFRVDEMFRCALLETDGALEIIATIQVFTQCFVEALEKASKQLRFALKTYF
+FT                   PYTSPSLAMVLLQDPQDIPRGHWLQTLKHISELLREAVEDQTHGSCGGPFESWFLFIHF
+FT                   GGWAEMVAEQLLMSAAEPPTALLWLLAFYYGPRDGRQQRAQTMVQVKAVLGHLLAMSRS
+FT                   SSLSAQDLQTVAGQGTDTDLRAPAQQLIRHLLLNFLLWAPGGHTIAWDVITLMAHTAEI
 FT                   THEIIGFLDQTLYRWNRLGIESPRSEKLARELLKELRTQV"
 
 References
@@ -512,15 +482,14 @@ Known bugs
 See also
 
    Program name     Description
-   backtranambig    Back-translate a protein sequence to ambiguous
-                    nucleotide sequence
+   backtranambig    Back-translate a protein sequence to ambiguous nucleotide
+                    sequence
    backtranseq      Back-translate a protein sequence to a nucleotide sequence
    extractfeat      Extract features from sequence(s)
    maskfeat         Write a sequence with masked features
    plotorf          Plot potential open reading frames in a nucleotide sequence
    prettyseq        Write a nucleotide sequence and its translation to file
-   remap            Display restriction enzyme binding sites in a nucleotide
-                    sequence
+   remap            Display restriction enzyme binding sites in a nucleotide sequence
    showfeat         Display features of a sequence in pretty format
    showorf          Display a nucleotide sequence and translation in pretty format
    showseq          Displays sequences with features in pretty format
@@ -530,7 +499,7 @@ See also
 
 Author(s)
 
-   Alan Bleasby (ajb © ebi.ac.uk)
+   Alan Bleasby (ajb (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

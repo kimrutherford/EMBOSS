@@ -1,0 +1,93 @@
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+#ifndef ensbaseadaptor_h
+#define ensbaseadaptor_h
+
+#include "ensassemblymapper.h"
+#include "ensdata.h"
+
+
+
+
+/*
+** Prototype definitions
+*/
+
+/* Ensembl Base Adaptor */
+
+EnsPBaseadaptor ensBaseadaptorNew(
+    EnsPDatabaseadaptor dba,
+    const char **Ptables,
+    const char **Pcolumns,
+    EnsOBaseadaptorLeftJoin *left_join,
+    const char *condition,
+    const char *final,
+    AjBool Fquery(EnsPDatabaseadaptor dba,
+                  const AjPStr statement,
+                  EnsPAssemblymapper am,
+                  EnsPSlice slice,
+                  AjPList objects));
+
+void ensBaseadaptorDel(EnsPBaseadaptor *Pba);
+
+EnsPDatabaseadaptor ensBaseadaptorGetDatabaseadaptor(const EnsPBaseadaptor ba);
+
+const char **ensBaseadaptorGetTables(const EnsPBaseadaptor ba);
+
+const char **ensBaseadaptorGetColumns(const EnsPBaseadaptor ba);
+
+AjBool ensBaseadaptorSetTables(EnsPBaseadaptor ba, const char ** Ptables);
+
+AjBool ensBaseadaptorSetColumns(EnsPBaseadaptor ba, const char ** Pcolumns);
+
+AjBool ensBaseadaptorSetDefaultCondition(EnsPBaseadaptor ba,
+                                         const char *condition);
+
+AjBool ensBaseadaptorSetFinalCondition(EnsPBaseadaptor ba, const char *final);
+
+const char *ensBaseadaptorGetPrimaryTable(const EnsPBaseadaptor ba);
+
+AjBool ensBaseadaptorGetMultiSpecies(const EnsPBaseadaptor ba);
+
+ajuint ensBaseadaptorGetSpeciesIdentifier(const EnsPBaseadaptor ba);
+
+AjBool ensBaseadaptorEscapeC(EnsPBaseadaptor ba, char **Ptxt,
+                              const AjPStr str);
+
+AjBool ensBaseadaptorEscapeS(EnsPBaseadaptor ba, AjPStr *Pstr,
+                              const AjPStr str);
+
+AjBool ensBaseadaptorGenericFetch(const EnsPBaseadaptor ba,
+                                  const AjPStr constraint,
+                                  EnsPAssemblymapper am,
+                                  EnsPSlice slice,
+                                  AjPList objects);
+
+void *ensBaseadaptorFetchByIdentifier(const EnsPBaseadaptor ba, ajuint identifier);
+
+AjBool ensBaseadaptorFetchAllByIdentifiers(const EnsPBaseadaptor ba,
+                                           AjPList idlist,
+                                           AjPList objects);
+
+AjBool ensBaseadaptorFetchAll(const EnsPBaseadaptor ba, AjPList objects);
+
+AjBool ensBaseadaptorFetchAllIdentifiers(const EnsPBaseadaptor ba,
+				  AjPStr table,
+				  AjPStr prikey,
+				  AjPList idlist);
+
+/*
+** End of prototype definitions
+*/
+
+
+
+
+#endif
+
+#ifdef __cplusplus
+}
+#endif

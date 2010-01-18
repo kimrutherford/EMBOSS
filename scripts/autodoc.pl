@@ -285,7 +285,7 @@ sub cleantext ( $ ) {
 
 	    }
 	    else {
-		if(/^\s+Standard \(Mandatory\) qualifiers Allowed values Default/) {
+		if(/^\s+Qualifier Type Description Allowed values Default/) {
 		    $acdtable = 1;
 		}
 	    }
@@ -1089,7 +1089,7 @@ $progs{$thisprogram}
 
 
 # check to see if the command table include file exists
-	system "acdtable $thisprogram 2> x.x";
+	system "acdtable $thisprogram -verbose 2> x.x";
 	checkincludefile($thisprogram, $progdocdir, 'itable');
 
 

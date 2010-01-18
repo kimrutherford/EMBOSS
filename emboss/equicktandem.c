@@ -101,7 +101,7 @@ int main(int argc, char **argv)
 
     ajFmtPrintAppS(&tmpstr, "Threshold: %d\n", thresh);
     ajFmtPrintAppS(&tmpstr, "Maxrepeat: %d\n", maxrepeat);
-    ajReportSetHeader(report, tmpstr);
+    ajReportSetHeaderS(report, tmpstr);
 
     begin = ajSeqGetBegin(sequence) - 1;
     end   = ajSeqGetEnd(sequence) - 1;

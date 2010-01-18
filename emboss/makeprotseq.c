@@ -22,13 +22,15 @@
 ******************************************************************************/
 
 #include "emboss.h"
-#include "stdlib.h"
 
 
-static AjPStr makeprotseq_random_sequence (AjPStr const * seqchar,
+static AjPStr makeprotseq_random_sequence(AjPStr const * seqchar,
 					   ajint scmax, ajint length);
-static void makeprotseq_default_chars (AjPList* list);
-static void makeprotseq_parse_pepstats (AjPList* list,AjPFile data);
+static void makeprotseq_default_chars(AjPList* list);
+static void makeprotseq_parse_pepstats(AjPList* list,AjPFile data);
+
+
+
 
 /* @prog makeprotseq **********************************************************
 **
@@ -36,6 +38,7 @@ static void makeprotseq_parse_pepstats (AjPList* list,AjPFile data);
 ** pepstats output to specify sequence composition.
 **
 ******************************************************************************/
+
 int main(int argc, char **argv)
 {
     AjPSeqout outseq = NULL;
@@ -53,79 +56,85 @@ int main(int argc, char **argv)
 
     embInit("makeprotseq", argc, argv);
 
-    data     = ajAcdGetInfile ("pepstatsfile");
-    insert   = ajAcdGetString ("insert");
-    start    = ajAcdGetInt ("start");
-    length   = ajAcdGetInt ("length");
-    amount   = ajAcdGetInt ("amount");
-    outseq   = ajAcdGetSeqoutall ("outseq");
+    data     = ajAcdGetInfile("pepstatsfile");
+    insert   = ajAcdGetString("insert");
+    start    = ajAcdGetInt("start");
+    length   = ajAcdGetInt("length");
+    amount   = ajAcdGetInt("amount");
+    outseq   = ajAcdGetSeqoutall("outseq");
 
     list = ajListstrNew();
 
     /* this is checked by acd
-    if (amount <=0 || length <= 0)
-	ajFatal ("Amount or length is 0 or less. "
+    if(amount <=0 || length <= 0)
+	ajFatal("Amount or length is 0 or less. "
                  "Unable to create any sequences"); */
 
     /* if insert, make sure sequence is large enough */
-    if (ajStrGetLen(insert))
+    if(ajStrGetLen(insert))
     {
 	length -= ajStrGetLen(insert);
 	/* start= start <= 1 ? 0 : --start; */ /* checked in acd */
 	start--;
-	if (length <= 0)
-	    ajFatal ("Sequence smaller than inserted part. "
+
+	if(length <= 0)
+	    ajFatal("Sequence smaller than inserted part. "
 		     "Unable to create sequences.");
     }
 
     /* make the list of AjPStr to be used in sequence creation */
-    if (data) {
-	ajDebug ("Distribution datafile '%s' given checking type\n",
+    if(data)
+    {
+	ajDebug("Distribution datafile '%s' given checking type\n",
 		 ajFileGetNameC(data));
 	seqstr = ajStrNew();
 	ajReadlineTrim(data,&seqstr);
-	if (ajStrFindC(seqstr,"PEPSTATS") == 0)
+
+	if(ajStrFindC(seqstr,"PEPSTATS") == 0)
 	{
-	    makeprotseq_parse_pepstats (&list,data);
+	    makeprotseq_parse_pepstats(&list,data);
 	}
 	else
 	{
-	    ajWarn ("Not pepstats file. Making completely random sequences.");
-	    makeprotseq_default_chars (&list);
+	    ajWarn("Not pepstats file. Making completely random sequences.");
+	    makeprotseq_default_chars(&list);
 	}
+
 	ajStrDel(&seqstr);
-	ajFileClose (&data);
+	ajFileClose(&data);
     }
     else
-	makeprotseq_default_chars (&list);
+	makeprotseq_default_chars(&list);
 
     /* if insert, make sure type is correct */
     /* typecheking code is not working, uncomment and test after it is
-    if (ajStrGetLen(insert))
+    if(ajStrGetLen(insert))
     {
 	seqstr = ajStrNew();
-	if (prot)
+	if(prot)
 	    ajStrAssignC(&seqstr,"pureprotein");
-	if (!ajSeqTypeCheckS(&insert,seqstr))
-	    ajFatal ("Insert not the same sequence type as sequence itself.");
+	if(!ajSeqTypeCheckS(&insert,seqstr))
+	    ajFatal("Insert not the same sequence type as sequence itself.");
 	ajStrDel(&seqstr);
     } */
 
     /* array allows fast creation of a sequences */
     scmax = ajListstrToarray(list,&seqr);
-    if (!scmax)
-	ajFatal ("No strings in list. No characters to make the sequence.");
+    if(!scmax)
+	ajFatal("No strings in list. No characters to make the sequence.");
 
-    ajDebug ("Distribution array done.\nscmax '%d', extra '%d', first '%S'\n",
+    ajDebug("Distribution array done.\nscmax '%d', extra '%d', first '%S'\n",
 	     scmax,extra,seqr[0]);
 
     ajRandomSeed();
 
-    while (amount-- > 0)
+    while(amount-- > 0)
     {
-	seqstr = makeprotseq_random_sequence (seqr,scmax,length);
-	if (ajStrGetLen(insert))
+	seqstr = makeprotseq_random_sequence(seqr,scmax,length);
+
+	if(ajStrGetLen(insert))
 	    ajStrInsertS(&seqstr,start,insert);
+
 	ajStrFmtLower(&seqstr);
 	seq = ajSeqNew();
 
@@ -133,8 +142,8 @@ int main(int argc, char **argv)
 	ajSeqSetProt(seq);
 
 	ajSeqoutWriteSeq(outseq, seq);
-	ajSeqDel (&seq);
-	ajStrDel (&seqstr);
+	ajSeqDel(&seq);
+	ajStrDel(&seqstr);
     }
 
     ajSeqoutClose(outseq);
@@ -144,8 +153,12 @@ int main(int argc, char **argv)
     AJFREE(seqr);
 
     embExit();
+
     return 0;
 }
+
+
+
 
 /* @funcstatic makeprotseq_random_sequence ************************************
 **
@@ -157,21 +170,25 @@ int main(int argc, char **argv)
 ** @return [AjPStr] Sequence string
 ** @@
 ******************************************************************************/
-static AjPStr makeprotseq_random_sequence (AjPStr const * seqchar,
-					   ajint scmax, ajint length)
+
+static AjPStr makeprotseq_random_sequence(AjPStr const * seqchar,
+                                          ajint scmax, ajint length)
 {
     AjPStr seq = ajStrNew();
     ajint idx  = 0;
     ajint len  = length;
 
-    while (len-- > 0)
+    while(len-- > 0)
     {
-	idx = (ajint) (ajRandomNumberD()*scmax);
+	idx = (ajint) (ajRandomDouble()*scmax);
 	ajStrAppendS(&seq,seqchar[idx]);
     }
 
     return seq;
 }
+
+
+
 
 /* @funcstatic makeprotseq_default_chars **************************************
 **
@@ -181,7 +198,8 @@ static AjPStr makeprotseq_random_sequence (AjPStr const * seqchar,
 ** @return [void]
 ** @@
 ******************************************************************************/
-static void makeprotseq_default_chars (AjPList* list)
+
+static void makeprotseq_default_chars(AjPList* list)
 {
     int i;
     int max;
@@ -193,15 +211,18 @@ static void makeprotseq_default_chars (AjPList* list)
     chars = seqCharProtPure;
     max = seqCharProtPureLength;
 
-    for (i = 0; i < max; i++)
+    for(i = 0; i < max; i++)
     {
 	tmp = ajStrNew();
-	tmp = ajFmtStr ("%c",chars[i]);
+	tmp = ajFmtStr("%c",chars[i]);
 	ajListstrPushAppend(*list,tmp);
     }
 
     return;
 }
+
+
+
 
 /* @funcstatic makeprotseq_parse_pepstats *************************************
 **
@@ -212,7 +233,8 @@ static void makeprotseq_default_chars (AjPList* list)
 ** @return [void]
 ** @@
 ******************************************************************************/
-static void makeprotseq_parse_pepstats (AjPList* list,AjPFile data)
+
+static void makeprotseq_parse_pepstats(AjPList* list,AjPFile data)
 {
     AjPStr line = ajStrNew();
     AjPStr ch;
@@ -222,35 +244,43 @@ static void makeprotseq_parse_pepstats (AjPList* list,AjPFile data)
     ajint count = 0;
     ajint i = 0;
 
-    ajDebug ("Parsing pepstats file.\n");
+    ajDebug("Parsing pepstats file.\n");
 
     /* skip the lines before residues */
-    while (ajReadline(data,&line))
+    while(ajReadline(data,&line))
     {
-	if (ajStrFindC(line,"Residue") == 0)
+	if(ajStrFindC(line,"Residue") == 0)
 	    break;
     }
+
     /* parse residue part */
-    while (ajReadlineTrim(data,&line))
+    while(ajReadlineTrim(data,&line))
     {
-	if (ajStrParseCountC(line," \t") == 0)
+	if(ajStrParseCountC(line," \t") == 0)
 	   break;
+
 	ch = ajStrNew();
 	tok = ajStrParseWhite(line);
 	ajStrAppendS(&ch,tok);
 	ajStrFmtLower(&ch);
-	for (count = 1;count < 5;count++)
+
+	for(count = 1;count < 5;count++)
 	    tok = ajStrParseWhite(NULL);
-	ajStrToDouble (tok,&value);
+
+	ajStrToDouble(tok,&value);
 	count = (ajint) (value * 100) +
 	    ((value - (int) value ) >= 0.5 ? 1 : 0);
-	for (i=0;i<count;i++)
+
+	for(i=0;i<count;i++)
 	{
 	    chcopy = ajStrNewS(ch);
-	    ajListstrPush (*list,chcopy);
+	    ajListstrPush(*list,chcopy);
 	}
+
 	ajStrDel(&ch);
     }
+
     ajStrDel(&line);
+
     return;
 }

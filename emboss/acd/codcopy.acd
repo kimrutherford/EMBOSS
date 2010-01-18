@@ -1,6 +1,7 @@
 application: codcopy [
   documentation: "Copy and reformat a codon usage table"
   groups: "Edit"
+  relations: "EDAM: Codon usage table handling"
 ]
 
 section: input [
@@ -10,6 +11,7 @@ section: input [
 
   codon: infile [
     parameter: "Y"
+    relations: "EDAM: Codon usage table"                                   
   ]
 
 endsection: input
@@ -28,6 +30,7 @@ section: output [
 
   outcodon: outfile [
     parameter: "Y"
+    relations: "EDAM: Codon usage table"                                   
   ]
 
 endsection: output

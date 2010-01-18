@@ -119,7 +119,7 @@ int main(int argc, char **argv)
                     codon = ajStrNew();
                     ajStrAssignSubS(&codon, ajSeqGetSeqS(nseq), 
                                 (pos*3)+frame-1, (pos*3)+frame+2);
-                    type = ajTrnStartStop(trnTable, codon, &aa);
+                    type = ajTrnCodonstrTypeS(trnTable, codon, &aa);
                     if (type != 1) {
                         /* first codon is not a valid START, force a mismatch */
                         pos = -1;

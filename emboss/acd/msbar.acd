@@ -1,6 +1,7 @@
 application: msbar [
   documentation: "Mutate a sequence"
   groups: "Nucleic:Mutation, Protein:Mutation"
+  relations: "EDAM: Sequence mutation and randomisation"
 ]
 
 section: input [
@@ -11,6 +12,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "any"
+    relations: "EDAM: Sequence record"                                     
   ]
 
   seqall: othersequence [
@@ -31,6 +33,7 @@ section: input [
            still a match to the set of sequence given here, then the matching
            mutated sequence is written with a warning message."
     nullok: "Y"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: input
@@ -46,6 +49,7 @@ section: required [
     minimum: "0"
     information: "Number of times to perform the mutation
                   operations"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   list: point [
@@ -59,6 +63,7 @@ section: required [
     delimiter: ";"
     codedelimiter: ":"
     information: "Types of point mutations to perform"
+    relations: "EDAM: Generic string array"                                
   ]
 
   list: block [
@@ -72,6 +77,7 @@ section: required [
     delimiter: ";"
     codedelimiter: ":"
     information: "Types of block mutations to perform"
+    relations: "EDAM: Generic string array"                                
   ]
 
   list: codon [
@@ -87,6 +93,7 @@ section: required [
     information: "Types of codon mutations to perform"
     help: "Types of codon mutations to perform. These are only done if
            the sequence is nucleic."
+    relations: "EDAM: Generic string array"                                
   ]
 
 endsection: required
@@ -100,6 +107,7 @@ section: additional [
     additional: "@(!$(acdprotein))"
     default: "N"
     information: "Do 'codon' and 'block' operations in frame"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: additional
@@ -113,12 +121,14 @@ section: advanced [
     default: "1"
     minimum: "0"
     information: "Minimum size for a block mutation"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: maximum [
     default: "10"
     minimum: "$(minimum)"
     information: "Maximum size for a block mutation"
+    relations: "EDAM: Generic integer"                                     
   ]
 
 endsection: advanced
@@ -130,6 +140,7 @@ section: output [
 
   seqoutall: outseq [
     parameter: "Y"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: output

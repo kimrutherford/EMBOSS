@@ -1,5 +1,4 @@
-
-                                makeprotseq 
+                                 makeprotseq
 
 
 
@@ -31,29 +30,34 @@ Usage
    Here is a sample session with makeprotseq
 
 
-% makeprotseq 
+% makeprotseq
 Create random protein sequences
-Pepstats program output file (optional): 
-Number of sequences created [100]: 
-Length of each sequence [100]: 
-protein output sequence(s) [makeseq.fasta]: 
+Pepstats program output file (optional):
+Number of sequences created [100]:
+Length of each sequence [100]:
+protein output sequence(s) [makeseq.fasta]:
+
 
    Go to the output files for this example
 
    Example 2
 
 
-% makeprotseq 
+% makeprotseq
 Create random protein sequences
 Pepstats program output file (optional): ../pepstats-keep/laci_ecoli.pepstats
-Number of sequences created [100]: 
-Length of each sequence [100]: 
-protein output sequence(s) [makeseq.fasta]: 
+Number of sequences created [100]:
+Length of each sequence [100]:
+protein output sequence(s) [makeseq.fasta]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Create random protein sequences
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
    -pepstatsfile       infile     This file should be a pepstats output file.
@@ -64,7 +68,7 @@ Command line arguments
    -length             integer    [100] Length of each sequence (Integer 1 or
                                   more)
 *  -insert             string     String that is inserted into sequence (Any
-                                  string is accepted)
+                                  string)
 *  -start              integer    [1] Start point of inserted sequence
                                   (Integer 1 or more)
   [-outseq]            seqoutall  [.] Protein sequence
@@ -97,13 +101,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -160,6 +166,7 @@ Polar           (D+E+H+K+N+Q+R+S+T+Z)   160             44.444
 Charged         (B+D+E+H+K+R+Z)         69              19.167
 Basic           (H+K+R)                 37              10.278
 Acidic          (B+D+E+Z)               32               8.889
+
 
 Output file format
 
@@ -464,8 +471,8 @@ See also
 
 Author(s)
 
-   This application was contributed by Henrikki Almusa, Medicel,
-   Helsinki, Finland
+   This application was contributed by Henrikki Almusa, Medicel, Helsinki,
+   Finland
 
 History
 

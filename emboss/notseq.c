@@ -62,8 +62,8 @@ int main(int argc, char **argv)
 	ajStrAssignS(&name, ajSeqGetNameS(seq));
 	ajStrAssignS(&acc, ajSeqGetAccS(seq));
 
-	if(embMiscMatchPattern(name, pattern) ||
-	    embMiscMatchPattern(acc, pattern))
+	if(embMiscMatchPatternDelimC(name, pattern, ",;") ||
+           embMiscMatchPatternDelimC(acc, pattern, ",;"))
 	    ajSeqoutWriteSeq(junkout, seq);
 	else
 	    /* no match, so not excluded */

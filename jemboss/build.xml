@@ -87,10 +87,8 @@
     <!-- Copies jars -->
     <copy todir="${jar.dir}">
       <fileset dir=".">
-        <include name="lib/grout.jar"/>
         <include name="lib/jakarta-regexp-1.2.jar"/>
-        <include name="lib/JembossPrintAlignment.jar"/>
-        <include name="lib/jalview.jar"/>
+        <include name="lib/jalviewApplet.jar"/>
         <include name="resources/**"/>
       	<include name="images/**"/>
       </fileset>
@@ -110,9 +108,8 @@
           <attribute name="Built-By" value="EMBOSS TEAM"/>
   	      <attribute name="Main-Class" value="org.emboss.jemboss.Jemboss"/>
               <attribute name="Class-Path" 
-                         value="lib/grout.jar lib/jakarta-regexp-1.2.jar
-                                lib/JembossPrintAlignment.jar
-                                lib/jalview.jar ."/>
+                         value="lib/jakarta-regexp-1.2.jar
+                                lib/jalviewApplet.jar ."/>
       </manifest>
   	</jar>
   </target>

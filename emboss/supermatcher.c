@@ -108,11 +108,8 @@ int main(int argc, char **argv)
     AjPStr m = 0;
     AjPStr n = 0;
 
-    AjPFile outf = NULL;
     AjPFile errorf;
     AjBool show = ajFalse;
-    AjBool scoreonly = ajFalse;
-    AjBool showalign = ajTrue;
 
     ajint    lena = 0;
     ajint    lenb = 0;
@@ -158,21 +155,11 @@ int main(int argc, char **argv)
     errorf    = ajAcdGetOutfile("errorfile");
     width     = ajAcdGetInt("width");	/* not the same as awidth */
 
-    /* obsolete. Can be uncommented in acd file and here to reuse */
+    gapopen   = ajRoundFloat(gapopen, 8);
+    gapextend = ajRoundFloat(gapextend, 8);
 
-    /* outf      = ajAcdGetOutfile("originalfile"); */
-    /* show      = ajAcdGetBoolean("showinternals");*/
-    /* scoreonly = ajAcdGetBoolean("scoreonly"); */
-    /* showalign = ajAcdGetBoolean("showalign"); */
-
-    gapopen   = ajRoundF(gapopen, 8);
-    gapextend = ajRoundF(gapextend, 8);
-
-    if(!showalign)
-	scoreonly = ajTrue;
-
-    sub = ajMatrixfArray(matrix);
-    cvt = ajMatrixfCvt(matrix);
+    sub = ajMatrixfGetMatrix(matrix);
+    cvt = ajMatrixfGetCvt(matrix);
 
     embWordLength(wordlen);
 
@@ -199,39 +186,32 @@ int main(int argc, char **argv)
 	    lenb   = ajSeqGetLen(b);
 	    beginb = 1 + ajSeqGetOffset(b);
 
-	    n=ajStrNewRes(1+ajSeqGetLen(b));
-
 	    ajDebug("Processing '%S'\n", ajSeqGetNameS(b));
 	    p = ajSeqGetSeqC(a);
 	    q = ajSeqGetSeqC(b);
-
-	    ajStrAssignC(&m,"");
-	    ajStrAssignC(&n,"");
-
 
 	    if(!supermatcher_findstartpoints(seq1MatchTable,b,a,
 					     &start1, &start2,
 					     &end1, &end2))
 	    {
-		start1 = 0;
-		end1   = lena-1;
-		start2 = (ajint)(width/2);
-		end2   = lenb-1;
-
 		ajFmtPrintF(errorf,
 			    "No wordmatch start points for "
 			    "%s vs %s. No alignment\n",
 			    ajSeqGetNameC(a),ajSeqGetNameC(b));
-		ajStrDel(&n);
 		continue;
 	    }
+	    
+        n=ajStrNewRes(1+ajSeqGetLen(b));
+        ajStrAssignC(&m,"");
+        ajStrAssignC(&n,"");
+
 	    ajDebug("++ %S v %S start:%d %d end:%d %d\n",
 		    ajSeqGetNameS(a), ajSeqGetNameS(b),
 		    start1, start2, end1, end2);
 
-	    if(end1-start1 > oldmax)
+	    if(end1-start1+1 > oldmax)
 	    {
-		oldmax = ((end1-start1)+1)+width;
+		oldmax = ((end1-start1)+1);
 		AJRESIZE(path,oldmax*width*sizeof(float));
 		AJRESIZE(compass,oldmax*width*sizeof(ajint));
 		ajDebug("++ resize to oldmax: %d\n", oldmax);
@@ -252,34 +232,27 @@ int main(int argc, char **argv)
                                            path,sub,cvt,
                                            compass,show);
 
-	    if(scoreonly)
-	    {
-		if(outf)
-		    ajFmtPrintF(outf,"%s %s %.2f\n",
-                                ajSeqGetNameC(a),ajSeqGetNameC(b),
-				score);
-	    }
-	    else
-	    {
-		ajDebug("Calling embAlignWalkSWMatrixFast\n");
-		embAlignWalkSWMatrixFast(path,compass,gapopen,gapextend,a,b,
+	    embAlignWalkSWMatrixFast(path,compass,gapopen,gapextend,a,b,
 					 &m,&n,end1-start1+1,end2-start2+1,
 					 0,width,
                                          &start1,&start2);
 
-		ajDebug("Calling embAlignPrintLocal\n");
-		if(outf)
-		    embAlignPrintLocal(outf,m,n,start1,start2,
-				       score,1,sub,cvt,ajSeqGetNameC(a),
-				       ajSeqGetNameC(b),
-				       begina,beginb);
-		embAlignReportLocal(align, a, b,
-				    m,n,start1,start2,
-				    gapopen, gapextend,
-				    score,matrix, begina, beginb);
+		if(!ajAlignFormatShowsSequences(align))
+		{
+		    ajAlignDefineCC(align, ajStrGetPtr(m),
+		            ajStrGetPtr(n), ajSeqGetNameC(a),
+		            ajSeqGetNameC(b));
+		    ajAlignSetScoreR(align, score);
+		}
+		else
+		{
+		    embAlignReportLocal(align, a, b,
+		            m,n,start1,start2,
+		            gapopen, gapextend,
+		            score,matrix, begina, beginb);
+		}
 		ajAlignWrite(align);
 		ajAlignReset(align);
-	    }
 	    ajStrDel(&n);
 	}
 
@@ -290,6 +263,11 @@ int main(int argc, char **argv)
 
     }
 
+    if(!ajAlignFormatShowsSequences(align))
+    {
+        ajMatrixfDel(&matrix);        
+    }
+    
     AJFREE(path);
     AJFREE(compass);
 
@@ -298,7 +276,6 @@ int main(int argc, char **argv)
     ajSeqallDel(&seq1);
     ajSeqDel(&a);
     ajSeqsetDel(&seq2);
-    ajFileClose(&outf);
     ajFileClose(&errorf);
 
     embExit();

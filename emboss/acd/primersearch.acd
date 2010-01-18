@@ -1,6 +1,7 @@
 application: primersearch [
   documentation: "Search DNA sequences for matches with primer pairs"
   groups: "Nucleic:Primers"
+  relations: "EDAM: Sequence database search by primer"
 ]
 
 section: input [
@@ -11,12 +12,14 @@ section: input [
   seqall: seqall [
     parameter: "Y"
     type: "dna"
+    relations: "EDAM: DNA sequence record"                                 
   ]
 
   infile: infile [
     parameter: "Y"
     information: "Primer pairs file"
     knowntype: "primer pairs"
+    relations:  "EDAM: Primer pairs sequence record"                   
   ]
 
 endsection: input
@@ -30,6 +33,7 @@ section: required [
     parameter: "Y"
     default: "0"
     information: "Allowed percent mismatch"
+    relations: "EDAM: Generic integer"                                     
   ]
 
 endsection: required
@@ -43,6 +47,7 @@ section: output [
     parameter: "Y"
     knowntype: "primer3 output"
     information: "Whitehead primer3_core program output file"
+    relations:  "EDAM: Primer3 primer report"                                 
   ]
 
 endsection: output

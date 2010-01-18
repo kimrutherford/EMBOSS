@@ -196,9 +196,9 @@ int main(int argc, char **argv)
 		break;			/* T */
 	    }
 	
-	back     = ajIntNewL(maxsave);
-	localMax = ajIntNewL(maxsave);
-	matrix   = ajInt2dNewLL(maxsave, maxsave);
+	back     = ajIntNewRes(maxsave);
+	localMax = ajIntNewRes(maxsave);
+	matrix   = ajInt2dNewResRes2(maxsave, maxsave);
 
 	for(i=0; i<maxsave; i++)
 	{

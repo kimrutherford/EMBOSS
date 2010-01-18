@@ -1,5 +1,4 @@
-
-                                 splitter 
+                                  splitter
 
 
 
@@ -28,8 +27,9 @@ Usage
    with no overlap between the sub-sequences:
 
 
-% splitter tembl:BA000025 ba000025.split 
+% splitter tembl:BA000025 ba000025.split
 Split sequence(s) into smaller sequences
+
 
    Go to the input files for this example
    Go to the output files for this example
@@ -40,12 +40,16 @@ Split sequence(s) into smaller sequences
    3,000 bases on each sub-sequence:
 
 
-% splitter tembl:BA000025 ba000025.split -size=50000 -over=3000 
+% splitter tembl:BA000025 ba000025.split -size=50000 -over=3000
 Split sequence(s) into smaller sequences
+
 
    Go to the output files for this example
 
 Command line arguments
+
+Split sequence(s) into smaller sequences
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -100,13 +104,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Data files
 
@@ -116,12 +122,12 @@ Notes
 
    Splitting a large sequence into smaller sub-sequences for analysis
    might be useful in cases where a particularly memory or CPU intensive
-   application will not run quickly enough or at all on the full
-   sequence. This should seldom be necessary in EMBOSS.
+   application will not run quickly enough or at all on the full sequence.
+   This should seldom be necessary in EMBOSS.
 
-   By default, splitter will write all the sub-sequences to a single
-   file. In some cases, particularly where non-EMBOSS programs are used,
-   it is necessary to have a single sequence per file. To write the
+   By default, splitter will write all the sub-sequences to a single file.
+   In some cases, particularly where non-EMBOSS programs are used, it is
+   necessary to have a single sequence per file. To write the
    sub-sequences into separate files use the command-line switch
    -ossingle.
 
@@ -197,7 +203,7 @@ See also
 
 Author(s)
 
-   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   Gary Williams (gwilliam (c) rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 

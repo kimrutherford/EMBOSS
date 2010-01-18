@@ -231,7 +231,7 @@ int main(int argc, char **argv)
     float ml_limit;
     float e_limit;
 
-    ajGraphInit("tmap", argc, argv);
+    embInit("tmap", argc, argv);
 
     seqset = ajAcdGetSeqset("sequences");
     mult   = ajAcdGetGraphxy("graph");
@@ -528,7 +528,7 @@ static void tmap_present3p(ajint antal, const ajint *npos, const ajint *cpos,
 		     &calcid, &calcsim, &calcgap, &calclen);
 
     ajStrAssignC(&hdr, "");
-    ajReportSetHeader(report, hdr);
+    ajReportSetHeaderS(report, hdr);
 
     seq = ajSeqNewRes(ajSeqsetGetSize(seqset));
     ajSeqSetProt(seq);
@@ -553,7 +553,7 @@ static void tmap_present3p(ajint antal, const ajint *npos, const ajint *cpos,
 	feat = ajFeattableNewSeq(cseq);
 	tmap_refpos2(j, poss);
 	ajStrAssignC(&hdr, "");
-	ajReportSetHeader(report, hdr);
+	ajReportSetHeaderS(report, hdr);
 	for(i=1; i<=antal; i++)
 	{
 	    seqf=ajFeatNewII(feat,npos[i],cpos[i]);
@@ -1353,7 +1353,7 @@ static void tmap_align_rel(ajint antal, ajint poss, ajint span)
 
 static void tmap_plot2(AjPGraph mult)
 {
-  AjPGraphPlpData graphdata = NULL;
+  AjPGraphdata graphdata = NULL;
   float max = -10.0;
   float min = 10.0;
   ajuint i;
@@ -1371,23 +1371,23 @@ static void tmap_plot2(AjPGraph mult)
 	  min = profile[j][i];
       }
     }
-    graphdata = ajGraphPlpDataNew();
-    ajGraphPlpDataSetTypeC(graphdata,"Overlay 2D Plot");
+    graphdata = ajGraphdataNew();
+    ajGraphdataSetTypeC(graphdata,"Overlay 2D Plot");
 
-    ajGraphPlpDataCalcXY(graphdata,glposs,0.0,1.0,&profile[j][0]);
+    ajGraphdataCalcXY(graphdata,glposs,0.0,1.0,&profile[j][0]);
 
-    ajGraphPlpDataSetMaxima(graphdata,0.,(float)glposs,min,max);
+    ajGraphdataSetTruescale(graphdata,0.,(float)glposs,min,max);
 
-    ajGraphPlpDataSetXTitleC(graphdata,"Residue no.");
-    ajGraphPlpDataSetYTitleC(graphdata,"");
-    ajGraphPlpDataSetTitleC(graphdata,"");
-    ajGraphPlpDataSetSubTitleC(graphdata,"");
+    ajGraphdataSetXlabelC(graphdata,"Residue no.");
+    ajGraphdataSetYlabelC(graphdata,"");
+    ajGraphdataSetTitleC(graphdata,"");
+    ajGraphdataSetSubtitleC(graphdata,"");
 
     ajGraphDataAdd(mult,graphdata);
   }
-  ajGraphPlpDataSetLineType(graphdata, 2);
-  ajGraphxySetGaps(mult,AJTRUE);
-  ajGraphxySetOverLap(mult,AJTRUE);
+  ajGraphdataSetLinetype(graphdata, 2);
+  ajGraphxySetflagGaps(mult,AJTRUE);
+  ajGraphxySetflagOverlay(mult,AJTRUE);
 
 
   if(min > 0.0)
@@ -1397,7 +1397,7 @@ static void tmap_plot2(AjPGraph mult)
 
   max = max*(float)1.1;
 
-  ajGraphxySetMaxMin(mult,0.0,(float)glposs,min,max);
+  ajGraphxySetMinmax(mult,0.0,(float)glposs,min,max);
   ajGraphSetTitleC(mult,"Tmap");
 
   max = max * (float)0.95;
@@ -1407,7 +1407,7 @@ static void tmap_plot2(AjPGraph mult)
 		      max+((max-min)*(float)0.01),BLACK,1);
 
   ajGraphxyDisplay(mult,AJFALSE);
-  ajGraphCloseWin();
+  ajGraphicsClose();
 
   return;
 }

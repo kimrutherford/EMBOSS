@@ -1,5 +1,4 @@
-
-                                 stssearch 
+                                  stssearch
 
 
 
@@ -28,16 +27,20 @@ Usage
    Here is a sample session with stssearch
 
 
-% stssearch 
+% stssearch
 Search a DNA database for matches with a set of STS primers
 Input nucleotide sequence(s): @eclac.list
 Primer pairs file: lac.primers
-Output file [j01636.stssearch]: 
+Output file [j01636.stssearch]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Search a DNA database for matches with a set of STS primers
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-seqall]            seqall     Nucleotide sequence(s) filename and optional
@@ -76,13 +79,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -113,8 +118,7 @@ PrimC CGTCAGTATCCCCGTTTACAG  TATCGCCAAAATCACCGCC
 PrimD AATACGCAAACCGCCTCTCC   TTATCCGCTCACAATTCCACAC
 PrimE AATACGCAAACCGCCTCTCC   CACAACCCGCTCACAATTCCA
 
-   The primers file consists of three columns separated by tabs or
-   spaces.
+   The primers file consists of three columns separated by tabs or spaces.
 
    The first column is the name of the primer pair.
    The second column is the sequence of the first primer.
@@ -193,7 +197,7 @@ See also
 
 Author(s)
 
-   Peter            Rice (pmr © ebi.ac.uk)
+   Peter            Rice (pmr (c) ebi.ac.uk)
    European         Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton,         Cambridge CB10 1SD, UK
 

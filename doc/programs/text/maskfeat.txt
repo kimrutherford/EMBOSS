@@ -1,5 +1,4 @@
-
-                                 maskfeat 
+                                  maskfeat
 
 
 
@@ -18,10 +17,10 @@ Description
 
    maskfeat reads a sequence with associated features and writes the same
    information to file but with features of the specified type omitted
-   (masked). Sequence regions corresponding to the masked-out features
-   are masked such that characters in those region are (optionally)
-   converted to lower case and / or (optionally) replaced with the
-   specified mask character.
+   (masked). Sequence regions corresponding to the masked-out features are
+   masked such that characters in those region are (optionally) converted
+   to lower case and / or (optionally) replaced with the specified mask
+   character.
 
 Usage
 
@@ -31,9 +30,10 @@ Usage
    2356:
 
 
-% maskfeat tembl:ab000360 
+% maskfeat tembl:ab000360
 Write a sequence with masked features
-output sequence [ab000360.fasta]: 
+output sequence [ab000360.fasta]:
+
 
    Go to the input files for this example
    Go to the output files for this example
@@ -45,13 +45,17 @@ output sequence [ab000360.fasta]:
    sequence upper-case before the lower-case masking:
 
 
-% maskfeat tembl:ab000360 -tolower -supper 
+% maskfeat tembl:ab000360 -tolower -supper
 Write a sequence with masked features
-output sequence [ab000360.fasta]: 
+output sequence [ab000360.fasta]:
+
 
    Go to the output files for this example
 
 Command line arguments
+
+Write a sequence with masked features
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -73,7 +77,7 @@ Command line arguments
                                   If you wish to mask more than one type,
                                   separate their names with spaces or commas,
                                   eg:
-                                  *UTR repeat* (Any string is accepted)
+                                  *UTR repeat* (Any string)
    -tolower            toggle     [N] The region can be 'masked' by converting
                                   the sequence characters to lower-case, some
                                   non-EMBOSS programs e.g. fasta can
@@ -132,13 +136,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -164,8 +170,7 @@ XX
 KW   .
 XX
 OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
-;
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
 OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
 OC   Homo.
 XX
@@ -213,94 +218,50 @@ FT   repeat_region   2331..2356
 FT                   /rpt_unit_seq="gt"
 XX
 SQ   Sequence 2582 BP; 694 A; 494 C; 581 G; 813 T; 0 other;
-     ggatccctgc tgcagagggg gtaacggtgt ctggcttgcc aagcaatatt tgttgtggtc        6
-0
-     tatcatggaa gaaataaagt cgggcaatat gaattttttt tttctcaaat ttgccggatg       12
-0
-     gctgtggtgt ttctgactct tagttttctc attgtgaaaa aggaatgatt atcttcttcg       18
-0
-     atcctctcaa gagtttcctt gttttgagta gattgatagc tctttaaagg atgctaagct       24
-0
-     cagctaatgg aagaagagtc tagtttcttt gaggctttga ttttggttaa actatagagc       30
-0
-     tcataccttt ctgtatggtg cagcttacta ttgtctttgg attggtaact taaaaaatac       36
-0
-     aaataacatg cctttgagaa ccaataaaaa ctatggatat tatccctata aatttacaca       42
-0
-     aatccagata taagcatgca atgtgatata cctaagggat atgtgaacca ctgagttaag       48
-0
-     aactgcttta gagggagata caatgtgaga cacaggcttt gggataagac tttggtttga       54
-0
-     atcctggctc tgctctgtta ccttagggca aagttactta agcatcttga atctcagctt       60
-0
-     ttttaccaaa gcaggactaa tactaactta caaggtggtg aggattaagt gaaagaagat       66
-0
-     acataaggca cttagcacat agtaggtact caataagcga tagctaacag atgtctatta       72
-0
-     ttattcaagg aattataatt ttcaaatctg aaatgcagtt ttaatgtccc ataaggtgac       78
-0
-     taccacatac atttttctca gacttttagt aaactgagtt gatttgactt tatctcagta       84
-0
-     ctactcttga cctttcacaa ctttcgtagg ttcacagtct ctctttttct aggaacttgg       90
-0
-     ctgtgttgtc ctgcctcaga gacaaattca tctattgtag gcctagcccc tgcctttgaa       96
-0
-     aacaaggaaa ggttggtaga acatcaacac agcatggaat ttccagggag gtctcatttc      102
-0
-     aaaacttcat aaagaacaag aaccacctgg acttctgtga gggcgatgat taaactggcc      108
-0
-     tgagtttgaa tgaaaggata atgtatgctc aacctgtgac taacaccaag gaggtcaagt      114
-0
-     ggcagaaggt cttgtatgag cgacagccct ttcctgataa ctatgtggac cggcgattcc      120
-0
-     tggaagagct ccggaaaaac atccatgctc ggaaatacca atattgggct gtggtatttg      126
-0
-     agtccagtgt ggtgatccag cagctgtgca gtgtttgtgt ttttgtggtt atctggtggt      132
-0
-     atatggatga gggtcttctg gccccccatt ggcttttagg gactggcctg gcttcttcac      138
-0
-     tgattgggta tgttttgttt gatctcattg atggaggtga agggcggaag aagagtgggc      144
-0
-     agacccggtg ggctgacctg aagagtgccc tagtcttcat tactttcact tatgggtttt      150
-0
-     caccagtgct gaagaccctt acagagtctg tcagcactga caccatctat gccatgtcag      156
-0
-     tcttcatgct gttaggccat ctcatctttt ttgactatgg tgccaatgct gccattgtat      162
-0
-     ccagcacact atccttgaac atggccatct ttgcttctgt atgcttggca tcacgtcttc      168
-0
-     cccggtccct gcatgccttc atcatggtga catttgccat tcagattttt gccctgtggc      174
-0
-     ccatgttgca gaagaaacta aaggcatgta ctccccggag ctatgtgggg gtcacactgc      180
-0
-     tttttgcatt ttcagccgtg ggaggcctac tgtccattag tgctgtggga gccgtactct      186
-0
-     ttgcccttct gctgatgtct atctcatgtc tgtgttcatt ctacctcatt cgcttgcagc      192
-0
-     tttttaaaga aaacattcat gggccttggg atgaagctga aatcaaggaa gacttgtcca      198
-0
-     ggttcctcag ttaaattagg acatccatta cattattaaa gcaagctgat agattagcct      204
-0
-     cctaactagt atagaactta aagacagagt tccattctgg aagcagcatg tcattgtggt      210
-0
-     aagagaatag agatcaaaac caaaaaaaat gaaccaaagg cttgggtggt gagggtgctt      216
-0
-     atcctttctg ttattttgta gatgaaaaaa ctttctgggg acctcttgaa ttacatgctg      222
-0
-     taacatatga agtgatgtgg tttctattaa aaaaataaca catccatcaa gttgtctcat      228
-0
-     gatttttcca taaacaggag gcagacagag gggcatgaag agtgaagtaa gtgtgtgtgt      234
-0
-     gtgtgtgtgt gtgtgtaaag tcacttcttt ctaccctttt caatgtgcta atgctctttt      240
-0
-     atttatctag ggctcaaatc ttagaacaca gggtgctatg ctcagttttg ttgcccaaga      246
-0
-     tcacagaatt ggttacttaa ccttgactca gagtttctac cttgttctta gggaagcata      252
-0
-     tcacaactaa ttgcaaagca gagtgtgatg tgtcacaata agcagaatgc tagggggaat      258
-0
-     tc                                                                     258
-2
+     ggatccctgc tgcagagggg gtaacggtgt ctggcttgcc aagcaatatt tgttgtggtc        60
+     tatcatggaa gaaataaagt cgggcaatat gaattttttt tttctcaaat ttgccggatg       120
+     gctgtggtgt ttctgactct tagttttctc attgtgaaaa aggaatgatt atcttcttcg       180
+     atcctctcaa gagtttcctt gttttgagta gattgatagc tctttaaagg atgctaagct       240
+     cagctaatgg aagaagagtc tagtttcttt gaggctttga ttttggttaa actatagagc       300
+     tcataccttt ctgtatggtg cagcttacta ttgtctttgg attggtaact taaaaaatac       360
+     aaataacatg cctttgagaa ccaataaaaa ctatggatat tatccctata aatttacaca       420
+     aatccagata taagcatgca atgtgatata cctaagggat atgtgaacca ctgagttaag       480
+     aactgcttta gagggagata caatgtgaga cacaggcttt gggataagac tttggtttga       540
+     atcctggctc tgctctgtta ccttagggca aagttactta agcatcttga atctcagctt       600
+     ttttaccaaa gcaggactaa tactaactta caaggtggtg aggattaagt gaaagaagat       660
+     acataaggca cttagcacat agtaggtact caataagcga tagctaacag atgtctatta       720
+     ttattcaagg aattataatt ttcaaatctg aaatgcagtt ttaatgtccc ataaggtgac       780
+     taccacatac atttttctca gacttttagt aaactgagtt gatttgactt tatctcagta       840
+     ctactcttga cctttcacaa ctttcgtagg ttcacagtct ctctttttct aggaacttgg       900
+     ctgtgttgtc ctgcctcaga gacaaattca tctattgtag gcctagcccc tgcctttgaa       960
+     aacaaggaaa ggttggtaga acatcaacac agcatggaat ttccagggag gtctcatttc      1020
+     aaaacttcat aaagaacaag aaccacctgg acttctgtga gggcgatgat taaactggcc      1080
+     tgagtttgaa tgaaaggata atgtatgctc aacctgtgac taacaccaag gaggtcaagt      1140
+     ggcagaaggt cttgtatgag cgacagccct ttcctgataa ctatgtggac cggcgattcc      1200
+     tggaagagct ccggaaaaac atccatgctc ggaaatacca atattgggct gtggtatttg      1260
+     agtccagtgt ggtgatccag cagctgtgca gtgtttgtgt ttttgtggtt atctggtggt      1320
+     atatggatga gggtcttctg gccccccatt ggcttttagg gactggcctg gcttcttcac      1380
+     tgattgggta tgttttgttt gatctcattg atggaggtga agggcggaag aagagtgggc      1440
+     agacccggtg ggctgacctg aagagtgccc tagtcttcat tactttcact tatgggtttt      1500
+     caccagtgct gaagaccctt acagagtctg tcagcactga caccatctat gccatgtcag      1560
+     tcttcatgct gttaggccat ctcatctttt ttgactatgg tgccaatgct gccattgtat      1620
+     ccagcacact atccttgaac atggccatct ttgcttctgt atgcttggca tcacgtcttc      1680
+     cccggtccct gcatgccttc atcatggtga catttgccat tcagattttt gccctgtggc      1740
+     ccatgttgca gaagaaacta aaggcatgta ctccccggag ctatgtgggg gtcacactgc      1800
+     tttttgcatt ttcagccgtg ggaggcctac tgtccattag tgctgtggga gccgtactct      1860
+     ttgcccttct gctgatgtct atctcatgtc tgtgttcatt ctacctcatt cgcttgcagc      1920
+     tttttaaaga aaacattcat gggccttggg atgaagctga aatcaaggaa gacttgtcca      1980
+     ggttcctcag ttaaattagg acatccatta cattattaaa gcaagctgat agattagcct      2040
+     cctaactagt atagaactta aagacagagt tccattctgg aagcagcatg tcattgtggt      2100
+     aagagaatag agatcaaaac caaaaaaaat gaaccaaagg cttgggtggt gagggtgctt      2160
+     atcctttctg ttattttgta gatgaaaaaa ctttctgggg acctcttgaa ttacatgctg      2220
+     taacatatga agtgatgtgg tttctattaa aaaaataaca catccatcaa gttgtctcat      2280
+     gatttttcca taaacaggag gcagacagag gggcatgaag agtgaagtaa gtgtgtgtgt      2340
+     gtgtgtgtgt gtgtgtaaag tcacttcttt ctaccctttt caatgtgcta atgctctttt      2400
+     atttatctag ggctcaaatc ttagaacaca gggtgctatg ctcagttttg ttgcccaaga      2460
+     tcacagaatt ggttacttaa ccttgactca gagtttctac cttgttctta gggaagcata      2520
+     tcacaactaa ttgcaaagca gagtgtgatg tgtcacaata agcagaatgc tagggggaat      2580
+     tc                                                                     2582
 //
 
 Output file format
@@ -414,15 +375,15 @@ Data files
 Notes
 
    Formats such as EMBL or SWISSPROT include features in the sequence
-   annotation. Otherwise, features they may be supplied in a separate
-   file and specified with the qualifier -ufo or -fopenfile / -fformat.
+   annotation. Otherwise, features they may be supplied in a separate file
+   and specified with the qualifier -ufo or -fopenfile / -fformat.
 
    The feature type to mask is by default repeat*, i.e. any type whose
-   name starts with repeat will be omitted from the output file. Any
-   other type of feature(s) may be specified with the -type qualifier. To
-   specify more than one type of feature, separate their names with
-   spaces or commas. The names may be wild-carded with asterisks * to
-   find gruops of feature types sharing a common part of their names.
+   name starts with repeat will be omitted from the output file. Any other
+   type of feature(s) may be specified with the -type qualifier. To
+   specify more than one type of feature, separate their names with spaces
+   or commas. The names may be wild-carded with asterisks * to find gruops
+   of feature types sharing a common part of their names.
 
    If you are unsure of the names of feature types in use, please consult
    http://www.ebi.ac.uk/Services/WebFeat/ (EMBL feature types) and see
@@ -505,7 +466,7 @@ See also
 
 Author(s)
 
-   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   Gary Williams (gwilliam (c) rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 

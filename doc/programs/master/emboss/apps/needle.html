@@ -21,7 +21,7 @@ needle
 </H2>
 
 
-<p><b>needle</b> reads two input sequences and writes their optimal global sequence alignment to file. It uses the Needleman-Wunsch alignment algorithm to find the optimum alignment (including gaps) of two sequences along their entire length. The algorithm uses a dynamic programming method to ensure the alignment is optimum, by exploring all possible alignments and choosing the best. A scoring matrix is read that contains values for every possible residue or nucleotide match. Needle finds the alignment with the maximum possible score where the score of an alignment is equal to the sum of the matches taken from the scoring matrix, minus a penalties arising from opening and extending gaps in the aligned sequences.  The substitution matrix and gap opening and extension penalties are user-specified.</p>
+<p><b>needle</b> reads two input sequences and writes their optimal global sequence alignment to file. It uses the Needleman-Wunsch alignment algorithm to find the optimum alignment (including gaps) of two sequences along their entire length. The algorithm uses a dynamic programming method to ensure the alignment is optimum, by exploring all possible alignments and choosing the best. A scoring matrix is read that contains values for every possible residue or nucleotide match. Needle finds the alignment with the maximum possible score where the score of an alignment is equal to the sum of the matches taken from the scoring matrix, minus penalties arising from opening and extending gaps in the aligned sequences.  The substitution matrix and gap opening and extension penalties are user-specified.</p>
 
 
 <H3>
@@ -33,12 +33,11 @@ needle
 
 <p>An important problem is the treatment of gaps, i.e., spaces inserted to optimise the alignment score. A penalty is subtracted from the score for each gap opened (the 'gap open' penalty) and a penalty is subtracted from the score for the total number of gap spaces multiplied by a cost (the 'gap extension' penalty). Typically, the cost of extending a gap is set to be 5-10 times lower than the cost for opening a gap.</p>
 
-<p>There are two ways to compute a penalty for a gap of n positions :
+<p>Penalty for a gap of <tt>n</tt> positions is calculated using the following formula:
 
 <pre>gap opening penalty + (n - 1) * gap extension penalty
-gap penalty + n * gap length penalty</pre>
+</pre>
 
-The two methods are basically equivalent.  The first way is used by EMBOSS and WU-BLAST. The second way is used by NCBI-BLAST, GCG, Staden and CLUSTAL. Fasta for a long time used the first way, but recently shifted to the second.
 </p>
 
 <p>In a Needleman-Wunsch global alignment, the entire length of each sequence is aligned. The sequences might be partially overlapping or one sequence might be aligned entirely internally to the other.  There is no penalty for the hanging ends of the overlap. In bioinformatics, it is usually reasonable to assume that the sequences are incomplete and there should be no penalty for failing to align the missing bases.</p>

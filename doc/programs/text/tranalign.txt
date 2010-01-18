@@ -1,5 +1,4 @@
-
-                                 tranalign 
+                                  tranalign
 
 
 
@@ -21,12 +20,12 @@ Description
    corresponding set of aligned protein sequences which are the
    translations, and writes the coding regions to file as a nucleotide
    sequence alignment. The sequences must be in the same order in the
-   input sets. Each nucleotide sequence is translated in all three
-   forward frames using the specified genetic code and the translations
-   compared to the corresponding protein sequence from input the
-   alignment. The contiguous nucleotide sequence that coded the protein
-   is written to file (it will not splice together different exons to
-   produce a coding sequence).
+   input sets. Each nucleotide sequence is translated in all three forward
+   frames using the specified genetic code and the translations compared
+   to the corresponding protein sequence from input the alignment. The
+   contiguous nucleotide sequence that coded the protein is written to
+   file (it will not splice together different exons to produce a coding
+   sequence).
 
 Algorithm
 
@@ -39,13 +38,17 @@ Usage
    Here is a sample session with tranalign
 
 
-% tranalign ../data/tranalign.pep tranalign2.seq 
+% tranalign ../data/tranalign.pep tranalign2.seq
 Generate an alignment of nucleic coding regions from aligned proteins
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Generate an alignment of nucleic coding regions from aligned proteins
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         seqall     Nucleotide sequence(s) filename and optional
@@ -129,19 +132,21 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
    The input is a set of unaligned nucleic sequences and the set of
-   aligned protein sequences to be used as a guide in the alignment of
-   the output nucleic sequences.
+   aligned protein sequences to be used as a guide in the alignment of the
+   output nucleic sequences.
 
    The ID names of the nucleic acid and protein sequences are NOT checked
    to see if they correspond to each other. They can have any names.
@@ -208,6 +213,7 @@ agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
 cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
 tctaataaaaaagccacttagttcagtcaaaaaaaaaa
 
+
   File: tranalign.pep
 
 >HSFAU1_3
@@ -229,6 +235,7 @@ KKTGRAKRRMQYNRRFVNVVPTFGKKKGPNANS
 PLSRLHLRGSWDRRSVANMQLFVRAQELHTFEVTGQETVAQIKAHVAS-LEGIAPEDQVV
 LLAGAPLEDEATLGQCGVEALTTLEVGRMLFG-GKVHGSLARAGKVRGQTPKVAKQEKKK
 KKTGRAKRRMQYNRRFVNVVPTFGKKKGPNANS
+
 
 Output file format
 
@@ -342,36 +349,35 @@ Known bugs
 
 See also
 
-   Program name     Description
-   edialign         Local multiple alignment of sequences
-   emma             Multiple sequence alignment (ClustalW wrapper)
-   infoalign        Display basic information about a multiple sequence
-                    alignment
-   plotcon          Plot conservation of a sequence alignment
-   prettyplot       Draw a sequence alignment with pretty formatting
-   showalign        Display a multiple sequence alignment in pretty format
+                    Program name                          Description
+                    edialign     Local multiple alignment of sequences
+                    emma         Multiple sequence alignment (ClustalW wrapper)
+                    infoalign    Display basic information about a multiple sequence alignment
+                    plotcon      Plot conservation of a sequence alignment
+                    prettyplot   Draw a sequence alignment with pretty formatting
+                    showalign    Display a multiple sequence alignment in pretty format
 
 Author(s)
 
-   The original program mrtrans was written by Bill Pearson
-   (wrp@virginia.edu)
+                    The original program mrtrans was written by Bill Pearson
+                    (wrp@virginia.edu)
 
-   tranalign was written in EMBOSS code using the description of mrtrans
-   as a guide by Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
-   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
-   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+                    tranalign was written in EMBOSS code using the description of mrtrans
+                    as a guide by Gary Williams (gwilliam (c) rfcgr.mrc.ac.uk)
+   MRC              Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome           Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 History
 
-   mrtrans written (Jan 1991, July 1987) - Bill Pearson
+                    mrtrans written (Jan 1991, July 1987) - Bill Pearson
 
-   tranalign written (March 2002) - Gary Williams
+                    tranalign written (March 2002) - Gary Williams
 
 Target users
 
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
 
 Comments
 
-   None
+                    None

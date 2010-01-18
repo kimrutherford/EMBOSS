@@ -1,6 +1,8 @@
 application: trimseq [
   documentation: "Remove unwanted characters from start and end of sequence(s)"
   groups: "Edit"
+  relations: "EDAM: Sequence cutting"
+  relations: "EDAM: Sequence ambiguity calculation"
 ]
 
 section: input [
@@ -11,6 +13,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "gapany"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: input
@@ -30,6 +33,7 @@ section: additional [
            the sequence is shifted along the sequence from the ends and
            trimming is done only if there is a greater or equal percentage of
            ambiguity than the threshold percentage."
+    relations: "EDAM: Generic integer"                                     
   ]
 
   float: percent [
@@ -38,6 +42,7 @@ section: additional [
     information: "Percent threshold of ambiguity in window"
     help: "This is the threshold of the percentage ambiguity in the
            window required in order to trim a sequence."
+    relations: "EDAM: Generic float"                                       
   ]
 
   boolean: strict [
@@ -49,6 +54,7 @@ section: additional [
            also the nucleotide IUPAC ambiguity codes M, R, W, S, Y, K, V, H,
            D and B. In protein sequences, trim off not only X's but also B
            and Z."
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: star [
@@ -57,6 +63,7 @@ section: additional [
     information: "Trim off asterisks"
     help: "In protein sequences, trim off not only X's, but also the
            *'s"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: additional
@@ -69,11 +76,13 @@ section: advanced [
   boolean: left [
     default: "Y"
     information: "Trim at the start"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: right [
     default: "Y"
     information: "Trim at the end"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: advanced
@@ -85,6 +94,7 @@ section: output [
 
   seqoutall: outseq [
     parameter: "Y"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: output

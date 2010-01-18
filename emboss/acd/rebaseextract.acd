@@ -5,6 +5,7 @@ application: rebaseextract [
   gui: "no"
   batch: "no"
   cpu: "low"
+  relations: "EDAM: Database processing"
 ]
 
 section: input [
@@ -16,12 +17,14 @@ section: input [
     parameter: "Y"
     information: "REBASE database withrefm file"
     knowntype: "rebase withrefm"
+    relations:  "EDAM: REBASE withrefm record"                         
   ]
 
   infile: protofile [
     parameter: "Y"
     information: "REBASE database proto file"
     knowntype: "rebase proto"
+    relations:  "EDAM: REBASE proto record"                            
   ]
 
   boolean: equivalences [
@@ -30,6 +33,7 @@ section: input [
     information: "Create prototype equivalence file"
     help: "This option calculates an embossre.equ file using
            restriction enzyme prototypes in the withrefm file."
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: input

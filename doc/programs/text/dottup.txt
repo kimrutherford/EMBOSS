@@ -1,5 +1,4 @@
-
-                                  dottup 
+                                   dottup
 
 
 
@@ -19,23 +18,22 @@ Description
    A dotplot is a graphical representation of the regions of similarity
    between two sequences.
 
-   The two sequences are placed on the axes of a rectangular image and
-   (in the simplest forms of dotplot) wherever there is a similarity
-   between the sequences a dot is placed on the image.
+   The two sequences are placed on the axes of a rectangular image and (in
+   the simplest forms of dotplot) wherever there is a similarity between
+   the sequences a dot is placed on the image.
 
    Where the two sequences have substantial regions of similarity, many
-   dots align to form diagonal lines. It is therefore possible to see at
-   a glance where there are local regions of similarity as these will
-   have long diagonal lines. It is also easy to see other features such
-   as repeats (which form parallel diagonal lines), and insertions or
-   deletions (which form breaks or discontinuities in the diagonal
-   lines).
+   dots align to form diagonal lines. It is therefore possible to see at a
+   glance where there are local regions of similarity as these will have
+   long diagonal lines. It is also easy to see other features such as
+   repeats (which form parallel diagonal lines), and insertions or
+   deletions (which form breaks or discontinuities in the diagonal lines).
 
-   dottup looks for places where words (tuples) of a specified length
-   have an exact match in both sequences and draws a diagonal line over
-   the position of these words. This is a fast, but not especially
-   sensitive way of creating dotplots. It is an acceptable method for
-   displaying regions of substantial similarity between two sequences.
+   dottup looks for places where words (tuples) of a specified length have
+   an exact match in both sequences and draws a diagonal line over the
+   position of these words. This is a fast, but not especially sensitive
+   way of creating dotplots. It is an acceptable method for displaying
+   regions of substantial similarity between two sequences.
 
    Using a longer word (tuple) size displays less random noise, runs
    extremely quickly, but is less sensitive. Shorter word sizes are more
@@ -47,16 +45,20 @@ Usage
    Here is a sample session with dottup
 
 
-% dottup tembl:j01636 tembl:v00294 -wordsize=6 -gtitle='v00294 vs j01636' -grap
-h cps 
+% dottup tembl:j01636 tembl:v00294 -wordsize=6 -gtitle='v00294 vs j01636' -graph
+ cps
 Displays a wordmatch dotplot of two sequences
 
 Created dottup.ps
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Displays a wordmatch dotplot of two sequences
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-asequence]         sequence   Sequence filename and optional format, or
@@ -66,10 +68,10 @@ Command line arguments
    -wordsize           integer    [10] Word size (Integer 2 or more)
 *  -graph              graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, das, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif)
 *  -xygraph            xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, das, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif)
 
    Additional (Optional) qualifiers (* if not always prompted):
 *  -[no]boxit          boolean    [Y] Draw a box around dotplot
@@ -139,13 +141,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -153,8 +157,8 @@ Input file format
 
   Input files for usage example
 
-   'tembl:j01636' is a sequence entry in the example nucleic acid
-   database 'tembl'
+   'tembl:j01636' is a sequence entry in the example nucleic acid database
+   'tembl'
 
   Database entry: tembl:j01636
 
@@ -212,106 +216,56 @@ RP   1146-1282
 
   [Part of this file has been deleted for brevity]
 
-     cgatttggct acatgacatc aaccatatca gcaaaagtga tacgggtatt atttttgccg      456
-0
-     ctatttctct gttctcgcta ttattccaac cgctgtttgg tctgctttct gacaaactcg      462
-0
-     ggctgcgcaa atacctgctg tggattatta ccggcatgtt agtgatgttt gcgccgttct      468
-0
-     ttatttttat cttcgggcca ctgttacaat acaacatttt agtaggatcg attgttggtg      474
-0
-     gtatttatct aggcttttgt tttaacgccg gtgcgccagc agtagaggca tttattgaga      480
-0
-     aagtcagccg tcgcagtaat ttcgaatttg gtcgcgcgcg gatgtttggc tgtgttggct      486
-0
-     gggcgctgtg tgcctcgatt gtcggcatca tgttcaccat caataatcag tttgttttct      492
-0
-     ggctgggctc tggctgtgca ctcatcctcg ccgttttact ctttttcgcc aaaacggatg      498
-0
-     cgccctcttc tgccacggtt gccaatgcgg taggtgccaa ccattcggca tttagcctta      504
-0
-     agctggcact ggaactgttc agacagccaa aactgtggtt tttgtcactg tatgttattg      510
-0
-     gcgtttcctg cacctacgat gtttttgacc aacagtttgc taatttcttt acttcgttct      516
-0
-     ttgctaccgg tgaacagggt acgcgggtat ttggctacgt aacgacaatg ggcgaattac      522
-0
-     ttaacgcctc gattatgttc tttgcgccac tgatcattaa tcgcatcggt gggaaaaacg      528
-0
-     ccctgctgct ggctggcact attatgtctg tacgtattat tggctcatcg ttcgccacct      534
-0
-     cagcgctgga agtggttatt ctgaaaacgc tgcatatgtt tgaagtaccg ttcctgctgg      540
-0
-     tgggctgctt taaatatatt accagccagt ttgaagtgcg tttttcagcg acgatttatc      546
-0
-     tggtctgttt ctgcttcttt aagcaactgg cgatgatttt tatgtctgta ctggcgggca      552
-0
-     atatgtatga aagcatcggt ttccagggcg cttatctggt gctgggtctg gtggcgctgg      558
-0
-     gcttcacctt aatttccgtg ttcacgctta gcggccccgg cccgctttcc ctgctgcgtc      564
-0
-     gtcaggtgaa tgaagtcgct taagcaatca atgtcggatg cggcgcgacg cttatccgac      570
-0
-     caacatatca taacggagtg atcgcattga acatgccaat gaccgaaaga ataagagcag      576
-0
-     gcaagctatt taccgatatg tgcgaaggct taccggaaaa aagacttcgt gggaaaacgt      582
-0
-     taatgtatga gtttaatcac tcgcatccat cagaagttga aaaaagagaa agcctgatta      588
-0
-     aagaaatgtt tgccacggta ggggaaaacg cctgggtaga accgcctgtc tatttctctt      594
-0
-     acggttccaa catccatata ggccgcaatt tttatgcaaa tttcaattta accattgtcg      600
-0
-     atgactacac ggtaacaatc ggtgataacg tactgattgc acccaacgtt actctttccg      606
-0
-     ttacgggaca ccctgtacac catgaattga gaaaaaacgg cgagatgtac tcttttccga      612
-0
-     taacgattgg caataacgtc tggatcggaa gtcatgtggt tattaatcca ggcgtcacca      618
-0
-     tcggggataa ttctgttatt ggcgcgggta gtatcgtcac aaaagacatt ccaccaaacg      624
-0
-     tcgtggcggc tggcgttcct tgtcgggtta ttcgcgaaat aaacgaccgg gataagcact      630
-0
-     attatttcaa agattataaa gttgaatcgt cagtttaaat tataaaaatt gcctgatacg      636
-0
-     ctgcgcttat caggcctaca agttcagcga tctacattag ccgcatccgg catgaacaaa      642
-0
-     gcgcaggaac aagcgtcgca tcatgcctct ttgacccaca gctgcggaaa acgtactggt      648
-0
-     gcaaaacgca gggttatgat catcagccca acgacgcaca gcgcatgaaa tgcccagtcc      654
-0
-     atcaggtaat tgccgctgat actacgcagc acgccagaaa accacggggc aagcccggcg      660
-0
-     atgataaaac cgattccctg cataaacgcc accagcttgc cagcaatagc cggttgcaca      666
-0
-     gagtgatcga gcgccagcag caaacagagc ggaaacgcgc cgcccagacc taacccacac      672
-0
-     accatcgccc acaataccgg caattgcatc ggcagccaga taaagccgca gaaccccacc      678
-0
-     agttgtaaca ccagcgccag cattaacagt ttgcgccgat cctgatggcg agccatagca      684
-0
-     ggcatcagca aagctcctgc ggcttgccca agcgtcatca atgccagtaa ggaaccgctg      690
-0
-     tactgcgcgc tggcaccaat ctcaatatag aaagcgggta accaggcaat caggctggcg      696
-0
-     taaccgccgt taatcagacc gaagtaaaca cccagcgtcc acgcgcgggg agtgaatacc      702
-0
-     acgcgaaccg gagtggttgt tgtcttgtgg gaagaggcga cctcgcgggc gctttgccac      708
-0
-     caccaggcaa agagcgcaac aacggcaggc agcgccacca ggcgagtgtt tgataccagg      714
-0
-     tttcgctatg ttgaactaac cagggcgtta tggcggcacc aagcccaccg ccgcccatca      720
-0
-     gagccgcgga ccacagcccc atcaccagtg gcgtgcgctg ctgaaaccgc cgtttaatca      726
-0
-     ccgaagcatc accgcctgaa tgatgccgat ccccacccca ccaagcagtg cgctgctaag      732
-0
-     cagcagcgca ctttgcgggt aaagctcacg catcaatgca ccgacggcaa tcagcaacag      738
-0
-     actgatggcg acactgcgac gttcgctgac atgctgatga agccagcttc cggccagcgc      744
-0
-     cagcccgccc atggtaacca ccggcagagc ggtcgac                               747
-7
+     cgatttggct acatgacatc aaccatatca gcaaaagtga tacgggtatt atttttgccg      4560
+     ctatttctct gttctcgcta ttattccaac cgctgtttgg tctgctttct gacaaactcg      4620
+     ggctgcgcaa atacctgctg tggattatta ccggcatgtt agtgatgttt gcgccgttct      4680
+     ttatttttat cttcgggcca ctgttacaat acaacatttt agtaggatcg attgttggtg      4740
+     gtatttatct aggcttttgt tttaacgccg gtgcgccagc agtagaggca tttattgaga      4800
+     aagtcagccg tcgcagtaat ttcgaatttg gtcgcgcgcg gatgtttggc tgtgttggct      4860
+     gggcgctgtg tgcctcgatt gtcggcatca tgttcaccat caataatcag tttgttttct      4920
+     ggctgggctc tggctgtgca ctcatcctcg ccgttttact ctttttcgcc aaaacggatg      4980
+     cgccctcttc tgccacggtt gccaatgcgg taggtgccaa ccattcggca tttagcctta      5040
+     agctggcact ggaactgttc agacagccaa aactgtggtt tttgtcactg tatgttattg      5100
+     gcgtttcctg cacctacgat gtttttgacc aacagtttgc taatttcttt acttcgttct      5160
+     ttgctaccgg tgaacagggt acgcgggtat ttggctacgt aacgacaatg ggcgaattac      5220
+     ttaacgcctc gattatgttc tttgcgccac tgatcattaa tcgcatcggt gggaaaaacg      5280
+     ccctgctgct ggctggcact attatgtctg tacgtattat tggctcatcg ttcgccacct      5340
+     cagcgctgga agtggttatt ctgaaaacgc tgcatatgtt tgaagtaccg ttcctgctgg      5400
+     tgggctgctt taaatatatt accagccagt ttgaagtgcg tttttcagcg acgatttatc      5460
+     tggtctgttt ctgcttcttt aagcaactgg cgatgatttt tatgtctgta ctggcgggca      5520
+     atatgtatga aagcatcggt ttccagggcg cttatctggt gctgggtctg gtggcgctgg      5580
+     gcttcacctt aatttccgtg ttcacgctta gcggccccgg cccgctttcc ctgctgcgtc      5640
+     gtcaggtgaa tgaagtcgct taagcaatca atgtcggatg cggcgcgacg cttatccgac      5700
+     caacatatca taacggagtg atcgcattga acatgccaat gaccgaaaga ataagagcag      5760
+     gcaagctatt taccgatatg tgcgaaggct taccggaaaa aagacttcgt gggaaaacgt      5820
+     taatgtatga gtttaatcac tcgcatccat cagaagttga aaaaagagaa agcctgatta      5880
+     aagaaatgtt tgccacggta ggggaaaacg cctgggtaga accgcctgtc tatttctctt      5940
+     acggttccaa catccatata ggccgcaatt tttatgcaaa tttcaattta accattgtcg      6000
+     atgactacac ggtaacaatc ggtgataacg tactgattgc acccaacgtt actctttccg      6060
+     ttacgggaca ccctgtacac catgaattga gaaaaaacgg cgagatgtac tcttttccga      6120
+     taacgattgg caataacgtc tggatcggaa gtcatgtggt tattaatcca ggcgtcacca      6180
+     tcggggataa ttctgttatt ggcgcgggta gtatcgtcac aaaagacatt ccaccaaacg      6240
+     tcgtggcggc tggcgttcct tgtcgggtta ttcgcgaaat aaacgaccgg gataagcact      6300
+     attatttcaa agattataaa gttgaatcgt cagtttaaat tataaaaatt gcctgatacg      6360
+     ctgcgcttat caggcctaca agttcagcga tctacattag ccgcatccgg catgaacaaa      6420
+     gcgcaggaac aagcgtcgca tcatgcctct ttgacccaca gctgcggaaa acgtactggt      6480
+     gcaaaacgca gggttatgat catcagccca acgacgcaca gcgcatgaaa tgcccagtcc      6540
+     atcaggtaat tgccgctgat actacgcagc acgccagaaa accacggggc aagcccggcg      6600
+     atgataaaac cgattccctg cataaacgcc accagcttgc cagcaatagc cggttgcaca      6660
+     gagtgatcga gcgccagcag caaacagagc ggaaacgcgc cgcccagacc taacccacac      6720
+     accatcgccc acaataccgg caattgcatc ggcagccaga taaagccgca gaaccccacc      6780
+     agttgtaaca ccagcgccag cattaacagt ttgcgccgat cctgatggcg agccatagca      6840
+     ggcatcagca aagctcctgc ggcttgccca agcgtcatca atgccagtaa ggaaccgctg      6900
+     tactgcgcgc tggcaccaat ctcaatatag aaagcgggta accaggcaat caggctggcg      6960
+     taaccgccgt taatcagacc gaagtaaaca cccagcgtcc acgcgcgggg agtgaatacc      7020
+     acgcgaaccg gagtggttgt tgtcttgtgg gaagaggcga cctcgcgggc gctttgccac      7080
+     caccaggcaa agagcgcaac aacggcaggc agcgccacca ggcgagtgtt tgataccagg      7140
+     tttcgctatg ttgaactaac cagggcgtta tggcggcacc aagcccaccg ccgcccatca      7200
+     gagccgcgga ccacagcccc atcaccagtg gcgtgcgctg ctgaaaccgc cgtttaatca      7260
+     ccgaagcatc accgcctgaa tgatgccgat ccccacccca ccaagcagtg cgctgctaag      7320
+     cagcagcgca ctttgcgggt aaagctcacg catcaatgca ccgacggcaa tcagcaacag      7380
+     actgatggcg acactgcgac gttcgctgac atgctgatga agccagcttc cggccagcgc      7440
+     cagcccgccc atggtaacca ccggcagagc ggtcgac                               7477
 //
 
   Database entry: tembl:v00294
@@ -355,59 +309,34 @@ FT                   /db_xref="InterPro:IPR001761"
 FT                   /db_xref="PDB:3EDC"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P03023"
 FT                   /protein_id="CAA23569.1"
-FT                   /translation="MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAE
-L
-FT                   NYIPNRVAQQLAGKQSLLIGVATSSLALHAPSQIVAAIKSRADQLGASVVVSMVERSG
-V
-FT                   EACKAAVHNLLAQRVSGLIINYPLDDQDAIAVEAACTNVPALFLDVSDQTPINSIIFS
-H
-FT                   EDGTRLGVEHLVALGHQQIALLAGPLSSVSARLRLAGWHKYLTRNQIQPIAEREGDWS
-A
-FT                   MSGFQQTMQMLNEGIVPTAMLVANDQMALGAMRAITESGLRVGADISVVGYDDTEDSS
-C
-FT                   YIPPSTTIKQDFRLLGQTSVDRLLQLSQGQAVKGNQLLPVSLVKRKTTLAPNTQTASP
-R
+FT                   /translation="MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAEL
+FT                   NYIPNRVAQQLAGKQSLLIGVATSSLALHAPSQIVAAIKSRADQLGASVVVSMVERSGV
+FT                   EACKAAVHNLLAQRVSGLIINYPLDDQDAIAVEAACTNVPALFLDVSDQTPINSIIFSH
+FT                   EDGTRLGVEHLVALGHQQIALLAGPLSSVSARLRLAGWHKYLTRNQIQPIAEREGDWSA
+FT                   MSGFQQTMQMLNEGIVPTAMLVANDQMALGAMRAITESGLRVGADISVVGYDDTEDSSC
+FT                   YIPPSTTIKQDFRLLGQTSVDRLLQLSQGQAVKGNQLLPVSLVKRKTTLAPNTQTASPR
 FT                   ALADSLMQLARQVSRLESGQ"
 XX
 SQ   Sequence 1113 BP; 249 A; 304 C; 322 G; 238 T; 0 other;
-     ccggaagaga gtcaattcag ggtggtgaat gtgaaaccag taacgttata cgatgtcgca        6
-0
-     gagtatgccg gtgtctctta tcagaccgtt tcccgcgtgg tgaaccaggc cagccacgtt       12
-0
-     tctgcgaaaa cgcgggaaaa agtggaagcg gcgatggcgg agctgaatta cattcccaac       18
-0
-     cgcgtggcac aacaactggc gggcaaacag tcgttgctga ttggcgttgc cacctccagt       24
-0
-     ctggccctgc acgcgccgtc gcaaattgtc gcggcgatta aatctcgcgc cgatcaactg       30
-0
-     ggtgccagcg tggtggtgtc gatggtagaa cgaagcggcg tcgaagcctg taaagcggcg       36
-0
-     gtgcacaatc ttctcgcgca acgcgtcagt gggctgatca ttaactatcc gctggatgac       42
-0
-     caggatgcca ttgctgtgga agctgcctgc actaatgttc cggcgttatt tcttgatgtc       48
-0
-     tctgaccaga cacccatcaa cagtattatt ttctcccatg aagacggtac gcgactgggc       54
-0
-     gtggagcatc tggtcgcatt gggtcaccag caaatcgcgc tgttagcggg cccattaagt       60
-0
-     tctgtctcgg cgcgtctgcg tctggctggc tggcataaat atctcactcg caatcaaatt       66
-0
-     cagccgatag cggaacggga aggcgactgg agtgccatgt ccggttttca acaaaccatg       72
-0
-     caaatgctga atgagggcat cgttcccact gcgatgctgg ttgccaacga tcagatggcg       78
-0
-     ctgggcgcaa tgcgcgccat taccgagtcc gggctgcgcg ttggtgcgga tatctcggta       84
-0
-     gtgggatacg acgataccga agacagctca tgttatatcc cgccgtcaac caccatcaaa       90
-0
-     caggattttc gcctgctggg gcaaaccagc gtggaccgct tgctgcaact ctctcagggc       96
-0
-     caggcggtga agggcaatca gctgttgccc gtctcactgg tgaaaagaaa aaccaccctg      102
-0
-     gcgcccaata cgcaaaccgc ctctccccgc gcgttggccg attcattaat gcagctggca      108
-0
-     cgacaggttt cccgactgga aagcgggcag tga                                   111
-3
+     ccggaagaga gtcaattcag ggtggtgaat gtgaaaccag taacgttata cgatgtcgca        60
+     gagtatgccg gtgtctctta tcagaccgtt tcccgcgtgg tgaaccaggc cagccacgtt       120
+     tctgcgaaaa cgcgggaaaa agtggaagcg gcgatggcgg agctgaatta cattcccaac       180
+     cgcgtggcac aacaactggc gggcaaacag tcgttgctga ttggcgttgc cacctccagt       240
+     ctggccctgc acgcgccgtc gcaaattgtc gcggcgatta aatctcgcgc cgatcaactg       300
+     ggtgccagcg tggtggtgtc gatggtagaa cgaagcggcg tcgaagcctg taaagcggcg       360
+     gtgcacaatc ttctcgcgca acgcgtcagt gggctgatca ttaactatcc gctggatgac       420
+     caggatgcca ttgctgtgga agctgcctgc actaatgttc cggcgttatt tcttgatgtc       480
+     tctgaccaga cacccatcaa cagtattatt ttctcccatg aagacggtac gcgactgggc       540
+     gtggagcatc tggtcgcatt gggtcaccag caaatcgcgc tgttagcggg cccattaagt       600
+     tctgtctcgg cgcgtctgcg tctggctggc tggcataaat atctcactcg caatcaaatt       660
+     cagccgatag cggaacggga aggcgactgg agtgccatgt ccggttttca acaaaccatg       720
+     caaatgctga atgagggcat cgttcccact gcgatgctgg ttgccaacga tcagatggcg       780
+     ctgggcgcaa tgcgcgccat taccgagtcc gggctgcgcg ttggtgcgga tatctcggta       840
+     gtgggatacg acgataccga agacagctca tgttatatcc cgccgtcaac caccatcaaa       900
+     caggattttc gcctgctggg gcaaaccagc gtggaccgct tgctgcaact ctctcagggc       960
+     caggcggtga agggcaatca gctgttgccc gtctcactgg tgaaaagaaa aaccaccctg      1020
+     gcgcccaata cgcaaaccgc ctctccccgc gcgttggccg attcattaat gcagctggca      1080
+     cgacaggttt cccgactgga aagcgggcag tga                                   1113
 //
 
 Output file format
@@ -462,7 +391,7 @@ See also
 
 Author(s)
 
-   Ian              Longden (il © sanger.ac.uk)
+   Ian              Longden (il (c) sanger.ac.uk)
    Sanger           Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
                     CB10 1SA, UK.
 

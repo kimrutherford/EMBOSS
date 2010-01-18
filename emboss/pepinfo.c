@@ -20,8 +20,6 @@
 ******************************************************************************/
 
 #include "emboss.h"
-#include "ajhist.h"
-#include <stdlib.h>
 
 
 #define NOY (AJGRAPH_X_BOTTOM + AJGRAPH_Y_LEFT + AJGRAPH_Y_RIGHT + \
@@ -119,10 +117,10 @@ int main(int argc, char **argv)
 	"Consensus parameters (Eisenberg et al)"
     };
 
-    ajGraphInit("pepinfo", argc, argv);
-    ajGraphSetPage(960, 960);
+    embInit("pepinfo", argc, argv);
+    ajGraphicsSetPagesize(960, 960);
 
-    aj_hist_mark=NOY;
+    ajHistogramSetMark(NOY);
 
     /* Get parameters */
     inseq         = ajAcdGetSeq("sequence");
@@ -235,8 +233,8 @@ int main(int argc, char **argv)
 		    "%d to %d", ajSeqGetNameC(inseq),seq_begin, seq_end);
 	ajHistSetTitleC(hist, ajStrGetPtr(tmpa));
 
-	ajHistSetXAxisC(hist, "Residue Number");
-	ajHistSetYAxisLeftC(hist, "");
+	ajHistSetXlabelC(hist, "Residue Number");
+	ajHistSetYlabelC(hist, "");
 
 	for(i=0; i<9; i++)
 	{
@@ -256,7 +254,7 @@ int main(int argc, char **argv)
 	    AJFREE(iv[i]);
 
 	/*delete hist object*/
-	ajHistDelete(&hist);
+	ajHistDel(&hist);
     }
 
     /* if hydropathy plot required */
@@ -265,7 +263,7 @@ int main(int argc, char **argv)
 	ajDebug("hydropathy plot\n");
 
 	if(numGraphs)
-	    ajGraphxySetOverLap(graphs, ajFalse);
+	    ajGraphxySetflagOverlay(graphs, ajFalse);
 
 	/* get data from amino acid properties */
 	aa_hydro = ajListNew();
@@ -358,23 +356,23 @@ int main(int argc, char **argv)
     if(numGraphs)
     {
 	if(do_general || do_seq)
-	    ajGraphNewPage(graphs, ajFalse);
+	    ajGraphNewpage(graphs, ajFalse);
 
-	ajGraphSetCharScale(0.50);
+	ajGraphicsSetCharscale(0.50);
 	ajGraphSetTitleC(graphs,"Pepinfo");
 
 	ajGraphxyDisplay(graphs,AJTRUE);
     }
 
     if(do_plot)
-	ajGraphCloseWin();
+	ajGraphicsClose();
 
     ajSeqDel(&inseq);
     ajFileClose(&outfile);
     ajFileClose(&aa_properties);
     ajFileClose(&aa_hydropathy);
     ajGraphxyDel(&graphs);
-    ajHistDelete(&hist);
+    ajHistDel(&hist);
 
     /* Delete Data tables*/
     embDataListDel(&aa_props);
@@ -490,7 +488,7 @@ static void pepinfo_plotGraph2Float(AjPGraph graphs,
 				    const char * xtext, const char * ytext)
 {
 
-    AjPGraphPlpData plot;
+    AjPGraphdata plot;
 
     ajint npts = 0;
 
@@ -499,23 +497,23 @@ static void pepinfo_plotGraph2Float(AjPGraph graphs,
 
     npts = seq_end - seq_start;
 
-    ajGraphArrayMaxMin(results,npts,&ymin,&ymax);
+    ajGraphicsCalcRange(results,npts,&ymin,&ymax);
 
     /*
     **  initialise plot, the number of points will be the length of the data
     **  in the results structure
     */
-    plot = ajGraphPlpDataNewI(npts);
+    plot = ajGraphdataNewI(npts);
 
     /*Set up rest of plot information*/
-    ajGraphPlpDataSetTitleC(plot, title_text);
-    ajGraphPlpDataSetXTitleC(plot, xtext);
-    ajGraphPlpDataSetYTitleC(plot, ytext);
-    ajGraphPlpDataSetMaxMin(plot,(float)1,(float)npts,ymin,ymax);
-    ajGraphPlpDataSetMaxima(plot,(float)1,(float)npts,ymin,ymax);
-    ajGraphPlpDataSetTypeC(plot,"2D Plot");
+    ajGraphdataSetTitleC(plot, title_text);
+    ajGraphdataSetXlabelC(plot, xtext);
+    ajGraphdataSetYlabelC(plot, ytext);
+    ajGraphdataSetMinmax(plot,(float)1,(float)npts,ymin,ymax);
+    ajGraphdataSetTruescale(plot,(float)1,(float)npts,ymin,ymax);
+    ajGraphdataSetTypeC(plot,"2D Plot");
 
-    ajGraphPlpDataCalcXY(plot, npts, (float)seq_begin, 1.0, results);
+    ajGraphdataCalcXY(plot, npts, (float)seq_begin, 1.0, results);
     ajGraphDataAdd(graphs, plot);
 
     return;
@@ -554,11 +552,11 @@ static void pepinfo_plotHistInt2(AjPHist hist,
     for(i=0; i<npts; i++)
 	farray[i] = (float) results[i];
 
-    ajHistCopyData(hist, hist_num, farray);
+    ajHistDataCopy(hist, hist_num, farray);
 
-    ajHistSetMultiTitleC(hist, hist_num, header);
-    ajHistSetMultiXTitleC(hist, hist_num, xtext);
-    ajHistSetMultiYTitleC(hist, hist_num, ytext);
+    ajHistSetmultiTitleC(hist, hist_num, header);
+    ajHistSetmultiXlabelC(hist, hist_num, xtext);
+    ajHistSetmultiYlabelC(hist, hist_num, ytext);
 
     AJFREE(farray);
 

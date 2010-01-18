@@ -207,15 +207,15 @@ int main(int argc, char **argv)
     ajReportSetStatistics(report, 2,
                           ajSeqGetLenTrimmed(seq1)+ajSeqGetLenTrimmed(seq2));
 
-    ajFeatWrite(seq1out, Tab1);
-    ajFeatWrite(seq2out, Tab2);
+    ajFeattableWrite(seq1out, Tab1);
+    ajFeattableWrite(seq2out, Tab2);
 
     tmpstr = ajStrNew();
     ajFmtPrintS(&tmpstr, "Feature file for first sequence");
-    ajReportFileAdd(report, ajFeattabOutFile(seq1out), tmpstr);
+    ajReportAddFileF(report, ajFeattabOutFile(seq1out), tmpstr);
 
     ajFmtPrintS(&tmpstr, "Feature file for second sequence");
-    ajReportFileAdd(report, ajFeattabOutFile(seq2out), tmpstr);
+    ajReportAddFileF(report, ajFeattabOutFile(seq2out), tmpstr);
 
     ajReportWrite(report, TabRpt, seq1);
     ajReportClose(report);
@@ -305,18 +305,18 @@ static void diffseq_Diff(const AjPList difflist,
 
     /* create report header */
     ajFmtPrintS(&tmpstr, "Compare: %S     from: %d   to: %d\n\n",
-		ajReportSeqName(report, seq2),
+		ajReportGetSeqnameSeq(report, seq2),
 		ajSeqGetBegin(seq2), ajSeqGetEnd(seq2));    
     if (over1start != -1)   
     { 
         ajFmtPrintAppS(&tmpstr, "%S overlap starts at %d\n",
-			   ajReportSeqName(report, seq1),
+			   ajReportGetSeqnameSeq(report, seq1),
 			   over1start);
         ajFmtPrintAppS(&tmpstr, "%S overlap starts at %d\n\n",
-			   ajReportSeqName(report, seq2),
+			   ajReportGetSeqnameSeq(report, seq2),
 			   over2start);
     }
-    ajReportSetHeader(report, tmpstr);
+    ajReportSetHeaderS(report, tmpstr);
 
 
     iter = ajListIterNewread(difflist);
@@ -343,7 +343,7 @@ static void diffseq_Diff(const AjPList difflist,
         diffseq_Features("second_feature", gf,
                             feat2, diff->Start2, diff->End2);
 
-        ajFmtPrintS(&tmp, "*name %S", ajReportSeqName(report, seq2));
+        ajFmtPrintS(&tmp, "*name %S", ajReportGetSeqnameSeq(report, seq2));
         ajFeatTagAdd(gf, NULL, tmp);
 
         if(diff->Len2 > 0)
@@ -385,10 +385,10 @@ static void diffseq_Diff(const AjPList difflist,
     {
         ajFmtPrintS(&tmp, "Overlap_end: %d in %S\n",
                     over1end,
-                    ajReportSeqName(report, seq1));
+                    ajReportGetSeqnameSeq(report, seq1));
         ajFmtPrintAppS(&tmp, "Overlap_end: %d in %S\n",
                        over2end,
-                       ajReportSeqName(report, seq2));
+                       ajReportGetSeqnameSeq(report, seq2));
         if(ajSeqIsNuc(seq1))
         {
             ajFmtPrintAppS(&tmp, "\n");
@@ -401,7 +401,7 @@ static void diffseq_Diff(const AjPList difflist,
         /* no iterations of the match list done - ie no matches */
         ajFmtPrintS(&tmp, "No regions of alignment found.\n");
     
-    ajReportSetTail(report, tmp);
+    ajReportSetTailS(report, tmp);
     
 
     ajStrDel(&tmp);

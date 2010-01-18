@@ -2,6 +2,7 @@ application: checktrans [
   documentation: "Reports STOP codons and ORF statistics of a
                   protein"
   groups: "Protein:Composition"
+  relations: "EDAM: Coding region prediction"
 ]
 
 section: input [
@@ -12,6 +13,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "stopprotein"
+    relations: "EDAM: Protein sequence record"                             
   ]
 
 endsection: input
@@ -26,6 +28,7 @@ section: required [
     minimum: "1"
     default: "100"
     information: "Minimum ORF Length to report"
+    relations: "EDAM: Generic integer"                                     
   ]
 
 endsection: required
@@ -45,6 +48,7 @@ section: additional [
            not one there already, makes checktrans treat the end as a
            potential ORF. If an asterisk is added, it is not included in the
            reported count of STOPs."
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: additional
@@ -57,17 +61,20 @@ section: output [
   outfile: outfile [
     parameter: "Y"
     knowntype: "checktrans output"
+    relations:  "EDAM:Coding region report"                                
   ]
 
   seqoutall: outseq [
     parameter: "Y"
     help: "Sequence file to hold output ORF sequences"
+    relations: "EDAM: Sequence record"                                     
   ]
 
   featout: outfeat [
     parameter: "Y"
     help: "File for output features"
     type: "protein"
+    relations: "EDAM: Protein sequence feature table"                      
   ]
 
 endsection: output

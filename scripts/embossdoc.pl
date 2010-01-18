@@ -601,7 +601,7 @@ $lastfname = "";
 
 %categs = ("new" => 1, "delete" => 1, "assign" => 1, "modify" => 1,
 	   "cast" => 1, "derive" => 1, "use" => 1, "iterate" => 1,
-	   "input" => 1, "output" => 1, "misc" => 1);
+	   "input" => 1, "output" => 1, "misc" => 1, "internals" => 1);
 %ctot = ();
 if ($ARGV[0]) {$infile = $ARGV[0];}
 if ($ARGV[1]) {$lib = $ARGV[1];}
@@ -648,6 +648,7 @@ else {
     while (<>) {$source .= $_}
 }
 
+open (BOOK, ">$pubout.book");
 open (OBS, ">>deprecated.new");
 print OBS "#$pubout\n";
 open (HTML, ">$pubout.html");
@@ -672,6 +673,7 @@ $mainprog = 0;
 $functot = 0;
 $datanum=0;
 $secnum=0;
+$bookstr = "$pubout\.c\n";
 $datastr = " ";
 $datastrstatic = " ";
 $sectstr = " ";
@@ -718,6 +720,7 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
     @savecode = ();
     @savevar = ();
     @savecast = ();
+    @savedesc = ();
     $inputargs = "";
     $outputargs = "";
     $modifyargs = "";
@@ -729,7 +732,7 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
     $errtext = "See source code";
     $dependtext = "See source code";
     $othertext = "See other functions in this section";
-    $availtext = "In release 5.0.0";
+    $availtext = "In release 6.1.0";
     $ctype = "";
 
     while ($cc =~ m/\s@((\S+)\s+([^@]*[^@\s]))/gos) {
@@ -774,6 +777,8 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    $srest =~ s/{([^\}]+)}/<a href="#$1">$1<\/a>/gos;
 	    print "\nSection $sect\n";
 	    print "-----------------------------\n";
+
+	    $bookstr .= "\n  section: $sect\n";
 
 	    push (@{$datasect{$datatitle}}, $sect);
 	    $datasub = "$datatitle - $sect";
@@ -854,6 +859,7 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    $datastr = "<p><b>Sections:</b> ";
 	    $datastrstatic = "<p><b>Sections:</b> ";
 
+	    $bookstr .= "  $dataname\n $datadesc\n";
 	    splice(@namrules, 1+$namrulesfilecount);
 	    splice(@namdescs, 1+$namrulesfilecount);
 	    splice(@sufname, 1+$suffixfilecount);
@@ -1061,6 +1067,13 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 #           }
 #           print "\n";
 #           print "-----------------------------\n";
+	    $bookstr .= sprintf "%-15s %s (", $ftype, $fname;
+	    $ia = 0;
+	    foreach $f (split(/,/,$fargs)) {
+		if($ia++) {$bookstr .= ", "}
+		$bookstr .= $f;
+	    }
+	    $bookstr .= ");\n";
 	}
 
 	elsif ($token eq "funcstatic")  {
@@ -1166,6 +1179,8 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    $shortdesc = $mrest;
 	    $longdesc = $mrest;
 
+	    $bookmacro = $fname;
+	    @bookmacroparams = ();
 	    print SRS "ID $name\n";
 	    print SRS "TY macro\n";
 	    print SRS "MO $pubout\n";
@@ -1288,6 +1303,7 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 
 	    testvar($var);
 	    if ($ismacro) {               # No code to test for macros
+		push (@bookmacroparams, "$cast $var");
 	    }
 	    else {
 		$curarg = $largs[$acnt];
@@ -1328,7 +1344,7 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    push @savecode, $code;
 	    push @savevar,  $var;
 	    push @savecast, $cast;
-
+	    push @savedesc, $prest;
 	    $drest = $prest;
 	    $drest =~ s/\n\n+$/\n/gos;
 	    $drest =~ s/\n\n\n+/\n\n/gos;
@@ -1509,6 +1525,16 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    else {
 		$returnargs = "<tr><td><b>$rtype:</b></td><td>$rrest</td></tr>";
 	    }
+	    if($ismacro) {
+		$bookstr .= sprintf "%-15s %s (", $rtype, $bookmacro;
+		$ia = 0;
+		foreach $f (@bookmacroparams) {
+		    if($ia++) {$bookstr .= ", "}
+		    $bookstr .= $f;
+		}
+		$bookstr .= ");\n";
+	    }
+
 	    $rrest =~ s/>/\&gt;/gos;
 	    $rrest =~ s/</\&lt;/gos;
 	    $ftable .= "<tr><td>$rtype</td><td>\&nbsp;</td><td>RETURN</td><td>$rrest</td></tr>\n";
@@ -1541,7 +1567,7 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    $ctot{$ctype}++;
 	    secttest($sect,$ctype);
 	    if (!defined($categs{$ctype})) {
-		print "bad \@fcategory $ctype - unknown type\n";
+		print "bad \@fcategory $ctype - unknown category type\n";
 	    }
 	}
 
@@ -1662,8 +1688,11 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	elsif ($token eq "cc")  {
 	    if($mastertoken ne "func" &&
 	       $mastertoken ne "funcstatic" &&
-	       $mastertoken ne "macro") {
-		print "bad syntax \@$token must be in \@func, funcstatic, or macro\n";
+	       $mastertoken ne "macro" &&
+	       $mastertoken ne "section" &&
+	       $mastertoken ne "filesection" &&
+	       $mastertoken ne "datasection") {
+		print "bad syntax \@$token must be in \@func, funcstatic, or macro or a section\n";
 	    }
 	    next;
 	}
@@ -1915,6 +1944,13 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 #			print LOG "calling isnamrule i: $i rules $#{$namrules[$i]} names $#nameparts\n";
 			if(!isnamrule($i, @{$namrules[$i]}, @nameparts)) {
 			    print "bad name $fname: '$f' not found\n";
+			    print "** \@nam$j";
+			    if($j == $#nameparts) {
+				print "rule $f $frest\n";
+                            }
+                            else{
+                                print "rule $f Undocumented\n";
+			    }
 			    last;
 			}
 		    }
@@ -1999,6 +2035,9 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    $igen=$#genargname + 1;
 	    if($igen < $isave) {
 		print "bad argrule: $igen/$isave params defined\n";
+		for($i=$igen;$i <$isave;$i++) {
+		    print "** \@argrule $fname $savevar[$i] \[$savecast[$i]\] $savedesc[$i]\n";
+		}
 	    }
 	    elsif($igen > $isave) {
 		print "bad argrule: expected $isave params, found $igen\n";
@@ -2252,6 +2291,9 @@ print HTML "$out";
 print HTMLB "$outstatic";
 close HTML;
 close HTMLB;
+
+print BOOK "$bookstr\n";
+close BOOK;
 
 exit ();
 

@@ -20,7 +20,6 @@
 ******************************************************************************/
 
 #include "emboss.h"
-#include "stdlib.h"
 
 
 
@@ -48,14 +47,14 @@ int main(int argc, char **argv)
     plist    = ajAcdGetPattern("pattern");
 
     ajPatlistSeqDoc(plist, &tmpstr);
-    ajReportSetHeader(report, tmpstr);
+    ajReportSetHeaderS(report, tmpstr);
 
     writeok=ajTrue;
     while(writeok && ajSeqallNext(seqall,&seq))
     {
 	tab = ajFeattableNewProt(ajSeqGetNameS(seq));
         embPatlistSeqSearch(tab,seq,plist,ajFalse);
-	if(ajFeattableSize(tab))
+	if(ajFeattableGetSize(tab))
 	    writeok = ajReportWrite(report,tab,seq);
         ajFeattableDel(&tab);
     }

@@ -5,6 +5,7 @@ application: supermatcher [
   gui: "yes"
   batch: "yes"
   cpu: "medium"
+  relations: "EDAM: Local sequence alignment"
 ]
 
 section: input [
@@ -15,12 +16,14 @@ section: input [
   seqall: asequence [
     parameter: "Y"
     type: "any"
+    relations: "EDAM: Sequence record"                                     
   ]
 
   seqset: bsequence [
     parameter: "Y"
     type: "@($(acdprotein) ? stopprotein : nucleotide)"
     aligned: "N"
+    relations: "EDAM: Sequence record"                                     
   ]
 
   matrixf: datafile [
@@ -31,6 +34,7 @@ section: input [
            sequences. By default it is the file 'EBLOSUM62' (for proteins) or
            the file 'EDNAFULL' (for nucleic sequences). These files are
            found in the 'data' directory of the EMBOSS installation."
+    relations: "EDAM: Float comparison matrix"                             
   ]
 
 endsection: input
@@ -47,6 +51,7 @@ section: required [
     maximum: "100.0"
     default: "@($(acdprotein)? 10.0 : 10.0)"
     expected: "10.0 for any sequence type"
+    relations: "EDAM: Generic float"                                       
   ]
 
   float: gapextend [
@@ -56,6 +61,7 @@ section: required [
     maximum: "10.0"
     default: "@($(acdprotein)? 0.5 : 0.5)"
     expected: "0.5 for any sequence type"
+    relations: "EDAM: Generic float"                                       
   ]
 
 endsection: required
@@ -70,6 +76,7 @@ section: additional [
     default: "16"
     minimum: "1"
     information: "Alignment width"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: wordlen [
@@ -77,6 +84,7 @@ section: additional [
     default: "6"
     minimum: "3"
     information: "Word length for initial matching"
+    relations: "EDAM: Generic integer"                                     
   ]
 
 endsection: additional
@@ -91,6 +99,7 @@ section: output [
     aformat: "simple"
     minseqs: "2"
     maxseqs: "2"
+    relations: "EDAM: Pairwise sequence alignment data"                    
   ]
 
   outfile: errorfile [
@@ -99,6 +108,7 @@ section: output [
     help: "Error file to be written to"
     knowntype: "supermatcher error"
     information: "Program supermatcher errors output file for failed alignments"
+    relations:  "EDAM: EMBOSS supermatcher error file"                 
   ]
 
 endsection: output

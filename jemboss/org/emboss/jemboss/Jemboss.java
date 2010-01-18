@@ -171,7 +171,7 @@ public class Jemboss implements ActionListener
        mysettings.getUserHome().equals(System.getProperty("user.home")))
     {
         if (System.getProperty("os.name").startsWith("Windows")) {
-            String emboss_root = (String)System.getenv().get("EMBOSS_ROOT");
+            String emboss_root = mysettings.getEmbossBin();
             String userhome = emboss_root + fileseparator
             + System.getProperty("user.name");
             String resultshome = userhome + fileseparator + "results";

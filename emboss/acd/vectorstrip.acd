@@ -1,6 +1,7 @@
 application: vectorstrip [
   documentation: "Removes vectors from the ends of nucleotide sequence(s)"
   groups: "Edit"
+  relations: "EDAM: Sequence cutting"
 ]
 
 section: input [
@@ -11,6 +12,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "dna"
+    relations: "EDAM: DNA sequence record"                                 
   ]
 
   section: vectorfilesection [
@@ -22,6 +24,7 @@ section: input [
       parameter: "Y"
       default: "Y"
       information: "Are your vector sequences in a file?"
+    relations: "EDAM: Generic boolean"                                     
     ]
 
     infile: vectorsfile [
@@ -30,6 +33,7 @@ section: input [
       default: ""
       information: "Cloning vector definition file (optional)"
       knowntype: "vector"
+    relations:  "EDAM: vectorstrip cloning vector definition record"   
     ]
 
   endsection: vectorfilesection
@@ -45,6 +49,7 @@ section: required [
     standard: "Y"
     default: "10"
     information: "Max allowed % mismatch"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   boolean: besthits [
@@ -52,18 +57,21 @@ section: required [
     default: "Y"
     information: "Show only the best hits (minimise
                   mismatches)?"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   string: alinker [
     standard: "@(!$(readfile))"
     information: "The 5' sequence"
     knowntype: "nucleotide sequence"
+    relations:  "EDAM: Nucleotide sequence"                            
   ]
 
   string: blinker [
     standard: "@(!$(readfile))"
     information: "The 3' sequence"
     knowntype: "nucleotide sequence"
+    relations:  "EDAM: Nucleotide sequence"                            
   ]
 
 endsection: required
@@ -78,15 +86,18 @@ section: output [
     information: "Show all sequences in output"
     default: "N"
     outputmodifier: "Y"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   outfile: outfile [
     parameter: "Y"
     knowntype: "vectorstrip output"
+    relations:  "EDAM:EMBOSS vectorstrip log file"                         
   ]
 
   seqoutall: outseq [
     parameter: "Y"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: output

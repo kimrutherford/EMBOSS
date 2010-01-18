@@ -40,7 +40,7 @@ int main(int argc, char **argv)
     AjPStr str   = NULL;
     AjBool plot;
     AjPGraph graph=NULL;
-    AjPGraphPlpData fgraph=NULL;
+    AjPGraphdata fgraph=NULL;
     AjPStr st = NULL;
 
     ajint c;
@@ -64,7 +64,7 @@ int main(int argc, char **argv)
     float min = 0.;
 
 
-    ajGraphInit("freak", argc, argv);
+    embInit("freak", argc, argv);
 
     seqall = ajAcdGetSeqall("seqall");
     plot   = ajAcdGetToggle("plot");
@@ -133,25 +133,25 @@ int main(int argc, char **argv)
 	}
 	else if(plot && c)
 	{
-	    fgraph = ajGraphPlpDataNewI(c);
-	    ajGraphSetTitle(graph,ajSeqGetNameS(seq));
+	    fgraph = ajGraphdataNewI(c);
+	    ajGraphSetTitleS(graph,ajSeqGetNameS(seq));
 	    ajFmtPrintS(&st,"From %d to %d. Residues:%s Window:%d Step:%d",
 			pos+1,end+1,ajStrGetPtr(bases),window,step);
-	    ajGraphSetSubTitle(graph,st);
-	    ajGraphSetXTitleC(graph,"Position");
-	    ajGraphSetYTitleC(graph,"Frequency");
-	    ajGraphxySetXStart(graph,x[0]);
-	    ajGraphxySetXEnd(graph,x[c-1]);
-	    ajGraphxySetYStart(graph,0.);
-	    ajGraphxySetYEnd(graph,y[c-1]);
-	    ajGraphxySetXRangeII(graph,(ajint)x[0],(ajint)x[c-1]);
-	    ajGraphxySetYRangeII(graph,0,(ajint)y[c-1]);
-	    ajGraphPlpDataSetMaxMin(fgraph,x[0],x[c-1],0.,1.0);
-	    ajGraphArrayMaxMin(y,c,&min,&max);
-	    ajGraphPlpDataSetMaxima(fgraph,x[0],x[c-1],min,max);
-	    ajGraphPlpDataSetTypeC(fgraph,"2D Plot");
+	    ajGraphSetSubtitleS(graph,st);
+	    ajGraphSetXlabelC(graph,"Position");
+	    ajGraphSetYlabelC(graph,"Frequency");
+	    ajGraphxySetXstartF(graph,x[0]);
+	    ajGraphxySetXendF(graph,x[c-1]);
+	    ajGraphxySetYstartF(graph,0.);
+	    ajGraphxySetYendF(graph,y[c-1]);
+	    ajGraphxySetXrangeII(graph,(ajint)x[0],(ajint)x[c-1]);
+	    ajGraphxySetYrangeII(graph,0,(ajint)y[c-1]);
+	    ajGraphdataSetMinmax(fgraph,x[0],x[c-1],0.,1.0);
+	    ajGraphicsCalcRange(y,c,&min,&max);
+	    ajGraphdataSetTruescale(fgraph,x[0],x[c-1],min,max);
+	    ajGraphdataSetTypeC(fgraph,"2D Plot");
 
-	    ajGraphPlpDataSetXY(fgraph,x,y);
+	    ajGraphdataAddXY(fgraph,x,y);
 	    ajGraphDataReplace(graph,fgraph);
 	    ajGraphxyDisplay(graph,ajFalse);
 	}
@@ -162,7 +162,7 @@ int main(int argc, char **argv)
 	ajStrDel(&str);
     }
 
-    ajGraphClose();
+    ajGraphicsClose();
     ajGraphxyDel(&graph);
 
     ajFileClose(&outf);

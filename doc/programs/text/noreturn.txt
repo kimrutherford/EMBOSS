@@ -1,5 +1,4 @@
-
-                                 noreturn 
+                                  noreturn
 
 
 
@@ -16,24 +15,28 @@ Function
 
 Description
 
-   noreturn reads an input file of plain text containing unwanted
-   carriage returns on the end of lines, and writes an output file which
-   is identical to the input file, except that any trailing carriage
-   returns are removed.
+   noreturn reads an input file of plain text containing unwanted carriage
+   returns on the end of lines, and writes an output file which is
+   identical to the input file, except that any trailing carriage returns
+   are removed.
 
 Usage
 
    Here is a sample session with noreturn
 
 
-% noreturn abc.dat 
+% noreturn abc.dat
 Remove carriage return from ASCII files
-ASCII text output file [abc.noreturn]: 
+ASCII text output file [abc.noreturn]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Remove carriage return from ASCII files
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     ASCII text file
@@ -59,13 +62,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -104,10 +109,10 @@ Notes
    have a 'new line' and a 'carriage return' at the end of every line.
    When files are transferred from a PC to a Unix machines, it is often
    useful to convert the file from the PC format to the Unix format,
-   otherwise commands (such as 'more') and programs (such as text
-   editors) that display the file can become confused. noreturn removes
-   'carriage return' characters from such files, converting them from PC
-   format to Unix format text files.
+   otherwise commands (such as 'more') and programs (such as text editors)
+   that display the file can become confused. noreturn removes 'carriage
+   return' characters from such files, converting them from PC format to
+   Unix format text files.
 
    EMBOSS programs can read in both PC and Unix text file formats, so it
    is not necessary for you to use this utility all of the time.
@@ -184,7 +189,7 @@ See also
 
 Author(s)
 
-   Alan Bleasby (ajb © ebi.ac.uk)
+   Alan Bleasby (ajb (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

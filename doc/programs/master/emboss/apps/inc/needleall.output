@@ -1,0 +1,113 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: needleall.error</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Alignment score (21.5) is less than minimum score(40.0) for sequences Illumina_Genomici_DNA_Adapters1_1 vs FC12044_91407_8_200_406_24
+Alignment score (24.5) is less than minimum score(40.0) for sequences Illumina_Genomic_DNA_Adapters1_2 vs FC12044_91407_8_200_406_24
+Alignment score (31.0) is less than minimum score(40.0) for sequences Illumina_Genomic_DNA_PCR_Primers1_1 vs FC12044_91407_8_200_406_24
+Alignment score (25.5) is less than minimum score(40.0) for sequences Illumina_Genomic_DNA_PCR_Primers1_2 vs FC12044_91407_8_200_406_24
+Alignment score (24.5) is less than minimum score(40.0) for sequences Illumina_Genomic_DNA_sequencing_primer vs FC12044_91407_8_200_406_24
+Alignment score (16.5) is less than minimum score(40.0) for sequences Illumina_Paired_End_DNA_Adapters1_1 vs FC12044_91407_8_200_406_24
+Alignment score (24.5) is less than minimum score(40.0) for sequences Illumina_Paired_End_DNA_Adapters1_2 vs FC12044_91407_8_200_406_24
+Alignment score (31.0) is less than minimum score(40.0) for sequences Illumina_Paired_End_DNA_PCR_Primers1_1 vs FC12044_91407_8_200_406_24
+Alignment score (21.0) is less than minimum score(40.0) for sequences Illumina_Paired_End_DNA_PCR_Primers1_2 vs FC12044_91407_8_200_406_24
+Alignment score (24.5) is less than minimum score(40.0) for sequences Illumina_Paired_End_DNA_sequencing_primer_1 vs FC12044_91407_8_200_406_24
+Alignment score (21.0) is less than minimum score(40.0) for sequences Illumina_Paired_End_DNA_sequencing_primer_2 vs FC12044_91407_8_200_406_24
+Alignment score (14.5) is less than minimum score(40.0) for sequences Illumina_DpnII_Gex_Adapters1_1 vs FC12044_91407_8_200_406_24
+Alignment score (24.5) is less than minimum score(40.0) for sequences Illumina_DpnII_Gex_Adapters1_2 vs FC12044_91407_8_200_406_24
+Alignment score (12.0) is less than minimum score(40.0) for sequences Illumina_DpnII_Gex_Adapters2_1 vs FC12044_91407_8_200_406_24
+Alignment score (12.0) is less than minimum score(40.0) for sequences Illumina_DpnII_Gex_Adapters2_2 vs FC12044_91407_8_200_406_24
+Alignment score (12.0) is less than minimum score(40.0) for sequences Illumina_DpnII_Gex_PCR_Primer_1 vs FC12044_91407_8_200_406_24
+Alignment score (23.5) is less than minimum score(40.0) for sequences Illumina_DpnII_Gex_sequencing_primer vs FC12044_91407_8_200_406_24
+Alignment score (12.5) is less than minimum score(40.0) for sequences Illumina_NlaIII_Gex_Adapters1_1 vs FC12044_91407_8_200_406_24
+Alignment score (27.0) is less than minimum score(40.0) for sequences Illumina_NlaIII_Gex_Adapters1_2 vs FC12044_91407_8_200_406_24
+Alignment score (12.0) is less than minimum score(40.0) for sequences Illumina_NlaIII_Gex_Adapters2_1 vs FC12044_91407_8_200_406_24
+Alignment score (12.0) is less than minimum score(40.0) for sequences Illumina_NlaIII_Gex_Adapters2_2 vs FC12044_91407_8_200_406_24
+Alignment score (12.0) is less than minimum score(40.0) for sequences Illumina_NlaIII_Gex_PCR_Primer_1 vs FC12044_91407_8_200_406_24
+Alignment score (27.5) is less than minimum score(40.0) for sequences Illumina_NlaIII_Gex_sequencing_primer vs FC12044_91407_8_200_406_24
+Alignment score (12.0) is less than minimum score(40.0) for sequences Illumina_Small_RNA_RT_Primer vs FC12044_91407_8_200_406_24
+Alignment score (23.5) is less than minimum score(40.0) for sequences Illumina_Small_RNA_5p_Adapter vs FC12044_91407_8_200_406_24
+Alignment score (13.0) is less than minimum score(40.0) for sequences Illumina_Small_RNA_3p_Adapter vs FC12044_91407_8_200_406_24
+Alignment score (12.0) is less than minimum score(40.0) for sequences Illumina_Small_RNA_PCR_Primer_1 vs FC12044_91407_8_200_406_24
+Alignment score (23.5) is less than minimum score(40.0) for sequences Illumina_Small_RNA_sequencing_primer vs FC12044_91407_8_200_406_24
+Alignment score (17.5) is less than minimum score(40.0) for sequences Illumina_Genomici_DNA_Adapters1_1 vs FC12044_91407_8_200_720_610
+Alignment score (31.5) is less than minimum score(40.0) for sequences Illumina_Genomic_DNA_Adapters1_2 vs FC12044_91407_8_200_720_610
+Alignment score (31.5) is less than minimum score(40.0) for sequences Illumina_Genomic_DNA_PCR_Primers1_1 vs FC12044_91407_8_200_720_610
+Alignment score (20.5) is less than minimum score(40.0) for sequences Illumina_Genomic_DNA_PCR_Primers1_2 vs FC12044_91407_8_200_720_610
+Alignment score (31.5) is less than minimum score(40.0) for sequences Illumina_Genomic_DNA_sequencing_primer vs FC12044_91407_8_200_720_610
+Alignment score (0.0) is less than minimum score(40.0) for sequences Illumina_Paired_End_DNA_Adapters1_1 vs FC12044_91407_8_200_720_610
+Alignment score (31.5) is less than minimum score(40.0) for sequences Illumina_Paired_End_DNA_Adapters1_2 vs FC12044_91407_8_200_720_610
+Alignment score (31.5) is less than minimum score(40.0) for sequences Illumina_Paired_End_DNA_PCR_Primers1_1 vs FC12044_91407_8_200_720_610
+Alignment score (33.5) is less than minimum score(40.0) for sequences Illumina_Paired_End_DNA_PCR_Primers1_2 vs FC12044_91407_8_200_720_610
+Alignment score (31.5) is less than minimum score(40.0) for sequences Illumina_Paired_End_DNA_sequencing_primer_1 vs FC12044_91407_8_200_720_610
+Alignment score (33.5) is less than minimum score(40.0) for sequences Illumina_Paired_End_DNA_sequencing_primer_2 vs FC12044_91407_8_200_720_610
+Alignment score (20.0) is less than minimum score(40.0) for sequences Illumina_DpnII_Gex_Adapters1_1 vs FC12044_91407_8_200_720_610
+Alignment score (9.0) is less than minimum score(40.0) for sequences Illumina_DpnII_Gex_Adapters1_2 vs FC12044_91407_8_200_720_610
+Alignment score (11.0) is less than minimum score(40.0) for sequences Illumina_DpnII_Gex_Adapters2_1 vs FC12044_91407_8_200_720_610
+Alignment score (15.5) is less than minimum score(40.0) for sequences Illumina_DpnII_Gex_Adapters2_2 vs FC12044_91407_8_200_720_610
+Alignment score (11.0) is less than minimum score(40.0) for sequences Illumina_DpnII_Gex_PCR_Primer_1 vs FC12044_91407_8_200_720_610
+Alignment score (10.0) is less than minimum score(40.0) for sequences Illumina_DpnII_Gex_PCR_Primer_2 vs FC12044_91407_8_200_720_610
+Alignment score (15.0) is less than minimum score(40.0) for sequences Illumina_DpnII_Gex_sequencing_primer vs FC12044_91407_8_200_720_610
+Alignment score (20.0) is less than minimum score(40.0) for sequences Illumina_NlaIII_Gex_Adapters1_1 vs FC12044_91407_8_200_720_610
+Alignment score (9.5) is less than minimum score(40.0) for sequences Illumina_NlaIII_Gex_Adapters1_2 vs FC12044_91407_8_200_720_610
+Alignment score (7.0) is less than minimum score(40.0) for sequences Illumina_NlaIII_Gex_Adapters2_1 vs FC12044_91407_8_200_720_610
+Alignment score (15.5) is less than minimum score(40.0) for sequences Illumina_NlaIII_Gex_Adapters2_2 vs FC12044_91407_8_200_720_610
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+Alignment score (13.0) is less than minimum score(40.0) for sequences Illumina_DpnII_Gex_Adapters1_1 vs FC12044_91407_8_200_675_16
+Alignment score (17.0) is less than minimum score(40.0) for sequences Illumina_DpnII_Gex_Adapters1_2 vs FC12044_91407_8_200_675_16
+Alignment score (13.5) is less than minimum score(40.0) for sequences Illumina_DpnII_Gex_Adapters2_1 vs FC12044_91407_8_200_675_16
+Alignment score (11.0) is less than minimum score(40.0) for sequences Illumina_DpnII_Gex_Adapters2_2 vs FC12044_91407_8_200_675_16
+Alignment score (13.5) is less than minimum score(40.0) for sequences Illumina_DpnII_Gex_PCR_Primer_1 vs FC12044_91407_8_200_675_16
+Alignment score (17.5) is less than minimum score(40.0) for sequences Illumina_DpnII_Gex_PCR_Primer_2 vs FC12044_91407_8_200_675_16
+Alignment score (22.0) is less than minimum score(40.0) for sequences Illumina_DpnII_Gex_sequencing_primer vs FC12044_91407_8_200_675_16
+Alignment score (13.0) is less than minimum score(40.0) for sequences Illumina_NlaIII_Gex_Adapters1_1 vs FC12044_91407_8_200_675_16
+Alignment score (17.0) is less than minimum score(40.0) for sequences Illumina_NlaIII_Gex_Adapters1_2 vs FC12044_91407_8_200_675_16
+Alignment score (13.5) is less than minimum score(40.0) for sequences Illumina_NlaIII_Gex_Adapters2_1 vs FC12044_91407_8_200_675_16
+Alignment score (11.0) is less than minimum score(40.0) for sequences Illumina_NlaIII_Gex_Adapters2_2 vs FC12044_91407_8_200_675_16
+Alignment score (13.5) is less than minimum score(40.0) for sequences Illumina_NlaIII_Gex_PCR_Primer_1 vs FC12044_91407_8_200_675_16
+Alignment score (17.5) is less than minimum score(40.0) for sequences Illumina_NlaIII_Gex_PCR_Primer_2 vs FC12044_91407_8_200_675_16
+Alignment score (21.5) is less than minimum score(40.0) for sequences Illumina_NlaIII_Gex_sequencing_primer vs FC12044_91407_8_200_675_16
+Alignment score (13.5) is less than minimum score(40.0) for sequences Illumina_Small_RNA_RT_Primer vs FC12044_91407_8_200_675_16
+Alignment score (15.0) is less than minimum score(40.0) for sequences Illumina_Small_RNA_5p_Adapter vs FC12044_91407_8_200_675_16
+Alignment score (7.0) is less than minimum score(40.0) for sequences Illumina_Small_RNA_3p_Adapter vs FC12044_91407_8_200_675_16
+Alignment score (13.5) is less than minimum score(40.0) for sequences Illumina_Small_RNA_PCR_Primer_1 vs FC12044_91407_8_200_675_16
+Alignment score (17.5) is less than minimum score(40.0) for sequences Illumina_Small_RNA_PCR_Primer_2 vs FC12044_91407_8_200_675_16
+Alignment score (22.0) is less than minimum score(40.0) for sequences Illumina_Small_RNA_sequencing_primer vs FC12044_91407_8_200_675_16
+Alignment score (21.0) is less than minimum score(40.0) for sequences Illumina_Genomici_DNA_Adapters1_1 vs FC12044_91407_8_200_285_136
+Alignment score (17.5) is less than minimum score(40.0) for sequences Illumina_Genomic_DNA_Adapters1_2 vs FC12044_91407_8_200_285_136
+Alignment score (30.0) is less than minimum score(40.0) for sequences Illumina_Genomic_DNA_PCR_Primers1_1 vs FC12044_91407_8_200_285_136
+Alignment score (16.5) is less than minimum score(40.0) for sequences Illumina_Genomic_DNA_PCR_Primers1_2 vs FC12044_91407_8_200_285_136
+Alignment score (17.5) is less than minimum score(40.0) for sequences Illumina_Genomic_DNA_sequencing_primer vs FC12044_91407_8_200_285_136
+Alignment score (7.0) is less than minimum score(40.0) for sequences Illumina_Paired_End_DNA_Adapters1_1 vs FC12044_91407_8_200_285_136
+Alignment score (17.5) is less than minimum score(40.0) for sequences Illumina_Paired_End_DNA_Adapters1_2 vs FC12044_91407_8_200_285_136
+Alignment score (30.0) is less than minimum score(40.0) for sequences Illumina_Paired_End_DNA_PCR_Primers1_1 vs FC12044_91407_8_200_285_136
+Alignment score (21.0) is less than minimum score(40.0) for sequences Illumina_Paired_End_DNA_PCR_Primers1_2 vs FC12044_91407_8_200_285_136
+Alignment score (17.5) is less than minimum score(40.0) for sequences Illumina_Paired_End_DNA_sequencing_primer_1 vs FC12044_91407_8_200_285_136
+Alignment score (18.5) is less than minimum score(40.0) for sequences Illumina_Paired_End_DNA_sequencing_primer_2 vs FC12044_91407_8_200_285_136
+Alignment score (27.5) is less than minimum score(40.0) for sequences Illumina_DpnII_Gex_Adapters1_1 vs FC12044_91407_8_200_285_136
+Alignment score (13.5) is less than minimum score(40.0) for sequences Illumina_DpnII_Gex_Adapters1_2 vs FC12044_91407_8_200_285_136
+Alignment score (6.0) is less than minimum score(40.0) for sequences Illumina_DpnII_Gex_Adapters2_1 vs FC12044_91407_8_200_285_136
+Alignment score (17.5) is less than minimum score(40.0) for sequences Illumina_DpnII_Gex_Adapters2_2 vs FC12044_91407_8_200_285_136
+Alignment score (6.0) is less than minimum score(40.0) for sequences Illumina_DpnII_Gex_PCR_Primer_1 vs FC12044_91407_8_200_285_136
+Alignment score (12.0) is less than minimum score(40.0) for sequences Illumina_DpnII_Gex_PCR_Primer_2 vs FC12044_91407_8_200_285_136
+Alignment score (17.5) is less than minimum score(40.0) for sequences Illumina_DpnII_Gex_sequencing_primer vs FC12044_91407_8_200_285_136
+Alignment score (26.5) is less than minimum score(40.0) for sequences Illumina_NlaIII_Gex_Adapters1_1 vs FC12044_91407_8_200_285_136
+Alignment score (14.5) is less than minimum score(40.0) for sequences Illumina_NlaIII_Gex_Adapters1_2 vs FC12044_91407_8_200_285_136
+Alignment score (2.0) is less than minimum score(40.0) for sequences Illumina_NlaIII_Gex_Adapters2_1 vs FC12044_91407_8_200_285_136
+Alignment score (17.5) is less than minimum score(40.0) for sequences Illumina_NlaIII_Gex_Adapters2_2 vs FC12044_91407_8_200_285_136
+Alignment score (6.0) is less than minimum score(40.0) for sequences Illumina_NlaIII_Gex_PCR_Primer_1 vs FC12044_91407_8_200_285_136
+Alignment score (12.0) is less than minimum score(40.0) for sequences Illumina_NlaIII_Gex_PCR_Primer_2 vs FC12044_91407_8_200_285_136
+Alignment score (15.5) is less than minimum score(40.0) for sequences Illumina_NlaIII_Gex_sequencing_primer vs FC12044_91407_8_200_285_136
+Alignment score (6.0) is less than minimum score(40.0) for sequences Illumina_Small_RNA_RT_Primer vs FC12044_91407_8_200_285_136
+Alignment score (15.5) is less than minimum score(40.0) for sequences Illumina_Small_RNA_5p_Adapter vs FC12044_91407_8_200_285_136
+Alignment score (17.5) is less than minimum score(40.0) for sequences Illumina_Small_RNA_3p_Adapter vs FC12044_91407_8_200_285_136
+Alignment score (6.0) is less than minimum score(40.0) for sequences Illumina_Small_RNA_PCR_Primer_1 vs FC12044_91407_8_200_285_136
+Alignment score (12.0) is less than minimum score(40.0) for sequences Illumina_Small_RNA_PCR_Primer_2 vs FC12044_91407_8_200_285_136
+Alignment score (17.5) is less than minimum score(40.0) for sequences Illumina_Small_RNA_sequencing_primer vs FC12044_91407_8_200_285_136
+</pre>
+</td></tr></table><p>

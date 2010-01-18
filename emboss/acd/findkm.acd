@@ -1,6 +1,7 @@
 application: findkm [
   documentation: "Calculate and plot enzyme reaction data"
   groups: "Enzyme Kinetics"
+  relations: "EDAM: Km and Vmax calculation"
 ]
 
 section: input [
@@ -13,6 +14,7 @@ section: input [
     information: "Enzyme kinetics data (application-specific)
                   file"
     knowntype: "enzyme data"
+    relations:  "EDAM: Enzymatic reaction data"                        
   ]
 
 endsection: input
@@ -25,6 +27,7 @@ section: advanced [
   boolean: plot [
     default: "Y"
     information: "S/V vs S"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: advanced
@@ -37,11 +40,13 @@ section: output [
   outfile: outfile [
     parameter: "Y"
     knowntype: "findkm output"
+    relations:  "EDAM:Enzyme kinetics report"                              
   ]
 
   xygraph: graphlb [
     standard: "Y"
     multiple: "2"
+    relations: "EDAM: EMBOSS graph file"                                   
   ]
 
 endsection: output

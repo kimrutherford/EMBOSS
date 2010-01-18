@@ -54,7 +54,7 @@ int main(int argc, char **argv)
     outf   = ajAcdGetOutfile("outfile");
     sum    = ajAcdGetBoolean("sum");
     
-    codon  = ajCodNewCode(0);
+    codon  = ajCodNewCodenum(0);
 
     ccnt = 0;
     substr = ajStrNew();
@@ -65,10 +65,10 @@ int main(int argc, char **argv)
 	end = ajSeqallGetseqEnd(seqall);
 	ajStrAssignSubS(&substr,ajSeqGetSeqS(seq),beg-1,end-1);
 	ajStrFmtUpper(&substr);
-	ajCodCountTriplets(codon,substr,&ccnt);
+	ajCodSetTripletsS(codon,substr,&ccnt);
 	if(!sum)
 	{
-	    ajCodCalculateUsage(codon,ccnt);
+	    ajCodCalcUsage(codon,ccnt);
 	    td = ajCodCalcNc(codon);
 	    Nc = (float) td;
 	    
@@ -79,7 +79,7 @@ int main(int argc, char **argv)
 
     if(sum)
     {
-	ajCodCalculateUsage(codon,ccnt);
+	ajCodCalcUsage(codon,ccnt);
 	td = ajCodCalcNc(codon);
 	Nc = (float) td;
 	

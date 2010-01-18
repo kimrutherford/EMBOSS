@@ -53,7 +53,7 @@ int main(int argc, char **argv)
     gctable   = ajAcdGetListSingle("table");
     ajStrToInt(gctable, &gctablenum);
 
-    codon = ajCodNewCode(gctablenum);
+    codon = ajCodNewCodenum(gctablenum);
     while(ajSeqallNext(seqall, &a))
     {
         substr = ajStrNew();

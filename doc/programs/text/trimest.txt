@@ -1,5 +1,4 @@
-
-                                  trimest 
+                                   trimest
 
 
 
@@ -22,17 +21,17 @@ Description
    that are at least the specified minimum length. The tails may continue
    a defined num of non-A or non-T bases. If both a 5' poly-T tail and a
    3' poly-A tail is identified, it removes the longest of the two. The
-   output is a set of sequences with the poly-A (or poly-T) tails
-   removed. If a sequence had a 5' poly-T tail then the resulting
-   sequence is reverse-complemented by default. The description line has
-   a comment appended about the changes made to the sequence.
+   output is a set of sequences with the poly-A (or poly-T) tails removed.
+   If a sequence had a 5' poly-T tail then the resulting sequence is
+   reverse-complemented by default. The description line has a comment
+   appended about the changes made to the sequence.
 
 Algorithm
 
    trimest looks for a repeat of at least -minlength A's at the 3' end
    (and, by default, -minlength T's at the 5' end). If there are an
-   apparent 5' poly-T tail and a poly-A tail, then it removes whichever
-   is the longer of the two.
+   apparent 5' poly-T tail and a poly-A tail, then it removes whichever is
+   the longer of the two.
 
    By default, it will allow -mismatches non-A (or non-T) bases in the
    tail. If a mismatch is found, then there has to be at least -minlength
@@ -46,13 +45,17 @@ Usage
    Here is a sample session with trimest
 
 
-% trimest tembl:x65923 x65923.seq 
+% trimest tembl:x65923 x65923.seq
 Remove poly-A tails from nucleotide sequences
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Remove poly-A tails from nucleotide sequences
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -145,13 +148,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -159,8 +164,8 @@ Input file format
 
   Input files for usage example
 
-   'tembl:x65923' is a sequence entry in the example nucleic acid
-   database 'tembl'
+   'tembl:x65923' is a sequence entry in the example nucleic acid database
+   'tembl'
 
   Database entry: tembl:x65923
 
@@ -176,8 +181,7 @@ XX
 KW   fau gene.
 XX
 OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
-;
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
 OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
 OC   Homo.
 XX
@@ -221,10 +225,8 @@ FT                   /db_xref="HSSP:1GJZ"
 FT                   /db_xref="InterPro:IPR006846"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
 FT                   /protein_id="CAA46716.1"
-FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLA
-G
-FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKT
-G
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
 FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
 FT   misc_feature    98..102
 FT                   /note="nucleolar localization signal"
@@ -234,24 +236,15 @@ FT   polyA_signal    484..489
 FT   polyA_site      509
 XX
 SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
-     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        6
-0
-     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       12
-0
-     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       18
-0
-     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       24
-0
-     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       30
-0
-     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       36
-0
-     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       42
-0
-     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       48
-0
-     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               51
-8
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        60
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       120
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       180
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       240
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       300
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       360
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       420
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       480
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               518
 //
 
 Output file format
@@ -277,9 +270,9 @@ cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
 tctaataaaaaagccacttagttcagtc
 
    The output is a set of sequences with the poly-A (or poly-T) tails
-   removed. If a sequence had a 5' poly-T tail then the resulting
-   sequence is reverse-complemented by default. The description line has
-   a comment appended about the changes made to the sequence.
+   removed. If a sequence had a 5' poly-T tail then the resulting sequence
+   is reverse-complemented by default. The description line has a comment
+   appended about the changes made to the sequence.
 
 Data files
 
@@ -288,15 +281,15 @@ Data files
 Notes
 
    EST and mRNA sequences often have poly-A tails at their 3' end. Where
-   an EST sequences is the reverse complement of a corresponding mRNA's
+   an EST sequence is the reverse complement of a corresponding mRNA's
    forward sense it may have a poly-T tail at its 5' end.
 
    trimest is not infallible. There are often repeats of A (or T) in a
    sequence that just happen by chance to occur at the 3' (or 5') end of
-   the EST sequence. trimest has no way of determining if the A's it
-   finds are part of a real poly-A tail or are a part of the transcribed
-   genomic sequence. It removes any apparent poly-A tails that match its
-   criteria for a poly-A tail (see "Algorithm").
+   the EST sequence. trimest has no way of determining if the A's it finds
+   are part of a real poly-A tail or are a part of the transcribed genomic
+   sequence. It removes any apparent poly-A tails that match its criteria
+   for a poly-A tail (see "Algorithm").
 
 References
 
@@ -304,9 +297,7 @@ References
 
 Warnings
 
-   trimest can make no guarantee that the tails removed have biologic
-   significance or not. They may in fact be part of the transcribed
-   sequence.
+   None.
 
 Diagnostic Error Messages
 
@@ -372,7 +363,7 @@ See also
 
 Author(s)
 
-   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   Gary Williams (gwilliam (c) rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 

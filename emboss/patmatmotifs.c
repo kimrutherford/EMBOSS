@@ -103,7 +103,7 @@ int main(int argc, char **argv)
     ajFmtPrintAppS(&tmpstr, "Full: %B\n", full);
     ajFmtPrintAppS(&tmpstr, "Prune: %B\n", prune);
     ajFmtPrintAppS(&tmpstr, "Data_file: %F\n", inf);
-    ajReportSetHeader(report, tmpstr);
+    ajReportSetHeaderS(report, tmpstr);
 
     while(ajReadlineTrim(inf, &regexp))
     {
@@ -194,7 +194,7 @@ int main(int argc, char **argv)
 	}
     }
 
-    ajReportSetTail(report,tailstr);
+    ajReportSetTailS(report,tailstr);
     ajReportWrite(report, tab, sequence);
 
     ajReportDel(&report);

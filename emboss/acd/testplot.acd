@@ -1,6 +1,7 @@
 application: testplot [
   documentation: "Test plot"
   groups: "Test"
+  relations: "EDAM: File debugging"
 ]
 
 section: required [
@@ -14,6 +15,7 @@ section: required [
     minimum: "2"
     maximum: "360"
     information: "Number of degrees to plot"
+    relations: "EDAM: Generic integer"                                     
   ]
 
 endsection: required
@@ -27,11 +29,13 @@ section: output [
     standard: "y"
     default: "y"
     information: "Overlap the graphs"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   xygraph: graph [
     standard: "y"
     multiple: "3"
+    relations: "EDAM: EMBOSS graph file"                                   
   ]
 
 endsection: output

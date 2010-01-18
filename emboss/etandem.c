@@ -373,7 +373,7 @@ int main(int argc, char **argv)
     ajFmtPrintAppS(&tmpstr, "Maxrepeat: %d\n", nmax);
     ajFmtPrintAppS(&tmpstr, "Mismatch: %B\n", mismatch);
     ajFmtPrintAppS(&tmpstr, "Uniform: %B\n", uniform);
-    ajReportSetHeader(report, tmpstr);
+    ajReportSetHeaderS(report, tmpstr);
 
     cvt = ajSeqcvtNewC("ACGTN");
     ajSeqConvertNum(sequence, cvt, &nseq);

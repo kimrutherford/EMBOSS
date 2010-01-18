@@ -20,7 +20,7 @@
 ******************************************************************************/
 
 #include "emboss.h"
-#include "math.h"
+#include <math.h>
 
 #define DAYHOFF_FILE "Edayhoff.freq"
 

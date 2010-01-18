@@ -1,5 +1,4 @@
-
-                                  maskseq 
+                                   maskseq
 
 
 
@@ -16,10 +15,10 @@ Function
 
 Description
 
-   maskseq reads a sequence and writes a masked version of it to file.
-   The sequence is masked in a specified set of regions such that
-   characters in that region are (optionally) converted to lower case and
-   / or (optionally) replaced with the specified mask character.
+   maskseq reads a sequence and writes a masked version of it to file. The
+   sequence is masked in a specified set of regions such that characters
+   in that region are (optionally) converted to lower case and / or
+   (optionally) replaced with the specified mask character.
 
 Usage
 
@@ -29,8 +28,9 @@ Usage
    new sequence file 'prot2.seq':
 
 
-% maskseq prot.fasta prot2.seq -reg=10-12 
+% maskseq prot.fasta prot2.seq -reg=10-12
 Write a sequence with masked regions
+
 
    Go to the input files for this example
    Go to the output files for this example
@@ -41,8 +41,9 @@ Write a sequence with masked regions
    character 'x' and write to the new sequence file 'prot2.seq':
 
 
-% maskseq prot.fasta prot2.seq -reg=20-30 -mask=x 
+% maskseq prot.fasta prot2.seq -reg=20-30 -mask=x
 Write a sequence with masked regions
+
 
    Go to the output files for this example
 
@@ -51,8 +52,9 @@ Write a sequence with masked regions
    Mask off the regions 20 to 23, 34 to 45 and 88 to 90 in 'prot.fasta':
 
 
-% maskseq prot.fasta prot2.seq -reg=20-23,34-45,88-90 
+% maskseq prot.fasta prot2.seq -reg=20-23,34-45,88-90
 Write a sequence with masked regions
+
 
    Go to the output files for this example
 
@@ -62,12 +64,16 @@ Write a sequence with masked regions
    'prot.fasta':
 
 
-% maskseq prot.fasta prot2.seq -reg=20-23,34-45,88-90 -tolower 
+% maskseq prot.fasta prot2.seq -reg=20-23,34-45,88-90 -tolower
 Write a sequence with masked regions
+
 
    Go to the output files for this example
 
 Command line arguments
+
+Write a sequence with masked regions
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Sequence filename and optional format, or
@@ -144,13 +150,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -168,8 +176,8 @@ ACDEFGHIKLMNPQRSTVWY
 ACDEFGHIKLMNPQRSTVWY
 
    You can specify a file of ranges to mask out by giving the '-regions'
-   qualifier the value '@' followed by the name of the file containing
-   the ranges. (eg: '-regions @myfile').
+   qualifier the value '@' followed by the name of the file containing the
+   ranges. (eg: '-regions @myfile').
 
    The format of the range file is:
      * Comment lines start with '#' in the first column.
@@ -183,13 +191,13 @@ ACDEFGHIKLMNPQRSTVWY
      * White-space before or after the text is removed.
 
    An example range file is:
-     _________________________________________________________________
+     __________________________________________________________________
 
 # this is my set of ranges
 12   23
  4   5       this is like 12-23, but smaller
 67   10348   interesting region
-     _________________________________________________________________
+     __________________________________________________________________
 
 Output file format
 
@@ -233,15 +241,15 @@ Data files
 
 Notes
 
-   It is common for database searches to mask out low-complexity or
-   biased composition regions of a sequence so that spurious matches do
-   not occur. It is possible that you have a program that has reported
-   such biased regions but which has not masked the sequence itself. In
-   that case, you can use this program to do the masking.
+   It is common for database searches to mask out low-complexity or biased
+   composition regions of a sequence so that spurious matches do not
+   occur. It is possible that you have a program that has reported such
+   biased regions but which has not masked the sequence itself. In that
+   case, you can use this program to do the masking.
 
-   There are other uses for it. For example, some non-EMBOSS programs
-   (for example FASTA) are capable of treating lower-case regions as if
-   they are masked. maskseq can mask a region to lower-case instead of
+   There are other uses for it. For example, some non-EMBOSS programs (for
+   example FASTA) are capable of treating lower-case regions as if they
+   are masked. maskseq can mask a region to lower-case instead of
    replacing the sequence with N's or X's if you use the qualifier
    -tolower or use a space character as the masking character.
 
@@ -323,7 +331,7 @@ See also
 
 Author(s)
 
-   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   Gary Williams (gwilliam (c) rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 

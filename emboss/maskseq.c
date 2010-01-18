@@ -56,7 +56,7 @@ int main(int argc, char **argv)
 
     /* get the copy of the sequence and the regions */
     ajStrAssignSubS(&str, ajSeqGetSeqS(seq), beg, end);
-    ajRangeBegin(regions, beg+1);
+    ajRangeSetOffset(regions, beg+1);
 
     /*
     ** if the mask character is null or space or 'tower' is True, then

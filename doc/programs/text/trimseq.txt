@@ -1,5 +1,4 @@
-
-                                  trimseq 
+                                   trimseq
 
 
 
@@ -27,8 +26,9 @@ Usage
    Here is a sample session with trimseq
 
 
-% trimseq untrimmed.seq trim1.seq -window 1 -percent 100 
+% trimseq untrimmed.seq trim1.seq -window 1 -percent 100
 Remove unwanted characters from start and end of sequence(s)
+
 
    Go to the input files for this example
    Go to the output files for this example
@@ -36,36 +36,43 @@ Remove unwanted characters from start and end of sequence(s)
    Example 2
 
 
-% trimseq untrimmed.seq trim2.seq -window 5 -percent 40 
+% trimseq untrimmed.seq trim2.seq -window 5 -percent 40
 Remove unwanted characters from start and end of sequence(s)
+
 
    Go to the output files for this example
 
    Example 3
 
 
-% trimseq untrimmed.seq trim3.seq -window 5 -percent 50 
+% trimseq untrimmed.seq trim3.seq -window 5 -percent 50
 Remove unwanted characters from start and end of sequence(s)
+
 
    Go to the output files for this example
 
    Example 4
 
 
-% trimseq untrimmed.seq trim4.seq -window 5 -percent 50 -strict 
+% trimseq untrimmed.seq trim4.seq -window 5 -percent 50 -strict
 Remove unwanted characters from start and end of sequence(s)
+
 
    Go to the output files for this example
 
    Example 5
 
 
-% trimseq untrimmed.seq trim5.seq -window 5 -percent 50 -strict -noright 
+% trimseq untrimmed.seq trim5.seq -window 5 -percent 50 -strict -noright
 Remove unwanted characters from start and end of sequence(s)
+
 
    Go to the output files for this example
 
 Command line arguments
+
+Remove unwanted characters from start and end of sequence(s)
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     (Gapped) sequence(s) filename and optional
@@ -137,13 +144,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -253,8 +262,8 @@ Notes
      * all gap characters
      * X's and N's (in nucleic sequences)
      * *'s (optional)
-     * IUPAC ambiguity codes: B and Z in proteins, M,R,W,S,Y,K,V,H,D and
-       B in nucleic sequences (optional)
+     * IUPAC ambiguity codes: B and Z in proteins, M,R,W,S,Y,K,V,H,D and B
+       in nucleic sequences (optional)
 
    Rather than removing individual characters, it removes an entire
    segment, using a threshold percentage of unwanted characters in a
@@ -266,9 +275,8 @@ Notes
    Thus if the window size is set to 1 and the percentage threshold is
    100, no further poor quality regions will be removed. If the window
    size is set to 5 and the percentage threshold is 40 then the sequence
-   AAGCTNNNNATT will be trimmed to AAGCT, while AAGCTNATT or
-   AAGCTNNNNATTT will not be trimmed as less than 40% of the last 5
-   characters are N's.
+   AAGCTNNNNATT will be trimmed to AAGCT, while AAGCTNATT or AAGCTNNNNATTT
+   will not be trimmed as less than 40% of the last 5 characters are N's.
 
    After trimming these poor quality regions, it will again then trim off
    any dangling gap characters from the ends.
@@ -345,7 +353,7 @@ See also
 
 Author(s)
 
-   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   Gary Williams (gwilliam (c) rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 

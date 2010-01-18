@@ -43,7 +43,6 @@ import org.emboss.jemboss.gui.Browser;
 public class AlignJFrame extends JFrame
 {
 
-  private Vector graphicSequence;    // Vector containing graphical seqs
   protected JScrollPane jspSequence; // Sequence scrollpane
   protected static GraphicSequenceCollection gsc;
   private static Matrix mat;
@@ -56,7 +55,7 @@ public class AlignJFrame extends JFrame
   protected Hashtable currentColour;
   protected boolean useExitMenu = false;  // whether to use 'Exit' or 'Close'
   protected JMenuBar menuBar;
-  
+  PatternJFrame findPattern;
   JCheckBoxMenuItem drawColorBox;
  
   /**
@@ -296,6 +295,7 @@ public class AlignJFrame extends JFrame
         public void actionPerformed(ActionEvent e)
         {
           dispose();
+          findPattern.dispose();
         }
       });
       fileMenu.add(close);
@@ -420,7 +420,8 @@ public class AlignJFrame extends JFrame
 // find pattern
     JMenuItem findMenu = new JMenuItem("Find pattern");
     viewMenu.add(findMenu);
-    final PatternJFrame patFrame = new PatternJFrame();
+    findPattern = new PatternJFrame();
+    final PatternJFrame patFrame = findPattern;
     findMenu.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)
@@ -433,6 +434,8 @@ public class AlignJFrame extends JFrame
         patFrame.setLocation(pos);
         patFrame.setGraphic(gsc);
         patFrame.setVisible(true);
+        patFrame.setExtendedState(patFrame.getExtendedState() & ~ICONIFIED);
+        patFrame.requestFocusInWindow();
         patFrame.toFront();
       }
     });
@@ -1029,6 +1032,7 @@ public class AlignJFrame extends JFrame
      public void windowClosing(WindowEvent we)
      {
         dispose();
+        findPattern.dispose();
      }
   }
 

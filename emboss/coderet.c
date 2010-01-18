@@ -137,7 +137,7 @@ int main(int argc, char **argv)
             if(seqoutcds && ajFeatTypeMatchC(gf, "CDS"))
             {
                 icds++;
-                ret = ajFeatGetSeq(gf, feat, seq, &cds);
+                ret = ajFeatGetSeqJoin(gf, feat, seq, &cds);
 		if(!ret)
 		{
 		    ajWarn("Cannot extract %S\n",ajSeqGetNameS(seq));
@@ -149,7 +149,7 @@ int main(int argc, char **argv)
             if(seqoutmrna && ajFeatTypeMatchC(gf, "mRNA"))
             {
                 imrna++;
-                ret = ajFeatGetSeq(gf, feat, seq, &mrna);
+                ret = ajFeatGetSeqJoin(gf, feat, seq, &mrna);
                 if(!ret)
                 {
                     ajWarn("Cannot extract %s",ajSeqGetNameC(seq));
@@ -165,11 +165,9 @@ int main(int argc, char **argv)
                 if(ajFeatTypeMatchC(gf, "CDS") ||
                    ajFeatTypeMatchC(gf, "mRNA") ||
                    ajFeatTypeMatchC(gf, "exon"))
-                {
-                    irest++;
                     ajFeatLocMark(gf, feat, &copyseq);
-                }
-
+                else
+                    irest++;
             }
 
             if(seqoutprot && ajFeatTypeMatchC(gf, "CDS"))
@@ -196,7 +194,7 @@ int main(int argc, char **argv)
             ajFmtPrintF(logf, "%6d", itran);
 
         ajFmtPrintF(logf, "%6d %s\n",
-                    icds+imrna+irest+itran, ajSeqGetNameC(seq));
+                    icds+imrna+irest, ajSeqGetNameC(seq));
     }
 
 

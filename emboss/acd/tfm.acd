@@ -1,6 +1,7 @@
 application: tfm [
   documentation: "Displays full documentation for an application"
   groups: "Information"
+  relations: "EDAM: Application information"
 ]
 
 section: input [
@@ -15,6 +16,7 @@ section: input [
     help: "Enter the name of an EMBOSS program"
     minlength: "1"
     knowntype: "emboss program"
+    relations:  "EDAM: EMBOSS application name"                        
   ]
 
 endsection: input
@@ -29,6 +31,7 @@ section: output [
     default: "stdout"
     knowntype: "text documentation"
     information: "Program documentation text output file"
+    relations:  "EDAM: Application bibliographic information"          
   ]
 
   boolean: html [
@@ -38,6 +41,7 @@ section: output [
     help: "This will format the output for displaying as a WWW
            document."
     outputmodifier: "Y"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   boolean: more [
@@ -49,6 +53,7 @@ section: output [
            going on to the next page. When you have finished reading a page,
            press the SPACE bar to proceed to the next page."
     outputmodifier: "Y"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: output

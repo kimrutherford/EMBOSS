@@ -1,6 +1,7 @@
 application: pepwheel [
   documentation: "Draw a helical wheel diagram for a protein sequence"
   groups: "Display, Protein:2D Structure"
+  relations: "EDAM: Protein secondary structure visualisation"
 ]
 
 section: input [
@@ -11,6 +12,7 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "Protein"
+    relations: "EDAM: Sequence"                                            
   ]
 
 endsection: input
@@ -23,6 +25,7 @@ section: output [
   boolean: wheel [
     default: "Y"
     information: "Plot the wheel"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
   integer: steps [
@@ -33,6 +36,7 @@ section: output [
     information: "Number of steps"
     help: "The number of residues plotted per turn is this value
            divided by the 'turns' value."
+    relations: "EDAM: Generic integer"                                     
   ]
 
   integer: turns [
@@ -43,12 +47,14 @@ section: output [
     information: "Number of turns"
     help: "The number of residues plotted per turn is the 'steps'
            value divided by this value."
+    relations: "EDAM: Generic integer"                                     
   ]
 
   graph: graph [
     standard: "Y"
     gdesc: "Helical wheel"
     gxtitle: "$(sequence.name)"
+    relations: "EDAM: EMBOSS graph file"                                   
   ]
 
   section: markupsection [
@@ -62,6 +68,7 @@ section: output [
              as squares and all other residues are unmarked. This overrides
              any other markup that you may have specified using the
              qualifiers '-squares', '-diamonds' and '-octags'."
+    relations: "EDAM: Generic boolean"                                     
     ]
 
     string: squares [
@@ -71,6 +78,7 @@ section: output [
       help: "By default the aliphatic residues ILVM are marked with
              squares."
       knowntype: "protein codes"
+    relations:  "EDAM: Amino acid code string"                         
     ]
 
     string: diamonds [
@@ -79,6 +87,7 @@ section: output [
       information: "Mark as diamonds"
       help: "By default the residues DENQST are marked with diamonds."
       knowntype: "protein codes"
+    relations:  "EDAM: Amino acid code string"                         
     ]
 
     string: octags [
@@ -88,6 +97,7 @@ section: output [
       help: "By default the positively charged residues HKR are marked
              with octagons."
       knowntype: "protein codes"
+    relations:  "EDAM: Amino acid code string"                         
     ]
 
   endsection: markupsection

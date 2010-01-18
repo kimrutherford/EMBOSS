@@ -1,6 +1,7 @@
 application: cons [
   documentation: "Create a consensus sequence from a multiple alignment"
   groups: "Alignment:Consensus"
+  relations: "EDAM: Sequence alignment conservation analysis"
 ]
 
 section: input [
@@ -14,6 +15,7 @@ section: input [
     aligned: "Y"
     minseqs: "2"
     help: "File containing a sequence alignment."
+    relations: "EDAM: Sequence alignment data"                             
   ]
 
   matrix: datafile [
@@ -24,6 +26,7 @@ section: input [
            sequences. By default it is the file 'EBLOSUM62' (for proteins) or
            the file 'EDNAFULL' (for nucleic sequences). These files are
            found in the 'data' directory of the EMBOSS installation."
+    relations: "EDAM: Integer comparison matrix"                           
   ]
 
 endsection: input
@@ -41,6 +44,7 @@ section: additional [
            half the total weight of all the sequences in the alignment."
     default: "@( $(sequence.totweight) / 2)"
     expected: "Half the total sequence weighting"
+    relations: "EDAM: Generic float"                                       
   ]
 
   integer: identity [
@@ -52,6 +56,7 @@ section: additional [
            alignment only columns of identities contribute to the consensus."
     default: "0"
     minimum: "0"
+    relations: "EDAM: Generic integer"                                     
   ]
 
   float: setcase [
@@ -62,6 +67,7 @@ section: additional [
            consensus is is upper-case and below which the consensus is in
            lower-case."
     default: "@( $(sequence.totweight) / 2)"
+    relations: "EDAM: Generic float"                                       
   ]
 
 endsection: additional
@@ -73,6 +79,7 @@ section: output [
 
   seqout: outseq [
     parameter: "Y"
+    relations: "EDAM: Sequence"                                            
   ]
 
   string: name [
@@ -80,6 +87,7 @@ section: output [
     default: ""
     information: "Name of the consensus sequence"
     knowntype: "sequence id output"
+    relations:  "EDAM: Sequence unique identifier"                     
   ]
 
 endsection: output

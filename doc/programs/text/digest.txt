@@ -1,5 +1,4 @@
-
-                                  digest 
+                                   digest
 
 
 
@@ -17,22 +16,22 @@ Function
 Description
 
    This programs allows you to input one or more protein sequences and to
-   specify one proteolytic agent from a list, which might be a
-   proteolytic enzyme or other reagent. It will then write a report file
-   containing the positions where the agent cuts, together with the
-   peptides produced.
+   specify one proteolytic agent from a list, which might be a proteolytic
+   enzyme or other reagent. It will then write a report file containing
+   the positions where the agent cuts, together with the peptides
+   produced.
 
 Algorithm
 
-   By default digest uses average molecular weights. The -mono option
-   will use monoisotopic weights.
+   By default digest uses average molecular weights. The -mono option will
+   use monoisotopic weights.
 
 Usage
 
    Here is a sample session with digest
 
 
-% digest 
+% digest
 Reports on protein proteolytic enzyme or reagent cleavage sites
 Input protein sequence(s): tsw:opsd_human
 Enzymes and Reagents
@@ -44,14 +43,18 @@ Enzymes and Reagents
          6 : V8-phosph
          7 : Chymotrypsin
          8 : CNBr
-Select number [1]: 
-Use monoisotopic weights [N]: 
-Output report [opsd_human.digest]: 
+Select number [1]:
+Use monoisotopic weights [N]:
+Output report [opsd_human.digest]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Reports on protein proteolytic enzyme or reagent cleavage sites
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-seqall]            seqall     Protein sequence(s) filename and optional
@@ -134,13 +137,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -280,7 +285,7 @@ Output file format
 
 ########################################
 # Program: digest
-# Rundate: Tue 15 Jul 2008 12:00:00
+# Rundate: Fri 15 Jan 2010 12:00:00
 # Commandline: digest
 #    -seqall tsw:opsd_human
 # Report_format: seqtable
@@ -297,16 +302,16 @@ Output file format
 #=======================================
 
   Start     End Mol_Weight Cterm  Nterm  Sequence
-     70     135   7129.344 R      Y      TPLNYILLNLAVADLFMVLGGFTSTLYTSLHGYFVFGP
-TGCNLEGFFATLGGEIALWSLVVLAIER
-    178     231   6335.517 R      E      YIPEGLQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIP
-MIIIFFCYGQLVFTVK
-     22      69   5788.894 R      T      SPFEYPQYYLAEPWQFSMLAAYMFLLIVLGFPINFLTL
-YVTVQHKKLR
-    253     296   5004.103 R      S      MVIIMVIAFLICWVPYASVAFYIFTHQGSNFGPIFMTI
-PAFFAK
-    136     177   4600.476 R      Y      YVVVCKPMSNFRFGENHAIMGVAFTWVMALACAAPPLA
-GWSR
+     70     135   7129.344 R      Y      TPLNYILLNLAVADLFMVLGGFTSTLYTSLHGYFVFGPT
+GCNLEGFFATLGGEIALWSLVVLAIER
+    178     231   6335.517 R      E      YIPEGLQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIPM
+IIIFFCYGQLVFTVK
+     22      69   5788.894 R      T      SPFEYPQYYLAEPWQFSMLAAYMFLLIVLGFPINFLTLY
+VTVQHKKLR
+    253     296   5004.103 R      S      MVIIMVIAFLICWVPYASVAFYIFTHQGSNFGPIFMTIP
+AFFAK
+    136     177   4600.476 R      Y      YVVVCKPMSNFRFGENHAIMGVAFTWVMALACAAPPLAG
+WSR
       1      21   2257.506 .      S      MNGTEGPNFYVPFSNATGVVR
     297     311   1728.097 K      Q      SAAIYNPVIYIMMNK
     232     245   1490.547 K      A      EAAAQQQESATTQK
@@ -340,12 +345,12 @@ Data files
 Notes
 
    If you wish to emulate a partial digestion, then using the -overlap
-   qualifier will display the results from a digest in which all cut
-   sites are used and in which one site at a time is not cut. Thus the
-   resulting peptide fragments from the cut sites numbered 1, 2, 3, 4
-   etc. are shown, plus the fragments produced by cutting at the sites 1
-   to 3, 2 to 4, etc. In other words, this option will reveal fragments
-   containing one potential cut site.
+   qualifier will display the results from a digest in which all cut sites
+   are used and in which one site at a time is not cut. Thus the resulting
+   peptide fragments from the cut sites numbered 1, 2, 3, 4 etc. are
+   shown, plus the fragments produced by cutting at the sites 1 to 3, 2 to
+   4, etc. In other words, this option will reveal fragments containing
+   one potential cut site.
 
    If you wish to emulate a very partial digestion (!) then using the
    -allpartials qualifier will do what -overlap did, but also show all
@@ -355,8 +360,8 @@ Notes
    2..4, 2..5, 3..5, etc. In other words, this option will reveal
    fragments containing one or more potential cut site.
 
-   If the boolean -ragging is specified then terminal digest fragments
-   are also shown; this can be useful for mass spectrometry. Ragging is
+   If the boolean -ragging is specified then terminal digest fragments are
+   also shown; this can be useful for mass spectrometry. Ragging is
    further controlled by the -termini option which allows you to select
    removal of residues from the N and/or C termini.
 
@@ -407,7 +412,7 @@ See also
 
 Author(s)
 
-   Alan Bleasby (ajb © ebi.ac.uk)
+   Alan Bleasby (ajb (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

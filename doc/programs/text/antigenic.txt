@@ -1,5 +1,4 @@
-
-                                 antigenic 
+                                  antigenic
 
 
 
@@ -16,30 +15,31 @@ Function
 
 Description
 
-   Antigenic predicts potentially antigenic regions of a protein
-   sequence, using the method of Kolaskar and Tongaonkar. This method is
-   based on a single parameter and thus very simple to use.
+   Antigenic predicts potentially antigenic regions of a protein sequence,
+   using the method of Kolaskar and Tongaonkar. This method is based on a
+   single parameter and thus very simple to use.
 
 Algorithm
 
    Analysis of data from experimentally determined antigenic sites on
    proteins has revealed that the hydrophobic residues Cys, Leu and Val,
-   if they occur on the surface of a protein, are more likely to be a
-   part of antigenic sites. The method of Kolaskar and Tongaonkar to
-   predict antigenic determinants in proteins is semi-empirical and makes
-   use of physicochemical properties of amino acid residues and their
-   frequencies of occurrence in experimentally known segmental epitopes.
+   if they occur on the surface of a protein, are more likely to be a part
+   of antigenic sites. The method of Kolaskar and Tongaonkar to predict
+   antigenic determinants in proteins is semi-empirical and makes use of
+   physicochemical properties of amino acid residues and their frequencies
+   of occurrence in experimentally known segmental epitopes.
 
 Usage
 
    Here is a sample session with antigenic
 
 
-% antigenic 
+% antigenic
 Finds antigenic sites in proteins
 Input protein sequence(s): tsw:actb1_fugru
-Minimum length of antigenic region [6]: 
-Output report [actb1_fugru.antigenic]: 
+Minimum length of antigenic region [6]:
+Output report [actb1_fugru.antigenic]:
+
 
    Go to the input files for this example
    Go to the output files for this example
@@ -50,15 +50,19 @@ Output report [actb1_fugru.antigenic]:
    regions can be produced.
 
 
-% antigenic -rformat gff 
+% antigenic -rformat gff
 Finds antigenic sites in proteins
 Input protein sequence(s): tsw:actb1_fugru
-Minimum length of antigenic region [6]: 
-Output report [actb1_fugru.antigenic]: 
+Minimum length of antigenic region [6]:
+Output report [actb1_fugru.antigenic]:
+
 
    Go to the output files for this example
 
 Command line arguments
+
+Finds antigenic sites in proteins
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -108,13 +112,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -237,7 +243,7 @@ Output file format
 
 ########################################
 # Program: antigenic
-# Rundate: Tue 15 Jul 2008 12:00:00
+# Rundate: Fri 15 Jan 2010 12:00:00
 # Commandline: antigenic
 #    -sequence tsw:actb1_fugru
 # Report_format: motif
@@ -347,9 +353,9 @@ Max_score_pos at "*"
 
 ##gff-version 3
 ##sequence-region ACTB1_FUGRU 1 375
-#!Date 2008-07-15
+#!Date 2010-01-15
 #!Type Protein
-#!Source-version EMBOSS 6.1.0
+#!Source-version EMBOSS 6.2.0
 ACTB1_FUGRU     antigenic       epitope 214     222     1.207   +       .
 ID="ACTB1_FUGRU.1";note="*pos 218"
 ACTB1_FUGRU     antigenic       epitope 131     145     1.187   +       .
@@ -404,11 +410,12 @@ Data files
 
 % embossdata -fetch -file Exxx.dat
 
+
    Users can provide their own data files in their own directories.
    Project specific files can be put in the current directory, or for
-   tidier directory listings in a subdirectory called ".embossdata".
-   Files for all EMBOSS runs can be put in the user's home directory, or
-   again in a subdirectory called ".embossdata".
+   tidier directory listings in a subdirectory called ".embossdata". Files
+   for all EMBOSS runs can be put in the user's home directory, or again
+   in a subdirectory called ".embossdata".
 
    The directories are searched in the following order:
      * . (your current directory)
@@ -489,17 +496,16 @@ Total          2066         5340        7944
 
 Notes
 
-   Application of this method to a large number of proteins has shown
-   that their method can predict antigenic determinants with about 75%
-   accuracy which is better than most of the known methods.
+   Application of this method to a large number of proteins has shown that
+   their method can predict antigenic determinants with about 75% accuracy
+   which is better than most of the known methods.
 
 References
 
     1. Kolaskar,AS and Tongaonkar,PC (1990). A semi-empirical method for
        prediction of antigenic determinants on protein antigens. FEBS
        Letters 276: 172-174.
-    2. Parker,JMR, Guo,D and Hodges,RS (1986). Biochemistry 25:
-       5425-5432.
+    2. Parker,JMR, Guo,D and Hodges,RS (1986). Biochemistry 25: 5425-5432.
 
 Warnings
 
@@ -537,12 +543,12 @@ See also
 
 Author(s)
 
-   Alan Bleasby (ajb © ebi.ac.uk)
+   Alan Bleasby (ajb (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 
    Original program "ANTIGENIC" by Peter Rice (EGCG 1991) Peter Rice
-   (pmr © ebi.ac.uk)
+   (pmr (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 

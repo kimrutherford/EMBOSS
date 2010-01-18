@@ -30,7 +30,7 @@
 ** @param [r] pgm [const char*] Application name, used as the name of
 **                              the ACD file
 ** @param [r] argc [ajint] Number of arguments provided on the command line,
-**        usually passsed as-is by the calling application.
+**        usually passed as-is by the calling application.
 ** @param [r] argv [char* const[]] Actual arguments as an array of text.
 ** @return [void]
 ** @@
@@ -38,6 +38,7 @@
 
 void  embInit (const char *pgm, ajint argc, char * const argv[])
 {
+    ajSeqdbInit();
     ajNamInit("emboss");
 
     ajAcdInit (pgm, argc, argv);
@@ -58,7 +59,7 @@ void  embInit (const char *pgm, ajint argc, char * const argv[])
 ** @param [r] pgm [const char*] Application name, used as the name
 **                              of the ACD file
 ** @param [r] argc [ajint] Number of arguments provided on the command line,
-**        usually passsed as-is by the calling application.
+**        usually passed as-is by the calling application.
 ** @param [r] argv [char* const[]] Actual arguments as an array of text.
 ** @param [r] package [const char*] Package name, used to find the ACD file
 ** @return [void]
@@ -66,11 +67,44 @@ void  embInit (const char *pgm, ajint argc, char * const argv[])
 ******************************************************************************/
 
 void embInitP (const char *pgm, ajint argc, char * const argv[],
-		   const char *package)
+               const char *package)
 {
+    ajSeqdbInit();
     ajNamInit("emboss");
 
-    ajAcdInitP (pgm, argc, argv, package);
+    ajAcdInitPV (pgm, argc, argv, package, "");
+
+    return;
+}
+
+
+
+
+/* @func embInitPV *************************************************************
+**
+** Initialises everything. Reads an ACD (AJAX Command Definition) file
+** prompts the user for any missing information, reads all sequences
+** and other input into local structures which applications can request.
+** Must be called in each EMBOSS program first.
+**
+** @param [r] pgm [const char*] Application name, used as the name
+**                              of the ACD file
+** @param [r] argc [ajint] Number of arguments provided on the command line,
+**        usually passed as-is by the calling application.
+** @param [r] argv [char* const[]] Actual arguments as an array of text.
+** @param [r] package [const char*] Package name, used to find the ACD file
+** @param [r] packversion [const char*] Package version
+** @return [void]
+** @@
+******************************************************************************/
+
+void embInitPV (const char *pgm, ajint argc, char * const argv[],
+               const char *package, const char *packversion)
+{
+    ajSeqdbInit();
+    ajNamInit("emboss");
+
+    ajAcdInitPV (pgm, argc, argv, package, packversion);
 
     return;
 }

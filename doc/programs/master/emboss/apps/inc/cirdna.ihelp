@@ -1,5 +1,8 @@
+Draws circular maps of DNA constructs
+Version: EMBOSS:6.2.0
+
    Standard (Mandatory) qualifiers:
-  [-infile]            infile     [inputfile] Commands to the lindna drawing
+  [-infile]            infile     [inputfile] Commands to the cirdna drawing
                                   program file
    -[no]ruler          boolean    [Y] Draw a ruler
    -blocktype          menu       [Filled] Type of blocks (Values: Open (Open
@@ -9,7 +12,7 @@
    -posblocks          selection  [In] Text inside or outside the blocks
    -graphout           graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, das, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif)
 
    Additional (Optional) qualifiers:
    -maxgroups          integer    [20] Maximum number of groups (Integer 1 or
@@ -71,11 +74,12 @@
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
 

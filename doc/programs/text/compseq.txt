@@ -1,5 +1,4 @@
-
-                                  compseq 
+                                   compseq
 
 
 
@@ -27,11 +26,11 @@ Description
 Algorithm
 
    By default, compseq makes the (false) assumption that each word is
-   equally likely. The expected frequency therefore of any dimer is 1/16
-   - this is simply the inverse of the number of possible dimers (AA, AC,
-   AG, AT, CA, CC, CG, CT, GA, GC, GG, GT, TA, TC, TG, TT). Similarly,
-   the expected frequency of any trimer is 1/64, etc. Clearly this is not
-   the case in real sequences where there will be bias in favour of some
+   equally likely. The expected frequency therefore of any dimer is 1/16 -
+   this is simply the inverse of the number of possible dimers (AA, AC,
+   AG, AT, CA, CC, CG, CT, GA, GC, GG, GT, TA, TC, TG, TT). Similarly, the
+   expected frequency of any trimer is 1/64, etc. Clearly this is not the
+   case in real sequences where there will be bias in favour of some
    monomers and words. There are ways around this (see "Notes").
 
    The normal behaviour of compseq is to count the frequencies of all
@@ -50,8 +49,9 @@ Usage
    To count the frequencies of dinucleotides in a file:
 
 
-% compseq tembl:x65923 -word 2 result3.comp 
+% compseq tembl:x65923 -word 2 result3.comp
 Calculate the composition of unique words in sequences
+
 
    Go to the input files for this example
    Go to the output files for this example
@@ -62,25 +62,30 @@ Calculate the composition of unique words in sequences
    results of hexanucleotides that do not occur in the sequence:
 
 
-% compseq tembl:x65923 -word 6 result6.comp -nozero 
+% compseq tembl:x65923 -word 6 result6.comp -nozero
 Calculate the composition of unique words in sequences
+
 
    Go to the output files for this example
 
    Example 3
 
-   To count the frequencies of trinucleotides in frame 2 of a sequence
-   and use a previously prepared compseq output to show the expected
+   To count the frequencies of trinucleotides in frame 2 of a sequence and
+   use a previously prepared compseq output to show the expected
    frequencies:
 
 
-% compseq tembl:x65923 -word 3 result3.comp -frame 2 -in prev.comp 
+% compseq tembl:x65923 -word 3 result3.comp -frame 2 -in prev.comp
 Calculate the composition of unique words in sequences
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Calculate the composition of unique words in sequences
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -183,32 +188,34 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
    compseq reads a normal sequence(s) USA.
 
-   An optional second input file is the output from a previous compseq
-   run used to set the expected word frequencies.
+   An optional second input file is the output from a previous compseq run
+   used to set the expected word frequencies.
 
    The optional second input data file format is exactly the same as the
    output file format.
 
    It expects to read in a previous output file of this program. An error
-   is produced if the word size of the current compseq job and that of
-   the output file being read in are different.
+   is produced if the word size of the current compseq job and that of the
+   output file being read in are different.
 
   Input files for usage example
 
-   'tembl:x65923' is a sequence entry in the example nucleic acid
-   database 'tembl'
+   'tembl:x65923' is a sequence entry in the example nucleic acid database
+   'tembl'
 
   Database entry: tembl:x65923
 
@@ -224,8 +231,7 @@ XX
 KW   fau gene.
 XX
 OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
-;
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
 OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
 OC   Homo.
 XX
@@ -269,10 +275,8 @@ FT                   /db_xref="HSSP:1GJZ"
 FT                   /db_xref="InterPro:IPR006846"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
 FT                   /protein_id="CAA46716.1"
-FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLA
-G
-FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKT
-G
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
 FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
 FT   misc_feature    98..102
 FT                   /note="nucleolar localization signal"
@@ -282,24 +286,15 @@ FT   polyA_signal    484..489
 FT   polyA_site      509
 XX
 SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
-     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        6
-0
-     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       12
-0
-     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       18
-0
-     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       24
-0
-     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       30
-0
-     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       36
-0
-     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       42
-0
-     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       48
-0
-     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               51
-8
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        60
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       120
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       180
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       240
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       300
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       360
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       420
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       480
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               518
 //
 
   Input files for usage example 3
@@ -393,18 +388,18 @@ Output file format
 
    The output format consists of:
 
-   Header information and comments are preceeded by a '#' character at
-   the start of the line.
+   Header information and comments are preceeded by a '#' character at the
+   start of the line.
 
    The Word size and the Total count are then given on separate lines,
 
    The headers of the columns of results are preceeded by a '#'
 
-   The results columns are: the sub-sequence word, the observed
-   frequency, the expected frequency (which will be read from the input
-   file if one is given, else it is a simple inverse of the number of
-   words of the size specified that can be constructed), the ratio of the
-   observed to expected frequency.
+   The results columns are: the sub-sequence word, the observed frequency,
+   the expected frequency (which will be read from the input file if one
+   is given, else it is a simple inverse of the number of words of the
+   size specified that can be constructed), the ratio of the observed to
+   expected frequency.
 
    After a blank line at the end, the results of 'Other' words is given -
    this is the number of words with a sequence which has IUPAC ambiguity
@@ -670,32 +665,32 @@ Notes
    previous compseq analysis and use this to set the expected frequencies
    of the subsequences. In this case, the input sequences under
    investigation should be representative of those used for the previous
-   compseq analysis. It is down to your biological expertise to ensure
-   the sequences are genuinely "representative", for instance, you might
+   compseq analysis. It is down to your biological expertise to ensure the
+   sequences are genuinely "representative", for instance, you might
    select a group of sequences belonging to the same taxonomic rank such
    as genus or species.
 
    The file of expected frequencies is specified by name with the -infile
-   qualifier. The word size in the current run must be the same as the
-   one in this results file. Obviously, you should use a file produced
-   from protein sequences if you are counting protein sequence word
+   qualifier. The word size in the current run must be the same as the one
+   in this results file. Obviously, you should use a file produced from
+   protein sequences if you are counting protein sequence word
    frequencies, and you must use one made from nucleotide frequencies if
    you are analysing a nucleotide sequence.
 
    As an alternative to using -infile, the expected frequencies of words
    may be calculated from the observed frequency of single bases or
-   residues in the sequences. To do this, specify the -calcfreq
-   qualifier. If you are reporting a word size of 1 (single bases or
-   residues) then there is no point in using this option because the
-   calculated expected frequency will be equal to the observed frequency.
+   residues in the sequences. To do this, specify the -calcfreq qualifier.
+   If you are reporting a word size of 1 (single bases or residues) then
+   there is no point in using this option because the calculated expected
+   frequency will be equal to the observed frequency.
 
    Calculating the expected frequencies like this will give an
    approximation of the expected frequencies that you might get by using
    an input file of frequencies produced by a previous run of this
    program. If an input file of expected word frequencies has been
    specified then the values from that file will be used instead of this
-   calculation of expected frequency from the sequence, even if
-   'calcfreq' is set to be true.
+   calculation of expected frequency from the sequence, even if 'calcfreq'
+   is set to be true.
 
 References
 
@@ -718,8 +713,7 @@ Diagnostic Error Messages
           frequencies to the word size used in this run of compseq.
 
    "The 'Word size' line was not found, instead found:"
-          You appear to be trying to read a corrupted compseq results
-          file
+          You appear to be trying to read a corrupted compseq results file
 
 Exit status
 
@@ -733,10 +727,9 @@ Known bugs
    of other programs on your machine.
 
    If you run out of memory, you may see the program crash with a generic
-   error message that will be specific to your machine's operating
-   system, but will probably be a warning about writing to memory that
-   the program does not own (eg "Segmentation fault" on a Solaris
-   machine)
+   error message that will be specific to your machine's operating system,
+   but will probably be a warning about writing to memory that the program
+   does not own (eg "Segmentation fault" on a Solaris machine)
 
    This is not a bug, it is a feature of the way this program grabs large
    amounts of memory. The maximum word size is restricted to avoid this
@@ -745,8 +738,8 @@ Known bugs
 See also
 
    Program name     Description
-   backtranambig    Back-translate a protein sequence to ambiguous
-                    nucleotide sequence
+   backtranambig    Back-translate a protein sequence to ambiguous nucleotide
+                    sequence
    backtranseq      Back-translate a protein sequence to a nucleotide sequence
    banana           Plot bending and curvature data for B-DNA
    btwisted         Calculate the twisting in a B-DNA sequence
@@ -768,11 +761,11 @@ See also
    pepwindowall     Draw Kyte-Doolittle hydropathy plot for a protein
                     alignment
    sirna            Finds siRNA duplexes in mRNA
-   wordcount        Count and extract unique words in DNA sequence(s)
+   wordcount        Count and extract unique words in molecular sequence(s)
 
 Author(s)
 
-   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   Gary Williams (gwilliam (c) rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
@@ -781,9 +774,9 @@ History
    Completed 2 March 2000
    5 April 2001 (version 1.12.0) - the operation of the option '-reverse'
    has changed. It is now 'False' by default instead of being 'True' by
-   default for nucleic sequences. Too many people were getting confused
-   by the counts being done on both senses, so this is now done on only
-   the forward sense by default.
+   default for nucleic sequences. Too many people were getting confused by
+   the counts being done on both senses, so this is now done on only the
+   forward sense by default.
 
 Target users
 

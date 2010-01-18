@@ -171,7 +171,7 @@ sub runtest ($) {
 	    print STDERR "No AB line before AA line in test $testid\n";
 	}
 	$dtop = "../../embassy/$packa/emboss_doc";
-	if (!defined($tfm{$testapp})) {
+	if ($doembassy && !defined($tfm{$testapp})) {
 	    $tfm{$testapp}=0;
 	    if (-e "$dtop/html/$testapp.html") {$tfm{$testapp}++}
 	    else {print STDERR "No HTML docs for $testapp\n";$misshtml++;}
@@ -315,7 +315,7 @@ sub runtest ($) {
     $testpath = "../$testpath";	# we run from the test/qa/* subdirectory
   }
 
-  if ($testa) {	# for "embassy" apps (AA lines) we can skip
+  if ($doembassy && $testa) {	# for "embassy" apps (AA lines) we can skip
     if ($testappname && !defined($acdname{$testapp})) { # embassy make not run
 	print STDERR "Embassy application $testapp ($packa) not installed - skip\n";
       $skipembassy++;
@@ -745,12 +745,20 @@ $packa="unknown";
 $dowild=0;
 $logfile = "qatest.log";
 $testwild = "*";
+$doembassy=1;
+$docheck=1;
+$qatestfile = "../qatest.dat";
+$acddir=  "../../emboss/acd";
 
 foreach $test (@ARGV) {
   if ($test =~ /^-(.*)/) {
     $opt=$1;
     if ($opt eq "kk") {$defdelete="keep"}
+    elsif ($opt eq "keep") {$defdelete="keep"}
     elsif ($opt eq "ks") {$defdelete="success"}
+    elsif ($opt eq "ka") {$defdelete="all"}
+    elsif ($opt eq "noembassy") {$doembassy=0}
+    elsif ($opt eq "nocheck") {$docheck=0}
     elsif ($opt eq "wild") {
 	$dowild=1;
 	if(defined($testname)) {
@@ -758,10 +766,11 @@ foreach $test (@ARGV) {
 	}
     }
     elsif ($opt eq "mcheck") {$domcheck="MALLOC_CHECK_=3;export MALLOC_CHECK_;"}
-    elsif ($opt eq "ka") {$defdelete="all"}
     elsif ($opt =~ /without=(\S+)/) {$without{$1}=1}
     elsif ($opt =~ /t=([0-9]+)/) {$timeoutdef=int($1)}
     elsif ($opt =~ /logfile=(\S+)/) {$logfile=">$1"} # append to logfile
+    elsif ($opt =~ /testfile=(\S+)/) {$qatestfile="$1"}
+    elsif ($opt =~ /acd=(\S+)/) {$acddir="$1"}
     else {print STDERR "+++ unknown option '$opt'\n"; usage()}
   }
   else {
@@ -826,7 +835,7 @@ $SIG{ALRM} = sub { print STDERR "+++ timeout handler\n"; die "qatest timeout" };
 # The relative path is fixed, as are the paths of files in the qatest.dat
 # file, so best to keep everything running in the test/qa directory
 
-opendir (ACDDIR, "../../emboss/acd") || die "Cannot open emboss/acd directory";
+opendir (ACDDIR, "$acddir") || die "Cannot open emboss/acd directory";
 @acdfiles = readdir(ACDDIR);
 closedir ACDDIR;
 
@@ -856,11 +865,14 @@ if (!$numtests) {
 
 }
 
-open (IN, "../qatest.dat") || die "Cannot open qatest.dat";
+open (IN, "$qatestfile") || die "Cannot open $qatestfile";
 open (LOG, ">$logfile") || die "Cannot open $logfile";
 
 # make qatest.log unbuffered and be sure to reset the current filehandle
 $fh = select LOG; $|=1; select $fh;
+
+$ischeck = 0;
+$isembassy = 0;
 
 while (<IN>) {
 
@@ -870,7 +882,11 @@ while (<IN>) {
     $lastid = $id;
     $id = $1;
     $testdef = "";
+    $ischeck = 0;
+    $isembassy = 0;
   }
+  if (/^AA\s+/) {$isembassy = 1}
+  if (/^AQ\s+/) {$ischeck = 1}
   $testdef .= $_;
 
 # end of definition - fire up the test
@@ -878,7 +894,8 @@ while (<IN>) {
   if (/^\/\//) {
     if (($numtests > 0) && !$dowild && !$dotest{$id}) {next}
     if (($numtests > 0) && $dowild && $id !~ /$testwild/) {next}
-
+    if($isembassy && !$doembassy) {next}
+    if($ischeck && !$docheck) {next}
     $result = runtest ($testdef);
     $tcount++;
 

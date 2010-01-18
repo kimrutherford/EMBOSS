@@ -1,9 +1,10 @@
 application: cutgextract [
-  documentation: "Extract codon usage tables from from CUTG database"
+  documentation: "Extract codon usage tables from CUTG database"
   groups: "Utils:Database creation"
   gui: "no"
   batch: "no"
   cpu: "medium"
+  relations: "EDAM: Codon usage table handling"
 ]
 
 section: input [
@@ -15,6 +16,7 @@ section: input [
     parameter: "Y"
     information: "Codon usage directories"
     knowntype: "codon usage"
+    relations:  "EDAM: Codon usage table file"                         
   ]
 
 endsection: input
@@ -35,24 +37,28 @@ section: advanced [
     default: ""
     information: "CUTG release"
     knowntype: "database release"
+    relations:  "EDAM: Database version information"                   
   ]
 
   string: wildspec [
     default: "*.codon"
     information: "Type of codon file"
     knowntype: "filename wildcard"
+    relations:  "EDAM: File name"                                      
   ]
 
   string: species [
     default: "*"
     information: "Species wildcard"
     knowntype: "wildcard string"
+    relations:  "EDAM: Wildcard string"                                
   ]
 
   boolean: allrecords [
     default: "N"
     information: "Include all records, including those with
                   warnings"
+    relations: "EDAM: Generic boolean"                                     
   ]
 
 endsection: advanced
@@ -66,6 +72,7 @@ section: output [
     parameter: "Y"
     knowntype: "log"
     information: "General log output file"
+    relations:  "EDAM: Application log file"                           
   ]
 
   string: filename [
@@ -75,6 +82,7 @@ section: output [
            each species. Leave blank to generate the filenames. Specify a
            filename to combine several species into one file."
     knowntype: "output filename"
+    relations:  "EDAM: File name"                                      
   ]
 
 endsection: output

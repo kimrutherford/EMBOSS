@@ -1,5 +1,4 @@
-
-                                 jaspscan 
+                                  jaspscan
 
 
 
@@ -24,16 +23,16 @@ Description
 
    An output file is written with information on the matches, including
    sequence ID and accession number, the start and end positions of the
-   match in an input sequence and the sequence of the region where a
-   match has been found. Binding factor information, where available, is
-   given at the end of the matches for each matching entry.
+   match in an input sequence and the sequence of the region where a match
+   has been found. Binding factor information, where available, is given
+   at the end of the matches for each matching entry.
 
 Usage
 
    Here is a sample session with jaspscan
 
 
-% jaspscan -both 
+% jaspscan -both
 Scans DNA sequences for transcription factors
 Input nucleotide sequence(s): tembl:m23100
 Jaspar matrix set
@@ -43,15 +42,19 @@ Jaspar matrix set
          N : CNE
          O : POLII
          S : SPLICE
-Matrix set [C]: 
+Matrix set [C]:
 Comma separated matrix list [all]: ma0079
-Threshold percentage [80.0]: 
-Output report [m23100.jaspscan]: 
+Threshold percentage [80.0]:
+Output report [m23100.jaspscan]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Scans DNA sequences for transcription factors
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -85,7 +88,7 @@ Command line arguments
                                   ! other matrices
                                   ma0010
                                   ma0032
-                                  ma0053 (Any string is accepted)
+                                  ma0053 (Any string)
    -threshold          float      [80.0] If the matrix score is greater than
                                   or equal to this percentage
                                   then a hit will be reported (Any numeric
@@ -97,7 +100,7 @@ Command line arguments
                                   the 'matrices'
                                   list. Matrices are specified in the same way
                                   as for the
-                                  selection list. (Any string is accepted)
+                                  selection list. (Any string)
    -both               boolean    [N] If set then both the forward and reverse
                                   strands are searched
 
@@ -141,13 +144,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -155,8 +160,8 @@ Input file format
 
   Input files for usage example
 
-   'tembl:m23100' is a sequence entry in the example nucleic acid
-   database 'tembl'
+   'tembl:m23100' is a sequence entry in the example nucleic acid database
+   'tembl'
 
   Database entry: tembl:m23100
 
@@ -172,8 +177,7 @@ XX
 KW   Alu repeat; insulin receptor.
 XX
 OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
-;
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
 OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
 OC   Homo.
 XX
@@ -230,76 +234,41 @@ FT                   /number=1
 FT                   /note="G00-119-352"
 XX
 SQ   Sequence 2085 BP; 417 A; 631 C; 702 G; 335 T; 0 other;
-     agatctggcc attgcactcc agcctgggca acagagaaaa actccatcta aaaaaaaaaa        6
-0
-     aaaaaaaaaa aaaaaacaga gagagagaga gagagagaga gaaggaaacg gaactggggg       12
-0
-     gaggatttgc aaaaatatgg ttagggatgg cacttcagag atgaagccat cctggagtgt       18
-0
-     tacgggcaag ggaaatgctg gggcaaagcc ccagaggcag gaataggttt ggcctgttgc       24
-0
-     atgaacagtg ggtccagctc ctagcaaact gtttattgaa tgaaagaaga atgaatgcct       30
-0
-     tgggtctagg gttgtgctgg gcgctttctt aagttttctt tcccgggtac ctccccagaa       36
-0
-     ctggcatgca ggtattatta aacccattac acaagtgaaa ctggcccaga gacagaaaag       42
-0
-     tccctggtcc aagaccacac aggagtgagg ggtggaggaa ccctcctccc attgagttct       48
-0
-     ggctttccta tactgaaagc cccttcctct cctgcagtaa ggtaggtgga accgctgtcc       54
-0
-     cgccttgttg gtgaatgtcg ttgctagact tcagacacat acaggctggt ctgctgaaaa       60
-0
-     tcagagatgt ccacctgcgc cctattcgag gtctccggcg tcttctttgg cgtcgtcttt       66
-0
-     gccctttcag aagcgtctgc acatttttcc aggtgtcatt tctccaactt gaacacaggg       72
-0
-     agcgcactgg gcacgcgggc acgtggctgt ccccaggggc ctggcttggg tctcgcccct       78
-0
-     gggccggggc gcacgcgcgg gcgggacatc tgggggcgcc cacgcgctct gggacgagtg       84
-0
-     tcgctggcca ggcccggact gaggaaaggc gagtgagaca ctactcgcct ggggtgcaaa       90
-0
-     atttaaggga gtgaaaaaaa aaaaaaaaga aagaaaccaa aaccacctcg agtcaccaaa       96
-0
-     ataaacattt taatgcagta ttttttaaaa aatcaacagg aatcctccaa agcccactat      102
-0
-     gaacaaaata gcaaaatggt agagaaagga tctgtgccgc tgcgtcgggc ctgtggggcg      108
-0
-     cctccggggg tctgaaactg gaggagactc ggggctgtag ggcgcgcgga tctggggcgc      114
-0
-     gccctcggtc ccggcgcgcc cagggcctcc cgcgcggggc ccggcacagg gaggcgggga      120
-0
-     ggcgggcggg gcggggcggg accgggcggc acctccctcc cctgcaagct ttccctccct      126
-0
-     ctcctgggcc tctcccgggc gcagagtccc ttcctaggcc agatccgcgc cgccttttcc      132
-0
-     cgcggcccgc acggggccca gctgacgggc cgcgttgttt acgggccgga gcagccctct      138
-0
-     ctcccgccgc ccgcccgcca cccgccagcc caggtgcccg cccgccagtc agctagtccg      144
-0
-     tcggtccgcg cgtccctctg tcccggagcc cgcagatcgc gacccagagc gcgcggggcc      150
-0
-     gagagccgag agacagtccc gggcgcagcg cggagctccg ggccccgaga tcctgggacg      156
-0
-     gggcccgggc cgcagcggcc ggggggtcgg ggccaccacc gcaagggcct ccgctcagta      162
-0
-     tttgtagctg gcgaagccgc gcgcgccctt cccggggctg cctctgggcc ctccccggca      168
-0
-     ggggggctgc ggcccgcggg tcgcgggcgt ggaagagaag gacgcgcggc ccccagcgcc      174
-0
-     tcttgggtgg ccgcctcgga gcatgacccc cgcgggccag cgccgcgcgc tctgatccga      180
-0
-     ggagaccccg cgctcccgca gccatgggca ccgggggccg gcggggagcg gcggccgcgc      186
-0
-     cgctgctggt ggcggtggcc gcgctgctac tgggcgccgc gggccacctg taccccggag      192
-0
-     agggtgagtc tgggggcgcg ggcgtgggcg gggagcgccg cgatggggag aggaccccac      198
-0
-     ccaagccaaa atcgatcccc cgcttgtgga ctgagaaccc tccccagggg cggggggcgg      204
-0
-     tggccaggac ggtagctcct gcatcgcgta gggggagcgg gaagc                      208
-5
+     agatctggcc attgcactcc agcctgggca acagagaaaa actccatcta aaaaaaaaaa        60
+     aaaaaaaaaa aaaaaacaga gagagagaga gagagagaga gaaggaaacg gaactggggg       120
+     gaggatttgc aaaaatatgg ttagggatgg cacttcagag atgaagccat cctggagtgt       180
+     tacgggcaag ggaaatgctg gggcaaagcc ccagaggcag gaataggttt ggcctgttgc       240
+     atgaacagtg ggtccagctc ctagcaaact gtttattgaa tgaaagaaga atgaatgcct       300
+     tgggtctagg gttgtgctgg gcgctttctt aagttttctt tcccgggtac ctccccagaa       360
+     ctggcatgca ggtattatta aacccattac acaagtgaaa ctggcccaga gacagaaaag       420
+     tccctggtcc aagaccacac aggagtgagg ggtggaggaa ccctcctccc attgagttct       480
+     ggctttccta tactgaaagc cccttcctct cctgcagtaa ggtaggtgga accgctgtcc       540
+     cgccttgttg gtgaatgtcg ttgctagact tcagacacat acaggctggt ctgctgaaaa       600
+     tcagagatgt ccacctgcgc cctattcgag gtctccggcg tcttctttgg cgtcgtcttt       660
+     gccctttcag aagcgtctgc acatttttcc aggtgtcatt tctccaactt gaacacaggg       720
+     agcgcactgg gcacgcgggc acgtggctgt ccccaggggc ctggcttggg tctcgcccct       780
+     gggccggggc gcacgcgcgg gcgggacatc tgggggcgcc cacgcgctct gggacgagtg       840
+     tcgctggcca ggcccggact gaggaaaggc gagtgagaca ctactcgcct ggggtgcaaa       900
+     atttaaggga gtgaaaaaaa aaaaaaaaga aagaaaccaa aaccacctcg agtcaccaaa       960
+     ataaacattt taatgcagta ttttttaaaa aatcaacagg aatcctccaa agcccactat      1020
+     gaacaaaata gcaaaatggt agagaaagga tctgtgccgc tgcgtcgggc ctgtggggcg      1080
+     cctccggggg tctgaaactg gaggagactc ggggctgtag ggcgcgcgga tctggggcgc      1140
+     gccctcggtc ccggcgcgcc cagggcctcc cgcgcggggc ccggcacagg gaggcgggga      1200
+     ggcgggcggg gcggggcggg accgggcggc acctccctcc cctgcaagct ttccctccct      1260
+     ctcctgggcc tctcccgggc gcagagtccc ttcctaggcc agatccgcgc cgccttttcc      1320
+     cgcggcccgc acggggccca gctgacgggc cgcgttgttt acgggccgga gcagccctct      1380
+     ctcccgccgc ccgcccgcca cccgccagcc caggtgcccg cccgccagtc agctagtccg      1440
+     tcggtccgcg cgtccctctg tcccggagcc cgcagatcgc gacccagagc gcgcggggcc      1500
+     gagagccgag agacagtccc gggcgcagcg cggagctccg ggccccgaga tcctgggacg      1560
+     gggcccgggc cgcagcggcc ggggggtcgg ggccaccacc gcaagggcct ccgctcagta      1620
+     tttgtagctg gcgaagccgc gcgcgccctt cccggggctg cctctgggcc ctccccggca      1680
+     ggggggctgc ggcccgcggg tcgcgggcgt ggaagagaag gacgcgcggc ccccagcgcc      1740
+     tcttgggtgg ccgcctcgga gcatgacccc cgcgggccag cgccgcgcgc tctgatccga      1800
+     ggagaccccg cgctcccgca gccatgggca ccgggggccg gcggggagcg gcggccgcgc      1860
+     cgctgctggt ggcggtggcc gcgctgctac tgggcgccgc gggccacctg taccccggag      1920
+     agggtgagtc tgggggcgcg ggcgtgggcg gggagcgccg cgatggggag aggaccccac      1980
+     ccaagccaaa atcgatcccc cgcttgtgga ctgagaaccc tccccagggg cggggggcgg      2040
+     tggccaggac ggtagctcct gcatcgcgta gggggagcgg gaagc                      2085
 //
 
 Output file format
@@ -312,7 +281,7 @@ Output file format
 
 ########################################
 # Program: jaspscan
-# Rundate: Tue 15 Jul 2008 12:00:00
+# Rundate: Fri 15 Jan 2010 12:00:00
 # Commandline: jaspscan
 #    -both
 #    -sequence tembl:m23100
@@ -331,62 +300,62 @@ Output file format
 #=======================================
 
   Start     End  Strand Score_Percent ID     Name   Species      Class
-  Supergroup Protein_Seq Experiment Source_PMID Info_Content Closest_Jaspar Clo
-sest_Transfac MCS_Score Built_From Sequence
-    117     126       +        82.143 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
-2 vertebrate P08047      SELEX      2192357            9.719 .              .
-                      . .          gggggaggat
-   1191    1200       +        89.286 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
-2 vertebrate P08047      SELEX      2192357            9.719 .              .
-                      . .          gaggcgggga
-   1203    1212       +        83.929 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
-2 vertebrate P08047      SELEX      2192357            9.719 .              .
-                      . .          cgggcggggc
-   1208    1217       +        89.286 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
-2 vertebrate P08047      SELEX      2192357            9.719 .              .
-                      . .          ggggcggggc
-   1213    1222       +        80.357 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
-2 vertebrate P08047      SELEX      2192357            9.719 .              .
-                      . .          ggggcgggac
-   1704    1713       +        82.143 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
-2 vertebrate P08047      SELEX      2192357            9.719 .              .
-                      . .          cgggcgtgga
-   1838    1847       +        82.143 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
-2 vertebrate P08047      SELEX      2192357            9.719 .              .
-                      . .          ccggcgggga
-   1933    1942       +        82.143 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
-2 vertebrate P08047      SELEX      2192357            9.719 .              .
-                      . .          ggggcgcggg
-   1945    1954       +        89.286 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
-2 vertebrate P08047      SELEX      2192357            9.719 .              .
-                      . .          tgggcgggga
-   2027    2036       +        89.286 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
-2 vertebrate P08047      SELEX      2192357            9.719 .              .
-                      . .          ggggcggggg
-   2032    2041       +        87.500 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
-2 vertebrate P08047      SELEX      2192357            9.719 .              .
-                      . .          ggggggcggt
-   2034    2043       +        82.143 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
-2 vertebrate P08047      SELEX      2192357            9.719 .              .
-                      . .          ggggcggtgg
-   1252    1261       -        80.357 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
-2 vertebrate P08047      SELEX      2192357            9.719 .              .
-                      . .          gagggaggga
-   1304    1313       -        80.357 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
-2 vertebrate P08047      SELEX      2192357            9.719 .              .
-                      . .          gcggcgcgga
-   1805    1814       -        80.357 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
-2 vertebrate P08047      SELEX      2192357            9.719 .              .
-                      . .          agcgcggggt
-   1974    1983       -        89.286 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
-2 vertebrate P08047      SELEX      2192357            9.719 .              .
-                      . .          tgggtggggt
-   2016    2025       -        80.357 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
-2 vertebrate P08047      SELEX      2192357            9.719 .              .
-                      . .          ggggagggtt
-   2017    2026       -        87.500 MA0079 SP1    Homo sapiens ZN-FINGER, C2H
-2 vertebrate P08047      SELEX      2192357            9.719 .              .
-                      . .          tggggagggt
+ Supergroup Protein_Seq Experiment Source_PMID Info_Content Closest_Jaspar Close
+st_Transfac MCS_Score Built_From Sequence
+    117     126       +        82.143 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
+ vertebrate P08047      SELEX      2192357            9.719 .              .
+                    . .          gggggaggat
+   1191    1200       +        89.286 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
+ vertebrate P08047      SELEX      2192357            9.719 .              .
+                    . .          gaggcgggga
+   1203    1212       +        83.929 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
+ vertebrate P08047      SELEX      2192357            9.719 .              .
+                    . .          cgggcggggc
+   1208    1217       +        89.286 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
+ vertebrate P08047      SELEX      2192357            9.719 .              .
+                    . .          ggggcggggc
+   1213    1222       +        80.357 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
+ vertebrate P08047      SELEX      2192357            9.719 .              .
+                    . .          ggggcgggac
+   1704    1713       +        82.143 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
+ vertebrate P08047      SELEX      2192357            9.719 .              .
+                    . .          cgggcgtgga
+   1838    1847       +        82.143 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
+ vertebrate P08047      SELEX      2192357            9.719 .              .
+                    . .          ccggcgggga
+   1933    1942       +        82.143 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
+ vertebrate P08047      SELEX      2192357            9.719 .              .
+                    . .          ggggcgcggg
+   1945    1954       +        89.286 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
+ vertebrate P08047      SELEX      2192357            9.719 .              .
+                    . .          tgggcgggga
+   2027    2036       +        89.286 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
+ vertebrate P08047      SELEX      2192357            9.719 .              .
+                    . .          ggggcggggg
+   2032    2041       +        87.500 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
+ vertebrate P08047      SELEX      2192357            9.719 .              .
+                    . .          ggggggcggt
+   2034    2043       +        82.143 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
+ vertebrate P08047      SELEX      2192357            9.719 .              .
+                    . .          ggggcggtgg
+   1252    1261       -        80.357 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
+ vertebrate P08047      SELEX      2192357            9.719 .              .
+                    . .          gagggaggga
+   1304    1313       -        80.357 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
+ vertebrate P08047      SELEX      2192357            9.719 .              .
+                    . .          gcggcgcgga
+   1805    1814       -        80.357 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
+ vertebrate P08047      SELEX      2192357            9.719 .              .
+                    . .          agcgcggggt
+   1974    1983       -        89.286 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
+ vertebrate P08047      SELEX      2192357            9.719 .              .
+                    . .          tgggtggggt
+   2016    2025       -        80.357 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
+ vertebrate P08047      SELEX      2192357            9.719 .              .
+                    . .          ggggagggtt
+   2017    2026       -        87.500 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
+ vertebrate P08047      SELEX      2192357            9.719 .              .
+                    . .          tggggagggt
 
 #---------------------------------------
 #---------------------------------------
@@ -406,11 +375,12 @@ Data files
 
 % embossdata -fetch -file Exxx.dat
 
+
    Users can provide their own data files in their own directories.
    Project specific files can be put in the current directory, or for
-   tidier directory listings in a subdirectory called ".embossdata".
-   Files for all EMBOSS runs can be put in the user's home directory, or
-   again in a subdirectory called ".embossdata".
+   tidier directory listings in a subdirectory called ".embossdata". Files
+   for all EMBOSS runs can be put in the user's home directory, or again
+   in a subdirectory called ".embossdata".
 
    The directories are searched in the following order:
      * . (your current directory)
@@ -467,7 +437,7 @@ See also
 
 Author(s)
 
-   Alan             Bleasby (ajb © ebi.ac.uk)
+   Alan             Bleasby (ajb (c) ebi.ac.uk)
    European         Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton,         Cambridge CB10 1SD, UK
 

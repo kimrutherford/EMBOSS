@@ -1,5 +1,4 @@
-
-                                  seealso 
+                                   seealso
 
 
 
@@ -18,28 +17,32 @@ Description
 
    seealso takes the name of an EMBOSS or EMBASSY program and returns a
    list of applications in the same functional group. Application names
-   and short descriptions are listed. Optionally, the output is written
-   to an HTML table.
+   and short descriptions are listed. Optionally, the output is written to
+   an HTML table.
 
 Usage
 
    Here is a sample session with seealso
 
 
-% seealso 
+% seealso
 Finds programs with similar function to a specified program
 Program to search for: matcher
 
 SEE ALSO
 seqmatchall  All-against-all word comparison of a sequence set
-supermatcher Calculate approximate local pair-wise alignments of larger sequenc
-es
+supermatcher Calculate approximate local pair-wise alignments of larger sequence
+s
 water        Smith-Waterman local alignment of sequences
 wordfinder   Match large sequences against one or more other sequences
 wordmatch    Finds regions of identity (exact matches) of two sequences
 
 
+
 Command line arguments
+
+Finds programs with similar function to a specified program
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-search]            string     Enter the name of an EMBOSS program (Any
@@ -99,8 +102,7 @@ Command line arguments
                                   libraries and share the same look and feel,
                                   but are generally developed by people who
                                   wish the programs to be outside of the GNU
-                                  Public Licence scheme (Any string is
-                                  accepted)
+                                  Public Licence scheme (Any string)
    -colon              boolean    [N] The groups that EMBOSS applications
                                   belong to have up to two levels, for example
                                   the primary group 'ALIGNMENT' has several
@@ -125,13 +127,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -153,19 +157,18 @@ Notes
 
    The functional group of a program is set in its ACD file; this is an
    EMBOSS system file which specifies the application command-line
-   interface such as required parameters, help on the parameters,
-   one-line description of the program and so on. Normally the names of
-   the groups are fairly specific. For example "NUCLEIC COMPOSITION" is a
-   small group of applications for nucleotide sequence composition
-   analysis.
+   interface such as required parameters, help on the parameters, one-line
+   description of the program and so on. Normally the names of the groups
+   are fairly specific. For example "NUCLEIC COMPOSITION" is a small group
+   of applications for nucleotide sequence composition analysis.
 
    The -explode qualifier will increase the number of groups that the
    program retrieves by splitting the group name at selected points to
    produce such groups as: "NUCLEIC", "NUCLEIC COMPOSITION" and
    "COMPOSITION". All programs with the exploded group names which also
-   include "NUCLEIC" and "COMPOSITION" will now be reported. The result
-   of this qualifier is thus a report of a larger number of programs with
-   a more tenuous link to the specified program.
+   include "NUCLEIC" and "COMPOSITION" will now be reported. The result of
+   this qualifier is thus a report of a larger number of programs with a
+   more tenuous link to the specified program.
 
    The groups that the program belongs to can be output by using the
    -groups qualifier.
@@ -187,6 +190,7 @@ Diagnostic Error Messages
 
 FATAL ERROR: No application specified.
 
+
    is output if a non-existent program name is specified.
 
 Exit status
@@ -200,48 +204,46 @@ Known bugs
 
 See also
 
-   Program name     Description
-   abiview          Display the trace in an ABI sequencer file
-   cirdna           Draws circular maps of DNA constructs
-   infoalign        Display basic information about a multiple sequence
-                    alignment
-   infobase         Return information on a given nucleotide base
-   inforesidue      Return information on a given amino acid residue
-   infoseq          Display basic information about sequences
-   lindna           Draws linear maps of DNA constructs
-   pepnet           Draw a helical net for a protein sequence
-   pepwheel         Draw a helical wheel diagram for a protein sequence
-   prettyplot       Draw a sequence alignment with pretty formatting
-   prettyseq        Write a nucleotide sequence and its translation to file
-   remap            Display restriction enzyme binding sites in a nucleotide
-                    sequence
-   showalign        Display a multiple sequence alignment in pretty format
-   showdb           Displays information on configured databases
-   showfeat         Display features of a sequence in pretty format
-   showpep          Displays protein sequences with features in pretty format
-   showseq          Displays sequences with features in pretty format
-   sixpack          Display a DNA sequence with 6-frame translation and ORFs
-   textsearch       Search the textual description of sequence(s)
-   tfm              Displays full documentation for an application
-   whichdb          Search all sequence databases for an entry and retrieve it
-   wossname         Finds programs by keywords in their short description
+                   Program name                            Description
+                   abiview      Display the trace in an ABI sequencer file
+                   cirdna       Draws circular maps of DNA constructs
+                   infoalign    Display basic information about a multiple sequence alignment
+                   infobase     Return information on a given nucleotide base
+                   inforesidue  Return information on a given amino acid residue
+                   infoseq      Display basic information about sequences
+                   lindna       Draws linear maps of DNA constructs
+                   pepnet       Draw a helical net for a protein sequence
+                   pepwheel     Draw a helical wheel diagram for a protein sequence
+                   prettyplot   Draw a sequence alignment with pretty formatting
+                   prettyseq    Write a nucleotide sequence and its translation to file
+                   remap        Display restriction enzyme binding sites in a nucleotide sequence
+                   showalign    Display a multiple sequence alignment in pretty format
+                   showdb       Displays information on configured databases
+                   showfeat     Display features of a sequence in pretty format
+                   showpep      Displays protein sequences with features in pretty format
+                   showseq      Displays sequences with features in pretty format
+                   sixpack      Display a DNA sequence with 6-frame translation and ORFs
+                   textsearch   Search the textual description of sequence(s)
+                   tfm          Displays full documentation for an application
+                   whichdb      Search all sequence databases for an entry and retrieve it
+                   wossname     Finds programs by keywords in their short description
 
 Author(s)
 
-   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
-   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
-   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+   Gary             Williams (gwilliam (c) rfcgr.mrc.ac.uk)
+   MRC              Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome           Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 History
 
-   Written 16 June 2000 in response to a need to improve the automatic
-   construction of EMBOSS documentation web pages.
+                    Written 16 June 2000 in response to a need to improve the automatic
+                    construction of EMBOSS documentation web pages.
 
 Target users
 
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
 
 Comments
 
-   None
+                    None

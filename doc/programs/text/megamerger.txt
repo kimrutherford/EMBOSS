@@ -1,5 +1,4 @@
-
-                                megamerger 
+                                 megamerger
 
 
 
@@ -18,38 +17,42 @@ Description
 
    megamerger reads two overlapping input DNA sequences and uses a
    word-match algorithm to align the sequences. A merged sequence is
-   generated from the alignment and writen to the output file. The
-   actions megamerger took in generating the merged sequence are written
-   to an output file. The sequences can be very long.
+   generated from the alignment and writen to the output file. The actions
+   megamerger took in generating the merged sequence are written to an
+   output file. The sequences can be very long.
 
 Algorithm
 
-   The program does a match of all sequence words of size 20 (by
-   default). It then reduces this to the minimum set of overlapping
-   matches by sorting the matches in order of size (largest size first)
-   and then for each such match it removes any smaller matches that
-   overlap. The result is a set of the longest ungapped alignments
-   between the two sequences that do not overlap with each other. If the
-   two sequences are identical in their region of overlap then there will
-   be one region of match and no mismatches. Where there is a mismatch,
-   the merged sequence uses bases from the sequence whose mismatch region
-   is furthest from the start or end of the sequence.
+   The program does a match of all sequence words of size 20 (by default).
+   It then reduces this to the minimum set of overlapping matches by
+   sorting the matches in order of size (largest size first) and then for
+   each such match it removes any smaller matches that overlap. The result
+   is a set of the longest ungapped alignments between the two sequences
+   that do not overlap with each other. If the two sequences are identical
+   in their region of overlap then there will be one region of match and
+   no mismatches. Where there is a mismatch, the merged sequence uses
+   bases from the sequence whose mismatch region is furthest from the
+   start or end of the sequence.
 
 Usage
 
    Here is a sample session with megamerger
 
 
-% megamerger tembl:v00295 tembl:v00296 
+% megamerger tembl:v00295 tembl:v00296
 Merge two large overlapping DNA sequences
-Word size [20]: 
-output sequence [v00295.merged]: 
+Word size [20]:
+output sequence [v00295.merged]:
 Output file [v00295.megamerger]: report
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
+
+Merge two large overlapping DNA sequences
+Version: EMBOSS:6.2.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         sequence   Nucleotide sequence filename and optional
@@ -132,13 +135,15 @@ Command line arguments
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
@@ -146,8 +151,8 @@ Input file format
 
   Input files for usage example
 
-   'tembl:v00295' is a sequence entry in the example nucleic acid
-   database 'tembl'
+   'tembl:v00295' is a sequence entry in the example nucleic acid database
+   'tembl'
 
   Database entry: tembl:v00295
 
@@ -201,20 +206,13 @@ FT                   /db_xref="InterPro:IPR018457"
 FT                   /db_xref="PDB:2V8N"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P02920"
 FT                   /protein_id="CAA23571.1"
-FT                   /translation="MYYLKNTNFWMFGLFFFFYFFIMGAYFPFFPIWLHDINHISKSD
-T
-FT                   GIIFAAISLFSLLFQPLFGLLSDKLGLRKYLLWIITGMLVMFAPFFIFIFGPLLQYNI
-L
-FT                   VGSIVGGIYLGFCFNAGAPAVEAFIEKVSRRSNFEFGRARMFGCVGWALCASIVGIMF
-T
-FT                   INNQFVFWLGSGCALILAVLLFFAKTDAPSSATVANAVGANHSAFSLKLALELFRQPK
-L
-FT                   WFLSLYVIGVSCTYDVFDQQFANFFTSFFATGEQGTRVFGYVTTMGELLNASIMFFAP
-L
-FT                   IINRIGGKNALLLAGTIMSVRIIGSSFATSALEVVILKTLHMFEVPFLLVGCFKYITS
-Q
-FT                   FEVRFSATIYLVCFCFFKQLAMIFMSVLAGNMYESIGFQGAYLVLGLVALGFTLISVF
-T
+FT                   /translation="MYYLKNTNFWMFGLFFFFYFFIMGAYFPFFPIWLHDINHISKSDT
+FT                   GIIFAAISLFSLLFQPLFGLLSDKLGLRKYLLWIITGMLVMFAPFFIFIFGPLLQYNIL
+FT                   VGSIVGGIYLGFCFNAGAPAVEAFIEKVSRRSNFEFGRARMFGCVGWALCASIVGIMFT
+FT                   INNQFVFWLGSGCALILAVLLFFAKTDAPSSATVANAVGANHSAFSLKLALELFRQPKL
+FT                   WFLSLYVIGVSCTYDVFDQQFANFFTSFFATGEQGTRVFGYVTTMGELLNASIMFFAPL
+FT                   IINRIGGKNALLLAGTIMSVRIIGSSFATSALEVVILKTLHMFEVPFLLVGCFKYITSQ
+FT                   FEVRFSATIYLVCFCFFKQLAMIFMSVLAGNMYESIGFQGAYLVLGLVALGFTLISVFT
 FT                   LSGPGPLSLLRRQVNEVA"
 FT   CDS             1423..>1500
 FT                   /transl_table=11
@@ -227,56 +225,31 @@ FT                   /protein_id="CAA23572.1"
 FT                   /translation="MNMPMTERIRAGKLFTDMCEGLPEKR"
 XX
 SQ   Sequence 1500 BP; 315 A; 342 C; 357 G; 486 T; 0 other;
-     ttccagctga gcgccggtcg ctaccattac cagttggtct ggtgtcaaaa ataataataa        6
-0
-     ccgggcaggc catgtctgcc cgtatttcgc gtaaggaaat ccattatgta ctatttaaaa       12
-0
-     aacacaaact tttggatgtt cggtttattc tttttctttt acttttttat catgggagcc       18
-0
-     tacttcccgt ttttcccgat ttggctacat gacatcaacc atatcagcaa aagtgatacg       24
-0
-     ggtattattt ttgccgctat ttctctgttc tcgctattat tccaaccgct gtttggtctg       30
-0
-     ctttctgaca aactcgggct gcgcaaatac ctgctgtgga ttattaccgg catgttagtg       36
-0
-     atgtttgcgc cgttctttat ttttatcttc gggccactgt tacaatacaa cattttagta       42
-0
-     ggatcgattg ttggtggtat ttatctaggc ttttgtttta acgccggtgc gccagcagta       48
-0
-     gaggcattta ttgagaaagt cagccgtcgc agtaatttcg aatttggtcg cgcgcggatg       54
-0
-     tttggctgtg ttggctgggc gctgtgtgcc tcgattgtcg gcatcatgtt caccatcaat       60
-0
-     aatcagtttg ttttctggct gggctctggc tgtgcactca tcctcgccgt tttactcttt       66
-0
-     ttcgccaaaa cggatgcgcc ctcttctgcc acggttgcca atgcggtagg tgccaaccat       72
-0
-     tcggcattta gccttaagct ggcactggaa ctgttcagac agccaaaact gtggtttttg       78
-0
-     tcactgtatg ttattggcgt ttcctgcacc tacgatgttt ttgaccaaca gtttgctaat       84
-0
-     ttctttactt cgttctttgc taccggtgaa cagggtacgc gggtatttgg ctacgtaacg       90
-0
-     acaatgggcg aattacttaa cgcctcgatt atgttctttg cgccactgat cattaatcgc       96
-0
-     atcggtggga aaaacgccct gctgctggct ggcactatta tgtctgtacg tattattggc      102
-0
-     tcatcgttcg ccacctcagc gctggaagtg gttattctga aaacgctgca tatgtttgaa      108
-0
-     gtaccgttcc tgctggtggg ctgctttaaa tatattacca gccagtttga agtgcgtttt      114
-0
-     tcagcgacga tttatctggt ctgtttctgc ttctttaagc aactggcgat gatttttatg      120
-0
-     tctgtactgg cgggcaatat gtatgaaagc atcggtttcc agggcgctta tctggtgctg      126
-0
-     ggtctggtgg cgctgggctt caccttaatt tccgtgttca cgcttagcgg ccccggcccg      132
-0
-     ctttccctgc tgcgtcgtca ggtgaatgaa gtcgcttaag caatcaatgt cggatgcggc      138
-0
-     gcgacgctta tccgaccaac atatcataac ggagtgatcg cattgaacat gccaatgacc      144
-0
-     gaaagaataa gagcaggcaa gctatttacc gatatgtgcg aaggcttacc ggaaaaaaga      150
-0
+     ttccagctga gcgccggtcg ctaccattac cagttggtct ggtgtcaaaa ataataataa        60
+     ccgggcaggc catgtctgcc cgtatttcgc gtaaggaaat ccattatgta ctatttaaaa       120
+     aacacaaact tttggatgtt cggtttattc tttttctttt acttttttat catgggagcc       180
+     tacttcccgt ttttcccgat ttggctacat gacatcaacc atatcagcaa aagtgatacg       240
+     ggtattattt ttgccgctat ttctctgttc tcgctattat tccaaccgct gtttggtctg       300
+     ctttctgaca aactcgggct gcgcaaatac ctgctgtgga ttattaccgg catgttagtg       360
+     atgtttgcgc cgttctttat ttttatcttc gggccactgt tacaatacaa cattttagta       420
+     ggatcgattg ttggtggtat ttatctaggc ttttgtttta acgccggtgc gccagcagta       480
+     gaggcattta ttgagaaagt cagccgtcgc agtaatttcg aatttggtcg cgcgcggatg       540
+     tttggctgtg ttggctgggc gctgtgtgcc tcgattgtcg gcatcatgtt caccatcaat       600
+     aatcagtttg ttttctggct gggctctggc tgtgcactca tcctcgccgt tttactcttt       660
+     ttcgccaaaa cggatgcgcc ctcttctgcc acggttgcca atgcggtagg tgccaaccat       720
+     tcggcattta gccttaagct ggcactggaa ctgttcagac agccaaaact gtggtttttg       780
+     tcactgtatg ttattggcgt ttcctgcacc tacgatgttt ttgaccaaca gtttgctaat       840
+     ttctttactt cgttctttgc taccggtgaa cagggtacgc gggtatttgg ctacgtaacg       900
+     acaatgggcg aattacttaa cgcctcgatt atgttctttg cgccactgat cattaatcgc       960
+     atcggtggga aaaacgccct gctgctggct ggcactatta tgtctgtacg tattattggc      1020
+     tcatcgttcg ccacctcagc gctggaagtg gttattctga aaacgctgca tatgtttgaa      1080
+     gtaccgttcc tgctggtggg ctgctttaaa tatattacca gccagtttga agtgcgtttt      1140
+     tcagcgacga tttatctggt ctgtttctgc ttctttaagc aactggcgat gatttttatg      1200
+     tctgtactgg cgggcaatat gtatgaaagc atcggtttcc agggcgctta tctggtgctg      1260
+     ggtctggtgg cgctgggctt caccttaatt tccgtgttca cgcttagcgg ccccggcccg      1320
+     ctttccctgc tgcgtcgtca ggtgaatgaa gtcgcttaag caatcaatgt cggatgcggc      1380
+     gcgacgctta tccgaccaac atatcataac ggagtgatcg cattgaacat gccaatgacc      1440
+     gaaagaataa gagcaggcaa gctatttacc gatatgtgcg aaggcttacc ggaaaaaaga      1500
 //
 
   Database entry: tembl:v00296
@@ -326,132 +299,77 @@ FT                   /db_xref="InterPro:IPR014718"
 FT                   /db_xref="PDB:3DYP"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P00722"
 FT                   /protein_id="CAA23573.1"
-FT                   /translation="TMITDSLAVVLQRRDWENPGVTQLNRLAAHPPFASWRNSEEART
-D
-FT                   RPSQQLRSLNGEWRFAWFPAPEAVPESWLECDLPEADTVVVPSNWQMHGYDAPIYTNV
-T
-FT                   YPITVNPPFVPTENPTGCYSLTFNVDESWLQEGQTRIIFDGVNSAFHLWCNGRWVGYG
-Q
-FT                   DSRLPSEFDLSAFLRAGENRLAVMVLRWSDGSYLEDQDMWRMSGIFRDVSLLHKPTTQ
-I
-FT                   SDFHVATRFNDDFSRAVLEAEVQMCGELRDYLRVTVSLWQGETQVASGTAPFGGEIID
-E
+FT                   /translation="TMITDSLAVVLQRRDWENPGVTQLNRLAAHPPFASWRNSEEARTD
+FT                   RPSQQLRSLNGEWRFAWFPAPEAVPESWLECDLPEADTVVVPSNWQMHGYDAPIYTNVT
+FT                   YPITVNPPFVPTENPTGCYSLTFNVDESWLQEGQTRIIFDGVNSAFHLWCNGRWVGYGQ
+FT                   DSRLPSEFDLSAFLRAGENRLAVMVLRWSDGSYLEDQDMWRMSGIFRDVSLLHKPTTQI
+FT                   SDFHVATRFNDDFSRAVLEAEVQMCGELRDYLRVTVSLWQGETQVASGTAPFGGEIIDE
 
 
   [Part of this file has been deleted for brevity]
 
-     gaggcccgca ccgatcgccc ttcccaacag ttgcgcagcc tgaatggcga atggcgcttt       18
-0
-     gcctggtttc cggcaccaga agcggtgccg gaaagctggc tggagtgcga tcttcctgag       24
-0
-     gccgatactg tcgtcgtccc ctcaaactgg cagatgcacg gttacgatgc gcccatctac       30
-0
-     accaacgtaa cctatcccat tacggtcaat ccgccgtttg ttcccacgga gaatccgacg       36
-0
-     ggttgttact cgctcacatt taatgttgat gaaagctggc tacaggaagg ccagacgcga       42
-0
-     attatttttg atggcgttaa ctcggcgttt catctgtggt gcaacgggcg ctgggtcggt       48
-0
-     tacggccagg acagtcgttt gccgtctgaa tttgacctga gcgcattttt acgcgccgga       54
-0
-     gaaaaccgcc tcgcggtgat ggtgctgcgt tggagtgacg gcagttatct ggaagatcag       60
-0
-     gatatgtggc ggatgagcgg cattttccgt gacgtctcgt tgctgcataa accgactaca       66
-0
-     caaatcagcg atttccatgt tgccactcgc tttaatgatg atttcagccg cgctgtactg       72
-0
-     gaggctgaag ttcagatgtg cggcgagttg cgtgactacc tacgggtaac agtttcttta       78
-0
-     tggcagggtg aaacgcaggt cgccagcggc accgcgcctt tcggcggtga aattatcgat       84
-0
-     gagcgtggtg gttatgccga tcgcgtcaca ctacgtctga acgtcgaaaa cccgaaactg       90
-0
-     tggagcgccg aaatcccgaa tctctatcgt gcggtggttg aactgcacac cgccgacggc       96
-0
-     acgctgattg aagcagaagc ctgcgatgtc ggtttccgcg aggtgcggat tgaaaatggt      102
-0
-     ctgctgctgc tgaacggcaa gccgttgctg attcgaggcg ttaaccgtca cgagcatcat      108
-0
-     cctctgcatg gtcaggtcat ggatgagcag acgatggtgc aggatatcct gctgatgaag      114
-0
-     cagaacaact ttaacgccgt gcgctgttcg cattatccga accatccgct gtggtacacg      120
-0
-     ctgtgcgacc gctacggcct gtatgtggtg gatgaagcca atattgaaac ccacggcatg      126
-0
-     gtgccaatga atcgtctgac cgatgatccg cgctggctac cggcgatgag cgaacgcgta      132
-0
-     acgcgaatgg tgcagcgcga tcgtaatcac ccgagtgtga tcatctggtc gctggggaat      138
-0
-     gaatcaggcc acggcgctaa tcacgacgcg ctgtatcgct ggatcaaatc tgtcgatcct      144
-0
-     tcccgcccgg tgcagtatga aggcggcgga gccgacacca cggccaccga tattatttgc      150
-0
-     ccgatgtacg cgcgcgtgga tgaagaccag cccttcccgg ctgtgccgaa atggtccatc      156
-0
-     aaaaaatggc tttcgctacc tggagagacg cgcccgctga tcctttgcga atacgcccac      162
-0
-     gcgatgggta acagtcttgg cggtttcgct aaatactggc aggcgtttcg tcagtatccc      168
-0
-     cgtttacagg gcggcttcgt ctgggactgg gtggatcagt cgctgattaa atatgatgaa      174
-0
-     aacggcaacc cgtggtcggc ttacggcggt gattttggcg atacgccgaa cgatcgccag      180
-0
-     ttctgtatga acggtctggt ctttgccgac cgcacgccgc atccagcgct gacggaagca      186
-0
-     aaacaccagc agcagttttt ccagttccgt ttatccgggc aaaccatcga agtgaccagc      192
-0
-     gaatacctgt tccgtcatag cgataacgag ctcctgcact ggatggtggc gctggatggt      198
-0
-     aagccgctgg caagcggtga agtgcctctg gatgtcgctc cacaaggtaa acagttgatt      204
-0
-     gaactgcctg aactaccgca gccggagagc gccgggcaac tctggctcac agtacgcgta      210
-0
-     gtgcaaccga acgcgaccgc atggtcagaa gccgggcaca tcagcgcctg gcagcagtgg      216
-0
-     cgtctggcgg aaaacctcag tgtgacgctc cccgccgcgt cccacgccat cccgcatctg      222
-0
-     accaccagcg aaatggattt ttgcatcgag ctgggtaata agcgttggca atttaaccgc      228
-0
-     cagtcaggct ttctttcaca gatgtggatt ggcgataaaa aacaactgct gacgccgctg      234
-0
-     cgcgatcagt tcacccgtgc accgctggat aacgacattg gcgtaagtga agcgacccgc      240
-0
-     attgacccta acgcctgggt cgaacgctgg aaggcggcgg gccattacca ggccgaagca      246
-0
-     gcgttgttgc agtgcacggc agatacactt gctgatgcgg tgctgattac gaccgctcac      252
-0
-     gcgtggcagc atcaggggaa aaccttattt atcagccgga aaacctaccg gattgatggt      258
-0
-     agtggtcaaa tggcgattac cgttgatgtt gaagtggcga gcgatacacc gcatccggcg      264
-0
-     cggattggcc tgaactgcca gctggcgcag gtagcagagc gggtaaactg gctcggatta      270
-0
-     gggccgcaag aaaactatcc cgaccgcctt actgccgcct gttttgaccg ctgggatctg      276
-0
-     ccattgtcag acatgtatac cccgtacgtc ttcccgagcg aaaacggtct gcgctgcggg      282
-0
-     acgcgcgaat tgaattatgg cccacaccag tggcgcggcg acttccagtt caacatcagc      288
-0
-     cgctacagtc aacagcaact gatggaaacc agccatcgcc atctgctgca cgcggaagaa      294
-0
-     ggcacatggc tgaatatcga cggtttccat atggggattg gtggcgacga ctcctggagc      300
-0
-     ccgtcagtat cggcggaatt ccagctgagc gccggtcgct accattacca gttggtctgg      306
-0
-     tgtcaaaaat aataataa                                                    307
-8
+     gaggcccgca ccgatcgccc ttcccaacag ttgcgcagcc tgaatggcga atggcgcttt       180
+     gcctggtttc cggcaccaga agcggtgccg gaaagctggc tggagtgcga tcttcctgag       240
+     gccgatactg tcgtcgtccc ctcaaactgg cagatgcacg gttacgatgc gcccatctac       300
+     accaacgtaa cctatcccat tacggtcaat ccgccgtttg ttcccacgga gaatccgacg       360
+     ggttgttact cgctcacatt taatgttgat gaaagctggc tacaggaagg ccagacgcga       420
+     attatttttg atggcgttaa ctcggcgttt catctgtggt gcaacgggcg ctgggtcggt       480
+     tacggccagg acagtcgttt gccgtctgaa tttgacctga gcgcattttt acgcgccgga       540
+     gaaaaccgcc tcgcggtgat ggtgctgcgt tggagtgacg gcagttatct ggaagatcag       600
+     gatatgtggc ggatgagcgg cattttccgt gacgtctcgt tgctgcataa accgactaca       660
+     caaatcagcg atttccatgt tgccactcgc tttaatgatg atttcagccg cgctgtactg       720
+     gaggctgaag ttcagatgtg cggcgagttg cgtgactacc tacgggtaac agtttcttta       780
+     tggcagggtg aaacgcaggt cgccagcggc accgcgcctt tcggcggtga aattatcgat       840
+     gagcgtggtg gttatgccga tcgcgtcaca ctacgtctga acgtcgaaaa cccgaaactg       900
+     tggagcgccg aaatcccgaa tctctatcgt gcggtggttg aactgcacac cgccgacggc       960
+     acgctgattg aagcagaagc ctgcgatgtc ggtttccgcg aggtgcggat tgaaaatggt      1020
+     ctgctgctgc tgaacggcaa gccgttgctg attcgaggcg ttaaccgtca cgagcatcat      1080
+     cctctgcatg gtcaggtcat ggatgagcag acgatggtgc aggatatcct gctgatgaag      1140
+     cagaacaact ttaacgccgt gcgctgttcg cattatccga accatccgct gtggtacacg      1200
+     ctgtgcgacc gctacggcct gtatgtggtg gatgaagcca atattgaaac ccacggcatg      1260
+     gtgccaatga atcgtctgac cgatgatccg cgctggctac cggcgatgag cgaacgcgta      1320
+     acgcgaatgg tgcagcgcga tcgtaatcac ccgagtgtga tcatctggtc gctggggaat      1380
+     gaatcaggcc acggcgctaa tcacgacgcg ctgtatcgct ggatcaaatc tgtcgatcct      1440
+     tcccgcccgg tgcagtatga aggcggcgga gccgacacca cggccaccga tattatttgc      1500
+     ccgatgtacg cgcgcgtgga tgaagaccag cccttcccgg ctgtgccgaa atggtccatc      1560
+     aaaaaatggc tttcgctacc tggagagacg cgcccgctga tcctttgcga atacgcccac      1620
+     gcgatgggta acagtcttgg cggtttcgct aaatactggc aggcgtttcg tcagtatccc      1680
+     cgtttacagg gcggcttcgt ctgggactgg gtggatcagt cgctgattaa atatgatgaa      1740
+     aacggcaacc cgtggtcggc ttacggcggt gattttggcg atacgccgaa cgatcgccag      1800
+     ttctgtatga acggtctggt ctttgccgac cgcacgccgc atccagcgct gacggaagca      1860
+     aaacaccagc agcagttttt ccagttccgt ttatccgggc aaaccatcga agtgaccagc      1920
+     gaatacctgt tccgtcatag cgataacgag ctcctgcact ggatggtggc gctggatggt      1980
+     aagccgctgg caagcggtga agtgcctctg gatgtcgctc cacaaggtaa acagttgatt      2040
+     gaactgcctg aactaccgca gccggagagc gccgggcaac tctggctcac agtacgcgta      2100
+     gtgcaaccga acgcgaccgc atggtcagaa gccgggcaca tcagcgcctg gcagcagtgg      2160
+     cgtctggcgg aaaacctcag tgtgacgctc cccgccgcgt cccacgccat cccgcatctg      2220
+     accaccagcg aaatggattt ttgcatcgag ctgggtaata agcgttggca atttaaccgc      2280
+     cagtcaggct ttctttcaca gatgtggatt ggcgataaaa aacaactgct gacgccgctg      2340
+     cgcgatcagt tcacccgtgc accgctggat aacgacattg gcgtaagtga agcgacccgc      2400
+     attgacccta acgcctgggt cgaacgctgg aaggcggcgg gccattacca ggccgaagca      2460
+     gcgttgttgc agtgcacggc agatacactt gctgatgcgg tgctgattac gaccgctcac      2520
+     gcgtggcagc atcaggggaa aaccttattt atcagccgga aaacctaccg gattgatggt      2580
+     agtggtcaaa tggcgattac cgttgatgtt gaagtggcga gcgatacacc gcatccggcg      2640
+     cggattggcc tgaactgcca gctggcgcag gtagcagagc gggtaaactg gctcggatta      2700
+     gggccgcaag aaaactatcc cgaccgcctt actgccgcct gttttgaccg ctgggatctg      2760
+     ccattgtcag acatgtatac cccgtacgtc ttcccgagcg aaaacggtct gcgctgcggg      2820
+     acgcgcgaat tgaattatgg cccacaccag tggcgcggcg acttccagtt caacatcagc      2880
+     cgctacagtc aacagcaact gatggaaacc agccatcgcc atctgctgca cgcggaagaa      2940
+     ggcacatggc tgaatatcga cggtttccat atggggattg gtggcgacga ctcctggagc      3000
+     ccgtcagtat cggcggaatt ccagctgagc gccggtcgct accattacca gttggtctgg      3060
+     tgtcaaaaat aataataa                                                    3078
 //
 
 Output file format
 
    The actions megamerger took in generating the merged sequence are
    written to an output file. Any actions that require a choice between
-   using regions of the two sequences where they have a mismatch is
-   marked with the word WARNING!. Where there was a mismatch between the
-   two sequences, the merged sequence is written out in uppercase and the
-   sequence whose mismatch region is furthest from the end of the
-   sequence (the one with most remaining bases or residues) is used in
-   the merged sequence.
+   using regions of the two sequences where they have a mismatch is marked
+   with the word WARNING!. Where there was a mismatch between the two
+   sequences, the merged sequence is written out in uppercase and the
+   sequence whose mismatch region is furthest from the end of the sequence
+   (the one with most remaining bases or residues) is used in the merged
+   sequence.
 
    The name and description of the first input sequence is used for the
    name and description of the output sequence.
@@ -474,6 +392,7 @@ V00295 overlap ends at 60
 V00296 overlap ends at 3078
 
 Using V00295 61-1500 as the final sequence
+
 
   File: v00295.merged
 
@@ -559,8 +478,8 @@ ggcttaccggaaaaaaga
 
    Where there has been a mismatch between the two sequences, the merged
    sequence is written out in uppercase and the sequence whose mismatch
-   region is furthest from the edges of the sequence is used in the
-   merged sequence.
+   region is furthest from the edges of the sequence is used in the merged
+   sequence.
 
    The name and description of the first input sequence is used for the
    name and description of the output sequence.
@@ -622,7 +541,7 @@ See also
 
 Author(s)
 
-   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   Gary Williams (gwilliam (c) rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 

@@ -1,6 +1,7 @@
 application: degapseq [
   documentation: "Removes non-alphabetic (e.g. gap) characters from sequences"
   groups: "Edit"
+  relations: "EDAM: Sequence cutting"
 ]
 
 section: input [
@@ -11,6 +12,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "gapany"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: input
@@ -22,6 +24,7 @@ section: output [
 
   seqoutall: outseq [
     parameter: "Y"
+    relations: "EDAM: Sequence record"                                     
   ]
 
 endsection: output
