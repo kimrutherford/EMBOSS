@@ -108,9 +108,6 @@ install-stamp:
 	antiword $(CURDIR)/debian/emboss-doc/usr/share/EMBOSS/doc/manuals/domainatrix.doc > $(CURDIR)/debian/emboss-doc/usr/share/EMBOSS/doc/manuals/domainatrix.txt
 	# Remove this file when the relicenced file becomes part of the upstream tarball.
 	uudecode -o $(CURDIR)/debian/emboss-doc/usr/share/EMBOSS/doc/manuals/EMBOSS_qg.pdf $(CURDIR)/debian/EMBOSS_qg_new.pdf.uu
-	# Remove this file, that belongs to the PHYLIPNEW EMBASSY package (embassy-phylip in Debian).
-	# See EMBOSS bug ‘https://sourceforge.net/support/tracker.php?aid=2831977’.
-	rm $(CURDIR)/debian/emboss-doc/usr/share/EMBOSS/doc/programs/text/frestdist.txt
 
 	$(MAKE) -C jemboss install DESTDIR=$(CURDIR)/debian/jemboss bindir=/usr/bin
 	# dangling LICEN[CS]E FILE
