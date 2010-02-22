@@ -1,13 +1,13 @@
 '\" t
 .\"     Title: EMMA
-.\"    Author: Debian-Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
-.\" Generator: DocBook XSL Stylesheets v1.75.1 <http://docbook.sf.net/>
-.\"      Date: 07/15/2009
+.\"    Author: Debian Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
+.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
+.\"      Date: 02/22/2010
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 6.1.0
+.\"    Source: EMBOSS 6.2.0
 .\"  Language: English
 .\"
-.TH "EMMA" "1e" "07/15/2009" "EMBOSS 6.1.0" "EMBOSS Manual for Debian"
+.TH "EMMA" "1e" "02/22/2010" "EMBOSS 6.2.0" "EMBOSS Manual for Debian"
 .\" -----------------------------------------------------------------
 .\" * set default formatting
 .\" -----------------------------------------------------------------
@@ -22,7 +22,7 @@
 emma \- Multiple sequence alignment (ClustalW wrapper)
 .SH "SYNOPSIS"
 .HP \w'\fBemma\fR\ 'u
-\fBemma\fR \fB\-sequence\ \fR\fB\fIseqall\fR\fR [\fB\-onlydend\ \fR\fB\fItoggle\fR\fR] \fB\-dend\ \fR\fB\fItoggle\fR\fR \fB\-dendfile\ \fR\fB\fIinfile\fR\fR \fB\-pwmatrix\ \fR\fB\fIlist\fR\fR \fB\-pwdnamatrix\ \fR\fB\fIlist\fR\fR \fB\-usermatrix\ \fR\fB\fIvariable\fR\fR \fB\-pairwisedatafile\ \fR\fB\fIinfile\fR\fR \fB\-matrix\ \fR\fB\fIlist\fR\fR \fB\-usermamatrix\ \fR\fB\fIvariable\fR\fR \fB\-dnamatrix\ \fR\fB\fIlist\fR\fR \fB\-umamatrix\ \fR\fB\fIvariable\fR\fR \fB\-mamatrixfile\ \fR\fB\fIinfile\fR\fR [\fB\-slow\ \fR\fB\fItoggle\fR\fR] \fB\-pwgapopen\ \fR\fB\fIfloat\fR\fR \fB\-pwgapextend\ \fR\fB\fIfloat\fR\fR \fB\-ktup\ \fR\fB\fIinteger\fR\fR \fB\-gapw\ \fR\fB\fIinteger\fR\fR \fB\-topdiags\ \fR\fB\fIinteger\fR\fR \fB\-window\ \fR\fB\fIinteger\fR\fR \fB\-nopercent\ \fR\fB\fIboolean\fR\fR [\fB\-gapopen\ \fR\fB\fIfloat\fR\fR] [\fB\-gapextend\ \fR\fB\fIfloat\fR\fR] [\fB\-endgaps\ \fR\fB\fIboolean\fR\fR] [\fB\-gapdist\ \fR\fB\fIinteger\fR\fR] \fB\-norgap\ \fR\fB\fIboolean\fR\fR \fB\-hgapres\ \fR\fB\fIstring\fR\fR \fB\-nohgap\ \fR\fB\fIboolean\fR\fR [\fB\-maxdiv\ \fR\fB\fIinteger\fR\fR] \fB\-outseq\ \fR\fB\fIseqoutset\fR\fR \fB\-dendoutfile\ \fR\fB\fIoutfile\fR\fR
+\fBemma\fR \fB\-sequence\ \fR\fB\fIseqall\fR\fR [\fB\-onlydend\ \fR\fB\fItoggle\fR\fR] \fB\-dend\ \fR\fB\fItoggle\fR\fR \fB\-dendfile\ \fR\fB\fIinfile\fR\fR [\fB\-slow\ \fR\fB\fItoggle\fR\fR] \fB\-pwmatrix\ \fR\fB\fIlist\fR\fR \fB\-pwdnamatrix\ \fR\fB\fIlist\fR\fR \fB\-usermatrix\ \fR\fB\fIvariable\fR\fR \fB\-pairwisedatafile\ \fR\fB\fIinfile\fR\fR \fB\-matrix\ \fR\fB\fIlist\fR\fR \fB\-usermamatrix\ \fR\fB\fIvariable\fR\fR \fB\-dnamatrix\ \fR\fB\fIlist\fR\fR \fB\-umamatrix\ \fR\fB\fIvariable\fR\fR \fB\-mamatrixfile\ \fR\fB\fIinfile\fR\fR \fB\-pwgapopen\ \fR\fB\fIfloat\fR\fR \fB\-pwgapextend\ \fR\fB\fIfloat\fR\fR \fB\-ktup\ \fR\fB\fIinteger\fR\fR \fB\-gapw\ \fR\fB\fIinteger\fR\fR \fB\-topdiags\ \fR\fB\fIinteger\fR\fR \fB\-window\ \fR\fB\fIinteger\fR\fR \fB\-nopercent\ \fR\fB\fIboolean\fR\fR [\fB\-gapopen\ \fR\fB\fIfloat\fR\fR] [\fB\-gapextend\ \fR\fB\fIfloat\fR\fR] [\fB\-endgaps\ \fR\fB\fIboolean\fR\fR] [\fB\-gapdist\ \fR\fB\fIinteger\fR\fR] \fB\-norgap\ \fR\fB\fIboolean\fR\fR \fB\-hgapres\ \fR\fB\fIstring\fR\fR \fB\-nohgap\ \fR\fB\fIboolean\fR\fR [\fB\-maxdiv\ \fR\fB\fIinteger\fR\fR] \fB\-outseq\ \fR\fB\fIseqoutset\fR\fR \fB\-dendoutfile\ \fR\fB\fIoutfile\fR\fR
 .HP \w'\fBemma\fR\ 'u
 \fBemma\fR \fB\-help\fR
 .SH "DESCRIPTION"
@@ -49,7 +49,12 @@ Default value: N
 \fB\-dendfile\fR \fIinfile\fR
 .RS 4
 .RE
-.SS "Protein align options"
+.PP
+\fB\-slow\fR \fItoggle\fR
+.RS 4
+A distance is calculated between every pair of sequences and these are used to construct the dendrogram which guides the final multiple alignment\&. The scores are calculated from separate pairwise alignments\&. These can be calculated using 2 methods: dynamic programming (slow but accurate) or by the method of Wilbur and Lipman (extremely fast but approximate)\&. The slow\-accurate method is fine for short sequences but will be VERY SLOW for many (e\&.g\&. >100) long (e\&.g\&. >1000 residue) sequences\&. Default value: Y
+.RE
+.SS "Pairwise align options"
 .PP
 \fB\-pwmatrix\fR \fIlist\fR
 .RS 4
@@ -93,11 +98,6 @@ This gives a menu where a single matrix (not a series) can be selected\&. Defaul
 .RE
 .SS "Additional section"
 .SS "Slow align options"
-.PP
-\fB\-slow\fR \fItoggle\fR
-.RS 4
-A distance is calculated between every pair of sequences and these are used to construct the dendrogram which guides the final multiple alignment\&. The scores are calculated from separate pairwise alignments\&. These can be calculated using 2 methods: dynamic programming (slow but accurate) or by the method of Wilbur and Lipman (extremely fast but approximate)\&. The slow\-accurate method is fine for short sequences but will be VERY SLOW for many (e\&.g\&. >100) long (e\&.g\&. >1000 residue) sequences\&. Default value: Y
-.RE
 .PP
 \fB\-pwgapopen\fR \fIfloat\fR
 .RS 4
@@ -194,7 +194,7 @@ emma is fully documented via the
 system\&.
 .SH "AUTHOR"
 .PP
-\fBDebian\-Med Packaging Team\fR <\&debian\-med\-packaging@lists\&.alioth\&.debian\&.org\&>
+\fBDebian Med Packaging Team\fR <\&debian\-med\-packaging@lists\&.alioth\&.debian\&.org\&>
 .RS 4
 Wrote the script used to autogenerate this manual page\&.
 .RE

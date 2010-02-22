@@ -1,13 +1,13 @@
 '\" t
 .\"     Title: PRIMERS
-.\"    Author: Debian-Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
-.\" Generator: DocBook XSL Stylesheets v1.75.1 <http://docbook.sf.net/>
-.\"      Date: 07/15/2009
+.\"    Author: Debian Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
+.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
+.\"      Date: 02/22/2010
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 6.1.0
+.\"    Source: EMBOSS 6.2.0
 .\"  Language: English
 .\"
-.TH "PRIMERS" "1e" "07/15/2009" "EMBOSS 6.1.0" "EMBOSS Manual for Debian"
+.TH "PRIMERS" "1e" "02/22/2010" "EMBOSS 6.2.0" "EMBOSS Manual for Debian"
 .\" -----------------------------------------------------------------
 .\" * set default formatting
 .\" -----------------------------------------------------------------
@@ -22,7 +22,7 @@
 primers \- Simple version of primer3 to pick PCR primers
 .SH "SYNOPSIS"
 .HP \w'\fBprimers\fR\ 'u
-\fBprimers\fR \fB\-sequence\ \fR\fB\fIseqall\fR\fR [\fB\-target\ \fR\fB\fIrange\fR\fR] [\fB\-minsize\ \fR\fB\fIinteger\fR\fR] [\fB\-maxsize\ \fR\fB\fIinteger\fR\fR] [\fB\-maxdifftm\ \fR\fB\fIfloat\fR\fR] [\fB\-explainflag\ \fR\fB\fIboolean\fR\fR] [\fB\-numreturn\ \fR\fB\fIinteger\fR\fR] \fB\-outfile\ \fR\fB\fIoutfile\fR\fR
+\fBprimers\fR \fB\-sequence\ \fR\fB\fIseqall\fR\fR [\fB\-targetregion\ \fR\fB\fIrange\fR\fR] [\fB\-minsize\ \fR\fB\fIinteger\fR\fR] [\fB\-maxsize\ \fR\fB\fIinteger\fR\fR] [\fB\-maxdifftm\ \fR\fB\fIfloat\fR\fR] [\fB\-explainflag\ \fR\fB\fIboolean\fR\fR] [\fB\-numreturn\ \fR\fB\fIinteger\fR\fR] \fB\-outfile\ \fR\fB\fIoutfile\fR\fR
 .HP \w'\fBprimers\fR\ 'u
 \fBprimers\fR \fB\-help\fR
 .SH "DESCRIPTION"
@@ -38,7 +38,7 @@ The sequence from which to choose primers\&. The sequence must be presented 5\' 
 .RE
 .SS "Additional section"
 .PP
-\fB\-target\fR \fIrange\fR
+\fB\-targetregion\fR \fIrange\fR
 .RS 4
 If one or more Targets is specified then a legal primer pair must flank at least one of them\&. A Target might be a simple sequence repeat site (for example a CA repeat) or a single\-base\-pair polymorphism\&. The value should be a space\-separated list of <start>,<end> pairs where <start> is the index of the first base of a Target, and <end> is the last E\&.g\&. 50,51 requires primers to surround the 2 bases at positions 50 and 51\&.
 .RE
@@ -82,7 +82,7 @@ primers is fully documented via the
 system\&.
 .SH "AUTHOR"
 .PP
-\fBDebian\-Med Packaging Team\fR <\&debian\-med\-packaging@lists\&.alioth\&.debian\&.org\&>
+\fBDebian Med Packaging Team\fR <\&debian\-med\-packaging@lists\&.alioth\&.debian\&.org\&>
 .RS 4
 Wrote the script used to autogenerate this manual page\&.
 .RE

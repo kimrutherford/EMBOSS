@@ -1,13 +1,13 @@
 '\" t
 .\"     Title: REMAP
-.\"    Author: Debian-Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
-.\" Generator: DocBook XSL Stylesheets v1.75.1 <http://docbook.sf.net/>
-.\"      Date: 07/15/2009
+.\"    Author: Debian Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
+.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
+.\"      Date: 02/22/2010
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 6.1.0
+.\"    Source: EMBOSS 6.2.0
 .\"  Language: English
 .\"
-.TH "REMAP" "1e" "07/15/2009" "EMBOSS 6.1.0" "EMBOSS Manual for Debian"
+.TH "REMAP" "1e" "02/22/2010" "EMBOSS 6.2.0" "EMBOSS Manual for Debian"
 .\" -----------------------------------------------------------------
 .\" * set default formatting
 .\" -----------------------------------------------------------------
@@ -85,7 +85,7 @@ This allows those enzymes which have one or more \'N\' ambiguity codes in their 
 .PP
 \fB\-plasmid\fR \fIboolean\fR
 .RS 4
-If this is set then this allows searches for restriction enzyme recognition site and cut postions that span the end of the sequence to be considered\&. Default value: N
+If this is set then this allows searches for restriction enzyme recognition site and cut positions that span the end of the sequence to be considered\&. Default value: N
 .RE
 .PP
 \fB\-methylation\fR \fIboolean\fR
@@ -205,7 +205,7 @@ remap is fully documented via the
 system\&.
 .SH "AUTHOR"
 .PP
-\fBDebian\-Med Packaging Team\fR <\&debian\-med\-packaging@lists\&.alioth\&.debian\&.org\&>
+\fBDebian Med Packaging Team\fR <\&debian\-med\-packaging@lists\&.alioth\&.debian\&.org\&>
 .RS 4
 Wrote the script used to autogenerate this manual page\&.
 .RE

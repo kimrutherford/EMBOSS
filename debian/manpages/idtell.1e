@@ -1,13 +1,13 @@
 '\" t
-.\"     Title: DEMOLIST
-.\"    Author: Debian-Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
-.\" Generator: DocBook XSL Stylesheets v1.75.1 <http://docbook.sf.net/>
-.\"      Date: 07/15/2009
+.\"     Title: IDTELL
+.\"    Author: Debian Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
+.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
+.\"      Date: 02/22/2010
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 6.1.0
+.\"    Source: EMBOSS 6.2.0
 .\"  Language: English
 .\"
-.TH "DEMOLIST" "1e" "07/15/2009" "EMBOSS 6.1.0" "EMBOSS Manual for Debian"
+.TH "IDTELL" "1e" "02/22/2010" "EMBOSS 6.2.0" "EMBOSS Manual for Debian"
 .\" -----------------------------------------------------------------
 .\" * set default formatting
 .\" -----------------------------------------------------------------
@@ -19,34 +19,42 @@
 .\" * MAIN CONTENT STARTS HERE *
 .\" -----------------------------------------------------------------
 .SH "NAME"
-demolist \- Demonstration of the list functions
+idtell \- Identify the type of a data identifier / query term
 .SH "SYNOPSIS"
-.HP \w'\fBdemolist\fR\ 'u
-\fBdemolist\fR \fB\-infile\ \fR\fB\fIinfile\fR\fR
-.HP \w'\fBdemolist\fR\ 'u
-\fBdemolist\fR \fB\-help\fR
+.HP \w'\fBidtell\fR\ 'u
+\fBidtell\fR [\fB\-identifier\ \fR\fB\fIstring\fR\fR] \fB\-dbref\ \fR\fB\fIdatafile\fR\fR
+.HP \w'\fBidtell\fR\ 'u
+\fBidtell\fR \fB\-help\fR
 .SH "DESCRIPTION"
 .PP
-\fBdemolist\fR
-is a command line program from EMBOSS (\(lqthe European Molecular Biology Open Software Suite\(rq)\&. It is part of the "Test" command group(s)\&.
+\fBidtell\fR
+is a command line program from EMBOSS (\(lqthe European Molecular Biology Open Software Suite\(rq)\&. It is part of the "Information" command group(s)\&.
 .SH "OPTIONS"
 .SS "Input section"
 .PP
-\fB\-infile\fR \fIinfile\fR
+\fB\-identifier\fR \fIstring\fR
 .RS 4
-File containing normal tab delimited gff\'s
 .RE
+.PP
+\fB\-dbref\fR \fIdatafile\fR
+.RS 4
+File of database information including identifier, description, type, URL etc\&. Default value: dbref\&.dat
+.RE
+.SS "Required section"
+.SS "Additional section"
+.SS "Advanced section"
+.SS "Output section"
 .SH "BUGS"
 .PP
 Bugs can be reported to the Debian Bug Tracking system (http://bugs\&.debian\&.org/emboss), or directly to the EMBOSS developers (http://sourceforge\&.net/tracker/?group_id=93650&atid=605031)\&.
 .SH "SEE ALSO"
 .PP
-demolist is fully documented via the
+idtell is fully documented via the
 \fBtfm\fR(1)
 system\&.
 .SH "AUTHOR"
 .PP
-\fBDebian\-Med Packaging Team\fR <\&debian\-med\-packaging@lists\&.alioth\&.debian\&.org\&>
+\fBDebian Med Packaging Team\fR <\&debian\-med\-packaging@lists\&.alioth\&.debian\&.org\&>
 .RS 4
 Wrote the script used to autogenerate this manual page\&.
 .RE

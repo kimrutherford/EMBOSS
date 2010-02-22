@@ -1,13 +1,13 @@
 '\" t
 .\"     Title: DIGEST
-.\"    Author: Debian-Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
-.\" Generator: DocBook XSL Stylesheets v1.75.1 <http://docbook.sf.net/>
-.\"      Date: 07/15/2009
+.\"    Author: Debian Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
+.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
+.\"      Date: 02/22/2010
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 6.1.0
+.\"    Source: EMBOSS 6.2.0
 .\"  Language: English
 .\"
-.TH "DIGEST" "1e" "07/15/2009" "EMBOSS 6.1.0" "EMBOSS Manual for Debian"
+.TH "DIGEST" "1e" "02/22/2010" "EMBOSS 6.2.0" "EMBOSS Manual for Debian"
 .\" -----------------------------------------------------------------
 .\" * set default formatting
 .\" -----------------------------------------------------------------
@@ -92,7 +92,7 @@ digest is fully documented via the
 system\&.
 .SH "AUTHOR"
 .PP
-\fBDebian\-Med Packaging Team\fR <\&debian\-med\-packaging@lists\&.alioth\&.debian\&.org\&>
+\fBDebian Med Packaging Team\fR <\&debian\-med\-packaging@lists\&.alioth\&.debian\&.org\&>
 .RS 4
 Wrote the script used to autogenerate this manual page\&.
 .RE

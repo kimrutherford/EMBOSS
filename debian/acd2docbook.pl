@@ -37,7 +37,7 @@ print <<"__XML__";
 <!-- Template from docbook-xsl version 1.72.0.dfsg.1-1                             -->
 
   <!ENTITY dhemail     "debian-med-packaging\@lists.alioth.debian.org">
-  <!ENTITY dhusername  "Debian-Med Packaging Team">
+  <!ENTITY dhusername  "Debian Med Packaging Team">
   <!ENTITY dhrelease   "$embossversion">
   <!ENTITY dhtitle     "EMBOSS Manual for Debian">
   <!ENTITY dhucpackage "$NAME">

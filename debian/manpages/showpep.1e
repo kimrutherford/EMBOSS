@@ -1,13 +1,13 @@
 '\" t
 .\"     Title: SHOWPEP
-.\"    Author: Debian-Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
-.\" Generator: DocBook XSL Stylesheets v1.75.1 <http://docbook.sf.net/>
-.\"      Date: 07/15/2009
+.\"    Author: Debian Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
+.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
+.\"      Date: 02/22/2010
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 6.1.0
+.\"    Source: EMBOSS 6.2.0
 .\"  Language: English
 .\"
-.TH "SHOWPEP" "1e" "07/15/2009" "EMBOSS 6.1.0" "EMBOSS Manual for Debian"
+.TH "SHOWPEP" "1e" "02/22/2010" "EMBOSS 6.2.0" "EMBOSS Manual for Debian"
 .\" -----------------------------------------------------------------
 .\" * set default formatting
 .\" -----------------------------------------------------------------
@@ -91,7 +91,7 @@ Tags are the types of extra values that a feature may have\&. By default any fea
 .PP
 \fB\-valuematch\fR \fIstring\fR
 .RS 4
-Tag values are the values associated with a feature tag\&. Tags are the types of extra values that a feature may have\&. By default any feature tag value in the feature table is shown\&. You can set this to match any feature tag valueyou wish to show\&. The tag value may be wildcarded by using \'*\'\&. If you wish to show more than one tag value, separate their names with the character \'|\', eg: pax* | 10 Default value: *
+Tag values are the values associated with a feature tag\&. Tags are the types of extra values that a feature may have\&. By default any feature tag value in the feature table is shown\&. You can set this to match any feature tag value you wish to show\&. The tag value may be wildcarded by using \'*\'\&. If you wish to show more than one tag value, separate their names with the character \'|\', eg: pax* | 10 Default value: *
 .RE
 .PP
 \fB\-stricttags\fR \fIboolean\fR
@@ -158,7 +158,7 @@ showpep is fully documented via the
 system\&.
 .SH "AUTHOR"
 .PP
-\fBDebian\-Med Packaging Team\fR <\&debian\-med\-packaging@lists\&.alioth\&.debian\&.org\&>
+\fBDebian Med Packaging Team\fR <\&debian\-med\-packaging@lists\&.alioth\&.debian\&.org\&>
 .RS 4
 Wrote the script used to autogenerate this manual page\&.
 .RE
