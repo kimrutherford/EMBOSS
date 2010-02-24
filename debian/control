@@ -14,7 +14,7 @@ Homepage: http://emboss.sourceforge.net
 
 Package: emboss
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, emboss-data (= ${source:Version}), csh | c-shell
+Depends: ${shlibs:Depends}, ${misc:Depends}, emboss-data (= ${source:Version})
 Recommends: primer3, dialign
 Suggests: emboss-doc, emboss-test, embassy, clustalw
 Description: the european molecular biology open software suite
