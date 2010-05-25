@@ -5,6 +5,8 @@ emboss (6.2.0-1) UNRELEASED; urgency=low
     §5.6.16 and dpkg-source(1) 1.14.25), since the upstream patches can not be
     easily handled by the formats 3.0.
   * Dropped useless dependency on csh | c-shell for emboss (LP: 525662).
+  * Incremented Standards-Version in debian/control to reflect conformance
+    with Policy 3.8.4 (no changes needed).
 
  -- Charles Plessy <plessy@debian.org>  Sun, 21 Feb 2010 16:54:43 +0900
 
