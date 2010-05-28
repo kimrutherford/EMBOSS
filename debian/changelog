@@ -1,9 +1,12 @@
-emboss (6.2.0-1) UNRELEASED; urgency=low
+emboss (6.2.0-1) unstable; urgency=low
 
   * New upstream release.
   * Dropped useless dependency on csh | c-shell for emboss (LP: 525662).
   * Incremented Standards-Version in debian/control to reflect conformance
     with Policy 3.8.4 (no changes needed).
+  * Detected a zlib convenience copy; added debian/emboss.lintian-overrides
+    until Upstream confirms that EMBOSS can build on latest pristine zlib
+    (See http://lists.open-bio.org/pipermail/emboss/2010-May/003915.html).
 
  -- Charles Plessy <plessy@debian.org>  Mon, 31 May 2010 15:13:09 +0900
 
@@ -11,7 +14,7 @@ emboss (6.1.0-5) unstable; urgency=low
 
   * The source package is now managed with Git (debian/control).
     - VCS URLs updated in debian/control.
-  * debian/changelog: corrected an error on a progam name (vectorstrip).
+  * debian/changelog: corrected an error on a program name (vectorstrip).
   * debian/patches/transient-vectorstrip.patch: keep quality scores.
   * Two new patches not yet officialised:
     - debian/patches/transient-vectorstrip.patch: retain quality scores.
@@ -57,7 +60,7 @@ emboss (6.1.0-2) unstable; urgency=low
 
 emboss (6.1.0-1) unstable; urgency=low
 
-  * New upstream relase (Closes: #530112).
+  * New upstream release (Closes: #530112).
   * Dropped patch against previous release.
   * Created or refreshed the manpages.
 
@@ -271,14 +274,14 @@ emboss (5.0.0-3) unstable; urgency=low
   * debian/patches/ajindex-fix-2008-01-09.patch:
     - Fixes rare secondary index problem with input files over 2Gb.
   * debian/control:
-    - Swiched maintainership to the Debian-Med packaging team.
+    - Switched maintainership to the Debian-Med packaging team.
     - Relocated the package to the Debian-Med Subversion repository.
     - Allowed upload by Debian Maintainers.
     - Checked that the package is compliant to Policy 3.7.3
-    - Added dialign again to the Recommends: field. It only disapperared from
+    - Added dialign again to the Recommends: field. It only disappeared from
       the documentation; the edialign program is still there.
     - -dev packages now depend on their corresponding libraries.
-    - Replaced occurences of $(source:Version} by ${binary:Version} to make
+    - Replaced occurrences of $(source:Version} by ${binary:Version} to make
       the packages binNMU safe.
     - emboss-data and emboss-doc do not Suggest: emboss anymore.
     - Changed the description of libajax5 and libnucleus5 so that they are not
@@ -313,9 +316,9 @@ emboss (5.0.0-2) unstable; urgency=low
       emboss-lib (Closes: #435232).
     - Removed inactive developer from the uploaders list.
     - Suggests: embassy.
-  * Temporarly incorporates a relicenced version of the EMBOSS Quick
+  * Temporarily incorporates a relicenced version of the EMBOSS Quick
     Guide, until it becomes part of the original tarball. Its sources
-    are shipped uuencoded, therfore emboss now build-depends on sharutils.
+    are shipped uuencoded, therefore emboss now build-depends on sharutils.
 
   [ Nelson A. de Oliveira ]
   * Checked and fixed clean target. (Closes: #442554).
@@ -329,13 +332,13 @@ emboss (5.0.0-1) unstable; urgency=low
     for more information.
   * Moved all the binaries to /usr/lib/emboss. /usr/bin contains only
     symbolic links (Closes : #427439, #427440).
-  * Makes sure that there is a Makefile befor invoking the clean rule.
+  * Makes sure that there is a Makefile before invoking the clean rule.
   * Added /etc/emboss/embossrc.d directory for future modular
     configuration.
-  * Swiched from dpatch to quilt (no patches for the moment).
+  * Switched from dpatch to quilt (no patches for the moment).
   * Build-depend on libemboss-acd-perl to generate manpages with
     acd2docbook.pl, written especially for this package (Closes: #423938).
-  * Adding a placeholder file to force the includion of debian/manpages.
+  * Adding a placeholder file to force the inclusion of debian/manpages.
   * Removing the entries in the Debian menu until we agree that we
     want them.
 
@@ -344,7 +347,7 @@ emboss (5.0.0-1) unstable; urgency=low
 emboss (4.1.0-1) experimental; urgency=low
 
   * New maintainer and uploaders
-  * First official relase (Closes: #156276)
+  * First official release (Closes: #156276)
   * Xlib transition.
   * Using dpatch and /usr/share/dpatch/dpatch.make to manage patches.
   * Added XS-Vcs entries in debian/changelog.

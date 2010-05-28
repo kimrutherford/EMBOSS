@@ -145,6 +145,7 @@ binary-arch: build install test
 	dh_testroot -a
 	dh_installchangelogs -a ChangeLog
 	dh_installdocs -a
+	dh_lintian -a
 #	dh_installmenu -a
 #	dh_desktop -a
 #	dh_installmime -a
