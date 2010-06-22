@@ -1,3 +1,9 @@
+emboss (6.2.0-2) unstable; urgency=low
+
+  * Updated debian/patches/official-upstream-patch.patch to version 1-19.
+
+ -- Charles Plessy <plessy@debian.org>  Tue, 22 Jun 2010 17:01:44 +0900
+
 emboss (6.2.0-1) unstable; urgency=low
 
   * New upstream release.
