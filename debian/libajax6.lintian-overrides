@@ -1,5 +1,0 @@
-# I have contacted upstream to ask if EMBOSS can be built against the latest zlib.
-# http://lists.open-bio.org/pipermail/emboss/2010-May/003915.html
-# Fedora's patch will be applied as soon as I get Upstream's approval
-# -- Charles Plessy <plessy@debian.org>  Thu, 27 May 2010 13:31:29 +0900
-libajax6: embedded-zlib ./usr/lib/libezlib.so.1.1.0

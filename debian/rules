@@ -11,7 +11,9 @@ EMBOSS-TEST = $(CURDIR)/debian/emboss-test
 AJAX        = $(CURDIR)/debian/libajax6
 NUCLEUS     = $(CURDIR)/debian/libnucleus6
 
-CONFFLAGS   = --prefix=/usr --bindir=/usr/lib/emboss
+CONFFLAGS   = --prefix=/usr
+CONFFLAGS   += --bindir=/usr/lib/emboss
+CONFFLAGS   += --enable-systemlibs
 
 # If openjdk-6-jdk is not installed don't tell configure to use it.
 # This allows binary-arch builds to be performed without openjdk
@@ -32,7 +34,7 @@ include /usr/share/quilt/quilt.make
 build: config.status patch debian/copyright build-stamp
 build-stamp:
 	dh_testdir
-	$(MAKE) AJAX_FIXED_ROOT=\\\"/usr/share/EMBOSS\\\"
+	$(MAKE) AJAX_FIXED_ROOT=\\\"/usr/share/EMBOSS\\\" LDFLAGS="-lexpat"
 	touch build-stamp
 
 # In order to use this rule you must install libemboss-acd-perl, xsltproc, docbook-xml and docbook-xsl
