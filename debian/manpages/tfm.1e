@@ -2,12 +2,21 @@
 .\"     Title: TFM
 .\"    Author: Debian Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 .\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
-.\"      Date: 02/22/2010
+.\"      Date: 07/16/2010
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 6.2.0
+.\"    Source: EMBOSS 6.3.0
 .\"  Language: English
 .\"
-.TH "TFM" "1e" "02/22/2010" "EMBOSS 6.2.0" "EMBOSS Manual for Debian"
+.TH "TFM" "1e" "07/16/2010" "EMBOSS 6.3.0" "EMBOSS Manual for Debian"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
 .\" -----------------------------------------------------------------
 .\" * set default formatting
 .\" -----------------------------------------------------------------
@@ -50,7 +59,7 @@ This will format the output for displaying as a WWW document\&. Default value: N
 .PP
 \fB\-more\fR \fIboolean\fR
 .RS 4
-This uses the standard UNIX utility \'more\' to display the text page\-by\-page, waiting for you to read one screen\-full before going on to the next page\&. When you have finished reading a page, press the SPACE bar to proceed to the next page\&. Default value: @(!$(html))
+This uses the standard UNIX utility \*(Aqmore\*(Aq to display the text page\-by\-page, waiting for you to read one screen\-full before going on to the next page\&. When you have finished reading a page, press the SPACE bar to proceed to the next page\&. Default value: @(!$(html))
 .RE
 .SH "BUGS"
 .PP

@@ -2,12 +2,21 @@
 .\"     Title: PEPWHEEL
 .\"    Author: Debian Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 .\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
-.\"      Date: 02/22/2010
+.\"      Date: 07/16/2010
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 6.2.0
+.\"    Source: EMBOSS 6.3.0
 .\"  Language: English
 .\"
-.TH "PEPWHEEL" "1e" "02/22/2010" "EMBOSS 6.2.0" "EMBOSS Manual for Debian"
+.TH "PEPWHEEL" "1e" "07/16/2010" "EMBOSS 6.3.0" "EMBOSS Manual for Debian"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
 .\" -----------------------------------------------------------------
 .\" * set default formatting
 .\" -----------------------------------------------------------------
@@ -44,12 +53,12 @@ Default value: Y
 .PP
 \fB\-steps\fR \fIinteger\fR
 .RS 4
-The number of residues plotted per turn is this value divided by the \'turns\' value\&. Default value: 18
+The number of residues plotted per turn is this value divided by the \*(Aqturns\*(Aq value\&. Default value: 18
 .RE
 .PP
 \fB\-turns\fR \fIinteger\fR
 .RS 4
-The number of residues plotted per turn is the \'steps\' value divided by this value\&. Default value: 5
+The number of residues plotted per turn is the \*(Aqsteps\*(Aq value divided by this value\&. Default value: 5
 .RE
 .PP
 \fB\-graph\fR \fIgraph\fR
@@ -59,7 +68,7 @@ The number of residues plotted per turn is the \'steps\' value divided by this v
 .PP
 \fB\-amphipathic\fR \fItoggle\fR
 .RS 4
-If this is true then the residues ACFGILMVWY are marked as squares and all other residues are unmarked\&. This overrides any other markup that you may have specified using the qualifiers \'\-squares\', \'\-diamonds\' and \'\-octags\'\&.
+If this is true then the residues ACFGILMVWY are marked as squares and all other residues are unmarked\&. This overrides any other markup that you may have specified using the qualifiers \*(Aq\-squares\*(Aq, \*(Aq\-diamonds\*(Aq and \*(Aq\-octags\*(Aq\&.
 .RE
 .PP
 \fB\-squares\fR \fIstring\fR

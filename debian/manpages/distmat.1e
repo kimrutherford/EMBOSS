@@ -2,12 +2,21 @@
 .\"     Title: DISTMAT
 .\"    Author: Debian Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 .\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
-.\"      Date: 02/22/2010
+.\"      Date: 07/16/2010
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 6.2.0
+.\"    Source: EMBOSS 6.3.0
 .\"  Language: English
 .\"
-.TH "DISTMAT" "1e" "02/22/2010" "EMBOSS 6.2.0" "EMBOSS Manual for Debian"
+.TH "DISTMAT" "1e" "07/16/2010" "EMBOSS 6.3.0" "EMBOSS Manual for Debian"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
 .\" -----------------------------------------------------------------
 .\" * set default formatting
 .\" -----------------------------------------------------------------
@@ -66,12 +75,12 @@ Choose base positions to analyse in each codon i\&.e\&. 123 (all bases), 12 (the
 .PP
 \fB\-calculatea\fR \fIboolean\fR
 .RS 4
-This will force the calculation of parameter \'a\' in the Jin\-Nei Gamma distance calculation, otherwise the default is 1\&.0 (see \-parametera option)\&. Default value: N
+This will force the calculation of parameter \*(Aqa\*(Aq in the Jin\-Nei Gamma distance calculation, otherwise the default is 1\&.0 (see \-parametera option)\&. Default value: N
 .RE
 .PP
 \fB\-parametera\fR \fIfloat\fR
 .RS 4
-User defined parameter \'a\' to be use in the Jin\-Nei Gamma distance calculation\&. The suggested value to be used is 1\&.0 (Jin et al\&.) and this is the default\&. Default value: 1\&.0
+User defined parameter \*(Aqa\*(Aq to be use in the Jin\-Nei Gamma distance calculation\&. The suggested value to be used is 1\&.0 (Jin et al\&.) and this is the default\&. Default value: 1\&.0
 .RE
 .SS "Output section"
 .PP

@@ -2,12 +2,21 @@
 .\"     Title: NEWCPGSEEK
 .\"    Author: Debian Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 .\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
-.\"      Date: 02/22/2010
+.\"      Date: 07/16/2010
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 6.2.0
+.\"    Source: EMBOSS 6.3.0
 .\"  Language: English
 .\"
-.TH "NEWCPGSEEK" "1e" "02/22/2010" "EMBOSS 6.2.0" "EMBOSS Manual for Debian"
+.TH "NEWCPGSEEK" "1e" "07/16/2010" "EMBOSS 6.3.0" "EMBOSS Manual for Debian"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
 .\" -----------------------------------------------------------------
 .\" * set default formatting
 .\" -----------------------------------------------------------------

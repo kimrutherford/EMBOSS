@@ -2,12 +2,21 @@
 .\"     Title: ODDCOMP
 .\"    Author: Debian Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 .\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
-.\"      Date: 02/22/2010
+.\"      Date: 07/16/2010
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 6.2.0
+.\"    Source: EMBOSS 6.3.0
 .\"  Language: English
 .\"
-.TH "ODDCOMP" "1e" "02/22/2010" "EMBOSS 6.2.0" "EMBOSS Manual for Debian"
+.TH "ODDCOMP" "1e" "07/16/2010" "EMBOSS 6.3.0" "EMBOSS Manual for Debian"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
 .\" -----------------------------------------------------------------
 .\" * set default formatting
 .\" -----------------------------------------------------------------
@@ -38,13 +47,13 @@ is a command line program from EMBOSS (\(lqthe European Molecular Biology Open S
 .PP
 \fB\-infile\fR \fIinfile\fR
 .RS 4
-This is a file in the format of the output produced by \'compseq\' that is used to set the minimum frequencies of words in this analysis\&.
+This is a file in the format of the output produced by \*(Aqcompseq\*(Aq that is used to set the minimum frequencies of words in this analysis\&.
 .RE
 .SS "Required section"
 .PP
 \fB\-fullwindow\fR \fItoggle\fR
 .RS 4
-Set this option on (Y) if you want the window size to be set to the length of the current protein\&. Otherwise, leave this option unset, in which case you\'ll be prompted for a window size to use\&. Default value: N
+Set this option on (Y) if you want the window size to be set to the length of the current protein\&. Otherwise, leave this option unset, in which case you\*(Aqll be prompted for a window size to use\&. Default value: N
 .RE
 .PP
 \fB\-window\fR \fIinteger\fR
@@ -55,7 +64,7 @@ This is the size of window in which to count\&. Thus if you want to count freque
 .PP
 \fB\-ignorebz\fR \fIboolean\fR
 .RS 4
-The amino acid code B represents Asparagine or Aspartic acid and the code Z represents Glutamine or Glutamic acid\&. These are not commonly used codes and you may wish not to count words containing them, just noting them in the count of \'Other\' words\&. Default value: Y
+The amino acid code B represents Asparagine or Aspartic acid and the code Z represents Glutamine or Glutamic acid\&. These are not commonly used codes and you may wish not to count words containing them, just noting them in the count of \*(AqOther\*(Aq words\&. Default value: Y
 .RE
 .SS "Output section"
 .PP

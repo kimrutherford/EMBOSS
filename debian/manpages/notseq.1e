@@ -2,12 +2,21 @@
 .\"     Title: NOTSEQ
 .\"    Author: Debian Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 .\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
-.\"      Date: 02/22/2010
+.\"      Date: 07/16/2010
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 6.2.0
+.\"    Source: EMBOSS 6.3.0
 .\"  Language: English
 .\"
-.TH "NOTSEQ" "1e" "02/22/2010" "EMBOSS 6.2.0" "EMBOSS Manual for Debian"
+.TH "NOTSEQ" "1e" "07/16/2010" "EMBOSS 6.3.0" "EMBOSS Manual for Debian"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
 .\" -----------------------------------------------------------------
 .\" * set default formatting
 .\" -----------------------------------------------------------------
@@ -39,7 +48,7 @@ is a command line program from EMBOSS (\(lqthe European Molecular Biology Open S
 .PP
 \fB\-exclude\fR \fIstring\fR
 .RS 4
-Enter a list of sequence names or accession numbers to exclude from the sequences read in\&. The excluded sequences will be written to the file specified in the \'junkout\' parameter\&. The remainder will be written out to the file specified in the \'outseq\' parameter\&. The list of sequence names can be separated by either spaces or commas\&. The sequence names can be wildcarded\&. The sequence names are case independent\&. An example of a list of sequences to be excluded is: myseq, hs*, one two three a file containing a list of sequence names can be specified by giving the file name preceeded by a \'@\', eg: \'@names\&.dat\'
+Enter a list of sequence names or accession numbers to exclude from the sequences read in\&. The excluded sequences will be written to the file specified in the \*(Aqjunkout\*(Aq parameter\&. The remainder will be written out to the file specified in the \*(Aqoutseq\*(Aq parameter\&. The list of sequence names can be separated by either spaces or commas\&. The sequence names can be wildcarded\&. The sequence names are case independent\&. An example of a list of sequences to be excluded is: myseq, hs*, one two three a file containing a list of sequence names can be specified by giving the file name preceeded by a \*(Aq@\*(Aq, eg: \*(Aq@names\&.dat\*(Aq
 .RE
 .SS "Output section"
 .PP

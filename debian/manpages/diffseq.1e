@@ -2,12 +2,21 @@
 .\"     Title: DIFFSEQ
 .\"    Author: Debian Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 .\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
-.\"      Date: 02/22/2010
+.\"      Date: 07/16/2010
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 6.2.0
+.\"    Source: EMBOSS 6.3.0
 .\"  Language: English
 .\"
-.TH "DIFFSEQ" "1e" "02/22/2010" "EMBOSS 6.2.0" "EMBOSS Manual for Debian"
+.TH "DIFFSEQ" "1e" "07/16/2010" "EMBOSS 6.3.0" "EMBOSS Manual for Debian"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
 .\" -----------------------------------------------------------------
 .\" * set default formatting
 .\" -----------------------------------------------------------------
@@ -43,7 +52,7 @@ is a command line program from EMBOSS (\(lqthe European Molecular Biology Open S
 .PP
 \fB\-wordsize\fR \fIinteger\fR
 .RS 4
-The similar regions between the two sequences are found by creating a hash table of \'wordsize\'d subsequences\&. 10 is a reasonable default\&. Making this value larger (20?) may speed up the program slightly, but will mean that any two differences within \'wordsize\' of each other will be grouped as a single region of difference\&. This value may be made smaller (4?) to improve the resolution of nearby differences, but the program will go much slower\&. Default value: 10
+The similar regions between the two sequences are found by creating a hash table of \*(Aqwordsize\*(Aqd subsequences\&. 10 is a reasonable default\&. Making this value larger (20?) may speed up the program slightly, but will mean that any two differences within \*(Aqwordsize\*(Aq of each other will be grouped as a single region of difference\&. This value may be made smaller (4?) to improve the resolution of nearby differences, but the program will go much slower\&. Default value: 10
 .RE
 .SS "Additional section"
 .PP
@@ -59,12 +68,12 @@ Normally this program will find regions of identity that are the length of the s
 .PP
 \fB\-aoutfeat\fR \fIfeatout\fR
 .RS 4
-File for output of first sequence\'s features Default value: $(asequence\&.name)\&.diffgff
+File for output of first sequence\*(Aqs features Default value: $(asequence\&.name)\&.diffgff
 .RE
 .PP
 \fB\-boutfeat\fR \fIfeatout\fR
 .RS 4
-File for output of second sequence\'s features Default value: $(bsequence\&.name)\&.diffgff
+File for output of second sequence\*(Aqs features Default value: $(bsequence\&.name)\&.diffgff
 .RE
 .SH "BUGS"
 .PP

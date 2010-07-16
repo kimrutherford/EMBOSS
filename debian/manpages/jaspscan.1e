@@ -2,12 +2,21 @@
 .\"     Title: JASPSCAN
 .\"    Author: Debian Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 .\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
-.\"      Date: 02/22/2010
+.\"      Date: 07/16/2010
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 6.2.0
+.\"    Source: EMBOSS 6.3.0
 .\"  Language: English
 .\"
-.TH "JASPSCAN" "1e" "02/22/2010" "EMBOSS 6.2.0" "EMBOSS Manual for Debian"
+.TH "JASPSCAN" "1e" "07/16/2010" "EMBOSS 6.3.0" "EMBOSS Manual for Debian"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
 .\" -----------------------------------------------------------------
 .\" * set default formatting
 .\" -----------------------------------------------------------------
@@ -43,7 +52,7 @@ Default value: C
 .PP
 \fB\-matrices\fR \fIstring\fR
 .RS 4
-The name \'all\' reads in all matrix files from the selected JASPAR matrix set\&. You can specify individual matrices by giving their names with commas between then, such as: \'ma0001,ma0015\'\&. The case of the names is not important\&. You can specify a file of matrix names to read in by giving the name of the file holding the matrix names with a \'@\' character in front of it, for example, \'@matrix\&.list\'\&. Blank lines and lines starting with a hash character or \'!\' are ignored and all other lines are concatenated together with a comma character \',\' and then treated as the list of enzymes to search for\&. An example of a file of matrix names is: ! my matrices ma0001, ma0002 ! other matrices ma0010 ma0032 ma0053 Default value: all
+The name \*(Aqall\*(Aq reads in all matrix files from the selected JASPAR matrix set\&. You can specify individual matrices by giving their names with commas between then, such as: \*(Aqma0001\&.1,ma0015*\*(Aq\&. The case of the names is not important\&. You can specify a file of matrix names to read in by giving the name of the file holding the matrix names with a \*(Aq@\*(Aq character in front of it, for example, \*(Aq@matrix\&.list\*(Aq\&. Blank lines and lines starting with a hash character or \*(Aq!\*(Aq are ignored and all other lines are concatenated together with a comma character \*(Aq,\*(Aq and then treated as the list of enzymes to search for\&. An example of a file of matrix names is: ! my matrices ma0001\&.1, ma0002\&.1 ! other matrices ma0010\&.1 ma0032* ma0053\&.1 Default value: all
 .RE
 .SS "Required section"
 .PP
@@ -55,7 +64,7 @@ If the matrix score is greater than or equal to this percentage then a hit will 
 .PP
 \fB\-exclude\fR \fIstring\fR
 .RS 4
-The names of any matrices to exclude from the \'matrices\' list\&. Matrices are specified in the same way as for the selection list\&.
+The names of any matrices to exclude from the \*(Aqmatrices\*(Aq list\&. Matrices are specified in the same way as for the selection list\&.
 .RE
 .PP
 \fB\-both\fR \fIboolean\fR

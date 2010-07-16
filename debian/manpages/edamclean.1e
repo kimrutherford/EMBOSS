@@ -2,12 +2,21 @@
 .\"     Title: EDAMCLEAN
 .\"    Author: Debian Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 .\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
-.\"      Date: 02/22/2010
+.\"      Date: 07/16/2010
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 6.2.0
+.\"    Source: EMBOSS 6.3.0
 .\"  Language: English
 .\"
-.TH "EDAMCLEAN" "1e" "02/22/2010" "EMBOSS 6.2.0" "EMBOSS Manual for Debian"
+.TH "EDAMCLEAN" "1e" "07/16/2010" "EMBOSS 6.3.0" "EMBOSS Manual for Debian"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
 .\" -----------------------------------------------------------------
 .\" * set default formatting
 .\" -----------------------------------------------------------------
@@ -22,19 +31,19 @@
 edamclean \- Validate and fix EDAM OBO ontology
 .SH "SYNOPSIS"
 .HP \w'\fBedamclean\fR\ 'u
-\fBedamclean\fR \fB\-edamin\ \fR\fB\fIinfile\fR\fR \fB\-mode\ \fR\fB\fIselection\fR\fR \fB\-edamout\ \fR\fB\fIoutfile\fR\fR \fB\-log\ \fR\fB\fIoutfile\fR\fR
+\fBedamclean\fR \fB\-edamin\ \fR\fB\fIinfile\fR\fR \fB\-mode\ \fR\fB\fIselection\fR\fR \fB\-edamout\ \fR\fB\fIoutfile\fR\fR \fB\-log\ \fR\fB\fIoutfile\fR\fR \fB\-xml\ \fR\fB\fIoutfile\fR\fR
 .HP \w'\fBedamclean\fR\ 'u
 \fBedamclean\fR \fB\-help\fR
 .SH "DESCRIPTION"
 .PP
 \fBedamclean\fR
-is a command line program from EMBOSS (\(lqthe European Molecular Biology Open Software Suite\(rq)\&. It is part of the "" command group(s)\&.
+is a command line program from EMBOSS (\(lqthe European Molecular Biology Open Software Suite\(rq)\&. It is part of the "Ontology:EDAM" command group(s)\&.
 .SH "OPTIONS"
 .SS "Input section"
 .PP
 \fB\-edamin\fR \fIinfile\fR
 .RS 4
-Default value: /homes/jison/Ontologies/EDAM_beta1\&.obo
+Default value: /homes/jison/edam/EDAM\&.obo
 .RE
 .SS "Required section"
 .PP
@@ -53,6 +62,11 @@ Default value: EDAM_out\&.obo
 \fB\-log\fR \fIoutfile\fR
 .RS 4
 Default value: EDAM_out\&.log
+.RE
+.PP
+\fB\-xml\fR \fIoutfile\fR
+.RS 4
+Default value: EDAM_out\&.xml
 .RE
 .SH "BUGS"
 .PP

@@ -2,12 +2,21 @@
 .\"     Title: TRIMEST
 .\"    Author: Debian Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 .\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
-.\"      Date: 02/22/2010
+.\"      Date: 07/16/2010
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 6.2.0
+.\"    Source: EMBOSS 6.3.0
 .\"  Language: English
 .\"
-.TH "TRIMEST" "1e" "02/22/2010" "EMBOSS 6.2.0" "EMBOSS Manual for Debian"
+.TH "TRIMEST" "1e" "07/16/2010" "EMBOSS 6.3.0" "EMBOSS Manual for Debian"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
 .\" -----------------------------------------------------------------
 .\" * set default formatting
 .\" -----------------------------------------------------------------
@@ -44,23 +53,23 @@ This is the minimum length that a poly\-A (or poly\-T) tail must have before it 
 .PP
 \fB\-mismatches\fR \fIinteger\fR
 .RS 4
-If there are this number or fewer contiguous non\-A bases in a poly\-A tail then, if there are \'\-minlength\' \'A\' bases before them, they will be considered part of the tail and removed \&. For example the terminal 4 A\'s of GCAGAAAA would be removed with the default values of \-minlength=4 and \-mismatches=1 (There are not at least 4 A\'s before the last \'G\' and so only the A\'s after it are considered to be part of the tail)\&. The terminal 9 bases of GCAAAAGAAAA would be removed; There are at least \-minlength A\'s preceeding the last \'G\', so it is part of the tail\&. Default value: 1
+If there are this number or fewer contiguous non\-A bases in a poly\-A tail then, if there are \*(Aq\-minlength\*(Aq \*(AqA\*(Aq bases before them, they will be considered part of the tail and removed \&. For example the terminal 4 A\*(Aqs of GCAGAAAA would be removed with the default values of \-minlength=4 and \-mismatches=1 (There are not at least 4 A\*(Aqs before the last \*(AqG\*(Aq and so only the A\*(Aqs after it are considered to be part of the tail)\&. The terminal 9 bases of GCAAAAGAAAA would be removed; There are at least \-minlength A\*(Aqs preceeding the last \*(AqG\*(Aq, so it is part of the tail\&. Default value: 1
 .RE
 .PP
 \fB\-reverse\fR \fIboolean\fR
 .RS 4
-When a poly\-T region at the 5\' end of the sequence is found and removed, it is likely that the sequence is in the reverse sense\&. This option will change the sequence to the forward sense when it is written out\&. If this option is not set, then the sense will not be changed\&. Default value: Y
+When a poly\-T region at the 5\*(Aq end of the sequence is found and removed, it is likely that the sequence is in the reverse sense\&. This option will change the sequence to the forward sense when it is written out\&. If this option is not set, then the sense will not be changed\&. Default value: Y
 .RE
 .PP
 \fB\-tolower\fR \fItoggle\fR
 .RS 4
-The poly\-A region can be \'masked\' by converting the sequence characters to lower\-case\&. Some non\-EMBOSS programs e\&.g\&. fasta can interpret this as a masked region\&. The sequence is unchanged apart from the case change\&. You might like to ensure that the whole sequence is in upper\-case before masking the specified regions to lower\-case by using the \'\-supper\' sequence qualifier\&. Default value: N
+The poly\-A region can be \*(Aqmasked\*(Aq by converting the sequence characters to lower\-case\&. Some non\-EMBOSS programs e\&.g\&. fasta can interpret this as a masked region\&. The sequence is unchanged apart from the case change\&. You might like to ensure that the whole sequence is in upper\-case before masking the specified regions to lower\-case by using the \*(Aq\-supper\*(Aq sequence qualifier\&. Default value: N
 .RE
 .SS "Advanced section"
 .PP
 \fB\-fiveprime\fR \fIboolean\fR
 .RS 4
-If this is set true, then the 5\' end of the sequence is inspected for poly\-T tails\&. These will be removed if they are longer than any 3\' poly\-A tails\&. If this is false, then the 5\' end is ignored\&. Default value: Y
+If this is set true, then the 5\*(Aq end of the sequence is inspected for poly\-T tails\&. These will be removed if they are longer than any 3\*(Aq poly\-A tails\&. If this is false, then the 5\*(Aq end is ignored\&. Default value: Y
 .RE
 .SS "Output section"
 .PP

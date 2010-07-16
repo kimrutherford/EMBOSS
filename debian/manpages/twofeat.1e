@@ -2,12 +2,21 @@
 .\"     Title: TWOFEAT
 .\"    Author: Debian Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 .\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
-.\"      Date: 02/22/2010
+.\"      Date: 07/16/2010
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 6.2.0
+.\"    Source: EMBOSS 6.3.0
 .\"  Language: English
 .\"
-.TH "TWOFEAT" "1e" "02/22/2010" "EMBOSS 6.2.0" "EMBOSS Manual for Debian"
+.TH "TWOFEAT" "1e" "07/16/2010" "EMBOSS 6.3.0" "EMBOSS Manual for Debian"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
 .\" -----------------------------------------------------------------
 .\" * set default formatting
 .\" -----------------------------------------------------------------
@@ -39,12 +48,12 @@ is a command line program from EMBOSS (\(lqthe European Molecular Biology Open S
 .PP
 \fB\-asource\fR \fIstring\fR
 .RS 4
-By default any feature source in the feature table is allowed\&. You can set this to match any feature source you wish to allow\&. The source name is usually either the name of the program that detected the feature or it is the feature table (eg: EMBL) that the feature came from\&. The source may be wildcarded by using \'*\'\&. If you wish to allow more than one source, separate their names with the character \'|\', eg: gene* | embl Default value: *
+By default any feature source in the feature table is allowed\&. You can set this to match any feature source you wish to allow\&. The source name is usually either the name of the program that detected the feature or it is the feature table (eg: EMBL) that the feature came from\&. The source may be wildcarded by using \*(Aq*\*(Aq\&. If you wish to allow more than one source, separate their names with the character \*(Aq|\*(Aq, eg: gene* | embl Default value: *
 .RE
 .PP
 \fB\-atype\fR \fIstring\fR
 .RS 4
-By default every feature in the feature table is allowed\&. You can set this to be any feature type you wish to allow\&. See http://www3\&.ebi\&.ac\&.uk/Services/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www\&.expasy\&.ch/txt/userman\&.txt for a list of the Swissprot feature types\&. The type may be wildcarded by using \'*\'\&. If you wish to allow more than one type, separate their names with the character \'|\', eg: *UTR | intron Default value: *
+By default every feature in the feature table is allowed\&. You can set this to be any feature type you wish to allow\&. See http://www\&.ebi\&.ac\&.uk/embl/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www\&.expasy\&.org/sprot/userman\&.html for a list of the Swissprot feature types\&. The type may be wildcarded by using \*(Aq*\*(Aq\&. If you wish to allow more than one type, separate their names with the character \*(Aq|\*(Aq, eg: *UTR | intron Default value: *
 .RE
 .PP
 \fB\-asense\fR \fIlist\fR
@@ -64,23 +73,23 @@ If this is less than or equal to the maximum score, then any score is permitted\
 .PP
 \fB\-atag\fR \fIstring\fR
 .RS 4
-Tags are the types of extra values that a feature may have\&. For example in the EMBL feature table, a \'CDS\' type of feature may have the tags \'/codon\', \'/codon_start\', \'/db_xref\', \'/EC_number\', \'/evidence\', \'/exception\', \'/function\', \'/gene\', \'/label\', \'/map\', \'/note\', \'/number\', \'/partial\', \'/product\', \'/protein_id\', \'/pseudo\', \'/standard_name\', \'/translation\', \'/transl_except\', \'/transl_table\', or \'/usedin\'\&. Some of these tags also have values, for example \'/gene\' can have the value of the gene name\&. By default any feature tag in the feature table is allowed\&. You can set this to match any feature tag you wish to allow\&. The tag may be wildcarded by using \'*\'\&. If you wish to allow more than one tag, separate their names with the character \'|\', eg: gene | label Default value: *
+Tags are the types of extra values that a feature may have\&. For example in the EMBL feature table, a \*(AqCDS\*(Aq type of feature may have the tags \*(Aq/codon\*(Aq, \*(Aq/codon_start\*(Aq, \*(Aq/db_xref\*(Aq, \*(Aq/EC_number\*(Aq, \*(Aq/evidence\*(Aq, \*(Aq/exception\*(Aq, \*(Aq/function\*(Aq, \*(Aq/gene\*(Aq, \*(Aq/label\*(Aq, \*(Aq/map\*(Aq, \*(Aq/note\*(Aq, \*(Aq/number\*(Aq, \*(Aq/partial\*(Aq, \*(Aq/product\*(Aq, \*(Aq/protein_id\*(Aq, \*(Aq/pseudo\*(Aq, \*(Aq/standard_name\*(Aq, \*(Aq/translation\*(Aq, \*(Aq/transl_except\*(Aq, \*(Aq/transl_table\*(Aq, or \*(Aq/usedin\*(Aq\&. Some of these tags also have values, for example \*(Aq/gene\*(Aq can have the value of the gene name\&. By default any feature tag in the feature table is allowed\&. You can set this to match any feature tag you wish to allow\&. The tag may be wildcarded by using \*(Aq*\*(Aq\&. If you wish to allow more than one tag, separate their names with the character \*(Aq|\*(Aq, eg: gene | label Default value: *
 .RE
 .PP
 \fB\-avalue\fR \fIstring\fR
 .RS 4
-Tag values are the values associated with a feature tag\&. Tags are the types of extra values that a feature may have\&. For example in the EMBL feature table, a \'CDS\' type of feature may have the tags \'/codon\', \'/codon_start\', \'/db_xref\', \'/EC_number\', \'/evidence\', \'/exception\', \'/function\', \'/gene\', \'/label\', \'/map\', \'/note\', \'/number\', \'/partial\', \'/product\', \'/protein_id\', \'/pseudo\', \'/standard_name\', \'/translation\', \'/transl_except\', \'/transl_table\', or \'/usedin\'\&. Only some of these tags can have values, for example \'/gene\' can have the value of the gene name\&. By default any feature tag value in the feature table is allowed\&. You can set this to match any feature tag value you wish to allow\&. The tag value may be wildcarded by using \'*\'\&. If you wish to allow more than one tag value, separate their names with the character \'|\', eg: pax* | 10 Default value: *
+Tag values are the values associated with a feature tag\&. Tags are the types of extra values that a feature may have\&. For example in the EMBL feature table, a \*(AqCDS\*(Aq type of feature may have the tags \*(Aq/codon\*(Aq, \*(Aq/codon_start\*(Aq, \*(Aq/db_xref\*(Aq, \*(Aq/EC_number\*(Aq, \*(Aq/evidence\*(Aq, \*(Aq/exception\*(Aq, \*(Aq/function\*(Aq, \*(Aq/gene\*(Aq, \*(Aq/label\*(Aq, \*(Aq/map\*(Aq, \*(Aq/note\*(Aq, \*(Aq/number\*(Aq, \*(Aq/partial\*(Aq, \*(Aq/product\*(Aq, \*(Aq/protein_id\*(Aq, \*(Aq/pseudo\*(Aq, \*(Aq/standard_name\*(Aq, \*(Aq/translation\*(Aq, \*(Aq/transl_except\*(Aq, \*(Aq/transl_table\*(Aq, or \*(Aq/usedin\*(Aq\&. Only some of these tags can have values, for example \*(Aq/gene\*(Aq can have the value of the gene name\&. By default any feature tag value in the feature table is allowed\&. You can set this to match any feature tag value you wish to allow\&. The tag value may be wildcarded by using \*(Aq*\*(Aq\&. If you wish to allow more than one tag value, separate their names with the character \*(Aq|\*(Aq, eg: pax* | 10 Default value: *
 .RE
 .SS "Second feature options"
 .PP
 \fB\-bsource\fR \fIstring\fR
 .RS 4
-By default any feature source in the feature table is allowed\&. You can set this to match any feature source you wish to allow\&. The source name is usually either the name of the program that detected the feature or it is the feature table (eg: EMBL) that the feature came from\&. The source may be wildcarded by using \'*\'\&. If you wish to allow more than one source, separate their names with the character \'|\', eg: gene* | embl Default value: *
+By default any feature source in the feature table is allowed\&. You can set this to match any feature source you wish to allow\&. The source name is usually either the name of the program that detected the feature or it is the feature table (eg: EMBL) that the feature came from\&. The source may be wildcarded by using \*(Aq*\*(Aq\&. If you wish to allow more than one source, separate their names with the character \*(Aq|\*(Aq, eg: gene* | embl Default value: *
 .RE
 .PP
 \fB\-btype\fR \fIstring\fR
 .RS 4
-By default every feature in the feature table is allowed\&. You can set this to be any feature type you wish to allow\&. See http://www3\&.ebi\&.ac\&.uk/Services/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www\&.expasy\&.ch/txt/userman\&.txt for a list of the Swissprot feature types\&. The type may be wildcarded by using \'*\'\&. If you wish to allow more than one type, separate their names with the character \'|\', eg: *UTR | intron Default value: *
+By default every feature in the feature table is allowed\&. You can set this to be any feature type you wish to allow\&. See http://www\&.ebi\&.ac\&.uk/embl/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www\&.expasy\&.org/sprot/userman\&.html for a list of the Swissprot feature types\&. The type may be wildcarded by using \*(Aq*\*(Aq\&. If you wish to allow more than one type, separate their names with the character \*(Aq|\*(Aq, eg: *UTR | intron Default value: *
 .RE
 .PP
 \fB\-bsense\fR \fIlist\fR
@@ -100,12 +109,12 @@ If this is less than or equal to the maximum score, then any score is permitted\
 .PP
 \fB\-btag\fR \fIstring\fR
 .RS 4
-Tags are the types of extra values that a feature may have\&. For example in the EMBL feature table, a \'CDS\' type of feature may have the tags \'/codon\', \'/codon_start\', \'/db_xref\', \'/EC_number\', \'/evidence\', \'/exception\', \'/function\', \'/gene\', \'/label\', \'/map\', \'/note\', \'/number\', \'/partial\', \'/product\', \'/protein_id\', \'/pseudo\', \'/standard_name\', \'/translation\', \'/transl_except\', \'/transl_table\', or \'/usedin\'\&. Some of these tags also have values, for example \'/gene\' can have the value of the gene name\&. By default any feature tag in the feature table is allowed\&. You can set this to match any feature tag you wish to allow\&. The tag may be wildcarded by using \'*\'\&. If you wish to allow more than one tag, separate their names with the character \'|\', eg: gene | label Default value: *
+Tags are the types of extra values that a feature may have\&. For example in the EMBL feature table, a \*(AqCDS\*(Aq type of feature may have the tags \*(Aq/codon\*(Aq, \*(Aq/codon_start\*(Aq, \*(Aq/db_xref\*(Aq, \*(Aq/EC_number\*(Aq, \*(Aq/evidence\*(Aq, \*(Aq/exception\*(Aq, \*(Aq/function\*(Aq, \*(Aq/gene\*(Aq, \*(Aq/label\*(Aq, \*(Aq/map\*(Aq, \*(Aq/note\*(Aq, \*(Aq/number\*(Aq, \*(Aq/partial\*(Aq, \*(Aq/product\*(Aq, \*(Aq/protein_id\*(Aq, \*(Aq/pseudo\*(Aq, \*(Aq/standard_name\*(Aq, \*(Aq/translation\*(Aq, \*(Aq/transl_except\*(Aq, \*(Aq/transl_table\*(Aq, or \*(Aq/usedin\*(Aq\&. Some of these tags also have values, for example \*(Aq/gene\*(Aq can have the value of the gene name\&. By default any feature tag in the feature table is allowed\&. You can set this to match any feature tag you wish to allow\&. The tag may be wildcarded by using \*(Aq*\*(Aq\&. If you wish to allow more than one tag, separate their names with the character \*(Aq|\*(Aq, eg: gene | label Default value: *
 .RE
 .PP
 \fB\-bvalue\fR \fIstring\fR
 .RS 4
-Tag values are the values associated with a feature tag\&. Tags are the types of extra values that a feature may have\&. For example in the EMBL feature table, a \'CDS\' type of feature may have the tags \'/codon\', \'/codon_start\', \'/db_xref\', \'/EC_number\', \'/evidence\', \'/exception\', \'/function\', \'/gene\', \'/label\', \'/map\', \'/note\', \'/number\', \'/partial\', \'/product\', \'/protein_id\', \'/pseudo\', \'/standard_name\', \'/translation\', \'/transl_except\', \'/transl_table\', or \'/usedin\'\&. Only some of these tags can have values, for example \'/gene\' can have the value of the gene name\&. By default any feature tag value in the feature table is allowed\&. You can set this to match any feature tag value you wish to allow\&. The tag value may be wildcarded by using \'*\'\&. If you wish to allow more than one tag value, separate their names with the character \'|\', eg: pax* | 10 Default value: *
+Tag values are the values associated with a feature tag\&. Tags are the types of extra values that a feature may have\&. For example in the EMBL feature table, a \*(AqCDS\*(Aq type of feature may have the tags \*(Aq/codon\*(Aq, \*(Aq/codon_start\*(Aq, \*(Aq/db_xref\*(Aq, \*(Aq/EC_number\*(Aq, \*(Aq/evidence\*(Aq, \*(Aq/exception\*(Aq, \*(Aq/function\*(Aq, \*(Aq/gene\*(Aq, \*(Aq/label\*(Aq, \*(Aq/map\*(Aq, \*(Aq/note\*(Aq, \*(Aq/number\*(Aq, \*(Aq/partial\*(Aq, \*(Aq/product\*(Aq, \*(Aq/protein_id\*(Aq, \*(Aq/pseudo\*(Aq, \*(Aq/standard_name\*(Aq, \*(Aq/translation\*(Aq, \*(Aq/transl_except\*(Aq, \*(Aq/transl_table\*(Aq, or \*(Aq/usedin\*(Aq\&. Only some of these tags can have values, for example \*(Aq/gene\*(Aq can have the value of the gene name\&. By default any feature tag value in the feature table is allowed\&. You can set this to match any feature tag value you wish to allow\&. The tag value may be wildcarded by using \*(Aq*\*(Aq\&. If you wish to allow more than one tag value, separate their names with the character \*(Aq|\*(Aq, eg: pax* | 10 Default value: *
 .RE
 .SS "Feature relation options"
 .PP
@@ -116,12 +125,12 @@ This allows you to specify the allowed overlaps of the features A and B\&. You c
 .PP
 \fB\-minrange\fR \fIinteger\fR
 .RS 4
-If this is greater or equal to \'maxrange\', then no min or max range is specified
+If this is greater or equal to \*(Aqmaxrange\*(Aq, then no min or max range is specified
 .RE
 .PP
 \fB\-maxrange\fR \fIinteger\fR
 .RS 4
-If this is less than or equal to \'minrange\', then no min or max range is specified
+If this is less than or equal to \*(Aqminrange\*(Aq, then no min or max range is specified
 .RE
 .PP
 \fB\-rangetype\fR \fIlist\fR
@@ -131,7 +140,7 @@ This allows you to specify the positions from which the allowed minimum or maxim
 .PP
 \fB\-sense\fR \fIlist\fR
 .RS 4
-This allows you to specify the required sense that the two features must be on\&. This is ignored (always \'Any\') when looking at protein sequence features\&. Default value: A
+This allows you to specify the required sense that the two features must be on\&. This is ignored (always \*(AqAny\*(Aq) when looking at protein sequence features\&. Default value: A
 .RE
 .PP
 \fB\-order\fR \fIlist\fR
@@ -147,7 +156,7 @@ If you set this to be true, then the two features themselves will be written out
 .PP
 \fB\-typeout\fR \fIstring\fR
 .RS 4
-If you have specified that the pairs of features that are found should be reported as one feature in the ouput, then you can specify the \'type\' name of the new feature here\&. By default every feature in the feature table is allowed\&. See http://www3\&.ebi\&.ac\&.uk/Services/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www\&.expasy\&.ch/txt/userman\&.txt for a list of the Swissprot feature types\&. If you specify an invalid feature type name, then the default name \'misc_feature\' is used\&. Default value: misc_feature
+If you have specified that the pairs of features that are found should be reported as one feature in the ouput, then you can specify the \*(Aqtype\*(Aq name of the new feature here\&. By default every feature in the feature table is allowed\&. See http://www\&.ebi\&.ac\&.uk/embl/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www\&.expasy\&.org/sprot/userman\&.html for a list of the Swissprot feature types\&. If you specify an invalid feature type name, then the default name \*(Aqmisc_feature\*(Aq is used\&. Default value: misc_feature
 .RE
 .PP
 \fB\-outfile\fR \fIreport\fR

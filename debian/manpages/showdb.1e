@@ -2,12 +2,21 @@
 .\"     Title: SHOWDB
 .\"    Author: Debian Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 .\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
-.\"      Date: 02/22/2010
+.\"      Date: 07/16/2010
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 6.2.0
+.\"    Source: EMBOSS 6.3.0
 .\"  Language: English
 .\"
-.TH "SHOWDB" "1e" "02/22/2010" "EMBOSS 6.2.0" "EMBOSS Manual for Debian"
+.TH "SHOWDB" "1e" "07/16/2010" "EMBOSS 6.3.0" "EMBOSS Manual for Debian"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
 .\" -----------------------------------------------------------------
 .\" * set default formatting
 .\" -----------------------------------------------------------------
@@ -64,7 +73,7 @@ This displays the access methods that can be used on this database, for all, que
 .PP
 \fB\-fields\fR \fIboolean\fR
 .RS 4
-This displays the search fields that can be used on this database, other than the standard \'id\' or \'acc\' fields\&. Default value: $(full)
+This displays the search fields that can be used on this database, other than the standard \*(Aqid\*(Aq or \*(Aqacc\*(Aq fields\&. Default value: $(full)
 .RE
 .PP
 \fB\-defined\fR \fIboolean\fR
@@ -80,7 +89,7 @@ Default value: $(full)
 .PP
 \fB\-only\fR \fItoggle\fR
 .RS 4
-This is a way of shortening the command line if you only want a few standard columns to be displayed\&. Instead of specifying: \'\-nohead \-notype \-noid \-noquery \-noall\' to get only the comment output, you can specify \'\-only \-comment\' Default value: N
+This is a way of shortening the command line if you only want a few standard columns to be displayed\&. Instead of specifying: \*(Aq\-nohead \-notype \-noid \-noquery \-noall\*(Aq to get only the comment output, you can specify \*(Aq\-only \-comment\*(Aq Default value: N
 .RE
 .PP
 \fB\-heading\fR \fIboolean\fR

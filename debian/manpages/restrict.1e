@@ -2,12 +2,21 @@
 .\"     Title: RESTRICT
 .\"    Author: Debian Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 .\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
-.\"      Date: 02/22/2010
+.\"      Date: 07/16/2010
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 6.2.0
+.\"    Source: EMBOSS 6.3.0
 .\"  Language: English
 .\"
-.TH "RESTRICT" "1e" "02/22/2010" "EMBOSS 6.2.0" "EMBOSS Manual for Debian"
+.TH "RESTRICT" "1e" "07/16/2010" "EMBOSS 6.3.0" "EMBOSS Manual for Debian"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
 .\" -----------------------------------------------------------------
 .\" * set default formatting
 .\" -----------------------------------------------------------------
@@ -53,7 +62,7 @@ This sets the minimum length of the restriction enzyme recognition site\&. Any e
 .PP
 \fB\-enzymes\fR \fIstring\fR
 .RS 4
-The name \'all\' reads in all enzyme names from the REBASE database\&. You can specify enzymes by giving their names with commas between then, such as: \'HincII,hinfI,ppiI,hindiii\'\&. The case of the names is not important\&. You can specify a file of enzyme names to read in by giving the name of the file holding the enzyme names with a \'@\' character in front of it, for example, \'@enz\&.list\'\&. Blank lines and lines starting with a hash character or \'!\' are ignored and all other lines are concatenated together with a comma character \',\' and then treated as the list of enzymes to search for\&. An example of a file of enzyme names is: ! my enzymes HincII, ppiII ! other enzymes hindiii HinfI PpiI Default value: all
+The name \*(Aqall\*(Aq reads in all enzyme names from the REBASE database\&. You can specify enzymes by giving their names with commas between then, such as: \*(AqHincII,hinfI,ppiI,hindiii\*(Aq\&. The case of the names is not important\&. You can specify a file of enzyme names to read in by giving the name of the file holding the enzyme names with a \*(Aq@\*(Aq character in front of it, for example, \*(Aq@enz\&.list\*(Aq\&. Blank lines and lines starting with a hash character or \*(Aq!\*(Aq are ignored and all other lines are concatenated together with a comma character \*(Aq,\*(Aq and then treated as the list of enzymes to search for\&. An example of a file of enzyme names is: ! my enzymes HincII, ppiII ! other enzymes hindiii HinfI PpiI Default value: all
 .RE
 .SS "Advanced section"
 .PP
@@ -89,7 +98,7 @@ This allows those enzymes which cut at different positions on the forward and re
 .PP
 \fB\-ambiguity\fR \fIboolean\fR
 .RS 4
-This allows those enzymes which have one or more \'N\' ambiguity codes in their pattern to be considered Default value: Y
+This allows those enzymes which have one or more \*(AqN\*(Aq ambiguity codes in their pattern to be considered Default value: Y
 .RE
 .PP
 \fB\-plasmid\fR \fIboolean\fR
@@ -104,13 +113,13 @@ If this is set then RE recognition sites will not match methylated bases\&. Defa
 .PP
 \fB\-commercial\fR \fIboolean\fR
 .RS 4
-If this is set, then only those enzymes with a commercial supplier will be searched for\&. This qualifier is ignored if you have specified an explicit list of enzymes to search for, rather than searching through \'all\' the enzymes in the REBASE database\&. It is assumed that, if you are asking for an explicit enzyme, then you probably know where to get it from and so all enzymes names that you have asked to be searched for, and which cut, will be reported whether or not they have a commercial supplier\&. Default value: Y
+If this is set, then only those enzymes with a commercial supplier will be searched for\&. This qualifier is ignored if you have specified an explicit list of enzymes to search for, rather than searching through \*(Aqall\*(Aq the enzymes in the REBASE database\&. It is assumed that, if you are asking for an explicit enzyme, then you probably know where to get it from and so all enzymes names that you have asked to be searched for, and which cut, will be reported whether or not they have a commercial supplier\&. Default value: Y
 .RE
 .SS "Output section"
 .PP
 \fB\-limit\fR \fIboolean\fR
 .RS 4
-This limits the reporting of enzymes to just one enzyme from each group of isoschizomers\&. The enzyme chosen to represent an isoschizomer group is the prototype indicated in the data file \'embossre\&.equ\', which is created by the program \'rebaseextract\'\&. If you prefer different prototypes to be used, make a copy of embossre\&.equ in your home directory and edit it\&. If this value is set to be false then all of the input enzymes will be reported\&. You might like to set this to false if you are supplying an explicit set of enzymes rather than searching \'all\' of them\&. Default value: Y
+This limits the reporting of enzymes to just one enzyme from each group of isoschizomers\&. The enzyme chosen to represent an isoschizomer group is the prototype indicated in the data file \*(Aqembossre\&.equ\*(Aq, which is created by the program \*(Aqrebaseextract\*(Aq\&. If you prefer different prototypes to be used, make a copy of embossre\&.equ in your home directory and edit it\&. If this value is set to be false then all of the input enzymes will be reported\&. You might like to set this to false if you are supplying an explicit set of enzymes rather than searching \*(Aqall\*(Aq of them\&. Default value: Y
 .RE
 .PP
 \fB\-alphabetic\fR \fIboolean\fR

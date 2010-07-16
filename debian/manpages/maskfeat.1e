@@ -2,12 +2,21 @@
 .\"     Title: MASKFEAT
 .\"    Author: Debian Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 .\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
-.\"      Date: 02/22/2010
+.\"      Date: 07/16/2010
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 6.2.0
+.\"    Source: EMBOSS 6.3.0
 .\"  Language: English
 .\"
-.TH "MASKFEAT" "1e" "02/22/2010" "EMBOSS 6.2.0" "EMBOSS Manual for Debian"
+.TH "MASKFEAT" "1e" "07/16/2010" "EMBOSS 6.3.0" "EMBOSS Manual for Debian"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
 .\" -----------------------------------------------------------------
 .\" * set default formatting
 .\" -----------------------------------------------------------------
@@ -39,17 +48,17 @@ is a command line program from EMBOSS (\(lqthe European Molecular Biology Open S
 .PP
 \fB\-type\fR \fIstring\fR
 .RS 4
-By default any feature in the feature table with a type starting \'repeat\' is masked\&. You can set this to be any feature type you wish to mask\&. See http://www3\&.ebi\&.ac\&.uk/Services/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www\&.expasy\&.ch/txt/userman\&.txt for a list of the Swissprot feature types\&. The type may be wildcarded by using \'*\'\&. If you wish to mask more than one type, separate their names with spaces or commas, eg: *UTR repeat* Default value: repeat*
+By default any feature in the feature table with a type starting \*(Aqrepeat\*(Aq is masked\&. You can set this to be any feature type you wish to mask\&. See http://www\&.ebi\&.ac\&.uk/embl/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www\&.expasy\&.org/sprot/userman\&.html for a list of the Swissprot feature types\&. The type may be wildcarded by using \*(Aq*\*(Aq\&. If you wish to mask more than one type, separate their names with spaces or commas, eg: *UTR repeat* Default value: repeat*
 .RE
 .PP
 \fB\-tolower\fR \fItoggle\fR
 .RS 4
-The region can be \'masked\' by converting the sequence characters to lower\-case, some non\-EMBOSS programs e\&.g\&. fasta can interpret this as a masked region\&. The sequence is unchanged apart from the case change\&. You might like to ensure that the whole sequence is in upper\-case before masking the specified regions to lower\-case by using the \'\-supper\' flag\&. Default value: N
+The region can be \*(Aqmasked\*(Aq by converting the sequence characters to lower\-case, some non\-EMBOSS programs e\&.g\&. fasta can interpret this as a masked region\&. The sequence is unchanged apart from the case change\&. You might like to ensure that the whole sequence is in upper\-case before masking the specified regions to lower\-case by using the \*(Aq\-supper\*(Aq flag\&. Default value: N
 .RE
 .PP
 \fB\-maskchar\fR \fIstring\fR
 .RS 4
-Character to use when masking\&. Default is \'X\' for protein sequences, \'N\' for nucleic sequences\&. If the mask character is set to be the SPACE character or a null character, then the sequence is \'masked\' by changing it to lower\-case, just as with the \'\-lowercase\' flag\&. Default value: @($(acdprotein)?X:N)
+Character to use when masking\&. Default is \*(AqX\*(Aq for protein sequences, \*(AqN\*(Aq for nucleic sequences\&. If the mask character is set to be the SPACE character or a null character, then the sequence is \*(Aqmasked\*(Aq by changing it to lower\-case, just as with the \*(Aq\-lowercase\*(Aq flag\&. Default value: @($(acdprotein)?X:N)
 .RE
 .SS "Output section"
 .PP
