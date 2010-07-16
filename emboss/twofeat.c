@@ -752,7 +752,7 @@ static PHit twofeat_HitsNew(void)
     AJNEW0(pthis);
 	    
     return pthis;
-} 
+}
 
 
 
@@ -783,7 +783,7 @@ static void twofeat_HitsDel(PHit *pthis)
 
 
 
-   
+
 /* @funcstatic twofeat_check_match *********************************
 **
 ** check for overlap, minrange, maxrange, rangetype, sense, order
@@ -1083,6 +1083,7 @@ static ajint twofeat_get_sense_type(const AjPStr sense)
 
     return -1;
 }
+
 
 
 

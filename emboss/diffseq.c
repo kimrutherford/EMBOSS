@@ -60,6 +60,9 @@ typedef struct CdsSval
 } CdsOval;
 #define CdsPval CdsOval*
 
+
+
+
 /* @datastatic PosPDiff ****************************************************
 **
 ** Position of a difference between two matching regions
@@ -121,6 +124,8 @@ static PosPDiff diffseq_PosPDiffNew(void);
 static void diffseq_PosPDiffDel(void **x, void *cl);
 
 static void diffseq_FeatSetCDSFrame(AjPFeattable ftab);
+
+
 
 
 /* @prog diffseq **************************************************************
@@ -414,6 +419,9 @@ static void diffseq_Diff(const AjPList difflist,
     return;
 }
 
+
+
+
 /* @funcstatic diffseq_WordMatchListConvDiffToFeat ****************************
 **
 ** Convert the differences list to feature tables for output.
@@ -672,6 +680,7 @@ static void diffseq_AddTags(AjPStr* strval,
 
 
 
+
 /* @funcstatic diffseq_DiffList ************************************************
 **
 ** Converts a list of matching regions into a list of differences
@@ -831,6 +840,8 @@ static void diffseq_DiffList(const AjPList matchlist, AjPList difflist,
 }
 
 
+
+
 /* @funcstatic diffseq_PosPDiffNew ********************************************
 **
 ** Constructor for an empty PosPDiff object
@@ -849,7 +860,10 @@ static PosPDiff diffseq_PosPDiffNew(void)
                    
     return pthis;
 }
-    
+
+
+
+
 /* @funcstatic diffseq_PosPDiffDel ********************************************
 **
 ** Destructor for a PosPDiff object for use with ajListMap
@@ -873,7 +887,7 @@ static void diffseq_PosPDiffDel(void **x, void *cl)
                    
     return;
 }
-    
+
 
 
 

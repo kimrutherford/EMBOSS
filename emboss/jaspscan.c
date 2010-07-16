@@ -36,18 +36,20 @@
 #define JASPTAB_GUESS 1000
 
 
-/* @datastatic AjPJsphits *****************************************************
+
+
+/* @datastatic PJsphits *****************************************************
 **
 ** Jaspar hits object
 **
 ** Holds hits from scanning a sequence with a Jaspar matrix
 ** Also holds matrix information and type.
 **
-** AjPJsphits is implemented as a pointer to a C data structure.
+** PJsphits is implemented as a pointer to a C data structure.
 **
 ** @alias AjPPStr
-** @alias AjSJsphits
-** @alias AjOJsphits
+** @alias SJsphits
+** @alias OJsphits
 **
 ** @attr matname [AjPStr] matrix name
 ** @attr start [ajuint] start position
@@ -61,7 +63,7 @@
 ** @@
 ******************************************************************************/
 
-typedef struct AjSJspHits {
+typedef struct SJsphits {
   AjPStr matname;
   ajuint start;
   ajuint end;
@@ -71,22 +73,22 @@ typedef struct AjSJspHits {
   float  maxscore;
   char type;
   char Padding[7];
-} AjOJsphits;
-#define AjPJsphits AjOJsphits*
+} OJsphits;
+#define PJsphits OJsphits*
 
 
 
 
-/* @datastatic AjPJspmat ******************************************************
+/* @datastatic PJspmat ******************************************************
 **
 ** Jaspar matrix object
 **
 ** Also holds matrix information and type from the matrix_list.txt file
 **
-** AjPJspmat is implemented as a pointer to a C data structure.
+** PJspmat is implemented as a pointer to a C data structure.
 **
-** @alias AjSJspmat
-** @alias AjOJspmat
+** @alias SJspmat
+** @alias OJspmat
 **
 ** @attr id [AjPStr] Identifier
 ** @attr num [AjPStr] Information content (very close to optional content value)
@@ -112,7 +114,7 @@ typedef struct AjSJspHits {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSJspmat {
+typedef struct SJspmat {
     AjPStr id;
     AjPStr num;
     AjPStr name;
@@ -134,8 +136,8 @@ typedef struct AjSJspmat {
     AjPStr consens;
     char type;
     char Padding[7];
-} AjOJspmat;
-#define AjPJspmat AjOJspmat*
+} OJspmat;
+#define PJspmat OJspmat*
 
 
 
@@ -152,16 +154,16 @@ static void    jaspscan_scan(const AjPStr seq, const ajuint begin,
 			     const AjBool both, AjPList hits);
 
 
-static AjPJsphits jaspscan_hitsnew(void);
-static void       jaspscan_hitsdel(AjPJsphits *thys);
+static PJsphits jaspscan_hitsnew(void);
+static void       jaspscan_hitsdel(PJsphits *thys);
 
-static AjPJspmat  jaspscan_infonew(void);
-static void       jaspscan_infodel(AjPJspmat *thys);
+static PJspmat  jaspscan_infonew(void);
+static void       jaspscan_infodel(PJspmat *thys);
 
 static AjPTable jaspscan_ReadCoreList(const AjPStr jaspdir);
 static AjPTable jaspscan_ReadFamList(const AjPStr jaspdir);
 
-static void   jaspscan_coretoken(AjPJspmat info, const AjPStr str);
+static void   jaspscan_coretoken(PJspmat info, const AjPStr str);
 static ajuint jaspscan_readmatrix(const AjPStr mfname, float ***matrix);
 
 static void   jaspscan_ReportHits(AjPFeattable TabRpt, const AjPTable mattab,
@@ -594,7 +596,7 @@ static void jaspscan_scan(const AjPStr seq, const ajuint begin,
 			  const float threshold,
 			  const AjBool both, AjPList hits)
 {
-    AjPJsphits val = NULL;
+    PJsphits val = NULL;
     AjPStr mname   = NULL;
     float **matrix = NULL;
     ajuint cols;
@@ -790,13 +792,13 @@ static ajuint jaspscan_readmatrix(const AjPStr mfname, float ***matrix)
 **
 ** Creates a hits object
 **
-** @return [AjPJsphits] list of hits
+** @return [PJsphits] list of hits
 ** @@
 ******************************************************************************/
 
-static AjPJsphits jaspscan_hitsnew(void)
+static PJsphits jaspscan_hitsnew(void)
 {
-    AjPJsphits thys = NULL;
+    PJsphits thys = NULL;
     
     AJNEW0(thys);
     thys->matname = ajStrNew();
@@ -811,15 +813,15 @@ static AjPJsphits jaspscan_hitsnew(void)
 **
 ** Delete a Jaspar hits object
 **
-** @param [w] thys [AjPJsphits*] Jaspar hits object
+** @param [w] thys [PJsphits*] Jaspar hits object
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void jaspscan_hitsdel(AjPJsphits *thys)
+static void jaspscan_hitsdel(PJsphits *thys)
 {
-    AjPJsphits pthis;
+    PJsphits pthis;
 
     pthis = *thys;
 
@@ -840,7 +842,7 @@ static void jaspscan_hitsdel(AjPJsphits *thys)
 **
 ** @param [r] jaspdir [const AjPStr] Jaspar directory
 **
-** @return [AjPTable] AjPJspmat objects with matrix ID keys
+** @return [AjPTable] PJspmat objects with matrix ID keys
 ** @@
 ******************************************************************************/
 
@@ -852,7 +854,7 @@ static AjPTable jaspscan_ReadCoreList(const AjPStr jaspdir)
     AjPStr key   = NULL;
     AjPStr str   = NULL;
  
-    AjPJspmat info = NULL;
+    PJspmat info = NULL;
     
     AjPFile inf  = NULL;
     const char *p = NULL;
@@ -936,7 +938,7 @@ static AjPTable jaspscan_ReadCoreList(const AjPStr jaspdir)
 **
 ** @param [r] jaspdir [const AjPStr] Jaspar directory
 **
-** @return [AjPTable] AjPJspmat objects with matrix ID keys
+** @return [AjPTable] PJspmat objects with matrix ID keys
 ** @@
 ******************************************************************************/
 
@@ -948,7 +950,7 @@ static AjPTable jaspscan_ReadFamList(const AjPStr jaspdir)
     AjPStr key   = NULL;
     AjPStr str   = NULL;
  
-    AjPJspmat info = NULL;
+    PJspmat info = NULL;
     
     AjPFile inf  = NULL;
     const char *p = NULL;
@@ -1036,14 +1038,14 @@ static AjPTable jaspscan_ReadFamList(const AjPStr jaspdir)
 **
 ** Parse matrix_list.txt key/value pairs
 **
-** @param [u] info [AjPJspmat] Jaspar matrix information
+** @param [u] info [PJspmat] Jaspar matrix information
 ** @param [r] str [const AjPStr] key/value pair
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void jaspscan_coretoken(AjPJspmat info, const AjPStr str)
+static void jaspscan_coretoken(PJspmat info, const AjPStr str)
 {
     const char *p;
     const char *q;
@@ -1123,13 +1125,13 @@ static void jaspscan_coretoken(AjPJspmat info, const AjPStr str)
 **
 ** Creates a hits object
 **
-** @return [AjPJspmat] matrix information
+** @return [PJspmat] matrix information
 ** @@
 ******************************************************************************/
 
-static AjPJspmat jaspscan_infonew(void)
+static PJspmat jaspscan_infonew(void)
 {
-    AjPJspmat thys = NULL;
+    PJspmat thys = NULL;
     
     AJNEW0(thys);
 
@@ -1163,15 +1165,15 @@ static AjPJspmat jaspscan_infonew(void)
 **
 ** Delete a Jaspar information object
 **
-** @param [w] thys [AjPJspmat*] Jaspar hits object
+** @param [w] thys [PJspmat*] Jaspar hits object
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void jaspscan_infodel(AjPJspmat *thys)
+static void jaspscan_infodel(PJspmat *thys)
 {
-    AjPJspmat pthis;
+    PJspmat pthis;
 
     pthis = *thys;
 
@@ -1220,8 +1222,8 @@ static void jaspscan_infodel(AjPJspmat *thys)
 static void jaspscan_ReportHits(AjPFeattable TabRpt, const AjPTable mattab,
 				AjPList hits)
 {
-    AjPJsphits hit = NULL;
-    AjPJspmat info = NULL;
+    PJsphits hit = NULL;
+    PJspmat info = NULL;
     AjPFeature feat = NULL;
     AjPStr str = NULL;
     float fnum = 0.;
@@ -1345,7 +1347,7 @@ static void jaspscan_ReportHits(AjPFeattable TabRpt, const AjPTable mattab,
 
 static void jaspscan_ClearTable(void **key, void **value, void *cl)
 {
-    AjPJspmat info = (AjPJspmat) *value;
+    PJspmat info = (PJspmat) *value;
     AjPStr skey = (AjPStr) *key;
     
     ajStrDel(&skey);

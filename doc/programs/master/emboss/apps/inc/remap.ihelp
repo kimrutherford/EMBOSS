@@ -1,5 +1,5 @@
 Display restriction enzyme binding sites in a nucleotide sequence
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -41,8 +41,8 @@ Version: EMBOSS:6.2.0
    -maxcuts            integer    [2000000000] This sets the maximum number of
                                   cuts for any restriction enzyme that will
                                   be considered. Any enzymes that cut more
-                                  times than this will be ignored. (Integer up
-                                  to 2000000000)
+                                  times than this will be ignored. (Any
+                                  integer value)
    -single             boolean    [N] If this is set then this forces the
                                   values of the mincuts and maxcuts qualifiers
                                   to both be 1. Any other value you may have
@@ -59,7 +59,7 @@ Version: EMBOSS:6.2.0
                                   pattern to be considered
    -plasmid            boolean    [N] If this is set then this allows searches
                                   for restriction enzyme recognition site and
-                                  cut postions that span the end of the
+                                  cut positions that span the end of the
                                   sequence to be considered.
    -methylation        boolean    [N] If this is set then RE recognition sites
                                   will not match methylated bases.

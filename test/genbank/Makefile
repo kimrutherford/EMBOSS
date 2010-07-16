@@ -37,10 +37,11 @@ subdir = test/genbank
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/amd64.m4 \
-	$(top_srcdir)/m4/general.m4 $(top_srcdir)/m4/java.m4 \
-	$(top_srcdir)/m4/lf_x11.m4 $(top_srcdir)/m4/mysql.m4 \
-	$(top_srcdir)/m4/pngdriver.m4 $(top_srcdir)/m4/postgresql.m4 \
-	$(top_srcdir)/m4/sgi.m4 $(top_srcdir)/configure.in
+	$(top_srcdir)/m4/general.m4 $(top_srcdir)/m4/hpdf.m4 \
+	$(top_srcdir)/m4/java.m4 $(top_srcdir)/m4/lf_x11.m4 \
+	$(top_srcdir)/m4/mysql.m4 $(top_srcdir)/m4/pngdriver.m4 \
+	$(top_srcdir)/m4/postgresql.m4 $(top_srcdir)/m4/sgi.m4 \
+	$(top_srcdir)/configure.in
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -73,22 +74,22 @@ am__installdirs = "$(DESTDIR)$(pkgdatadir)"
 DATA = $(pkgdata_DATA)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 pkgdatadir = $(prefix)/share/$(PACKAGE)/test/genbank
-ACLOCAL = ${SHELL} /m1/emboss/emboss/missing --run aclocal-1.11
-AJAX_FIXED_ROOT = \"/m1/emboss/emboss/emboss\"
+ACLOCAL = ${SHELL} /m2/emboss/emboss/missing --run aclocal-1.11
+AJAX_FIXED_ROOT = \"/m2/emboss/emboss/emboss\"
 AJAX_SYSTEM = \"Linux\"
-AMTAR = ${SHELL} /m1/emboss/emboss/missing --run tar
+AMTAR = ${SHELL} /m2/emboss/emboss/missing --run tar
 AR = ar
-AUTOCONF = ${SHELL} /m1/emboss/emboss/missing --run autoconf
-AUTOHEADER = ${SHELL} /m1/emboss/emboss/missing --run autoheader
-AUTOMAKE = ${SHELL} /m1/emboss/emboss/missing --run automake-1.11
+AUTOCONF = ${SHELL} /m2/emboss/emboss/missing --run autoconf
+AUTOHEADER = ${SHELL} /m2/emboss/emboss/missing --run autoheader
+AUTOMAKE = ${SHELL} /m2/emboss/emboss/missing --run automake-1.11
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS =   -O2  -DNO_AUTH -D__amd64__  
+CFLAGS =   -O2  -DNO_AUTH -D__amd64__ -I/usr/include/mysql 
 CPP = gcc -E
 CPPFLAGS = -DAJ_LinuxLF -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE  -DLENDIAN
 CYGPATH_W = echo
-DEFS = -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE=\"EMBOSS\" -DVERSION=\"6.2.0\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_DLFCN_H=1 -DLT_OBJDIR=\".libs/\" -DHAVE_DIRENT_H=1 -DSTDC_HEADERS=1 -DHAVE_UNISTD_H=1 -DGETPGRP_VOID=1 -DHAVE_STRFTIME=1 -DHAVE_FORK=1 -DHAVE_VFORK=1 -DHAVE_WORKING_VFORK=1 -DHAVE_WORKING_FORK=1 -DHAVE_VPRINTF=1 -DHAVE_MEMMOVE=1 -DPLD_xwin=1 -DHAVE_LIBM=1 -DPLD_png=1
+DEFS = -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DPACKAGE=\"EMBOSS\" -DVERSION=\"6.3.0\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_DLFCN_H=1 -DLT_OBJDIR=\".libs/\" -DHAVE_DIRENT_H=1 -DSTDC_HEADERS=1 -DHAVE_UNISTD_H=1 -DGETPGRP_VOID=1 -DHAVE_STRFTIME=1 -DHAVE_FORK=1 -DHAVE_VFORK=1 -DHAVE_WORKING_VFORK=1 -DHAVE_WORKING_FORK=1 -DHAVE_VPRINTF=1 -DHAVE_MEMMOVE=1 -DPLD_xwin=1 -DHAVE_LIBM=1 -DPLD_pdf=1 -DPLD_png=1 -DHAVE_MYSQL=1
 DEPDIR = .deps
 DEVWARNINGS = 
 DEVWARN_CFLAGS = 
@@ -99,7 +100,8 @@ ECHO_N = -n
 ECHO_T = 
 EGREP = /bin/grep -E
 EHAVEANT = 
-EMBOSS_TOP = /m1/emboss/emboss
+EMBOSS_TOP = /m2/emboss/emboss
+ESYSTEMLIBS = 
 EXEEXT = 
 FGREP = /bin/grep -F
 GREP = /bin/grep
@@ -114,19 +116,19 @@ ISAIXIA64 =
 ISCYGWIN = 
 JAVA_OK = 
 LD = /usr/bin/ld -m elf_x86_64
-LDFLAGS =   
+LDFLAGS =  -rdynamic -L/usr/lib64/mysql -lmysqlclient -lz -lcrypt -lnsl -lm -lssl -lcrypto 
 LIBOBJS = 
-LIBS = -lm  -lgd -lpng -lz -lm
+LIBS = -lm  -lhpdf -lgd -lpng -lz -lm
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LIPO = 
 LN_S = ln -s
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /m1/emboss/emboss/missing --run makeinfo
+MAKEINFO = ${SHELL} /m2/emboss/emboss/missing --run makeinfo
 MKDIR_P = /bin/mkdir -p
-MYSQL_CFLAGS = 
+MYSQL_CFLAGS = -I/usr/include/mysql
 MYSQL_CONFIG = /usr/bin/mysql_config
-MYSQL_LDFLAGS = 
-MYSQL_VERSION = 5.1.41
+MYSQL_LDFLAGS = -rdynamic -L/usr/lib64/mysql -lmysqlclient -lz -lcrypt -lnsl -lm -lssl -lcrypto
+MYSQL_VERSION = 5.1.47
 NEEDAJAX = 
 NM = /usr/bin/nm -B
 NMEDIT = 
@@ -139,6 +141,7 @@ PACKAGE_BUGREPORT =
 PACKAGE_NAME = 
 PACKAGE_STRING = 
 PACKAGE_TARNAME = 
+PACKAGE_URL = 
 PACKAGE_VERSION = 
 PATH_SEPARATOR = :
 PCRE_DATE = 11-Apr-2009
@@ -157,7 +160,7 @@ SED = /bin/sed
 SET_MAKE = 
 SHELL = /bin/sh
 STRIP = strip
-VERSION = 6.2.0
+VERSION = 6.3.0
 WARNINGS = 
 WARN_CFLAGS = 
 XLIB =  -lX11 
@@ -166,10 +169,10 @@ X_CFLAGS =
 X_EXTRA_LIBS = 
 X_LIBS = 
 X_PRE_LIBS =  -lSM -lICE
-abs_builddir = /m1/emboss/emboss/test/genbank
-abs_srcdir = /m1/emboss/emboss/test/genbank
-abs_top_builddir = /m1/emboss/emboss
-abs_top_srcdir = /m1/emboss/emboss
+abs_builddir = /m2/emboss/emboss/test/genbank
+abs_srcdir = /m2/emboss/emboss/test/genbank
+abs_top_builddir = /m2/emboss/emboss
+abs_top_srcdir = /m2/emboss/emboss
 ac_ct_CC = gcc
 ac_ct_DUMPBIN = 
 am__include = include
@@ -199,7 +202,7 @@ host_vendor = unknown
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /m1/emboss/emboss/install-sh
+install_sh = ${SHELL} /m2/emboss/emboss/install-sh
 javac_in_path = true
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec

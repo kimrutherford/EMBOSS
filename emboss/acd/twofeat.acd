@@ -1,7 +1,8 @@
 application: twofeat [
   documentation: "Finds neighbouring pairs of features in sequence(s)"
   groups: "Feature tables"
-  relations: "EDAM: Sequence feature query"
+  relations: "/edam/topic/0000160 Sequence features"
+  relations: "/edam/operation/0000255 Sequence feature table query"
 ]
 
 section: input [
@@ -13,7 +14,9 @@ section: input [
     parameter: "Y"
     type: "any"
     features: "Y"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0000848 Sequence" 
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more" 
   ]
 
   section: afeaturesection [
@@ -36,7 +39,7 @@ section: input [
              with the character '|', eg: \
              gene* | embl"
       knowntype: "feature source list"
-    relations:  "EDAM: List of sequence feature sources"               
+    relations:  "/edam/data/0000856 Sequence feature source"               
     ]
 
     string: atype [
@@ -45,16 +48,16 @@ section: input [
       information: "Type of first feature"
       help: "By default every feature in the feature table is allowed.
              You can set this to be any feature type you wish to allow. \
-             See http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the
+             See http://www.ebi.ac.uk/embl/WebFeat/ for a list of the
              EMBL feature types and see Appendix A of the Swissprot user
-             manual in http://www.expasy.ch/txt/userman.txt for a list of the
-             Swissprot feature types. \
+             manual in http://www.expasy.org/sprot/userman.html
+             for a list of the Swissprot feature types. \
              The type may be wildcarded by using '*'. \
              If you wish to allow more than one type, separate their names
              with the character '|', eg: \
              *UTR | intron"
       knowntype: "feature key list"
-    relations:  "EDAM: List of sequence feature types"                 
+    relations:  "/edam/data/0001020 Sequence feature key"                 
     ]
 
     list: asense [
@@ -69,7 +72,7 @@ section: input [
       information: "Sense of first feature"
       help: "By default any feature sense is allowed. You can set this
              to match the required sense."
-    relations: "EDAM: Generic string array"                                
+    relations: "/edam/data/0000853 DNA sense specification"                                
     ]
 
     float: aminscore [
@@ -78,7 +81,7 @@ section: input [
       information: "Minimum score of first feature"
       help: "If this is greater than or equal to the maximum score,
              then any score is allowed."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001772 Score"
     ]
 
     float: amaxscore [
@@ -87,7 +90,7 @@ section: input [
       information: "Maximum score of first feature"
       help: "If this is less than or equal to the maximum score, then
              any score is permitted."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001772 Score"
     ]
 
     string: atag [
@@ -110,7 +113,7 @@ section: input [
              with the character '|', eg: \
              gene | label"
       knowntype: "feature tag list"
-    relations:  "EDAM: List of sequence feature tags"                  
+    relations:  "/edam/data/0001021 Sequence feature qualifier"                  
     ]
 
     string: avalue [
@@ -134,7 +137,7 @@ section: input [
              names with the character '|', eg: \
              pax* | 10"
       knowntype: "feature tagvalue list"
-    relations:  "EDAM: Generic string"                                 
+    relations:  "/edam/data/0001021 Sequence feature qualifier"                                 
     ]
 
   endsection: afeaturesection
@@ -159,7 +162,7 @@ section: input [
              with the character '|', eg: \
              gene* | embl"
       knowntype: "feature source list"
-    relations:  "EDAM: List of sequence feature sources"               
+    relations:  "/edam/data/0000856 Sequence feature source"               
     ]
 
     string: btype [
@@ -168,16 +171,16 @@ section: input [
       information: "Type of second feature"
       help: "By default every feature in the feature table is allowed.
              You can set this to be any feature type you wish to allow. \
-             See http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the
+             See http://www.ebi.ac.uk/embl/WebFeat/ for a list of the
              EMBL feature types and see Appendix A of the Swissprot user
-             manual in http://www.expasy.ch/txt/userman.txt for a list of the
-             Swissprot feature types. \
+             manual in http://www.expasy.org/sprot/userman.html
+             for a list of the Swissprot feature types. \
              The type may be wildcarded by using '*'. \
              If you wish to allow more than one type, separate their names
              with the character '|', eg: \
              *UTR | intron"
       knowntype: "feature key list"
-    relations:  "EDAM: List of sequence feature types"                 
+    relations:  "/edam/data/0001020 Sequence feature key"                 
     ]
 
     list: bsense [
@@ -192,7 +195,7 @@ section: input [
       information: "Sense of second feature"
       help: "By default any feature sense is allowed. You can set this
              to match the required sense."
-    relations: "EDAM: Generic string array"                                
+      relations: "/edam/data/0000853 DNA sense specification"                                
     ]
 
     float: bminscore [
@@ -201,7 +204,7 @@ section: input [
       information: "Minimum score of second feature"
       help: "If this is greater than or equal to the maximum score,
              then any score is allowed."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001772 Score"
     ]
 
     float: bmaxscore [
@@ -210,7 +213,7 @@ section: input [
       information: "Maximum score of second feature"
       help: "If this is less than or equal to the maximum score, then
              any score is permitted."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001772 Score"
     ]
 
     string: btag [
@@ -233,7 +236,7 @@ section: input [
              with the character '|', eg: \
              gene | label"
       knowntype: "feature tag list"
-    relations:  "EDAM: List of sequence feature tags"                  
+    relations:  "/edam/data/0001021 Sequence feature qualifier"                  
     ]
 
     string: bvalue [
@@ -257,7 +260,7 @@ section: input [
              names with the character '|', eg: \
              pax* | 10"
       knowntype: "feature tagvalue list"
-    relations:  "EDAM: Generic string"                                 
+    relations:  "/edam/data/0001021 Sequence feature qualifier"
     ]
 
   endsection: bfeaturesection
@@ -284,7 +287,7 @@ section: input [
              You can allow any or no overlaps, specify that they must or must
              not overlap, that one must or must not be wholly enclosed
              within another feature."
-    relations: "EDAM: Generic string array"                                
+    relations: "/edam/data/0001773 Tool-specific parameter"                                
     ]
 
     integer: minrange [
@@ -293,7 +296,7 @@ section: input [
       information: "The minimum distance between the features"
       help: "If this is greater or equal to 'maxrange', then no min or
              max range is specified"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001249 Sequence length"                                     
     ]
 
     integer: maxrange [
@@ -302,7 +305,7 @@ section: input [
       information: "The maximum distance between the features"
       help: "If this is less than or equal to 'minrange', then no min
              or max range is specified"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001249 Sequence length"                                     
     ]
 
     list: rangetype [
@@ -319,7 +322,7 @@ section: input [
       help: "This allows you to specify the positions from which the
              allowed minimum or maximum distance between the features is
              measured"
-    relations: "EDAM: Generic string array"                                
+    relations: "/edam/data/0001773 Tool-specific parameter"                                
     ]
 
     list: sense [
@@ -335,7 +338,7 @@ section: input [
       help: "This allows you to specify the required sense that the
              two features must be on. This is ignored (always 'Any') when
              looking at protein sequence features."
-    relations: "EDAM: Generic string array"                                
+     relations: "/edam/data/0000853 DNA sense specification"
     ]
 
     list: order [
@@ -353,7 +356,7 @@ section: input [
              features. The order is measured from the start positions of the
              features. This criterion is always applied despite the specified
              overlap type required."
-    relations: "EDAM: Generic string array"                                
+    relations: "/edam/data/0001773 Tool-specific parameter"                                
     ]
 
   endsection: featurerelationsection
@@ -374,7 +377,7 @@ section: output [
            themselves will be written out. If it is left as false, then a
            single feature will be written out covering the two features you
            found."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   string: typeout [
@@ -385,20 +388,20 @@ section: output [
            found should be reported as one feature in the ouput, then you can
            specify the 'type' name of the new feature here. By default every
            feature in the feature table is allowed. See
-           http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL
+           http://www.ebi.ac.uk/embl/WebFeat/ for a list of the EMBL
            feature types and see Appendix A of the Swissprot user manual in
-           http://www.expasy.ch/txt/userman.txt for a list of the Swissprot
+           http://www.expasy.org/sprot/userman.html for a list of the Swissprot
            feature types. If you specify an invalid feature type name, then
            the default name 'misc_feature' is used."
     knowntype: "feature key"
-    relations:  "EDAM: Sequence feature type"                          
+    relations:  "/edam/data/0001020 Sequence feature key"                          
   ]
 
   report: outfile [
     parameter: "Y"
     taglist: "int:starta int:enda int:startb int:endb"
     rformat: "table"
-    relations: "EDAM: EMBOSS report"                                       
+    relations: "/edam/data/0001271 Sequence feature report"                                       
   ]
 
 endsection: output

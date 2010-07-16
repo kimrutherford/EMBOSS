@@ -10,6 +10,9 @@ extern "C"
 
 enum AjEListType {ajEListAny, ajEListStr};
 
+
+
+
 /* @data AjPListNode **********************************************************
 **
 ** Substructure of AjPList
@@ -30,6 +33,9 @@ typedef struct AjSListNode {
 } AjOListNode;
 
 #define AjPListNode AjOListNode*
+
+
+
 
 /* @data AjPList **************************************************************
 **
@@ -58,6 +64,9 @@ typedef struct AjSList {
 } AjOList;
 
 #define AjPList AjOList*
+
+
+
 
 /* @data AjIList **************************************************************
 **
@@ -150,6 +159,8 @@ ajuint      ajListstrToarrayAppend (const AjPList list, AjPStr** array);
 void        ajListstrTrace   (const AjPList list);
 
 ajuint      ajListToarray (const AjPList list, void*** array);
+ajuint      ajListToindex(const AjPList list, ajuint* listindex,
+                          int (*sort1) (const void*, const void*));
 void        ajListTrace   (const AjPList list);
 
 AjBool      ajListMapfind (const AjPList listhead,

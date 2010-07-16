@@ -97,6 +97,9 @@ static AjPStr tmpdb  = NULL;
 static EmbPEntry dbiblastEntry = NULL;
 static AjPList* fdl   = NULL;
 
+
+
+
 /* @datastatic PMemFile *******************************************************
 **
 ** DbiBlast in-memory file
@@ -242,29 +245,29 @@ static AjBool dbiblast_parseNcbi(const AjPStr line, AjPFile * alistfile,
 				 AjBool systemsort, AjPStr const * fields,
 				 ajint* maxFieldLen,
 				 ajuint* countfield,
-				 AjPStr* id, AjPList* fdl);
+				 AjPStr* myid, AjPList* myfdl);
 static AjBool dbiblast_parseGcg(const AjPStr line, AjPFile * alistfile,
 				AjBool systemsort, AjPStr const * fields,
 				ajint* maxFieldLen,
 				ajuint* countfield,
-				AjPStr* id, AjPList* fdl);
+				AjPStr* myid, AjPList* myfdl);
 static AjBool dbiblast_parseSimple(const AjPStr line,
 				   AjPFile * alistfile,
 				   AjBool systemsort, AjPStr const * fields,
 				   ajint* maxFieldLen,
 				   ajuint* countfield,
-				   AjPStr* id, AjPList* fdl);
+				   AjPStr* myid, AjPList* myfdl);
 static AjBool dbiblast_parseId(const AjPStr line, AjPFile * alistfile,
 			       AjBool systemsort, AjPStr const * fields,
 			       ajint* maxFieldLen,
 			       ajuint* countfield,
-			       AjPStr* id, AjPList* fdl);
+			       AjPStr* myid, AjPList* myfdl);
 static AjBool dbiblast_parseUnknown(const AjPStr line,
 				    AjPFile * alistfile,
 				    AjBool systemsort, AjPStr const * fields,
 				    ajint* maxFieldLen,
 				    ajuint* countfield,
-				    AjPStr* id, AjPList* fdl);
+				    AjPStr* myid, AjPList* myfdl);
 
 
 
@@ -287,7 +290,7 @@ typedef struct SParser
   AjBool (*Parser) (const AjPStr line, AjPFile * alistfile,
 		    AjBool systemsort, AjPStr const * fields,
 		    ajint* maxFieldLen, ajuint* countfield,
-		    AjPStr* id, AjPList* fdl);
+		    AjPStr* myid, AjPList* myfdl);
 } OParser;
 
 static OParser parser[] =
@@ -332,7 +335,7 @@ static size_t dbiblast_memfreadS(AjPStr* dest, size_t size, size_t num_items,
 
 static ajint dbiblast_loadtable(ajuint* table, ajint isize, PBlastDb db,
 				ajint top, ajint pos);
-static ajint dbiblast_ncblreadhdr(AjPStr* hline, PBlastDb db,
+static ajint dbiblast_ncblreadhdr(AjPStr* hdrline, PBlastDb db,
 				  ajint start, ajint end);
 static AjBool dbiblast_wrongtype(const AjPStr oname, const char *suff);
 

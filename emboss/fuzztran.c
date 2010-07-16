@@ -29,6 +29,8 @@ static void fuzztran_SourceFeature(const AjPFeattable thys, const AjPSeq pseq,
 				   AjPFeattable sourcetab);
 
 
+
+
 /* @prog fuzztran *************************************************************
 **
 ** Protein pattern search after translation

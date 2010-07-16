@@ -45,9 +45,9 @@ public class JembossAuthServer
   /** Jemboss error log file */
   private final String errorLog = new String(tmproot+"/jemboss_error.log");
   /** file separator */
-  private final String fs = new String(System.getProperty("file.separator"));
+  private final String fs = File.separator;
   /** path separator */
-  private final String ps = new String(System.getProperty("path.separator"));
+  private final String ps = File.pathSeparator;
   /** line separator */
   private final String ls = System.getProperty("line.separator");
 
@@ -453,8 +453,11 @@ public class JembossAuthServer
     {
       public boolean accept(File dir, String name)
       {
-        File fileName = new File(dir, name);
-        return !fileName.isDirectory();
+          if (name.startsWith("EPAM") || name.startsWith("EBLOSUM") ||
+                  name.startsWith("EDNA"))
+              return true;
+          
+          return false;
       };
     });
     StringBuffer matrices = new StringBuffer();
@@ -478,6 +481,9 @@ public class JembossAuthServer
       matrices.append(dataFile[i]+"\n");
     showdbOut.add("codons");
     showdbOut.add(matrices.toString());
+    
+    showdbOut.add("doesJembossServerSupportPDFoutput");
+    showdbOut.add(Boolean.toString(jp.getEmbossHavePDF()));
 
     return showdbOut;
   }
@@ -666,8 +672,12 @@ public class JembossAuthServer
       catch(Exception exp){} 
  
 //include any stderr from EMBOSS
+      String stderr = aj.getErrStd();
       result.add("msg");
-      result.add(aj.getErrStd());
+      result.add(stderr);
+      if (stderr.length()>0)
+          createStderrFile(project, stderr);
+      
 
 //add a finished file
       try
@@ -712,6 +722,25 @@ public class JembossAuthServer
     return result;
   }
 
+  
+  /**
+  *
+  * Creates a file named "stderrfile" in the project directory
+  *
+  */
+  
+  private void createStderrFile(String project, String stderr)
+  {
+    File finished = new File(project + fs + "stderrfile");
+
+    try
+    {
+      PrintWriter fout = new PrintWriter(new FileWriter(finished));
+      fout.println(stderr);
+      fout.close();
+    }
+    catch (IOException ioe) {}
+  }
 
   /**
   *

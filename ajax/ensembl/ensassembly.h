@@ -49,7 +49,7 @@ typedef struct EnsSAssembly
     ajuint ComponentEnd;
     ajint Orientation;
 } EnsOAssembly;
-    
+
 #define EnsPAssembly EnsOAssembly*
 
 
@@ -91,7 +91,7 @@ ajint ensAssemblyGetOrientation(const EnsPAssembly assembly);
 
 AjBool ensAssemblyTrace(const EnsPAssembly assembly, ajuint level);
 
-ajuint ensAssemblyGetMemSize(const EnsPAssembly assembly);
+ajulong ensAssemblyGetMemsize(const EnsPAssembly assembly);
 
 /*
 ** End of prototype definitions
@@ -100,7 +100,7 @@ ajuint ensAssemblyGetMemSize(const EnsPAssembly assembly);
 
 
 
-#endif
+#endif /* ensassembly_h */
 
 #ifdef __cplusplus
 }

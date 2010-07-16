@@ -52,7 +52,7 @@ extern "C"
 **
 **
 **
-** @attr Entry              [AjPStr]  Domain identifer code.
+** @attr Entry              [AjPStr]  Domain identifier code.
 ** @attr Pdb                [AjPStr]  Corresponding pdb identifier code.
 ** @attr Class              [AjPStr]  SCOP class name as an AjPStr.
 ** @attr Fold               [AjPStr]  SCOP fold  name as an AjPStr. 
@@ -182,8 +182,8 @@ typedef struct AjSScop
 **
 **
 **
-** @attr DomainID       [AjPStr]  Domain identifer code        
-** @attr Pdb            [AjPStr]  Corresponding PDB identifer code
+** @attr DomainID       [AjPStr]  Domain identifier code
+** @attr Pdb            [AjPStr]  Corresponding PDB identifier code
 ** @attr Class          [AjPStr]  CATH class name as an AjPStr
 ** @attr Architecture   [AjPStr]  CATH architecture name as an AjPStr
 ** @attr Topology       [AjPStr]  CATH topology name as an AjPStr
@@ -298,7 +298,7 @@ typedef struct AjSCath
 **         format file.
 ** @delete ajDomainDel Default Domain destructor.
 ** @output ajDomainWrite Write Domain object to DCF format file.
-** @other  ajDomainDCFType Assertains type of domains (ajSCOP or ajCATH) in a 
+** @other  ajDomainDCFType Ascertains type of domains (ajSCOP or ajCATH) in a
 **         DCF file.
 ** @assign ajDomainCopy Replicates a Domain object.
 ** @cast   ajDomainGetId Returns domain id, either DomainID element
@@ -383,7 +383,7 @@ AjPCath   ajCathReadCNew(AjPFile inf, const char *entry);
 AjPCath   ajCathReadNew(AjPFile inf, const AjPStr entry);
 AjPList   ajCathReadAllNew(AjPFile inf); 
 AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, 
-			      AjPFile namesf, AjPFile logf);
+			      AjPFile namesf, AjPFile flog);
 AjBool    ajCathWrite(AjPFile outf, const AjPCath obj);
 
 

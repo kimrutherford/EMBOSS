@@ -260,6 +260,9 @@ static void vectorstrip_vlistdel(AjPList* vlist)
 
 /* "constructors" */
 
+
+
+
 /* @funcstatic vectorstrip_initialise_cp **************************************
 **
 ** Initialises data members of a CPattern.
@@ -378,6 +381,9 @@ static void vectorstrip_read_vector_data(AjPFile vectorfile,
 
 /* "destructors" */
 
+
+
+
 /* @funcstatic vectorstrip_free_list ******************************************
 **
 ** Frees a list of EmbPMatMatch.
@@ -440,6 +446,9 @@ static void vectorstrip_free_cp(CPattern* pat)
 
 
 /* data processing */
+
+
+
 
 /* @funcstatic vectorstrip_process_pattern ************************************
 **
@@ -519,7 +528,7 @@ static void vectorstrip_process_pattern(const AjPStr pattern,
 ** @param [r] threelist [const AjPList] list of EmbPMatMatch representing hits
 **                               of 3'  pattern against the sequence
 ** @param [r] sequence [const AjPSeq] the sequence itself
-** @param [u] seqout [AjPSeqout] place to writesubsequences
+** @param [u] seqout [AjPSeqout] place to write subsequences
 ** @param [u] outf [AjPFile] file for writing information about the hits
 ** @return [void]
 ******************************************************************************/
@@ -721,13 +730,14 @@ static void vectorstrip_scan_sequence(const Vector vector, AjPSeqout seqout,
 	vectorstrip_process_pattern(vector->threeprime, threelist, seqname,
 				    text, mis_per, begin, besthits);
 
-    if(!(ajListGetLength(fivelist) || ajListGetLength(threelist)))
+    if(ajListGetLength(fivelist)==0 && ajListGetLength(threelist)==0)
     {
 	ajFmtPrintF(outf, "\nSequence: %s \t Vector: %s\tNo match\n",
 		    ajStrGetPtr(seqname), ajStrGetPtr(vector->name));
+
 	if(allsequences)
-	    vectorstrip_process_hits(fivelist, threelist, sequence,
-				     seqout, outf);
+	    ajSeqoutWriteSeq(seqout, sequence);
+
     }
     else
     {
@@ -818,6 +828,8 @@ static void vectorstrip_ccs_pattern(const AjPStr pattern, AjPList hitlist,
 /* result output */
 
 
+
+
 /* @funcstatic vectorstrip_print_sequence *************************************
 **
 ** Details of the output
@@ -895,11 +907,11 @@ static void vectorstrip_print_sequence(const AjPSeq sequence,
 
 
 
+
 /* @funcstatic vectorstrip_write_sequence *************************************
 **
-** Details of the output
-** sequence (hit positions, number of mismatches, sequences trimmed
-** from 5' and 3' ends) are written to outf
+** Sequence is written using the sequence output object seqout
+** An extended sequence name is used to indicate trim positions
 **
 ** @param [r] sequence [const AjPSeq] the entire sequence
 ** @param [w] seqout [AjPSeqout] where to write out subsequences
@@ -940,7 +952,7 @@ static void vectorstrip_write_sequence(const AjPSeq sequence, AjPSeqout seqout,
     }
 
     ajSeqDel(&seqcp);
-     ajStrDel(&name);
+    ajStrDel(&name);
     ajStrDel(&num);
 
     return;

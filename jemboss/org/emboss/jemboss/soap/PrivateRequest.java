@@ -85,7 +85,6 @@ public class PrivateRequest
        org.apache.axis.client.Service serv =
                                new org.apache.axis.client.Service();
        Call    call     = (Call) serv.createCall();
-       //QName   qn       = new QName(service, method);
        call.setTargetEndpointAddress( new java.net.URL(endpoint) );
        call.setOperationName(new QName(service, method));
        call.setEncodingStyle(org.apache.axis.Constants.URI_SOAP12_ENC);
@@ -108,6 +107,13 @@ public class PrivateRequest
            if(obj.getClass().equals(String.class))
            {
              call.addParameter("Args"+i, XMLType.XSD_STRING,
+                             javax.xml.rpc.ParameterMode.IN);
+           }
+           else if(obj.getClass().equals(Vector.class))
+           {
+             params[i] = obj;
+
+             call.addParameter("Args"+i, XMLType.SOAP_VECTOR,
                              javax.xml.rpc.ParameterMode.IN);
            }
            else if(obj.getClass().equals(Hashtable.class))
@@ -171,7 +177,7 @@ public class PrivateRequest
            String msg = (String)vans.get(j+1);
            if(msg.startsWith("Failed Authorisation"))
              throw new JembossSoapException("Authentication Failed");
-           else if(msg.startsWith("Error"))
+           else if(msg.indexOf("Error")!=-1 || msg.indexOf("error")!=-1)
              JOptionPane.showMessageDialog(null, msg, "alert",
                                    JOptionPane.ERROR_MESSAGE);
          }
@@ -180,9 +186,9 @@ public class PrivateRequest
      } 
      catch (Exception e) 
      {
-        System.out.println("Exception in PrivateRequest "+
+        System.err.println("Exception in PrivateRequest "+
                             e.getMessage ());
-        throw new JembossSoapException("  Fault Code   = " );
+        throw new JembossSoapException(e.getMessage());
      }
 
    }

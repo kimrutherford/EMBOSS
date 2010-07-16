@@ -33,6 +33,7 @@ static void trimest_tolower(AjPStr *strng, ajint start, ajint end);
 
 
 
+
 /* @prog trimest **************************************************************
 **
 ** Trim poly-A tails off EST sequences
@@ -218,6 +219,9 @@ static ajint trimest_get_tail(const AjPSeq seq, ajint direction,
 
     return result;
 }
+
+
+
 
 /* @funcstatic trimest_tolower ***********************************************
 **

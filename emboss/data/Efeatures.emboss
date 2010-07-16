@@ -8,7 +8,7 @@
 # === Originally Based on the GFF standard 2.0 ===
 # Note: GFF includes EMBL/Genbank/DDBJ feature keys and tags
 
-# EMBL/GenBank/DDBJ feature tags
+# EMBL/GenBank/DDBJ feature keys
 # ==============================
 
 #includeonly Efeatures.embl

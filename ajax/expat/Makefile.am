@@ -11,12 +11,11 @@ INCLUDES =
 
 EXPATSRC = xmlparse.c xmltok.c xmlrole.c xmltok_impl.c xmltok_ns.c
 
-# Uncomment and amend when there are some real headers
-include_HEADERS = expat.h expat_external.h expatemboss.h
-
-noinst_HEADERS = expat_config.h ascii.h asciitab.h iasciitab.h \
+pkginclude_HEADERS = expat_config.h ascii.h asciitab.h iasciitab.h \
 internal.h latin1tab.h nametab.h utf8tab.h xmlrole.h xmltok.h \
-xmltok_impl.h
+xmltok_impl.h expat.h expat_external.h expatemboss.h
+
+pkgincludedir = $(includedir)/eexpat
 
 libeexpat_la_SOURCES = $(EXPATSRC)
 

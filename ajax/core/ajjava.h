@@ -10,7 +10,11 @@ extern "C" {
 #endif
 
 
-#include <jni.h>
+#ifdef HAVE_TARGETCONFIG_H
+#include <TargetConfig.h>
+#endif /* HAVE_TARGETCONFIG_H */
+    
+#include "jni.h"
 
 
 

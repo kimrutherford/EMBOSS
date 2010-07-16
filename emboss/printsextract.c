@@ -171,6 +171,8 @@ static void printsextract_write_code(AjPFile fp, AjPStr *s, AjPStr *c)
 }
 
 
+
+
 /* @funcstatic printsextract_write_accession **********************************
 **
 ** Undocumented.

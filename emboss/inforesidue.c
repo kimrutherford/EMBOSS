@@ -24,6 +24,9 @@
 
 #define DAYHOFF_FILE "Edayhoff.freq"
 
+
+
+
 /* @prog inforesidue ***********************************************************
 **
 ** Return information on amino acid residues

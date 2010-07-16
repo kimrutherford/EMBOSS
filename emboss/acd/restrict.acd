@@ -2,7 +2,8 @@ application: restrict [
   documentation: "Report restriction enzyme cleavage sites in
                   a nucleotide sequence"
   groups: "Nucleic:Restriction"
-  relations: "EDAM: Restriction site identification"
+  relations: "/edam/topic/0000100 Nucleic acid restriction"
+  relations: "/edam/operation/0000431 Restriction site identification"
 ]
 
 section: input [
@@ -13,7 +14,9 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "DNA"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0001215 Pure DNA sequence"                                     
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more" 
   ]
 
   datafile: datafile [
@@ -21,7 +24,7 @@ section: input [
     information: "Restriction enzyme data file (optional)"
     knowntype: "restriction enzyme data"
     nullok: "Y"
-    relations:  "EDAM: Restriction enzyme pattern data"                
+    relations:  "/edam/data/0001518 Restriction enzyme pattern data"                
   ]
 
   datafile: mfile [
@@ -29,7 +32,7 @@ section: input [
     information: "Restriction enzyme methylation data file (optional)"
     knowntype: "restriction enzyme methylation data"
     nullok: "Y"
-    relations:  "EDAM: Restriction enzyme reference data"        
+    relations:  "/edam/data/0001517 Restriction enzyme information"        
   ]
 
 endsection: input
@@ -48,7 +51,7 @@ section: required [
     help: "This sets the minimum length of the restriction enzyme
            recognition site. Any enzymes with sites shorter than this will be
            ignored."
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001249 Sequence length"                                     
   ]
 
   string: enzymes [
@@ -74,7 +77,7 @@ section: required [
            HinfI \
            PpiI"
     knowntype: "enzyme list"
-    relations:  "EDAM: Restriction enzyme name"                        
+    relations:  "/edam/data/0001013 Restriction enzyme name"                        
   ]
 
 endsection: required
@@ -92,18 +95,17 @@ section: advanced [
     help: "This sets the minimum number of cuts for any restriction
            enzyme that will be considered. Any enzymes that cut fewer times
            than this will be ignored."
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001773 Tool-specific parameter"                                     
   ]
 
   integer: max [
     minimum: "$(min)"
-    maximum: "2000000000"
     default: "2000000000"
     information: "Maximum cuts per RE"
     help: "This sets the maximum number of cuts for any restriction
            enzyme that will be considered. Any enzymes that cut more times
            than this will be ignored."
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001773 Tool-specific parameter"                                     
   ]
 
   boolean: solofragment [
@@ -112,7 +114,7 @@ section: advanced [
     help: "This gives the fragment lengths of the forward sense strand
            produced by complete restriction by each restriction enzyme on
            its own. Results are added to the tail section of the report."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: single [
@@ -121,7 +123,7 @@ section: advanced [
     help: "If this is set then this forces the values of the mincuts
            and maxcuts qualifiers to both be 1. Any other value you may have
            set them to will be ignored."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: blunt [
@@ -129,7 +131,7 @@ section: advanced [
     information: "Allow blunt end cutters"
     help: "This allows those enzymes which cut at the same position on
            the forward and reverse strands to be considered."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: sticky [
@@ -138,7 +140,7 @@ section: advanced [
     help: "This allows those enzymes which cut at different positions
            on the forward and reverse strands, leaving an overhang, to be
            considered."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: ambiguity [
@@ -146,7 +148,7 @@ section: advanced [
     information: "Allow ambiguous matches"
     help: "This allows those enzymes which have one or more 'N'
            ambiguity codes in their pattern to be considered"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: plasmid [
@@ -155,7 +157,7 @@ section: advanced [
     help: "If this is set then this allows searches for restriction
            enzyme recognition site and cut positions that span the end of the
            sequence to be considered."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: methylation [
@@ -163,7 +165,7 @@ section: advanced [
     information: "Use methylation data"
     help: "If this is set then RE recognition sites will not match
            methylated bases."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: commercial [
@@ -177,7 +179,7 @@ section: advanced [
            you probably know where to get it from and so all enzymes names
            that you have asked to be searched for, and which cut, will be
            reported whether or not they have a commercial supplier."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
 endsection: advanced
@@ -199,13 +201,13 @@ section: output [
            set to be false then all of the input enzymes will be reported.
            You might like to set this to false if you are supplying an
            explicit set of enzymes rather than searching 'all' of them."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: alphabetic [
     default: "N"
     information: "Sort output alphabetically"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: fragments [
@@ -214,13 +216,13 @@ section: output [
     help: "This gives the fragment lengths of the forward sense strand
            produced by complete restriction using all of the input enzymes
            together. Results are added to the tail section of the report."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: name [
     default: "N"
     information: "Show sequence name"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   report: outfile [
@@ -231,7 +233,7 @@ section: output [
     taglist: "str:enzyme=Enzyme_name str:site=Restriction_site
               int:5prime int:3prime int:5primerev int:3primerev"
     precision: "0"
-    relations: "EDAM: EMBOSS report"                                       
+    relations: "/edam/data/0001305 Restriction site report"                                       
   ]
 
 endsection: output

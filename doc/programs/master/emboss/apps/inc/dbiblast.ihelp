@@ -1,5 +1,5 @@
 Index a BLAST database
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     Database name (Any string from 2 to 19
@@ -37,8 +37,14 @@ Version: EMBOSS:6.2.0
 
    Associated qualifiers:
 
+   "-directory" associated qualifiers
+   -extension          string     Default file extension
+
    "-outfile" associated qualifiers
    -odirectory         string     Output directory
+
+   "-indexoutdir" associated qualifiers
+   -extension          string     Default file extension
 
    General qualifiers:
    -auto               boolean    Turn off prompts

@@ -82,6 +82,7 @@ int main(int argc, char **argv)
     double psolu;
 
     double molar_ext_coeff;
+    double molar_ext_coeff_ss;
 
     float *dhstat = NULL;
     AjPFile mfptr = NULL;
@@ -128,9 +129,10 @@ int main(int argc, char **argv)
 	ajFmtPrintF(outf,"PEPSTATS of %s from %d to %d\n\n",ajSeqGetNameC(seq),
 		    be,en);
 
+        molwt=embPropCalcMolwt(ajStrGetPtr(substr),0,len-1,mwdata,mono);
 	ajFmtPrintF(outf,"Molecular weight = %-10.2f\t\tResidues = %-6d\n",
-		    (molwt=embPropCalcMolwt(ajStrGetPtr(substr),0,len-1,
-					    mwdata,mono)),len);
+                    molwt, len);
+
 	for(i=0,charge=0.0;i<26;++i)
 	    charge += (double)c[i] * (double) embPropGetCharge(aadata[i]);
 
@@ -142,15 +144,24 @@ int main(int argc, char **argv)
 	else
 	    ajFmtPrintF(outf,"Isoelectric Point = %-6.4lf\n",iep);
 
-	molar_ext_coeff = embPropCalcMolextcoeff(ajStrGetPtr(substr),0,len-1,
-						 aadata);
+	molar_ext_coeff = embPropCalcMolextcoeff(ajStrGetPtr(substr),
+                                                 0,len-1,
+						 ajFalse, aadata);
+	molar_ext_coeff_ss = embPropCalcMolextcoeff(ajStrGetPtr(substr),
+                                                    0,len-1,
+                                                    ajTrue, aadata);
 
+	ajFmtPrintF(outf,
+                    "A280 Molar Extinction Coefficients  = %d (reduced)"
+                    "   %d (cystine bridges)\n", 
+		    (ajint)molar_ext_coeff,
+                    (ajint) molar_ext_coeff_ss);
 
-	ajFmtPrintF(outf,"A280 Molar Extinction Coefficient  = %-8d\n", 
-		    (ajint)molar_ext_coeff);
-
-	ajFmtPrintF(outf,"A280 Extinction Coefficient 1mg/ml = %-10.2f\n",
-		    molar_ext_coeff / molwt);
+	ajFmtPrintF(outf,
+                    "A280 Extinction Coefficients 1mg/ml = %.3f (reduced)"
+                    "   %.3f (cystine bridges)\n",
+		    molar_ext_coeff / molwt,
+		    molar_ext_coeff_ss / molwt);
 
 	ngps = c['N'-'A'] + c['G'-'A'] + c['P'-'A'] + c['S'-'A'];
 	rk   = c['R'-'A'] + c['K'-'A'];

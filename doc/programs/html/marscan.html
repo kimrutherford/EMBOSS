@@ -78,7 +78,7 @@ Output report [u01317.marscan]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Finds matrix/scaffold recognition (MRS) signatures in DNA sequences
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -644,7 +644,7 @@ The output is a standard EMBOSS report file.
 The results can be output in one of several styles by using the
 command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
 the name of the required format.  The available format names are: embl,
-genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+genbank, gff, pir, swiss, debug, listfile, dbmotif, diffseq, excel,
 feattable, motif, regions, seqtable, simple, srs, table, tagseq
 
 <p>
@@ -672,7 +672,7 @@ By default <b>marscan</b> writes a GFF (Gene Feature Format) report file.
 ##sequence-region U01317 1 65963
 #!Date 2010-01-15
 #!Type DNA
-#!Source-version EMBOSS 6.2.0
+#!Source-version EMBOSS 6.3.0
 U01317	marscan	regulatory_region	2242	2458	0.000	+	.	ID="U01317.1";note="*type MAR/SAR recognition site (MRS)";note="*start8bp 2451";note="*end8bp 2458";note="*start16bp 2242";note="*end16bp 2257"
 U01317	marscan	regulatory_region	17654	17730	0.000	+	.	ID="U01317.2";note="*type MAR/SAR recognition site (MRS)";note="*start8bp 17723";note="*end8bp 17730";note="*start16bp 17654";note="*end16bp 17669"
 U01317	marscan	regulatory_region	40956	41123	0.000	+	.	ID="U01317.3";note="*type MAR/SAR recognition site (MRS)";note="*start8bp 40956";note="*end8bp 40963";note="*start16bp 41108";note="*end16bp 41123"
@@ -821,11 +821,13 @@ None.
 <H2>
     Author(s)
 </H2>
-Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+Gary Williams formerly at:
 <br>
 MRC Rosalind Franklin Centre for Genomics Research
 Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
 
 <H2>
     History

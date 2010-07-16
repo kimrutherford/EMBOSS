@@ -4,7 +4,8 @@ application: dbxreport [
   gui: "yes"
   batch: "no"
   cpu: "medium"
-  relations: "EDAM: Database index analysis"
+  relations: "/edam/topic/0000091 Database and file management"
+  relations: "/edam/operation/0000228 Database index analysis"
 ]
 
 section: input [
@@ -19,7 +20,7 @@ section: input [
     information: "Basename for index files"
     knowntype: "emboss database name"
     pattern: "[A-z][A-z0-9_]+"
-    relations:  "EDAM: Generic database name"                          
+    relations:  "/edam/data/0001056 Database name"                          
   ]
 
   directory: indexdir [
@@ -27,7 +28,7 @@ section: input [
     default: "."
     information: "Index directory"
     knowntype: "emboss database index"
-    relations:  "EDAM: Directory name"                                 
+    relations:  "/edam/data/0001049 Directory name"                                 
   ]
 
   list: idtype [
@@ -39,7 +40,7 @@ section: input [
     maximum: "6"
     minimum: "1"
     default: "all"
-    relations: "EDAM: Generic string array"                                
+    relations: "/edam/data/0001773 Tool-specific parameter"                                
   ]
 
 endsection: input
@@ -59,7 +60,7 @@ section: advanced [
 boolean: fullreport [
   information: "Write full details to debug file"
   default: "N"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
 ]
 
 
@@ -73,7 +74,7 @@ section: output [
   outfile: outfile [
     standard: "y"
     knowntype: "dbxreport output"
-    relations:  "EDAM:Database index"                                      
+    relations:  "/edam/data/0000955 Database index"
   ]
 
 endsection: output

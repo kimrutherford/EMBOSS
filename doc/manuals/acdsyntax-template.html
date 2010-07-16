@@ -787,15 +787,6 @@ usually do not contain sequence data. The type of data can be identified by a
 "knowntype" attribute and matched to an Infile standard type for
 use as input to another program.</p>
 
-<!-- #acdtype-outfileall -->
-<h5>Outfileall</h5>
-
-<p>Non-sequence-related data files, usually plain
-text. This data type refers to files that are to be produced by the program and 
-usually do not contain sequence data. The type of data can be identified by a
-"knowntype" attribute and matched to an Infile standard type for
-use as input to another program.</p>
-
 <!-- #acdtype-outfreq -->
 <h5>Outfreq</h5>
 
@@ -1623,6 +1614,28 @@ the sum should match the total. Remember that most floating point
 fractions cannot be represented accurately in binary form.
 </p>
 
+<p>The <i>warnrange:</i> attribute warns the user if an out of range
+value (below the minimum, or above the maximum) has been automatically
+adjusted to be valid. This includes adjusting a default value where
+the calculated range no longer includes it.</p>
+
+<p>Where one or both of the <i>minimum:</i> or <i>maximum</i> values
+are calculated there is a possibility that the maximum value will be
+defined lower than the minimum. In such cases there is a
+requirement (an error message is generated if the definitions are
+missing) that the <i>failrange:</i> attribute is defined.</p>
+
+Where the maximum is lower than the minimum and <i>failrange:</i> is
+false, by default the maximum value is used. Where this is not ideal
+for the application, the <i>trueminimum:</i> attribute can be set true
+to use the minimum value as the only acceptable value.</p>
+
+<p>If <i>failrange:</i> is defined true, there must be
+a <i>failmessage:</i> attribute explaining to the user why there is no
+valid value between the defined minimum and maximum. An error message
+is generated if the <i>failmessage</i> attribute is absent in this
+case.</p>
+
 <!-- #acdattr-boolean -->
 <h5>Boolean</h5>
 
@@ -1647,9 +1660,35 @@ they can fix the value, or provide parsers for each alternative.
 <!-- #acdattr-float -->
 <h5>Float</h5>
 
+<p>The <i>large:</i> attribute defines values that can exceed the size
+or accuracy of a standard float value and will be passed as double
+precision to the application.</p>
+
 <p>The <i>minimum:</i> and <i>maximum:</i> attributes define the lower
 and upper value limits and default to the boundaries as specified by
 the systems set-up.</p>
+
+<p>The <i>warnrange:</i> attribute warns the user if an out of range
+value (below the minimum, or above the maximum) has been automatically
+adjusted to be valid. This includes adjusting a default value where
+the calculated range no longer includes it.</p>
+
+<p>Where one or both of the <i>minimum:</i> or <i>maximum</i> values
+are calculated there is a possibility that the maximum value will be
+defined lower than the minimum. In such cases there is a
+requirement (an error message is generated if the definitions are
+missing) that the <i>failrange:</i> attribute is defined.</p>
+
+Where the maximum is lower than the minimum and <i>failrange:</i> is
+false, by default the maximum value is used. Where this is not ideal
+for the application, the <i>trueminimum:</i> attribute can be set true
+to use the minimum value as the only acceptable value.</p>
+
+<p>If <i>failrange:</i> is defined true, there must be
+a <i>failmessage:</i> attribute explaining to the user why there is no
+valid value between the defined minimum and maximum. An error message
+is generated if the <i>failmessage</i> attribute is absent in this
+case.</p>
 
 <p>The <i>increment:</i> attribute defines the steps
 that this parameter is allowed to take, in case there is a need to
@@ -1663,11 +1702,39 @@ decimal places that will be taken into account for this value.</p>
 <!-- #acdattr-integer -->
 <h5>Integer</h5>
 
+<p>The <i>large:</i> attribute defines values that can exceed the size
+of a standard integer and will be passed as long integers to the
+application.</p>
+
 <p>The integer data type can hold simple integer values. The
 <i>minimum:</i> and <i>maximum:</i> attributes define the boundaries
-and default to the boundaries as specified by the systems setup. The
-<i>increment:</i> attribute defines the steps that this parameter is allowed to
-take, in case there is a need to iterate this parameter.</p>
+and default to the boundaries as specified by the systems setup.</p>
+
+<p>The <i>warnrange:</i> attribute warns the user if an out of range
+value (below the minimum, or above the maximum) has been automatically
+adjusted to be valid. This includes adjusting a default value where
+the calculated range no longer includes it.</p>
+
+<p>Where one or both of the <i>minimum:</i> or <i>maximum</i> values
+are calculated there is a possibility that the maximum value will be
+defined lower than the minimum. In such cases there is a
+requirement (an error message is generated if the definitions are
+missing) that the <i>failrange:</i> attribute is defined.</p>
+
+Where the maximum is lower than the minimum and <i>failrange:</i> is
+false, by default the maximum value is used. Where this is not ideal
+for the application, the <i>trueminimum:</i> attribute can be set true
+to use the minimum value as the only acceptable value.</p>
+
+<p>If <i>failrange:</i> is defined true, there must be
+a <i>failmessage:</i> attribute explaining to the user why there is no
+valid value between the defined minimum and maximum. An error message
+is generated if the <i>failmessage</i> attribute is absent in this
+case.</p>
+
+<p>The <i>increment:</i> attribute defines the steps that this
+parameter is allowed to take, in case there is a need to iterate this
+parameter.</p>
 
 <!-- #acdattr-range -->
 <h5>Range</h5>
@@ -1677,6 +1744,28 @@ take, in case there is a need to iterate this parameter.</p>
 and default to the boundaries as specified by the systems setup. The
 <i>minlength:</i> attribute defines the minimum number of values
 required.</p>
+
+<p>The <i>warnrange:</i> attribute warns the user if an out of range
+value (below the minimum, or above the maximum) has been automatically
+adjusted to be valid. This includes adjusting a default value where
+the calculated range no longer includes it.</p>
+
+<p>Where one or both of the <i>minimum:</i> or <i>maximum</i> values
+are calculated there is a possibility that the maximum value will be
+defined lower than the minimum. In such cases there is a
+requirement (an error message is generated if the definitions are
+missing) that the <i>failrange:</i> attribute is defined.</p>
+
+Where the maximum is lower than the minimum and <i>failrange:</i> is
+false, by default the maximum value is used. Where this is not ideal
+for the application, the <i>trueminimum:</i> attribute can be set true
+to use the minimum value as the only acceptable value.</p>
+
+<p>If <i>failrange:</i> is defined true, there must be
+a <i>failmessage:</i> attribute explaining to the user why there is no
+valid value between the defined minimum and maximum. An error message
+is generated if the <i>failmessage</i> attribute is absent in this
+case.</p>
 
 <p>The <i>size:</i> attribute defines an exact number of values
 required. The <i>minsize:</i> attribute defines a minimum number of values
@@ -2583,38 +2672,6 @@ recommended value.</p>
 <p>The <i>append:</i> attribute specifies that output is appended to
 the end of an existing output file. By default, the output file will
 be overwritten.</p>
-
-
-<!-- #acdattr-outfileall -->
-<h5>Outfileall</h5>
-
-<p>The output filename is constructed from the <i>name:</i>
-and <i>extension:</i> attributes in a $( <i>name</i>).$(<i>extension</i>)
-format. If the <i>name:</i> attribute is not defined in the ACD file, it will
-default to the calculated attribute <i>name:</i> of the FIRST sequence that is
-read in ($(asequence.name) if the sequence parameter is named asequence).</p>
-
-<p>The <i>extension:</i> attribute will default to the program name,
-and is usually left as the default value.</p>
-
-<p>The <i>nulldefault:</i> attribute overrides the default name
-generation, and uses an empty string (no output file) as the default
-for programs where an output file is only occasionally
-required. Examples include programs where the original output format
-is available, usually for users that still require it for parsing in
-automated scripts. In combination with the <i>nullok:</i> and
-<i>missing:</i> attributes, this allows qualifiers to be null by
-default, and turned on from the command line.</p>
-
-<p>The <i>nullok:</i> attribute allows a default value to be replaced
-by an empty string or by -noxxx on the command line if the application
-can run without an output file.
-</p>
-
-<p>The <i>knowntype:</i> attribute should always be defined. If the output
-is not of any special type, a knowntype of "(program) output" is the
-recommended value.</p>
-
 
 <!-- #acdattr-outmatrix -->
 <h5>Outmatrix</h5>

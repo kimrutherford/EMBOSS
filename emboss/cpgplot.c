@@ -31,7 +31,7 @@ static void cpgplot_findbases(const AjPStr substr, ajint len,
 			      ajint window, ajint shift, float *obsexp,
 			      float *xypc, const AjPStr bases,
 			      float *obsexpmax,
-			      ajint *plstart, ajint *plotend);
+			      ajint *plotstart, ajint *plotend);
 
 static void cpgplot_countbases(const char *seq, const char *bases,
 			       ajint window,

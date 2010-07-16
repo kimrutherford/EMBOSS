@@ -1,12 +1,12 @@
 ########################################
 # Program: dbiflat
-# Rundate: Wed 15 Jul 2009 12:00:00
+# Rundate: Thu 15 Jul 2010 12:00:00
 # Dbname: EMBL
 # Release: 0.0
-# Date: 15/07/09
-# CurrentDirectory: /data2/users/pmr/cvsemboss/test/embl/
+# Date: 15/07/10
+# CurrentDirectory: /homes/pmr/devemboss/test/embl/
 # IndexDirectory: ./
-# IndexDirectoryPath: /data2/users/pmr/cvsemboss/test/embl/
+# IndexDirectoryPath: /homes/pmr/devemboss/test/embl/
 # Maxindex: 0
 # Fields: 6
 #   Field 1: id
@@ -16,7 +16,7 @@
 #   Field 5: key
 #   Field 6: org
 # Directory: ./
-# DirectoryPath: /data2/users/pmr/cvsemboss/test/embl/
+# DirectoryPath: /homes/pmr/devemboss/test/embl/
 # Filenames: *.dat
 # Exclude: 
 # Files: 10

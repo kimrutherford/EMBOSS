@@ -90,7 +90,7 @@ int main(int argc, char **argv)
 		ajStrAssignC(&pager,"more");
 	}
 	ajFmtPrintS(&cmd,"%S %S",pager,path);
-	system(ajStrGetPtr(cmd));
+	ajSysExecPathS(cmd);
     }
     else
     {
@@ -165,7 +165,7 @@ static void tfm_FindAppDocRoot(const AjPStr program,
     /* try to open the installed doc directory */
     if(ajStrGetLen(roottmp))
 	ajStrAssignS(docroot, roottmp);
-    else
+   else
     {
         ajStrAssignS(&docrootinst, ajNamValueInstalldir());
 	ajDirnameFix(&docrootinst);
@@ -198,9 +198,8 @@ static void tfm_FindAppDocRoot(const AjPStr program,
 		  ajFmtPrintS(docroot,"%Sprograms%shtml%s",
 			      docrootinst,SLASH_STRING,SLASH_STRING);
 	      else
-		  ajFmtPrintS(docroot,"%Shtml%semboss%sapps%s",
-			      docrootinst,SLASH_STRING,SLASH_STRING,
-			      SLASH_STRING);
+		  ajFmtPrintS(docroot,"%Sprograms%shtml%s",
+			      docrootinst,SLASH_STRING,SLASH_STRING);
           }
 	}
 	else

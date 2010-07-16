@@ -5,7 +5,7 @@
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>nospace </b>
-Remove all whitespace from an ASCII text file
+Remove whitespace from an ASCII text file
 ASCII text file: <b>seqspace.txt</b>
 ASCII text output file [seqspace.nospace]: <b></b>
 

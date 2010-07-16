@@ -36,7 +36,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td>-outfile</td>
+<td>[-outfile]<br>(Parameter 3)</td>
 <td>align</td>
 <td>Output alignment file name</td>
 <td>Alignment output file</td>
@@ -44,7 +44,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td>-aoutfeat</td>
+<td>[-aoutfeat]<br>(Parameter 4)</td>
 <td>featout</td>
 <td>Output features UFO</td>
 <td>Writeable feature table</td>
@@ -52,7 +52,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td>-boutfeat</td>
+<td>[-boutfeat]<br>(Parameter 5)</td>
 <td>featout</td>
 <td>Output features UFO</td>
 <td>Writeable feature table</td>
@@ -66,7 +66,7 @@
 <tr bgcolor="#FFFFCC">
 <td>-[no]dumpalign</td>
 <td>toggle</td>
-<td>Dump all matches as alignments</td>
+<td>Dump matches as alignments</td>
 <td>Toggle value Yes/No</td>
 <td>Yes</td>
 </tr>
@@ -74,7 +74,7 @@
 <tr bgcolor="#FFFFCC">
 <td>-logfile</td>
 <td>outfile</td>
-<td>Log file reports statistics on kmer frequency distribution and number of matches in the seqall sequences for each sequence in the seqset</td>
+<td>Statistics on distribution of kmers and matches</td>
 <td>Output file</td>
 <td>wordmatch.log</td>
 </tr>
@@ -82,7 +82,7 @@
 <tr bgcolor="#FFFFCC">
 <td>-[no]dumpfeat</td>
 <td>toggle</td>
-<td>Dump all matches as feature files</td>
+<td>Dump matches as feature files</td>
 <td>Toggle value Yes/No</td>
 <td>Yes</td>
 </tr>
@@ -339,7 +339,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -aformat</td>
+<td> -aformat3<br>-aformat_outfile</td>
 <td>string</td>
 <td>Alignment format</td>
 <td>Any string</td>
@@ -347,7 +347,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -aextension</td>
+<td> -aextension3<br>-aextension_outfile</td>
 <td>string</td>
 <td>File name extension</td>
 <td>Any string</td>
@@ -355,7 +355,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -adirectory</td>
+<td> -adirectory3<br>-adirectory_outfile</td>
 <td>string</td>
 <td>Output directory</td>
 <td>Any string</td>
@@ -363,7 +363,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -aname</td>
+<td> -aname3<br>-aname_outfile</td>
 <td>string</td>
 <td>Base file name</td>
 <td>Any string</td>
@@ -371,7 +371,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -awidth</td>
+<td> -awidth3<br>-awidth_outfile</td>
 <td>integer</td>
 <td>Alignment width</td>
 <td>Any integer value</td>
@@ -379,7 +379,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -aaccshow</td>
+<td> -aaccshow3<br>-aaccshow_outfile</td>
 <td>boolean</td>
 <td>Show accession number in the header</td>
 <td>Boolean value Yes/No</td>
@@ -387,7 +387,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -adesshow</td>
+<td> -adesshow3<br>-adesshow_outfile</td>
 <td>boolean</td>
 <td>Show description in the header</td>
 <td>Boolean value Yes/No</td>
@@ -395,7 +395,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -ausashow</td>
+<td> -ausashow3<br>-ausashow_outfile</td>
 <td>boolean</td>
 <td>Show the full USA in the alignment</td>
 <td>Boolean value Yes/No</td>
@@ -403,7 +403,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -aglobal</td>
+<td> -aglobal3<br>-aglobal_outfile</td>
 <td>boolean</td>
 <td>Show the full sequence in alignment</td>
 <td>Boolean value Yes/No</td>
@@ -429,7 +429,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -offormat</td>
+<td> -offormat4<br>-offormat_aoutfeat</td>
 <td>string</td>
 <td>Output feature format</td>
 <td>Any string</td>
@@ -437,7 +437,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -ofopenfile</td>
+<td> -ofopenfile4<br>-ofopenfile_aoutfeat</td>
 <td>string</td>
 <td>Features file name</td>
 <td>Any string</td>
@@ -445,7 +445,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -ofextension</td>
+<td> -ofextension4<br>-ofextension_aoutfeat</td>
 <td>string</td>
 <td>File name extension</td>
 <td>Any string</td>
@@ -453,7 +453,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -ofdirectory</td>
+<td> -ofdirectory4<br>-ofdirectory_aoutfeat</td>
 <td>string</td>
 <td>Output directory</td>
 <td>Any string</td>
@@ -461,15 +461,15 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -ofname</td>
+<td> -ofname4<br>-ofname_aoutfeat</td>
 <td>string</td>
 <td>Base file name</td>
 <td>Any string</td>
-<td>&nbsp;</td>
+<td>$(asequence.name)</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -ofsingle</td>
+<td> -ofsingle4<br>-ofsingle_aoutfeat</td>
 <td>boolean</td>
 <td>Separate file for each entry</td>
 <td>Boolean value Yes/No</td>
@@ -482,7 +482,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -offormat</td>
+<td> -offormat5<br>-offormat_boutfeat</td>
 <td>string</td>
 <td>Output feature format</td>
 <td>Any string</td>
@@ -490,7 +490,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -ofopenfile</td>
+<td> -ofopenfile5<br>-ofopenfile_boutfeat</td>
 <td>string</td>
 <td>Features file name</td>
 <td>Any string</td>
@@ -498,7 +498,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -ofextension</td>
+<td> -ofextension5<br>-ofextension_boutfeat</td>
 <td>string</td>
 <td>File name extension</td>
 <td>Any string</td>
@@ -506,7 +506,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -ofdirectory</td>
+<td> -ofdirectory5<br>-ofdirectory_boutfeat</td>
 <td>string</td>
 <td>Output directory</td>
 <td>Any string</td>
@@ -514,7 +514,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -ofname</td>
+<td> -ofname5<br>-ofname_boutfeat</td>
 <td>string</td>
 <td>Base file name</td>
 <td>Any string</td>
@@ -522,7 +522,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -ofsingle</td>
+<td> -ofsingle5<br>-ofsingle_boutfeat</td>
 <td>boolean</td>
 <td>Separate file for each entry</td>
 <td>Boolean value Yes/No</td>

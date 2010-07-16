@@ -9,8 +9,8 @@ Display information on a sequence:
 % <b>infoseq tembl:x13776 </b>
 Display basic information about sequences
 
-USA                      Database  Name           Accession      Type Length %GC    Description 
-tembl-id:X13776          tembl          X13776         X13776         N    2167   66.54  Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+USA                      Database  Name           Accession      Type Length %GC    Organism            Description 
+tembl-id:X13776          tembl          X13776         X13776         N    2167   66.54  Pseudomonas aeruginosa Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
 
 </pre></td></tr></table><p>
 <p>
@@ -27,8 +27,8 @@ Don't display the USA of a sequence:
 % <b>infoseq tembl:x13776 -nousa </b>
 Display basic information about sequences
 
-Database  Name           Accession      Type Length %GC    Description 
-tembl          X13776         X13776         N    2167   66.54  Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+Database  Name           Accession      Type Length %GC    Organism            Description 
+tembl          X13776         X13776         N    2167   66.54  Pseudomonas aeruginosa Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
 
 </pre></td></tr></table><p>
 <p>
@@ -100,8 +100,8 @@ Display information formatted with HTML:
 Display basic information about sequences
 
 <table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>USA</th><th>Database</th><th>Name</th><th>Accession</th><th>Type</th><th>Length</th><th>%GC</th><th>Description</th></tr>
-<tr><td>tembl-id:X13776</td><td>tembl</td><td>X13776</td><td>X13776</td><td>N</td><td>2167</td><td>66.54</td><td>Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation</td></tr>
+<tr><th>USA</th><th>Database</th><th>Name</th><th>Accession</th><th>Type</th><th>Length</th><th>%GC</th><th>Organism</th><th>Description</th></tr>
+<tr><td>tembl-id:X13776</td><td>tembl</td><td>X13776</td><td>X13776</td><td>N</td><td>2167</td><td>66.54</td><td>Pseudomonas aeruginosa</td><td>Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation</td></tr>
 </table>
 
 </pre></td></tr></table><p>

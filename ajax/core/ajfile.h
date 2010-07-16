@@ -6,8 +6,18 @@ extern "C"
 #ifndef ajfile_h
 #define ajfile_h
 
+#ifdef WIN32
+#include "win32.h"
+#endif
+
 #include "ajlist.h"
 #include <sys/stat.h>
+
+#ifdef WIN32
+#define pid_t void*
+#else
+#define HANDLE void*
+#endif
 
 /* @data AjPFile **************************************************************
 **
@@ -33,31 +43,37 @@ extern "C"
 ** @attr Blocklen [ajuint] Read block length used
 ** @attr Buffsize [ajuint] Buffer size (zero for default size)
 ** @attr Handle [ajint] AJAX file number 0 if unused
-** @attr Pid [pid_t] Process PID if any
+** @attr Pid [pid_t] Process PID if any (non-WIN32 only)
+** @attr Process [HANDLE] Process handle (WIN32 only)
+** @attr Thread [HANDLE] Thread handle (WIN32 only)
 ** @@
 ******************************************************************************/
 
-typedef struct AjSFile {
-  FILE *fp;
-  AjPStr Name;
-  AjPList List;
-  AjBool End;
-  AjBool App;
-  AjPStr Buff;
-  char *Workbuffer;
-  char *Readblock;
-  ajlong Filepos;
-  ajuint Blocksize;
-  ajuint Blockpos;
-  ajuint Blocklen;
-  ajuint Buffsize;
-  ajint Handle;
-#ifndef WIN32
-  pid_t Pid;
-#endif
+typedef struct AjSFile
+{
+    FILE *fp;
+    AjPStr Name;
+    AjPList List;
+    AjBool End;
+    AjBool App;
+    AjPStr Buff;
+    char *Workbuffer;
+    char *Readblock;
+    ajlong Filepos;
+    ajuint Blocksize;
+    ajuint Blockpos;
+    ajuint Blocklen;
+    ajuint Buffsize;
+    ajint Handle;
+    pid_t Pid;
+    HANDLE Process;
+    HANDLE Thread;
 } AjOFile;
 
 #define AjPFile AjOFile*
+
+
+
 
 /* @data AjPFilebufflist ******************************************************
 **
@@ -82,6 +98,9 @@ typedef struct AjSFilebufflist {
 } AjOFilebufflist;
 
 #define AjPFilebufflist AjOFilebufflist*
+
+
+
 
 /* @data AjPFilebuff **********************************************************
 **
@@ -122,6 +141,9 @@ typedef struct AjSFilebuff {
 
 #define AjPFilebuff AjOFilebuff*
 
+
+
+
 /* @data AjPDir **************************************************************
 **
 ** Ajax directory object. Holds information for an open
@@ -144,6 +166,9 @@ typedef struct AjSDir {
 
 #define AjPDir AjODir*
 
+
+
+
 /* @data AjPDirout ***********************************************************
 **
 ** Ajax output directory object. Holds information for an open
@@ -163,6 +188,9 @@ typedef struct AjSDirout {
 } AjODirout;
 
 #define AjPDirout AjODirout*
+
+
+
 
 /* @data AjPOutfile ***********************************************************
 **
@@ -227,6 +255,8 @@ AjBool         ajDiroutExists(AjPDirout thys);
 AjPDirout      ajDiroutNewPath(const AjPStr name);
 AjPDirout      ajDiroutNewPathExt(const AjPStr name, const AjPStr ext);
 AjBool         ajDiroutOpen(AjPDirout thys);
+ajint          ajFilelistAddDirectory(AjPList list,
+                                      const AjPDir dir);
 ajint          ajFilelistAddPathWildRecursiveIgnore(AjPList list,
 						    const AjPStr path,
 						    const AjPStr wildname,
@@ -312,9 +342,12 @@ const char*    ajFileGetNameC(const AjPFile thys);
 const AjPStr   ajFileGetNameS(const AjPFile thys);
 AjBool         ajFilenameReplacePathS(AjPStr* filename, const AjPStr dir);
 AjBool         ajFilenameReplacePathC(AjPStr* filename, const char* dir);
+AjBool         ajFilenameReplaceExtC(AjPStr* filename, const char* extension);
 AjBool         ajFilenameReplaceExtS(AjPStr* filename,
                                      const AjPStr extension);
-AjBool         ajFilenameReplaceExtC(AjPStr* filename, const char* extension);
+AjBool         ajFilenameSetExtC(AjPStr* filename, const char* extension);
+AjBool         ajFilenameSetExtS(AjPStr* filename,
+                                 const AjPStr extension);
 AjPFile        ajFileNewOutappendNameS(const AjPStr name);
 AjPFile        ajFileNewListinList(AjPList list);
 AjPFile        ajFileNewListinDirPre(const AjPDir dir, const AjPStr prefix);
@@ -352,6 +385,7 @@ AjBool         ajFilenameExistsWrite(const AjPStr filename);
 AjBool         ajFileValueRedirectStderr(void);
 AjBool         ajFileValueRedirectStdin(void);
 AjBool         ajFileValueRedirectStdout(void);
+AjBool         ajFileIsFile(const AjPFile file);
 AjBool         ajFileIsStderr(const AjPFile file);
 AjBool         ajFileIsStdin(const AjPFile file);
 AjBool         ajFileIsStdout(const AjPFile file);

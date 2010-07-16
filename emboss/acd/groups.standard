@@ -30,6 +30,10 @@ Nucleic:RNA_folding RNA folding methods and analysis
 Nucleic:Restriction Restriction enzyme sites in nucleotide sequences
 Nucleic:Transcription Transcription factors, promoters and terminator prediction
 Nucleic:Translation Translation of nucleotide sequence to protein sequence
+Ontology:EDAM EDAM ontology
+Ontology:GO GO Gene ontology
+Ontology:SO SO Sequence ontology
+Ontology:Taxonomy NCBI Taxonomy
 Phylogeny:Consensus Phylogenetic consensus methods
 Phylogeny:Continuous_characters Phylogenetic continuous character methods
 Phylogeny:Discrete_characters Phylogenetic discrete character methods

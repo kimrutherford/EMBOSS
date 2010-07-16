@@ -94,15 +94,15 @@ static AjPList* fdl  = NULL;
 static AjBool dbiflat_ParseEmbl(AjPFile libr, AjPFile* alistfile,
 				AjBool systemsort, AjPStr* fields,
 				ajint* maxFieldLen, ajuint* countfield,
-				ajint *dpos, AjPStr* id, AjPList* acl);
+				ajint *dpos, AjPStr* myid, AjPList* acl);
 static AjBool dbiflat_ParseGenbank(AjPFile libr, AjPFile* alistfile,
 				   AjBool systemsort, AjPStr* fields,
 				   ajint* maxFieldLen, ajuint* countfield,
-				   ajint *dpos, AjPStr* id, AjPList* acl);
+				   ajint *dpos, AjPStr* myid, AjPList* acl);
 static AjBool dbiflat_ParseRefseq(AjPFile libr, AjPFile* alistfile,
 				  AjBool systemsort, AjPStr* fields,
 				  ajint* maxFieldLen, ajuint* countfield,
-				  ajint *dpos, AjPStr* id, AjPList* acl);
+				  ajint *dpos, AjPStr* myid, AjPList* acl);
 
 
 
@@ -125,7 +125,7 @@ typedef struct DbiflatSParser
     AjBool (*Parser) (AjPFile libr, AjPFile* alistfile,
 		      AjBool systemsort, AjPStr* fields,
 		      ajint* maxFieldLen, ajuint* countfield,
-		      ajint *dpos, AjPStr* id, AjPList* acl);
+		      ajint *dpos, AjPStr* myid, AjPList* acl);
 } DbiflatOParser;
 #define DbiflatPParser DbiflatOParser*
 

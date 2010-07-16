@@ -1,0 +1,18 @@
+application: domtestd [
+  documentation: "Create some XML and search for an element"
+  groups: "Edit"
+  relations: "/edam/topic/0000220 File handling"
+  relations: "/edam/operation/0000336 File debugging"
+]
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    information: "Element information file"
+  ]
+
+endsection: output

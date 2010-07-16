@@ -161,6 +161,9 @@ static float* cirdnaToText=NULL;
 /*    float FromText[MAXLABELS];*/
 /*    float ToText[MAXLABELS];*/
 
+
+
+
 /* @prog cirdna ***************************************************************
 **
 ** Draws circular maps of DNA constructs
@@ -1246,6 +1249,7 @@ static float cirdna_ComputeAngle(float RealLength, float Length,
 
     return 360-j;
 }
+
 
 
 

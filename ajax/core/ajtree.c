@@ -1154,7 +1154,7 @@ void ajTreestrTrace(const AjPTree thys)
 
 /* @funcstatic treeTraceNode **************************************************
 **
-** Write information about a tee to debug output
+** Write information about a tree to debug output
 **
 ** @param [r] thys [const AjPTree] Tree node
 ** @param [r] num [ajint] Node number
@@ -1284,7 +1284,7 @@ static void treestrTraceNode (const AjPTree thys, ajint num)
 **
 ** Stop when back up at the original parent node.
 **
-** @param [r] thys [const AjPTree] Currentree node
+** @param [r] thys [const AjPTree] Current tree node
 ** @param [r] parent [const AjPTree] Parent tree node
 ** @return [AjPTree] New tree node created. It has no data value so far,
 **                   so ajTreeAddNode or ajTreeAddData should be called to

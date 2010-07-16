@@ -1,5 +1,5 @@
 Reads and writes a feature table
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-features]          features   (no help text) features value

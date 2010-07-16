@@ -1,5 +1,5 @@
 Calculates nucleic acid melting temperature
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -26,7 +26,8 @@ Version: EMBOSS:6.2.0
                                   (Number from 0.000 to 150.000)
 *  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tek, tekt, none, data, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif, pdf,
+                                  svg, pdf, svg)
 *  -outfile            report     [*.dan] If a plot is not being produced then
                                   data on the melting point etc. in each
                                   window along the sequence is output to the

@@ -1,7 +1,8 @@
 application: transeq [
   documentation: "Translate nucleic acid sequences"
   groups: "Nucleic:Translation"
-  relations: "EDAM: DNA translation"
+  relations: "/edam/topic/0000108 Transcription and translation"
+  relations: "/edam/operation/0000371 DNA translation"
 ]
 
 section: input [
@@ -12,7 +13,9 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "nucleotide"
-    relations: "EDAM: Nucleotide sequence record"                          
+    relations:  "/edam/data/0001210 Pure nucleotide sequence"
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more"
   ]
 
 endsection: input
@@ -33,7 +36,7 @@ section: additional [
     delimiter: ","
     codedelimiter: ":"
     information: "Frame(s) to translate"
-    relations: "EDAM: Generic string array"                                
+    relations: "/edam/data/0002126 Translation frame specification"                                
   ]
 
   list: table [
@@ -56,7 +59,7 @@ section: additional [
     codedelimiter: ":"
     information: "Code to use"
     knowntype: "genetic code"
-    relations:  "EDAM: Genetic code"                                   
+    relations: "/edam/data/0002128 Genetic code name"
   ]
 
   range: regions [
@@ -75,7 +78,7 @@ section: additional [
            Note: you should not try to use this option with any other frame
            than the default, -frame=1"
     expected: "Whole sequence"
-    relations: "EDAM: Generic integer range"                               
+    relations: "/edam/data/0001017 Sequence range"
   ]
 
   boolean: trim [
@@ -85,7 +88,7 @@ section: additional [
     help: "This removes all 'X' and '*' characters from the right end
            of the translation. The trimming process starts at the end and
            continues until the next character is not a 'X' or a '*'"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: clean [
@@ -96,7 +99,7 @@ section: additional [
            character to 'X' (an unknown residue). This is useful because some
            programs will not accept protein sequences with '*' characters in
            them."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
 endsection: additional
@@ -117,7 +120,7 @@ section: advanced [
            programs. If you prefer to define frame '-1' as using the set of
            codons starting with the last codon of the sequence, then set this
            to be true."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
 endsection: advanced
@@ -131,7 +134,9 @@ section: output [
     parameter: "Y"
     extension: "pep"
     type: "stopprotein"
-    relations: "EDAM: Protein sequence record"                             
+    relations: "/edam/data/0001208 Protein sequence"
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more"                             
   ]
 
 endsection: output

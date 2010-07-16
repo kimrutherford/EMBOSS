@@ -23,10 +23,10 @@ ajuint ensTableHashUint(const void *key, ajuint hashsize);
 ** End of prototype definitions
 */
 
-#define MENSTABLEUINTNEW(size) \
+#define MENSTABLEUINTNEW(size)                                          \
 ajTableNewFunctionLen(size, ensTableCmpUint, ensTableHashUint)
 
-#endif
+#endif /* enstable_h */
 
 #ifdef __cplusplus
 }

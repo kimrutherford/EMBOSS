@@ -50,14 +50,15 @@ Created octanol.ps
 Command line arguments
 
 Draw a White-Wimley protein hydropathy plot
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Protein sequence filename and optional
                                   format, or reference (input USA)
   [-graph]             xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tek, tekt, none, data, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif, pdf,
+                                  svg, pdf, svg)
 
    Additional (Optional) qualifiers:
    -datafile           datafile   [Ewhite-wimley.dat] White-Wimley data file
@@ -128,7 +129,7 @@ ID   OPSD_HUMAN              Reviewed;         348 AA.
 AC   P08100; Q16414; Q2M249;
 DT   01-AUG-1988, integrated into UniProtKB/Swiss-Prot.
 DT   01-AUG-1988, sequence version 1.
-DT   16-JUN-2009, entry version 116.
+DT   15-JUN-2010, entry version 128.
 DE   RecName: Full=Rhodopsin;
 DE   AltName: Full=Opsin-2;
 GN   Name=RHO; Synonyms=OPN2;
@@ -156,9 +157,9 @@ RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA].
 RC   TISSUE=Retina;
 RX   PubMed=17974005; DOI=10.1186/1471-2164-8-399;
 RA   Bechtel S., Rosenfelder H., Duda A., Schmidt C.P., Ernst U.,
-RA   Wellenreuther R., Mehrle A., Schuster C., Bahr A., Blocker H.,
-RA   Heubner D., Hoerlein A., Michel G., Wedler H., Kohrer K.,
-RA   Ottenwalder B., Poustka A., Wiemann S., Schupp I.;
+RA   Wellenreuther R., Mehrle A., Schuster C., Bahr A., Bloecker H.,
+RA   Heubner D., Hoerlein A., Michel G., Wedler H., Koehrer K.,
+RA   Ottenwaelder B., Poustka A., Wiemann S., Schupp I.;
 RT   "The full-ORF clone resource of the German cDNA consortium.";
 RL   BMC Genomics 8:399-399(2007).
 RN   [4]
@@ -181,7 +182,7 @@ RT   rhodopsin-encoding gene.";
 FT                                /FTId=VAR_004816.
 FT   VARIANT     209    209       V -> M (effect not known).
 FT                                /FTId=VAR_004817.
-FT   VARIANT     211    211       H -> P (in RP4).
+FT   VARIANT     211    211       H -> P (in RP4; dbSNP:rs28933993).
 FT                                /FTId=VAR_004818.
 FT   VARIANT     211    211       H -> R (in RP4).
 FT                                /FTId=VAR_004819.
@@ -201,7 +202,7 @@ FT   VARIANT     267    267       P -> R (in RP4).
 FT                                /FTId=VAR_004826.
 FT   VARIANT     292    292       A -> E (in CSNBAD1).
 FT                                /FTId=VAR_004827.
-FT   VARIANT     296    296       K -> E (in RP4).
+FT   VARIANT     296    296       K -> E (in RP4; dbSNP:rs29001653).
 FT                                /FTId=VAR_004828.
 FT   VARIANT     297    297       S -> R (in RP4).
 FT                                /FTId=VAR_004829.
@@ -217,9 +218,9 @@ FT   VARIANT     347    347       P -> L (in RP4; common variant).
 FT                                /FTId=VAR_004834.
 FT   VARIANT     347    347       P -> Q (in RP4).
 FT                                /FTId=VAR_004835.
-FT   VARIANT     347    347       P -> R (in RP4).
+FT   VARIANT     347    347       P -> R (in RP4; dbSNP:rs29001566).
 FT                                /FTId=VAR_004836.
-FT   VARIANT     347    347       P -> S (in RP4).
+FT   VARIANT     347    347       P -> S (in RP4; dbSNP:rs29001637).
 FT                                /FTId=VAR_004837.
 SQ   SEQUENCE   348 AA;  38893 MW;  6F4F6FCBA34265B2 CRC64;
      MNGTEGPNFY VPFSNATGVV RSPFEYPQYY LAEPWQFSML AAYMFLLIVL GFPINFLTLY
@@ -368,9 +369,12 @@ See also
 
 Author(s)
 
-   Ian Longden (il (c) sanger.ac.uk)
+   Ian Longden formerly at:
    Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
    CB10 1SA, UK.
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

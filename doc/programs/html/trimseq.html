@@ -123,7 +123,7 @@ Remove unwanted characters from start and end of sequence(s)
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Remove unwanted characters from start and end of sequence(s)
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     (Gapped) sequence(s) filename and optional
@@ -140,7 +140,7 @@ Version: EMBOSS:6.2.0
                                   along the sequence from the ends and
                                   trimming is done only if there is a greater
                                   or equal percentage of ambiguity than the
-                                  threshold percentage. (Any integer value)
+                                  threshold percentage. (Integer 1 or more)
    -percent            float      [100.0] This is the threshold of the
                                   percentage ambiguity in the window required
                                   in order to trim a sequence. (Any numeric
@@ -244,7 +244,7 @@ Version: EMBOSS:6.2.0
 <td>-window</td>
 <td>integer</td>
 <td>This determines the size of the region that is considered when deciding whether the percentage of ambiguity is greater than the threshold. A value of 5 means that a region of 5 letters in the sequence is shifted along the sequence from the ends and trimming is done only if there is a greater or equal percentage of ambiguity than the threshold percentage.</td>
-<td>Any integer value</td>
+<td>Integer 1 or more</td>
 <td>1</td>
 </tr>
 
@@ -907,7 +907,7 @@ None noted.
 
 <tr>
 <td><a href="nospace.html">nospace</a></td>
-<td>Remove all whitespace from an ASCII text file</td>
+<td>Remove whitespace from an ASCII text file</td>
 </tr>
 
 <tr>
@@ -1010,11 +1010,13 @@ None noted.
 <H2>
     Author(s)
 </H2>
-Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+Gary Williams formerly at:
 <br>
 MRC Rosalind Franklin Centre for Genomics Research
 Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
 
 
 <H2>

@@ -1,7 +1,9 @@
 application: cpgplot [
   documentation: "Identify and plot CpG islands in nucleotide sequence(s)"
   groups: "Nucleic:CpG Islands"
-  relations: "EDAM: CpG island and isochores identification"
+  relations: "/edam/topic/0000157 Sequence composition"
+  relations: "/edam/operation/0000430 CpG island and isochores identification"
+  relations: "/edam/operation/0000576 CpG island and isochores visualisation"
 ]
 
 section: input [
@@ -12,7 +14,9 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "DNA"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0001215 Pure DNA sequence"
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more" 
   ]
 
 endsection: input
@@ -26,24 +30,28 @@ section: required [
     standard: "Y"
     minimum: "1"
     maximum: "$(sequence.end)"
+    failrange: "N"
+    trueminimum: "Y"
     default: "100"
     information: "Window size"
     help: "The percentage CG content and the Observed frequency of CG
            is calculated within a window whose size is set by this parameter.
            The window is moved down the sequence and these statistics are
            calculated at each position that the window is moved to."
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001251 Window size"
   ]
 
   integer: minlen [
     standard: "Y"
     minimum: "1"
     maximum: "$(sequence.end)"
+    failrange: "N"
+    trueminimum: "N"
     default: "200"
     information: "Minimum length of an island"
     help: "This sets the minimum length that a CpG island has to be
            before it is reported."
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001249 Sequence length"                                     
   ]
 
   float: minoe [
@@ -55,7 +63,7 @@ section: required [
     help: "This sets the minimum average observed to expected ratio of
            C plus G to CpG in a set of 10 windows that are required before a
            CpG island is reported."
-    relations: "EDAM: Generic float"                                       
+relations: "/edam/data/0001773 Tool-specific parameter"
   ]
 
   float: minpc [
@@ -66,7 +74,7 @@ section: required [
     information: "Minimum percentage"
     help: "This sets the minimum average percentage of G plus C a set
            of 10 windows that are required before a CpG island is reported."
-    relations: "EDAM: Generic float"                                       
+   relations: "/edam/data/0002146 Threshold"
   ]
 
 endsection: required
@@ -82,19 +90,19 @@ section: output [
            input sequence name, CpG island parameters and the output details
            of any CpG islands that are found."
     knowntype: "cpgplot output"
-    relations:  "EDAM:CpG island and isochore report"                      
+    relations:  "/edam/data/0001304 CpG island and isochore report"                      
   ]
 
   toggle: plot [
     default: "Y"
     information: "Plot CpG island score"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   xygraph: graph [
     standard: "$(plot)"
     multiple: "3"
-    relations: "EDAM: EMBOSS graph file"                                   
+    relations: "/edam/data/0002142 EMBOSS graph"                                   
   ]
 
   boolean: obsexp [
@@ -102,7 +110,7 @@ section: output [
     information: "Show observed/expected threshold line"
     help: "If this is set to true then the graph of the observed to
            expected ratio of C plus G to CpG within a window is displayed."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: cg [
@@ -110,7 +118,7 @@ section: output [
     information: "Show CpG rich regions"
     help: "If this is set to true then the graph of the regions which
            have been determined to be CpG islands is displayed."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: pc [
@@ -118,14 +126,14 @@ section: output [
     information: "Show percentage line"
     help: "If this is set to true then the graph of the percentage C
            plus G within a window is displayed."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   featout: outfeat [
     parameter: "Y"
     help: "File for output features"
     type: "nucleotide"
-    relations: "EDAM: Nucleotide sequence feature table"                   
+    relations: "/edam/data/0001273 Nucleotide sequence feature table"                   
   ]
 
 endsection: output

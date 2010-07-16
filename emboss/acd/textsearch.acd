@@ -1,7 +1,8 @@
 application: textsearch [
   documentation: "Search the textual description of sequence(s)"
   groups: "Display, Information"
-  relations: "EDAM: Sequence database search by keyword"
+  relations: "/edam/topic/0000155 Sequence retrieval"
+  relations: "/edam/operation/0000345 Sequence retrieval by keyword"
 ]
 
 section: input [
@@ -12,7 +13,9 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "gapany"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0000848 Sequence" 
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more" 
   ]
 
 endsection: input
@@ -31,7 +34,7 @@ section: required [
            human|mouse \
            will find text with either 'human' OR 'mouse' in the text"
     knowntype: "regular expression"
-    relations:  "EDAM: Regular expression"                             
+    relations:  "/edam/data/0001352 Regular expression"                             
   ]
 
 endsection: required
@@ -45,7 +48,7 @@ section: additional [
     additional: "Y"
     default: "N"
     information: "Do a case-sensitive search"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
 endsection: additional
@@ -60,7 +63,7 @@ section: output [
     default: "N"
     information: "Format output as an HTML table"
     outputmodifier: "Y"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: only [
@@ -71,43 +74,43 @@ section: output [
            '-nohead -noname -nousa -noacc -nodesc' \
            to get only the name output, you can specify \
            '-only -name'"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: heading [
     default: "@(!$(only))"
     information: "Display column headings"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: usa [
     default: "@(!$(only))"
     information: "Display the USA of the sequence"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: accession [
     default: "@(!$(only))"
     information: "Display 'accession' column"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: name [
     default: "@(!$(only))"
     information: "Display 'name' column"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: description [
     default: "@(!$(only))"
     information: "Display 'description' column"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   outfile: outfile [
     parameter: "Y"
     knowntype: "textsearch output"
-    relations:  "EDAM:Sequence information report"                         
+    relations:  "/edam/data/0000855 Sequence annotation"                         
   ]
 
 endsection: output

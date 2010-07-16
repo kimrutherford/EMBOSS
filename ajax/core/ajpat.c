@@ -25,6 +25,9 @@
 ******************************************************************************/
 #include "ajax.h"
 
+
+
+
 /* @datastatic PatPRegTypes ***************************************************
 **
 ** Regular expression pattern types
@@ -52,6 +55,9 @@ static PatORegTypes patRegTypes[] = {
   {"nucleotide",  "Nucleotide sequence pattern"},
   {NULL, NULL}
 };
+
+
+
 
 /* @datastatic PatPRegInformat ************************************************
 **
@@ -81,6 +87,9 @@ static PatORegInformat patRegInformat[] =
     {"fasta",      "Fasta sequence style with header"},
     {NULL, NULL}
 };
+
+
+
 
 /* @datastatic PatPSeqInformat ************************************************
 **
@@ -1228,9 +1237,13 @@ void ajPatCompDel (AjPPatComp *pthys)
       AJFREE(thys->sotable);
 
     if(thys->type==6)
+    {
 	for(i=0;i<thys->m;++i)
 	    AJFREE(thys->skipm[i]);
 
+        AJFREE(thys->skipm);
+    }
+    
     AJFREE(*pthys);
 
     return;
@@ -1330,19 +1343,19 @@ ajuint ajPatternRegexType(const AjPStr type)
 ** Documents patterns to a formatted string
 **
 ** @param [u] plist [AjPPatlistRegex] Pattern list object
-** @param [w] pdoc [AjPStr*] Formatted string
+** @param [w] Pdoc [AjPStr*] Formatted string
 ** @return [ajuint] Number of patterns
 ** @@
 ******************************************************************************/
 
-ajuint ajPatlistRegexDoc (AjPPatlistRegex plist, AjPStr* pdoc)
+ajuint ajPatlistRegexDoc (AjPPatlistRegex plist, AjPStr* Pdoc)
 {
     AjPPatternRegex pat = NULL;
 
-    ajFmtPrintS(pdoc, "%-12S %S\n", "Pattern_name", "Pattern");
+    ajFmtPrintS(Pdoc, "%-12S %S\n", "Pattern_name", "Pattern");
 
     while (ajPatlistRegexGetNext(plist, &pat))
-	ajFmtPrintAppS(pdoc, "%-12S %S\n",
+	ajFmtPrintAppS(Pdoc, "%-12S %S\n",
 		       ajPatternRegexGetName(pat),
 		       ajPatternRegexGetPattern(pat));
 
@@ -1357,20 +1370,20 @@ ajuint ajPatlistRegexDoc (AjPPatlistRegex plist, AjPStr* pdoc)
 ** Documents patterns to a formatted string
 **
 ** @param [u] plist [AjPPatlistSeq] Pattern list object
-** @param [w] pdoc [AjPStr*] Formatted string
+** @param [w] Pdoc [AjPStr*] Formatted string
 ** @return [ajuint] Number of patterns
 ** @@
 ******************************************************************************/
 
-ajuint ajPatlistSeqDoc (AjPPatlistSeq plist, AjPStr* pdoc)
+ajuint ajPatlistSeqDoc (AjPPatlistSeq plist, AjPStr* Pdoc)
 {
     AjPPatternSeq pat = NULL;
 
-    ajFmtPrintS(pdoc, "%-12s %8s %s\n",
+    ajFmtPrintS(Pdoc, "%-12s %8s %s\n",
 		   "Pattern_name", "Mismatch", "Pattern");
     while (ajPatlistSeqGetNext(plist, &pat))
     {
-	ajFmtPrintAppS(pdoc, "%-12S %8d %S\n",
+	ajFmtPrintAppS(Pdoc, "%-12S %8d %S\n",
 		       ajPatternSeqGetName(pat),
 		       ajPatternSeqGetMismatch(pat),
 		       ajPatternSeqGetPattern(pat));

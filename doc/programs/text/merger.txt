@@ -72,7 +72,7 @@ output sequence [v00295.fasta]:
 Command line arguments
 
 Merge two overlapping sequences
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         sequence   Sequence filename and optional format, or
@@ -221,18 +221,23 @@ FT                   /codon_start=1
 FT                   /transl_table=11
 FT                   /note="reading frame (lacZ)"
 FT                   /db_xref="GOA:P00722"
+FT                   /db_xref="InterPro:IPR004199"
+FT                   /db_xref="InterPro:IPR006101"
+FT                   /db_xref="InterPro:IPR006102"
+FT                   /db_xref="InterPro:IPR006103"
+FT                   /db_xref="InterPro:IPR006104"
+FT                   /db_xref="InterPro:IPR008979"
+FT                   /db_xref="InterPro:IPR011013"
+FT                   /db_xref="InterPro:IPR013781"
+FT                   /db_xref="InterPro:IPR013812"
 FT                   /db_xref="InterPro:IPR014718"
-FT                   /db_xref="PDB:3DYP"
-FT                   /db_xref="UniProtKB/Swiss-Prot:P00722"
-FT                   /protein_id="CAA23570.1"
-FT                   /translation="FQLSAGRYHYQLVWCQK"
-FT   CDS             106..1359
-FT                   /transl_table=11
-FT                   /note="reading frame (lacY)"
-FT                   /db_xref="GOA:P02920"
-FT                   /db_xref="InterPro:IPR018457"
-FT                   /db_xref="PDB:2V8N"
-FT                   /db_xref="UniProtKB/Swiss-Prot:P02920"
+FT                   /db_xref="InterPro:IPR017853"
+FT                   /db_xref="PDB:1BGL"
+FT                   /db_xref="PDB:1BGM"
+
+
+  [Part of this file has been deleted for brevity]
+
 FT                   /protein_id="CAA23571.1"
 FT                   /translation="MYYLKNTNFWMFGLFFFFYFFIMGAYFPFFPIWLHDINHISKSDT
 FT                   GIIFAAISLFSLLFQPLFGLLSDKLGLRKYLLWIITGMLVMFAPFFIFIFGPLLQYNIL
@@ -246,7 +251,12 @@ FT   CDS             1423..>1500
 FT                   /transl_table=11
 FT                   /note="reading frame (lacA)"
 FT                   /db_xref="GOA:P07464"
+FT                   /db_xref="InterPro:IPR001451"
+FT                   /db_xref="InterPro:IPR011004"
 FT                   /db_xref="InterPro:IPR018357"
+FT                   /db_xref="PDB:1KQA"
+FT                   /db_xref="PDB:1KRR"
+FT                   /db_xref="PDB:1KRU"
 FT                   /db_xref="PDB:1KRV"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P07464"
 FT                   /protein_id="CAA23572.1"
@@ -324,7 +334,12 @@ FT                   /transl_table=11
 FT                   /gene="lacA"
 FT                   /product="thiogalactoside transacetylase"
 FT                   /db_xref="GOA:P07464"
+FT                   /db_xref="InterPro:IPR001451"
+FT                   /db_xref="InterPro:IPR011004"
 FT                   /db_xref="InterPro:IPR018357"
+FT                   /db_xref="PDB:1KQA"
+FT                   /db_xref="PDB:1KRR"
+FT                   /db_xref="PDB:1KRU"
 FT                   /db_xref="PDB:1KRV"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P07464"
 FT                   /protein_id="CAA36162.1"
@@ -615,9 +630,12 @@ See also
 
 Author(s)
 
-   Gary Williams (gwilliam (c) rfcgr.mrc.ac.uk)
+   Gary Williams formerly at:
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

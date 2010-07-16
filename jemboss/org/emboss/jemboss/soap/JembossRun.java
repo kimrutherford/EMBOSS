@@ -44,42 +44,76 @@ public class JembossRun
   private Hashtable proganswer;
 
   /**
+  * Makes a web service call to run an EMBOSS job.
+  * This constructor is used when user.auth is true.
   *
-  * @param appl       	defining command
+  * @param cmdl       	command line
   * @param options    	defining options
   * @param filesToMove  Hashtable of filenames and contents
   * @param mysettings 	jemboss properties
   * @throws JembossSoapException if authentication fails
   *
   */
-  public JembossRun(String appl, String options, Hashtable filesToMove, 
+  public JembossRun(String cmdl, String options, Hashtable filesToMove, 
                     JembossParams mysettings) throws JembossSoapException 
   {
 
     String fulloptions;
 
     Vector params = new Vector();
-    params.addElement(appl);
+    params.addElement(cmdl);
 
      //construct a full options string
     fulloptions = "mode="+mysettings.getCurrentMode()+" "+options;
-//   if (mysettings.getUseX11()) 
-//     fulloptions = "display="+mysettings.getX11display()+" "+fulloptions;
     params.addElement(fulloptions);
 
     // just pass the hash
     params.addElement(filesToMove);
 
     PrivateRequest eRun;
-    try 
-    {
-      eRun = new PrivateRequest(mysettings,
-			       "run_prog", params);
-    }
-    catch (JembossSoapException e)
-    {
-      throw new JembossSoapException("Authentication Failed");
-    }
+
+    eRun = new PrivateRequest(mysettings,"run_prog", params);
+
+    proganswer = eRun.getHash();
+    status = proganswer.get("status").toString();
+    statusmsg = proganswer.get("msg").toString();
+    
+    proganswer.remove("status");  // delete the status/msg
+    proganswer.remove("msg");
+  }
+
+  
+  /**
+  * Makes a web service call to run an EMBOSS job.
+  * This constructor is used when user.auth is false.
+  * 
+  * @param cmdl         command line
+  * @param options      defining options
+  * @param filesToMove  Hashtable of filenames and contents
+  * @param mysettings   jemboss properties
+  * @throws JembossSoapException if authentication fails
+  *
+  */
+  public JembossRun(List cmdl, String options, Hashtable filesToMove, 
+                    JembossParams mysettings) throws JembossSoapException 
+  {
+
+    String fulloptions;
+
+    Vector params = new Vector();
+    params.addElement(new Vector(cmdl));
+
+     //construct a full options string
+    fulloptions = "mode="+mysettings.getCurrentMode()+" "+options;
+    params.addElement(fulloptions);
+
+    // just pass the hash
+    params.addElement(filesToMove);
+
+    PrivateRequest eRun;
+
+    eRun = new PrivateRequest(mysettings,
+                   "run_prog_array", params);
 
     proganswer = eRun.getHash();
     status = proganswer.get("status").toString();

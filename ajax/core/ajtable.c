@@ -52,6 +52,8 @@ static void tableStrDelKey(void** key, void** value, void* cl);
 static void tableFreeSetExpand (void);
 
 
+
+
 /* @filesection ajtable ********************************************************
 **
 ** @nam1rule aj Function belongs to the AJAX library.
@@ -75,6 +77,7 @@ static void tableFreeSetExpand (void);
 
 
 
+
 /* @section Comparison functions **********************************************
 **
 ** @fdata [AjPTable]
@@ -95,6 +98,8 @@ static void tableFreeSetExpand (void);
 ** @fcategory misc
 **
 ******************************************************************************/
+
+
 
 
 /* @funcstatic tableCmpAtom ***************************************************
@@ -152,6 +157,9 @@ static ajuint tableHashAtom(const void *key, ajuint hashsize)
 ** @valrule * [AjPTable] New hash table
 **
 ******************************************************************************/
+
+
+
 
 /* @func ajTableNewFunctionLen *************************************************
 **
@@ -290,8 +298,8 @@ AjPTable ajTableNewLen(ajuint size)
 **
 ** Retrieves values from a hash table
 **
-** @nam3rule Fetch Retrieval fuction
-** @nam4rule FetchKey Key retrieval fuction
+** @nam3rule Fetch Retrieval function
+** @nam4rule FetchKey Key retrieval function
 ** @nam3rule Get return attribute
 ** @nam4rule GetLength Table size
 ** @nam3rule Toarray Return keys and values as arrays
@@ -310,6 +318,9 @@ AjPTable ajTableNewLen(ajuint size)
 ** @fcategory cast
 **
 ******************************************************************************/
+
+
+
 
 /* @func ajTableFetch *********************************************************
 **
@@ -483,6 +494,9 @@ ajuint ajTableToarrayKeys(const AjPTable table,
     return table->length;
 }
 
+
+
+
 /* @obsolete ajTableToarray
 ** @rename ajTableToarrayKeysValues
 */
@@ -493,6 +507,8 @@ __deprecated ajuint ajTableToarray(const AjPTable table,
 
     return ajTableToarrayKeysValues(table, keyarray, valarray);
 }
+
+
 
 
 /* @func ajTableToarrayKeysValues *********************************************
@@ -542,6 +558,9 @@ ajuint ajTableToarrayKeysValues(const AjPTable table,
     return table->length;
 }
 
+
+
+
 /* @func ajTableToarrayValues *************************************************
 **
 ** creates two N+1 element arrays that holds the N values
@@ -582,6 +601,9 @@ ajuint ajTableToarrayValues(const AjPTable table,
     return table->length;
 }
 
+
+
+
 /* @section Trace functions ***************************************************
 **
 ** @fdata [AjPTable]
@@ -593,6 +615,8 @@ ajuint ajTableToarrayValues(const AjPTable table,
 ** @fcategory misc
 **
 ******************************************************************************/
+
+
 
 
 /* @func ajTableTrace *********************************************************
@@ -652,12 +676,14 @@ void ajTableTrace(const AjPTable table)
 ** @argrule Put key [void*] Key
 ** @argrule Put value [void*] Value
 ** @argrule Remove key [const void*] Key
-** @argrule RemoveKey truekey [void**] Removed key poiner - ready to be freed
+** @argrule RemoveKey truekey [void**] Removed key pointer - ready to be freed
 **
 ** @valrule * [void*] Previous value for key, or NULL
 **
 ** @fcategory modify
 ******************************************************************************/
+
+
 
 
 /* @func ajTablePut ***********************************************************
@@ -843,6 +869,8 @@ void * ajTableRemoveKey(AjPTable table, const void *key, void** truekey)
 ******************************************************************************/
 
 
+
+
 /* @func ajTableMap **********************************************************
 **
 ** calls function 'apply' for each key-value in table
@@ -962,6 +990,9 @@ void ajTableMapDel(AjPTable table,
 **
 ******************************************************************************/
 
+
+
+
 /* @funcstatic tableFreeSetExpand **********************************************
 **
 ** Expand the list of free structure bindings
@@ -991,8 +1022,9 @@ static void tableFreeSetExpand (void)
     return;
 }
 
-    
-    
+
+
+
 /* @func ajTableFree **********************************************************
 **
 ** Deallocates and clears a hash table. Does not clear keys or values.
@@ -1119,6 +1151,9 @@ void ajTableExit(void)
 **
 ******************************************************************************/
 
+
+
+
 /* @func ajTablestrNew ********************************************************
 **
 ** Creates, initialises, and returns a new, empty table that can hold an
@@ -1209,7 +1244,7 @@ AjPTable ajTablestrNewLen(ajuint size)
 **
 ** Retrieves values from a hash table
 **
-** @nam3rule Fetch Retrieval fuction
+** @nam3rule Fetch Retrieval function
 **
 ** @argrule Fetch table [const AjPTable] Hash table
 ** @argrule Fetch key [const AjPStr] Key
@@ -1219,6 +1254,9 @@ AjPTable ajTablestrNewLen(ajuint size)
 ** @fcategory cast
 **
 ******************************************************************************/
+
+
+
 
 /* @func ajTablestrFetch ******************************************************
 **
@@ -1271,6 +1309,9 @@ const AjPStr ajTablestrFetch(const AjPTable table, const AjPStr key)
 ** @fcategory modify
 **
 ******************************************************************************/
+
+
+
 
 /* @func ajTablestrFetchmod ***************************************************
 **
@@ -1328,6 +1369,8 @@ AjPStr* ajTablestrFetchmod(AjPTable table, const AjPStr key)
 ** @fcategory misc
 **
 ******************************************************************************/
+
+
 
 
 /* @func ajTablestrCmp ********************************************************
@@ -1502,6 +1545,8 @@ __deprecated ajuint ajStrTableHashCase(const void* key, ajuint hashsize)
 ******************************************************************************/
 
 
+
+
 /* @func ajTablestrPrint ******************************************************
 **
 ** Print function for a table with a string key.
@@ -1565,7 +1610,7 @@ void ajTablestrTrace(const AjPTable table)
     ajDebug("(string) table trace: ");
     ajDebug(" length: %d", table->length);
     ajDebug(" size: %d", table->size);
-    ajDebug(" timestamp: %u", table->timestamp);
+    ajDebug(" timestamp: %u\n", table->timestamp);
 
     for(i = 0; i < table->size; i++)
 	if(table->buckets[i])
@@ -1623,6 +1668,9 @@ __deprecated void ajStrTableTrace(const AjPTable table)
 **
 ******************************************************************************/
 
+
+
+
 /* @func ajTablestrFree *******************************************************
 **
 ** Free keys and value strings in a table and free the table.
@@ -1637,6 +1685,9 @@ __deprecated void ajStrTableTrace(const AjPTable table)
 
 void ajTablestrFree(AjPTable* Ptable)
 {
+    if(!Ptable)
+        return;
+
     if(!*Ptable)
 	return;
 
@@ -1776,6 +1827,9 @@ static void tableStrDelKey(void** key, void** value, void* cl)
 **
 ******************************************************************************/
 
+
+
+
 /* @section Constructors ******************************************************
 **
 ** Constructors for hash tables
@@ -1791,6 +1845,7 @@ static void tableStrDelKey(void** key, void** value, void* cl)
 ** @valrule * [AjPTable] New hash table
 **
 ******************************************************************************/
+
 
 
 
@@ -1929,6 +1984,8 @@ __deprecated AjPTable ajStrTableNew(ajuint hint)
 ** @fcategory misc
 **
 ******************************************************************************/
+
+
 
 
 /* @func ajTablecharCmp *******************************************************
@@ -2097,6 +2154,8 @@ __deprecated ajuint ajStrTableHashCaseC(const void* key, ajuint hashsize)
 ** @fcategory misc
 **
 ******************************************************************************/
+
+
 
 
 /* @func ajTablecharPrint *****************************************************

@@ -12,18 +12,18 @@ extern "C"
 
 
 
-/******************************************************************************
+/* EnsECacheType **************************************************************
 **
 ** Ensembl Cache Type enumeration.
 **
 ******************************************************************************/
 
-enum EnsECacheType
+typedef enum EnsOCacheType
 {
     ensECacheTypeNULL,
     ensECacheTypeNumeric,
     ensECacheTypeAlphaNumeric
-};
+} EnsECacheType;
 
 
 
@@ -40,19 +40,19 @@ enum EnsECacheType
 ** @attr Table [AjPTable] AJAX Table implementing lookup functionality
 ** @attr Reference [(void**)] Object-specific referencing function
 ** @attr Delete [(void*)] Object-specific deletion function
-** @attr Size [(ajuint*)] Object-specific memory sizing function
+** @attr Size [(ajulong*)] Object-specific memory sizing function
 ** @attr Read [(void**)] Object-specific reading function
 ** @attr Write [(AjBool*)] Object-specific writing function
-** @attr Type [AjEnum] Ensembl Cache type (EnsECacheNumeric, ...)
+** @attr Type [EnsECacheType] Ensembl Cache type
 ** @attr Synchron [AjBool] ajTrue: Immediately write-back value data
 **                         ajFalse: Write-back value data later
 ** @cc Cache limits
-** @attr MaxBytes [ajuint] Maximum number of allowed bytes
-** @attr MaxCount [ajuint] Maximum number of allowed entries
-** @attr MaxSize [ajuint] Maximum memory size of an object
+** @attr Bytes [ajulong] Current number of cached bytes
+** @attr MaxBytes [ajulong] Maximum number of allowed bytes
+** @attr MaxSize [ajulong] Maximum memory size of an object
 ** @cc Cache size
-** @attr Bytes [ajuint] Current number of cached bytes
 ** @attr Count [ajuint] Current number of cached entry
+** @attr MaxCount [ajuint] Maximum number of allowed entries
 ** @cc Cache performance statistics
 ** @attr Dropped [ajuint] Number of entries dropped by the LRU algorithm
 ** @attr Removed [ajuint] Number of entries explicitly removed
@@ -69,16 +69,16 @@ typedef struct EnsSCache
     AjPTable Table;
     void* (*Reference)(void *);
     void (*Delete)(void **);
-    ajuint (*Size)(const void *);
+    ajulong (*Size)(const void *);
     void* (*Read)(const void *key);
     AjBool (*Write)(const void *);
-    AjEnum Type;
+    EnsECacheType Type;
     AjBool Synchron;
-    ajuint MaxBytes;
-    ajuint MaxCount;
-    ajuint MaxSize;
-    ajuint Bytes;
+    ajulong Bytes;
+    ajulong MaxBytes;
+    ajulong MaxSize;
     ajuint Count;
+    ajuint MaxCount;
     ajuint Dropped;
     ajuint Removed;
     ajuint Stored;
@@ -97,13 +97,13 @@ typedef struct EnsSCache
 
 /* Ensembl Cache */
 
-EnsPCache ensCacheNew(AjEnum type,
-                      ajuint maxbytes,
+EnsPCache ensCacheNew(EnsECacheType type,
+                      ajulong maxbytes,
                       ajuint maxcount,
-                      ajuint maxsize,
+                      ajulong maxsize,
                       void* Freference(void* value),
                       void Fdelete(void** value),
-                      ajuint Fsize(const void* value),
+                      ajulong Fsize(const void* value),
                       void* Fread(const void* key),
                       AjBool Fwrite(const void* value),
                       AjBool synchron,
@@ -128,7 +128,7 @@ AjBool ensCacheTrace(const EnsPCache cache, ajuint level);
 
 
 
-#endif
+#endif /* enscache_h */
 
 #ifdef __cplusplus
 }

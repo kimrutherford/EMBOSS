@@ -30,7 +30,6 @@
 
 
 #ifndef WIN32
-
 /* @func assert ***************************************************************
 **
 ** The assert() macro inserts diagnostics into programs.

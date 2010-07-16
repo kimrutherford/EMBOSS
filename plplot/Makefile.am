@@ -8,9 +8,16 @@ if ISSHARED
 if ISAIXIA64
 
 if AMPNG
-TESTPNG_CFLAGS = -Wl,-G -lgd -lpng -lz -lX11 -lm
+
+if AMPDF
+TESTPDF_CFLAGS = -Wl,-G -lhpdf
 else
-TESTPNG_CFLAGS = -Wl,-G -lX11
+TESTPDF_CFLAGS = -Wl,-G
+endif
+
+TESTPNG_CFLAGS = $(TESTPDF_CFLAGS) -lgd -lpng -lz -lX11 -lm
+else
+TESTPNG_CFLAGS = $(TESTPDF_CFLAGS) -lX11
 endif
 endif
 endif
@@ -29,7 +36,8 @@ plctrl.c plcvt.c pldtik.c plfill.c plhist.c plline.c plmap.c \
 plot3d.c plpage.c plsdef.c plshade.c plsym.c pltick.c \
 plvpor.c plwind.c plstripc.c hpgl.c impress.c \
 ljiip.c ljii.c null.c data.c pbm.c plbuf.c \
-plmeta.c ps.c tek.c xfig.c xwin.c gd.c plimage.c plstdio.c plvect.c
+plmeta.c ps.c tek.c xfig.c xwin.c gd.c pdf.c svg.c \
+plimage.c plstdio.c plvect.c
 
 # removed gdpng.c (replaced by gd.c) next.c gd300.c
 

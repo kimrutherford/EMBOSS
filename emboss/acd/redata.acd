@@ -1,7 +1,8 @@
 application: redata [
   documentation: "Retrieve information from REBASE restriction enzyme database"
   groups: "Nucleic:Restriction"
-  relations: "EDAM: Restriction site information"
+  relations: "/edam/topic/0000100 Nucleic acid restriction"
+  relations: "/edam/operation/0000280 Restriction enzyme information"
 ]
 
 section: input [
@@ -18,7 +19,7 @@ section: input [
            capital 'i', not a '1' or an 'l'. The names are case-independent
            ('AaeI' is the same as 'aaei')"
     knowntype: "enzyme name"
-    relations:  "EDAM: Restriction enzyme name"                        
+    relations:  "/edam/data/0001013 Restriction enzyme name"                        
   ]
 
 endsection: input
@@ -32,25 +33,25 @@ section: output [
     default: "Y"
     information: "Show isoschizomers"
     help: "Show other enzymes with this specificity. (Isoschizomers)"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: references [
     default: "Y"
     information: "Show references"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: suppliers [
     default: "Y"
     information: "Show suppliers"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   outfile: outfile [
     parameter: "Y"
     knowntype: "redata output"
-    relations:  "EDAM:Restriction enzyme report"                           
+    relations:  "/edam/data/0001517 Restriction enzyme information"                           
   ]
 
 endsection: output

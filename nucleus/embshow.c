@@ -134,6 +134,9 @@ static void showAddTags(AjPStr *tagsout, const AjPFeature feat, AjBool values);
 /* ========================= constructors ============================= */
 /* ==================================================================== */
 
+
+
+
 /* @section Show Sequence Constructors ****************************************
 **
 ** All constructors return a new show sequence object by pointer.
@@ -217,6 +220,9 @@ static EmbPShowInfo showInfoNew(void* info, ajint type)
 /* ==================================================================== */
 /* ========================== destructors ============================= */
 /* ==================================================================== */
+
+
+
 
 /* @section Show Sequence Destructors *****************************************
 **
@@ -518,6 +524,9 @@ static void showDelNote(EmbPShowNote* pinfo)
 /* ==================================================================== */
 /* ========================== Assignments ============================= */
 /* ==================================================================== */
+
+
+
 
 /* @section Show Sequence Assignments *****************************************
 **
@@ -823,6 +832,9 @@ void embShowAddNote(EmbPShow thys, const AjPRange regions)
 /* =========================== Modifiers ============================== */
 /* ==================================================================== */
 
+
+
+
 /* @section Show Sequence Modifiers *******************************************
 **
 ** These functions modify the behaviour of the last show descriptor on
@@ -839,6 +851,9 @@ void embShowAddNote(EmbPShow thys, const AjPRange regions)
 /* ==================================================================== */
 /* ======================== Operators ==================================*/
 /* ==================================================================== */
+
+
+
 
 /* @section Show Sequence Operators *******************************************
 **
@@ -953,6 +968,8 @@ static void showPrintLines(AjPFile out, const AjPList lines)
 /* ==================================================================== */
 /* ======================== Assignments ================================*/
 /* ==================================================================== */
+
+
 
 
 /* @section Show Fill Assignments *********************************************

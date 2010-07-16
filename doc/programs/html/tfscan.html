@@ -82,7 +82,7 @@ Transcription Factor Class
          C : Custom
 Select class [V]: <b>v</b>
 Number of mismatches [0]: <b></b>
-Output file [k00650.tfscan]: <b></b>
+Output report [k00650.tfscan]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -96,7 +96,7 @@ Output file [k00650.tfscan]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Identify transcription factor binding sites in DNA sequences
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -106,7 +106,7 @@ Version: EMBOSS:6.2.0
                                   (other); C (Custom))
 *  -custom             datafile   Transfac database data file (optional)
    -mismatch           integer    [0] Number of mismatches (Integer 0 or more)
-  [-outfile]           outfile    [*.tfscan] Output file name
+  [-outfile]           report     [*.tfscan] Output report file name
 
    Additional (Optional) qualifiers:
    -minlength          integer    [1] Display matches equal to or above this
@@ -132,7 +132,17 @@ Version: EMBOSS:6.2.0
    -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -odirectory2        string     Output directory
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
+   -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -201,9 +211,9 @@ Version: EMBOSS:6.2.0
 
 <tr bgcolor="#FFFFCC">
 <td>[-outfile]<br>(Parameter 2)</td>
-<td>outfile</td>
-<td>Output file name</td>
-<td>Output file</td>
+<td>report</td>
+<td>Output report file name</td>
+<td>Report output file</td>
 <td><i>&lt;*&gt;</i>.tfscan</td>
 </tr>
 
@@ -349,16 +359,96 @@ Version: EMBOSS:6.2.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+<th align="left" colspan=5>"-outfile" associated report qualifiers
 </td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -odirectory2<br>-odirectory_outfile</td>
+<td> -rformat2<br>-rformat_outfile</td>
+<td>string</td>
+<td>Report format</td>
+<td>Any string</td>
+<td>seqtable</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -rname2<br>-rname_outfile</td>
+<td>string</td>
+<td>Base file name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -rextension2<br>-rextension_outfile</td>
+<td>string</td>
+<td>File name extension</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -rdirectory2<br>-rdirectory_outfile</td>
 <td>string</td>
 <td>Output directory</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -raccshow2<br>-raccshow_outfile</td>
+<td>boolean</td>
+<td>Show accession number in the report</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -rdesshow2<br>-rdesshow_outfile</td>
+<td>boolean</td>
+<td>Show description in the report</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -rscoreshow2<br>-rscoreshow_outfile</td>
+<td>boolean</td>
+<td>Show the score in the report</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -rstrandshow2<br>-rstrandshow_outfile</td>
+<td>boolean</td>
+<td>Show the nucleotide strand in the report</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -rusashow2<br>-rusashow_outfile</td>
+<td>boolean</td>
+<td>Show the full USA in the report</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -rmaxall2<br>-rmaxall_outfile</td>
+<td>integer</td>
+<td>Maximum total hits to report</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -rmaxseq2<br>-rmaxseq_outfile</td>
+<td>integer</td>
+<td>Maximum hits to report for one sequence</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -522,15 +612,15 @@ RT   "Human fos gene";
 RL   Cold Spring Harb. Symp. Quant. Biol. 51:0-0(0).
 XX
 DR   EPD; EP11145; HS_FOS.
-DR   TRANSFAC; R00458; HS$CFOS_01.
-DR   TRANSFAC; R00459; HS$CFOS_02.
-DR   TRANSFAC; R00460; HS$CFOS_03.
-DR   TRANSFAC; R00461; HS$CFOS_04.
-DR   TRANSFAC; R00463; HS$CFOS_06.
-DR   TRANSFAC; R00464; HS$CFOS_07.
-DR   TRANSFAC; R00465; HS$CFOS_08.
-DR   TRANSFAC; R00466; HS$CFOS_09.
-DR   TRANSFAC; R00467; HS$CFOS_10.
+XX
+CC   [2]  sites; promoter region.
+CC   C-fos is the human cellular homolog of the v-fos oncogene of
+CC   Finkel-Biskis-Jinkins murine osteosarcoma virus (FBJ-MuSV).  [2] It
+CC   was found that both human and murine c-fos genes contained an
+CC   enhancer-like element in their 5' noncoding regions that was
+CC   necessary for increased transcription following serum activation.
+CC   The FBJ-MuSV v-fos oncogene contains a deletion relative to murine
+CC   and human c-fos proto-oncogenes that causes complete divergence of
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -600,19 +690,40 @@ DR   TRANSFAC; R00467; HS$CFOS_10.
 <p><h3>File: k00650.tfscan</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-TFSCAN of K00650 from 1 to 6210
+########################################
+# Program: tfscan
+# Rundate: Fri 15 Jan 2010 12:00:00
+# Commandline: tfscan
+#    -sequence tembl:k00650
+#    -menu v
+# Report_format: seqtable
+# Report_file: k00650.tfscan
+########################################
 
-MOUSE$FCGR3A_02      R04413   3287  3292  ttcctc
-                     T00702; PU.1;Quality: 3; Species: mouse, Mus musculus.
-HS$ALBU_03           R00079   5940  5944  tggca
-HS$ALBU_03           R00079   3757  3761  tggca
-HS$ALBU_03           R00079   2776  2780  tggca
-HS$ALBU_03           R00079   2418  2422  tggca
-HS$ALBU_03           R00079   2010  2014  tggca
-HS$ALBU_03           R00079   1676  1680  tggca
-HS$ALBU_03           R00079   1356  1360  tggca
-                     T00599; NF-1/L;Quality: 6; Species: rat, Rattus norvegicus.
-HS$ALBU_02           R00078   2009  2014  ttggca
+#=======================================
+#
+# Sequence: K00650     from: 1   to: 6210
+# HitCount: 9
+#=======================================
+
+  Start     End  Strand Accession Factor                                                      Sequence
+   3287    3292       + R04413    T00702; PU.1;Quality: 3; Species: mouse, Mus musculus.      ttcctc
+   5940    5944       + R00079    T00599; NF-1/L;Quality: 6; Species: rat, Rattus norvegicus. tggca
+   3757    3761       + R00079    T00599; NF-1/L;Quality: 6; Species: rat, Rattus norvegicus. tggca
+   2776    2780       + R00079    T00599; NF-1/L;Quality: 6; Species: rat, Rattus norvegicus. tggca
+   2418    2422       + R00079    T00599; NF-1/L;Quality: 6; Species: rat, Rattus norvegicus. tggca
+   2010    2014       + R00079    T00599; NF-1/L;Quality: 6; Species: rat, Rattus norvegicus. tggca
+   1676    1680       + R00079    T00599; NF-1/L;Quality: 6; Species: rat, Rattus norvegicus. tggca
+   1356    1360       + R00079    T00599; NF-1/L;Quality: 6; Species: rat, Rattus norvegicus. tggca
+   2009    2014       + R00078    T00599; NF-1/L;Quality: 6; Species: rat, Rattus norvegicus. ttggca
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Reported_sequences: 1
+# Reported_hitcount: 9
+#---------------------------------------
 </pre>
 </td></tr></table><p>
 
@@ -793,10 +904,12 @@ in order to set up the data files from the TRANSFAC distribution files.
 <H2>
     Author(s)
 </H2>
-Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
+Alan Bleasby 
 <br>
 European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
 
 
 <H2>

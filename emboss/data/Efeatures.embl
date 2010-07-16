@@ -969,6 +969,7 @@ promoter SO:0000167
 #mol=DNA
 
 # Use RBS instead for ribosome binding sites
+
 protein_bind SO:0000410
        M/bound_moiety
         /allele
@@ -1612,8 +1613,9 @@ V_segment  SO:0000466
 
 #up=CDS
 #org=eukaryotes
+# was variation SO:0000109 but this is now obsoleted in SO
 
-variation SO:0000109
+variation SO:0001060 SO:0000109
         /allele
         /citation
 	/compare

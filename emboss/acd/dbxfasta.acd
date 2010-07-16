@@ -4,7 +4,8 @@ application: dbxfasta [
   gui: "yes"
   batch: "yes"
   cpu: "medium"
-  relations: "EDAM: Database indexing"
+  relations: "/edam/topic/0000091 Database and file management"
+  relations: "/edam/operation/0000227 Database indexing"
 ]
 
 section: input [
@@ -19,7 +20,7 @@ section: input [
     information: "Basename for index files"
     knowntype: "emboss database name"
     pattern: "[A-z][A-z0-9_]+"
-    relations:  "EDAM: Generic database name"                          
+    relations:  "/edam/data/0001056 Database name"                          
   ]
 
   string: dbresource [
@@ -29,7 +30,7 @@ section: input [
     information: "Resource name"
     knowntype: "emboss database name"
     pattern: "[A-z][A-z0-9_]+"
-    relations:  "EDAM: Generic database name"                          
+    relations:  "/edam/data/0001056 Database name"                          
   ]
 
   list: idformat [
@@ -42,7 +43,7 @@ section: input [
     default: "idacc"
     delimiter: ";"
     codedelimiter: "+"
-    relations: "EDAM: Generic string array"                                
+    relations: "/edam/data/0001773 Tool-specific parameter"                                
   ]
 
   directory: directory [
@@ -50,7 +51,7 @@ section: input [
     default: "."
     information: "Database directory"
     knowntype: "emboss database directory"
-    relations:  "EDAM: Directory name"                                 
+    relations:  "/edam/data/0001049 Directory name"                                 
   ]
 
   string: filenames [
@@ -58,7 +59,7 @@ section: input [
     default: "*.fasta"
     information: "Wildcard database filename"
     knowntype: "emboss database wildcard filename"
-    relations:  "EDAM: Generic database name"                          
+    relations:  "/edam/data/0001056 Database name"                          
   ]
 
 endsection: input
@@ -76,7 +77,7 @@ section: required [
     minimum: "1"
     maximum: "4"
     default: "id,acc"
-    relations: "EDAM: Generic string array"                                
+    relations: "/edam/data/0001773 Tool-specific parameter"                                
   ]
 
 endsection: required
@@ -91,7 +92,7 @@ section: advanced [
     maxlength: "9"
     information: "Release number"
     knowntype: "emboss database release"
-    relations:  "EDAM: Database version information"                   
+    relations:  "/edam/data/0001670 Database version information"                   
   ]
 
   string: date [
@@ -100,13 +101,13 @@ section: advanced [
     information: "Index date"
     pattern: "^([0-9]+.[0-9]+.[0-9]+)?$"
     knowntype: "date"
-    relations:  "EDAM: Date"                                           
+    relations:  "/edam/data/0002156 Date"                                           
   ]
 
   string: exclude [
     information: "Wildcard filename(s) to exclude"
     knowntype: "filename wildcard"
-    relations:  "EDAM: File name"                                      
+    relations:  "/edam/data/0001050 File name"                                      
   ]
 
 endsection: advanced
@@ -120,14 +121,14 @@ section: output [
     default: "."
     information: "Index file output directory"
     knowntype: "emboss database index"
-    relations:  "EDAM: Directory name"                                 
+    relations:  "/edam/data/0001049 Directory name"                                 
   ]
 
   outfile: outfile [
     standard: "Y"
     knowntype: "log"
     information: "General log output file"
-    relations:  "EDAM: Application log file"                           
+    relations:  "/edam/data/0001678 Tool log"
   ]
 
 endsection: output

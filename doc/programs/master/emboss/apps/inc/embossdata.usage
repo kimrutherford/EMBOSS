@@ -59,6 +59,7 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/
   EBLOSUMN
   EDNAFULL
   EDNAMAT
+  EDNASIMPLE
   EGC.0
   EGC.1
   EGC.10
@@ -208,180 +209,6 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/
 
 DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_PHYLOFACTS
 
-  PF0001.pfm
-  PF0002.pfm
-  PF0003.pfm
-  PF0004.pfm
-  PF0005.pfm
-  PF0006.pfm
-  PF0007.pfm
-  PF0008.pfm
-  PF0009.pfm
-  PF0010.pfm
-  PF0011.pfm
-  PF0012.pfm
-  PF0013.pfm
-  PF0014.pfm
-  PF0015.pfm
-  PF0016.pfm
-  PF0017.pfm
-  PF0018.pfm
-  PF0019.pfm
-  PF0020.pfm
-  PF0021.pfm
-  PF0022.pfm
-  PF0023.pfm
-  PF0024.pfm
-  PF0025.pfm
-  PF0026.pfm
-  PF0027.pfm
-  PF0028.pfm
-  PF0029.pfm
-  PF0030.pfm
-  PF0031.pfm
-  PF0032.pfm
-  PF0033.pfm
-  PF0034.pfm
-  PF0035.pfm
-  PF0036.pfm
-  PF0037.pfm
-  PF0038.pfm
-  PF0039.pfm
-  PF0040.pfm
-  PF0041.pfm
-  PF0042.pfm
-  PF0043.pfm
-  PF0044.pfm
-  PF0045.pfm
-  PF0046.pfm
-  PF0047.pfm
-  PF0048.pfm
-  PF0049.pfm
-  PF0050.pfm
-  PF0051.pfm
-  PF0052.pfm
-  PF0053.pfm
-  PF0054.pfm
-  PF0055.pfm
-  PF0056.pfm
-  PF0057.pfm
-  PF0058.pfm
-  PF0059.pfm
-  PF0060.pfm
-  PF0061.pfm
-  PF0062.pfm
-  PF0063.pfm
-  PF0064.pfm
-  PF0065.pfm
-  PF0066.pfm
-  PF0067.pfm
-  PF0068.pfm
-  PF0069.pfm
-  PF0070.pfm
-  PF0071.pfm
-  PF0072.pfm
-  PF0073.pfm
-  PF0074.pfm
-  PF0075.pfm
-  PF0076.pfm
-  PF0077.pfm
-  PF0078.pfm
-  PF0079.pfm
-  PF0080.pfm
-  PF0081.pfm
-  PF0082.pfm
-  PF0083.pfm
-  PF0084.pfm
-  PF0085.pfm
-  PF0086.pfm
-  PF0087.pfm
-  PF0088.pfm
-  PF0089.pfm
-  PF0090.pfm
-  PF0091.pfm
-  PF0092.pfm
-  PF0093.pfm
-  PF0094.pfm
-  PF0095.pfm
-  PF0096.pfm
-  PF0097.pfm
-  PF0098.pfm
-  PF0099.pfm
-  PF0100.pfm
-  PF0101.pfm
-  PF0102.pfm
-  PF0103.pfm
-  PF0104.pfm
-  PF0105.pfm
-  PF0106.pfm
-  PF0107.pfm
-  PF0108.pfm
-  PF0109.pfm
-  PF0110.pfm
-  PF0111.pfm
-  PF0112.pfm
-  PF0113.pfm
-  PF0114.pfm
-  PF0115.pfm
-  PF0116.pfm
-  PF0117.pfm
-  PF0118.pfm
-  PF0119.pfm
-  PF0120.pfm
-  PF0121.pfm
-  PF0122.pfm
-  PF0123.pfm
-  PF0124.pfm
-  PF0125.pfm
-  PF0126.pfm
-  PF0127.pfm
-  PF0128.pfm
-  PF0129.pfm
-  PF0130.pfm
-  PF0131.pfm
-  PF0132.pfm
-  PF0133.pfm
-  PF0134.pfm
-  PF0135.pfm
-  PF0136.pfm
-  PF0137.pfm
-  PF0138.pfm
-  PF0139.pfm
-  PF0140.pfm
-  PF0141.pfm
-  PF0142.pfm
-  PF0143.pfm
-  PF0144.pfm
-  PF0145.pfm
-  PF0146.pfm
-  PF0147.pfm
-  PF0148.pfm
-  PF0149.pfm
-  PF0150.pfm
-  PF0151.pfm
-  PF0152.pfm
-  PF0153.pfm
-  PF0154.pfm
-  PF0155.pfm
-  PF0156.pfm
-  PF0157.pfm
-  PF0158.pfm
-  PF0159.pfm
-  PF0160.pfm
-  PF0161.pfm
-  PF0162.pfm
-  PF0163.pfm
-  PF0164.pfm
-  PF0165.pfm
-  PF0166.pfm
-  PF0167.pfm
-  PF0168.pfm
-  PF0169.pfm
-  PF0170.pfm
-  PF0171.pfm
-  PF0172.pfm
-  PF0173.pfm
-  PF0174.pfm
   dummyfile
   matrix_list.txt
 
@@ -389,6 +216,7 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_PHYLOFACTS
 DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_POLII
 
   dummyfile
+  matrix_list.txt
 
 
 DIRECTORY: /homes/pmr/local/share/EMBOSS/data/AAINDEX
@@ -1081,6 +909,12 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/AAINDEX
   zimj680105
 
 
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_PBM_HLH
+
+  dummyfile
+  matrix_list.txt
+
+
 DIRECTORY: /homes/pmr/local/share/EMBOSS/data/CODONS
 
   Cut.index
@@ -1348,150 +1182,28 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/CODONS
 DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_SPLICE
 
   dummyfile
+  matrix_list.txt
 
 
 DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_FAM
 
-  MF0001.pfm
-  MF0002.pfm
-  MF0003.pfm
-  MF0004.pfm
-  MF0005.pfm
-  MF0006.pfm
-  MF0007.pfm
-  MF0008.pfm
-  MF0009.pfm
-  MF0010.pfm
-  MF0011.pfm
   dummyfile
   matrix_list.txt
 
 
 DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_CORE
 
-  MA0001.pfm
-  MA0002.pfm
-  MA0003.pfm
-  MA0004.pfm
-  MA0005.pfm
-  MA0006.pfm
-  MA0007.pfm
-  MA0008.pfm
-  MA0009.pfm
-  MA0010.pfm
-  MA0011.pfm
-  MA0012.pfm
-  MA0013.pfm
-  MA0014.pfm
-  MA0015.pfm
-  MA0016.pfm
-  MA0017.pfm
-  MA0018.pfm
-  MA0019.pfm
-  MA0020.pfm
-  MA0021.pfm
-  MA0022.pfm
-  MA0023.pfm
-  MA0024.pfm
-  MA0025.pfm
-  MA0026.pfm
-  MA0027.pfm
-  MA0028.pfm
-  MA0029.pfm
-  MA0030.pfm
-  MA0031.pfm
-  MA0032.pfm
-  MA0033.pfm
-  MA0034.pfm
-  MA0035.pfm
-  MA0036.pfm
-  MA0037.pfm
-  MA0038.pfm
-  MA0039.pfm
-  MA0040.pfm
-  MA0041.pfm
-  MA0042.pfm
-  MA0043.pfm
-  MA0044.pfm
-  MA0045.pfm
-  MA0046.pfm
-  MA0047.pfm
-  MA0048.pfm
-  MA0049.pfm
-  MA0050.pfm
-  MA0051.pfm
-  MA0052.pfm
-  MA0053.pfm
-  MA0054.pfm
-  MA0055.pfm
-  MA0056.pfm
-  MA0057.pfm
-  MA0058.pfm
-  MA0059.pfm
-  MA0060.pfm
-  MA0061.pfm
-  MA0062.pfm
-  MA0063.pfm
-  MA0064.pfm
-  MA0065.pfm
-  MA0066.pfm
-  MA0067.pfm
-  MA0068.pfm
-  MA0069.pfm
-  MA0070.pfm
-  MA0071.pfm
-  MA0072.pfm
-  MA0073.pfm
-  MA0074.pfm
-  MA0075.pfm
-  MA0076.pfm
-  MA0077.pfm
-  MA0078.pfm
-  MA0079.pfm
-  MA0080.pfm
-  MA0081.pfm
-  MA0082.pfm
-  MA0083.pfm
-  MA0084.pfm
-  MA0085.pfm
-  MA0086.pfm
-  MA0087.pfm
-  MA0088.pfm
-  MA0089.pfm
-  MA0090.pfm
-  MA0091.pfm
-  MA0092.pfm
-  MA0093.pfm
-  MA0094.pfm
-  MA0095.pfm
-  MA0096.pfm
-  MA0097.pfm
-  MA0098.pfm
-  MA0099.pfm
-  MA0100.pfm
-  MA0101.pfm
-  MA0102.pfm
-  MA0103.pfm
-  MA0104.pfm
-  MA0105.pfm
-  MA0106.pfm
-  MA0107.pfm
-  MA0108.pfm
-  MA0109.pfm
-  MA0110.pfm
-  MA0111.pfm
-  MA0112.pfm
-  MA0113.pfm
-  MA0114.pfm
-  MA0115.pfm
-  MA0116.pfm
-  MA0117.pfm
-  MA0118.pfm
-  MA0119.pfm
-  MA0120.pfm
-  MA0121.pfm
-  MA0122.pfm
-  MA0123.pfm
+  MA0070.1.pfm
+  MA0071.1.pfm
+  MA0072.1.pfm
+  MA0073.1.pfm
+  MA0074.1.pfm
+  MA0075.1.pfm
+  MA0076.1.pfm
+  MA0077.1.pfm
+  MA0078.1.pfm
+  MA0079.1.pfm
+  MA0079.2.pfm
   dummyfile
   matrix_list.txt
 
@@ -1505,9 +1217,22 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/REBASE
   embossre.sup
 
 
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_PBM
+
+  dummyfile
+  matrix_list.txt
+
+
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_PBM_HOMEO
+
+  dummyfile
+  matrix_list.txt
+
+
 DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_CNE
 
   dummyfile
+  matrix_list.txt
 
 </pre></td></tr></table><p>
 <p>

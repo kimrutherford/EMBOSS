@@ -37,6 +37,8 @@ static PLFLT offset1;
 static PLFLT offset2;
 
 
+
+
 /* @prog dottup ***************************************************************
 **
 ** Displays a wordmatch dotplot of two sequences
@@ -175,7 +177,7 @@ int main(int argc, char **argv)
 		/* a lot smaller then just label start and end */
 		ajGraphicsDrawposLine(fbegin1,fbegin2,fbegin1,
 			    fbegin2-ticklen);
-		sprintf(ptr,"%d",ajSeqGetOffset(seq1));
+		sprintf(ptr,"%u",ajSeqGetOffset(seq1));
 		ajGraphicsDrawposTextAtmid(fbegin1,fbegin2-(onefifth),ptr);
 		
 		ajGraphicsDrawposLine(fend1,fbegin2,
@@ -210,7 +212,7 @@ int main(int argc, char **argv)
 		/* a lot smaller then just label start and end */
 		ajGraphicsDrawposLine(fbegin1,fbegin2,fbegin1-ticklen,
 			    fbegin2);
-		sprintf(ptr,"%d",ajSeqGetOffset(seq2));
+		sprintf(ptr,"%u",ajSeqGetOffset(seq2));
 		ajGraphicsDrawposTextAtend(fbegin1-(onefifth),fbegin2,ptr);
 
 		ajGraphicsDrawposLine(fbegin1,fend2,fbegin1-ticklen,
@@ -248,7 +250,6 @@ int main(int argc, char **argv)
 
 
 #ifndef NO_PLOT
-
 /* @funcstatic dottup_drawPlotlines *******************************************
 **
 ** Undocumented.

@@ -1,7 +1,8 @@
 application: profit [
   documentation: "Scan one or more sequences with a simple frequency matrix"
   groups: "Nucleic:Profiles, Protein:Profiles"
-  relations: "EDAM: Sequence-profile alignment"
+  relations: "/edam/topic/0000188 Sequence profiles"
+  relations: "/edam/operation/0000300 Sequence-profile alignment"
 ]
 
 section: input [
@@ -13,13 +14,15 @@ section: input [
     parameter: "Y"
     information: "Profile or weight matrix file"
     knowntype: "profile or matrix"
-    relations:  "EDAM: Sequence profile"                               
+    relations:  "/edam/data/0001354 Sequence profile"                               
   ]
 
   seqall: sequence [
     parameter: "Y"
     type: "any"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0000848 Sequence" 
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more" 
   ]
 
 endsection: input
@@ -32,7 +35,7 @@ section: output [
   outfile: outfile [
     parameter: "Y"
     knowntype: "profit output"
-    relations:  "EDAM:Sequence-profile alignment report"                   
+    relations:  "/edam/data/0000869 Sequence-profile alignment"                   
   ]
 
 endsection: output

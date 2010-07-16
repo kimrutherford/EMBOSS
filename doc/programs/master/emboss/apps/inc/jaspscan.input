@@ -40,9 +40,6 @@ RT   "Human insulin-receptor gene. Partial sequence and amplification of exons
 RT   by polymerase chain reaction";
 RL   Diabetes 39(1):123-128(1990).
 XX
-DR   EMBL-JOIN; M32972.
-DR   TRANSFAC; R03068; HS$INSR_01.
-XX
 CC   Draft entry and computer-readable sequence for [1] kindly submitted
 CC   by G.Bell, 14-MAR-1990.
 XX
@@ -57,6 +54,9 @@ FT                   /tissue_type="liver"
 FT                   /db_xref="taxon:9606"
 FT   repeat_region   &lt;1..76
 FT                   /rpt_family="Alu"
+FT   exon            1541..1923
+FT                   /gene="INSR"
+FT                   /number=1
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>

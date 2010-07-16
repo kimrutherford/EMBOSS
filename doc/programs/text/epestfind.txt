@@ -133,7 +133,7 @@ Created epestfind.ps
 Command line arguments
 
 Finds PEST motifs as potential proteolytic cleavage sites
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Protein sequence USA to be analysed.
@@ -146,7 +146,8 @@ Version: EMBOSS:6.2.0
                                   will be written.
    -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tek, tekt, none, data, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif, pdf,
+                                  svg, pdf, svg)
 
    Additional (Optional) qualifiers:
    -mwdata             datafile   [Emolwt.dat] Molecular weights data file
@@ -527,9 +528,11 @@ See also
 
 Author(s)
 
-   Michael K. Schuster and Martin Grabner
-   (martin.grabner (c) univie.ac.at)
-   from the Austrian National EMBnet node.
+   Michael K. Schuster and Martin Grabner formerly at:
+   Austrian National EMBnet node.
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
    Original program 'epestfind' by Scott Rogers and Martin Rechsteiner
    (C)1986.

@@ -4,7 +4,7 @@
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @version $Revision: 1.4 $
+** @version $Revision: 1.13 $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -43,34 +43,23 @@
 /* ======================== private functions ========================= */
 /* ==================================================================== */
 
-extern EnsPAnalysisadaptor
-ensRegistryGetAnalysisadaptor(EnsPDatabaseadaptor dba);
-
-extern EnsPAssemblymapperadaptor
-ensRegistryGetAssemblymapperadaptor(EnsPDatabaseadaptor dba);
-
-extern EnsPCoordsystemadaptor
-ensRegistryGetCoordsystemadaptor(EnsPDatabaseadaptor dba);
-
-extern EnsPRepeatfeatureadaptor
-ensRegistryGetRepeatfeatureadaptor(EnsPDatabaseadaptor dba);
-
-extern EnsPSliceadaptor
-ensRegistryGetSliceadaptor(EnsPDatabaseadaptor dba);
-
-static AjBool repeatConsensusadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
+static AjBool repeatconsensusadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
                                                   const AjPStr statement,
                                                   AjPList rci);
 
-static void *repeatFeatureadaptorCacheReference(void *value);
+static int repeatfeatureCompareStartAscending(const void* P1, const void* P2);
 
-static void repeatFeatureadaptorCacheDelete(void **value);
+static int repeatfeatureCompareStartDescending(const void* P1, const void* P2);
 
-static ajuint repeatFeatureadaptorCacheSize(const void *value);
+static void *repeatfeatureadaptorCacheReference(void *value);
 
-static EnsPFeature repeatFeatureadaptorGetFeature(const void *rf);
+static void repeatfeatureadaptorCacheDelete(void **value);
 
-static AjBool repeatFeatureadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
+static ajulong repeatfeatureadaptorCacheSize(const void *value);
+
+static EnsPFeature repeatfeatureadaptorGetFeature(const void *rf);
+
+static AjBool repeatfeatureadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
                                                 const AjPStr statement,
                                                 EnsPAssemblymapper am,
                                                 EnsPSlice slice,
@@ -92,7 +81,7 @@ static AjBool repeatFeatureadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 **
 ** Functions for manipulating Ensembl Repeat Consensus objects
 **
-** @cc Bio::EnsEMBL::Repeatconsensus CVS Revision: 1.9
+** @cc Bio::EnsEMBL::RepeatConsensus CVS Revision: 1.9
 **
 ** @nam2rule Repeatconsensus
 **
@@ -130,8 +119,8 @@ static AjBool repeatFeatureadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 **
 ** Default constructor for an Ensembl Repeat Consensus.
 **
-** @cc Bio::EnsEMBL::Repeatconsensus::new
-** @param [r] adaptor [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @cc Bio::EnsEMBL::RepeatConsensus::new
+** @param [r] rca [EnsPRepeatconsensusadaptor] Ensembl Repeat Consensus Adaptor
 ** @param [r] identifier [ajuint] SQL databaseinternal identifier
 ** @param [r] name [AjPStr] Repeat Consensus name
 ** @param [r] class [AjPStr] Repeat Consensus class
@@ -143,7 +132,7 @@ static AjBool repeatFeatureadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 ** @@
 ******************************************************************************/
 
-EnsPRepeatconsensus ensRepeatconsensusNew(EnsPDatabaseadaptor adaptor,
+EnsPRepeatconsensus ensRepeatconsensusNew(EnsPRepeatconsensusadaptor rca,
                                           ajuint identifier,
                                           AjPStr name,
                                           AjPStr class,
@@ -152,28 +141,28 @@ EnsPRepeatconsensus ensRepeatconsensusNew(EnsPDatabaseadaptor adaptor,
                                           ajuint length)
 {
     EnsPRepeatconsensus rc = NULL;
-    
+
     AJNEW0(rc);
-    
-    rc->Adaptor    = adaptor;
+
+    rc->Adaptor    = rca;
     rc->Identifier = identifier;
-    
+
     if(name)
-	rc->Name = ajStrNewRef(name);
-    
+        rc->Name = ajStrNewRef(name);
+
     if(class)
-	rc->Class = ajStrNewRef(class);
-    
+        rc->Class = ajStrNewRef(class);
+
     if(type)
-	rc->Type = ajStrNewRef(type);
-    
+        rc->Type = ajStrNewRef(type);
+
     if(consensus)
-	rc->Consensus = ajStrNewRef(consensus);
-    
+        rc->Consensus = ajStrNewRef(consensus);
+
     rc->Length = length;
-    
+
     rc->Use = 1;
-    
+
     return rc;
 }
 
@@ -193,29 +182,29 @@ EnsPRepeatconsensus ensRepeatconsensusNew(EnsPDatabaseadaptor adaptor,
 EnsPRepeatconsensus ensRepeatconsensusNewObj(EnsPRepeatconsensus object)
 {
     EnsPRepeatconsensus rc = NULL;
-    
+
     AJNEW0(rc);
-    
+
     rc->Adaptor = object->Adaptor;
-    
+
     rc->Identifier = object->Identifier;
-    
+
     if(object->Name)
-	rc->Name = ajStrNewRef(object->Name);
-    
+        rc->Name = ajStrNewRef(object->Name);
+
     if(object->Class)
-	rc->Class = ajStrNewRef(object->Class);
-    
+        rc->Class = ajStrNewRef(object->Class);
+
     if(object->Type)
-	rc->Type = ajStrNewRef(object->Type);
-    
+        rc->Type = ajStrNewRef(object->Type);
+
     if(object->Consensus)
-	rc->Consensus = ajStrNewRef(object->Consensus);
-    
+        rc->Consensus = ajStrNewRef(object->Consensus);
+
     rc->Length = object->Length;
-    
+
     rc->Use = 1;
-    
+
     return rc;
 }
 
@@ -236,10 +225,10 @@ EnsPRepeatconsensus ensRepeatconsensusNewObj(EnsPRepeatconsensus object)
 EnsPRepeatconsensus ensRepeatconsensusNewRef(EnsPRepeatconsensus rc)
 {
     if(!rc)
-	return NULL;
-    
+        return NULL;
+
     rc->Use++;
-    
+
     return rc;
 }
 
@@ -279,39 +268,38 @@ EnsPRepeatconsensus ensRepeatconsensusNewRef(EnsPRepeatconsensus rc)
 void ensRepeatconsensusDel(EnsPRepeatconsensus *Prc)
 {
     EnsPRepeatconsensus pthis = NULL;
-    
+
     if(!Prc)
-	return;
-    
+        return;
+
     if(!*Prc)
-	return;
-    
-    /*
-     ajDebug("ensRepeatconsensusDel\n"
-	     "  *Prc %p\n",
-	     *Prc);
-     */
+        return;
+
+    if(ajDebugTest("ensRepeatconsensusDel"))
+        ajDebug("ensRepeatconsensusDel\n"
+                "  *Prc %p\n",
+                *Prc);
 
     pthis = *Prc;
-    
+
     pthis->Use--;
-    
+
     if(pthis->Use)
     {
-	*Prc = NULL;
-	
-	return;
+        *Prc = NULL;
+
+        return;
     }
-    
+
     ajStrDel(&pthis->Name);
     ajStrDel(&pthis->Class);
     ajStrDel(&pthis->Type);
     ajStrDel(&pthis->Consensus);
-    
+
     AJFREE(pthis);
 
     *Prc = NULL;
-    
+
     return;
 }
 
@@ -336,7 +324,8 @@ void ensRepeatconsensusDel(EnsPRepeatconsensus *Prc)
 **
 ** @argrule * rc [const EnsPRepeatconsensus] Repeat Consensus
 **
-** @valrule Adaptor [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @valrule Adaptor [EnsPRepeatconsensusadaptor] Ensembl Repeat Consensus
+**                                               Adaptor
 ** @valrule Identifier [ajuint] SQL database-internal identifier
 ** @valrule Name [AjPStr] Name
 ** @valrule Class [AjPStr] Class
@@ -352,20 +341,22 @@ void ensRepeatconsensusDel(EnsPRepeatconsensus *Prc)
 
 /* @func ensRepeatconsensusGetAdaptor *****************************************
 **
-** Get the Ensembl Database Adaptor element of an Ensembl Repeat Consensus.
+** Get the Ensembl Repeat Consensus Adaptor element of an
+** Ensembl Repeat Consensus.
 **
 ** @cc Bio::EnsEMBL::Storable::adaptor
 ** @param [r] rc [const EnsPRepeatconsensus] Ensembl Repeat Consensus
 **
-** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @return [EnsPRepeatconsensusadaptor] Ensembl Repeat Consensus Adaptor
 ** @@
 ******************************************************************************/
 
-EnsPDatabaseadaptor ensRepeatconsensusGetAdaptor(const EnsPRepeatconsensus rc)
+EnsPRepeatconsensusadaptor ensRepeatconsensusGetAdaptor(
+    const EnsPRepeatconsensus rc)
 {
     if(!rc)
-	return NULL;
-    
+        return NULL;
+
     return rc->Adaptor;
 }
 
@@ -387,8 +378,8 @@ EnsPDatabaseadaptor ensRepeatconsensusGetAdaptor(const EnsPRepeatconsensus rc)
 ajuint ensRepeatconsensusGetIdentifier(const EnsPRepeatconsensus rc)
 {
     if(!rc)
-	return 0;
-    
+        return 0;
+
     return rc->Identifier;
 }
 
@@ -399,7 +390,7 @@ ajuint ensRepeatconsensusGetIdentifier(const EnsPRepeatconsensus rc)
 **
 ** Get the name element of an Ensembl Repeat Consensus.
 **
-** @cc Bio::EnsEMBL::Repeatconsensus::name
+** @cc Bio::EnsEMBL::RepeatConsensus::name
 ** @param [r] rc [const EnsPRepeatconsensus] Ensembl Repeat Consensus
 **
 ** @return [AjPStr] Name
@@ -409,19 +400,19 @@ ajuint ensRepeatconsensusGetIdentifier(const EnsPRepeatconsensus rc)
 AjPStr ensRepeatconsensusGetName(const EnsPRepeatconsensus rc)
 {
     if(!rc)
-	return NULL;
-    
+        return NULL;
+
     return rc->Name;
 }
 
 
 
 
-/* @func ensRepeatconsensusGetClass ********************************************
+/* @func ensRepeatconsensusGetClass *******************************************
 **
 ** Get the class element of an Ensembl Repeat Consensus.
 **
-** @cc Bio::EnsEMBL::Repeatconsensus::repeat_class
+** @cc Bio::EnsEMBL::RepeatConsensus::repeat_class
 ** @param [r] rc [const EnsPRepeatconsensus] Ensembl Repeat Consensus
 **
 ** @return [AjPStr] Class
@@ -431,8 +422,8 @@ AjPStr ensRepeatconsensusGetName(const EnsPRepeatconsensus rc)
 AjPStr ensRepeatconsensusGetClass(const EnsPRepeatconsensus rc)
 {
     if(!rc)
-	return NULL;
-    
+        return NULL;
+
     return rc->Class;
 }
 
@@ -443,7 +434,7 @@ AjPStr ensRepeatconsensusGetClass(const EnsPRepeatconsensus rc)
 **
 ** Get the type element of an Ensembl Repeat Consensus.
 **
-** @cc Bio::EnsEMBL::Repeatconsensus::repeat_type
+** @cc Bio::EnsEMBL::RepeatConsensus::repeat_type
 ** @param [r] rc [const EnsPRepeatconsensus] Ensembl Repeat Consensus
 **
 ** @return [AjPStr] Type
@@ -453,8 +444,8 @@ AjPStr ensRepeatconsensusGetClass(const EnsPRepeatconsensus rc)
 AjPStr ensRepeatconsensusGetType(const EnsPRepeatconsensus rc)
 {
     if(!rc)
-	return NULL;
-    
+        return NULL;
+
     return rc->Type;
 }
 
@@ -465,7 +456,7 @@ AjPStr ensRepeatconsensusGetType(const EnsPRepeatconsensus rc)
 **
 ** Get the consensus sequence element of an Ensembl Repeat Consensus.
 **
-** @cc Bio::EnsEMBL::Repeatconsensus::repeat_consensus
+** @cc Bio::EnsEMBL::RepeatConsensus::repeat_consensus
 ** @param [r] rc [const EnsPRepeatconsensus] Ensembl Repeat Consensus
 **
 ** @return [AjPStr] Consensus sequence
@@ -475,8 +466,8 @@ AjPStr ensRepeatconsensusGetType(const EnsPRepeatconsensus rc)
 AjPStr ensRepeatconsensusGetConsensus(const EnsPRepeatconsensus rc)
 {
     if(!rc)
-	return NULL;
-    
+        return NULL;
+
     return rc->Consensus;
 }
 
@@ -487,7 +478,7 @@ AjPStr ensRepeatconsensusGetConsensus(const EnsPRepeatconsensus rc)
 **
 ** Get the length element of an Ensembl Repeat Consensus.
 **
-** @cc Bio::EnsEMBL::Repeatconsensus::length
+** @cc Bio::EnsEMBL::RepeatConsensus::length
 ** @param [r] rc [const EnsPRepeatconsensus] Ensembl Repeat Consensus
 **
 ** @return [ajuint] Length
@@ -497,8 +488,8 @@ AjPStr ensRepeatconsensusGetConsensus(const EnsPRepeatconsensus rc)
 ajuint ensRepeatconsensusGetLength(const EnsPRepeatconsensus rc)
 {
     if(!rc)
-	return 0;
-    
+        return 0;
+
     return rc->Length;
 }
 
@@ -533,24 +524,25 @@ ajuint ensRepeatconsensusGetLength(const EnsPRepeatconsensus rc)
 
 /* @func ensRepeatconsensusSetAdaptor *****************************************
 **
-** Set the Ensembl Database Adaptor element of an Ensembl Repeat Consensus.
+** Set the Ensembl Repeat Consensus Adaptor element of an
+** Ensembl Repeat Consensus.
 **
 ** @cc Bio::EnsEMBL::Storable::adaptor
 ** @param [u] rc [EnsPRepeatconsensus] Ensembl Repeat Consensus
-** @param [r] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [r] rca [EnsPRepeatconsensusadaptor] Ensembl Repeat Consensus Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
 AjBool ensRepeatconsensusSetAdaptor(EnsPRepeatconsensus rc,
-                                    EnsPDatabaseadaptor dba)
+                                    EnsPRepeatconsensusadaptor rca)
 {
     if(!rc)
         return ajFalse;
-    
-    rc->Adaptor = dba;
-    
+
+    rc->Adaptor = rca;
+
     return ajTrue;
 }
 
@@ -575,9 +567,9 @@ AjBool ensRepeatconsensusSetIdentifier(EnsPRepeatconsensus rc,
 {
     if(!rc)
         return ajFalse;
-    
+
     rc->Identifier = identifier;
-    
+
     return ajTrue;
 }
 
@@ -588,7 +580,7 @@ AjBool ensRepeatconsensusSetIdentifier(EnsPRepeatconsensus rc,
 **
 ** Set the name element of an Ensembl Repeat Consensus.
 **
-** @cc Bio::EnsEMBL::Repeatconsensus::name
+** @cc Bio::EnsEMBL::RepeatConsensus::name
 ** @param [u] rc [EnsPRepeatconsensus] Ensembl Repeat Consensus
 ** @param [u] name [AjPStr] Name
 **
@@ -600,12 +592,12 @@ AjBool ensRepeatconsensusSetName(EnsPRepeatconsensus rc, AjPStr name)
 {
     if(!rc)
         return ajFalse;
-    
+
     ajStrDel(&rc->Name);
-    
+
     if(name)
-	rc->Name = ajStrNewRef(name);
-    
+        rc->Name = ajStrNewRef(name);
+
     return ajTrue;
 }
 
@@ -616,7 +608,7 @@ AjBool ensRepeatconsensusSetName(EnsPRepeatconsensus rc, AjPStr name)
 **
 ** Set the class element of an Ensembl Repeat Consensus.
 **
-** @cc Bio::EnsEMBL::Repeatconsensus::repeat_class
+** @cc Bio::EnsEMBL::RepeatConsensus::repeat_class
 ** @param [u] rc [EnsPRepeatconsensus] Ensembl Repeat Consensus
 ** @param [u] class [AjPStr] Class
 **
@@ -628,12 +620,12 @@ AjBool ensRepeatconsensusSetClass(EnsPRepeatconsensus rc, AjPStr class)
 {
     if(!rc)
         return ajFalse;
-    
+
     ajStrDel(&rc->Class);
-    
+
     if(class)
-	rc->Class = ajStrNewRef(class);
-    
+        rc->Class = ajStrNewRef(class);
+
     return ajTrue;
 }
 
@@ -644,7 +636,7 @@ AjBool ensRepeatconsensusSetClass(EnsPRepeatconsensus rc, AjPStr class)
 **
 ** Set the type element of an Ensembl Repeat Consensus.
 **
-** @cc Bio::EnsEMBL::Repeatconsensus::repeat_type
+** @cc Bio::EnsEMBL::RepeatConsensus::repeat_type
 ** @param [u] rc [EnsPRepeatconsensus] Ensembl Repeat Consensus
 ** @param [u] type [AjPStr] Type
 **
@@ -656,12 +648,12 @@ AjBool ensRepeatconsensusSetType(EnsPRepeatconsensus rc, AjPStr type)
 {
     if(!rc)
         return ajFalse;
-    
+
     ajStrDel(&rc->Type);
-    
+
     if(type)
-	rc->Type = ajStrNewRef(type);
-    
+        rc->Type = ajStrNewRef(type);
+
     return ajTrue;
 }
 
@@ -672,7 +664,7 @@ AjBool ensRepeatconsensusSetType(EnsPRepeatconsensus rc, AjPStr type)
 **
 ** Set the consensus sequence element of an Ensembl Repeat Consensus.
 **
-** @cc Bio::EnsEMBL::Repeatconsensus::repeat_consensus
+** @cc Bio::EnsEMBL::RepeatConsensus::repeat_consensus
 ** @param [u] rc [EnsPRepeatconsensus] Ensembl Repeat Consensus
 ** @param [u] consensus [AjPStr] Consensus sequence
 **
@@ -680,16 +672,17 @@ AjBool ensRepeatconsensusSetType(EnsPRepeatconsensus rc, AjPStr type)
 ** @@
 ******************************************************************************/
 
-AjBool ensRepeatconsensusSetConsensus(EnsPRepeatconsensus rc, AjPStr consensus)
+AjBool ensRepeatconsensusSetConsensus(EnsPRepeatconsensus rc,
+                                      AjPStr consensus)
 {
     if(!rc)
         return ajFalse;
-    
+
     ajStrDel(&rc->Consensus);
-    
+
     if(consensus)
-	rc->Consensus = ajStrNewRef(consensus);
-    
+        rc->Consensus = ajStrNewRef(consensus);
+
     return ajTrue;
 }
 
@@ -700,7 +693,7 @@ AjBool ensRepeatconsensusSetConsensus(EnsPRepeatconsensus rc, AjPStr consensus)
 **
 ** Set the length element of an Ensembl Repeat Consensus.
 **
-** @cc Bio::EnsEMBL::Repeatconsensus::length
+** @cc Bio::EnsEMBL::RepeatConsensus::length
 ** @param [u] rc [EnsPRepeatconsensus] Ensembl Repeat Consensus
 ** @param [r] length [ajuint] Length
 **
@@ -712,9 +705,9 @@ AjBool ensRepeatconsensusSetLength(EnsPRepeatconsensus rc, ajuint length)
 {
     if(!rc)
         return ajFalse;
-    
+
     rc->Length = length;
-    
+
     return ajTrue;
 }
 
@@ -753,88 +746,88 @@ AjBool ensRepeatconsensusSetLength(EnsPRepeatconsensus rc, ajuint length)
 AjBool ensRepeatconsensusTrace(const EnsPRepeatconsensus rc, ajuint level)
 {
     AjPStr indent = NULL;
-    
+
     if(!rc)
-	return ajFalse;
-    
+        return ajFalse;
+
     indent = ajStrNew();
-    
+
     ajStrAppendCountK(&indent, ' ', level * 2);
-    
+
     ajDebug("%SensRepeatconsensusTrace %p\n"
-	    "%S  Adaptor %p\n"
-	    "%S  Identifier %u\n"
-	    "%S  Name '%S'\n"
-	    "%S  Class '%S'\n"
-	    "%S  Type '%S'\n"
-	    "%S  Consensus '%S'\n"
-	    "%S  Length %u\n"
-	    "%S  Use %u\n",
-	    indent, rc,
-	    indent, rc->Adaptor,
-	    indent, rc->Identifier,
-	    indent, rc->Name,
-	    indent, rc->Class,
-	    indent, rc->Type,
-	    indent, rc->Consensus,
-	    indent, rc->Length,
-	    indent, rc->Use);
-    
+            "%S  Adaptor %p\n"
+            "%S  Identifier %u\n"
+            "%S  Name '%S'\n"
+            "%S  Class '%S'\n"
+            "%S  Type '%S'\n"
+            "%S  Consensus '%S'\n"
+            "%S  Length %u\n"
+            "%S  Use %u\n",
+            indent, rc,
+            indent, rc->Adaptor,
+            indent, rc->Identifier,
+            indent, rc->Name,
+            indent, rc->Class,
+            indent, rc->Type,
+            indent, rc->Consensus,
+            indent, rc->Length,
+            indent, rc->Use);
+
     ajStrDel(&indent);
-    
+
     return ajTrue;
 }
 
 
 
 
-/* @func ensRepeatconsensusGetMemSize *****************************************
+/* @func ensRepeatconsensusGetMemsize *****************************************
 **
 ** Get the memory size in bytes of an Ensembl Repeat Consensus.
 **
 ** @param [r] rc [const EnsPRepeatconsensus] Ensembl Repeat Consensus
 **
-** @return [ajuint] Memory size
+** @return [ajulong] Memory size
 ** @@
 ******************************************************************************/
 
-ajuint ensRepeatconsensusGetMemSize(const EnsPRepeatconsensus rc)
+ajulong ensRepeatconsensusGetMemsize(const EnsPRepeatconsensus rc)
 {
-    ajuint size = 0;
-    
+    ajulong size = 0;
+
     if(!rc)
-	return 0;
-    
-    size += (ajuint) sizeof (EnsORepeatconsensus);
-    
+        return 0;
+
+    size += sizeof (EnsORepeatconsensus);
+
     if(rc->Name)
     {
-	size += (ajuint) sizeof (AjOStr);
-	
-	size += ajStrGetRes(rc->Name);
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(rc->Name);
     }
-    
+
     if(rc->Class)
     {
-	size += (ajuint) sizeof (AjOStr);
-	
-	size += ajStrGetRes(rc->Class);
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(rc->Class);
     }
-    
+
     if(rc->Type)
     {
-	size += (ajuint) sizeof (AjOStr);
-	
-	size += ajStrGetRes(rc->Type);
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(rc->Type);
     }
-    
+
     if(rc->Consensus)
     {
-	size += (ajuint) sizeof (AjOStr);
-	
-	size += ajStrGetRes(rc->Consensus);
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(rc->Consensus);
     }
-    
+
     return size;
 }
 
@@ -845,7 +838,7 @@ ajuint ensRepeatconsensusGetMemSize(const EnsPRepeatconsensus rc)
 **
 ** Functions for manipulating Ensembl Repeat Consensus Adaptor objects
 **
-** @cc Bio::EnsEMBL::DBSQL::Repeatconsensusadaptor CVS Revision: 1.20
+** @cc Bio::EnsEMBL::DBSQL::RepeatConsensusAdaptor CVS Revision: 1.20
 **
 ** @nam2rule Repeatconsensusadaptor
 **
@@ -854,14 +847,14 @@ ajuint ensRepeatconsensusGetMemSize(const EnsPRepeatconsensus rc)
 
 
 
-/* @funcstatic repeatConsensusadaptorFetchAllBySQL ****************************
+/* @funcstatic repeatconsensusadaptorFetchAllBySQL ****************************
 **
 ** Run a SQL statement against an Ensembl Database Adaptor and consolidate the
 ** results into an AJAX List of Ensembl Repeat Consensus objects.
 ** The caller is responsible for deleting the Ensembl Repeat Consensi before
 ** deleting the AJAX List.
 **
-** @cc Bio::EnsEMBL::DBSQL::Repeatconsensusadaptor::_generic_fetch
+** @cc Bio::EnsEMBL::DBSQL::RepeatConsensusAdaptor::_generic_fetch
 ** @param [r] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 ** @param [r] statement [const AjPStr] SQL statement
 ** @param [u] rci [AjPList] AJAX List of Ensembl Repeat Consensi
@@ -870,73 +863,102 @@ ajuint ensRepeatconsensusGetMemSize(const EnsPRepeatconsensus rc)
 ** @@
 ******************************************************************************/
 
-static AjBool repeatConsensusadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
+static AjBool repeatconsensusadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
                                                   const AjPStr statement,
                                                   AjPList rci)
 {
     ajuint identifier = 0;
-    
+
     AjPSqlstatement sqls = NULL;
     AjISqlrow sqli       = NULL;
     AjPSqlrow sqlr       = NULL;
-    
+
     AjPStr name      = NULL;
     AjPStr class     = NULL;
     AjPStr type      = NULL;
     AjPStr consensus = NULL;
-    
-    EnsPRepeatconsensus rc = NULL;
-    
+
+    EnsPRepeatconsensus rc         = NULL;
+    EnsPRepeatconsensusadaptor rca = NULL;
+
     if(!dba)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!statement)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!rci)
-	return ajFalse;
-    
+        return ajFalse;
+
+    rca = ensRegistryGetRepeatconsensusadaptor(dba);
+
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
-    
+
     sqli = ajSqlrowiterNew(sqls);
-    
+
     while(!ajSqlrowiterDone(sqli))
     {
-	identifier = 0;
-	name       = ajStrNew();
-	class      = ajStrNew();
-	type       = ajStrNew();
-	consensus  = ajStrNew();
-	
+        identifier = 0;
+        name       = ajStrNew();
+        class      = ajStrNew();
+        type       = ajStrNew();
+        consensus  = ajStrNew();
+
         sqlr = ajSqlrowiterGet(sqli);
-	
+
         ajSqlcolumnToUint(sqlr, &identifier);
         ajSqlcolumnToStr(sqlr, &name);
         ajSqlcolumnToStr(sqlr, &class);
         ajSqlcolumnToStr(sqlr, &type);
         ajSqlcolumnToStr(sqlr, &consensus);
-	
-	rc = ensRepeatconsensusNew(dba,
-				   identifier,
-				   name,
-				   class,
-				   type,
-				   consensus,
-				   0);
-	
-	ajListPushAppend(rci, (void *) rc);
-	
-	ajStrDel(&name);
-	ajStrDel(&class);
-	ajStrDel(&type);
-	ajStrDel(&consensus);
+
+        rc = ensRepeatconsensusNew(rca,
+                                   identifier,
+                                   name,
+                                   class,
+                                   type,
+                                   consensus,
+                                   0);
+
+        ajListPushAppend(rci, (void *) rc);
+
+        ajStrDel(&name);
+        ajStrDel(&class);
+        ajStrDel(&type);
+        ajStrDel(&consensus);
     }
-    
+
     ajSqlrowiterDel(&sqli);
-    
-    ajSqlstatementDel(&sqls);
-    
+
+    ensDatabaseadaptorSqlstatementDel(dba, &sqls);
+
     return ajTrue;
+}
+
+
+
+
+/* @func ensRepeatconsensusadaptorGetAdaptor **********************************
+**
+** Get the Ensembl Database Adaptor element of an
+** Ensembl Repeat Consensus Adaptor.
+**
+** @param [u] rca [EnsPRepeatconsensusadaptor] Ensembl Repeat Consensus Adaptor
+**
+** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
+** @@
+** NOTE: At the moment, the Ensembl Repeat Consensus Adaptor is just an alias
+** for the Ensembl Database Adaptor, but eventually an Ensembl Base Adaptor
+** could be used.
+******************************************************************************/
+
+EnsPDatabaseadaptor ensRepeatconsensusadaptorGetAdaptor(
+    EnsPRepeatconsensusadaptor rca)
+{
+    if(!rca)
+        return NULL;
+
+    return rca;
 }
 
 
@@ -957,10 +979,10 @@ static AjBool repeatConsensusadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 ** @nam4rule FetchBy Retrieve one Ensembl Repeat Consensus object
 **                   matching a criterion
 **
-** @argrule * adaptor [const EnsPRepeatconsensusadaptor] Ensembl Repeat
-**                                                       Consensus Adaptor
+** @argrule * rca [const EnsPRepeatconsensusadaptor] Ensembl Repeat
+**                                                   Consensus Adaptor
 ** @argrule FetchAll rci [AjPList] AJAX List of
-**                                    Ensembl Repeat Consensus objects
+**                                 Ensembl Repeat Consensus objects
 ** @argrule FetchBy Prc [EnsPRepeatconsensus*] Ensembl Repeat Consensus address
 **
 ** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
@@ -976,8 +998,8 @@ static AjBool repeatConsensusadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 ** Fetch an Ensembl Repeat Consensus by its internal SQL database identifier.
 ** The caller is responsible for deleting the Ensembl Repeat Consensus.
 **
-** @cc Bio::EnsEMBL::DBSQL::Repeatconsensusadaptor::fetch_by_dbID
-** @param [r] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @cc Bio::EnsEMBL::DBSQL::RepeatConsensusAdaptor::fetch_by_dbID
+** @param [r] rca [EnsPRepeatconsensusadaptor] Ensembl Repeat Consensus Adaptor
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 ** @param [w] Prc [EnsPRepeatconsensus*] Ensembl Repeat Consensus address
 **
@@ -985,54 +1007,60 @@ static AjBool repeatConsensusadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 ** @@
 ******************************************************************************/
 
-AjBool ensRepeatconsensusadaptorFetchByIdentifier(EnsPDatabaseadaptor dba,
-                                                  ajuint identifier,
-                                                  EnsPRepeatconsensus *Prc)
+AjBool ensRepeatconsensusadaptorFetchByIdentifier(
+    EnsPRepeatconsensusadaptor rca,
+    ajuint identifier,
+    EnsPRepeatconsensus *Prc)
 {
     AjPList rci      = NULL;
     AjPStr statement = NULL;
-    
+
+    EnsPDatabaseadaptor dba = NULL;
+
     EnsPRepeatconsensus rc = NULL;
-    
-    if(!dba)
-	return ajFalse;
-    
+
+    if(!rca)
+        return ajFalse;
+
     if(!identifier)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!Prc)
-	return ajFalse;
-    
-    statement = ajFmtStr("SELECT "
-			 "repeat_consensus.repeat_consensus_id, "
-			 "repeat_consensus.repeat_name, "
-			 "repeat_consensus.repeat_class, "
-			 "repeat_consensus.repeat_type, "
-			 "repeat_consensus.repeat_consensus "
-			 "FROM "
-			 "repeat_consensus "
-			 "WHERE "
-			 "repeat_consensus.repeat_consensus_id = %u",
-			 identifier);
-    
+        return ajFalse;
+
+    dba = ensRepeatconsensusadaptorGetAdaptor(rca);
+
+    statement = ajFmtStr(
+        "SELECT "
+        "repeat_consensus.repeat_consensus_id, "
+        "repeat_consensus.repeat_name, "
+        "repeat_consensus.repeat_class, "
+        "repeat_consensus.repeat_type, "
+        "repeat_consensus.repeat_consensus "
+        "FROM "
+        "repeat_consensus "
+        "WHERE "
+        "repeat_consensus.repeat_consensus_id = %u",
+        identifier);
+
     rci = ajListNew();
-    
-    repeatConsensusadaptorFetchAllBySQL(dba, statement, rci);
-    
+
+    repeatconsensusadaptorFetchAllBySQL(dba, statement, rci);
+
     if(ajListGetLength(rci) > 1)
-	ajFatal("ensRepeatconsensusadaptorFetchByIdentifier got more than one "
-		"Repeat Consensus for (PRIMARY KEY) identifier %u.\n",
-		identifier);
-    
+        ajFatal("ensRepeatconsensusadaptorFetchByIdentifier got more than one "
+                "Repeat Consensus for (PRIMARY KEY) identifier %u.\n",
+                identifier);
+
     ajListPop(rci, (void **) Prc);
-    
+
     while(ajListPop(rci, (void **) &rc))
-	ensRepeatconsensusDel(&rc);
-    
+        ensRepeatconsensusDel(&rc);
+
     ajListFree(&rci);
-    
+
     ajStrDel(&statement);
-    
+
     return ajTrue;
 }
 
@@ -1044,8 +1072,8 @@ AjBool ensRepeatconsensusadaptorFetchByIdentifier(EnsPDatabaseadaptor dba,
 ** Fetch an Ensembl Repeat Consensus by its name.
 ** The caller is responsible for deleting the Ensembl Repeat Consensus.
 **
-** @cc Bio::EnsEMBL::DBSQL::Repeatconsensusadaptor::fetch_by_name
-** @param [r] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @cc Bio::EnsEMBL::DBSQL::RepeatConsensusAdaptor::fetch_by_name
+** @param [r] rca [EnsPRepeatconsensusadaptor] Ensembl Repeat Consensus Adaptor
 ** @param [r] name [const AjPStr] Name
 ** @param [w] Prc [EnsPRepeatconsensus*] Ensembl Repeat Consensus address
 **
@@ -1053,60 +1081,66 @@ AjBool ensRepeatconsensusadaptorFetchByIdentifier(EnsPDatabaseadaptor dba,
 ** @@
 ******************************************************************************/
 
-AjBool ensRepeatconsensusadaptorFetchByName(EnsPDatabaseadaptor dba,
-                                            const AjPStr name,
-                                            EnsPRepeatconsensus *Prc)
+AjBool ensRepeatconsensusadaptorFetchByName(
+    EnsPRepeatconsensusadaptor rca,
+    const AjPStr name,
+    EnsPRepeatconsensus *Prc)
 {
     char *txtname;
-    
+
     AjPList rci = NULL;
-    
+
     AjPStr statement = NULL;
-    
+
+    EnsPDatabaseadaptor dba = NULL;
+
     EnsPRepeatconsensus rc = NULL;
-    
+
     if(!dba)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!name)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!Prc)
-	return ajFalse;
-    
+        return ajFalse;
+
+    dba = ensRepeatconsensusadaptorGetAdaptor(rca);
+
     ensDatabaseadaptorEscapeC(dba, &txtname, name);
-    
-    statement = ajFmtStr("SELECT "
-			 "repeat_consensus.repeat_consensus_id, "
-			 "repeat_consensus.repeat_name, "
-			 "repeat_consensus.repeat_class, "
-			 "repeat_consensus.repeat_type, "
-			 "repeat_consensus.repeat_consensus "
-			 "FROM "
-			 "repeat_consensus "
-			 "WHERE "
-			 "repeat_consensus.repeat_name = '%s'",
-			 txtname);
-    
+
+    statement = ajFmtStr(
+        "SELECT "
+        "repeat_consensus.repeat_consensus_id, "
+        "repeat_consensus.repeat_name, "
+        "repeat_consensus.repeat_class, "
+        "repeat_consensus.repeat_type, "
+        "repeat_consensus.repeat_consensus "
+        "FROM "
+        "repeat_consensus "
+        "WHERE "
+        "repeat_consensus.repeat_name = '%s'",
+        txtname);
+
     ajCharDel(&txtname);
-    
+
     rci = ajListNew();
-    
-    repeatConsensusadaptorFetchAllBySQL(dba, statement, rci);
-    
+
+    repeatconsensusadaptorFetchAllBySQL(dba, statement, rci);
+
     if(ajListGetLength(rci) > 1)
-	ajFatal("ensRepeatconsensusadaptorFetchByName got more than one "
-		"Repeat Consensus from the database for name '%S'.\n", name);
-    
+        ajFatal("ensRepeatconsensusadaptorFetchByName got more than one "
+                "Repeat Consensus from the database for name '%S'.\n", name);
+
     ajListPop(rci, (void **) Prc);
-    
+
     while(ajListPop(rci, (void **) &rc))
-	ensRepeatconsensusDel(&rc);
-    
+        ensRepeatconsensusDel(&rc);
+
     ajListFree(&rci);
-    
+
     ajStrDel(&statement);
-    
+
     return ajTrue;
 }
 
@@ -1118,8 +1152,8 @@ AjBool ensRepeatconsensusadaptorFetchByName(EnsPDatabaseadaptor dba,
 ** Fetch an Ensembl Repeat Consensus by its name and class.
 ** The caller is responsible for deleting the Ensembl Repeat Consensus.
 **
-** @cc Bio::EnsEMBL::DBSQL::Repeatconsensusadaptor::fetch_by_name_class
-** @param [r] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @cc Bio::EnsEMBL::DBSQL::RepeatConsensusAdaptor::fetch_by_name_class
+** @param [r] rca [EnsPRepeatconsensusadaptor] Ensembl Repeat Consensus Adaptor
 ** @param [r] name [const AjPStr] Name
 ** @param [r] class [const AjPStr] Class
 ** @param [w] Prc [EnsPRepeatconsensus*] Ensembl Repeat Consensus address
@@ -1128,73 +1162,79 @@ AjBool ensRepeatconsensusadaptorFetchByName(EnsPDatabaseadaptor dba,
 ** @@
 ******************************************************************************/
 
-AjBool ensRepeatconsensusadaptorFetchByNameClass(EnsPDatabaseadaptor dba,
-                                                 const AjPStr name,
-                                                 const AjPStr class,
-                                                 EnsPRepeatconsensus *Prc)
+AjBool ensRepeatconsensusadaptorFetchByNameClass(
+    EnsPRepeatconsensusadaptor rca,
+    const AjPStr name,
+    const AjPStr class,
+    EnsPRepeatconsensus *Prc)
 {
     char *txtname  = NULL;
     char *txtclass = NULL;
-    
+
     AjPList rci = NULL;
-    
+
     AjPStr statement = NULL;
-    
+
+    EnsPDatabaseadaptor dba = NULL;
+
     EnsPRepeatconsensus rc = NULL;
-    
+
     if(!dba)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!name)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!class)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!Prc)
-	return ajFalse;
-    
+        return ajFalse;
+
+    dba = ensRepeatconsensusadaptorGetAdaptor(rca);
+
     ensDatabaseadaptorEscapeC(dba, &txtname, name);
-    
+
     ensDatabaseadaptorEscapeC(dba, &txtclass, class);
-    
-    statement = ajFmtStr("SELECT "
-			 "repeat_consensus.repeat_consensus_id, "
-			 "repeat_consensus.repeat_name, "
-			 "repeat_consensus.repeat_class, "
-			 "repeat_consensus.repeat_type, "
-			 "repeat_consensus.repeat_consensus "
-			 "FROM "
-			 "repeat_consensus "
-			 "WHERE "
-			 "repeat_consensus.repeat_name = '%s' "
-			 "AND "
-			 "repeat_consensus.repeat_class = '%s'",
-			 txtname,
-			 txtclass);
-    
+
+    statement = ajFmtStr(
+        "SELECT "
+        "repeat_consensus.repeat_consensus_id, "
+        "repeat_consensus.repeat_name, "
+        "repeat_consensus.repeat_class, "
+        "repeat_consensus.repeat_type, "
+        "repeat_consensus.repeat_consensus "
+        "FROM "
+        "repeat_consensus "
+        "WHERE "
+        "repeat_consensus.repeat_name = '%s' "
+        "AND "
+        "repeat_consensus.repeat_class = '%s'",
+        txtname,
+        txtclass);
+
     ajCharDel(&txtname);
-    
+
     ajCharDel(&txtclass);
-    
+
     rci = ajListNew();
-    
-    repeatConsensusadaptorFetchAllBySQL(dba, statement, rci);
-    
+
+    repeatconsensusadaptorFetchAllBySQL(dba, statement, rci);
+
     if(ajListGetLength(rci) > 1)
-	ajFatal("ensRepeatconsensusadaptorFetchByNameClass got more than one "
-		"Repeat Consensus from the database for name '%S' and "
-		"class '%S'.\n", name, class);
-    
+        ajFatal("ensRepeatconsensusadaptorFetchByNameClass got more than one "
+                "Repeat Consensus from the database for name '%S' and "
+                "class '%S'.\n", name, class);
+
     ajListPop(rci, (void **) Prc);
-    
+
     while(ajListPop(rci, (void **) &rc))
-	ensRepeatconsensusDel(&rc);
-    
+        ensRepeatconsensusDel(&rc);
+
     ajListFree(&rci);
-    
+
     ajStrDel(&statement);
-    
+
     return ajTrue;
 }
 
@@ -1208,8 +1248,8 @@ AjBool ensRepeatconsensusadaptorFetchByNameClass(EnsPDatabaseadaptor dba,
 ** The caller is responsible for deleting the Ensembl Repeat Consensi before
 ** deleting the AJAX List.
 **
-** @cc Bio::EnsEMBL::DBSQL::Repeatconsensusadaptor::fetch_all_by_class_seq
-** @param [r] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @cc Bio::EnsEMBL::DBSQL::RepeatConsensusAdaptor::fetch_all_by_class_seq
+** @param [r] rca [EnsPRepeatconsensusadaptor] Ensembl Repeat Consensus Adaptor
 ** @param [r] class [const AjPStr] Class
 ** @param [r] consensus [const AjPStr] Consensus sequence
 ** @param [u] rci [AjPList] AJAX List of Ensembl Repeat Consensi
@@ -1219,53 +1259,58 @@ AjBool ensRepeatconsensusadaptorFetchByNameClass(EnsPDatabaseadaptor dba,
 ******************************************************************************/
 
 AjBool ensRepeatconsensusadaptorFetchAllByClassConsensus(
-    EnsPDatabaseadaptor dba,
+    EnsPRepeatconsensusadaptor rca,
     const AjPStr class,
     const AjPStr consensus,
     AjPList rci)
 {
     char *txtclass     = NULL;
     char *txtconsensus = NULL;
-    
+
     AjPStr statement = NULL;
-    
+
+    EnsPDatabaseadaptor dba = NULL;
+
     if(!dba)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!class)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!consensus)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!rci)
-	return ajFalse;
-    
+        return ajFalse;
+
+    dba = ensRepeatconsensusadaptorGetAdaptor(rca);
+
     ensDatabaseadaptorEscapeC(dba, &txtclass, class);
     ensDatabaseadaptorEscapeC(dba, &txtconsensus, consensus);
-    
-    statement = ajFmtStr("SELECT "
-			 "repeat_consensus.repeat_consensus_id, "
-			 "repeat_consensus.repeat_name, "
-			 "repeat_consensus.repeat_class, "
-			 "repeat_consensus.repeat_type, "
-			 "repeat_consensus.repeat_consensus "
-			 "FROM "
-			 "repeat_consensus "
-			 "WHERE "
-			 "repeat_consensus.repeat_class = '%s' "
-			 "AND "
-			 "repeat_consensus.repeat_consensus = '%s'",
-			 txtclass,
-			 txtconsensus);
-    
+
+    statement = ajFmtStr(
+        "SELECT "
+        "repeat_consensus.repeat_consensus_id, "
+        "repeat_consensus.repeat_name, "
+        "repeat_consensus.repeat_class, "
+        "repeat_consensus.repeat_type, "
+        "repeat_consensus.repeat_consensus "
+        "FROM "
+        "repeat_consensus "
+        "WHERE "
+        "repeat_consensus.repeat_class = '%s' "
+        "AND "
+        "repeat_consensus.repeat_consensus = '%s'",
+        txtclass,
+        txtconsensus);
+
     ajCharDel(&txtclass);
     ajCharDel(&txtconsensus);
-    
-    repeatConsensusadaptorFetchAllBySQL(dba, statement, rci);
-    
+
+    repeatconsensusadaptorFetchAllBySQL(dba, statement, rci);
+
     ajStrDel(&statement);
-    
+
     return ajTrue;
 }
 
@@ -1276,7 +1321,7 @@ AjBool ensRepeatconsensusadaptorFetchAllByClassConsensus(
 **
 ** Functions for manipulating Ensembl Repeat Feature objects
 **
-** @cc Bio::EnsEMBL::Repeatfeature CVS Revision: 1.24
+** @cc Bio::EnsEMBL::RepeatFeature CVS Revision: 1.24
 **
 ** @nam2rule Repeatfeature
 **
@@ -1314,9 +1359,8 @@ AjBool ensRepeatconsensusadaptorFetchAllByClassConsensus(
 **
 ** Default constructor for an Ensembl Repeat Feature.
 **
-** @cc Bio::EnsEMBL::Repeatfeature::new
-** @param [r] adaptor [EnsPRepeatfeatureadaptor] Ensembl Repeat
-**                                               Feature Adaptor
+** @cc Bio::EnsEMBL::RepeatFeature::new
+** @param [r] rfa [EnsPRepeatfeatureadaptor] Ensembl Repeat Feature Adaptor
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 ** @param [u] feature [EnsPFeature] Ensembl Feature
 ** @param [u] rc [EnsPRepeatconsensus] Ensembl Repeat Consensus
@@ -1324,11 +1368,11 @@ AjBool ensRepeatconsensusadaptorFetchAllByClassConsensus(
 ** @param [r] hend [ajint] Repeat Consensus hit end
 ** @param [r] score [double] Repeat Consensus score
 **
-** @return [EnsPRepeatconsensus] Ensembl Repeat Consensus
+** @return [EnsPRepeatfeature] Ensembl Repeat Feature
 ** @@
 ******************************************************************************/
 
-EnsPRepeatfeature ensRepeatfeatureNew(EnsPRepeatfeatureadaptor adaptor,
+EnsPRepeatfeature ensRepeatfeatureNew(EnsPRepeatfeatureadaptor rfa,
                                       ajuint identifier,
                                       EnsPFeature feature,
                                       EnsPRepeatconsensus rc,
@@ -1337,28 +1381,28 @@ EnsPRepeatfeature ensRepeatfeatureNew(EnsPRepeatfeatureadaptor adaptor,
                                       double score)
 {
     EnsPRepeatfeature rf = NULL;
-    
+
     if(!feature)
-	return NULL;
-    
+        return NULL;
+
     AJNEW0(rf);
-    
-    rf->Adaptor = adaptor;
-    
+
+    rf->Adaptor = rfa;
+
     rf->Identifier = identifier;
-    
+
     rf->Feature = ensFeatureNewRef(feature);
-    
+
     rf->Repeatconsensus = ensRepeatconsensusNewRef(rc);
-    
+
     rf->HitStart = hstart;
-    
+
     rf->HitEnd = hend;
-    
+
     rf->Score = score;
-    
+
     rf->Use = 1;
-    
+
     return rf;
 }
 
@@ -1378,25 +1422,25 @@ EnsPRepeatfeature ensRepeatfeatureNew(EnsPRepeatfeatureadaptor adaptor,
 EnsPRepeatfeature ensRepeatfeatureNewObj(EnsPRepeatfeature object)
 {
     EnsPRepeatfeature rf = NULL;
-    
+
     AJNEW0(rf);
-    
+
     rf->Adaptor = object->Adaptor;
-    
+
     rf->Identifier = object->Identifier;
-    
+
     rf->Feature = ensFeatureNewRef(object->Feature);
-    
+
     rf->Repeatconsensus = ensRepeatconsensusNewRef(object->Repeatconsensus);
-    
+
     rf->HitStart = object->HitStart;
-    
+
     rf->HitEnd = object->HitEnd;
-    
+
     rf->Score = object->Score;
-    
+
     rf->Use = 1;
-    
+
     return rf;
 }
 
@@ -1417,10 +1461,10 @@ EnsPRepeatfeature ensRepeatfeatureNewObj(EnsPRepeatfeature object)
 EnsPRepeatfeature ensRepeatfeatureNewRef(EnsPRepeatfeature rf)
 {
     if(!rf)
-	return NULL;
-    
+        return NULL;
+
     rf->Use++;
-    
+
     return rf;
 }
 
@@ -1460,38 +1504,37 @@ EnsPRepeatfeature ensRepeatfeatureNewRef(EnsPRepeatfeature rf)
 void ensRepeatfeatureDel(EnsPRepeatfeature *Prf)
 {
     EnsPRepeatfeature pthis = NULL;
-    
+
     if(!Prf)
-	return;
-    
+        return;
+
     if(!*Prf)
-	return;
+        return;
+
+    if(ajDebugTest("ensRepeatfeatureDel"))
+        ajDebug("ensRepeatfeatureDel\n"
+                "  *Prf %p\n",
+                *Prf);
 
     pthis = *Prf;
-    
-    /*
-     ajDebug("ensRepeatfeatureDel\n"
-	     "  *Prf %p\n",
-	     *Prf);
-     */
-    
+
     pthis->Use--;
-    
+
     if(pthis->Use)
     {
-	*Prf = NULL;
-	
-	return;
+        *Prf = NULL;
+
+        return;
     }
-    
+
     ensFeatureDel(&pthis->Feature);
-    
+
     ensRepeatconsensusDel(&pthis->Repeatconsensus);
-    
+
     AJFREE(pthis);
 
     *Prf = NULL;
-    
+
     return;
 }
 
@@ -1547,8 +1590,8 @@ const EnsPRepeatfeatureadaptor ensRepeatfeatureGetAdaptor(
     const EnsPRepeatfeature rf)
 {
     if(!rf)
-	return NULL;
-    
+        return NULL;
+
     return rf->Adaptor;
 }
 
@@ -1570,8 +1613,8 @@ const EnsPRepeatfeatureadaptor ensRepeatfeatureGetAdaptor(
 ajuint ensRepeatfeatureGetIdentifier(const EnsPRepeatfeature rf)
 {
     if(!rf)
-	return 0;
-    
+        return 0;
+
     return rf->Identifier;
 }
 
@@ -1591,8 +1634,8 @@ ajuint ensRepeatfeatureGetIdentifier(const EnsPRepeatfeature rf)
 EnsPFeature ensRepeatfeatureGetFeature(const EnsPRepeatfeature rf)
 {
     if(!rf)
-	return NULL;
-    
+        return NULL;
+
     return rf->Feature;
 }
 
@@ -1603,7 +1646,7 @@ EnsPFeature ensRepeatfeatureGetFeature(const EnsPRepeatfeature rf)
 **
 ** Get the Ensembl Repeat Consensus element of an Ensembl Repeat Feature.
 **
-** @cc Bio::EnsEMBL::Repeatfeature::repeat_consensus
+** @cc Bio::EnsEMBL::RepeatFeature::repeat_consensus
 ** @param [r] rf [const EnsPRepeatfeature] Ensembl Repeat Feature
 **
 ** @return [EnsPRepeatconsensus] Ensembl Repeat Consensus
@@ -1614,8 +1657,8 @@ EnsPRepeatconsensus ensRepeatfeatureGetRepeatconsensus(
     const EnsPRepeatfeature rf)
 {
     if(!rf)
-	return NULL;
-    
+        return NULL;
+
     return rf->Repeatconsensus;
 }
 
@@ -1626,7 +1669,7 @@ EnsPRepeatconsensus ensRepeatfeatureGetRepeatconsensus(
 **
 ** Get the hit start element of an Ensembl Repeat Feature.
 **
-** @cc Bio::EnsEMBL::Repeatfeature::hstart
+** @cc Bio::EnsEMBL::RepeatFeature::hstart
 ** @param [r] rf [const EnsPRepeatfeature] Ensembl Repeat Feature
 **
 ** @return [ajint] Hit start coordinate
@@ -1636,8 +1679,8 @@ EnsPRepeatconsensus ensRepeatfeatureGetRepeatconsensus(
 ajint ensRepeatfeatureGetHitStart(const EnsPRepeatfeature rf)
 {
     if(!rf)
-	return 0;
-    
+        return 0;
+
     return rf->HitStart;
 }
 
@@ -1648,7 +1691,7 @@ ajint ensRepeatfeatureGetHitStart(const EnsPRepeatfeature rf)
 **
 ** Get the hit end element of an Ensembl Repeat Feature.
 **
-** @cc Bio::EnsEMBL::Repeatfeature::hend
+** @cc Bio::EnsEMBL::RepeatFeature::hend
 ** @param [r] rf [const EnsPRepeatfeature] Ensembl Repeat Feature
 **
 ** @return [ajint] Hit end coordinate
@@ -1658,8 +1701,8 @@ ajint ensRepeatfeatureGetHitStart(const EnsPRepeatfeature rf)
 ajint ensRepeatfeatureGetHitEnd(const EnsPRepeatfeature rf)
 {
     if(!rf)
-	return 0;
-    
+        return 0;
+
     return rf->HitEnd;
 }
 
@@ -1670,7 +1713,7 @@ ajint ensRepeatfeatureGetHitEnd(const EnsPRepeatfeature rf)
 **
 ** Get the hit strand element of an Ensembl Repeat Feature.
 **
-** @cc Bio::EnsEMBL::Repeatfeature::hstrand
+** @cc Bio::EnsEMBL::RepeatFeature::hstrand
 ** @param [r] rf [const EnsPRepeatfeature] Ensembl Repeat Feature
 **
 ** @return [ajint] Hit strand
@@ -1680,8 +1723,8 @@ ajint ensRepeatfeatureGetHitEnd(const EnsPRepeatfeature rf)
 ajint ensRepeatfeatureGetHitStrand(const EnsPRepeatfeature rf)
 {
     if(!rf)
-	return 0;
-    
+        return 0;
+
     return 1;
 }
 
@@ -1692,7 +1735,7 @@ ajint ensRepeatfeatureGetHitStrand(const EnsPRepeatfeature rf)
 **
 ** Get the score element of an Ensembl Repeat Feature.
 **
-** @cc Bio::EnsEMBL::Repeatfeature::score
+** @cc Bio::EnsEMBL::RepeatFeature::score
 ** @param [r] rf [const EnsPRepeatfeature] Ensembl Repeat Feature
 **
 ** @return [double] Score
@@ -1702,8 +1745,8 @@ ajint ensRepeatfeatureGetHitStrand(const EnsPRepeatfeature rf)
 double ensRepeatfeatureGetScore(const EnsPRepeatfeature rf)
 {
     if(!rf)
-	return 0;
-    
+        return 0;
+
     return rf->Score;
 }
 
@@ -1753,9 +1796,9 @@ AjBool ensRepeatfeatureSetAdaptor(EnsPRepeatfeature rf,
 {
     if(!rf)
         return ajFalse;
-    
+
     rf->Adaptor = rfa;
-    
+
     return ajTrue;
 }
 
@@ -1779,9 +1822,9 @@ AjBool ensRepeatfeatureSetIdentifier(EnsPRepeatfeature rf, ajuint identifier)
 {
     if(!rf)
         return ajFalse;
-    
+
     rf->Identifier = identifier;
-    
+
     return ajTrue;
 }
 
@@ -1803,11 +1846,11 @@ AjBool ensRepeatfeatureSetFeature(EnsPRepeatfeature rf, EnsPFeature feature)
 {
     if(!rf)
         return ajFalse;
-    
-    ensFeatureDel(&(rf->Feature));
-    
+
+    ensFeatureDel(&rf->Feature);
+
     rf->Feature = ensFeatureNewRef(feature);
-    
+
     return ajTrue;
 }
 
@@ -1818,7 +1861,7 @@ AjBool ensRepeatfeatureSetFeature(EnsPRepeatfeature rf, EnsPFeature feature)
 **
 ** Set the Ensembl Repeat Consensus element of an Ensembl Repeat Feature.
 **
-** @cc Bio::EnsEMBL::Repeatfeature::repeat_consensus
+** @cc Bio::EnsEMBL::RepeatFeature::repeat_consensus
 ** @param [u] rf [EnsPRepeatfeature] Ensembl Repeat Feature
 ** @param [u] rc [EnsPRepeatconsensus] Ensembl Repeat Consensus
 **
@@ -1831,11 +1874,11 @@ AjBool ensRepeatfeatureSetRepeatconsensus(EnsPRepeatfeature rf,
 {
     if(!rf)
         return ajFalse;
-    
-    ensRepeatconsensusDel(&(rf->Repeatconsensus));
-    
+
+    ensRepeatconsensusDel(&rf->Repeatconsensus);
+
     rf->Repeatconsensus = ensRepeatconsensusNewRef(rc);
-    
+
     return ajTrue;
 }
 
@@ -1846,7 +1889,7 @@ AjBool ensRepeatfeatureSetRepeatconsensus(EnsPRepeatfeature rf,
 **
 ** Set the hit start element of an Ensembl Repeat Feature.
 **
-** @cc Bio::EnsEMBL::Repeatfeature::hstart
+** @cc Bio::EnsEMBL::RepeatFeature::hstart
 ** @param [u] rf [EnsPRepeatfeature] Ensembl Repeat Feature
 ** @param [r] hstart [ajuint] Hit start
 **
@@ -1858,9 +1901,9 @@ AjBool ensRepeatfeatureSetHitStart(EnsPRepeatfeature rf, ajuint hstart)
 {
     if(!rf)
         return ajFalse;
-    
+
     rf->HitStart = hstart;
-    
+
     return ajTrue;
 }
 
@@ -1871,7 +1914,7 @@ AjBool ensRepeatfeatureSetHitStart(EnsPRepeatfeature rf, ajuint hstart)
 **
 ** Set the hit end element of an Ensembl Repeat Feature.
 **
-** @cc Bio::EnsEMBL::Repeatfeature::hend
+** @cc Bio::EnsEMBL::RepeatFeature::hend
 ** @param [u] rf [EnsPRepeatfeature] Ensembl Repeat Feature
 ** @param [r] hend [ajuint] Hit end
 **
@@ -1883,9 +1926,9 @@ AjBool ensRepeatfeatureSetHitEnd(EnsPRepeatfeature rf, ajuint hend)
 {
     if(!rf)
         return ajFalse;
-    
+
     rf->HitEnd = hend;
-    
+
     return ajTrue;
 }
 
@@ -1896,7 +1939,7 @@ AjBool ensRepeatfeatureSetHitEnd(EnsPRepeatfeature rf, ajuint hend)
 **
 ** Set the score element of an Ensembl Repeat Feature.
 **
-** @cc Bio::EnsEMBL::Repeatfeature::score
+** @cc Bio::EnsEMBL::RepeatFeature::score
 ** @param [u] rf [EnsPRepeatfeature] Ensembl Repeat Feature
 ** @param [r] score [double] Score
 **
@@ -1908,9 +1951,9 @@ AjBool ensRepeatfeatureSetScore(EnsPRepeatfeature rf, double score)
 {
     if(!rf)
         return ajFalse;
-    
+
     rf->Score = score;
-    
+
     return ajTrue;
 }
 
@@ -1949,69 +1992,213 @@ AjBool ensRepeatfeatureSetScore(EnsPRepeatfeature rf, double score)
 AjBool ensRepeatfeatureTrace(const EnsPRepeatfeature rf, ajuint level)
 {
     AjPStr indent = NULL;
-    
+
     if(!rf)
-	return ajFalse;
-    
+        return ajFalse;
+
     indent = ajStrNew();
-    
+
     ajStrAppendCountK(&indent, ' ', level * 2);
-    
+
     ajDebug("%SensRepeatfeatureTrace %p\n"
-	    "%S  Adaptor %p\n"
-	    "%S  Identifier %u\n"
-	    "%S  Feature %p\n"
-	    "%S  Repeatconsensus %p\n"
-	    "%S  HitStart %d\n"
-	    "%S  HitEnd %d\n"
-	    "%S  Score %f\n"
-	    "%S  Use %u\n",
-	    indent, rf,
-	    indent, rf->Adaptor,
-	    indent, rf->Identifier,
-	    indent, rf->Feature,
-	    indent, rf->Repeatconsensus,
-	    indent, rf->HitStart,
-	    indent, rf->HitEnd,
-	    indent, rf->Score,
-	    indent, rf->Use);
-    
+            "%S  Adaptor %p\n"
+            "%S  Identifier %u\n"
+            "%S  Feature %p\n"
+            "%S  Repeatconsensus %p\n"
+            "%S  HitStart %d\n"
+            "%S  HitEnd %d\n"
+            "%S  Score %f\n"
+            "%S  Use %u\n",
+            indent, rf,
+            indent, rf->Adaptor,
+            indent, rf->Identifier,
+            indent, rf->Feature,
+            indent, rf->Repeatconsensus,
+            indent, rf->HitStart,
+            indent, rf->HitEnd,
+            indent, rf->Score,
+            indent, rf->Use);
+
     ensFeatureTrace(rf->Feature, level + 1);
-    
+
     ensRepeatconsensusTrace(rf->Repeatconsensus, level + 1);
-    
+
     ajStrDel(&indent);
-    
+
     return ajTrue;
 }
 
 
 
 
-/* @func ensRepeatfeatureGetMemSize *******************************************
+/* @func ensRepeatfeatureGetMemsize *******************************************
 **
 ** Get the memory size in bytes of an Ensembl Repeat Feature.
 **
 ** @param [r] rf [const EnsPRepeatfeature] Ensembl Repeat Feature
 **
-** @return [ajuint] Memory size
+** @return [ajulong] Memory size
 ** @@
 ******************************************************************************/
 
-ajuint ensRepeatfeatureGetMemSize(const EnsPRepeatfeature rf)
+ajulong ensRepeatfeatureGetMemsize(const EnsPRepeatfeature rf)
 {
-    ajuint size = 0;
-    
+    ajulong size = 0;
+
     if(!rf)
-	return 0;
-    
-    size += (ajuint) sizeof (EnsORepeatfeature);
-    
-    size += ensFeatureGetMemSize(rf->Feature);
-    
-    size += ensRepeatconsensusGetMemSize(rf->Repeatconsensus);
-    
+        return 0;
+
+    size += sizeof (EnsORepeatfeature);
+
+    size += ensFeatureGetMemsize(rf->Feature);
+
+    size += ensRepeatconsensusGetMemsize(rf->Repeatconsensus);
+
     return size;
+}
+
+
+
+
+/* @funcstatic repeatfeatureCompareStartAscending *****************************
+**
+** Comparison function to sort Ensembl Repeat Features by their
+** Ensembl Feature start coordinate in ascending order.
+**
+** @param [r] P1 [const void*] Ensembl Repeat Feature address 1
+** @param [r] P2 [const void*] Ensembl Repeat Feature address 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+** @@
+******************************************************************************/
+
+static int repeatfeatureCompareStartAscending(const void* P1, const void* P2)
+{
+    const EnsPRepeatfeature rf1 = NULL;
+    const EnsPRepeatfeature rf2 = NULL;
+
+    rf1 = *(EnsPRepeatfeature const *) P1;
+    rf2 = *(EnsPRepeatfeature const *) P2;
+
+    if(ajDebugTest("repeatfeatureCompareStartAscending"))
+        ajDebug("repeatfeatureCompareStartAscending\n"
+                "  rf1 %p\n"
+                "  rf2 %p\n",
+                rf1,
+                rf2);
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if(rf1 && (!rf2))
+        return -1;
+
+    if((!rf1) && (!rf2))
+        return 0;
+
+    if((!rf1) && rf2)
+        return +1;
+
+    return ensFeatureCompareStartAscending(rf1->Feature, rf2->Feature);
+}
+
+
+
+
+/* @func ensRepeatfeatureSortByStartAscending *********************************
+**
+** Sort Ensembl Repeat Features by their Ensembl Feature start coordinate
+** in ascending order.
+**
+** @param [u] rfs [AjPList] AJAX List of Ensembl Repeat Features
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensRepeatfeatureSortByStartAscending(AjPList rfs)
+{
+    if(!rfs)
+        return ajFalse;
+
+    ajListSort(rfs, repeatfeatureCompareStartAscending);
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic repeatfeatureCompareStartDescending ****************************
+**
+** Comparison function to sort Ensembl Repeat Features by their
+** Ensembl Feature start coordinate in descending order.
+**
+** @param [r] P1 [const void*] Ensembl Repeat Feature address 1
+** @param [r] P2 [const void*] Ensembl Repeat Feature address 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+** @@
+******************************************************************************/
+
+static int repeatfeatureCompareStartDescending(const void* P1, const void* P2)
+{
+    const EnsPRepeatfeature rf1 = NULL;
+    const EnsPRepeatfeature rf2 = NULL;
+
+    rf1 = *(EnsPRepeatfeature const *) P1;
+    rf2 = *(EnsPRepeatfeature const *) P2;
+
+    if(ajDebugTest("repeatfeatureCompareStartDescending"))
+        ajDebug("repeatfeatureCompareStartDescending\n"
+                "  rf1 %p\n"
+                "  rf2 %p\n",
+                rf1,
+                rf2);
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if(rf1 && (!rf2))
+        return -1;
+
+    if((!rf1) && (!rf2))
+        return 0;
+
+    if((!rf1) && rf2)
+        return +1;
+
+    return ensFeatureCompareStartDescending(rf1->Feature, rf2->Feature);
+}
+
+
+
+
+/* @func ensRepeatfeatureSortByStartDescending ********************************
+**
+** Sort Ensembl Repeat Features by their Ensembl Feature start coordinate
+** in descending order.
+**
+** @param [u] rfs [AjPList] AJAX List of Ensembl Repeat Features
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensRepeatfeatureSortByStartDescending(AjPList rfs)
+{
+    if(!rfs)
+        return ajFalse;
+
+    ajListSort(rfs, repeatfeatureCompareStartDescending);
+
+    return ajTrue;
 }
 
 
@@ -2021,7 +2208,7 @@ ajuint ensRepeatfeatureGetMemSize(const EnsPRepeatfeature rf)
 **
 ** Functions for manipulating Ensembl Repeat Feature Adaptor objects
 **
-** @cc Bio::EnsEMBL::DBSQL::Repeatfeatureadaptor CVS Revision: 1.55
+** @cc Bio::EnsEMBL::DBSQL::RepeatFeatureAdaptor CVS Revision: 1.55
 **
 ** @nam2rule Repeatfeatureadaptor
 **
@@ -2030,7 +2217,7 @@ ajuint ensRepeatfeatureGetMemSize(const EnsPRepeatfeature rf)
 
 
 
-/* @funcstatic repeatFeatureadaptorCacheReference *****************************
+/* @funcstatic repeatfeatureadaptorCacheReference *****************************
 **
 ** Wrapper function to reference an Ensembl Repeat Feature
 ** from an Ensembl Cache.
@@ -2041,24 +2228,23 @@ ajuint ensRepeatfeatureGetMemSize(const EnsPRepeatfeature rf)
 ** @@
 ******************************************************************************/
 
-static void *repeatFeatureadaptorCacheReference(void *value)
+static void* repeatfeatureadaptorCacheReference(void *value)
 {
-    /*
-     ajDebug("repeatFeatureadaptorCacheReference\n"
-	     "  value %p\n",
-	     value);
-     */
-    
+    if(ajDebugTest("repeatfeatureadaptorCacheReference"))
+        ajDebug("repeatfeatureadaptorCacheReference\n"
+                "  value %p\n",
+                value);
+
     if(!value)
-	return NULL;
-    
+        return NULL;
+
     return (void *) ensRepeatfeatureNewRef((EnsPRepeatfeature) value);
 }
 
 
 
 
-/* @funcstatic repeatFeatureadaptorCacheDelete ********************************
+/* @funcstatic repeatfeatureadaptorCacheDelete ********************************
 **
 ** Wrapper function to delete or de-reference an Ensembl Repeat Feature
 ** from an Ensembl Cache.
@@ -2069,48 +2255,47 @@ static void *repeatFeatureadaptorCacheReference(void *value)
 ** @@
 ******************************************************************************/
 
-static void repeatFeatureadaptorCacheDelete(void **value)
+static void repeatfeatureadaptorCacheDelete(void **value)
 {
-    /*
-     ajDebug("repeatFeatureadaptorCacheDelete\n"
-	     "  value %p\n",
-	     value);
-     */
-    
+    if(ajDebugTest("repeatfeatureadaptorCacheDelete"))
+        ajDebug("repeatfeatureadaptorCacheDelete\n"
+                "  value %p\n",
+                value);
+
     if(!value)
-	return;
-    
+        return;
+
     ensRepeatfeatureDel((EnsPRepeatfeature *) value);
-    
+
     return;
 }
 
 
 
 
-/* @funcstatic repeatFeatureadaptorCacheSize **********************************
+/* @funcstatic repeatfeatureadaptorCacheSize **********************************
 **
 ** Wrapper function to determine the memory size of an Ensembl Repeat Feature
 ** from an Ensembl Cache.
 **
 ** @param [r] value [const void*] Ensembl Repeat Feature
 **
-** @return [ajuint] Memory size
+** @return [ajulong] Memory size
 ** @@
 ******************************************************************************/
 
-static ajuint repeatFeatureadaptorCacheSize(const void *value)
+static ajulong repeatfeatureadaptorCacheSize(const void *value)
 {
     if(!value)
-	return 0;
-    
-    return ensRepeatfeatureGetMemSize((const EnsPRepeatfeature) value);
+        return 0;
+
+    return ensRepeatfeatureGetMemsize((const EnsPRepeatfeature) value);
 }
 
 
 
 
-/* @funcstatic repeatFeatureadaptorGetFeature *********************************
+/* @funcstatic repeatfeatureadaptorGetFeature *********************************
 **
 ** Wrapper function to get the Ensembl Feature of an
 ** Ensembl Repeat Feature from an Ensembl Feature Adaptor.
@@ -2121,18 +2306,18 @@ static ajuint repeatFeatureadaptorCacheSize(const void *value)
 ** @@
 ******************************************************************************/
 
-static EnsPFeature repeatFeatureadaptorGetFeature(const void *rf)
+static EnsPFeature repeatfeatureadaptorGetFeature(const void *rf)
 {
     if(!rf)
-	return 0;
-    
+        return 0;
+
     return ensRepeatfeatureGetFeature((const EnsPRepeatfeature) rf);
 }
 
 
 
 
-static const char *repeatFeatureadaptorTables[] =
+static const char *repeatfeatureadaptorTables[] =
 {
     "repeat_feature",
     "repeat_consensus",
@@ -2142,7 +2327,7 @@ static const char *repeatFeatureadaptorTables[] =
 
 
 
-static const char *repeatFeatureadaptorColumns[] =
+static const char *repeatfeatureadaptorColumns[] =
 {
     "repeat_feature.repeat_feature_id",
     "repeat_feature.seq_region_id",
@@ -2164,7 +2349,7 @@ static const char *repeatFeatureadaptorColumns[] =
 
 
 
-static EnsOBaseadaptorLeftJoin repeatFeatureadaptorLeftJoin[] =
+static EnsOBaseadaptorLeftJoin repeatfeatureadaptorLeftJoin[] =
 {
     {NULL, NULL}
 };
@@ -2172,37 +2357,37 @@ static EnsOBaseadaptorLeftJoin repeatFeatureadaptorLeftJoin[] =
 
 
 
-static const char *repeatFeatureadaptorDefaultCondition =
-"repeat_feature.repeat_consensus_id = "
-"repeat_consensus.repeat_consensus_id";
+static const char *repeatfeatureadaptorDefaultCondition =
+    "repeat_feature.repeat_consensus_id = "
+    "repeat_consensus.repeat_consensus_id";
 
 
 
 
-static const char *repeatFeatureadaptorFinalCondition = NULL;
+static const char *repeatfeatureadaptorFinalCondition = NULL;
 
 
 
 
-/* @funcstatic repeatFeatureadaptorFetchAllBySQL ******************************
+/* @funcstatic repeatfeatureadaptorFetchAllBySQL ******************************
 **
 ** Run a SQL statement against an Ensembl Database Adaptor and consolidate the
 ** results into an AJAX List of Ensembl Repeat Features.
 ** The caller is responsible for deleting the Ensembl Repeat Features before
 ** deleting the AJAX List.
 **
-** @cc Bio::EnsEMBL::DBSQL::Repeatfeatureadaptor::_objs_from_sth
+** @cc Bio::EnsEMBL::DBSQL::RepeatFeatureAdaptor::_objs_from_sth
 ** @param [r] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 ** @param [r] statement [const AjPStr] SQL statement
-** @param [u] am [EnsPAssemblymapper] Ensembl Assembly Mapper
-** @param [r] slice [EnsPSlice] Ensembl Slice
+** @param [uN] am [EnsPAssemblymapper] Ensembl Assembly Mapper
+** @param [uN] slice [EnsPSlice] Ensembl Slice
 ** @param [u] rfs [AjPList] AJAX List of Ensembl Repeat Features
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-static AjBool repeatFeatureadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
+static AjBool repeatfeatureadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
                                                 const AjPStr statement,
                                                 EnsPAssemblymapper am,
                                                 EnsPSlice slice,
@@ -2212,386 +2397,389 @@ static AjBool repeatFeatureadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
     ajuint rcid = 0;
     ajuint rfid = 0;
     ajuint srid = 0;
-    
+
     ajuint rpstart = 0;
     ajuint rpend   = 0;
     ajuint srstart = 0;
     ajuint srend   = 0;
     ajint srstrand = 0;
-    
+
     ajint slstart  = 0;
     ajint slend    = 0;
     ajint slstrand = 0;
     ajint sllength = 0;
-    
+
     double score = 0;
-    
+
+    AjBool debug = AJFALSE;
+
     AjPList mrs = NULL;
-    
+
     AjPSqlstatement sqls = NULL;
     AjISqlrow sqli       = NULL;
     AjPSqlrow sqlr       = NULL;
-    
+
     AjPStr rcname  = NULL;
     AjPStr rcclass = NULL;
     AjPStr rctype  = NULL;
     AjPStr rccons  = NULL;
-    
+
     EnsPAnalysis analysis = NULL;
     EnsPAnalysisadaptor aa = NULL;
-    
+
     EnsPAssemblymapperadaptor ama = NULL;
-    
+
     EnsPCoordsystemadaptor csa = NULL;
-    
+
     EnsPFeature feature = NULL;
-    
+
     EnsPMapperresult mr = NULL;
-    
-    EnsPRepeatconsensus rc = NULL;
-    
+
+    EnsPRepeatconsensus rc         = NULL;
+    EnsPRepeatconsensusadaptor rca = NULL;
+
     EnsPRepeatfeature rf         = NULL;
     EnsPRepeatfeatureadaptor rfa = NULL;
-    
+
     EnsPSlice srslice   = NULL;
     EnsPSliceadaptor sa = NULL;
-    
-    /*
-     ajDebug("repeatFeatureadaptorFetchAllBySQL\n"
-	     "  dba %p\n"
-	     "  statement %p\n"
-	     "  am %p\n"
-	     "  slice %p\n"
-	     "  rfs %p\n",
-	     dba,
-	     statement,
-	     am,
-	     slice,
-	     rfs);
-     */
-    
+
+    debug = ajDebugTest("repeatfeatureadaptorFetchAllBySQL");
+
+    if(debug)
+        ajDebug("repeatfeatureadaptorFetchAllBySQL\n"
+                "  dba %p\n"
+                "  statement %p\n"
+                "  am %p\n"
+                "  slice %p\n"
+                "  rfs %p\n",
+                dba,
+                statement,
+                am,
+                slice,
+                rfs);
+
     if(!dba)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!statement)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!rfs)
-	return ajFalse;
-    
+        return ajFalse;
+
     aa = ensRegistryGetAnalysisadaptor(dba);
-    
+
     csa = ensRegistryGetCoordsystemadaptor(dba);
-    
+
+    rca = ensRegistryGetRepeatconsensusadaptor(dba);
+
     rfa = ensRegistryGetRepeatfeatureadaptor(dba);
-    
+
     sa = ensRegistryGetSliceadaptor(dba);
-    
+
     if(slice)
-	ama = ensRegistryGetAssemblymapperadaptor(dba);
-    
+        ama = ensRegistryGetAssemblymapperadaptor(dba);
+
     mrs = ajListNew();
-    
+
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
-    
+
     sqli = ajSqlrowiterNew(sqls);
-    
+
     while(!ajSqlrowiterDone(sqli))
     {
-	rfid     = 0;
-	srid     = 0;
-	srstart  = 0;
-	srend    = 0;
-	srstrand = 0;
-	rcid     = 0;
-	rpstart  = 0;
-	rpend    = 0;
-	anid     = 0;
-	score    = 0;
-	rcname   = ajStrNew();
-	rcclass  = ajStrNew();
-	rctype   = ajStrNew();
-	rccons   = ajStrNew();
-	
-	sqlr = ajSqlrowiterGet(sqli);
-	
-	ajSqlcolumnToUint(sqlr, &rfid);
-	ajSqlcolumnToUint(sqlr, &srid);
-	ajSqlcolumnToUint(sqlr, &srstart);
-	ajSqlcolumnToUint(sqlr, &srend);
-	ajSqlcolumnToInt(sqlr, &srstrand);
-	ajSqlcolumnToUint(sqlr, &rcid);
-	ajSqlcolumnToUint(sqlr, &rpstart);
-	ajSqlcolumnToUint(sqlr, &rpend);
-	ajSqlcolumnToUint(sqlr, &anid);
-	ajSqlcolumnToDouble(sqlr, &score);
-	ajSqlcolumnToStr(sqlr, &rcname);
-	ajSqlcolumnToStr(sqlr, &rcclass);
-	ajSqlcolumnToStr(sqlr, &rctype);
-	ajSqlcolumnToStr(sqlr, &rccons);
-	
-	/* Need to get the internal Ensembl Sequence Region identifier. */
-	
-	srid = ensCoordsystemadaptorGetInternalSeqregionIdentifier(csa, srid);
-	
-	/*
-	** Since the Ensembl SQL schema defines Sequence Region start and end
-	** coordinates as unsigned integers for all Features, the range needs
-	** checking.
-	*/
-	
-	if(srstart <= INT_MAX)
-	    slstart = (ajint) srstart;
-	else
-	    ajFatal("repeatFeatureadaptorFetchAllBySQL got a "
-		    "Sequence Region start coordinate (%u) outside the "
-		    "maximum integer limit (%d).",
-		    srstart, INT_MAX);
-	
-	if(srend <= INT_MAX)
-	    slend = (ajint) srend;
-	else
-	    ajFatal("repeatFeatureadaptorFetchAllBySQL got a "
-		    "Sequence Region end coordinate (%u) outside the "
-		    "maximum integer limit (%d).",
-		    srend, INT_MAX);
-	
-	slstrand = srstrand;
-	
-	/* Create an Ensembl Repeat Consensus. */
-	
-	rc = ensRepeatconsensusNew(dba,
-				   rcid,
-				   rcname,
-				   rcclass,
-				   rctype,
-				   rccons,
-				   ajStrGetLen(rccons));
-	
-	ajStrDel(&rcname);
-	ajStrDel(&rcclass);
-	ajStrDel(&rctype);
-	ajStrDel(&rccons);
-	
-	/* Fetch the corresponding Ensembl Analysis. */
-	
-	ensAnalysisadaptorFetchByIdentifier(aa, anid, &analysis);
-	
-	/* Fetch a Slice spanning the entire Sequence Region. */
-	
-	ensSliceadaptorFetchBySeqregionIdentifier(sa, srid, 0, 0, 0, &srslice);
-	
-	/*
-	** FIXME: There is a difference to the Exon Adaptor.
-	** The Exonadaptor fetches an Assembly Mapper in case a Slice but no
-	** Assembly Mapper has been provided.
-	**
-	** FIXME: There are big problems with signedess to resolve!
-	** srstart from database is ajuint, ensSliceGetStart is ajint!
-	** we need a second set of variables that is signed and
-	** we should probably test before the assignment whether the value of
-	** the unsigned is out of the range of the signed???
-	*/
-	
-	/*
-	** Increase the reference counter of the Ensembl Assembly Mapper if
-	** one has been specified, otherwise fetch it from the database if a
-	** destination Slice has been specified.
-	*/
-	
-	if(am)
-	    am = ensAssemblymapperNewRef(am);
-	
-	if((!am) &&
-	    slice &&
-	    (!ensCoordsystemMatch(ensSliceGetCoordsystem(slice),
-				   ensSliceGetCoordsystem(srslice))))
-	    am = ensAssemblymapperadaptorFetchByCoordsystems(
-                ama,
-                ensSliceGetCoordsystem(slice),
-                ensSliceGetCoordsystem(srslice));
-	
-	/*
-	** Remap the Feature coordinates to another Ensembl Coordinate System
-	** if an Ensembl Assembly Mapper is defined at this point.
-	*/
-	
-	if(am)
-	{
-	    ensAssemblymapperFastMap(am,
-				     ensSliceGetSeqregion(srslice),
-				     slstart,
-				     slend,
-				     slstrand,
-				     mrs);
-	    
-	    /*
-	    ** The ensAssemblymapperFastMap function returns at best one
-	    ** Ensembl Mapper Result.
-	    */
-	    
-	    ajListPop(mrs, (void **) &mr);
-	    
-	    /*
-	    ** Skip Features that map to gaps or
-	    ** Coordinate System boundaries.
-	    */
-	    
-	    if(ensMapperresultGetType(mr) != ensEMapperresultCoordinate)
-	    {
-		/*
-		** FIXME: For debugging only.
-		** 
-		** ajDebug("repeatFeatureadaptorFetchAllBySQL mapped "
-		**	 "Repeat Feature %u on Sequence Region %u "
-		**	 "start %u end %u strand %d to gap.\n",
-		**	 rfid,
-		**	 srid,
-		**	 srstart,
-		**	 srend,
-		**	 srstrand);
-                **
-		** ensMapperresultTrace(mr, 1);
-		*/
-		
-		ensSliceDel(&srslice);
-		
-		ensAnalysisDel(&analysis);
-		
-		ensRepeatconsensusDel(&rc);
-		
-		ensAssemblymapperDel(&am);
-		
-		ensMapperresultDel(&mr);
-		
-		continue;
-	    }
-	    
-	    srid = ensMapperresultGetObjectIdentifier(mr);
-	    
-	    slstart = ensMapperresultGetStart(mr);
-	    
-	    slend = ensMapperresultGetEnd(mr);
-	    
-	    slstrand = ensMapperresultGetStrand(mr);
-	    
-	    /*
-	    ** Delete the Sequence Region Slice and fetch a Slice in the
-	    ** Coordinate System we just mapped to.
-	    */
-	    
-	    ensSliceDel(&srslice);
-	    
-	    ensSliceadaptorFetchBySeqregionIdentifier(sa,
-						      srid,
-						      0,
-						      0,
-						      0,
-						      &srslice);
-	    
-	    ensMapperresultDel(&mr);
-	}
-	
-	/*
-	** Convert Sequence Region Slice coordinates to destination Slice
-	** coordinates, if a destination Slice has been provided.
-	*/
-	
-	if(slice)
-	{
-	    /* Check that the length of the Slice is within range. */
-	    
-	    if(ensSliceGetLength(slice) <= INT_MAX)
-		sllength = (ajint) ensSliceGetLength(slice);
-	    else
-		ajFatal("repeatFeatureadaptorFetchAllBySQL got a Slice, "
-			"which length (%u) exceeds the "
-			"maximum integer limit (%d).",
-			ensSliceGetLength(slice), INT_MAX);
-	    
-	    /*
-	    ** Nothing needs to be done if the destination Slice starts at 1
-	    ** and is on the forward strand.
-	    */
-	    
-	    if((ensSliceGetStart(slice) != 1) ||
-		(ensSliceGetStrand(slice) < 0))
-	    {
-		if(ensSliceGetStrand(slice) >= 0)
-		{
-		    slstart = slstart - ensSliceGetStart(slice) + 1;
-		    
-		    slend = slend - ensSliceGetStart(slice) + 1;
-		}
-		else
-		{
-		    slend = ensSliceGetEnd(slice) - slstart + 1;
-		    
-		    slstart = ensSliceGetEnd(slice) - slend + 1;
-		    
-		    slstrand *= -1;
-		}
-	    }
-	    
-	    /* Throw away Repeat Features off the end of the requested Slice. */
-	    
-	    if((slstart > sllength) ||
-		(slend < 1) ||
-		(srid != ensSliceGetSeqregionIdentifier(slice)))
-	    {
-		ensSliceDel(&srslice);
-		
-		ensAnalysisDel(&analysis);
-		
-		ensRepeatconsensusDel(&rc);
-		
-		ensAssemblymapperDel(&am);
-		
-		continue;
-	    }
-	    
-	    /* Delete the Sequence Region Slice and set the requested Slice. */
-	    
-	    ensSliceDel(&srslice);
-	    
-	    srslice = ensSliceNewRef(slice);
-	}
-	
-	/* Finally, create a new Ensembl Repeat Feature. */
-	
-	feature = ensFeatureNewS(analysis,
-				 srslice,
-				 slstart,
-				 slend,
-				 slstrand);
-	
-	rf = ensRepeatfeatureNew(rfa,
-				 rfid,
-				 feature,
-				 rc,
-				 rpstart,
-				 rpend,
-				 score);
-	
-	ajListPushAppend(rfs, (void *) rf);
-	
-	ensFeatureDel(&feature);
-	
-	ensAssemblymapperDel(&am);
-	
-	ensSliceDel(&srslice);
-	
-	ensAnalysisDel(&analysis);
-	
-	ensRepeatconsensusDel(&rc);
+        rfid     = 0;
+        srid     = 0;
+        srstart  = 0;
+        srend    = 0;
+        srstrand = 0;
+        rcid     = 0;
+        rpstart  = 0;
+        rpend    = 0;
+        anid     = 0;
+        score    = 0;
+        rcname   = ajStrNew();
+        rcclass  = ajStrNew();
+        rctype   = ajStrNew();
+        rccons   = ajStrNew();
+
+        sqlr = ajSqlrowiterGet(sqli);
+
+        ajSqlcolumnToUint(sqlr, &rfid);
+        ajSqlcolumnToUint(sqlr, &srid);
+        ajSqlcolumnToUint(sqlr, &srstart);
+        ajSqlcolumnToUint(sqlr, &srend);
+        ajSqlcolumnToInt(sqlr, &srstrand);
+        ajSqlcolumnToUint(sqlr, &rcid);
+        ajSqlcolumnToUint(sqlr, &rpstart);
+        ajSqlcolumnToUint(sqlr, &rpend);
+        ajSqlcolumnToUint(sqlr, &anid);
+        ajSqlcolumnToDouble(sqlr, &score);
+        ajSqlcolumnToStr(sqlr, &rcname);
+        ajSqlcolumnToStr(sqlr, &rcclass);
+        ajSqlcolumnToStr(sqlr, &rctype);
+        ajSqlcolumnToStr(sqlr, &rccons);
+
+        /* Need to get the internal Ensembl Sequence Region identifier. */
+
+        srid = ensCoordsystemadaptorGetInternalSeqregionIdentifier(csa, srid);
+
+        /*
+        ** Since the Ensembl SQL schema defines Sequence Region start and end
+        ** coordinates as unsigned integers for all Features, the range needs
+        ** checking.
+        */
+
+        if(srstart <= INT_MAX)
+            slstart = (ajint) srstart;
+        else
+            ajFatal("repeatfeatureadaptorFetchAllBySQL got a "
+                    "Sequence Region start coordinate (%u) outside the "
+                    "maximum integer limit (%d).",
+                    srstart, INT_MAX);
+
+        if(srend <= INT_MAX)
+            slend = (ajint) srend;
+        else
+            ajFatal("repeatfeatureadaptorFetchAllBySQL got a "
+                    "Sequence Region end coordinate (%u) outside the "
+                    "maximum integer limit (%d).",
+                    srend, INT_MAX);
+
+        slstrand = srstrand;
+
+        /* Create an Ensembl Repeat Consensus. */
+
+        rc = ensRepeatconsensusNew(rca,
+                                   rcid,
+                                   rcname,
+                                   rcclass,
+                                   rctype,
+                                   rccons,
+                                   ajStrGetLen(rccons));
+
+        ajStrDel(&rcname);
+        ajStrDel(&rcclass);
+        ajStrDel(&rctype);
+        ajStrDel(&rccons);
+
+        /* Fetch the corresponding Ensembl Analysis. */
+
+        ensAnalysisadaptorFetchByIdentifier(aa, anid, &analysis);
+
+        /* Fetch a Slice spanning the entire Sequence Region. */
+
+        ensSliceadaptorFetchBySeqregionIdentifier(sa, srid, 0, 0, 0, &srslice);
+
+        /*
+        ** FIXME: There is a difference to the Exon Adaptor.
+        ** The Exonadaptor fetches an Assembly Mapper in case a Slice but no
+        ** Assembly Mapper has been provided.
+        **
+        ** FIXME: There are big problems with signedess to resolve!
+        ** srstart from database is ajuint, ensSliceGetStart is ajint!
+        ** we need a second set of variables that is signed and
+        ** we should probably test before the assignment whether the value of
+        ** the unsigned is out of the range of the signed???
+        */
+
+        /*
+        ** Increase the reference counter of the Ensembl Assembly Mapper if
+        ** one has been specified, otherwise fetch it from the database if a
+        ** destination Slice has been specified.
+        */
+
+        if(am)
+            am = ensAssemblymapperNewRef(am);
+        else if(slice && (!ensCoordsystemMatch(
+                              ensSliceGetCoordsystem(slice),
+                              ensSliceGetCoordsystem(srslice))))
+            am = ensAssemblymapperadaptorFetchBySlices(ama, slice, srslice);
+
+        /*
+        ** Remap the Feature coordinates to another Ensembl Coordinate System
+        ** if an Ensembl Assembly Mapper is defined at this point.
+        */
+
+        if(am)
+        {
+            ensAssemblymapperFastMap(am,
+                                     ensSliceGetSeqregion(srslice),
+                                     slstart,
+                                     slend,
+                                     slstrand,
+                                     mrs);
+
+            /*
+            ** The ensAssemblymapperFastMap function returns at best one
+            ** Ensembl Mapper Result.
+            */
+
+            ajListPop(mrs, (void **) &mr);
+
+            /*
+            ** Skip Features that map to gaps or
+            ** Coordinate System boundaries.
+            */
+
+            if(ensMapperresultGetType(mr) != ensEMapperresultCoordinate)
+            {
+                if(debug)
+                {
+                    ajDebug("repeatfeatureadaptorFetchAllBySQL mapped "
+                            "Repeat Feature %u on Sequence Region %u "
+                            "start %u end %u strand %d to gap.\n",
+                            rfid,
+                            srid,
+                            srstart,
+                            srend,
+                            srstrand);
+
+                    ensMapperresultTrace(mr, 1);
+                }
+
+                ensSliceDel(&srslice);
+
+                ensAnalysisDel(&analysis);
+
+                ensRepeatconsensusDel(&rc);
+
+                ensAssemblymapperDel(&am);
+
+                ensMapperresultDel(&mr);
+
+                continue;
+            }
+
+            srid = ensMapperresultGetObjectIdentifier(mr);
+
+            slstart = ensMapperresultGetStart(mr);
+
+            slend = ensMapperresultGetEnd(mr);
+
+            slstrand = ensMapperresultGetStrand(mr);
+
+            /*
+            ** Delete the Sequence Region Slice and fetch a Slice in the
+            ** Coordinate System we just mapped to.
+            */
+
+            ensSliceDel(&srslice);
+
+            ensSliceadaptorFetchBySeqregionIdentifier(sa,
+                                                      srid,
+                                                      0,
+                                                      0,
+                                                      0,
+                                                      &srslice);
+
+            ensMapperresultDel(&mr);
+        }
+
+        /*
+        ** Convert Sequence Region Slice coordinates to destination Slice
+        ** coordinates, if a destination Slice has been provided.
+        */
+
+        if(slice)
+        {
+            /* Check that the length of the Slice is within range. */
+
+            if(ensSliceGetLength(slice) <= INT_MAX)
+                sllength = (ajint) ensSliceGetLength(slice);
+            else
+                ajFatal("repeatfeatureadaptorFetchAllBySQL got a Slice, "
+                        "which length (%u) exceeds the "
+                        "maximum integer limit (%d).",
+                        ensSliceGetLength(slice), INT_MAX);
+
+            /*
+            ** Nothing needs to be done if the destination Slice starts at 1
+            ** and is on the forward strand.
+            */
+
+            if((ensSliceGetStart(slice) != 1) ||
+               (ensSliceGetStrand(slice) < 0))
+            {
+                if(ensSliceGetStrand(slice) >= 0)
+                {
+                    slstart = slstart - ensSliceGetStart(slice) + 1;
+
+                    slend = slend - ensSliceGetStart(slice) + 1;
+                }
+                else
+                {
+                    slend = ensSliceGetEnd(slice) - slstart + 1;
+
+                    slstart = ensSliceGetEnd(slice) - slend + 1;
+
+                    slstrand *= -1;
+                }
+            }
+
+            /*
+            ** Throw away Repeat Features off the end of the
+            ** requested Slice.
+            */
+
+            if((slstart > sllength) ||
+               (slend < 1) ||
+               (srid != ensSliceGetSeqregionIdentifier(slice)))
+            {
+                ensSliceDel(&srslice);
+
+                ensAnalysisDel(&analysis);
+
+                ensRepeatconsensusDel(&rc);
+
+                ensAssemblymapperDel(&am);
+
+                continue;
+            }
+
+            /* Delete the Sequence Region Slice and set the requested Slice. */
+
+            ensSliceDel(&srslice);
+
+            srslice = ensSliceNewRef(slice);
+        }
+
+        /* Finally, create a new Ensembl Repeat Feature. */
+
+        feature = ensFeatureNewS(analysis,
+                                 srslice,
+                                 slstart,
+                                 slend,
+                                 slstrand);
+
+        rf = ensRepeatfeatureNew(rfa,
+                                 rfid,
+                                 feature,
+                                 rc,
+                                 rpstart,
+                                 rpend,
+                                 score);
+
+        ajListPushAppend(rfs, (void *) rf);
+
+        ensFeatureDel(&feature);
+
+        ensAssemblymapperDel(&am);
+
+        ensSliceDel(&srslice);
+
+        ensAnalysisDel(&analysis);
+
+        ensRepeatconsensusDel(&rc);
     }
-    
+
     ajSqlrowiterDel(&sqli);
-    
-    ajSqlstatementDel(&sqls);
-    
+
+    ensDatabaseadaptorSqlstatementDel(dba, &sqls);
+
     ajListFree(&mrs);
-    
+
     return ajTrue;
 }
 
@@ -2609,14 +2797,8 @@ static AjBool repeatFeatureadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 ** @fnote None
 **
 ** @nam3rule New Constructor
-** @nam4rule NewObj Constructor with existing object
-** @nam4rule NewRef Constructor by incrementing the reference counter
 **
 ** @argrule New dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
-** @argrule Obj object [EnsPRepeatfeatureadaptor] Ensembl Repeat
-**                                                Feature Adaptor
-** @argrule Ref object [EnsPRepeatfeatureadaptor] Ensembl Repeat
-**                                                Feature Adaptor
 **
 ** @valrule * [EnsPRepeatfeatureadaptor] Ensembl Repeat Feature Adaptor
 **
@@ -2630,38 +2812,50 @@ static AjBool repeatFeatureadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 **
 ** Default Ensembl Repeat Feature Adaptor constructor.
 **
-** @cc Bio::EnsEMBL::DBSQL::Repeatfeatureadaptor::new
+** Ensembl Object Adaptors are singleton objects in the sense that a single
+** instance of an Ensembl Object Adaptor connected to a particular database is
+** sufficient to instantiate any number of Ensembl Objects from the database.
+** Each Ensembl Object will have a weak reference to the Object Adaptor that
+** instantiated it. Therefore, Ensembl Object Adaptors should not be
+** instantiated directly, but rather obtained from the Ensembl Registry,
+** which will in turn call this function if neccessary.
+**
+** @see ensRegistryGetDatabaseadaptor
+** @see ensRegistryGetRepeatfeatureadaptor
+**
+** @cc Bio::EnsEMBL::DBSQL::RepeatFeatureAdaptor::new
 ** @param [r] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
 ** @return [EnsPRepeatfeatureadaptor] Ensembl Repeat Feature Adaptor or NULL
 ** @@
 ******************************************************************************/
 
-EnsPRepeatfeatureadaptor ensRepeatfeatureadaptorNew(EnsPDatabaseadaptor dba)
+EnsPRepeatfeatureadaptor ensRepeatfeatureadaptorNew(
+    EnsPDatabaseadaptor dba)
 {
     EnsPRepeatfeatureadaptor rfa = NULL;
-    
+
     if(!dba)
-	return NULL;
-    
+        return NULL;
+
     AJNEW0(rfa);
-    
-    rfa->Adaptor =
-	ensFeatureadaptorNew(dba,
-			     repeatFeatureadaptorTables,
-			     repeatFeatureadaptorColumns,
-			     repeatFeatureadaptorLeftJoin,
-			     repeatFeatureadaptorDefaultCondition,
-			     repeatFeatureadaptorFinalCondition,
-			     repeatFeatureadaptorFetchAllBySQL,
-			     (void* (*)(const void* key)) NULL, /* Fread */
-			     repeatFeatureadaptorCacheReference,
-			     (AjBool (*)(const void* value)) NULL, /* Fwrite */
-			     repeatFeatureadaptorCacheDelete,
-			     repeatFeatureadaptorCacheSize,
-			     repeatFeatureadaptorGetFeature,
-			     "Repeatfeature");
-    
+
+    rfa->Adaptor = ensFeatureadaptorNew(
+        dba,
+        repeatfeatureadaptorTables,
+        repeatfeatureadaptorColumns,
+        repeatfeatureadaptorLeftJoin,
+        repeatfeatureadaptorDefaultCondition,
+        repeatfeatureadaptorFinalCondition,
+        repeatfeatureadaptorFetchAllBySQL,
+        (void* (*)(const void* key)) NULL,
+        repeatfeatureadaptorCacheReference,
+        (AjBool (*)(const void* value)) NULL,
+        repeatfeatureadaptorCacheDelete,
+        repeatfeatureadaptorCacheSize,
+        repeatfeatureadaptorGetFeature,
+        "Repeatfeature");
+
     return rfa;
 }
 
@@ -2671,6 +2865,12 @@ EnsPRepeatfeatureadaptor ensRepeatfeatureadaptorNew(EnsPDatabaseadaptor dba)
 /* @func ensRepeatfeatureadaptorDel *******************************************
 **
 ** Default destructor for an Ensembl Repeat Feature Adaptor.
+**
+** Ensembl Object Adaptors are singleton objects that are registered in the
+** Ensembl Registry and weakly referenced by Ensembl Objects that have been
+** instantiated by it. Therefore, Ensembl Object Adaptors should never be
+** destroyed directly. Upon exit, the Ensembl Registry will call this function
+** if required.
 **
 ** @param [d] Prfa [EnsPRepeatfeatureadaptor*] Ensembl Repeat Feature
 **                                             Adaptor address
@@ -2682,21 +2882,21 @@ EnsPRepeatfeatureadaptor ensRepeatfeatureadaptorNew(EnsPDatabaseadaptor dba)
 void ensRepeatfeatureadaptorDel(EnsPRepeatfeatureadaptor *Prfa)
 {
     EnsPRepeatfeatureadaptor pthis = NULL;
-    
+
     if(!Prfa)
-	return;
-    
+        return;
+
     if(!*Prfa)
-	return;
+        return;
 
     pthis = *Prfa;
-    
+
     ensFeatureadaptorDel(&pthis->Adaptor);
-    
+
     AJFREE(pthis);
 
     *Prfa = NULL;
-    
+
     return;
 }
 
@@ -2709,14 +2909,14 @@ void ensRepeatfeatureadaptorDel(EnsPRepeatfeatureadaptor *Prfa)
 ** The caller is responsible for deleting the Ensembl Repeat Features before
 ** deleting the AJAX List.
 **
-** @cc Bio::EnsEMBL::DBSQL::Repeatfeatureadaptor::fetch_all_by_Slice
+** @cc Bio::EnsEMBL::DBSQL::RepeatFeatureAdaptor::fetch_all_by_Slice
 ** @param [r] rfa [const EnsPRepeatfeatureadaptor] Ensembl Repeat
 **                                                 Feature Adaptor
-** @param [r] slice [EnsPSlice] Ensembl Slice
-** @param [r] anname [const AjPStr] Ensembl Analysis name
-** @param [r] rctype [const AjPStr] Ensembl Repeat Consensus type
-** @param [r] rcclass [const AjPStr] Ensembl Repeat Consensus class
-** @param [r] rcname [const AjPStr] Ensembl Repeat Consensus name
+** @param [u] slice [EnsPSlice] Ensembl Slice
+** @param [rN] anname [const AjPStr] Ensembl Analysis name
+** @param [rN] rctype [const AjPStr] Ensembl Repeat Consensus type
+** @param [rN] rcclass [const AjPStr] Ensembl Repeat Consensus class
+** @param [rN] rcname [const AjPStr] Ensembl Repeat Consensus name
 ** @param [u] rfs [AjPList] AJAX List of Ensembl Repeat Features
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
@@ -2735,89 +2935,82 @@ AjBool ensRepeatfeatureadaptorFetchAllBySlice(
     char *txtrcclass = NULL;
     char *txtrcname = NULL;
     char *txtrctype = NULL;
-    
+
     AjPStr constraint = NULL;
-    
-    /*
-     ajDebug("ensRepeatfeatureadaptorFetchAllBySlice\n"
-	     "  rfa %p\n"
-	     "  slice %p\n"
-	     "  anname '%S'\n"
-	     "  rctype '%S'\n"
-	     "  rcclass '%S'\n"
-	     "  rcname '%S'\n"
-	     "  rfs %p\n",
-	     rfa,
-	     slice,
-	     anname,
-	     rctype,
-	     rcclass,
-	     rcname,
-	     rfs);
-     */
-    
+
+    if(ajDebugTest("ensRepeatfeatureadaptorFetchAllBySlice"))
+        ajDebug("ensRepeatfeatureadaptorFetchAllBySlice\n"
+                "  rfa %p\n"
+                "  slice %p\n"
+                "  anname '%S'\n"
+                "  rctype '%S'\n"
+                "  rcclass '%S'\n"
+                "  rcname '%S'\n"
+                "  rfs %p\n",
+                rfa,
+                slice,
+                anname,
+                rctype,
+                rcclass,
+                rcname,
+                rfs);
+
     if(!rfa)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!slice)
-	return ajFalse;
-    
-    if(!anname)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!rfs)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(rctype && ajStrGetLen(rctype))
     {
-	ensFeatureadaptorEscapeC(rfa->Adaptor, &txtrctype, rctype);
-	
-	constraint =
-	    ajFmtStr("repeat_consensus.repeat_type = '%s'", txtrctype);
-	
-	ajCharDel(&txtrctype);
+        ensFeatureadaptorEscapeC(rfa->Adaptor, &txtrctype, rctype);
+
+        constraint =
+            ajFmtStr("repeat_consensus.repeat_type = '%s'", txtrctype);
+
+        ajCharDel(&txtrctype);
     }
-    
+
     if(rcclass && ajStrGetLen(rcclass))
     {
-	ensFeatureadaptorEscapeC(rfa->Adaptor, &txtrcclass, rcclass);
-	
-	if(constraint)
-	    ajFmtPrintAppS(&constraint,
-			   " AND repeat_consensus.repeat_class = '%s'",
-			   txtrcclass);
-	else
-	    constraint =
-		ajFmtStr("repeat_consensus.repeat_class = '%s'", txtrcclass);
-	
-	ajCharDel(&txtrcclass);
+        ensFeatureadaptorEscapeC(rfa->Adaptor, &txtrcclass, rcclass);
+
+        if(constraint)
+            ajFmtPrintAppS(&constraint,
+                           " AND repeat_consensus.repeat_class = '%s'",
+                           txtrcclass);
+        else
+            constraint =
+                ajFmtStr("repeat_consensus.repeat_class = '%s'", txtrcclass);
+
+        ajCharDel(&txtrcclass);
     }
-    
+
     if(rcname && ajStrGetLen(rcname))
     {
-	ensFeatureadaptorEscapeC(rfa->Adaptor, &txtrcname, rcname);
-	
-	if(constraint)
-	    ajFmtPrintAppS(&constraint,
-			   " AND repeat_consensus.repeat_name = '%s'",
-			   txtrcname);
-	else
-	    constraint =
-		ajFmtStr("repeat_consensus.repeat_name = '%s'", txtrcname);
-	
-	ajCharDel(&txtrcname);
+        ensFeatureadaptorEscapeC(rfa->Adaptor, &txtrcname, rcname);
+
+        if(constraint)
+            ajFmtPrintAppS(&constraint,
+                           " AND repeat_consensus.repeat_name = '%s'",
+                           txtrcname);
+        else
+            constraint =
+                ajFmtStr("repeat_consensus.repeat_name = '%s'", txtrcname);
+
+        ajCharDel(&txtrcname);
     }
-    
-    if(!constraint)
-	constraint = ajStrNew();
-    
+
     ensFeatureadaptorFetchAllBySliceConstraint(rfa->Adaptor,
-					       slice,
-					       constraint,
-					       anname,
-					       rfs);
-    
+                                               slice,
+                                               constraint,
+                                               anname,
+                                               rfs);
+
     ajStrDel(&constraint);
-    
+
     return ajTrue;
 }

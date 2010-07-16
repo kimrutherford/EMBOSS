@@ -15,20 +15,24 @@ extern "C"
 **
 ** Ensembl Database Connection.
 **
-** Holds information to connect to an SQL database.
+** Holds information to connect to a particular SQL database on a
+** relational database management system (RDBMS) instance.
 **
 ** @alias EnsSDatabaseconnection
 ** @alias EnsODatabaseconnection
 **
 ** @attr Sqlconnection [AjPSqlconnection] AJAX SQL Connection
-** @attr UserName [AjPStr] SQL user name
-** @attr Password [AjPStr] SQL password
-** @attr HostName [AjPStr] SQL host name
-** @attr HostPort [AjPStr] SQL host port
-** @attr Socket [AjPStr] SQL host UNIX socket
+** @attr UserName [AjPStr] User name
+** @attr Password [AjPStr] Password
+** @attr HostName [AjPStr] Host name or IP address
+** @attr HostPort [AjPStr] Host TCP/IP port
+** @attr SocketFile [AjPStr] UNIX socket file
 ** @attr DatabaseName [AjPStr] SQL database name
-** @attr SqlClientType [AjEnum] AJAX SQL client type
+** @attr AutoDisconnect [AjBool] Automatic disconnections
+** @attr SqlconnectionClient [AjESqlconnectionClient] AJAX SQL
+**                                                    Connection client
 ** @attr Use [ajuint] Use counter
+** @attr Padding [ajuint] Padding to alignment boundary
 **
 ** @@
 ******************************************************************************/
@@ -40,10 +44,12 @@ typedef struct EnsSDatabaseconnection
     AjPStr Password;
     AjPStr HostName;
     AjPStr HostPort;
-    AjPStr Socket;
+    AjPStr SocketFile;
     AjPStr DatabaseName;
-    AjEnum SqlClientType;
+    AjBool AutoDisconnect;
+    AjESqlconnectionClient SqlconnectionClient;
     ajuint Use;
+    ajuint Padding;
 } EnsODatabaseconnection;
 
 #define EnsPDatabaseconnection EnsODatabaseconnection*
@@ -55,18 +61,20 @@ typedef struct EnsSDatabaseconnection
 ** Prototype definitions
 */
 
-EnsPDatabaseconnection ensDatabaseconnectionNew(AjEnum client,
+EnsPDatabaseconnection ensDatabaseconnectionNew(AjESqlconnectionClient client,
                                                 AjPStr user,
                                                 AjPStr password,
                                                 AjPStr host,
                                                 AjPStr port,
-                                                AjPStr socket,
+                                                AjPStr socketfile,
                                                 AjPStr database);
 
 EnsPDatabaseconnection ensDatabaseconnectionNewC(EnsPDatabaseconnection dbc,
                                                  AjPStr database);
 
 EnsPDatabaseconnection ensDatabaseconnectionNewRef(EnsPDatabaseconnection dbc);
+
+EnsPDatabaseconnection ensDatabaseconnectionNewUrl(const AjPStr url);
 
 void ensDatabaseconnectionDel(EnsPDatabaseconnection* Pdbc);
 
@@ -81,31 +89,43 @@ AjPStr ensDatabaseconnectionGetHostName(const EnsPDatabaseconnection dbc);
 
 AjPStr ensDatabaseconnectionGetHostPort(const EnsPDatabaseconnection dbc);
 
-AjPStr ensDatabaseconnectionGetSocket(const EnsPDatabaseconnection dbc);
+AjPStr ensDatabaseconnectionGetSocketFile(const EnsPDatabaseconnection dbc);
 
 AjPStr ensDatabaseconnectionGetDatabaseName(const EnsPDatabaseconnection dbc);
 
-AjEnum ensDatabaseconnectionGetSqlClientType(const EnsPDatabaseconnection dbc);
+AjBool ensDatabaseconnectionGetAutoDisconnect(
+    const EnsPDatabaseconnection dbc);
+
+AjESqlconnectionClient ensDatabaseconnectionGetSqlconnectionClient(
+    const EnsPDatabaseconnection dbc);
+
+AjBool ensDatabaseconnectionSetAutoDisconnect(EnsPDatabaseconnection dbc,
+                                              AjBool autodisconnect);
 
 AjBool ensDatabaseconnectionMatch(const EnsPDatabaseconnection dbc1,
                                   const EnsPDatabaseconnection dbc2);
 
 AjBool ensDatabaseconnectionConnect(EnsPDatabaseconnection dbc);
 
-void ensDatabaseconnectionDisconnect(EnsPDatabaseconnection dbc);
+AjBool ensDatabaseconnectionDisconnect(EnsPDatabaseconnection dbc);
 
 AjBool ensDatabaseconnectionIsConnected(const EnsPDatabaseconnection dbc);
 
-AjPSqlstatement ensDatabaseconnectionSqlstatementNew(EnsPDatabaseconnection dbc,
-                                                     const AjPStr statement);
+AjPSqlstatement ensDatabaseconnectionSqlstatementNew(
+    EnsPDatabaseconnection dbc,
+    const AjPStr statement);
+
+AjBool ensDatabaseconnectionSqlstatementDel(
+    EnsPDatabaseconnection dbc,
+    AjPSqlstatement *Psqls);
 
 AjBool ensDatabaseconnectionEscapeC(EnsPDatabaseconnection dbc,
-                                     char **Ptxt,
-                                     const AjPStr str);
+                                    char **Ptxt,
+                                    const AjPStr str);
 
 AjBool ensDatabaseconnectionEscapeS(EnsPDatabaseconnection dbc,
-                                     AjPStr *Pstr,
-                                     const AjPStr str);
+                                    AjPStr *Pstr,
+                                    const AjPStr str);
 
 AjBool ensDatabaseconnectionTrace(const EnsPDatabaseconnection dbc,
                                   ajuint level);
@@ -117,7 +137,7 @@ AjBool ensDatabaseconnectionTrace(const EnsPDatabaseconnection dbc,
 
 
 
-#endif
+#endif /* ensdatabaseconnection_h */
 
 #ifdef __cplusplus
 }

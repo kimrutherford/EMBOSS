@@ -176,7 +176,7 @@ public class AuthPopup extends JFrame
 
   /**
   *
-  * Buttons across the bottom
+  * Buttons across the bottom. Used for the File Manager login only.
   *
   */
   public void addBottomPanel() 
@@ -300,7 +300,6 @@ public class AuthPopup extends JFrame
           remove(promptPanel);
           pack();
         }
-        else
           dispose();
       }
     });
@@ -328,7 +327,6 @@ public class AuthPopup extends JFrame
           remove(promptPanel);
           pack();
         }
-        else
           dispose();
       }
     });
@@ -336,10 +334,6 @@ public class AuthPopup extends JFrame
   }
 
 
-//public JButton getOKButton()
-//{
-//  return okButton;
-//}
 
 
   /**

@@ -2,6 +2,8 @@ application: sqltest [
   documentation: "Demonstration of SQL server access"
   groups: "Test"
   embassy: "myemboss"
+  relations: "/edam/topic/0000220 File handling"
+  relations: "/edam/operation/0000336 File debugging"
 ]
 
 section: input [

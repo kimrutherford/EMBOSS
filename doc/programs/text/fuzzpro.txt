@@ -47,7 +47,7 @@ Output report [12s1_arath.fuzzpro]:
 Command line arguments
 
 Search for patterns in protein sequences
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -193,7 +193,7 @@ Output file format
    The results can be output in one of several styles by using the
    command-line qualifier -rformat xxx, where 'xxx' is replaced by the
    name of the required format. The available format names are: embl,
-   genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+   genbank, gff, pir, swiss, debug, listfile, dbmotif, diffseq, excel,
    feattable, motif, regions, seqtable, simple, srs, table, tagseq
 
    See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
@@ -217,7 +217,7 @@ Output file format
 
 #=======================================
 #
-# Sequence: ACTB1_FUGRU     from: 1   to: 375
+# Sequence: ACTB1_TAKRU     from: 1   to: 375
 # HitCount: 1
 #
 # Pattern_name Mismatch Pattern
@@ -232,7 +232,7 @@ Output file format
 #---------------------------------------
 #=======================================
 #
-# Sequence: ACTB2_FUGRU     from: 1   to: 375
+# Sequence: ACTB2_TAKRU     from: 1   to: 375
 # HitCount: 1
 #
 # Pattern_name Mismatch Pattern
@@ -247,7 +247,7 @@ Output file format
 #---------------------------------------
 #=======================================
 #
-# Sequence: ACTB3_FUGRU     from: 1   to: 375
+# Sequence: ACTB3_TAKRU     from: 1   to: 375
 # HitCount: 1
 #
 # Pattern_name Mismatch Pattern
@@ -260,7 +260,7 @@ Output file format
   [Part of this file has been deleted for brevity]
 
 #
-# Sequence: ACTSA_FUGRU     from: 1   to: 377
+# Sequence: ACTSA_TAKRU     from: 1   to: 377
 # HitCount: 1
 #
 # Pattern_name Mismatch Pattern
@@ -275,7 +275,7 @@ Output file format
 #---------------------------------------
 #=======================================
 #
-# Sequence: ACTSB_FUGRU     from: 1   to: 377
+# Sequence: ACTSB_TAKRU     from: 1   to: 377
 # HitCount: 1
 #
 # Pattern_name Mismatch Pattern
@@ -306,7 +306,7 @@ Output file format
 
 #---------------------------------------
 # Total_sequences: 100
-# Total_length: 35263
+# Total_length: 35357
 # Reported_sequences: 8
 # Reported_hitcount: 8
 #---------------------------------------
@@ -367,9 +367,12 @@ See also
 
 Author(s)
 
-   Alan Bleasby (ajb (c) ebi.ac.uk)
+   Alan Bleasby
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

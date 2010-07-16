@@ -4,7 +4,9 @@ application: printsextract [
   gui: "no"
   batch: "no"
   cpu: "low"
-  relations: "EDAM: Database processing"
+  relations: "/edam/topic/0000188 Sequence profiles"
+  relations: "/edam/topic/0000091 Database and file management"
+  relations: "/edam/operation/0001812 File loading"
 ]
 
 section: input [
@@ -16,7 +18,7 @@ section: input [
     parameter: "Y"
     information: "PRINTS database file"
     knowntype: "prints database"
-    relations:  "EDAM: PRINTS database"                                
+    relations:  "/edam/data/0001365 Fingerprint"                                
   ]
 
 endsection: input

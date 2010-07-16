@@ -39,10 +39,11 @@ DIST_COMMON = $(pkginclude_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/amd64.m4 \
-	$(top_srcdir)/m4/general.m4 $(top_srcdir)/m4/java.m4 \
-	$(top_srcdir)/m4/lf_x11.m4 $(top_srcdir)/m4/mysql.m4 \
-	$(top_srcdir)/m4/pngdriver.m4 $(top_srcdir)/m4/postgresql.m4 \
-	$(top_srcdir)/m4/sgi.m4 $(top_srcdir)/configure.in
+	$(top_srcdir)/m4/general.m4 $(top_srcdir)/m4/hpdf.m4 \
+	$(top_srcdir)/m4/java.m4 $(top_srcdir)/m4/lf_x11.m4 \
+	$(top_srcdir)/m4/mysql.m4 $(top_srcdir)/m4/pngdriver.m4 \
+	$(top_srcdir)/m4/postgresql.m4 $(top_srcdir)/m4/sgi.m4 \
+	$(top_srcdir)/configure.in
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -77,8 +78,8 @@ am__objects_1 = pdfutils.lo plargs.lo plbox.lo plcont.lo plcore.lo \
 	plmap.lo plot3d.lo plpage.lo plsdef.lo plshade.lo plsym.lo \
 	pltick.lo plvpor.lo plwind.lo plstripc.lo hpgl.lo impress.lo \
 	ljiip.lo ljii.lo null.lo data.lo pbm.lo plbuf.lo plmeta.lo \
-	ps.lo tek.lo xfig.lo xwin.lo gd.lo plimage.lo plstdio.lo \
-	plvect.lo
+	ps.lo tek.lo xfig.lo xwin.lo gd.lo pdf.lo svg.lo plimage.lo \
+	plstdio.lo plvect.lo
 am_libeplplot_la_OBJECTS = $(am__objects_1)
 libeplplot_la_OBJECTS = $(am_libeplplot_la_OBJECTS)
 libeplplot_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
@@ -169,6 +170,7 @@ ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EHAVEANT = @EHAVEANT@
 EMBOSS_TOP = @EMBOSS_TOP@
+ESYSTEMLIBS = @ESYSTEMLIBS@
 EXEEXT = @EXEEXT@
 FGREP = @FGREP@
 GREP = @GREP@
@@ -208,6 +210,7 @@ PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
 PACKAGE_NAME = @PACKAGE_NAME@
 PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
+PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PCRE_DATE = @PCRE_DATE@
@@ -292,8 +295,10 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 SUBDIRS = lib
 lib_LTLIBRARIES = libeplplot.la
-@AMPNG_FALSE@@ISAIXIA64_TRUE@@ISSHARED_TRUE@TESTPNG_CFLAGS = -Wl,-G -lX11
-@AMPNG_TRUE@@ISAIXIA64_TRUE@@ISSHARED_TRUE@TESTPNG_CFLAGS = -Wl,-G -lgd -lpng -lz -lX11 -lm
+@AMPDF_FALSE@@AMPNG_TRUE@@ISAIXIA64_TRUE@@ISSHARED_TRUE@TESTPDF_CFLAGS = -Wl,-G
+@AMPDF_TRUE@@AMPNG_TRUE@@ISAIXIA64_TRUE@@ISSHARED_TRUE@TESTPDF_CFLAGS = -Wl,-G -lhpdf
+@AMPNG_FALSE@@ISAIXIA64_TRUE@@ISSHARED_TRUE@TESTPNG_CFLAGS = $(TESTPDF_CFLAGS) -lX11
+@AMPNG_TRUE@@ISAIXIA64_TRUE@@ISSHARED_TRUE@TESTPNG_CFLAGS = $(TESTPDF_CFLAGS) -lgd -lpng -lz -lX11 -lm
 AM_CFLAGS = $(TESTPNG_CFLAGS)
 @ISCYGWIN_TRUE@CYGWIN_LDFLAGS = -no-undefined -Wl,--add-stdcall-alias -Wl,--export-all-symbols -Wl,--enable-auto-import
 @ISCYGWIN_TRUE@CYGWIN_LIBS = -lX11 -lgd -lpng -lz
@@ -303,7 +308,8 @@ plctrl.c plcvt.c pldtik.c plfill.c plhist.c plline.c plmap.c \
 plot3d.c plpage.c plsdef.c plshade.c plsym.c pltick.c \
 plvpor.c plwind.c plstripc.c hpgl.c impress.c \
 ljiip.c ljii.c null.c data.c pbm.c plbuf.c \
-plmeta.c ps.c tek.c xfig.c xwin.c gd.c plimage.c plstdio.c plvect.c
+plmeta.c ps.c tek.c xfig.c xwin.c gd.c pdf.c svg.c \
+plimage.c plstdio.c plvect.c
 
 
 # removed gdpng.c (replaced by gd.c) next.c gd300.c
@@ -399,6 +405,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ljiip.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/null.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pbm.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pdf.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pdfutils.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/plargs.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/plbox.Plo@am__quote@
@@ -426,6 +433,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/plvpor.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/plwind.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ps.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/svg.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tek.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xfig.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xwin.Plo@am__quote@

@@ -1,7 +1,8 @@
 application: showdb [
   documentation: "Displays information on configured databases"
   groups: "Display, Information"
-  relations: "EDAM: Database information"
+  relations: "/edam/topic/0000088 Literature and documentation"
+  relations: "/edam/operation/0000516 Database information retrieval"
 ]
 
 section: input [
@@ -15,7 +16,7 @@ section: input [
     information: "Name of a single database to give information
                   on"
     knowntype: "emboss database name"
-    relations:  "EDAM: Generic database name"                          
+    relations:  "/edam/data/0001056 Database name"                          
   ]
 
 endsection: input
@@ -30,28 +31,28 @@ section: additional [
     default: "N"
     information: "Format output as an HTML table"
     outputmodifier: "Y"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: protein [
     additional: "Y"
     default: "Y"
     information: "Display protein databases"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: nucleic [
     additional: "Y"
     default: "Y"
     information: "Display nucleic acid databases"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: full [
     additional: "Y"
     default: "N"
     information: "Display all columns"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: methods [
@@ -60,7 +61,7 @@ section: additional [
     information: "Display 'methods' column"
     help: "This displays the access methods that can be used on this
            database, for all, query or ID access"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: fields [
@@ -69,7 +70,7 @@ section: additional [
     information: "Display 'fields' column"
     help: "This displays the search fields that can be used on this
            database, other than the standard 'id' or 'acc' fields."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: defined [
@@ -78,14 +79,14 @@ section: additional [
     information: "Display 'defined' column"
     help: "This displays a short name for the file containing the
            database definition"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: release [
     additional: "Y"
     default: "$(full)"
     information: "Display 'release' column"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
 endsection: additional
@@ -104,43 +105,43 @@ section: advanced [
            '-nohead -notype -noid -noquery -noall' \
            to get only the comment output, you can specify \
            '-only -comment'"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: heading [
     default: "@(!$(only))"
     information: "Display column headings"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: type [
     default: "@(!$(only))"
     information: "Display 'type' column"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: id [
     default: "@(!$(only))"
     information: "Display 'id' column"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: query [
     default: "@(!$(only))"
     information: "Display 'qry' column"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: all [
     default: "@(!$(only))"
     information: "Display 'all' column"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: comment [
     default: "@(!$(only))"
     information: "Display 'comment' column"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
 endsection: advanced
@@ -154,7 +155,7 @@ section: output [
     additional: "Y"
     default: "stdout"
     knowntype: "showdb output"
-    relations:  "EDAM:Database information report"                         
+    relations:  "/edam/data/0000957 Database metadata"                         
   ]
 
 endsection: output

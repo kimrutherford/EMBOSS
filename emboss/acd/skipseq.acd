@@ -2,7 +2,10 @@ application: skipseq [
   documentation: "Reads and writes (returns) sequences,
                   skipping first few"
   groups: "Edit"
-  relations: "EDAM: Sequence file handling"
+  relations: "/edam/topic/0000220 File handling"
+  relations: "/edam/topic/0000155 Sequence retrieval"  
+  relations: "/edam/operation/0001813 Sequence retrieval"  
+  relations: "/edam/operation/0002121 Sequence file handling"
 ]
 
 section: input [
@@ -12,21 +15,23 @@ section: input [
 
   boolean: feature [
     information: "Use feature information"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   seqall: sequence [
     parameter: "Y"
     features: "$(feature)"
     type: "gapany"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0000848 Sequence" 
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more" 
   ]
 
   integer: skip [
     standard: "Y"
     default: "0"
     information: "Number of sequences to skip at start"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001773 Tool-specific parameter"
   ]
 
 endsection: input
@@ -39,7 +44,9 @@ section: output [
   seqoutall: outseq [
     parameter: "Y"
     features: "$(feature)"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0000848 Sequence" 
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more"
   ]
 
 endsection: output

@@ -16,7 +16,7 @@
 
 #=======================================
 #
-# Sequence: ACTB1_FUGRU     from: 1   to: 375
+# Sequence: ACTB1_TAKRU     from: 1   to: 375
 # HitCount: 1
 #
 # Pattern_name Mismatch Pattern
@@ -31,7 +31,7 @@
 #---------------------------------------
 #=======================================
 #
-# Sequence: ACTB2_FUGRU     from: 1   to: 375
+# Sequence: ACTB2_TAKRU     from: 1   to: 375
 # HitCount: 1
 #
 # Pattern_name Mismatch Pattern
@@ -46,7 +46,7 @@
 #---------------------------------------
 #=======================================
 #
-# Sequence: ACTB3_FUGRU     from: 1   to: 375
+# Sequence: ACTB3_TAKRU     from: 1   to: 375
 # HitCount: 1
 #
 # Pattern_name Mismatch Pattern
@@ -59,7 +59,7 @@
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
 #
-# Sequence: ACTSA_FUGRU     from: 1   to: 377
+# Sequence: ACTSA_TAKRU     from: 1   to: 377
 # HitCount: 1
 #
 # Pattern_name Mismatch Pattern
@@ -74,7 +74,7 @@
 #---------------------------------------
 #=======================================
 #
-# Sequence: ACTSB_FUGRU     from: 1   to: 377
+# Sequence: ACTSB_TAKRU     from: 1   to: 377
 # HitCount: 1
 #
 # Pattern_name Mismatch Pattern
@@ -105,7 +105,7 @@
 
 #---------------------------------------
 # Total_sequences: 100
-# Total_length: 35263
+# Total_length: 35357
 # Reported_sequences: 8
 # Reported_hitcount: 8
 #---------------------------------------

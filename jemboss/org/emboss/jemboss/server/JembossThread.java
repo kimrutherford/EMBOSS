@@ -55,8 +55,38 @@ public class JembossThread extends Thread
   { 
     rea.waitFor();
     createFinishedFile();
+    String stderr;
+    try {
+        stderr = rea.getProcessStderr();
+
+        if (stderr.length()>0)
+            createStderrFile(stderr);
+
+    } catch (Exception e) {
+        System.err.println("Problem while capturing stderr output: " +
+        		e.getMessage());
+    }
+
   }
- 
+
+  /**
+  *
+  * Creates a file named "stderrfile" in the project directory
+  *
+  */
+  private void createStderrFile(String stderr)
+  {
+    File stderrfile = new File(project + File.separator + "stderrfile");
+
+    try
+    {
+      PrintWriter fout = new PrintWriter(new FileWriter(stderrfile));
+      fout.println(stderr);
+      fout.close();
+    }
+    catch (IOException ioe) {}
+  }
+  
   /**
   *
   * Creates a file named "finished" in the project directory,
@@ -65,8 +95,7 @@ public class JembossThread extends Thread
   */
   private void createFinishedFile()
   {
-    String fs = new String(System.getProperty("file.separator"));
-    File finished = new File(project + fs + ".finished");
+    File finished = new File(project + File.separator + ".finished");
 
     try
     {

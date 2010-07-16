@@ -89,6 +89,9 @@ static const char *spsumcodons[]=
 static const char *spsumaa= "RRRRRRLLLLLLSSSSSSTTTTPPPPAAAAGG"
                       "GGVVVVKKNNQQHHEEDDYYCCFFIIIMW***";
 
+
+
+
 /* @datastatic CodPInFormat ***************************************************
 **
 ** Codon usage input formats data structure
@@ -149,9 +152,11 @@ static CodOInFormat codInFormatDef[] =
 };
 
 
+
+
 /* @datastatic CodPOutFormat **************************************************
 **
-** Codon usage ioutput formats data structure
+** Codon usage output formats data structure
 **
 ** @alias CodSOutFormat
 ** @alias CodOOutFormat
@@ -200,6 +205,8 @@ static CodOOutFormat codOutFormatDef[] =
        codWriteStaden},
   {NULL, NULL, NULL}
 };
+
+
 
 
 /* @section Codon Constructors ************************************************
@@ -373,9 +380,11 @@ __deprecated AjPCod ajCodDup(const AjPCod thys)
 
 /* @section Codon Destructors ************************************************
 **
-** Desctuctor(s) for AjPCod objects
+** Destructor(s) for AjPCod objects
 **
 ******************************************************************************/
+
+
 
 
 /* @func ajCodDel *************************************************************
@@ -422,11 +431,13 @@ void ajCodDel(AjPCod *pthys)
 ******************************************************************************/
 
 
+
+
 /* @func ajCodBacktranslate ***************************************************
 **
-** Backtranslate a string
+** Back translate a string
 **
-** @param [w] b [AjPStr *] backtranslated sequence
+** @param [w] b [AjPStr *] back translated sequence
 ** @param [r] a [const AjPStr] sequence
 ** @param [r] thys [const AjPCod] codon usage object
 **
@@ -487,9 +498,9 @@ void ajCodBacktranslate(AjPStr *b, const AjPStr a, const AjPCod thys)
 
 /* @func ajCodBacktranslateAmbig **********************************************
 **
-** Backtranslate a string to a fully ambiguous nucleotide sequence as a string
+** Back translate a string to a fully ambiguous nucleotide sequence as a string
 **
-** @param [w] b [AjPStr *] backtranslated sequence
+** @param [w] b [AjPStr *] back translated sequence
 ** @param [r] a [const AjPStr] sequence
 ** @param [r] thys [const AjPCod] codon usage object
 **
@@ -796,6 +807,9 @@ __deprecated void ajCodCountTriplets(AjPCod thys, const AjPStr s, ajint *c)
     return;
 }
 
+
+
+
 /* @func ajCodIndex ***********************************************************
 **
 ** Return a codon index given a three character codon
@@ -959,6 +973,7 @@ AjBool ajCodRead(AjPCod thys, const AjPStr fn, const AjPStr format)
 
 
 
+
 /* @funcstatic codReadEmboss **************************************************
 **
 ** Read a codon index from a filename in EMBOSS format
@@ -1114,7 +1129,7 @@ static AjBool codReadStaden(AjPCod thys, AjPFilebuff inbuff)
 	if(ajStrFindRestC(codReadLine, "=") == -1)
 	    continue;
 
-	if(icod > 63)			/* ignore second noncoding set */
+	if(icod > 63)			/* ignore second non-coding set */
 	    continue;
 
 	/* check record format */
@@ -1246,7 +1261,7 @@ static AjBool codReadSpsum(AjPCod thys, AjPFilebuff inbuff)
 
 /* @funcstatic codReadCutg **************************************************
 **
-** Read a codon index from a filename in CUTG website format
+** Read a codon index from a filename in CUTG web site format
 **
 ** @param [w] thys [AjPCod] Codon object
 ** @param [u] inbuff [AjPFilebuff] Input file buffer
@@ -1801,7 +1816,7 @@ static AjBool codCommentProcess(AjPCod thys, const AjPStr ccline)
 **
 ** @param [u] token [AjPStr*] String
 **
-** @return [AjBool] ajrue if string is a valid codon sequence
+** @return [AjBool] ajTrue if string is a valid codon sequence
 ** @@
 ******************************************************************************/
 
@@ -1938,6 +1953,7 @@ static AjBool codIsNumber(const AjPStr token)
 
 
 
+
 /* @funcstatic codIsNumberF ***************************************************
 **
 ** Checks a string is a number, optionally ending in .000
@@ -2028,7 +2044,8 @@ static void codCalcFraction(AjPCod thys)
 
 	for(j=0;j<icount;j++)
 	{
-	    if(thys->tcount[count[j]])	/* so we know we have fsum > 0.0 */
+            /* so we know we have fsum > 0.0 */
+	    if(!E_FPZERO(thys->tcount[count[j]],U_DEPS))
 		thys->fraction[count[j]] = thys->tcount[count[j]]/fsum;
 	    else
 		thys->fraction[count[j]] = 0.0;
@@ -2242,6 +2259,7 @@ void ajCodWriteOut(const AjPCod thys, AjPOutfile outf)
 
     return;
 }
+
 
 
 
@@ -2488,6 +2506,9 @@ static void codWriteCutg(const AjPCod thys, AjPFile outf)
     return;
 }
 
+
+
+
 /* @funcstatic codWriteCutgaa *************************************************
 **
 ** Write codon structure to output file in Cutg format with amino acids
@@ -2601,7 +2622,7 @@ static void codWriteCutgaa(const AjPCod thys, AjPFile outf)
 
 /* @funcstatic codWriteCherry *************************************************
 **
-** Write codon structure to output file in Mike Cherry's codonusage database
+** Write codon structure to output file in Mike Cherry's codon usage database
 ** format.
 **
 ** Very similar to GCG format, has a structured header comment from
@@ -3070,7 +3091,6 @@ static double codRandom(ajint NA, ajint NC, ajint NG, ajint NT,
 
 
 
-
 /* @funcstatic codGetWstat *****************************************************
 **
 ** Calculate codon adaptive index W values
@@ -3101,7 +3121,7 @@ static double* codGetWstat(const AjPCod thys)
 	for(j=0;j<AJCODSTART;++j)
 	    if(thys->aa[j]==thisaa)
 		aamax = aamax > thys->tcount[j] ? aamax : thys->tcount[j];
-	if(aamax)
+	if(!E_FPZERO(aamax,U_DEPS))
 	    wk[i] = thys->tcount[i] / aamax;
     }
 
@@ -3150,7 +3170,7 @@ double ajCodCalcCaiCod(const AjPCod thys)
 
 	sum = (double)0.;
 
-	for(k=0;k<AJCODSTART && max;++k)
+	for(k=0;k<AJCODSTART && !E_FPZERO(max,U_DEPS);++k)
 	{
 	    if(thys->aa[k]==27)
 		continue;
@@ -3159,7 +3179,7 @@ double ajCodCalcCaiCod(const AjPCod thys)
 	    {
 		xij = thys->fraction[k];
 
-		if(xij)
+		if(!E_FPZERO(xij,U_DEPS))
 		{
 		    res = thys->tcount[k] * log(xij/max);
 		    sum += res;
@@ -3175,6 +3195,7 @@ double ajCodCalcCaiCod(const AjPCod thys)
 
     return cai;
 }
+
 
 
 
@@ -3213,7 +3234,7 @@ double ajCodCalcCaiSeq(const AjPCod thys, const AjPStr str)
     {
 	idx = ajCodIndexC(p);
 
-	if(wk[idx])
+	if(!E_FPZERO(wk[idx],U_DEPS))
 	    total += log(wk[idx]);
     }
 
@@ -3235,6 +3256,8 @@ __deprecated double ajCodCalcCai(const AjPCod thys, const AjPStr str)
 {
     return ajCodCalcCaiSeq(thys, str);
 }
+
+
 
 
 /* @func ajCodCalcGribskov ****************************************************
@@ -3408,13 +3431,13 @@ double ajCodCalcNc(const AjPCod thys)
 	if(nt[i])
 	    Fbar[i] /= (double)nt[i];
 
-    if(!Fbar[2])				/* Ile fix */
+    if(E_FPZERO(Fbar[2],U_DEPS))				/* Ile fix */
 	Fbar[2] = (Fbar[1]+Fbar[3]) / 2.0;
 
 
     for(i=1,sum=2.0;i<max;++i)
     {
-	if(!Fbar[i])
+	if(E_FPZERO(Fbar[i],U_DEPS))
 	    continue;
 
 	if(i==1)
@@ -3511,7 +3534,6 @@ void ajCodCalcUsage(AjPCod thys, ajint c)
 
 
 
-
 /* @obsolete ajCodCalculateUsage
 ** @rename ajCodCalcUsage
 */
@@ -3521,6 +3543,8 @@ __deprecated void ajCodCalculateUsage(AjPCod thys, ajint c)
     ajCodCalcUsage(thys, c);
     return;
 }
+
+
 
 
 /* @func ajCodGetName *********************************************************
@@ -3575,7 +3599,7 @@ const AjPStr ajCodGetDesc(const AjPCod thys)
 **
 ** Returns the description of a codon table
 **
-** @param [r] thys [const AjPCod] Codon usgage object
+** @param [r] thys [const AjPCod] Codon usage object
 ** @return [const char*] Original filename
 ******************************************************************************/
 
@@ -3701,7 +3725,7 @@ ajint ajCodGetNumcodon(const AjPCod thys)
 
 /* @func ajCodGetNumcds *****************************************************
 **
-** Returns the numbers od CDSs in a codon table
+** Returns the numbers of CDSs in a codon table
 **
 ** @param [r] thys [const AjPCod] Codon usage object
 ** @return [ajint] Number of CDSs
@@ -3759,6 +3783,9 @@ __deprecated void ajCodAssCode(AjPCod thys, ajint geneticcode)
     return;
 }
 
+
+
+
 /* @func ajCodSetDescC ********************************************************
 **
 ** Assigns the description of a codon table
@@ -3777,7 +3804,6 @@ void ajCodSetDescC(AjPCod thys, const char* desc)
 
 
 
-
 /* @obsolete ajCodAssDescC
 ** @rename ajCodSetDescC
 */
@@ -3787,6 +3813,8 @@ __deprecated void ajCodAssDescC(AjPCod thys, const char* desc)
     ajCodSetDescC(thys, desc);
     return;
 }
+
+
 
 
 /* @func ajCodSetDescS *********************************************************
@@ -3803,8 +3831,6 @@ void ajCodSetDescS(AjPCod thys, const AjPStr desc)
     ajStrAssignS(&thys->Desc,desc );
     return;
 }
-
-
 
 
 
@@ -3840,7 +3866,6 @@ void ajCodSetDivisionC(AjPCod thys, const char* division)
 
 
 
-
 /* @obsolete ajCodAssDivisionC
 ** @rename ajCodSetDivisionC
 */
@@ -3868,7 +3893,6 @@ void ajCodSetDivisionS(AjPCod thys, const AjPStr division)
     ajStrAssignS(&thys->Division, division);
     return;
 }
-
 
 
 
@@ -3903,6 +3927,7 @@ void ajCodSetNameC(AjPCod thys, const char* name)
 
 
 
+
 /* @obsolete ajCodAssNameC
 ** @rename ajCodSetNameC
 */
@@ -3912,6 +3937,7 @@ __deprecated void ajCodAssNameC(AjPCod thys, const char* name)
     ajCodSetNameC(thys, name);
     return;
 }
+
 
 
 
@@ -3932,6 +3958,7 @@ void ajCodSetNameS(AjPCod thys, const AjPStr name)
 
 
 
+
 /* @obsolete ajCodAssName
 ** @rename ajCodSetNameS
 */
@@ -3941,6 +3968,8 @@ __deprecated void ajCodAssName(AjPCod thys, const AjPStr name)
     ajCodSetNameS(thys, name);
     return;
 }
+
+
 
 
 /* @func ajCodSetNumcds ********************************************************
@@ -3957,8 +3986,6 @@ void ajCodSetNumcds(AjPCod thys, ajint numcds)
     thys->CdsCount = numcds;
     return;
 }
-
-
 
 
 
@@ -4003,6 +4030,7 @@ __deprecated void ajCodAssNumcodon(AjPCod thys, ajint numcodon)
     ajCodSetNumcodons(thys, numcodon);
     return;
 }
+
 
 
 
@@ -4055,7 +4083,6 @@ void ajCodSetReleaseS(AjPCod thys, const AjPStr release)
 
 
 
-
 /* @obsolete ajCodAssRelease
 ** @rename ajCodSetReleaseS
 */
@@ -4065,6 +4092,7 @@ __deprecated void ajCodAssRelease(AjPCod thys, const AjPStr release)
     ajCodSetReleaseS(thys, release);
     return;
 }
+
 
 
 
@@ -4217,7 +4245,7 @@ static void codFix(AjPCod thys)
     else
 	thys->CodonCount = totnum;
 
-    if(!totfreq)
+    if(E_FPZERO(totfreq,U_DEPS))
     {
 	for(i=0;i<64;i++)
 	{
@@ -4230,7 +4258,7 @@ static void codFix(AjPCod thys)
 	ajDebug("Codon usage file '%S' has total frequency/1000 of %.2f\n",
 	       thys->Name, totfreq);
 
-    if(!totfrac)
+    if(E_FPZERO(totfrac,U_DEPS))
     {
 	for(i=0;i<64;i++)
 	{

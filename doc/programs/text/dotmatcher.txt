@@ -54,7 +54,7 @@ Created dotmatcher.ps
 Command line arguments
 
 Draw a threshold dotplot of two sequences
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-asequence]         sequence   Sequence filename and optional format, or
@@ -63,10 +63,12 @@ Version: EMBOSS:6.2.0
                                   reference (input USA)
 *  -graph              graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tek, tekt, none, data, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif, pdf,
+                                  svg, pdf, svg)
 *  -xygraph            xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tek, tekt, none, data, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif, pdf,
+                                  svg, pdf, svg)
 
    Additional (Optional) qualifiers:
    -matrixfile         matrix     [EBLOSUM62 for protein, EDNAFULL for DNA]
@@ -77,7 +79,7 @@ Version: EMBOSS:6.2.0
                                   files are found in the 'data' directory of
                                   the EMBOSS installation.
    -windowsize         integer    [10] Window size over which to test
-                                  threshhold (Integer 3 or more)
+                                  threshold (Integer 3 or more)
    -threshold          integer    [23] Threshold (Integer 0 or more)
 
    Advanced (Unprompted) qualifiers:
@@ -170,7 +172,7 @@ ID   HBA_HUMAN               Reviewed;         142 AA.
 AC   P69905; P01922; Q1HDT5; Q3MIF5; Q53F97; Q96KF1; Q9NYR7; Q9UCM0;
 DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
 DT   23-JAN-2007, sequence version 2.
-DT   16-JUN-2009, entry version 73.
+DT   15-JUN-2010, entry version 86.
 DE   RecName: Full=Hemoglobin subunit alpha;
 DE   AltName: Full=Hemoglobin alpha chain;
 DE   AltName: Full=Alpha-globin;
@@ -279,7 +281,7 @@ AC   P68871; A4GX73; B2ZUE0; P02023; Q13852; Q14481; Q14510; Q45KT0;
 AC   Q549N7; Q6FI08; Q6R7N2; Q8IZI1; Q9BX96; Q9UCD6; Q9UCP8; Q9UCP9;
 DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
 DT   23-JAN-2007, sequence version 2.
-DT   16-JUN-2009, entry version 76.
+DT   15-JUN-2010, entry version 88.
 DE   RecName: Full=Hemoglobin subunit beta;
 DE   AltName: Full=Hemoglobin beta chain;
 DE   AltName: Full=Beta-globin;
@@ -465,9 +467,12 @@ See also
 
 Author(s)
 
-   Ian              Longden (il (c) sanger.ac.uk)
+   Ian              Longden formerly at:
    Sanger           Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
                     CB10 1SA, UK.
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

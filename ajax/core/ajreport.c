@@ -591,7 +591,7 @@ static void reportWriteDbMotif(AjPReport thys,
 ** diffseq application. The report describes matches, usually short,
 ** between two sequences and features which overlap them.
 **
-** A number of tags are used. The rpeort makes little sense without them.
+** A number of tags are used. The report makes little sense without them.
 ** These tags are used to replicate features in a second sequence.
 **
 ** Format:<br>
@@ -1888,7 +1888,7 @@ static void reportWriteSeqTable(AjPReport thys, const AjPFeattable ftable,
 **
 ** Writes a report in SRS simple format This is a simple parsable format that
 ** does not include the feature sequence (see also SRS format)
-** for applicatins where features can be large.
+** for applications where features can be large.
 ** Missing tag values are reported as '.'
 **
 ** Format:<br>
@@ -2729,6 +2729,7 @@ __deprecated AjBool ajReportSetTags(AjPReport thys, const AjPStr taglist)
 
 
 
+
 /* @func ajReportValid ********************************************************
 **
 ** Test for a report object.
@@ -3002,6 +3003,7 @@ static ajint reportGetTags(const AjPReport thys, AjPStr** types, AjPStr** names,
 
     return ntags;
 }
+
 
 
 
@@ -3313,6 +3315,8 @@ __deprecated void ajReportSetHeader(AjPReport thys, const AjPStr header)
 }
 
 
+
+
 /* @func ajReportSetHeaderC ***************************************************
 **
 ** Defines a feature report header
@@ -3424,6 +3428,7 @@ void ajReportSetSubheaderC(AjPReport thys, const char* header)
 
 
 
+
 /* @func ajReportSetSubheaderS *************************************************
 **
 ** Defines a feature report subheader
@@ -3456,6 +3461,8 @@ __deprecated void ajReportSetSubHeader(AjPReport thys, const AjPStr header)
 {
     ajReportSetSubheaderS(thys,header);
 }
+
+
 
 
 /* @func ajReportAppendSubheaderC **********************************************
@@ -3498,6 +3505,7 @@ __deprecated void ajReportAppendSubHeaderC(AjPReport thys, const char* header)
 
 
 
+
 /* @func ajReportAppendSubheaderS **********************************************
 **
 ** Defines a feature report subheader
@@ -3525,8 +3533,6 @@ void ajReportAppendSubheaderS(AjPReport thys, const AjPStr header)
 
 
 
-
-
 /* @obsolete ajReportAppendSubHeader
 ** @rename ajReportAppendSubheaderS
 */
@@ -3536,6 +3542,7 @@ __deprecated void ajReportAppendSubHeader(AjPReport thys, const AjPStr header)
     ajReportAppendSubheaderS(thys, header);
     return;
 }
+
 
 
 
@@ -3671,6 +3678,7 @@ __deprecated void ajReportSetTail(AjPReport thys, const AjPStr tail)
 
 
 
+
 /* @func ajReportAppendTailC **************************************************
 **
 ** Appends to a feature report tail
@@ -3725,8 +3733,6 @@ void ajReportAppendTailS(AjPReport thys, const AjPStr tail)
 
 
 
-
-
 /* @obsolete ajReportAppendTail
 ** @rename ajReportAppendTailS
 */
@@ -3736,7 +3742,6 @@ __deprecated void ajReportAppendTail(AjPReport thys, const AjPStr tail)
     ajReportAppendTailS(thys, tail);
     return;
 }
-
 
 
 
@@ -3881,6 +3886,7 @@ void ajReportAppendSubtailS(AjPReport thys, const AjPStr tail)
 
 
 
+
 /* @obsolete ajReportAppendSubTail
 ** @rename ajReportAppendSubtailS
 */
@@ -3890,6 +3896,7 @@ __deprecated void ajReportAppendSubTail(AjPReport thys, const AjPStr tail)
     ajReportAppendSubtailS(thys, tail);
     return;
 }
+
 
 
 
@@ -3985,8 +3992,6 @@ const AjPStr ajReportGetSeqnameSeq(const AjPReport thys, const AjPSeq seq)
 
 
 
-
-
 /* @obsolete ajReportSeqName
 ** @rename ajReportGetSeqnameSeq
 */
@@ -4036,7 +4041,6 @@ void ajReportAddFileF(AjPReport thys, AjPFile file, const AjPStr type)
 
 
 
-
 /* @obsolete ajReportFileAdd
 ** @rename ajReportAddFile
 */
@@ -4047,6 +4051,8 @@ __deprecated void ajReportFileAdd(AjPReport thys,
     ajReportAddFileF(thys, file, type);
     return;
 }
+
+
 
 
 /* @func ajReportPrintFormat **************************************************
@@ -4117,6 +4123,25 @@ void ajReportPrintbookFormat(AjPFile outf)
     AjPStr* names;
 
     fmtlist = ajListstrNew();
+
+    ajFmtPrintF(outf, "<para>The supported report formats are summarised "
+                "in the table below. The columns are as follows: "
+                "<emphasis>Output format</emphasis> (format name), "
+                "<emphasis>Nuc</emphasis> "
+                "(\"true\" indicates nucleotide sequence data may be "
+                "represented), "
+                "<emphasis>Pro</emphasis> (\"true\" indicates protein "
+                "sequence data may be represented, "
+                "<emphasis>Header</emphasis> (whether the standard EMBOSS "
+                "report header is included), "
+                "<emphasis>Seq</emphasis> (whether the sequence corresponding "
+                "to the features is included), "
+                "<emphasis>Tags</emphasis> (number of specific tag-values "
+                "reported.  A non-zero value suggests a format is not "
+                "suitable for application output that does not generate "
+                "these specific tags.) "
+                "<emphasis>Description</emphasis> (short description of "
+                "the format).</para>\n\n");
 
     ajFmtPrintF(outf, "<table frame=\"box\" rules=\"cols\">\n");
     ajFmtPrintF(outf, "  <caption>Report formats</caption>\n");

@@ -138,8 +138,8 @@ RL   (http://www.geneservice.co.uk/) and BACPAC Resources
 RL   (http://bacpac.chori.org/)
 XX
 DR   EMBL-CON; GL000124.
-DR   EMBL-JOIN; Z69720.
 DR   GDB; 11502921.
+DR   RFAM; RF00017; SRP_euk_arch.
 XX
 CC   -------------- Genome Center
 CC   Center: Wellcome Trust Sanger Institute

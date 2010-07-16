@@ -51,6 +51,9 @@ static AjPStr filedataTmpstr = NULL;
 
 static AjPStr filedataPath = NULL;
 
+
+
+
 /* @filesection ajfile ********************************************************
 **
 ** @nam1rule aj Function belongs to the AJAX library.
@@ -99,6 +102,7 @@ static AjPStr filedataPath = NULL;
 ** @fcategory new
 **
 ******************************************************************************/
+
 
 
 
@@ -313,7 +317,97 @@ __deprecated void ajFileDataNew(const AjPStr name, AjPFile *fnew)
 AjPFile ajDatafileNewInNamePathS(const AjPStr name, const AjPStr path)
 {
     AjPFile fnew = NULL;
+    char *p;
 
+    if(!ajStrGetLen(name))
+	return NULL;
+    if(ajStrGetLen(path))
+    {
+        ajStrAppendS(&filedataNameDataTmp,path);
+        ajDirnameFix(&filedataNameDataTmp);
+        ajStrAppendS(&filedataBaseTmp, name);
+    }
+    else
+    {
+        ajStrAssignS(&filedataBaseTmp, name);
+    }
+    
+    ajDebug("ajDatafileNewInNamePathS trying '%S'\n", filedataBaseTmp);
+
+    if(ajFilenameExistsRead(filedataBaseTmp))
+    {
+	fnew = ajFileNewInNameS(filedataBaseTmp);
+	ajStrDelStatic(&filedataBaseTmp);
+
+	return fnew;
+    }
+    
+    ajStrAssignC(&filedataNameDataTmp, ".embossdata");
+    ajStrAppendC(&filedataNameDataTmp, SLASH_STRING);
+    if(ajStrGetLen(path))
+    {
+        ajStrAppendS(&filedataNameDataTmp,path);
+        ajDirnameFix(&filedataNameDataTmp);
+    }
+    ajStrAppendS(&filedataNameDataTmp, filedataBaseTmp);
+    ajDebug("ajDatafileNewInNamePathS trying '%S'\n", filedataNameDataTmp);
+
+    if(ajFilenameExistsRead(filedataNameDataTmp))
+    {
+	fnew = ajFileNewInNameS(filedataNameDataTmp);
+	ajStrDelStatic(&filedataBaseTmp);
+	ajStrDelStatic(&filedataNameDataTmp);
+
+	return fnew;
+    }
+    
+    
+    if((p=getenv("HOME")))
+    {
+	ajStrAssignC(&filedataHomeTmp,p);
+	ajStrAppendC(&filedataHomeTmp,SLASH_STRING);
+        if(ajStrGetLen(path))
+        {
+            ajStrAppendS(&filedataNameDataTmp,path);
+            ajDirnameFix(&filedataNameDataTmp);
+        }
+	ajStrAppendS(&filedataHomeTmp,filedataBaseTmp);
+	ajDebug("ajDatafileNewInNamePathS trying '%S'\n", filedataHomeTmp);
+
+	if(ajFilenameExistsRead(filedataHomeTmp))
+	{
+	    fnew = ajFileNewInNameS(filedataHomeTmp);
+	    ajStrDelStatic(&filedataHomeTmp);
+	    ajStrDelStatic(&filedataBaseTmp);
+	    ajStrDelStatic(&filedataNameDataTmp);
+
+	    return fnew;
+	}
+
+	ajStrAssignC(&filedataHomeTmp,p);
+	ajStrAppendC(&filedataHomeTmp, "/.embossdata");
+	ajStrAppendC(&filedataHomeTmp, SLASH_STRING);
+        if(ajStrGetLen(path))
+        {
+            ajStrAppendS(&filedataNameDataTmp,path);
+            ajDirnameFix(&filedataNameDataTmp);
+        }
+	ajStrAppendS(&filedataHomeTmp,filedataBaseTmp);
+	ajDebug("ajDatafileNewInNamePathS trying '%S'\n", filedataHomeTmp);
+
+	if(ajFilenameExistsRead(filedataHomeTmp))
+	{
+	    fnew = ajFileNewInNameS(filedataHomeTmp);
+	    ajStrDelStatic(&filedataHomeTmp);
+	    ajStrDelStatic(&filedataBaseTmp);
+	    ajStrDelStatic(&filedataNameDataTmp);
+
+	    return fnew;
+	}
+
+	ajStrDelStatic(&filedataHomeTmp);
+    }
+    
     if(ajNamGetValueC("DATA", &filedataNameDataTmp))
     {
         ajDirnameFix(&filedataNameDataTmp);
@@ -559,6 +653,9 @@ __deprecated void ajFileDataNewWrite(const AjPStr name, AjPFile *fnew)
 **
 ******************************************************************************/
 
+
+
+
 /* @func ajDatafileValuePath ***************************************************
 **
 ** Get the path to the active data directory
@@ -640,6 +737,8 @@ __deprecated AjBool ajFilePathData(AjPStr *Ppath)
 ** @fcategory misc
 **
 ******************************************************************************/
+
+
 
 
 /* @func ajDatafileExit *******************************************************

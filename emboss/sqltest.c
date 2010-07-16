@@ -1,10 +1,9 @@
 /******************************************************************************
 ** @source sqltest application
-** Alphabetically minimises tandem repeat sequences.
-** @author Copyright (C) Michael K. Schuster
-** Department of Medical Biochemistry University Vienna
-** @author Copyright (C) Martin Grabner
-** (martin.grabner@univie.ac.at) EMBnet Austria
+** Test AJAX SQL library routines by connecting to a particular SQL instance
+** and running a "SHOW PROCESSLIST" statement.
+** @author Copyright (C) 2006 Michael K. Schuster
+** EMBL-European Bioinformatics Institute
 ** @version 1.0
 ** @@
 **
@@ -40,7 +39,7 @@ int main(int argc, char **argv)
     ajulong i = 0;
     ajuint j = 0;
     
-    AjEnum client = ajESqlClientMySQL;
+    AjESqlconnectionClient client = ajESqlconnectionClientMySQL;
     
     AjPFile outf = NULL;
     
@@ -48,7 +47,7 @@ int main(int argc, char **argv)
     AjPStr password = NULL;
     AjPStr host = NULL;
     AjPStr port = NULL;
-    AjPStr socket = NULL;
+    AjPStr socketf = NULL;
     AjPStr dbname = NULL;
     AjPStr statement = NULL;
     AjPStr result = NULL;
@@ -64,17 +63,14 @@ int main(int argc, char **argv)
     password = ajStrNew();
     host = ajStrNewC("ensembldb.ensembl.org");
     port = ajStrNewC("3306");
-    socket = ajStrNew();
+    socketf = ajStrNew();
     dbname = ajStrNew();
     statement = ajStrNewC("SHOW PROCESSLIST");
     result = ajStrNew();
     outf = ajAcdGetOutfile("outfile");
     
-    if(!ajSqlInit())
-	ajFatal("Library initialisation failed.");
-    
     sqlc =
-	ajSqlconnectionNewData(client, user, password, host, port, socket,
+	ajSqlconnectionNewData(client, user, password, host, port, socketf,
                                dbname);
     
     if(!sqlc)
@@ -149,7 +145,7 @@ int main(int argc, char **argv)
     ajStrDel(&password);
     ajStrDel(&host);
     ajStrDel(&port);
-    ajStrDel(&socket);
+    ajStrDel(&socketf);
     ajStrDel(&dbname);
     ajStrDel(&statement);
     ajStrDel(&result);

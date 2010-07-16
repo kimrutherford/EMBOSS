@@ -1,5 +1,5 @@
 Draw a non-overlapping wordmatch dotplot of two sequences
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         sequence   Sequence filename and optional format, or
@@ -9,7 +9,8 @@ Version: EMBOSS:6.2.0
    -wordsize           integer    [4] Word size (Integer 2 or more)
    -graph              graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tek, tekt, none, data, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif, pdf,
+                                  svg, pdf, svg)
 
    Additional (Optional) qualifiers:
    -overlaps           boolean    [N] Displays the overlapping matches (in

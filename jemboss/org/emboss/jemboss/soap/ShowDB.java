@@ -44,6 +44,8 @@ public class ShowDB
   private Vector matrices;
   /** codon usage tables */
   private Vector codons;
+  /** indicates whether connected jemboss server have PDF support */
+  private boolean serverSupportsPDF;
 
   /**
   *
@@ -72,6 +74,9 @@ public class ShowDB
     stMat = new StringTokenizer(mat,"\n");
     while (stMat.hasMoreTokens())
       codons.add(stMat.nextToken());
+    
+    serverSupportsPDF = Boolean.valueOf(dbReq.
+            getVal("doesJembossServerSupportPDFoutput")).booleanValue();
   }
 
   /**
@@ -130,4 +135,15 @@ public class ShowDB
     return codons;
   }
 
+  /**
+  *
+  * Returns whether connected jemboss server have PDF support
+  * @return     true or false
+  *
+  */
+  public boolean serverSupportsPDF()
+  {
+    return serverSupportsPDF;
+  }
+  
 }

@@ -1501,13 +1501,13 @@ FEATURES             Location/Qualifiers
                      Em:CA313724.1 Em:CA313733.1 Em:R55514.1"
      polyA_signal    20118. .20123
                      /gene="C16orf33"
-                     /locus_tag="Z69719.2-005"
+                     /locus_tag="Z69719.2-003"
      polyA_site      20138
                      /gene="C16orf33"
-                     /locus_tag="Z69719.2-005"
+                     /locus_tag="Z69719.2-003"
      polyA_site      20147
                      /gene="C16orf33"
-                     /locus_tag="Z69719.2-005"
+                     /locus_tag="Z69719.2-003"
      polyA_signal    20334. .20339
                      /gene="C16orf33"
                      /locus_tag="Z69719.2-001"
@@ -1607,7 +1607,7 @@ FEATURES             Location/Qualifiers
                      25230. .25387,25467. .25589,25665. .25874,26279. .26492,
                      27391. .27521,27591. .27707))
                      /gene="RHBDF1"
-                     /locus_tag="Z69719.3-013"
+                     /locus_tag="Z69719.3-001"
                      /standard_name="OTTHUMP00000067140"
                      /note="match: proteins: Tr:Q6PIX5 Tr:Q96CC6 Tr:Q9H6E1"
                      /codon_start=1

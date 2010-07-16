@@ -1,5 +1,5 @@
 Extract amino acid property data from AAINDEX
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     AAINDEX database file

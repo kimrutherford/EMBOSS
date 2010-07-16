@@ -1,5 +1,5 @@
 Displays protein sequences with features in pretty format
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     (Gapped) protein sequence(s) filename and
@@ -78,11 +78,11 @@ Version: EMBOSS:6.2.0
    -typematch          string     [*] By default any feature type in the
                                   feature table is shown. You can set this to
                                   match any feature type you wish to show.
-                                  See http://www3.ebi.ac.uk/Services/WebFeat/
-                                  for a list of the EMBL feature types and see
+                                  See http://www.ebi.ac.uk/embl/WebFeat/ for a
+                                  list of the EMBL feature types and see
                                   Appendix A of the Swissprot user manual in
-                                  http://www.expasy.ch/txt/userman.txt for a
-                                  list of the Swissprot feature types.
+                                  http://www.expasy.org/sprot/userman.html for
+                                  a list of the Swissprot feature types.
                                   The type may be wildcarded by using '*'.
                                   If you wish to show more than one type,
                                   separate their names with the character '|',
@@ -109,7 +109,7 @@ Version: EMBOSS:6.2.0
                                   extra values that a feature may have. By
                                   default any feature tag value in the feature
                                   table is shown. You can set this to match
-                                  any feature tag valueyou wish to show.
+                                  any feature tag value you wish to show.
                                   The tag value may be wildcarded by using
                                   '*'.
                                   If you wish to show more than one tag value,

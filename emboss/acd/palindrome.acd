@@ -1,8 +1,9 @@
 application: palindrome [
   documentation: "Finds inverted repeats in nucleotide sequence(s)"
   groups: "Nucleic:Repeats"
-  relations: "EDAM: Repeat sequence finding"
-  relations: "EDAM: RNA secondary structure prediction"
+  relations: "/edam/topic/0000157 Sequence composition"
+  relations: "/edam/operation/0000379 Repeat sequence identification"
+  relations: "/edam/operation/0000278 RNA secondary structure prediction"
 ]
 
 section: input [
@@ -13,7 +14,9 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "nucleotide"
-    relations: "EDAM: Nucleotide sequence record"                          
+    relations: "/edam/data/0000848 Sequence"
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more" 
   ]
 
 endsection: input
@@ -28,8 +31,10 @@ section: required [
     default: "10"
     minimum: "1"
     maximum: "@($(sequence.length)/2)"
+    failrange: "N"
+    trueminimum: "Y"
     information: "Enter minimum length of palindrome"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001249 Sequence length"
   ]
 
   integer: maxpallen [
@@ -37,8 +42,10 @@ section: required [
     default: "100"
     minimum: "$(minpalLen)"
     maximum: "@($(sequence.length)/2)"
+    failrange: "N"
+    trueminimum: "Y"
     information: "Enter maximum length of palindrome"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001249 Sequence length"
   ]
 
   integer: gaplimit [
@@ -46,8 +53,10 @@ section: required [
     default: "100"
     minimum: "0"
     maximum: "$(sequence.length)"
+    failrange: "N"
+    trueminimum: "Y"
     information: "Enter maximum gap between repeated regions"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001249 Sequence length"
   ]
 
   integer: nummismatches [
@@ -56,7 +65,7 @@ section: required [
     minimum: "0"
     information: "Number of mismatches allowed"
     valid: "Positive integer"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001773 Tool-specific parameter"
   ]
 
 endsection: required
@@ -70,14 +79,14 @@ section: output [
     parameter: "Y"
     extension: "pal"
     knowntype: "palindrome output"
-    relations:  "EDAM:Repeat sequence map report"                          
+    relations:  "/edam/data/0001299 Repeat sequence report"                          
   ]
 
   boolean: overlap [
     standard: "Y"
     information: "Report overlapping matches"
     default: "Y"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
 endsection: output

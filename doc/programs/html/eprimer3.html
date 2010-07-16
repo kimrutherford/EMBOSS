@@ -162,7 +162,7 @@ Picks PCR primers and hybridization oligos
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Picks PCR primers and hybridization oligos
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     The sequence from which to choose primers.
@@ -407,23 +407,23 @@ Version: EMBOSS:6.2.0
                                   and Cs in the sequence, and length is the
                                   length of the sequence.
                                   A similar formula is used by the prime
-                                  primer selection program in GCG
-                                  http://www.gcg.com), which instead uses
-                                  675.0/length in the last term (after F.
-                                  Baldino, Jr, M.-F. Chesselet, and M.E.
-                                  Lewis, Methods in Enzymology 168:766 (1989)
-                                  eqn (1) on page 766 without the mismatch and
-                                  formamide terms). The formulas here and in
-                                  Baldino et al. assume Na+ rather than K+.
-                                  According to J.G. Wetmur, Critical Reviews
-                                  in BioChem. and Mol. Bio. 26:227 (1991) 50
-                                  mM K+ should be equivalent in these formulae
-                                  to .2 M Na+. EPrimer3 uses the same salt
-                                  concentration value for calculating both the
-                                  primer melting temperature and the oligo
-                                  melting temperature. If you are planning to
-                                  use the PCR product for hybridization later
-                                  this behavior will not give you the Tm under
+                                  primer selection program in GCG, which
+                                  instead uses 675.0/length in the last term
+                                  (after F. Baldino, Jr, M.-F. Chesselet, and
+                                  M.E. Lewis, Methods in Enzymology 168:766
+                                  (1989) eqn (1) on page 766 without the
+                                  mismatch and formamide terms). The formulas
+                                  here and in Baldino et al. assume Na+ rather
+                                  than K+. According to J.G. Wetmur, Critical
+                                  Reviews in BioChem. and Mol. Bio. 26:227
+                                  (1991) 50 mM K+ should be equivalent in
+                                  these formulae to .2 M Na+. EPrimer3 uses
+                                  the same salt concentration value for
+                                  calculating both the primer melting
+                                  temperature and the oligo melting
+                                  temperature. If you are planning to use the
+                                  PCR product for hybridization later this
+                                  behavior will not give you the Tm under
                                   hybridization conditions. (Any numeric
                                   value)
 *  -oexcludedregion    range      [(full sequence)] Middle oligos may not
@@ -1025,7 +1025,7 @@ EPrimer3 favors ranges to the left side of the parameter string. EPrimer3 will r
 <td>The maximum allowed melting temperature of the amplicon. Product Tm is calculated using the formula from Bolton and McCarthy, PNAS 84:1390 (1962) as presented in Sambrook, Fritsch and Maniatis, Molecular Cloning, p 11.46 (1989, CSHL Press).
 Tm = 81.5 + 16.6(log10([Na+])) + .41*(%GC) - 600/length
 Where [Na+} is the molar sodium concentration, (%GC) is the percent of Gs and Cs in the sequence, and length is the length of the sequence.
-A similar formula is used by the prime primer selection program in GCG http://www.gcg.com), which instead uses 675.0/length in the last term (after F. Baldino, Jr, M.-F. Chesselet, and M.E. Lewis, Methods in Enzymology 168:766 (1989) eqn (1) on page 766 without the mismatch and formamide terms). The formulas here and in Baldino et al. assume Na+ rather than K+. According to J.G. Wetmur, Critical Reviews in BioChem. and Mol. Bio. 26:227 (1991) 50 mM K+ should be equivalent in these formulae to .2 M Na+. EPrimer3 uses the same salt concentration value for calculating both the primer melting temperature and the oligo melting temperature. If you are planning to use the PCR product for hybridization later this behavior will not give you the Tm under hybridization conditions.</td>
+A similar formula is used by the prime primer selection program in GCG, which instead uses 675.0/length in the last term (after F. Baldino, Jr, M.-F. Chesselet, and M.E. Lewis, Methods in Enzymology 168:766 (1989) eqn (1) on page 766 without the mismatch and formamide terms). The formulas here and in Baldino et al. assume Na+ rather than K+. According to J.G. Wetmur, Critical Reviews in BioChem. and Mol. Bio. 26:227 (1991) 50 mM K+ should be equivalent in these formulae to .2 M Na+. EPrimer3 uses the same salt concentration value for calculating both the primer melting temperature and the oligo melting temperature. If you are planning to use the PCR product for hybridization later this behavior will not give you the Tm under hybridization conditions.</td>
 <td>Any numeric value</td>
 <td>1000000.0</td>
 </tr>
@@ -1864,11 +1864,13 @@ None.
     Author(s)
 </H2>
 
-Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+Gary Williams formerly at:
 <br>
 MRC Rosalind Franklin Centre for Genomics Research
 Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
 
 <H2>
     History

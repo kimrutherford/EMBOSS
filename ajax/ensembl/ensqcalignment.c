@@ -4,7 +4,7 @@
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @version $Revision: 1.4 $
+** @version $Revision: 1.12 $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -21,7 +21,7 @@
 ** License along with this library; if not, write to the
 ** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ** Boston, MA  02111-1307, USA.
-*****************************************************************************/
+******************************************************************************/
 
 /* ==================================================================== */
 /* ========================== include files =========================== */
@@ -43,23 +43,13 @@
 /* ======================== private functions ========================= */
 /* ==================================================================== */
 
-extern EnsPAnalysisadaptor
-ensRegistryGetAnalysisadaptor(EnsPDatabaseadaptor dba);
-
-extern EnsPQcalignmentadaptor
-ensRegistryGetQcalignmentadaptor(EnsPDatabaseadaptor dba);
-
-extern EnsPQcsequenceadaptor
-ensRegistryGetQcsequenceadaptor(EnsPDatabaseadaptor dba);
-
-
-static AjBool qcAlignmentadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
+static AjBool qcalignmentadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
                                               const AjPStr statement,
                                               EnsPAssemblymapper am,
                                               EnsPSlice slice,
                                               AjPList qcas);
 
-    
+
 
 
 /* @filesection ensqcalignment ************************************************
@@ -114,7 +104,7 @@ static AjBool qcAlignmentadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 ** Default constructor for an Ensembl QC Alignment.
 **
 ** @cc Bio::EnsEMBL::Storable::new
-** @param [r] adaptor [EnsPQcalignmentadaptor] Ensembl QC Alignment Adaptor
+** @param [u] qcaa [EnsPQcalignmentadaptor] Ensembl QC Alignment Adaptor
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 ** @cc Bio::EnsEMBL::QC::Alignment::new
 ** @param [u] analysis [EnsPAnalysis] Ensembl Analysis
@@ -136,7 +126,7 @@ static AjBool qcAlignmentadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 ** @@
 ******************************************************************************/
 
-EnsPQcalignment ensQcalignmentNew(EnsPQcalignmentadaptor adaptor,
+EnsPQcalignment ensQcalignmentNew(EnsPQcalignmentadaptor qcaa,
                                   ajuint identifier,
                                   EnsPAnalysis analysis,
                                   EnsPQcsequence qsequence,
@@ -154,52 +144,52 @@ EnsPQcalignment ensQcalignmentNew(EnsPQcalignmentadaptor adaptor,
                                   AjPStr vulgar)
 {
     EnsPQcalignment qca = NULL;
-    
+
     if(!analysis)
-	return NULL;
-    
+        return NULL;
+
     if(!qsequence)
-	return NULL;
-    
+        return NULL;
+
     if(!tsequence)
-	return NULL;
-    
+        return NULL;
+
     AJNEW0(qca);
-    
+
     qca->Use = 1;
-    
+
     qca->Identifier = identifier;
-    
-    qca->Adaptor = adaptor;
-    
+
+    qca->Adaptor = qcaa;
+
     qca->Analysis = ensAnalysisNewRef(analysis);
-    
+
     qca->QuerySequence = ensQcsequenceNewRef(qsequence);
-    
+
     qca->QueryStart = qstart;
-    
+
     qca->QueryEnd = qend;
-    
+
     qca->QueryStrand = qstrand;
-    
+
     qca->TargetSequence = ensQcsequenceNewRef(tsequence);
-    
+
     qca->TargetStart = tstart;
-    
+
     qca->TargetEnd = tend;
-    
+
     qca->TargetStrand = tstrand;
-    
+
     qca->SpliceStrand = sstrand;
-    
+
     qca->Coverage = coverage;
-    
+
     qca->Score = score;
-    
+
     qca->Identity = identity;
-    
+
     qca->VULGAR = ajStrNewRef(vulgar);
-    
+
     return qca;
 }
 
@@ -219,48 +209,48 @@ EnsPQcalignment ensQcalignmentNew(EnsPQcalignmentadaptor adaptor,
 EnsPQcalignment ensQcalignmentNewObj(const EnsPQcalignment object)
 {
     EnsPQcalignment qca = NULL;
-    
+
     if(!object)
-	return NULL;
-    
+        return NULL;
+
     AJNEW0(qca);
-    
+
     qca->Use = 1;
-    
+
     qca->Identifier = object->Identifier;
-    
+
     qca->Adaptor = object->Adaptor;
-    
+
     if(object->Analysis)
-	qca->Analysis = ensAnalysisNewRef(object->Analysis);
-    
+        qca->Analysis = ensAnalysisNewRef(object->Analysis);
+
     qca->QuerySequence = ensQcsequenceNewRef(object->QuerySequence);
-    
+
     qca->QueryStart = object->QueryStart;
-    
+
     qca->QueryEnd = object->QueryEnd;
-    
+
     qca->QueryStrand = object->QueryStrand;
-    
+
     qca->TargetSequence = ensQcsequenceNewRef(object->TargetSequence);
-    
+
     qca->TargetStart = object->TargetStart;
-    
+
     qca->TargetEnd = object->TargetEnd;
-    
+
     qca->TargetStrand = object->TargetStrand;
-    
+
     qca->SpliceStrand = object->SpliceStrand;
-    
+
     qca->Coverage = object->Coverage;
-    
+
     qca->Score = object->Score;
-    
+
     qca->Identity = object->Identity;
-    
+
     if(object->VULGAR)
-	qca->VULGAR = ajStrNewRef(object->VULGAR);
-    
+        qca->VULGAR = ajStrNewRef(object->VULGAR);
+
     return qca;
 }
 
@@ -281,10 +271,10 @@ EnsPQcalignment ensQcalignmentNewObj(const EnsPQcalignment object)
 EnsPQcalignment ensQcalignmentNewRef(EnsPQcalignment qca)
 {
     if(!qca)
-	return NULL;
-    
+        return NULL;
+
     qca->Use++;
-    
+
     return qca;
 }
 
@@ -324,46 +314,48 @@ EnsPQcalignment ensQcalignmentNewRef(EnsPQcalignment qca)
 void ensQcalignmentDel(EnsPQcalignment *Pqca)
 {
     EnsPQcalignment pthis = NULL;
-    
-    /*
-     ajDebug("ensQcalignmentDel\n"
-	     "  *Pqca %p\n",
-	     *Pqca);
-     
-     ensQcalignmentTrace(*Pqca, 1);
-     */
-    
+
     if(!Pqca)
-	return;
-    
+        return;
+
     if(!*Pqca)
-	return;
+        return;
+
+    if(ajDebugTest("ensQcalignmentDel"))
+    {
+        ajDebug("ensQcalignmentDel\n"
+                "  *Pqca %p\n",
+                *Pqca);
+
+        ensQcalignmentTrace(*Pqca, 1);
+    }
 
     pthis = *Pqca;
-    
+
     pthis->Use--;
-    
+
     if(pthis->Use)
     {
-	*Pqca = NULL;
-	
-	return;
+        *Pqca = NULL;
+
+        return;
     }
-    
+
     ensAnalysisDel(&pthis->Analysis);
-    
+
     ensQcsequenceDel(&pthis->QuerySequence);
-    
+
     ensQcsequenceDel(&pthis->TargetSequence);
-    
+
     ajStrDel(&pthis->VULGAR);
-    
+
     AJFREE(pthis);
 
     *Pqca = NULL;
 
     return;
 }
+
 
 
 
@@ -416,8 +408,8 @@ void ensQcalignmentDel(EnsPQcalignment *Pqca)
 EnsPQcalignmentadaptor ensQcalignmentGetAdaptor(const EnsPQcalignment qca)
 {
     if(!qca)
-	return NULL;
-    
+        return NULL;
+
     return qca->Adaptor;
 }
 
@@ -438,8 +430,8 @@ EnsPQcalignmentadaptor ensQcalignmentGetAdaptor(const EnsPQcalignment qca)
 ajuint ensQcalignmentGetIdentifier(const EnsPQcalignment qca)
 {
     if(!qca)
-	return 0;
-    
+        return 0;
+
     return qca->Identifier;
 }
 
@@ -459,8 +451,8 @@ ajuint ensQcalignmentGetIdentifier(const EnsPQcalignment qca)
 const EnsPAnalysis ensQcalignmentGetAnalysis(const EnsPQcalignment qca)
 {
     if(!qca)
-	return NULL;
-    
+        return NULL;
+
     return qca->Analysis;
 }
 
@@ -480,8 +472,8 @@ const EnsPAnalysis ensQcalignmentGetAnalysis(const EnsPQcalignment qca)
 EnsPQcsequence ensQcalignmentGetQuerySequence(const EnsPQcalignment qca)
 {
     if(!qca)
-	return NULL;
-    
+        return NULL;
+
     return qca->QuerySequence;
 }
 
@@ -501,8 +493,8 @@ EnsPQcsequence ensQcalignmentGetQuerySequence(const EnsPQcalignment qca)
 ajuint ensQcalignmentGetQueryStart(const EnsPQcalignment qca)
 {
     if(!qca)
-	return 0;
-    
+        return 0;
+
     return qca->QueryStart;
 }
 
@@ -522,8 +514,8 @@ ajuint ensQcalignmentGetQueryStart(const EnsPQcalignment qca)
 ajuint ensQcalignmentGetQueryEnd(const EnsPQcalignment qca)
 {
     if(!qca)
-	return 0;
-    
+        return 0;
+
     return qca->QueryEnd;
 }
 
@@ -543,8 +535,8 @@ ajuint ensQcalignmentGetQueryEnd(const EnsPQcalignment qca)
 ajint ensQcalignmentGetQueryStrand(const EnsPQcalignment qca)
 {
     if(!qca)
-	return 0;
-    
+        return 0;
+
     return qca->QueryStrand;
 }
 
@@ -564,8 +556,8 @@ ajint ensQcalignmentGetQueryStrand(const EnsPQcalignment qca)
 EnsPQcsequence ensQcalignmentGetTargetSequence(const EnsPQcalignment qca)
 {
     if(!qca)
-	return NULL;
-    
+        return NULL;
+
     return qca->TargetSequence;
 }
 
@@ -585,8 +577,8 @@ EnsPQcsequence ensQcalignmentGetTargetSequence(const EnsPQcalignment qca)
 ajuint ensQcalignmentGetTargetStart(const EnsPQcalignment qca)
 {
     if(!qca)
-	return 0;
-    
+        return 0;
+
     return qca->TargetStart;
 }
 
@@ -606,8 +598,8 @@ ajuint ensQcalignmentGetTargetStart(const EnsPQcalignment qca)
 ajuint ensQcalignmentGetTargetEnd(const EnsPQcalignment qca)
 {
     if(!qca)
-	return 0;
-    
+        return 0;
+
     return qca->TargetEnd;
 }
 
@@ -627,8 +619,8 @@ ajuint ensQcalignmentGetTargetEnd(const EnsPQcalignment qca)
 ajint ensQcalignmentGetTargetStrand(const EnsPQcalignment qca)
 {
     if(!qca)
-	return 0;
-    
+        return 0;
+
     return qca->TargetStrand;
 }
 
@@ -648,8 +640,8 @@ ajint ensQcalignmentGetTargetStrand(const EnsPQcalignment qca)
 ajint ensQcalignmentGetSpliceStrand(const EnsPQcalignment qca)
 {
     if(!qca)
-	return 0;
-    
+        return 0;
+
     return qca->SpliceStrand;
 }
 
@@ -669,8 +661,8 @@ ajint ensQcalignmentGetSpliceStrand(const EnsPQcalignment qca)
 ajuint ensQcalignmentGetCoverage(const EnsPQcalignment qca)
 {
     if(!qca)
-	return 0;
-    
+        return 0;
+
     return qca->Coverage;
 }
 
@@ -690,8 +682,8 @@ ajuint ensQcalignmentGetCoverage(const EnsPQcalignment qca)
 double ensQcalignmentGetScore(const EnsPQcalignment qca)
 {
     if(!qca)
-	return 0;
-    
+        return 0;
+
     return qca->Score;
 }
 
@@ -711,8 +703,8 @@ double ensQcalignmentGetScore(const EnsPQcalignment qca)
 float ensQcalignmentGetIdentity(const EnsPQcalignment qca)
 {
     if(!qca)
-	return 0;
-    
+        return 0;
+
     return qca->Identity;
 }
 
@@ -732,8 +724,8 @@ float ensQcalignmentGetIdentity(const EnsPQcalignment qca)
 AjPStr ensQcalignmentGetVULGAR(const EnsPQcalignment qca)
 {
     if(!qca)
-	return NULL;
-    
+        return NULL;
+
     return qca->VULGAR;
 }
 
@@ -789,10 +781,10 @@ AjBool ensQcalignmentSetAdaptor(EnsPQcalignment qca,
                                 EnsPQcalignmentadaptor qcaa)
 {
     if(!qca)
-	return ajFalse;
-    
+        return ajFalse;
+
     qca->Adaptor = qcaa;
-    
+
     return ajTrue;
 }
 
@@ -811,13 +803,14 @@ AjBool ensQcalignmentSetAdaptor(EnsPQcalignment qca,
 ** @@
 ******************************************************************************/
 
-AjBool ensQcalignmentSetIdentifier(EnsPQcalignment qca, ajuint identifier)
+AjBool ensQcalignmentSetIdentifier(EnsPQcalignment qca,
+                                   ajuint identifier)
 {
     if(!qca)
-	return ajFalse;
-    
+        return ajFalse;
+
     qca->Identifier = identifier;
-    
+
     return ajTrue;
 }
 
@@ -829,21 +822,22 @@ AjBool ensQcalignmentSetIdentifier(EnsPQcalignment qca, ajuint identifier)
 ** Set the Ensembl Analysis element of an Ensembl QC Alignment.
 **
 ** @param [u] qca [EnsPQcalignment] Ensembl QC Alignment
-** @param [u] analysis [EnsPAnalysis] Ensembl Analysis
+** @param [uN] analysis [EnsPAnalysis] Ensembl Analysis
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensQcalignmentSetAnalysis(EnsPQcalignment qca, EnsPAnalysis analysis)
+AjBool ensQcalignmentSetAnalysis(EnsPQcalignment qca,
+                                 EnsPAnalysis analysis)
 {
     if(!qca)
-	return ajFalse;
-    
-    ensAnalysisDel(&(qca->Analysis));
-    
+        return ajFalse;
+
+    ensAnalysisDel(&qca->Analysis);
+
     qca->Analysis = ensAnalysisNewRef(analysis);
-    
+
     return ajTrue;
 }
 
@@ -855,21 +849,22 @@ AjBool ensQcalignmentSetAnalysis(EnsPQcalignment qca, EnsPAnalysis analysis)
 ** Set the query Ensembl QC Sequence element of an Ensembl QC Alignment.
 **
 ** @param [u] qca [EnsPQcalignment] Ensembl QC Alignment
-** @param [u] qcs [EnsPQcsequence] Ensembl QC Sequence
+** @param [uN] qsequence [EnsPQcsequence] Ensembl QC Sequence
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensQcalignmentSetQuerySequence(EnsPQcalignment qca, EnsPQcsequence qcs)
+AjBool ensQcalignmentSetQuerySequence(EnsPQcalignment qca,
+                                      EnsPQcsequence qsequence)
 {
     if(!qca)
-	return ajFalse;
-    
-    ensQcsequenceDel(&(qca->QuerySequence));
-    
-    qca->QuerySequence = ensQcsequenceNewRef(qcs);
-    
+        return ajFalse;
+
+    ensQcsequenceDel(&qca->QuerySequence);
+
+    qca->QuerySequence = ensQcsequenceNewRef(qsequence);
+
     return ajTrue;
 }
 
@@ -887,13 +882,14 @@ AjBool ensQcalignmentSetQuerySequence(EnsPQcalignment qca, EnsPQcsequence qcs)
 ** @@
 ******************************************************************************/
 
-AjBool ensQcalignmentSetQueryStart(EnsPQcalignment qca, ajuint qstart)
+AjBool ensQcalignmentSetQueryStart(EnsPQcalignment qca,
+                                   ajuint qstart)
 {
     if(!qca)
-	return ajFalse;
-    
+        return ajFalse;
+
     qca->QueryStart = qstart;
-    
+
     return ajTrue;
 }
 
@@ -911,13 +907,14 @@ AjBool ensQcalignmentSetQueryStart(EnsPQcalignment qca, ajuint qstart)
 ** @@
 ******************************************************************************/
 
-AjBool ensQcalignmentSetQueryEnd(EnsPQcalignment qca, ajuint qend)
+AjBool ensQcalignmentSetQueryEnd(EnsPQcalignment qca,
+                                 ajuint qend)
 {
     if(!qca)
-	return ajFalse;
-    
+        return ajFalse;
+
     qca->QueryEnd = qend;
-    
+
     return ajTrue;
 }
 
@@ -935,13 +932,14 @@ AjBool ensQcalignmentSetQueryEnd(EnsPQcalignment qca, ajuint qend)
 ** @@
 ******************************************************************************/
 
-AjBool ensQcalignmentSetQueryStrand(EnsPQcalignment qca, ajint qstrand)
+AjBool ensQcalignmentSetQueryStrand(EnsPQcalignment qca,
+                                    ajint qstrand)
 {
     if(!qca)
-	return ajFalse;
-    
+        return ajFalse;
+
     qca->QueryStrand = qstrand;
-    
+
     return ajTrue;
 }
 
@@ -953,21 +951,22 @@ AjBool ensQcalignmentSetQueryStrand(EnsPQcalignment qca, ajint qstrand)
 ** Set the target Ensembl QC Sequence element of an Ensembl QC Alignment.
 **
 ** @param [u] qca [EnsPQcalignment] Ensembl QC Alignment
-** @param [u] qcs [EnsPQcsequence] Ensembl QC Sequence
+** @param [u] tsequence [EnsPQcsequence] Ensembl QC Sequence
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensQcalignmentSetTargetSequence(EnsPQcalignment qca, EnsPQcsequence qcs)
+AjBool ensQcalignmentSetTargetSequence(EnsPQcalignment qca,
+                                       EnsPQcsequence tsequence)
 {
     if(!qca)
-	return ajFalse;
-    
-    ensQcsequenceDel(&(qca->TargetSequence));
-    
-    qca->TargetSequence = ensQcsequenceNewRef(qcs);
-    
+        return ajFalse;
+
+    ensQcsequenceDel(&qca->TargetSequence);
+
+    qca->TargetSequence = ensQcsequenceNewRef(tsequence);
+
     return ajTrue;
 }
 
@@ -985,13 +984,14 @@ AjBool ensQcalignmentSetTargetSequence(EnsPQcalignment qca, EnsPQcsequence qcs)
 ** @@
 ******************************************************************************/
 
-AjBool ensQcalignmentSetTargetStart(EnsPQcalignment qca, ajuint tstart)
+AjBool ensQcalignmentSetTargetStart(EnsPQcalignment qca,
+                                    ajuint tstart)
 {
     if(!qca)
-	return ajFalse;
-    
+        return ajFalse;
+
     qca->TargetStart = tstart;
-    
+
     return ajTrue;
 }
 
@@ -1009,13 +1009,14 @@ AjBool ensQcalignmentSetTargetStart(EnsPQcalignment qca, ajuint tstart)
 ** @@
 ******************************************************************************/
 
-AjBool ensQcalignmentSetTargetEnd(EnsPQcalignment qca, ajuint tend)
+AjBool ensQcalignmentSetTargetEnd(EnsPQcalignment qca,
+                                  ajuint tend)
 {
     if(!qca)
-	return ajFalse;
-    
+        return ajFalse;
+
     qca->TargetEnd = tend;
-    
+
     return ajTrue;
 }
 
@@ -1033,13 +1034,14 @@ AjBool ensQcalignmentSetTargetEnd(EnsPQcalignment qca, ajuint tend)
 ** @@
 ******************************************************************************/
 
-AjBool ensQcalignmentSetTargetStrand(EnsPQcalignment qca, ajint tstrand)
+AjBool ensQcalignmentSetTargetStrand(EnsPQcalignment qca,
+                                     ajint tstrand)
 {
     if(!qca)
-	return ajFalse;
-    
+        return ajFalse;
+
     qca->TargetStrand = tstrand;
-    
+
     return ajTrue;
 }
 
@@ -1057,13 +1059,14 @@ AjBool ensQcalignmentSetTargetStrand(EnsPQcalignment qca, ajint tstrand)
 ** @@
 ******************************************************************************/
 
-AjBool ensQcalignmentSetSpliceStrand(EnsPQcalignment qca, ajint sstrand)
+AjBool ensQcalignmentSetSpliceStrand(EnsPQcalignment qca,
+                                     ajint sstrand)
 {
     if(!qca)
-	return ajFalse;
-    
+        return ajFalse;
+
     qca->SpliceStrand = sstrand;
-    
+
     return ajTrue;
 }
 
@@ -1081,13 +1084,14 @@ AjBool ensQcalignmentSetSpliceStrand(EnsPQcalignment qca, ajint sstrand)
 ** @@
 ******************************************************************************/
 
-AjBool ensQcalignmentSetCoverage(EnsPQcalignment qca, ajuint coverage)
+AjBool ensQcalignmentSetCoverage(EnsPQcalignment qca,
+                                 ajuint coverage)
 {
     if(!qca)
-	return ajFalse;
-    
+        return ajFalse;
+
     qca->Coverage = coverage;
-    
+
     return ajTrue;
 }
 
@@ -1108,10 +1112,10 @@ AjBool ensQcalignmentSetCoverage(EnsPQcalignment qca, ajuint coverage)
 AjBool ensQcalignmentSetScore(EnsPQcalignment qca, double score)
 {
     if(!qca)
-	return ajFalse;
-    
+        return ajFalse;
+
     qca->Score = score;
-    
+
     return ajTrue;
 }
 
@@ -1129,13 +1133,14 @@ AjBool ensQcalignmentSetScore(EnsPQcalignment qca, double score)
 ** @@
 ******************************************************************************/
 
-AjBool ensQcalignmentSetIdentity(EnsPQcalignment qca, float identity)
+AjBool ensQcalignmentSetIdentity(EnsPQcalignment qca,
+                                 float identity)
 {
     if(!qca)
-	return ajFalse;
-    
+        return ajFalse;
+
     qca->Identity = identity;
-    
+
     return ajTrue;
 }
 
@@ -1147,52 +1152,53 @@ AjBool ensQcalignmentSetIdentity(EnsPQcalignment qca, float identity)
 ** Set the VULGAR line element of an Ensembl QC Alignment.
 **
 ** @param [u] qca [EnsPQcalignment] Ensembl QC Alignment
-** @param [u] vulgar [AjPStr] VULGAR line
+** @param [uN] vulgar [AjPStr] VULGAR line
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensQcalignmentSetVULGAR(EnsPQcalignment qca, AjPStr vulgar)
+AjBool ensQcalignmentSetVULGAR(EnsPQcalignment qca,
+                               AjPStr vulgar)
 {
     if(!qca)
-	return ajFalse;
-    
+        return ajFalse;
+
     ajStrDel(&qca->VULGAR);
-    
+
     qca->VULGAR = ajStrNewRef(vulgar);
-    
+
     return ajTrue;
 }
 
 
 
 
-/* @func ensQcalignmentGetMemSize *********************************************
+/* @func ensQcalignmentGetMemsize *********************************************
 **
 ** Get the memory size in bytes of an Ensembl QC Alignment.
 **
 ** @param [r] qca [const EnsPQcalignment] Ensembl QC Alignment
 **
-** @return [ajuint] Memory size
+** @return [ajulong] Memory size
 ** @@
 ******************************************************************************/
 
-ajuint ensQcalignmentGetMemSize(const EnsPQcalignment qca)
+ajulong ensQcalignmentGetMemsize(const EnsPQcalignment qca)
 {
-    ajuint size = 0;
-    
+    ajulong size = 0;
+
     if(!qca)
-	return 0;
-    
-    size += (ajuint) sizeof (EnsOQcalignment);
-    
-    size += ensAnalysisGetMemSize(qca->Analysis);
-    
-    size += ensQcsequenceGetMemSize(qca->QuerySequence);
-    
-    size += ensQcsequenceGetMemSize(qca->TargetSequence);
-    
+        return 0;
+
+    size += sizeof (EnsOQcalignment);
+
+    size += ensAnalysisGetMemsize(qca->Analysis);
+
+    size += ensQcsequenceGetMemsize(qca->QuerySequence);
+
+    size += ensQcsequenceGetMemsize(qca->TargetSequence);
+
     return size;
 }
 
@@ -1231,59 +1237,59 @@ ajuint ensQcalignmentGetMemSize(const EnsPQcalignment qca)
 AjBool ensQcalignmentTrace(const EnsPQcalignment qca, ajuint level)
 {
     AjPStr indent = NULL;
-    
+
     if(!qca)
-	return ajFalse;
-    
+        return ajFalse;
+
     indent = ajStrNew();
-    
+
     ajStrAppendCountK(&indent, ' ', level * 2);
-    
+
     ajDebug("%SensQcalignmentTrace %p\n"
-	    "%S  Use %u\n"
-	    "%S  Identifier %u\n"
-	    "%S  Adaptor %p\n"
-	    "%S  Analysis %p\n"
-	    "%S  QuerySequence %p\n"
-	    "%S  QueryStart %u\n"
-	    "%S  QueryEnd %u\n"
-	    "%S  QueryStrand %d\n"
-	    "%S  TargetSequence %p\n"
-	    "%S  TargetStart %u\n"
-	    "%S  TargetEnd %u\n"
-	    "%S  TargetStrand %d\n"
-	    "%S  SpliceStrand %d\n"
-	    "%S  Coverage %u\n"
-	    "%S  Score %f\n"
-	    "%S  Identity %f\n"
-	    "%S  VULGAR '%S'\n",
-	    indent, qca,
-	    indent, qca->Use,
-	    indent, qca->Identifier,
-	    indent, qca->Adaptor,
-	    indent, qca->Analysis,
-	    indent, qca->QuerySequence,
-	    indent, qca->QueryStart,
-	    indent, qca->QueryEnd,
-	    indent, qca->QueryStrand,
-	    indent, qca->TargetSequence,
-	    indent, qca->TargetStart,
-	    indent, qca->TargetEnd,
-	    indent, qca->TargetStrand,
-	    indent, qca->SpliceStrand,
-	    indent, qca->Coverage,
-	    indent, qca->Score,
-	    indent, qca->Identity,
-	    indent, qca->VULGAR);
-    
+            "%S  Use %u\n"
+            "%S  Identifier %u\n"
+            "%S  Adaptor %p\n"
+            "%S  Analysis %p\n"
+            "%S  QuerySequence %p\n"
+            "%S  QueryStart %u\n"
+            "%S  QueryEnd %u\n"
+            "%S  QueryStrand %d\n"
+            "%S  TargetSequence %p\n"
+            "%S  TargetStart %u\n"
+            "%S  TargetEnd %u\n"
+            "%S  TargetStrand %d\n"
+            "%S  SpliceStrand %d\n"
+            "%S  Coverage %u\n"
+            "%S  Score %f\n"
+            "%S  Identity %f\n"
+            "%S  VULGAR '%S'\n",
+            indent, qca,
+            indent, qca->Use,
+            indent, qca->Identifier,
+            indent, qca->Adaptor,
+            indent, qca->Analysis,
+            indent, qca->QuerySequence,
+            indent, qca->QueryStart,
+            indent, qca->QueryEnd,
+            indent, qca->QueryStrand,
+            indent, qca->TargetSequence,
+            indent, qca->TargetStart,
+            indent, qca->TargetEnd,
+            indent, qca->TargetStrand,
+            indent, qca->SpliceStrand,
+            indent, qca->Coverage,
+            indent, qca->Score,
+            indent, qca->Identity,
+            indent, qca->VULGAR);
+
     ensAnalysisTrace(qca->Analysis, 1);
-    
+
     ensQcsequenceTrace(qca->QuerySequence, 1);
-    
+
     ensQcsequenceTrace(qca->TargetSequence, 1);
-    
+
     ajStrDel(&indent);
-    
+
     return ajTrue;
 }
 
@@ -1311,39 +1317,39 @@ AjBool ensQcalignmentGetQueryCoordinates(const EnsPQcalignment qca,
                                          ajuint *Plength)
 {
     if(!qca)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!Pstart)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!Pend)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!Pstrand)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!Plength)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(qca->QueryStrand >= 0)
     {
-	*Pstart = qca->QueryStart;
-	
-	*Pend = qca->QueryEnd;
+        *Pstart = qca->QueryStart;
+
+        *Pend = qca->QueryEnd;
     }
     else
     {
-	*Pstart = qca->QueryEnd;
-	
-	*Pend = qca->QueryStart;
+        *Pstart = qca->QueryEnd;
+
+        *Pend = qca->QueryStart;
     }
-    
+
     *Pstrand = qca->QueryStrand;
-    
+
     /* In Exonerate coordinates the length is just end - start. */
-    
+
     *Plength = *Pend - *Pstart;
-    
+
     return ajTrue;
 }
 
@@ -1371,39 +1377,39 @@ AjBool ensQcalignmentGetTargetCoordinates(const EnsPQcalignment qca,
                                           ajuint *Plength)
 {
     if(!qca)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!Pstart)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!Pend)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!Pstrand)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!Plength)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(qca->TargetStrand >= 0)
     {
-	*Pstart = qca->TargetStart;
-	
-	*Pend = qca->TargetEnd;
+        *Pstart = qca->TargetStart;
+
+        *Pend = qca->TargetEnd;
     }
     else
     {
-	*Pstart = qca->TargetEnd;
-	
-	*Pend = qca->TargetStart;
+        *Pstart = qca->TargetEnd;
+
+        *Pend = qca->TargetStart;
     }
-    
+
     *Pstrand = qca->TargetStrand;
-    
+
     /* In Exonerate coordinates the length is just end - start. */
-    
+
     *Plength = *Pend - *Pstart;
-    
+
     return ajTrue;
 }
 
@@ -1432,47 +1438,47 @@ AjBool ensQcalignmentOverlapOnTarget(const EnsPQcalignment qca1,
     ajint end2 = 0;
     ajint strand1 = 0;
     ajint strand2 = 0;
-    
+
     ajuint length1 = 0;
     ajuint length2 = 0;
-    
+
     if(!qca1)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!qca2)
-	return ajFalse;
-    
+        return ajFalse;
+
     /* Check for identical target sequence objects. */
-    
+
     if(!ensQcsequenceMatch(qca1->TargetSequence, qca2->TargetSequence))
-	return ajFalse;
-    
+        return ajFalse;
+
     /* Check for identical target strands. */
-    
+
     if(qca1->TargetStrand != qca2->TargetStrand)
-	return 0;
-    
+        return 0;
+
     /*
     ** Determine the relative orientation of the target sequences in the
     ** alignment.
     */
-    
+
     ensQcalignmentGetTargetCoordinates(qca1,
-				       &start1,
-				       &end1,
-				       &strand1,
-				       &length1);
-    
+                                       &start1,
+                                       &end1,
+                                       &strand1,
+                                       &length1);
+
     ensQcalignmentGetTargetCoordinates(qca2,
-				       &start2,
-				       &end2,
-				       &strand2,
-				       &length2);
-    
+                                       &start2,
+                                       &end2,
+                                       &strand2,
+                                       &length2);
+
     /* Overlap criterion. */
-    
+
     if((start1 <= end2) && (end1 >= start2))
-	return ajTrue;
+        return ajTrue;
 
     return ajFalse;
 }
@@ -1509,84 +1515,86 @@ AjBool ensQcalignmentOverlapOnTarget(const EnsPQcalignment qca1,
 **
 ******************************************************************************/
 
-AjBool ensQcalignmentCalculateQueryCoverage(EnsPQcalignment qca,
-                                            float identity,
-                                            ajuint edge)
+AjBool ensQcalignmentCalculateQueryCoverage(
+    EnsPQcalignment qca,
+    float identity,
+    ajuint edge)
 {
-    AjBool value = ajFalse;
-    
+    AjBool value = AJFALSE;
+
     EnsPQcdatabase qqcdb = NULL;
     EnsPQcdatabase tqcdb = NULL;
-    
+
     if(!qca)
-	return ajFalse;
-    
+        return ajFalse;
+
     qqcdb = ensQcsequenceGetQcdatabase(qca->QuerySequence);
-    
+
     tqcdb = ensQcsequenceGetQcdatabase(qca->TargetSequence);
-    
+
     switch(ensQcdatabaseGetClass(tqcdb))
     {
-	case ensEQcdatabaseClassGenome:
-	    
-	    switch(ensQcdatabaseGetType(qqcdb))
-	    {
-		case ensEQcdatabaseTypeProtein:
-		   value = ensQcalignmentCalculateProteinToGenomeQueryCoverage(
-                       qca,
-                       identity,
-                       edge);
-		    
-		    break;
-		    
-		case ensEQcdatabaseTypeDNA:
-		    value = ensQcalignmentCalculateDNAToGenomeQueryCoverage(
-                        qca,
-                        identity,
-                        edge);
-		    
-		    break;
-		    
-		default:
-		    ajWarn("Cannot calculate a query to genome alignment "
+        case ensEQcdatabaseClassGenome:
+
+            switch(ensQcdatabaseGetType(qqcdb))
+            {
+                case ensEQcdatabaseTypeProtein:
+                    value =
+                        ensQcalignmentCalculateProteinToGenomeQueryCoverage(
+                            qca,
+                            identity,
+                            edge);
+
+                    break;
+
+                case ensEQcdatabaseTypeDNA:
+                    value =
+                        ensQcalignmentCalculateDNAToGenomeQueryCoverage(
+                            qca,
+                            identity,
+                            edge);
+
+                    break;
+
+                default:
+                    ajWarn("Cannot calculate a query to genome alignment "
                            "coverage "
-			   "for a database of type '%s'.",
-			   ensQcdatabaseTypeToChar(
+                           "for a database of type '%s'.",
+                           ensQcdatabaseTypeToChar(
                                ensQcdatabaseGetType(qqcdb)));
-	    }
-	    
-	    break;
-	    
-	default:
-	    
-	    switch(ensQcdatabaseGetType(qqcdb))
-	    {
-		case ensEQcdatabaseTypeProtein:
-		    
-		    value = ensQcalignmentCalculateProteinToProteinQueryCoverage(
-                        qca,
-                        identity);
-		    
-		    break;
-		    
-		case ensEQcdatabaseTypeDNA:
-		    
-		    value = ensQcalignmentCalculateDNAToDNAQueryCoverage(
-                        qca,
-                        identity,
-                        edge);
-		    
-		    break;
-		    
-		default:
-		    
-		    ajWarn("Cannot calculate a query alignment coverage for "
-			   "a database of type '%s'.",
-			   ensQcdatabaseTypeToChar(
+            }
+
+            break;
+
+        default:
+
+            switch(ensQcdatabaseGetType(qqcdb))
+            {
+                case ensEQcdatabaseTypeProtein:
+                    value =
+                        ensQcalignmentCalculateProteinToProteinQueryCoverage(
+                            qca,
+                            identity);
+
+                    break;
+
+                case ensEQcdatabaseTypeDNA:
+                    value =
+                        ensQcalignmentCalculateDNAToDNAQueryCoverage(
+                            qca,
+                            identity,
+                            edge);
+
+                    break;
+
+                default:
+                    ajWarn("Cannot calculate a query alignment coverage for "
+                           "a database of type '%s'.",
+                           ensQcdatabaseTypeToChar(
                                ensQcdatabaseGetType(qqcdb)));
-	    }
+            }
     }
-    
+
     return value;
 }
 
@@ -1616,7 +1624,7 @@ AjBool ensQcalignmentCalculateQueryCoverage(EnsPQcalignment qca,
 **
 ******************************************************************************/
 
-static const char *qcAlignmentProteinToProteinQueryCoverageProperties[] =
+static const char *qcalignmentProteinToProteinQueryCoverageProperties[] =
 {
     "No Alignment",
     "Alignment",
@@ -1684,151 +1692,151 @@ AjBool ensQcalignmentCalculateProteinToProteinQueryCoverage(
 {
     ajuint qlength = 0;
     ajuint tlength = 0;
-    
+
     ajint qstart  = 0;
     ajint qend    = 0;
     ajint qstrand = 0;
     ajint tstart  = 0;
     ajint tend    = 0;
     ajint tstrand = 0;
-    
+
     if(!qca)
-	return ajFalse;
-    
+        return ajFalse;
+
     qca->Score = 0;
-    
+
     /* An Alignment object without a target automatically has coverage 0. */
-    
+
     if(!qca->TargetSequence)
-	return ajTrue;
-    
+        return ajTrue;
+
     /*
     ** A query to target alignment is there, which is already good.
     ** (1*2**0=1)
     */
-    
+
     qca->Coverage += 1;
-    
+
     /* Assign alignment coordinates strand-dependent. */
-    
+
     ensQcalignmentGetQueryCoordinates(qca,
-				      &qstart,
-				      &qend,
-				      &qstrand,
-				      &qlength);
-    
+                                      &qstart,
+                                      &qend,
+                                      &qstrand,
+                                      &qlength);
+
     ensQcalignmentGetTargetCoordinates(qca,
-				       &tstart,
-				       &tend,
-				       &tstrand,
-				       &tlength);
-    
+                                       &tstart,
+                                       &tend,
+                                       &tstrand,
+                                       &tlength);
+
     qlength = ensQcsequenceGetLength(qca->QuerySequence);
-    
+
     tlength = ensQcsequenceGetLength(qca->TargetSequence);
-    
+
     /* Test for completeness of the N-terminus. */
-    
+
     if(qstart == 0)
     {
-	/* Perfect N-terminus (1*2**12=4096) */
-	if(tstart == 0)
-	    qca->Coverage += 4096;
-	/* Added start codon (1*2**10=1024) */
-	else if(tstart == 1)
-	    qca->Coverage += 1024;
-	/* Longer N-terminus (1*2**4=16) */
-	else if(tstart > 1)
-	    qca->Coverage += 16;
-	else
-	    ajWarn("Error in N-terminus query coverage scoring schema. "
-		   "ID: %u QS: %d TS: %d", qca->Identifier, qstart, tstart);
+        /* Perfect N-terminus (1*2**12=4096) */
+        if(tstart == 0)
+            qca->Coverage += 4096;
+        /* Added start codon (1*2**10=1024) */
+        else if(tstart == 1)
+            qca->Coverage += 1024;
+        /* Longer N-terminus (1*2**4=16) */
+        else if(tstart > 1)
+            qca->Coverage += 16;
+        else
+            ajWarn("Error in N-terminus query coverage scoring schema. "
+                   "ID: %u QS: %d TS: %d", qca->Identifier, qstart, tstart);
     }
     else if(qstart == 1)
     {
-	/* Missing start codon (1*2**8=256) */
-	if(tstart == 0)
-	    qca->Coverage += 256;
-	/* Non-matching start codon (1*2**6=64) */
-	else if(tstart == 1)
-	    qca->Coverage += 64;
-	/* Non-matching N-terminus (0*2**1=0) */
-	else if(tstart > 1)
-	    qca->Coverage += 0;
-	else
-	    ajWarn("Error in N-terminus query coverage scoring schema. "
-		   "ID: %u QS: %d TS: %d", qca->Identifier, qstart, tstart);
+        /* Missing start codon (1*2**8=256) */
+        if(tstart == 0)
+            qca->Coverage += 256;
+        /* Non-matching start codon (1*2**6=64) */
+        else if(tstart == 1)
+            qca->Coverage += 64;
+        /* Non-matching N-terminus (0*2**1=0) */
+        else if(tstart > 1)
+            qca->Coverage += 0;
+        else
+            ajWarn("Error in N-terminus query coverage scoring schema. "
+                   "ID: %u QS: %d TS: %d", qca->Identifier, qstart, tstart);
     }
     else if(qstart > 1)
     {
-	/* Shorter N-terminus (1*2**2=4) */
-	if(tstart == 0)
-	    qca->Coverage += 4;
-	/* Non-matching N-terminus (0*2**1=0) */
-	else if(tstart > 0)
-	    qca->Coverage += 0;
-	else
-	    ajWarn("Error in N-terminus query coverage scoring schema. "
-		   "ID: %u QS: %d TS: %d", qca->Identifier, qstart, tstart);
+        /* Shorter N-terminus (1*2**2=4) */
+        if(tstart == 0)
+            qca->Coverage += 4;
+        /* Non-matching N-terminus (0*2**1=0) */
+        else if(tstart > 0)
+            qca->Coverage += 0;
+        else
+            ajWarn("Error in N-terminus query coverage scoring schema. "
+                   "ID: %u QS: %d TS: %d", qca->Identifier, qstart, tstart);
     }
     else
-	ajWarn("Error in N-terminus query coverage scoring schema. "
-	       "ID: %u QS: %d TS: %d", qca->Identifier, qstart, tstart);
-    
+        ajWarn("Error in N-terminus query coverage scoring schema. "
+               "ID: %u QS: %d TS: %d", qca->Identifier, qstart, tstart);
+
     /* Test for completeness of the C-terminus. */
-    
+
     if(qend == (ajint) qlength)
     {
-	/* Perfect C-terminus (1*2**11=2048) */
-	if(tend == (ajint) tlength)
-	    qca->Coverage += 2048;
-	/* Added stop codon (1*2**9=512) */
-	else if(tend == (ajint) (tlength - 1))
-	    qca->Coverage += 512;
-	/* Longer C-terminus (1*2**3=8) */
-	else if(tend < (ajint) (tlength - 1))
-	    qca->Coverage += 8;
-	else
-	    ajWarn("Error in C-terminus coverage scoring schema. "
-		   "ID: %u QE: %d QL: %u TE: %d TL: %u",
-		   qca->Identifier, qend, qlength, tend, tlength);
+        /* Perfect C-terminus (1*2**11=2048) */
+        if(tend == (ajint) tlength)
+            qca->Coverage += 2048;
+        /* Added stop codon (1*2**9=512) */
+        else if(tend == (ajint) (tlength - 1))
+            qca->Coverage += 512;
+        /* Longer C-terminus (1*2**3=8) */
+        else if(tend < (ajint) (tlength - 1))
+            qca->Coverage += 8;
+        else
+            ajWarn("Error in C-terminus coverage scoring schema. "
+                   "ID: %u QE: %d QL: %u TE: %d TL: %u",
+                   qca->Identifier, qend, qlength, tend, tlength);
     }
     else if(qend == (ajint) (qlength - 1))
     {
-	
-	/* Missing stop codon (1*2**7=128) */
-	if(tend == (ajint) tlength)
-	    qca->Coverage += 128;
-	/* Non-matching stop codon (1*2**5=32) */
-	else if(tend == (ajint) (tlength - 1))
-	    qca->Coverage += 32;
-	/* Non-matching C-terminus (0*2**2=0) */
-	else if(tend < (ajint) (tlength - 1))
-	    qca->Coverage += 0;
-	else
-	    ajWarn("Error in C-terminus coverage scoring schema. "
-		   "ID: %u QE: %d QL: %u TE: %d TL: %u",
-		   qca->Identifier, qend, qlength, tend, tlength);
-	
+
+        /* Missing stop codon (1*2**7=128) */
+        if(tend == (ajint) tlength)
+            qca->Coverage += 128;
+        /* Non-matching stop codon (1*2**5=32) */
+        else if(tend == (ajint) (tlength - 1))
+            qca->Coverage += 32;
+        /* Non-matching C-terminus (0*2**2=0) */
+        else if(tend < (ajint) (tlength - 1))
+            qca->Coverage += 0;
+        else
+            ajWarn("Error in C-terminus coverage scoring schema. "
+                   "ID: %u QE: %d QL: %u TE: %d TL: %u",
+                   qca->Identifier, qend, qlength, tend, tlength);
+
     }
     else if(qend < (ajint) (qlength - 1))
     {
-	/* Shorter C-terminus (1*2**1=2) */
-	if(tend == (ajint) tlength)
-	    qca->Coverage += 2;
-	/* Non-matching C-terminus (0*2**2=0) */
-	else if(tend < (ajint) tlength)
-	    qca->Coverage += 0;
-	else
-	    ajWarn("Error in C-terminus coverage scoring schema. "
-		   "ID: %u QE: %d QL: %u TE: %d TL: %u",
-		   qca->Identifier, qend, qlength, tend, tlength);
+        /* Shorter C-terminus (1*2**1=2) */
+        if(tend == (ajint) tlength)
+            qca->Coverage += 2;
+        /* Non-matching C-terminus (0*2**2=0) */
+        else if(tend < (ajint) tlength)
+            qca->Coverage += 0;
+        else
+            ajWarn("Error in C-terminus coverage scoring schema. "
+                   "ID: %u QE: %d QL: %u TE: %d TL: %u",
+                   qca->Identifier, qend, qlength, tend, tlength);
     }
     else
-	ajWarn("Error in C-terminus coverage scoring schema. "
-	       "ID: %u QE: %d QL: %u TE: %d TL: %u",
-	       qca->Identifier, qend, qlength, tend, tlength);
-    
+        ajWarn("Error in C-terminus coverage scoring schema. "
+               "ID: %u QE: %d QL: %u TE: %d TL: %u",
+               qca->Identifier, qend, qlength, tend, tlength);
+
     /*
     ** Test for sequence identity over the threshold identity value
     ** only for perfect N and C-termini.
@@ -1836,10 +1844,10 @@ AjBool ensQcalignmentCalculateProteinToProteinQueryCoverage(
     ** (1*2**12 + 1*2**11 = 4096 + 2048 = 6144)
     ** Identity Threshold value (1*2**13=8192)
     */
-    
+
     if((qca->Coverage & 6144) && (qca->Identity >= identity))
-	qca->Coverage += 8192;
-    
+        qca->Coverage += 8192;
+
     return ajTrue;
 }
 
@@ -1866,7 +1874,7 @@ AjBool ensQcalignmentCalculateProteinToProteinQueryCoverage(
 **
 ******************************************************************************/
 
-static const char *qcAlignmentProteinToGenomeQueryCoverageProperties[] =
+static const char *qcalignmentProteinToGenomeQueryCoverageProperties[] =
 {
     "No Alignment",
     "Alignment",
@@ -1885,7 +1893,7 @@ static const char *qcAlignmentProteinToGenomeQueryCoverageProperties[] =
 
 
 
-/* @func ensQcalignmentCalculateProteinToProteinQueryCoverage *****************
+/* @func ensQcalignmentCalculateProteinToGenomeQueryCoverage ******************
 **
 ** Calculates the alignment coverage score for a query of type 'protein'
 ** against a target of class 'genome' and sets the score in the coverage
@@ -1914,83 +1922,84 @@ static const char *qcAlignmentProteinToGenomeQueryCoverageProperties[] =
 **
 ******************************************************************************/
 
-AjBool ensQcalignmentCalculateProteinToGenomeQueryCoverage(EnsPQcalignment qca,
-                                                           float identity,
-                                                           ajuint edge)
+AjBool ensQcalignmentCalculateProteinToGenomeQueryCoverage(
+    EnsPQcalignment qca,
+    float identity,
+    ajuint edge)
 {
     ajuint qlength = 0;
-    
+
     ajint qstart  = 0;
     ajint qend    = 0;
     ajint qstrand = 0;
-    
+
     if(!qca)
-	return ajFalse;
-    
+        return ajFalse;
+
     qca->Coverage = 0;
-    
+
     /* An Alignment object without a target automatically has coverage 0. */
-    
+
     if(!qca->TargetSequence)
-	return ajTrue;
-    
+        return ajTrue;
+
     /* Assign alignment coordinates strand-dependent. */
-    
+
     ensQcalignmentGetQueryCoordinates(qca,
-				      &qstart,
-				      &qend,
-				      &qstrand,
-				      &qlength);
-    
+                                      &qstart,
+                                      &qend,
+                                      &qstrand,
+                                      &qlength);
+
     qlength = ensQcsequenceGetLength(qca->QuerySequence);
-    
+
     /*
     ** A query to target alignment is there, which is already good.
     ** (1*2**0=1)
     */
-    
+
     qca->Coverage += 1;
-    
+
     /* Test for completeness of the N-terminus. */
-    
+
     /* Perfect N-terminus (1*2**6=64) */
     if(qstart == 0)
-	qca->Coverage += 64;
+        qca->Coverage += 64;
     /* Edge threshold (1*2**4=16) */
     else if(qstart <= (ajint) edge)
-	qca->Coverage += 16;
+        qca->Coverage += 16;
     /* Shorter N-terminus (1*2**2=4) */
     else if(qstart > (ajint) edge)
-	qca->Coverage += 4;
+        qca->Coverage += 4;
     else
-	ajWarn("Error in N-terminus query coverage scoring schema. "
-	       "ID: %d QS: %d", qca->Identifier, qstart);
-    
+        ajWarn("Error in N-terminus query coverage scoring schema. "
+               "ID: %d QS: %d", qca->Identifier, qstart);
+
     /* Test for completeness of the C-terminus. */
-    
+
     /* Perfect C-terminus (1*2**5=32) */
     if(qend == (ajint) qlength)
-	qca->Coverage += 32;
+        qca->Coverage += 32;
     /* Edge threshold (1*2**3=8) */
     else if(qend >= (ajint) (qlength - edge))
-	qca->Coverage += 8;
+        qca->Coverage += 8;
     /* Shorter C-terminus (1*2**1=2) */
     else if(qend < (ajint) (qlength - edge))
-	qca->Coverage += 2;
+        qca->Coverage += 2;
     else
-	ajWarn("Error in C-terminus coverage scoring schema. "
-	       "ID: %u QE: %d QL: %u", qca->Identifier, qend, qlength);
-    
+        ajWarn("Error in C-terminus coverage scoring schema. "
+               "ID: %u QE: %d QL: %u", qca->Identifier, qend, qlength);
+
     /*
     ** Test for sequence identity over the identity threshold value
     ** only for perfect N and C-termini.
     ** (1*2**6 + 1*2**5 = 64 + 32 = 96)
     ** Identity threshold value (1*2**7=128)
     */
-    
+
     if((qca->Coverage & 96) && (qca->Identity >= identity))
-	qca->Coverage += 128;
-    
+        qca->Coverage += 128;
+
     return ajTrue;
 }
 
@@ -2015,7 +2024,7 @@ AjBool ensQcalignmentCalculateProteinToGenomeQueryCoverage(EnsPQcalignment qca,
 **
 ******************************************************************************/
 
-static const char *qcAlignmentDNAToDNAQueryCoverageProperties[] =
+static const char *qcalignmentDNAToDNAQueryCoverageProperties[] =
 {
     "No Alignment",
     "Alignment",
@@ -2079,109 +2088,110 @@ static const char *qcAlignmentDNAToDNAQueryCoverageProperties[] =
 **
 ******************************************************************************/
 
-AjBool ensQcalignmentCalculateDNAToDNAQueryCoverage(EnsPQcalignment qca,
-                                                    float identity,
-                                                    ajuint edge)
+AjBool ensQcalignmentCalculateDNAToDNAQueryCoverage(
+    EnsPQcalignment qca,
+    float identity,
+    ajuint edge)
 {
     ajuint qlength = 0;
     ajuint tlength = 0;
-    
+
     ajint qstart  = 0;
     ajint qend    = 0;
     ajint qstrand = 0;
     ajint tstart  = 0;
     ajint tend    = 0;
     ajint tstrand = 0;
-    
+
     if(!qca)
-	return ajFalse;
-    
+        return ajFalse;
+
     qca->Coverage = 0;
-    
+
     /* An Alignment object without a target automatically has coverage 0. */
-    
+
     if(!qca->TargetSequence)
-	return ajTrue;
-    
+        return ajTrue;
+
     /* Assign alignment coordinates strand-dependent. */
-    
+
     ensQcalignmentGetQueryCoordinates(qca,
-				      &qstart,
-				      &qend,
-				      &qstrand,
-				      &qlength);
-    
+                                      &qstart,
+                                      &qend,
+                                      &qstrand,
+                                      &qlength);
+
     ensQcalignmentGetTargetCoordinates(qca,
-				       &tstart,
-				       &tend,
-				       &tstrand,
-				       &tlength);
-    
+                                       &tstart,
+                                       &tend,
+                                       &tstrand,
+                                       &tlength);
+
     /* Correct sequence lengths for PolyA+ tails. */
-    
+
     qlength = ensQcsequenceGetLength(qca->QuerySequence);
-    
+
     qlength -= ensQcsequenceGetPolyA(qca->QuerySequence);
-    
+
     tlength = ensQcsequenceGetLength(qca->TargetSequence);
-    
+
     tlength -= ensQcsequenceGetPolyA(qca->TargetSequence);
-    
+
     /*
     ** A query to target alignment is there, which is already good.
     ** (1*2**0=1)
     */
-    
+
     qca->Coverage += 1;
-    
+
     /* Test for completeness of the 5'-terminus. */
-    
+
     if(qstart == 0)
     {
-	/* Perfect 5'-terminus (1*2**12=4096) */
-	if(tstart == 0)
-	    qca->Coverage += 4096;
-	/* Longer 5'-edge (1*2**10=1024) */
-	else if(tstart <= (ajint) edge)
-	    qca->Coverage += 1024;
-	/* Longer 5'-region (1*2**4=16) */
-	else if(tstart > (ajint) edge)
-	    qca->Coverage += 16;
-	else
-	    ajWarn("Error in 5'-terminus query coverage scoring schema. "
-		   "ID: %u QS: %d TS: %d", qca->Identifier, qstart, tstart);
+        /* Perfect 5'-terminus (1*2**12=4096) */
+        if(tstart == 0)
+            qca->Coverage += 4096;
+        /* Longer 5'-edge (1*2**10=1024) */
+        else if(tstart <= (ajint) edge)
+            qca->Coverage += 1024;
+        /* Longer 5'-region (1*2**4=16) */
+        else if(tstart > (ajint) edge)
+            qca->Coverage += 16;
+        else
+            ajWarn("Error in 5'-terminus query coverage scoring schema. "
+                   "ID: %u QS: %d TS: %d", qca->Identifier, qstart, tstart);
     }
     else if(qstart <= (ajint) edge)
     {
-	/* Shorter 5'-edge (1*2**8=256) */
-	if(tstart == 0)
-	    qca->Coverage += 256;
-	/* Non-matching 5'-edge (1*2**6=64) */
-	else if(tstart <= (ajint) edge)
-	    qca->Coverage += 64;
-	/* Non-matching 5'-region (0*2**0=0) */
-	else if(tstart > (ajint) edge)
-	    qca->Coverage += 0;
-	else
-	    ajWarn("Error in 5'-terminus query coverage scoring schema. "
-		   "ID: %u QS: %d TS: %d", qca->Identifier, qstart, tstart);
+        /* Shorter 5'-edge (1*2**8=256) */
+        if(tstart == 0)
+            qca->Coverage += 256;
+        /* Non-matching 5'-edge (1*2**6=64) */
+        else if(tstart <= (ajint) edge)
+            qca->Coverage += 64;
+        /* Non-matching 5'-region (0*2**0=0) */
+        else if(tstart > (ajint) edge)
+            qca->Coverage += 0;
+        else
+            ajWarn("Error in 5'-terminus query coverage scoring schema. "
+                   "ID: %u QS: %d TS: %d", qca->Identifier, qstart, tstart);
     }
     else if(qstart > (ajint) edge)
     {
-	/* Shorter 5'-region (1*2**2=4) */
-	if(tstart == 0)
-	    qca->Coverage += 4;
-	/* Non-matching 5'-region (0*2**0=0) */
-	else if(tstart > 0)
-	    qca->Coverage += 0;
-	else
-	    ajWarn("Error in 5'-terminus query coverage scoring schema. "
-		   "ID: %u QS: %d TS: %d", qca->Identifier, qstart, tstart);
+        /* Shorter 5'-region (1*2**2=4) */
+        if(tstart == 0)
+            qca->Coverage += 4;
+        /* Non-matching 5'-region (0*2**0=0) */
+        else if(tstart > 0)
+            qca->Coverage += 0;
+        else
+            ajWarn("Error in 5'-terminus query coverage scoring schema. "
+                   "ID: %u QS: %d TS: %d", qca->Identifier, qstart, tstart);
     }
     else
-	ajWarn("Error in 5'-terminus query coverage scoring schema. "
-	       "ID: %u QS: %d TS: %d", qca->Identifier, qstart, tstart);
-    
+        ajWarn("Error in 5'-terminus query coverage scoring schema. "
+               "ID: %u QS: %d TS: %d", qca->Identifier, qstart, tstart);
+
     /*
     ** Test for completeness of the 3'-terminus.  As the PolyA tail
     ** detection algorithm could truncate As from the end of an mRNA,
@@ -2195,71 +2205,71 @@ AjBool ensQcalignmentCalculateDNAToDNAQueryCoverage(EnsPQcalignment qca,
     **
     ** FIXME???
     */
-    
+
     if(qend >= (ajint) qlength)
     {
-	/*
-	** Perfect 3'-terminus, including over-estimated Poly A tails.
-	** (1*2**11=2048)
+        /*
+        ** Perfect 3'-terminus, including over-estimated Poly A tails.
+        ** (1*2**11=2048)
         */
-	if(tend >= (ajint) tlength)
-	    qca->Coverage += 2048;
-	/* Longer 3'-edge (1*2**9=512) */
-	else if(tend >= (ajint) (tlength - edge))
-	    qca->Coverage += 512;
-	/* Longer 3'-region (1*2**3=8) */
-	else if(tend < (ajint) (tlength - edge))
-	    qca->Coverage += 8;
-	else
-	    ajWarn("Error in 3'-terminus query coverage scoring schema. "
-		   "ID: %u QE: %d QL: %u TE: %d TL: %u",
-		   qca->Identifier, qend, qlength, tend, tlength);
+        if(tend >= (ajint) tlength)
+            qca->Coverage += 2048;
+        /* Longer 3'-edge (1*2**9=512) */
+        else if(tend >= (ajint) (tlength - edge))
+            qca->Coverage += 512;
+        /* Longer 3'-region (1*2**3=8) */
+        else if(tend < (ajint) (tlength - edge))
+            qca->Coverage += 8;
+        else
+            ajWarn("Error in 3'-terminus query coverage scoring schema. "
+                   "ID: %u QE: %d QL: %u TE: %d TL: %u",
+                   qca->Identifier, qend, qlength, tend, tlength);
     }
     else if(qend >= (ajint) (qlength - edge))
     {
-	/* Added 3'-edge, including over-estimated Poly A tails. (1*2**7=128) */
-	if(tend >= (ajint) tlength)
-	    qca->Coverage += 128;
-	/* Non-matching 3'-edge (1*2**5=32) */
-	else if(tend >= (ajint) (tlength - edge))
-	    qca->Coverage += 32;
-	/* Non-matching 3-'terminus (0*2**2=0) */
-	else if(tend < (ajint) (tlength - edge))
-	    qca->Coverage += 0;
-	else
-	    ajWarn("Error in 3'-terminus query coverage scoring schema. "
-		   "ID: %u QE: %d QL: %u TE: %d TL: %u",
-		   qca->Identifier, qend, qlength, tend, tlength);
-	
+        /* Added 3'-edge, including over-estimated Poly A tails. (1*2**7=128) */
+        if(tend >= (ajint) tlength)
+            qca->Coverage += 128;
+        /* Non-matching 3'-edge (1*2**5=32) */
+        else if(tend >= (ajint) (tlength - edge))
+            qca->Coverage += 32;
+        /* Non-matching 3-'terminus (0*2**2=0) */
+        else if(tend < (ajint) (tlength - edge))
+            qca->Coverage += 0;
+        else
+            ajWarn("Error in 3'-terminus query coverage scoring schema. "
+                   "ID: %u QE: %d QL: %u TE: %d TL: %u",
+                   qca->Identifier, qend, qlength, tend, tlength);
+
     }
     else if(qend < (ajint) (qlength - edge))
     {
-	/* Shorter 3'-terminus (1*2**1=2) */
-	if(tend >= (ajint) tlength)
-	    qca->Coverage += 2;
-	/* Non-matching 3'-terminus (0*2**0=0) */
-	else if(tend < (ajint) tlength)
-	    qca->Coverage += 0;
-	else
-	    ajWarn("Error in 3'-terminus query coverage scoring schema. "
-		   "ID: %u QE: %d QL: %u TE: %d TL: %u",
-		   qca->Identifier, qend, qlength, tend, tlength);
+        /* Shorter 3'-terminus (1*2**1=2) */
+        if(tend >= (ajint) tlength)
+            qca->Coverage += 2;
+        /* Non-matching 3'-terminus (0*2**0=0) */
+        else if(tend < (ajint) tlength)
+            qca->Coverage += 0;
+        else
+            ajWarn("Error in 3'-terminus query coverage scoring schema. "
+                   "ID: %u QE: %d QL: %u TE: %d TL: %u",
+                   qca->Identifier, qend, qlength, tend, tlength);
     }
     else
-	ajWarn("Error in 3'-terminus query coverage scoring schema. "
-	       "ID: %u QE: %d QL: %u TE: %d TL: %u",
-	       qca->Identifier, qend, qlength, tend, tlength);
-    
+        ajWarn("Error in 3'-terminus query coverage scoring schema. "
+               "ID: %u QE: %d QL: %u TE: %d TL: %u",
+               qca->Identifier, qend, qlength, tend, tlength);
+
     /*
     ** Test for sequence identity over the identity threshold value
     ** only for perfect 5' and 3'-termini.
     ** (1*2**12 + 1*2**11 = 4096 + 2048 = 6144)
     ** Identity threshold value (1*2**13=8192).
     */
-    
+
     if((qca->Coverage & 6144) && (qca->Identity >= identity))
-	qca->Coverage += 8192;
-    
+        qca->Coverage += 8192;
+
     return ajTrue;
 }
 
@@ -2286,7 +2296,7 @@ AjBool ensQcalignmentCalculateDNAToDNAQueryCoverage(EnsPQcalignment qca,
 **
 ******************************************************************************/
 
-static const char *qcAlignmentDNAToGenomeQueryCoverageProperties[] =
+static const char *qcalignmentDNAToGenomeQueryCoverageProperties[] =
 {
     "No Alignment",
     "Alignment",
@@ -2337,90 +2347,91 @@ static const char *qcAlignmentDNAToGenomeQueryCoverageProperties[] =
 **
 ******************************************************************************/
 
-AjBool ensQcalignmentCalculateDNAToGenomeQueryCoverage(EnsPQcalignment qca,
-                                                       float identity,
-                                                       ajuint edge)
+AjBool ensQcalignmentCalculateDNAToGenomeQueryCoverage(
+    EnsPQcalignment qca,
+    float identity,
+    ajuint edge)
 {
     ajuint qlength = 0;
-    
+
     ajint qstart  = 0;
     ajint qend    = 0;
     ajint qstrand = 0;
-    
+
     if(!qca)
-	return ajFalse;
-    
+        return ajFalse;
+
     qca->Coverage = 0;
-    
+
     /* An Alignment object without a target automatically has coverage 0. */
-    
+
     if(!qca->TargetSequence)
-	return ajTrue;
-    
+        return ajTrue;
+
     /* Assign alignment coordinates strand-dependent. */
-    
+
     ensQcalignmentGetQueryCoordinates(qca,
-				      &qstart,
-				      &qend,
-				      &qstrand,
-				      &qlength);
-    
+                                      &qstart,
+                                      &qend,
+                                      &qstrand,
+                                      &qlength);
+
     qlength = ensQcsequenceGetLength(qca->QuerySequence);
-    
+
     qlength -= ensQcsequenceGetPolyA(qca->QuerySequence);
-    
+
     /*
     ** A query to target alignment is there, which is already good.
     ** (1*2**0=1)
     */
-    
+
     qca->Coverage += 1;
-    
+
     /* Test for completeness of the 5' terminus. */
-    
+
     /* Perfect 5' terminus (1*2**6=64) */
     if(qstart == 0)
-	qca->Coverage += 64;
+        qca->Coverage += 64;
     /* Edge threshold (1*2**4=16) */
     else if(qstart <= (ajint) edge)
-	qca->Coverage += 16;
+        qca->Coverage += 16;
     /* Shorter 5' terminus (1*2**2=4) */
     else if(qstart > (ajint) edge)
-	qca->Coverage += 4;
+        qca->Coverage += 4;
     else
-	ajWarn("Error in 5'-terminus query coverage scoring schema. "
-	       "ID: %u QS: %d", qca->Identifier, qstart);
-    
+        ajWarn("Error in 5'-terminus query coverage scoring schema. "
+               "ID: %u QS: %d", qca->Identifier, qstart);
+
     /*
     ** Test for completeness of the 3' terminus.  If part of a PolyA tail
     ** aligns to the genome sequence it may appear longer so that the end
     ** of the alignment actually extends the clipped mRNA sequence.
     */
-    
+
     /* Perfect 3' terminus (1*2**5=32) */
     if(qend >= (ajint) qlength)
-	qca->Coverage += 32;
+        qca->Coverage += 32;
     /* Edge threshold (1*2**3=8) */
     else if(qend >= (ajint) (qlength - edge))
-	qca->Coverage += 8;
+        qca->Coverage += 8;
     /* 3' terminus shorter (1*2**1=2) */
     else if(qend < (ajint) (qlength - edge))
-	qca->Coverage += 2;
+        qca->Coverage += 2;
     else
-	ajWarn("Error in 3'-terminus coverage scoring schema. "
-	       "ID: %u QE: %d QL: %u",
-	       qca->Identifier, qend, qlength);
-    
+        ajWarn("Error in 3'-terminus coverage scoring schema. "
+               "ID: %u QE: %d QL: %u",
+               qca->Identifier, qend, qlength);
+
     /*
     ** Test for sequence identity over the 'threshold_identity' value
     ** only for perfect 5' and 3'-termini.
     ** (1*2**6 + 1*2**5 = 32 + 64 = 96)
     ** Identity threshold value (1*2**7=128).
     */
-    
+
     if((qca->Coverage & 96) && (qca->Identity >= identity))
-	qca->Coverage += 128;
-    
+        qca->Coverage += 128;
+
     return ajTrue;
 }
 
@@ -2449,7 +2460,7 @@ AjBool ensQcalignmentCalculateDNAToGenomeQueryCoverage(EnsPQcalignment qca,
 **
 ******************************************************************************/
 
-static const char* qcAlignmentQueryToQueryCoverageProperties[] =
+static const char* qcalignmentQueryToQueryCoverageProperties[] =
 {
     "No Alignment",
     "Genome Alignment",
@@ -2500,105 +2511,106 @@ static const char* qcAlignmentQueryToQueryCoverageProperties[] =
 **
 ******************************************************************************/
 
-ajuint ensQcalignmentCalculateQueryToQueryCoverage(const EnsPQcalignment qca1,
-                                                   const EnsPQcalignment qca2)
+ajuint ensQcalignmentCalculateQueryToQueryCoverage(
+    const EnsPQcalignment qca1,
+    const EnsPQcalignment qca2)
 {
     ajuint score = 0;
-    
+
     ajint first_start = 0;
     ajint first_end   = 0;
-    
+
     ajint second_start = 0;
     ajint second_end   = 0;
-    
+
     if(!qca1)
-	return ajFalse;
-    
+        return ajFalse;
+
     /*
     ** If either of the Alignment objects has no target assigned, the score is
     ** automatically 0.
     */
-    
+
     if(!qca1->TargetSequence)
-	return score;
-    
+        return score;
+
     if(!qca2)
-	return score;
-    
+        return score;
+
     if(!qca2->TargetSequence)
-	return score;
-    
+        return score;
+
     /* The first Alignment object is always defined. (1*2**0=1) */
-    
+
     score += 1;
-    
+
     if(qca2)
     {
-	/* Check whether the query sequence is the same in both alignments. */
-	
-	/* FIXME: Should this use ensQcsequenceMatch? */
-	if(qca1->QuerySequence != qca2->QuerySequence)
-	    return 0;
-	
-	/* The second Alignment object is defined. (1*2**1=2) */
-	
-	score += 2;
-	
-	/*
-	** Determine the relative orientation of the query sequences in the
-	** alignment.
-	*/
-	
-	if(qca1->QueryStrand == qca2->QueryStrand)
-	{
-	    /* Parallel query sequences. */
-	    
-	    first_start  = qca1->QueryStart;
-	    first_end    = qca1->QueryEnd;
-	    
-	    second_start = qca2->QueryStart;
-	    second_end   = qca2->QueryEnd;
-	}
-	else
-	{
-	    /* Anti-parallel query sequences. */
-	    
-	    first_start  = qca1->QueryStart;
-	    first_end    = qca1->QueryEnd;
-	    
-	    second_start = qca2->QueryEnd;
-	    second_end   = qca2->QueryStart;
-	}
-	
-	/* Evaluate query start coordinates. */
-	
-	/* The first alignment is longer. (1*2**5=32) */
-	if(first_start < second_start)
-	    score += 32;
-	/* The first alignment is as long as the second. (1*2**7=128) */
-	else if(first_start == second_start)
-	    score += 128;
-	/* The first alignment is shorter. (1*2**3=8) */
-	else if(first_start > second_start)
-	    score += 8;
-	else
-	    ajWarn("Unexpected query start coordinate relationship.");
-	
-	/* Evaluate query end coordinates. */
-	
-	/* The first alignment is longer. (1*2**4=16) */
-	if(first_end > second_end)
-	    score += 16;
-	/* The first alignment is as long as the second. (1*2**6=64) */
-	else if(first_end == second_end)
-	    score += 64;
-	/* The first alignment is shorter. (1*2**2=4) */
-	else if(first_end < second_end)
-	    score += 4;
-	else
-	    ajWarn("Unexpected query end coordinate releationship.");
+        /* Check whether the query sequence is the same in both alignments. */
+
+        /* FIXME: Should this use ensQcsequenceMatch? */
+        if(qca1->QuerySequence != qca2->QuerySequence)
+            return 0;
+
+        /* The second Alignment object is defined. (1*2**1=2) */
+
+        score += 2;
+
+        /*
+        ** Determine the relative orientation of the query sequences in the
+        ** alignment.
+        */
+
+        if(qca1->QueryStrand == qca2->QueryStrand)
+        {
+            /* Parallel query sequences. */
+
+            first_start  = qca1->QueryStart;
+            first_end    = qca1->QueryEnd;
+
+            second_start = qca2->QueryStart;
+            second_end   = qca2->QueryEnd;
+        }
+        else
+        {
+            /* Anti-parallel query sequences. */
+
+            first_start  = qca1->QueryStart;
+            first_end    = qca1->QueryEnd;
+
+            second_start = qca2->QueryEnd;
+            second_end   = qca2->QueryStart;
+        }
+
+        /* Evaluate query start coordinates. */
+
+        /* The first alignment is longer. (1*2**5=32) */
+        if(first_start < second_start)
+            score += 32;
+        /* The first alignment is as long as the second. (1*2**7=128) */
+        else if(first_start == second_start)
+            score += 128;
+        /* The first alignment is shorter. (1*2**3=8) */
+        else if(first_start > second_start)
+            score += 8;
+        else
+            ajWarn("Unexpected query start coordinate relationship.");
+
+        /* Evaluate query end coordinates. */
+
+        /* The first alignment is longer. (1*2**4=16) */
+        if(first_end > second_end)
+            score += 16;
+        /* The first alignment is as long as the second. (1*2**6=64) */
+        else if(first_end == second_end)
+            score += 64;
+        /* The first alignment is shorter. (1*2**2=4) */
+        else if(first_end < second_end)
+            score += 4;
+        else
+            ajWarn("Unexpected query end coordinate releationship.");
     }
-    
+
     /*
     ** Test for perfect query coverage in genome alignments. See
     ** ensQcalignmentCalculateProteinToGenomeQueryCoverage and
@@ -2606,15 +2618,15 @@ ajuint ensQcalignmentCalculateQueryToQueryCoverage(const EnsPQcalignment qca1,
     ** Since this method is called for the genome alignment, the test
     ** refers to the first alignment (qca1).
     */
-    
+
     /* Perfect N- or 5'-terminus (1*2**6=64) */
     if(qca1->Coverage & 64)
-	score += 512;
-    
+        score += 512;
+
     /* Perfect C- or 3'-terminus (1*2**5=32) */
     if(qca1->Coverage & 32)
-	score += 256;
-    
+        score += 256;
+
     return score;
 }
 
@@ -2644,194 +2656,194 @@ AjBool ensQcalignmentReport(const EnsPQcalignment qca,
     ajint start  = 0;
     ajint end    = 0;
     ajint strand = 0;
-    
+
     ajuint length = 0;
-    
+
     AjPStr anchor   = NULL;
     AjPStr exturl   = NULL;
     AjPStr location = NULL;
-    
+
     EnsPQcdatabase qcdb = NULL;
-    
+
     if(!qca)
-	return ajFalse;
-    
+        return ajFalse;
+
     /* Format the query part of the Alignment object. */
-    
+
     ensQcalignmentGetQueryCoordinates(qca,
-				      &start,
-				      &end,
-				      &strand,
-				      &length);
-    
+                                      &start,
+                                      &end,
+                                      &strand,
+                                      &length);
+
     qcdb = ensQcsequenceGetQcdatabase(qca->QuerySequence);
-    
+
     if(internalquery)
     {
-	/* A HTML document-internal link is requested. */
-	
-	anchor = ajStrNew();
-	
-	ensQcsequenceFetchInternalAnchor(qca->QuerySequence, &anchor);
-	
-	ajFmtPrintAppS(Pstr, "%S:%d-%d:%d", anchor, start, end, strand);
-	
-	ajStrDel(&anchor);
+        /* A HTML document-internal link is requested. */
+
+        anchor = ajStrNew();
+
+        ensQcsequenceFetchInternalAnchor(qca->QuerySequence, &anchor);
+
+        ajFmtPrintAppS(Pstr, "%S:%d-%d:%d", anchor, start, end, strand);
+
+        ajStrDel(&anchor);
     }
     else if(ensQcdatabaseGetExternalURL(qcdb))
     {
-	/* An URL has been set in the sequence database definition. */
-	
-	exturl = ajStrNewS(ensQcdatabaseGetExternalURL(qcdb));
-	
-	if(ajStrFindC(exturl, "###LOCATION###"))
-	{
-	    /* ###LOCATION### links to Location/View. */
-	    
-	    location = ajFmtStr("%S:%d-%d",
-				ensQcsequenceGetName(qca->QuerySequence),
-				start,
-				end);
-	    
-	    ajStrExchangeCS(&exturl, "###LOCATION###", location);
-	    
-	    ensHTMLEncodeEntities(&exturl);
-	    
-	    ajFmtPrintAppS(Pstr,
-			   "<a href=\"%S\" target=\"external\">%S</a>:%d",
-			   exturl,
-			   location,
-			   strand);
-	    
-	    ajStrDel(&location);
-	}
-	else
-	{	
-	    /* Conventional URL replacement. */
-	    
-	    anchor = ajStrNew();
-	    
-	    ensQcsequenceFetchExternalAnchor(qca->QuerySequence,
-					     &anchor,
-					     ajFalse);
-	    
-	    ajFmtPrintAppS(Pstr,
-			   "%S:%d-%d:%d",
-			   anchor,
-			   start,
-			   end,
-			   strand);
-	    
-	    ajStrDel(&anchor);
-	}
-	
-	ajStrDel(&exturl);
-    }
-    else
-    {
-	/* No URL just plain text. */
-	
-	ajFmtPrintAppS(Pstr,
-		       "%S:%d-%d:%d",
-		       ensQcsequenceGetName(qca->QuerySequence),
-		       start,
-		       end,
-		       strand);
-    }
-    
-    ajFmtPrintAppS(Pstr, " (%d)", length);
-    
-    if(!qca->TargetSequence)
-	return ajTrue;
-    
-    /* Format the target part of the Alignment object. */
-    
-    ensQcalignmentGetTargetCoordinates(qca,
-				       &start,
-				       &end,
-				       &strand,
-				       &length);
-    
-    qcdb = ensQcsequenceGetQcdatabase(qca->TargetSequence);
-    
-    ajStrAppendC(Pstr, "\t");
-    
-    if(internaltarget)
-    {	
-	/* A HTML document-internal link has been requested. */
-	
-	anchor = ajStrNew();
-	
-	ensQcsequenceFetchInternalAnchor(qca->TargetSequence, &anchor);
-	
-	ajFmtPrintAppS(Pstr, "%S:%d-%d:%d", anchor, start, end, strand);
-	
-	ajStrDel(&anchor);
-    }
-    else if(ensQcdatabaseGetExternalURL(qcdb))
-    {	
-	/* URL has been set in the sequence database definition. */
-	
-	exturl = ajStrNewS(ensQcdatabaseGetExternalURL(qcdb));
-	
-	if(ajStrFindC(exturl, "###LOCATION###"))
+        /* An URL has been set in the sequence database definition. */
+
+        exturl = ajStrNewS(ensQcdatabaseGetExternalURL(qcdb));
+
+        if(ajStrFindC(exturl, "###LOCATION###"))
         {
-	    
-	    /* ###LOCATION### links to Location/View. */
-	    
-	    location = ajFmtStr("%S:%d-%d",
-				ensQcsequenceGetName(qca->TargetSequence),
-				start,
-				end);
-	    
-	    ajStrExchangeCS(&exturl, "###LOCATION###", location);
-	    
-	    ensHTMLEncodeEntities(&exturl);
-	    
-	    ajFmtPrintAppS(Pstr,
-			   "<a href=\"%S\" target=\"external\">%S</a>:%d",
-			   exturl,
-			   location,
-			   strand);
-	    
-	    ajStrDel(&location);
-	}
-	else
-	{
-	    /* Conventional URL replacement. */
-	    
-	    anchor = ajStrNew();
-	    
-	    ensQcsequenceFetchExternalAnchor(qca->TargetSequence,
-					     &anchor,
-					     ajFalse);
-	    
-	    ajFmtPrintAppS(Pstr,
-			   "%S:%d-%d:%d",
-			   anchor,
-			   start,
-			   end,
-			   strand);
-	    
-	    ajStrDel(&anchor);
-	}
-	
-	ajStrDel(&exturl);
+            /* ###LOCATION### links to Location/View. */
+
+            location = ajFmtStr("%S:%d-%d",
+                                ensQcsequenceGetName(qca->QuerySequence),
+                                start,
+                                end);
+
+            ajStrExchangeCS(&exturl, "###LOCATION###", location);
+
+            ensHTMLEncodeEntities(&exturl);
+
+            ajFmtPrintAppS(Pstr,
+                           "<a href=\"%S\" target=\"external\">%S</a>:%d",
+                           exturl,
+                           location,
+                           strand);
+
+            ajStrDel(&location);
+        }
+        else
+        {
+            /* Conventional URL replacement. */
+
+            anchor = ajStrNew();
+
+            ensQcsequenceFetchExternalAnchor(qca->QuerySequence,
+                                             &anchor,
+                                             ajFalse);
+
+            ajFmtPrintAppS(Pstr,
+                           "%S:%d-%d:%d",
+                           anchor,
+                           start,
+                           end,
+                           strand);
+
+            ajStrDel(&anchor);
+        }
+
+        ajStrDel(&exturl);
     }
     else
     {
-	/* No URL just plain text. */
-	
-	ajFmtPrintAppS(Pstr,
-		       "%S:%d-%d:%d",
-		       ensQcsequenceGetName(qca->TargetSequence),
-		       start,
-		       end,
-		       strand);
+        /* No URL just plain text. */
+
+        ajFmtPrintAppS(Pstr,
+                       "%S:%d-%d:%d",
+                       ensQcsequenceGetName(qca->QuerySequence),
+                       start,
+                       end,
+                       strand);
     }
-    
+
     ajFmtPrintAppS(Pstr, " (%d)", length);
-    
+
+    if(!qca->TargetSequence)
+        return ajTrue;
+
+    /* Format the target part of the Alignment object. */
+
+    ensQcalignmentGetTargetCoordinates(qca,
+                                       &start,
+                                       &end,
+                                       &strand,
+                                       &length);
+
+    qcdb = ensQcsequenceGetQcdatabase(qca->TargetSequence);
+
+    ajStrAppendC(Pstr, "\t");
+
+    if(internaltarget)
+    {
+        /* A HTML document-internal link has been requested. */
+
+        anchor = ajStrNew();
+
+        ensQcsequenceFetchInternalAnchor(qca->TargetSequence, &anchor);
+
+        ajFmtPrintAppS(Pstr, "%S:%d-%d:%d", anchor, start, end, strand);
+
+        ajStrDel(&anchor);
+    }
+    else if(ensQcdatabaseGetExternalURL(qcdb))
+    {
+        /* URL has been set in the sequence database definition. */
+
+        exturl = ajStrNewS(ensQcdatabaseGetExternalURL(qcdb));
+
+        if(ajStrFindC(exturl, "###LOCATION###"))
+        {
+
+            /* ###LOCATION### links to Location/View. */
+
+            location = ajFmtStr("%S:%d-%d",
+                                ensQcsequenceGetName(qca->TargetSequence),
+                                start,
+                                end);
+
+            ajStrExchangeCS(&exturl, "###LOCATION###", location);
+
+            ensHTMLEncodeEntities(&exturl);
+
+            ajFmtPrintAppS(Pstr,
+                           "<a href=\"%S\" target=\"external\">%S</a>:%d",
+                           exturl,
+                           location,
+                           strand);
+
+            ajStrDel(&location);
+        }
+        else
+        {
+            /* Conventional URL replacement. */
+
+            anchor = ajStrNew();
+
+            ensQcsequenceFetchExternalAnchor(qca->TargetSequence,
+                                             &anchor,
+                                             ajFalse);
+
+            ajFmtPrintAppS(Pstr,
+                           "%S:%d-%d:%d",
+                           anchor,
+                           start,
+                           end,
+                           strand);
+
+            ajStrDel(&anchor);
+        }
+
+        ajStrDel(&exturl);
+    }
+    else
+    {
+        /* No URL just plain text. */
+
+        ajFmtPrintAppS(Pstr,
+                       "%S:%d-%d:%d",
+                       ensQcsequenceGetName(qca->TargetSequence),
+                       start,
+                       end,
+                       strand);
+    }
+
+    ajFmtPrintAppS(Pstr, " (%d)", length);
+
     return ajTrue;
 }
 
@@ -2848,7 +2860,7 @@ AjBool ensQcalignmentReport(const EnsPQcalignment qca,
 **
 ******************************************************************************/
 
-static const char *qcAlignmentadaptorTables[] =
+static const char *qcalignmentadaptorTables[] =
 {
     "alignment",
     (const char *) NULL
@@ -2857,7 +2869,7 @@ static const char *qcAlignmentadaptorTables[] =
 
 
 
-static const char *qcAlignmentadaptorColumns[] =
+static const char *qcalignmentadaptorColumns[] =
 {
     "alignment.alignment_id",
     "alignment.analysis_id",
@@ -2882,7 +2894,7 @@ static const char *qcAlignmentadaptorColumns[] =
 
 
 
-static EnsOBaseadaptorLeftJoin qcAlignmentadaptorLeftJoin[] =
+static EnsOBaseadaptorLeftJoin qcalignmentadaptorLeftJoin[] =
 {
     {(const char*) NULL, (const char*) NULL}
 };
@@ -2890,31 +2902,31 @@ static EnsOBaseadaptorLeftJoin qcAlignmentadaptorLeftJoin[] =
 
 
 
-static const char *qcAlignmentadaptorDefaultCondition =
-(const char*) NULL;
+static const char *qcalignmentadaptorDefaultCondition =
+    (const char*) NULL;
 
-static const char *qcAlignmentadaptorFinalCondition =
-(const char *) NULL;
-
-
+static const char *qcalignmentadaptorFinalCondition =
+    (const char *) NULL;
 
 
-/* @funcstatic qcAlignmentadaptorFetchAllBySQL ********************************
+
+
+/* @funcstatic qcalignmentadaptorFetchAllBySQL ********************************
 **
 ** Run a SQL statement against an Ensembl Database Adaptor and consolidate the
 ** results into an AJAX List of Ensembl QC Alignment objects.
 **
-** @param [r] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 ** @param [r] statement [const AjPStr] SQL statement
-** @param [u] am [EnsPAssemblymapper] Ensembl Assembly Mapper
-** @param [r] slice [EnsPSlice] Ensembl Slice
+** @param [uN] am [EnsPAssemblymapper] Ensembl Assembly Mapper
+** @param [uN] slice [EnsPSlice] Ensembl Slice
 ** @param [u] qcas [AjPList] AJAX List of Ensembl QC Alignments
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-static AjBool qcAlignmentadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
+static AjBool qcalignmentadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
                                               const AjPStr statement,
                                               EnsPAssemblymapper am,
                                               EnsPSlice slice,
@@ -2922,11 +2934,11 @@ static AjBool qcAlignmentadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 {
     double score   = 0.0;
     float identity = 0.0;
-    
+
     ajint qstrand = 0;
     ajint tstrand = 0;
     ajint sstrand = 0;
-    
+
     ajuint identifier = 0;
     ajuint analysisid = 0;
     ajuint coverage   = 0;
@@ -2939,124 +2951,133 @@ static AjBool qcAlignmentadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
     ajuint tstart = 0;
     ajuint tend   = 0;
 
-    
+
     AjPSqlstatement sqls = NULL;
     AjISqlrow sqli       = NULL;
     AjPSqlrow sqlr       = NULL;
-    
+
     AjPStr vulgar = NULL;
-    
+
     EnsPAnalysis analysis  = NULL;
     EnsPAnalysisadaptor aa = NULL;
-    
+
     EnsPQcalignment qca         = NULL;
     EnsPQcalignmentadaptor qcaa = NULL;
-    
+
     EnsPQcsequence qsequence   = NULL;
     EnsPQcsequence tsequence   = NULL;
     EnsPQcsequenceadaptor qcsa = NULL;
-    
+
+    if(ajDebugTest("qcalignmentadaptorFetchAllBySQL"))
+        ajDebug("qcalignmentadaptorFetchAllBySQL\n"
+                "  dba %p\n"
+                "  statement %p\n"
+                "  am %p\n"
+                "  slice %p\n"
+                "  qcas %p\n",
+                dba,
+                statement,
+                am,
+                slice,
+                qcas);
+
     if(!dba)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!statement)
-	return ajFalse;
-    
-    (void) am;
-    
-    (void) slice;
-    
+        return ajFalse;
+
     if(!qcas)
-	return ajFalse;
-    
+        return ajFalse;
+
     aa = ensRegistryGetAnalysisadaptor(dba);
-    
+
     qcaa = ensRegistryGetQcalignmentadaptor(dba);
-    
+
     qcsa = ensRegistryGetQcsequenceadaptor(dba);
-    
+
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
-    
+
     sqli = ajSqlrowiterNew(sqls);
-    
+
     while(!ajSqlrowiterDone(sqli))
     {
-	identifier = 0;
-	analysisid = 0;
-	qdbid      = 0;
-	qsid       = 0;
-	qstart     = 0;
-	qend       = 0;
-	qstrand    = 0;
-	tdbid      = 0;
-	tsid       = 0;
-	tstart     = 0;
-	tend       = 0;
-	tstrand    = 0;
-	sstrand    = 0;
-	score      = 0.0;
-	identity   = 0.0;
-	vulgar     = ajStrNew();
-	coverage   = 0;
-	
+        identifier = 0;
+        analysisid = 0;
+        qdbid      = 0;
+        qsid       = 0;
+        qstart     = 0;
+        qend       = 0;
+        qstrand    = 0;
+        tdbid      = 0;
+        tsid       = 0;
+        tstart     = 0;
+        tend       = 0;
+        tstrand    = 0;
+        sstrand    = 0;
+        score      = 0.0;
+        identity   = 0.0;
+        vulgar     = ajStrNew();
+        coverage   = 0;
+
         sqlr = ajSqlrowiterGet(sqli);
-	
+
         ajSqlcolumnToUint(sqlr, &identifier);
         ajSqlcolumnToUint(sqlr, &analysisid);
-	ajSqlcolumnToUint(sqlr, &qdbid);
-	ajSqlcolumnToUint(sqlr, &qsid);
-	ajSqlcolumnToUint(sqlr, &qstart);
-	ajSqlcolumnToUint(sqlr, &qend);
-	ajSqlcolumnToInt(sqlr, &qstrand);
-	ajSqlcolumnToUint(sqlr, &tdbid);
-	ajSqlcolumnToUint(sqlr, &tsid);
-	ajSqlcolumnToUint(sqlr, &tstart);
-	ajSqlcolumnToUint(sqlr, &tend);
-	ajSqlcolumnToInt(sqlr, &tstrand);
-	ajSqlcolumnToInt(sqlr, &sstrand);
-	ajSqlcolumnToDouble(sqlr, &score);
-	ajSqlcolumnToFloat(sqlr, &identity);
-	ajSqlcolumnToStr(sqlr, &vulgar);
-	ajSqlcolumnToUint(sqlr, &coverage);
-	
-	ensAnalysisadaptorFetchByIdentifier(aa, analysisid, &analysis);
-	
-	ensQcsequenceadaptorFetchByIdentifier(qcsa, qsid, &qsequence);
-	
-	ensQcsequenceadaptorFetchByIdentifier(qcsa, tsid, &tsequence);
-	
-	qca = ensQcalignmentNew(qcaa,
-				identifier,
-				analysis,
-				qsequence,
-				qstart,
-				qend,
-				qstrand,
-				tsequence,
-				tstart,
-				tend,
-				tstrand,
-				sstrand,
-				coverage,
-				score,
-				identity,
-				vulgar);
-	
-	ajListPushAppend(qcas, (void *) qca);
-	
-	ensQcsequenceDel(&qsequence);
-	
-	ensQcsequenceDel(&tsequence);
-	
-	ensAnalysisDel(&analysis);
-	
-	ajStrDel(&vulgar);
+        ajSqlcolumnToUint(sqlr, &qdbid);
+        ajSqlcolumnToUint(sqlr, &qsid);
+        ajSqlcolumnToUint(sqlr, &qstart);
+        ajSqlcolumnToUint(sqlr, &qend);
+        ajSqlcolumnToInt(sqlr, &qstrand);
+        ajSqlcolumnToUint(sqlr, &tdbid);
+        ajSqlcolumnToUint(sqlr, &tsid);
+        ajSqlcolumnToUint(sqlr, &tstart);
+        ajSqlcolumnToUint(sqlr, &tend);
+        ajSqlcolumnToInt(sqlr, &tstrand);
+        ajSqlcolumnToInt(sqlr, &sstrand);
+        ajSqlcolumnToDouble(sqlr, &score);
+        ajSqlcolumnToFloat(sqlr, &identity);
+        ajSqlcolumnToStr(sqlr, &vulgar);
+        ajSqlcolumnToUint(sqlr, &coverage);
+
+        ensAnalysisadaptorFetchByIdentifier(aa, analysisid, &analysis);
+
+        ensQcsequenceadaptorFetchByIdentifier(qcsa, qsid, &qsequence);
+
+        ensQcsequenceadaptorFetchByIdentifier(qcsa, tsid, &tsequence);
+
+        qca = ensQcalignmentNew(qcaa,
+                                identifier,
+                                analysis,
+                                qsequence,
+                                qstart,
+                                qend,
+                                qstrand,
+                                tsequence,
+                                tstart,
+                                tend,
+                                tstrand,
+                                sstrand,
+                                coverage,
+                                score,
+                                identity,
+                                vulgar);
+
+        ajListPushAppend(qcas, (void *) qca);
+
+        ensQcsequenceDel(&qsequence);
+
+        ensQcsequenceDel(&tsequence);
+
+        ensAnalysisDel(&analysis);
+
+        ajStrDel(&vulgar);
     }
-    
+
     ajSqlrowiterDel(&sqli);
-    
-    ajSqlstatementDel(&sqls);
-    
+
+    ensDatabaseadaptorSqlstatementDel(dba, &sqls);
+
     return ajTrue;
 }
 
@@ -3074,12 +3095,8 @@ static AjBool qcAlignmentadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 ** @fnote None
 **
 ** @nam3rule New Constructor
-** @nam4rule NewObj Constructor with existing object
-** @nam4rule NewRef Constructor by incrementing the reference counter
 **
 ** @argrule New dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
-** @argrule Obj object [EnsPQcalignmentadaptor] Ensembl QC Alignment Adaptor
-** @argrule Ref object [EnsPQcalignmentadaptor] Ensembl QC Alignment Adaptor
 **
 ** @valrule * [EnsPQcalignmentadaptor] Ensembl QC Alignment Adaptor
 **
@@ -3093,24 +3110,37 @@ static AjBool qcAlignmentadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 **
 ** Default constructor for an Ensembl QC Alignment Adaptor.
 **
+** Ensembl Object Adaptors are singleton objects in the sense that a single
+** instance of an Ensembl Object Adaptor connected to a particular database is
+** sufficient to instantiate any number of Ensembl Objects from the database.
+** Each Ensembl Object will have a weak reference to the Object Adaptor that
+** instantiated it. Therefore, Ensembl Object Adaptors should not be
+** instantiated directly, but rather obtained from the Ensembl Registry,
+** which will in turn call this function if neccessary.
+**
+** @see ensRegistryGetDatabaseadaptor
+** @see ensRegistryGetQcalignmentadaptor
+**
 ** @param [r] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
 ** @return [EnsPQcalignmentadaptor] Ensembl QC Alignment Adaptor or NULL
 ** @@
 ******************************************************************************/
 
-EnsPQcalignmentadaptor ensQcalignmentadaptorNew(EnsPDatabaseadaptor dba)
+EnsPQcalignmentadaptor ensQcalignmentadaptorNew(
+    EnsPDatabaseadaptor dba)
 {
     if(!dba)
-	return NULL;
-    
-    return ensBaseadaptorNew(dba,
-			     qcAlignmentadaptorTables,
-			     qcAlignmentadaptorColumns,
-			     qcAlignmentadaptorLeftJoin,
-			     qcAlignmentadaptorDefaultCondition,
-			     qcAlignmentadaptorFinalCondition,
-			     qcAlignmentadaptorFetchAllBySQL);
+        return NULL;
+
+    return ensBaseadaptorNew(
+        dba,
+        qcalignmentadaptorTables,
+        qcalignmentadaptorColumns,
+        qcalignmentadaptorLeftJoin,
+        qcalignmentadaptorDefaultCondition,
+        qcalignmentadaptorFinalCondition,
+        qcalignmentadaptorFetchAllBySQL);
 }
 
 
@@ -3141,6 +3171,12 @@ EnsPQcalignmentadaptor ensQcalignmentadaptorNew(EnsPDatabaseadaptor dba)
 **
 ** Default destructor for an Ensembl QC Alignment Adaptor.
 **
+** Ensembl Object Adaptors are singleton objects that are registered in the
+** Ensembl Registry and weakly referenced by Ensembl Objects that have been
+** instantiated by it. Therefore, Ensembl Object Adaptors should never be
+** destroyed directly. Upon exit, the Ensembl Registry will call this function
+** if required.
+**
 ** @param [d] Pqcaa [EnsPQcalignmentadaptor*] Ensembl QC Alignment Adaptor
 **                                            address
 **
@@ -3150,20 +3186,19 @@ EnsPQcalignmentadaptor ensQcalignmentadaptorNew(EnsPDatabaseadaptor dba)
 
 void ensQcalignmentadaptorDel(EnsPQcalignmentadaptor *Pqcaa)
 {
-    /*
-     ajDebug("ensQcalignmentadaptorDel\n"
-	     "  *Pqcaa %p\n",
-	     *Pqcaa);
-     */
-    
     if(!Pqcaa)
-	return;
-    
+        return;
+
     if(!*Pqcaa)
-	return;
-    
+        return;
+
+    if(ajDebugTest("ensQcalignmentadaptorDel"))
+        ajDebug("ensQcalignmentadaptorDel\n"
+                "  *Pqcaa %p\n",
+                *Pqcaa);
+
     ensBaseadaptorDel(Pqcaa);
-    
+
     return;
 }
 
@@ -3175,7 +3210,7 @@ void ensQcalignmentadaptorDel(EnsPQcalignmentadaptor *Pqcaa)
 ** Fetch an Ensembl QC Alignment via its SQL database-internal identifier.
 ** The caller is responsible for deleting the Ensembl QC Alignment.
 **
-** @param [r] adaptor [EnsPQcalignmentadaptor] Ensembl QC Alignment Adaptor
+** @param [u] qcaa [EnsPQcalignmentadaptor] Ensembl QC Alignment Adaptor
 ** @param [r] identifier [ajuint] SQL database-internal QC Alignment identifier
 ** @param [wP] Pqca [EnsPQcalignment*] Ensembl QC Alignment address
 **
@@ -3183,22 +3218,22 @@ void ensQcalignmentadaptorDel(EnsPQcalignmentadaptor *Pqcaa)
 ** @@
 ******************************************************************************/
 
-AjBool ensQcalignmentadaptorFetchByIdentifier(EnsPQcalignmentadaptor adaptor,
+AjBool ensQcalignmentadaptorFetchByIdentifier(EnsPQcalignmentadaptor qcaa,
                                               ajuint identifier,
                                               EnsPQcalignment *Pqca)
 {
-    if(!adaptor)
-	return ajFalse;
-    
+    if(!qcaa)
+        return ajFalse;
+
     if(!identifier)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!Pqca)
-	return ajFalse;
-    
+        return ajFalse;
+
     *Pqca = (EnsPQcalignment)
-	ensBaseadaptorFetchByIdentifier(adaptor, identifier);
-    
+        ensBaseadaptorFetchByIdentifier(qcaa, identifier);
+
     return ajTrue;
 }
 
@@ -3212,11 +3247,11 @@ AjBool ensQcalignmentadaptorFetchByIdentifier(EnsPQcalignmentadaptor adaptor,
 ** The caller is responsible for deleting the Ensembl QC Alignments
 ** before deleting the AJAX List.
 **
-** @param [r] qcaa [EnsPQcalignmentadaptor] Ensembl QC Alignment Adaptor
+** @param [u] qcaa [EnsPQcalignmentadaptor] Ensembl QC Alignment Adaptor
 ** @param [r] analysis [const EnsPAnalysis] Ensembl Analysis
 ** @param [r] qdb [const EnsPQcdatabase] Query Ensembl QC Database
 ** @param [r] tdb [const EnsPQcdatabase] Target Ensembl QC Database
-** @param [w] qcas [AjPList] AJAX List of Ensembl QC Alignments
+** @param [u] qcas [AjPList] AJAX List of Ensembl QC Alignments
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
@@ -3230,39 +3265,39 @@ AjBool ensQcalignmentadaptorFetchAllByAnalysisQueryTarget(
     AjPList qcas)
 {
     AjPStr constraint = NULL;
-    
+
     if(!qcaa)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!analysis)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!qdb)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!tdb)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!qcas)
-	return ajFalse;
-    
+        return ajFalse;
+
     constraint = ajFmtStr("alignment.analysis_id = %u "
-			  "AND "
-			  "alignment.query_db_id = %u "
-			  "AND "
-			  "alignment.target_db_id = %u",
-			  ensAnalysisGetIdentifier(analysis),
-			  ensQcdatabaseGetIdentifier(qdb),
-			  ensQcdatabaseGetIdentifier(tdb));
-    
+                          "AND "
+                          "alignment.query_db_id = %u "
+                          "AND "
+                          "alignment.target_db_id = %u",
+                          ensAnalysisGetIdentifier(analysis),
+                          ensQcdatabaseGetIdentifier(qdb),
+                          ensQcdatabaseGetIdentifier(tdb));
+
     ensBaseadaptorGenericFetch(qcaa,
-			       constraint,
-			       (EnsPAssemblymapper) NULL,
-			       (EnsPSlice) NULL,
-			       qcas);
-    
+                               constraint,
+                               (EnsPAssemblymapper) NULL,
+                               (EnsPSlice) NULL,
+                               qcas);
+
     ajStrDel(&constraint);
-    
+
     return ajTrue;
 }
 
@@ -3275,10 +3310,10 @@ AjBool ensQcalignmentadaptorFetchAllByAnalysisQueryTarget(
 ** The caller is responsible for deleting the Ensembl QC Alignments
 ** before deleting the AJAX List.
 **
-** @param [r] qcaa [EnsPQcalignmentadaptor] Ensembl QC Alignment Adaptor
+** @param [u] qcaa [EnsPQcalignmentadaptor] Ensembl QC Alignment Adaptor
 ** @param [rN] analysis [const EnsPAnalysis] Ensembl Analysis
 ** @param [r] qdb [const EnsPQcdatabase] Query Ensembl QC Database
-** @param [w] qcas [AjPList] AJAX List of Ensembl QC Alignments
+** @param [u] qcas [AjPList] AJAX List of Ensembl QC Alignments
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
@@ -3290,32 +3325,32 @@ AjBool ensQcalignmentadaptorFetchAllByQuery(EnsPQcalignmentadaptor qcaa,
                                             AjPList qcas)
 {
     AjPStr constraint = NULL;
-    
+
     if(!qcaa)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!qdb)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!qcas)
-	return ajFalse;
-    
+        return ajFalse;
+
     constraint = ajFmtStr("alignment.query_db_id = %u",
-			  ensQcdatabaseGetIdentifier(qdb));
-    
+                          ensQcdatabaseGetIdentifier(qdb));
+
     if(analysis)
-	ajFmtPrintAppS(&constraint,
-		       " AND alignment.analysis_id = %u",
-		       ensAnalysisGetIdentifier(analysis));
-    
+        ajFmtPrintAppS(&constraint,
+                       " AND alignment.analysis_id = %u",
+                       ensAnalysisGetIdentifier(analysis));
+
     ensBaseadaptorGenericFetch(qcaa,
-			       constraint,
-			       (EnsPAssemblymapper) NULL,
-			       (EnsPSlice) NULL,
-			       qcas);
-    
+                               constraint,
+                               (EnsPAssemblymapper) NULL,
+                               (EnsPSlice) NULL,
+                               qcas);
+
     ajStrDel(&constraint);
-    
+
     return ajTrue;
 }
 
@@ -3328,10 +3363,10 @@ AjBool ensQcalignmentadaptorFetchAllByQuery(EnsPQcalignmentadaptor qcaa,
 ** The caller is responsible for deleting the Ensembl QC Alignments
 ** before deleting the AJAX List.
 **
-** @param [r] qcaa [EnsPQcalignmentadaptor] Ensembl QC Alignment Adaptor
+** @param [u] qcaa [EnsPQcalignmentadaptor] Ensembl QC Alignment Adaptor
 ** @param [rN] analysis [const EnsPAnalysis] Ensembl Analysis
 ** @param [r] tdb [const EnsPQcdatabase] Target Ensembl QC Database
-** @param [w] qcas [AjPList] AJAX List of Ensembl QC Alignments
+** @param [u] qcas [AjPList] AJAX List of Ensembl QC Alignments
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
@@ -3343,32 +3378,32 @@ AjBool ensQcalignmentadaptorFetchAllByTarget(EnsPQcalignmentadaptor qcaa,
                                              AjPList qcas)
 {
     AjPStr constraint = NULL;
-    
+
     if(!qcaa)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!tdb)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!qcas)
-	return ajFalse;
-    
+        return ajFalse;
+
     constraint = ajFmtStr("alignment.target_db_id = %u",
-			  ensQcdatabaseGetIdentifier(tdb));
-    
+                          ensQcdatabaseGetIdentifier(tdb));
+
     if(analysis)
-	ajFmtPrintAppS(&constraint,
-		       " AND alignment.analysis_id = %u",
-		       ensAnalysisGetIdentifier(analysis));
-    
+        ajFmtPrintAppS(&constraint,
+                       " AND alignment.analysis_id = %u",
+                       ensAnalysisGetIdentifier(analysis));
+
     ensBaseadaptorGenericFetch(qcaa,
-			       constraint,
-			       (EnsPAssemblymapper) NULL,
-			       (EnsPSlice) NULL,
-			       qcas);
-    
+                               constraint,
+                               (EnsPAssemblymapper) NULL,
+                               (EnsPSlice) NULL,
+                               qcas);
+
     ajStrDel(&constraint);
-    
+
     return ajTrue;
 }
 
@@ -3381,10 +3416,10 @@ AjBool ensQcalignmentadaptorFetchAllByTarget(EnsPQcalignmentadaptor qcaa,
 ** The caller is responsible for deleting the Ensembl QC Alignments
 ** before deleting the AJAX List.
 **
-** @param [r] qcaa [EnsPQcalignmentadaptor] Ensembl QC Alignment Adaptor
+** @param [u] qcaa [EnsPQcalignmentadaptor] Ensembl QC Alignment Adaptor
 ** @param [r] lower [ajuint] Lower coverage score
 ** @param [r] upper [ajuint] Upper coverage score
-** @param [w] qcas [AjPList] AJAX List of Ensembl QC Alignments
+** @param [u] qcas [AjPList] AJAX List of Ensembl QC Alignments
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
@@ -3396,26 +3431,26 @@ AjBool ensQcalignmentadaptorFetchAllByCoverage(EnsPQcalignmentadaptor qcaa,
                                                AjPList qcas)
 {
     AjPStr constraint = NULL;
-    
+
     if(!qcaa)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!qcas)
-	return ajFalse;
-    
+        return ajFalse;
+
     constraint = ajFmtStr("alignment.coverage >= %u "
-			  "AND "
-			  "alignment.coverage <= %u",
-			  lower, upper);
-    
+                          "AND "
+                          "alignment.coverage <= %u",
+                          lower, upper);
+
     ensBaseadaptorGenericFetch(qcaa,
-			       constraint,
-			       (EnsPAssemblymapper) NULL,
-			       (EnsPSlice) NULL,
-			       qcas);
-    
+                               constraint,
+                               (EnsPAssemblymapper) NULL,
+                               (EnsPSlice) NULL,
+                               qcas);
+
     ajStrDel(&constraint);
-    
+
     return ajTrue;
 }
 
@@ -3428,12 +3463,12 @@ AjBool ensQcalignmentadaptorFetchAllByCoverage(EnsPQcalignmentadaptor qcaa,
 ** The caller is responsible for deleting the Ensembl QC Alignments
 ** before deleting the AJAX List.
 **
-** @param [r] qcaa [EnsPQcalignmentadaptor] Ensembl QC Alignment Adaptor
-** @param [rN] analysis [const EnsPAnalysis] Ensembl Analysis
+** @param [u] qcaa [EnsPQcalignmentadaptor] Ensembl QC Alignment Adaptor
+** @param [r] analysis [const EnsPAnalysis] Ensembl Analysis
 ** @param [r] tsequence [const EnsPQcsequence] Target Ensembl QC Sequence
 ** @param [r] tstart [ajuint] Target start
 ** @param [r] tend [ajuint] Target end
-** @param [w] qcas [AjPList] AJAX List of Ensembl QC Alignments
+** @param [u] qcas [AjPList] AJAX List of Ensembl QC Alignments
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
@@ -3448,19 +3483,19 @@ AjBool ensQcalignmentadaptorFetchAllByTargetLocation(
     AjPList qcas)
 {
     AjPStr constraint = NULL;
-    
+
     if(!qcaa)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!analysis)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!tsequence)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!qcas)
-	return ajFalse;
-    
+        return ajFalse;
+
     /*
     ** Sometimes things can get complicated. There are four scenarios possible.
     **
@@ -3489,59 +3524,69 @@ AjBool ensQcalignmentadaptorFetchAllByTargetLocation(
     ** than the target end. Therefore, one SQL query per strand is
     ** required.
     */
-    
-    constraint = ajFmtStr("alignment.analysis_id = %u AND "
-			  "alignment.target_id = ? AND "
-			  "alignment.target_strand >= 0 AND (("
-			  "alignment.target_start >= ? AND "
-			  "alignment.target_start <= ?) OR ("
-			  "alignment.target_end >= ? AND "
-			  "alignment.target_end <= ?) OR ("
-			  "alignment.target_start <= ? AND "
-			  "alignment.target_end >= ?))",
-			  ensAnalysisGetIdentifier(analysis),
-			  ensQcsequenceGetIdentifier(tsequence),
-			  tstart,
-			  tend,
-			  tstart,
-			  tend,
-			  tstart,
-			  tend);
-    
+
+    constraint = ajFmtStr(
+        "alignment.analysis_id = %u "
+        "AND "
+        "alignment.target_id = %u "
+        "AND "
+        "alignment.target_strand >= 0 "
+        "AND "
+        "("
+        "(alignment.target_start >= %u AND alignment.target_start <= %u) "
+        "OR "
+        "(alignment.target_end >= %u AND alignment.target_end <= %u) "
+        "OR "
+        "(alignment.target_start <= %u AND alignment.target_end >= %u)"
+        ")",
+        ensAnalysisGetIdentifier(analysis),
+        ensQcsequenceGetIdentifier(tsequence),
+        tstart,
+        tend,
+        tstart,
+        tend,
+        tstart,
+        tend);
+
     ensBaseadaptorGenericFetch(qcaa,
-			       constraint,
-			       (EnsPAssemblymapper) NULL,
-			       (EnsPSlice) NULL,
-			       qcas);
-    
+                               constraint,
+                               (EnsPAssemblymapper) NULL,
+                               (EnsPSlice) NULL,
+                               qcas);
+
     ajStrDel(&constraint);
-    
-    constraint = ajFmtStr("alignment.analysis_id = %u AND "
-			  "alignment.target_id = ? AND "
-			  "alignment.target_strand < 0 AND (("
-			  "alignment.target_end >= ? AND "
-			  "alignment.target_end <= ?) OR ("
-			  "alignment.target_start >= ? AND "
-			  "alignment.target_start <= ?) OR ("
-			  "alignment.target_end <= ? AND "
-			  "alignment.target_start >= ?))",
-			  ensAnalysisGetIdentifier(analysis),
-			  ensQcsequenceGetIdentifier(tsequence),
-			  tstart,
-			  tend,
-			  tstart,
-			  tend,
-			  tstart,
-			  tend);
-    
+
+    constraint = ajFmtStr(
+        "alignment.analysis_id = %u "
+        "AND "
+        "alignment.target_id = %u "
+        "AND "
+        "alignment.target_strand < 0 "
+        "AND "
+        "("
+        "(alignment.target_end >= %u AND alignment.target_end <= %u) "
+        "OR "
+        "(alignment.target_start >= %u AND alignment.target_start <= %u) "
+        "OR "
+        "(alignment.target_end <= %u AND alignment.target_start >= %u)"
+        ")",
+        ensAnalysisGetIdentifier(analysis),
+        ensQcsequenceGetIdentifier(tsequence),
+        tstart,
+        tend,
+        tstart,
+        tend,
+        tstart,
+        tend);
+
     ensBaseadaptorGenericFetch(qcaa,
-			       constraint,
-			       (EnsPAssemblymapper) NULL,
-			       (EnsPSlice) NULL,
-			       qcas);
-    
+                               constraint,
+                               (EnsPAssemblymapper) NULL,
+                               (EnsPSlice) NULL,
+                               qcas);
+
     ajStrDel(&constraint);
-    
+
     return ajTrue;
 }
 
@@ -3552,7 +3597,7 @@ AjBool ensQcalignmentadaptorFetchAllByTargetLocation(
 **
 ** Store an Ensembl QC Alignment.
 **
-** @param [r] qcaa [EnsPQcalignmentadaptor] Ensembl QC Alignment Adaptor
+** @param [u] qcaa [EnsPQcalignmentadaptor] Ensembl QC Alignment Adaptor
 ** @param [u] qca [EnsPQcalignment] Ensembl QC Alignment
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
@@ -3563,84 +3608,85 @@ AjBool ensQcalignmentadaptorStore(EnsPQcalignmentadaptor qcaa,
                                   EnsPQcalignment qca)
 {
     char *txtvulgar = NULL;
-    
-    AjBool value = ajFalse;
-    
+
+    AjBool value = AJFALSE;
+
     AjPSqlstatement sqls = NULL;
-    
+
     AjPStr statement = NULL;
-    
+
     EnsPDatabaseadaptor dba = NULL;
-    
+
     if(!qcaa)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!qca)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(ensQcalignmentGetAdaptor(qca) &&
-	ensQcalignmentGetIdentifier(qca))
-	return ajFalse;
-    
+       ensQcalignmentGetIdentifier(qca))
+        return ajFalse;
+
     dba = ensBaseadaptorGetDatabaseadaptor(qcaa);
-    
+
     ensDatabaseadaptorEscapeC(dba, &txtvulgar, qca->VULGAR);
-    
-    statement = ajFmtStr("INSERT IGNORE INTO "
-			 "alignment "
-			 "SET "
-			 "alignment.analysis_id = %u, "
-			 "alignment.query_db_id = %u, "
-			 "alignment.query_id = %u, "
-			 "alignment.query_start = %u, "
-			 "alignment.query_end = %u, "
-			 "alignment.query_strand = %d, "
-			 "alignment.target_db_id = %u, "
-			 "alignment.target_id = %u, "
-			 "alignment.target_start = %u, "
-			 "alignment.target_end = %u, "
-			 "alignment.target_strand = %d, "
-			 "alignment.splice_strand = %d, "
-			 "alignment.score = %f, "
-			 "alignment.identity = %f, "
-			 "alignment.vulgar_line = '%s', "
-			 "alignment.coverage = %u",
-			 ensAnalysisGetIdentifier(qca->Analysis),
-			 ensQcsequenceGetQcdatabaseIdentifier(
-                             qca->QuerySequence),
-			 ensQcsequenceGetIdentifier(qca->QuerySequence),
-			 qca->QueryStart,
-			 qca->QueryEnd,
-			 qca->QueryStrand,
-			 ensQcsequenceGetQcdatabaseIdentifier(
-                             qca->TargetSequence),
-			 ensQcsequenceGetIdentifier(qca->TargetSequence),
-			 qca->TargetStart,
-			 qca->TargetEnd,
-			 qca->TargetStrand,
-			 qca->SpliceStrand,
-			 qca->Score,
-			 qca->Identity,
-			 txtvulgar,
-			 qca->Coverage);
-    
+
+    statement = ajFmtStr(
+        "INSERT IGNORE INTO "
+        "alignment "
+        "SET "
+        "alignment.analysis_id = %u, "
+        "alignment.query_db_id = %u, "
+        "alignment.query_id = %u, "
+        "alignment.query_start = %u, "
+        "alignment.query_end = %u, "
+        "alignment.query_strand = %d, "
+        "alignment.target_db_id = %u, "
+        "alignment.target_id = %u, "
+        "alignment.target_start = %u, "
+        "alignment.target_end = %u, "
+        "alignment.target_strand = %d, "
+        "alignment.splice_strand = %d, "
+        "alignment.score = %f, "
+        "alignment.identity = %f, "
+        "alignment.vulgar_line = '%s', "
+        "alignment.coverage = %u",
+        ensAnalysisGetIdentifier(qca->Analysis),
+        ensQcsequenceGetQcdatabaseIdentifier(
+            qca->QuerySequence),
+        ensQcsequenceGetIdentifier(qca->QuerySequence),
+        qca->QueryStart,
+        qca->QueryEnd,
+        qca->QueryStrand,
+        ensQcsequenceGetQcdatabaseIdentifier(
+            qca->TargetSequence),
+        ensQcsequenceGetIdentifier(qca->TargetSequence),
+        qca->TargetStart,
+        qca->TargetEnd,
+        qca->TargetStrand,
+        qca->SpliceStrand,
+        qca->Score,
+        qca->Identity,
+        txtvulgar,
+        qca->Coverage);
+
     ajCharDel(&txtvulgar);
-    
+
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
-    
+
     if(ajSqlstatementGetAffectedrows(sqls))
     {
-	ensQcalignmentSetIdentifier(qca, ajSqlstatementGetIdentifier(sqls));
-	
-	ensQcalignmentSetAdaptor(qca, qcaa);
-	
-	value = ajTrue;
+        ensQcalignmentSetIdentifier(qca, ajSqlstatementGetIdentifier(sqls));
+
+        ensQcalignmentSetAdaptor(qca, qcaa);
+
+        value = ajTrue;
     }
-    
-    ajSqlstatementDel(&sqls);
-    
+
+    ensDatabaseadaptorSqlstatementDel(dba, &sqls);
+
     ajStrDel(&statement);
-    
+
     return value;
 }
 
@@ -3651,7 +3697,7 @@ AjBool ensQcalignmentadaptorStore(EnsPQcalignmentadaptor qcaa,
 **
 ** Update an Ensembl QC Alignment.
 **
-** @param [r] qcaa [EnsPQcalignmentadaptor] Ensembl QC Alignment Adaptor
+** @param [u] qcaa [EnsPQcalignmentadaptor] Ensembl QC Alignment Adaptor
 ** @param [r] qca [const EnsPQcalignment] Ensembl QC Alignment
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
@@ -3662,80 +3708,81 @@ AjBool ensQcalignmentadaptorUpdate(EnsPQcalignmentadaptor qcaa,
                                    const EnsPQcalignment qca)
 {
     char *txtvulgar = NULL;
-    
-    AjBool value = ajFalse;
-    
+
+    AjBool value = AJFALSE;
+
     AjPSqlstatement sqls = NULL;
-    
+
     AjPStr statement = NULL;
-    
+
     EnsPDatabaseadaptor dba = NULL;
-    
+
     if(!qcaa)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!qca)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!ensQcalignmentGetIdentifier(qca))
-	return ajFalse;
-    
+        return ajFalse;
+
     dba = ensBaseadaptorGetDatabaseadaptor(qcaa);
-    
+
     ensDatabaseadaptorEscapeC(dba, &txtvulgar, qca->VULGAR);
-    
-    statement = ajFmtStr("UPDATE IGNORE "
-			 "alignment "
-			 "SET "
-			 "alignment.analysis_id = %u, "
-			 "alignment.query_db_id = %u, "
-			 "alignment.query_id = %u, "
-			 "alignment.query_start = %u, "
-			 "alignment.query_end = %u, "
-			 "alignment.query_strand = %d, "
-			 "alignment.target_db_id = %u, "
-			 "alignment.target_id = %u, "
-			 "alignment.target_start = %u, "
-			 "alignment.target_end = %u, "
-			 "alignment.target_strand = %d, "
-			 "alignment.splice_strand = %d, "
-			 "alignment.score = %f, "
-			 "alignment.identity = %f, "
-			 "alignment.vulgar_line = '%s', "
-			 "alignment.coverage = %u "
-			 "WHERE "
-			 "alignment.alignment_id = %u",
-			 ensAnalysisGetIdentifier(qca->Analysis),
-			 ensQcsequenceGetQcdatabaseIdentifier(
-                             qca->QuerySequence),
-			 ensQcsequenceGetIdentifier(qca->QuerySequence),
-			 qca->QueryStart,
-			 qca->QueryEnd,
-			 qca->QueryStrand,
-			 ensQcsequenceGetQcdatabaseIdentifier(
-                             qca->TargetSequence),
-			 ensQcsequenceGetIdentifier(qca->TargetSequence),
-			 qca->TargetStart,
-			 qca->TargetEnd,
-			 qca->TargetStrand,
-			 qca->SpliceStrand,
-			 qca->Score,
-			 qca->Identity,
-			 txtvulgar,
-			 qca->Coverage,
-			 qca->Identifier);
-    
+
+    statement = ajFmtStr(
+        "UPDATE IGNORE "
+        "alignment "
+        "SET "
+        "alignment.analysis_id = %u, "
+        "alignment.query_db_id = %u, "
+        "alignment.query_id = %u, "
+        "alignment.query_start = %u, "
+        "alignment.query_end = %u, "
+        "alignment.query_strand = %d, "
+        "alignment.target_db_id = %u, "
+        "alignment.target_id = %u, "
+        "alignment.target_start = %u, "
+        "alignment.target_end = %u, "
+        "alignment.target_strand = %d, "
+        "alignment.splice_strand = %d, "
+        "alignment.score = %f, "
+        "alignment.identity = %f, "
+        "alignment.vulgar_line = '%s', "
+        "alignment.coverage = %u "
+        "WHERE "
+        "alignment.alignment_id = %u",
+        ensAnalysisGetIdentifier(qca->Analysis),
+        ensQcsequenceGetQcdatabaseIdentifier(
+            qca->QuerySequence),
+        ensQcsequenceGetIdentifier(qca->QuerySequence),
+        qca->QueryStart,
+        qca->QueryEnd,
+        qca->QueryStrand,
+        ensQcsequenceGetQcdatabaseIdentifier(
+            qca->TargetSequence),
+        ensQcsequenceGetIdentifier(qca->TargetSequence),
+        qca->TargetStart,
+        qca->TargetEnd,
+        qca->TargetStrand,
+        qca->SpliceStrand,
+        qca->Score,
+        qca->Identity,
+        txtvulgar,
+        qca->Coverage,
+        qca->Identifier);
+
     ajCharDel(&txtvulgar);
-    
+
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
-    
+
     if(ajSqlstatementGetAffectedrows(sqls))
-	value = ajTrue;
-    
-    ajSqlstatementDel(&sqls);
-    
+        value = ajTrue;
+
+    ensDatabaseadaptorSqlstatementDel(dba, &sqls);
+
     ajStrDel(&statement);
-    
+
     return value;
 }
 
@@ -3746,52 +3793,61 @@ AjBool ensQcalignmentadaptorUpdate(EnsPQcalignmentadaptor qcaa,
 **
 ** Delete an Ensembl QC Alignment.
 **
-** @param [r] qcaa [EnsPQcalignmentadaptor] Ensembl QC Alignment Adaptor
-** @param [r] qca [const EnsPQcalignment] Ensembl QC Alignment
+** @param [u] qcaa [EnsPQcalignmentadaptor] Ensembl QC Alignment Adaptor
+** @param [u] qca [EnsPQcalignment] Ensembl QC Alignment
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
 AjBool ensQcalignmentadaptorDelete(EnsPQcalignmentadaptor qcaa,
-                                   const EnsPQcalignment qca)
+                                   EnsPQcalignment qca)
 {
-    AjBool value = ajFalse;
-    
+    AjBool value = AJFALSE;
+
     AjPSqlstatement sqls = NULL;
-    
+
     AjPStr statement = NULL;
-    
+
     EnsPDatabaseadaptor dba = NULL;
-    
+
     if(!qcaa)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!qca)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!ensQcalignmentGetIdentifier(qca))
-	return ajFalse;
-    
+        return ajFalse;
+
     dba = ensBaseadaptorGetDatabaseadaptor(qcaa);
-    
-    statement = ajFmtStr("DELETE FROM "
-			 "alignment "
-			 "WHERE "
-			 "alignment.alignment_id = %u",
-			 qca->Identifier);
-    
+
+    statement = ajFmtStr(
+        "DELETE FROM "
+        "alignment "
+        "WHERE "
+        "alignment.alignment_id = %u",
+        qca->Identifier);
+
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
-    
+
     if(ajSqlstatementGetAffectedrows(sqls))
-	value = ajTrue;
-    
-    ajSqlstatementDel(&sqls);
-    
+    {
+        qca->Adaptor    = (EnsPQcalignmentadaptor) NULL;
+        qca->Identifier = 0;
+
+        value = ajTrue;
+    }
+
+    ensDatabaseadaptorSqlstatementDel(dba, &sqls);
+
     ajStrDel(&statement);
-    
+
     return value;
 }
+
+
+
 
 /* @func ensQcalignmentDummyFunction ******************************************
 **
@@ -3802,17 +3858,13 @@ AjBool ensQcalignmentadaptorDelete(EnsPQcalignmentadaptor qcaa,
 **
 ******************************************************************************/
 
-void endQcalignmenttDummyFunction(void)
+void ensQcalignmentDummyFunction(void)
 {
-    (void) qcAlignmentProteinToProteinQueryCoverageProperties[0];
-    (void) qcAlignmentProteinToGenomeQueryCoverageProperties[0];
-    (void) qcAlignmentDNAToDNAQueryCoverageProperties[0];
-    (void) qcAlignmentDNAToGenomeQueryCoverageProperties[0];
-    (void) qcAlignmentQueryToQueryCoverageProperties[0];
+    (void) qcalignmentProteinToProteinQueryCoverageProperties[0];
+    (void) qcalignmentProteinToGenomeQueryCoverageProperties[0];
+    (void) qcalignmentDNAToDNAQueryCoverageProperties[0];
+    (void) qcalignmentDNAToGenomeQueryCoverageProperties[0];
+    (void) qcalignmentQueryToQueryCoverageProperties[0];
 
     return;
 }
-
-
-
-

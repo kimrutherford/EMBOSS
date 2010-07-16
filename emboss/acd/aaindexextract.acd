@@ -4,7 +4,9 @@ application: aaindexextract [
   gui: "no"
   batch: "no"
   cpu: "low"
-  relations: "EDAM: Database processing"
+  relations: "/edam/topic/0000154 Small molecules analysis"
+  relations: "/edam/topic/0000091 Database and file management"
+  relations: "/edam/operation/0001812 File loading"
 ]
 
 section: input [
@@ -16,7 +18,7 @@ section: input [
     information: "AAINDEX database file"
     parameter: "Y"
     knowntype: "aaindex database"
-    relations:  "EDAM: AAindex database"                               
+    relations:  "/edam/data/0001501 Amino acid index"                               
   ]
 
 endsection: input

@@ -21,7 +21,9 @@
 package org.emboss.jemboss;
 
 import java.util.*;
+import java.awt.Desktop;
 import java.io.FileInputStream;
+import java.io.InputStream;
 
 
 /**
@@ -168,7 +170,13 @@ public class JembossParams
   private Vector publicServers;
   private Vector privateServers;
 
-  /** Jemboss java server                   */
+
+  /** Jemboss started using the local option */
+  private static boolean standalone = true;
+  
+  /** Jemboss jemboss.server option was true that makes
+   * jemboss running in client mode unless it was not started
+   * using the local option as the first argument to the program */
   private static boolean jembossServer = false;
   /** property name for Jemboss java server */
   private String jembossServerName = "jemboss.server";
@@ -220,6 +228,13 @@ public class JembossParams
   private String resultsHome = System.getProperty("user.home")+ fs + "jemboss";
   private String resultsHomeName = "results.home";
 
+  /** Specifies whether EMBOSS installation Jemboss configured to use
+   *  have PDF support */
+  private boolean embossHavePDF = true;
+  /** property name for embossHavePDF */
+  private String embossHavePDFName = "embossHavePDF";
+
+  boolean desktopOpenActionSupported = false;
 
 /**
 *
@@ -280,7 +295,9 @@ public class JembossParams
     // try out of the classpath
     try
     {
-      jembossSettings.load(cl.getResourceAsStream("resources/jemboss.properties"));
+        InputStream is = cl.getResourceAsStream("resources/jemboss.properties");
+        if (is!=null)
+            jembossSettings.load(is);
     } 
     catch (Exception e) 
     {
@@ -305,33 +322,35 @@ public class JembossParams
     javaNoProxyEntries = new Vector();
     if(System.getProperty("proxyPort") != null) 
     {
-      if(System.getProperty("proxyHost") != null)
-      {
-	useJavaProxy = true;
-        useProxy = useJavaProxy;
-        useBrowserProxy = useJavaProxy;
-
-	javaProxyPort = System.getProperty("proxyPort");
-	javaProxyPortNum = Integer.parseInt(javaProxyPort);
-	javaProxyHost = System.getProperty("proxyHost");
-
-        browserProxyHost = javaProxyHost;
-        browserProxyPort = javaProxyPortNum;
-        
-	if(System.getProperty("http.nonProxyHosts") != null) 
+        if(System.getProperty("proxyHost") != null)
         {
-	  useJavaNoProxy = true;
-	  javaNoProxy = System.getProperty("http.nonProxyHosts");
-	  StringTokenizer tok = new StringTokenizer(javaNoProxy,"|");
-	  while (tok.hasMoreTokens()) 
-          {
-	    String toks = tok.nextToken() + "/";
-	    javaNoProxyEntries.add(toks);
-	  }
-	}
-      }
-    }
+            useJavaProxy = true;
+            useProxy = useJavaProxy;
+            useBrowserProxy = useJavaProxy;
 
+            javaProxyPort = System.getProperty("proxyPort");
+            javaProxyPortNum = Integer.parseInt(javaProxyPort);
+            javaProxyHost = System.getProperty("proxyHost");
+
+            browserProxyHost = javaProxyHost;
+            browserProxyPort = javaProxyPortNum;
+
+            if(System.getProperty("http.nonProxyHosts") != null) 
+            {
+                useJavaNoProxy = true;
+                javaNoProxy = System.getProperty("http.nonProxyHosts");
+                StringTokenizer tok = new StringTokenizer(javaNoProxy,"|");
+                while (tok.hasMoreTokens()) 
+                {
+                    String toks = tok.nextToken() + "/";
+                    javaNoProxyEntries.add(toks);
+                }
+            }
+        }
+    }
+    
+    checkDesktopSupport();
+    
   }
 
   /**
@@ -441,7 +460,11 @@ public class JembossParams
       currentMode = jembossSettings.getProperty(currentModeName);
       serverPublicList = jembossSettings.getProperty(serverPublicListName);
       serverPrivateList = jembossSettings.getProperty(serverPrivateListName);
-//    serviceUserName = jembossSettings.getProperty(serviceUserNameName);
+      
+      if(jembossSettings.getProperty(embossHavePDFName)!=null)
+          embossHavePDF = Boolean.getBoolean(
+                  jembossSettings.getProperty(embossHavePDFName));
+      
     } 
     catch (Exception e) {  }
   }
@@ -722,11 +745,16 @@ public class JembossParams
 /**
 *
 *  @return   	true if using a Jemboss server
+*  
+*  startup option 'local' overwrites jemboss.server settings
 *
 */
   public static boolean isJembossServer()
   {
-    return jembossServer;
+      if(standalone)
+          return false;
+      
+      return jembossServer;
   }
 
 /**
@@ -834,7 +862,36 @@ public class JembossParams
   {
     return embossData;
   }
-  
+
+
+
+
+  /**
+   *
+   * @return   the location of the emboss data
+   *
+   */
+  public boolean getDesktopSupportsOPENAction()
+  {
+      return desktopOpenActionSupported;
+  }
+
+
+
+
+  /**
+  *
+  * @return   the location of the emboss data
+  *
+  */
+ public boolean getEmbossHavePDF()
+ {
+     return embossHavePDF;
+ }
+
+
+
+
 /**
 *
 * @return	the location of the emboss binaries
@@ -1002,6 +1059,19 @@ public class JembossParams
     serverStatusHash.put(server, new Integer(i));
   }
 
+  
+  /**
+   *
+   * Records whether jemboss was started using the 'local' option
+   * that forces standalone mode.
+   *
+   */
+  static public void setStandaloneMode(boolean local) 
+  {
+      standalone = local;
+  }
+    
+    
 /**
 *
 * Return the username needed for the remote service
@@ -1323,6 +1393,32 @@ public class JembossParams
       updateJembossProperty(thiskey,thisval);
     }
     updateSettingsFromProperties();
+  }
+
+  
+  
+  
+  /*
+   * Checks whether current JVM supports Desktop OPEN action
+   */
+  private void checkDesktopSupport()
+  {
+      String javaVersion = System.getProperty("java.version");
+
+      float ver = Float.parseFloat(javaVersion.substring(0,
+              javaVersion.lastIndexOf('.')));
+
+      if (ver > 1.6)
+      {
+
+          if(Desktop.isDesktopSupported()){
+              Desktop d = Desktop.getDesktop();
+
+              if(d.isSupported(Desktop.Action.OPEN))
+                  desktopOpenActionSupported = true;
+
+          }
+      }
   }
 
 }

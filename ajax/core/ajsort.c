@@ -269,6 +269,8 @@ void ajSorttwoIntIncI(ajint *a, ajuint *p, ajuint n)
 }
 
 
+
+
 /* @obsolete ajSortTwoIntIncI
 ** @rename ajSorttwoIntIncI
 */
@@ -277,6 +279,8 @@ __deprecated void ajSortTwoIntIncI(ajint *a, ajuint *p, ajuint n)
     ajSorttwoIntIncI(a, p, n);
     return;
 }
+
+
 
 
 /* @func ajSorttwoUintIncI ****************************************************
@@ -327,6 +331,8 @@ __deprecated void ajSortTwoUintIncI(ajuint *a, ajuint *p, ajuint n)
     ajSorttwoUintIncI(a, p, n);
     return;
 }
+
+
 
 
 /* @func ajSortFloatDec *******************************************************

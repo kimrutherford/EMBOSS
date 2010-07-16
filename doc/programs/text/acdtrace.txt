@@ -32,9 +32,9 @@ Usage
 
 % acdtrace antigenic
 Finds antigenic sites in proteins
-Input protein sequence(s): tsw:actb1_fugru
+Input protein sequence(s): tsw:actb1_takru
 Minimum length of antigenic region [6]:
-Output report [actb1_fugru.antigenic]:
+Output report [actb1_takru.antigenic]:
 
 
    Go to the input files for this example
@@ -53,7 +53,7 @@ Output file format
 
   Output files for usage example
 
-  File: actb1_fugru.antigenic
+  File: actb1_takru.antigenic
 
 
 Data files
@@ -142,9 +142,12 @@ See also
 
 Author(s)
 
-   Peter Rice (pmr (c) ebi.ac.uk)
+   Peter Rice
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

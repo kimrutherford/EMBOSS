@@ -2,6 +2,8 @@ application: acdrelations
 [
   documentation: "Add relations: attribute to ACD files"
   groups: "Acd"
+  relations: "/edam/topic/0000220 File handling"
+  relations: "/edam/operation/0000335 File reformatting"
 ]
 
 
@@ -22,17 +24,17 @@ section: input
     extension: "acd"
   ]
 
-  datafile: infileedam 
+  datafile: inedamfile 
   [
     parameter: "Y"
     information: "EDAM relations: file"
     default: "edamtoacd.dat"
   ]
 
-  infile: infiletype 
+  infile: intypefile 
   [
     parameter: "Y"
-    information: "knowntypes.standard file"
+    information: "EMBOSS knowntypes.standard file"
     default: "/homes/jison/emboss/emboss/emboss/acd/knowntypes.standard"
   ]
 

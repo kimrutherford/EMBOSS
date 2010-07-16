@@ -38,6 +38,8 @@ static AjBool infoseq_print(AjBool html, AjBool instring,
 			    const AjPStr delimiter, AjPFile outfile);
 
 
+
+
 /* @prog infoseq **************************************************************
 **
 ** Displays some simple information about sequences
@@ -59,6 +61,7 @@ int main(int argc, char **argv)
     AjBool    dogi;
     AjBool    dosv;
     AjBool    dolength;
+    AjBool    doorg;
     AjBool    dodesc;
     AjBool    dopgc;
     AjPFile   outfile   = NULL;
@@ -78,6 +81,7 @@ int main(int argc, char **argv)
     const AjPStr gi        = NULL;
     const AjPStr sv        = NULL;
     const AjPStr desc      = NULL;
+    const AjPStr org       = NULL;
     const AjPStr db        = NULL;
     AjBool columns   = ajFalse;   
     AjPStr delimiter = NULL;      
@@ -106,6 +110,7 @@ int main(int argc, char **argv)
     dolength  = ajAcdGetBoolean("length");
     dopgc     = ajAcdGetBoolean("pgc");
     dodesc    = ajAcdGetBoolean("description");
+    doorg     = ajAcdGetBoolean("organism");
     columns   = ajAcdGetBoolean("columns"); 
     delimiter = ajAcdGetString("delimiter"); 
 
@@ -196,6 +201,11 @@ int main(int argc, char **argv)
 						   "%GC", 7, 
 						   columns, delimiter, 
 						   outfile);
+		if(doorg)
+		    instring = infoseq_printheader(html, instring,
+						   "Organism", 20,
+						   columns, delimiter, 
+						   outfile);
 		if(dodesc)
 		    instring = infoseq_printheader(html, instring,
 						   "Description", 12,
@@ -254,6 +264,7 @@ int main(int argc, char **argv)
 	/* description */
 	desc = ajSeqGetDescS(seq);
 
+        org = ajSeqGetTaxS(seq);
 
 	/* start table line */
 	if(html)
@@ -311,6 +322,10 @@ int main(int argc, char **argv)
 				     columns, delimiter, outfile);
 	}	
 
+	if(doorg)
+	    instring = infoseq_print(html, instring, org, ajTrue, 20, 
+				     columns, delimiter, outfile);
+
 	if(dodesc)
 	    instring = infoseq_print(html, instring, desc, ajFalse, 0, 
 				     columns, delimiter, outfile);
@@ -346,6 +361,7 @@ int main(int argc, char **argv)
 
     return 0;
 }
+
 
 
 
@@ -409,9 +425,6 @@ static AjBool infoseq_printheader(AjBool html,  AjBool instring,
 
     return ajTrue;
 }
-
-
-
 
 
 

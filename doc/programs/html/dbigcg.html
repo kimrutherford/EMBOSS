@@ -93,7 +93,7 @@ General log output file [outfile.dbigcg]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Index a GCG formatted database
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     Database name (Any string from 2 to 19
@@ -130,8 +130,14 @@ Version: EMBOSS:6.2.0
 
    Associated qualifiers:
 
+   "-directory" associated qualifiers
+   -extension          string     Default file extension
+
    "-outfile" associated qualifiers
    -odirectory         string     Output directory
+
+   "-indexoutdir" associated qualifiers
+   -extension          string     Default file extension
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -295,6 +301,19 @@ Version: EMBOSS:6.2.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-directory" associated directory qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -extension</td>
+<td>string</td>
+<td>Default file extension</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=5>"-outfile" associated outfile qualifiers
 </td>
 </tr>
@@ -303,6 +322,19 @@ Version: EMBOSS:6.2.0
 <td> -odirectory</td>
 <td>string</td>
 <td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-indexoutdir" associated outdir qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -extension</td>
+<td>string</td>
+<td>Default file extension</td>
 <td>Any string</td>
 <td>&nbsp;</td>
 </tr>
@@ -651,10 +683,12 @@ None.
     Author(s)
 </H2>
 
-Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
+Peter Rice
 <br>
 European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
 <H2>
     History
 </H2>

@@ -1,12 +1,12 @@
 ########################################
 # Program: dbiflat
-# Rundate: Wed 15 Jul 2009 12:00:00
+# Rundate: Thu 15 Jul 2010 12:00:00
 # Dbname: SWISSPROT
 # Release: 0.0
-# Date: 15/07/09
-# CurrentDirectory: /data2/users/pmr/cvsemboss/test/swiss/
+# Date: 15/07/10
+# CurrentDirectory: /homes/pmr/devemboss/test/swiss/
 # IndexDirectory: ./
-# IndexDirectoryPath: /data2/users/pmr/cvsemboss/test/swiss/
+# IndexDirectoryPath: /homes/pmr/devemboss/test/swiss/
 # Maxindex: 0
 # Fields: 6
 #   Field 1: id
@@ -16,7 +16,7 @@
 #   Field 5: key
 #   Field 6: org
 # Directory: ./
-# DirectoryPath: /data2/users/pmr/cvsemboss/test/swiss/
+# DirectoryPath: /homes/pmr/devemboss/test/swiss/
 # Filenames: *.dat
 # Exclude: 
 # Files: 1
@@ -30,16 +30,16 @@
 
 filename: 'seq.dat'
     id: 100
-   acc: 213
+   acc: 222
     sv: 100
-   des: 980
-   key: 756
-   org: 1447
+   des: 986
+   key: 789
+   org: 1451
 
-Index acc: maxlen 6 items 189
+Index acc: maxlen 6 items 198
 Index sv: maxlen 8 items 100
-Index des: maxlen 17 items 209
-Index key: maxlen 37 items 125
-Index org: maxlen 41 items 272
+Index des: maxlen 17 items 211
+Index key: maxlen 37 items 128
+Index org: maxlen 42 items 276
 
 Total 1 files 100 entries (0 duplicates)

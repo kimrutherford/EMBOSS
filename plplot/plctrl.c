@@ -1,4 +1,4 @@
-/* $Id: plctrl.c,v 1.13 2009/07/01 14:24:17 ajb Exp $
+/* $Id: plctrl.c,v 1.14 2010/04/28 13:53:53 ajb Exp $
 
 	Misc. control routines, like begin, end, exit, change graphics/text
 	mode, change color.  Includes some spillage from plcore.c.  If you
@@ -1360,7 +1360,7 @@ plLibOpenPdfstrm(const char *fn)		/* pmr: const */
     return NULL;
 
  done:
-    pldebug("plLibOpenPdfstr", "Found file %s\n", fs);
+    /* pldebug("plLibOpenPdfstr", "Found file %s\n", fs); */
     free_mem(fs);
     return (file);
 }

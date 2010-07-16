@@ -22,6 +22,7 @@ extern "C"
 ** @attr CacheByIdentifier [AjPTable] Identifier cache
 ** @attr CacheByName [AjPTable] Name cache
 ** @@
+** FIXME: Should this also have a CacheByAccessionVersion???
 ******************************************************************************/
 
 typedef struct EnsSQcsequenceadaptor
@@ -29,9 +30,6 @@ typedef struct EnsSQcsequenceadaptor
     EnsPBaseadaptor Adaptor;
     AjPTable CacheByIdentifier;
     AjPTable CacheByName;
-    /*
-    ** FIXME: Should this also have a CacheByAccessionVersion???
-    */
 } EnsOQcsequenceadaptor;
 
 #define EnsPQcsequenceadaptor EnsOQcsequenceadaptor*
@@ -167,19 +165,18 @@ AjBool ensQcsequenceSetPolyA(EnsPQcsequence qcs, ajuint polya);
 
 AjBool ensQcsequenceSetDescription(EnsPQcsequence qcs, AjPStr description);
 
-ajuint ensQcsequenceGetMemSize(const EnsPQcsequence qcs);
+ajulong ensQcsequenceGetMemsize(const EnsPQcsequence qcs);
 
 AjBool ensQcsequenceTrace(const EnsPQcsequence qcs, ajuint level);
 
-AjBool ensQcsequenceMatch(const EnsPQcsequence qcs1, const EnsPQcsequence qcs2);
+AjBool ensQcsequenceMatch(const EnsPQcsequence qcs1,
+                          const EnsPQcsequence qcs2);
 
 ajuint ensQcsequenceGetQcdatabaseIdentifier(const EnsPQcsequence qcs);
 
 AjBool ensHTMLEncodeSGMLID(AjPStr *Pstr);
-/* FIXME: This function should move! */
 
 AjBool ensHTMLEncodeEntities(AjPStr *Pstr);
-/* FIXME: This function should move! */
 
 AjBool ensQcsequenceFetchExternalURL(const EnsPQcsequence qcs, AjPStr *Pstr);
 
@@ -187,11 +184,16 @@ AjBool ensQcsequenceFetchExternalAnchor(const EnsPQcsequence qcs,
                                         AjPStr *Pstr,
                                         AjBool htmlid);
 
-AjBool ensQcsequenceFetchInternalAnchor(const EnsPQcsequence qcs, AjPStr *Pstr);
+AjBool ensQcsequenceFetchInternalAnchor(const EnsPQcsequence qcs,
+                                        AjPStr *Pstr);
 
 /* Ensembl Quality Check Sequence Adaptor */
 
-EnsPQcsequenceadaptor ensQcsequenceadaptorNew(EnsPDatabaseadaptor dba);
+EnsPQcsequenceadaptor ensRegistryGetQcsequenceadaptor(
+    EnsPDatabaseadaptor dba);
+
+EnsPQcsequenceadaptor ensQcsequenceadaptorNew(
+    EnsPDatabaseadaptor dba);
 
 void ensQcsequenceadaptorDel(EnsPQcsequenceadaptor* Pqcsa);
 
@@ -216,7 +218,7 @@ AjBool ensQcsequenceadaptorFetchByName(EnsPQcsequenceadaptor qcsa,
                                        EnsPQcsequence *Pqcs);
 
 AjBool ensQcsequenceadaptorFetchAllByQcdatabase(EnsPQcsequenceadaptor qcsa,
-                                                EnsPQcdatabase qcdb,
+                                                const EnsPQcdatabase qcdb,
                                                 AjPList qcss);
 
 AjBool ensQcsequenceadaptorStore(EnsPQcsequenceadaptor qcsa,
@@ -226,7 +228,7 @@ AjBool ensQcsequenceadaptorUpdate(EnsPQcsequenceadaptor qcsa,
                                   const EnsPQcsequence qcs);
 
 AjBool ensQcsequenceadaptorDelete(EnsPQcsequenceadaptor qcsa,
-                                  const EnsPQcsequence qcs);
+                                  EnsPQcsequence qcs);
 
 
 /*
@@ -236,7 +238,7 @@ AjBool ensQcsequenceadaptorDelete(EnsPQcsequenceadaptor qcsa,
 
 
 
-#endif
+#endif /* ensqcsequence_h */
 
 #ifdef __cplusplus
 }

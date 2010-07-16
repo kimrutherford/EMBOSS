@@ -7,6 +7,8 @@ extern "C"
 #define ajcod_h
 
 
+
+
 /* @data AjPCod ***************************************************************
 **
 ** Ajax codon object.
@@ -30,7 +32,7 @@ extern "C"
 ** @attr num [ajint*] Number of codons
 ** @attr tcount [double*] Codons per thousand
 ** @attr fraction [double*] Fraction of amino acids of this type
-** @attr back [ajint*] Index of favoured amino acid for backtranslation
+** @attr back [ajint*] Index of favoured amino acid for back translation
 ** @attr GeneticCode [ajint] Genetic code NCBI number to match
 **                           amino acids to codons.
 ** @attr Padding [char[4]] Padding to alignment boundary

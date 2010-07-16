@@ -2,22 +2,22 @@
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
 
-'tsw:actb1_fugru' is a sequence entry in the example protein database 'tsw'
+'tsw:actb1_takru' is a sequence entry in the example protein database 'tsw'
 <p>
-<p><h3>Database entry: tsw:actb1_fugru</h3>
+<p><h3>Database entry: tsw:actb1_takru</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
-ID   ACTB1_FUGRU             Reviewed;         375 AA.
+ID   ACTB1_TAKRU             Reviewed;         375 AA.
 AC   P68142; P53484;
 DT   25-OCT-2004, integrated into UniProtKB/Swiss-Prot.
 DT   25-OCT-2004, sequence version 1.
-DT   16-JUN-2009, entry version 31.
+DT   02-MAR-2010, entry version 39.
 DE   RecName: Full=Actin, cytoplasmic 1;
 DE   AltName: Full=Beta-actin A;
 DE   Contains:
 DE     RecName: Full=Actin, cytoplasmic 1, N-terminally processed;
 GN   Name=actba;
-OS   Fugu rubripes (Japanese pufferfish) (Takifugu rubripes).
+OS   Takifugu rubripes (Japanese pufferfish) (Fugu rubripes).
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
 OC   Actinopterygii; Neopterygii; Teleostei; Euteleostei; Neoteleostei;
 OC   Acanthomorpha; Acanthopterygii; Percomorpha; Tetraodontiformes;
@@ -54,15 +54,17 @@ CC   Distributed under the Creative Commons Attribution-NoDerivs License
 CC   -----------------------------------------------------------------------
 DR   EMBL; U37499; AAC59889.1; -; Genomic_DNA.
 DR   PIR; S71124; S71124.
-DR   HSSP; P02570; 1HLU.
-DR   SMR; P68142; 4-371.
-DR   HOVERGEN; P68142; -.
-DR   OMA; P68142; EKMTQIL.
-DR   GO; GO:0005737; C:cytoplasm; IEA:UniProtKB-SubCell.
+DR   SMR; P68142; 2-375.
+DR   Ensembl; ENSTRUT00000013141; ENSTRUP00000013080; ENSTRUG00000005447; Takifugu rubripes.
+DR   eggNOG; fiNOG04759; -.
+DR   InParanoid; P68142; -.
+DR   PhylomeDB; P68142; -.
+DR   GO; GO:0005737; C:cytoplasm; IEA:UniProtKB-KW.
 DR   GO; GO:0005856; C:cytoskeleton; IEA:UniProtKB-SubCell.
 DR   GO; GO:0005524; F:ATP binding; IEA:UniProtKB-KW.
 DR   GO; GO:0005515; F:protein binding; IEA:InterPro.
 DR   InterPro; IPR004000; Actin-like.
+DR   InterPro; IPR020902; Actin/actin-like_CS.
 DR   InterPro; IPR004001; Actin_CS.
 DR   PANTHER; PTHR11937; Actin_like; 1.
 DR   Pfam; PF00022; Actin; 1.

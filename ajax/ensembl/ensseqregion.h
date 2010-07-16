@@ -19,7 +19,7 @@ extern "C"
 
 /* Ensembl Sequence Region */
 
-EnsPSeqregion ensSeqregionNew(EnsPSeqregionadaptor adaptor,
+EnsPSeqregion ensSeqregionNew(EnsPSeqregionadaptor sra,
                               ajuint identifier,
                               EnsPCoordsystem cs,
                               AjPStr name,
@@ -43,7 +43,7 @@ ajint ensSeqregionGetLength(const EnsPSeqregion sr);
 
 const AjPList ensSeqregionGetAttributes(EnsPSeqregion sr);
 
-AjBool ensSeqregionSetAdaptor(EnsPSeqregion sr, EnsPSeqregionadaptor adaptor);
+AjBool ensSeqregionSetAdaptor(EnsPSeqregion sr, EnsPSeqregionadaptor sra);
 
 AjBool ensSeqregionSetIdentifier(EnsPSeqregion sr, ajuint identifier);
 
@@ -57,7 +57,7 @@ AjBool ensSeqregionAddAttribute(EnsPSeqregion sr, EnsPAttribute attribute);
 
 AjBool ensSeqregionTrace(const EnsPSeqregion sr, ajuint level);
 
-ajuint ensSeqregionGetMemSize(const EnsPSeqregion sr);
+ajulong ensSeqregionGetMemsize(const EnsPSeqregion sr);
 
 AjBool ensSeqregionMatch(const EnsPSeqregion sr1, const EnsPSeqregion sr2);
 
@@ -65,40 +65,56 @@ AjBool ensSeqregionFetchAllAttributes(EnsPSeqregion sr,
                                       const AjPStr code,
                                       AjPList attributes);
 
-AjBool ensSeqregionIsTopLevel(EnsPSeqregion sr);
+AjBool ensSeqregionIsNonReference(EnsPSeqregion sr, AjBool *Presult);
+
+AjBool ensSeqregionIsTopLevel(EnsPSeqregion sr, AjBool *Presult);
 
 /* Ensembl Sequence Region Adaptor */
 
-EnsPSeqregionadaptor ensSeqregionadaptorNew(EnsPDatabaseadaptor dba);
+EnsPSeqregionadaptor ensRegistryGetSeqregionadaptor(
+    EnsPDatabaseadaptor dba);
 
-void ensSeqregionadaptorDel(EnsPSeqregionadaptor *Padaptor);
+EnsPSeqregionadaptor ensSeqregionadaptorNew(
+    EnsPDatabaseadaptor dba);
+
+void ensSeqregionadaptorDel(EnsPSeqregionadaptor *Psra);
 
 EnsPDatabaseadaptor ensSeqregionadaptorGetDatabaseadaptor(
-    EnsPSeqregionadaptor adaptor);
+    const EnsPSeqregionadaptor sra);
 
-AjBool ensSeqregionadaptorCacheInsert(EnsPSeqregionadaptor adaptor,
+AjBool ensSeqregionadaptorCacheInsert(EnsPSeqregionadaptor sra,
                                       EnsPSeqregion *Psr);
 
-AjBool ensSeqregionadaptorCacheRemove(EnsPSeqregionadaptor adaptor,
+AjBool ensSeqregionadaptorCacheRemove(EnsPSeqregionadaptor sra,
                                       const EnsPSeqregion sr);
 
-AjBool ensSeqregionadaptorFetchByIdentifier(EnsPSeqregionadaptor adaptor,
+AjBool ensSeqregionadaptorFetchByIdentifier(EnsPSeqregionadaptor sra,
                                             ajuint identifier,
                                             EnsPSeqregion *Psr);
 
-AjBool ensSeqregionadaptorFetchByName(EnsPSeqregionadaptor adaptor,
+AjBool ensSeqregionadaptorFetchByName(EnsPSeqregionadaptor sra,
                                       const EnsPCoordsystem cs,
                                       const AjPStr name,
                                       EnsPSeqregion *Psr);
 
-AjBool ensSeqregionadaptorFetchByNameFuzzy(EnsPSeqregionadaptor adaptor,
+AjBool ensSeqregionadaptorFetchByNameFuzzy(EnsPSeqregionadaptor sra,
                                            const EnsPCoordsystem cs,
                                            const AjPStr name,
                                            EnsPSeqregion *Psr);
 
-AjBool ensSeqregionadaptorFetchAllByCoordsystem(EnsPSeqregionadaptor adaptor,
+AjBool ensSeqregionadaptorFetchAllByCoordsystem(EnsPSeqregionadaptor sra,
                                                 const EnsPCoordsystem cs,
-                                                AjPList srlist);
+                                                AjPList srs);
+
+AjBool ensSeqregionadaptorFetchAllByAttributeCodeValue(
+    EnsPSeqregionadaptor sra,
+    const AjPStr code,
+    const AjPStr value,
+    AjPList srs);
+
+AjBool ensSeqregionadaptorIsNonReference(EnsPSeqregionadaptor sra,
+                                         const EnsPSeqregion sr,
+                                         AjBool *Presult);
 
 /*
 ** End of prototype definitions
@@ -107,7 +123,7 @@ AjBool ensSeqregionadaptorFetchAllByCoordsystem(EnsPSeqregionadaptor adaptor,
 
 
 
-#endif
+#endif /* ensseqregion_h */
 
 #ifdef __cplusplus
 }

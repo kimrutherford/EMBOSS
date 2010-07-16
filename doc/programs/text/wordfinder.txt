@@ -42,7 +42,7 @@ Output alignment [j01636.wordfinder]:
 Command line arguments
 
 Match large sequences against one or more other sequences
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         seqset     Sequence set filename and optional format,
@@ -513,9 +513,12 @@ See also
 
 Author(s)
 
-   Ian Longden (il (c) sanger.ac.uk)
+   Ian Longden formerly at:
    Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
    CB10 1SA, UK.
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

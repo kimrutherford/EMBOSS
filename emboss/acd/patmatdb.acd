@@ -1,8 +1,9 @@
 application: patmatdb [
   documentation: "Searches protein sequences with a sequence motif"
   groups: "Protein:Motifs"
-  relations: "EDAM: Protein motif searching"
-  relations: "EDAM: Sequence database search by motif or pattern"
+  relations: "/edam/topic/0000161 Protein sequence motifs"
+  relations: "/edam/operation/0000382 Protein sequence motif searching"
+  relations: "/edam/operation/0000347 Sequence database search by motif or pattern"
 ]
 
 section: input [
@@ -13,7 +14,9 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "Protein"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0001219 Pure protein sequence"
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more" 
   ]
 
 endsection: input
@@ -35,7 +38,7 @@ section: required [
            followed by Cys. The search is case-independent, so 'AAA' matches
            'aaa'."
     knowntype: "prosite pattern"
-    relations:  "EDAM: Prosite protein pattern"                        
+    relations:  "/edam/data/0002071 Protein sequence motif"                        
   ]
 
 endsection: required
@@ -49,7 +52,7 @@ section: output [
     parameter: "Y"
     rformat: "dbmotif"
     precision: "0"
-    relations: "EDAM: EMBOSS report"                                       
+    relations: "/edam/data/0001298 Sequence motif report"                                       
   ]
 
 endsection: output

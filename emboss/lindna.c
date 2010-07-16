@@ -140,6 +140,8 @@ static float* lindnaFromText=NULL;
 static float* lindnaToText=NULL;
 
 
+
+
 /* @prog lindna ***************************************************************
 **
 ** Draws linear maps of DNA constructs

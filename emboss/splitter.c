@@ -102,10 +102,11 @@ int main(int argc, char **argv)
                 pos += size;
             }
         }
+
         splitter_MakeSubSeqName(&outseq_name, seq, pos, len-1);
         splitter_ProcessChunk (seqout, seq, pos, len-1,
                                outseq_name, feature);
-      }
+    }
 
     ajSeqoutClose(seqout);
     ajSeqallDel(&seqall);
@@ -135,16 +136,19 @@ int main(int argc, char **argv)
 static void splitter_write(AjPSeqout default_seqout,
                            AjPSeq subseq, const AjPSeq seq)
 {
-  /* set the description of the subsequence */
-  ajSeqAssignDescS(subseq, ajSeqGetDescS(seq));
+    /* set the description of the subsequence */
+    ajSeqAssignDescS(subseq, ajSeqGetDescS(seq));
 
-  /* set the type of the subsequence */
-  ajSeqType(subseq);
+    /* set the type of the subsequence */
+    ajSeqType(subseq);
 
-  ajSeqoutWriteSeq(default_seqout, subseq);
+    ajSeqoutWriteSeq(default_seqout, subseq);
 
-  return;
+    return;
 }
+
+
+
 
 /* @funcstatic splitter_MakeSubSeqName ****************************************
 **
@@ -161,19 +165,22 @@ static void splitter_MakeSubSeqName (AjPStr * name_ptr,
                                      const AjPSeq seq, ajuint start,
                                      ajuint end)
 {
-  AjPStr value = ajStrNew();
+    AjPStr value = ajStrNew();
 
-  /* create a nice name for the subsequence */
-  ajStrAssignS(name_ptr, ajSeqGetNameS(seq));
-  ajStrAppendC(name_ptr, "_");
-  ajStrFromUint(&value, ajSeqGetBegin(seq)+start);
-  ajStrAppendS(name_ptr, value);
-  ajStrAppendC(name_ptr, "-");
-  ajStrFromUint(&value, ajSeqGetBegin(seq)+end);
-  ajStrAppendS(name_ptr, value);
+    /* create a nice name for the subsequence */
+    ajStrAssignS(name_ptr, ajSeqGetNameS(seq));
+    ajStrAppendC(name_ptr, "_");
+    ajStrFromUint(&value, ajSeqGetBegin(seq)+start);
+    ajStrAppendS(name_ptr, value);
+    ajStrAppendC(name_ptr, "-");
+    ajStrFromUint(&value, ajSeqGetBegin(seq)+end);
+    ajStrAppendS(name_ptr, value);
 
-  ajStrDel(&value);
+    ajStrDel(&value);
 }
+
+
+
 
 /* @funcstatic splitter_ProcessChunk ******************************************
 **
@@ -192,30 +199,37 @@ static void splitter_ProcessChunk (AjPSeqout seqout, const AjPSeq seq,
                                    ajuint start, ajuint end, const AjPStr name,
                                    AjBool feature)
 {
-  AjPStr str = ajStrNew();
+    AjPStr str;
 
-  AjPFeattable new_feattable = NULL;
-  AjPSeq subseq = ajSeqNew ();
+    AjPFeattable new_feattable = NULL;
+    AjPSeq subseq;
 
-  ajDebug("splitter_ProcessChunk %d..%d '%S' %B\n",
-	  start, end, name, feature);
+    ajDebug("splitter_ProcessChunk %d..%d '%S' %B\n",
+            start, end, name, feature);
 
-  new_feattable = ajFeattableNew(name);
-  subseq->Fttable = new_feattable;
-  ajFeattableSetNuc(new_feattable);
+    str    = ajStrNew();
+    subseq = ajSeqNew();
+  
+  
+    new_feattable = ajFeattableNew(name);
+    subseq->Fttable = new_feattable;
+    ajFeattableSetNuc(new_feattable);
 
-  ajStrAssignSubC(&str,ajSeqGetSeqC(seq),start,end);
-  ajSeqAssignSeqS(subseq,str);
-  if (feature)
-    splitter_AddSubSeqFeat(subseq->Fttable,start,end,seq);
-  ajSeqAssignNameS(subseq, name);
-  splitter_write(seqout,subseq,seq);
+    ajStrAssignSubC(&str,ajSeqGetSeqC(seq),start,end);
+    ajSeqAssignSeqS(subseq,str);
 
-  ajStrDel(&str);
-  ajSeqDel(&subseq);
+    if(feature)
+        splitter_AddSubSeqFeat(subseq->Fttable,start,end,seq);
 
-  return;
+    ajSeqAssignNameS(subseq, name);
+    splitter_write(seqout,subseq,seq);
+
+    ajStrDel(&str);
+    ajSeqDel(&subseq);
+
+    return;
 }
+
 
 
 
@@ -233,40 +247,48 @@ static void splitter_ProcessChunk (AjPSeqout seqout, const AjPSeq seq,
 static void splitter_AddSubSeqFeat(AjPFeattable ftable, ajuint start,
                                    ajuint end, const AjPSeq oldseq)
 {
-  AjPFeattable old_feattable = NULL;
-  AjIList iter = NULL;
+    AjPFeattable old_feattable = NULL;
+    AjIList iter = NULL;
 
-  old_feattable = ajSeqGetFeatCopy(oldseq);
-  iter = ajListIterNewread(old_feattable->Features);
+    old_feattable = ajSeqGetFeatCopy(oldseq);
 
-  while(!ajListIterDone(iter)) {
-    AjPFeature gf = ajListIterGet(iter);
+    if(!old_feattable)
+        return;
 
-    AjPFeature copy = NULL;
+    iter = ajListIterNewread(old_feattable->Features);
 
-
-    if (((ajFeatGetEnd(gf) < start + 1) &&
-        (gf->End2 == 0 || gf->End2 < start + 1)) ||
-        ((ajFeatGetStart(gf) > end + 1) &&
-        (gf->Start2 == 0 || gf->Start2 > end + 1)))
+    while(!ajListIterDone(iter))
     {
-        continue;
+        AjPFeature gf = ajListIterGet(iter);
+
+        AjPFeature copy = NULL;
+
+
+        if (((ajFeatGetEnd(gf) < start + 1) &&
+             (gf->End2 == 0 || gf->End2 < start + 1)) ||
+            ((ajFeatGetStart(gf) > end + 1) &&
+             (gf->Start2 == 0 || gf->Start2 > end + 1)))
+        {
+            continue;
+        }
+
+        copy = ajFeatNewFeat(gf);
+        copy->Start = copy->Start - start;
+        copy->End = copy->End - start;
+
+        if (copy->Start2 > 0)
+            copy->Start2 = copy->Start2 - start;
+
+        if (copy->End2 > 0)
+            copy->End2 = copy->End2 - start;
+
+        ajFeatTrimOffRange (copy, 0, 1, end - start + 1, AJTRUE, AJTRUE);
+
+        ajFeattableAdd(ftable, copy);
     }
 
-    copy = ajFeatNewFeat(gf);
-    copy->Start = copy->Start - start;
-    copy->End = copy->End - start;
+    ajFeattableDel(&old_feattable);
+    ajListIterDel(&iter);
 
-    if (copy->Start2 > 0)
-      copy->Start2 = copy->Start2 - start;
-
-    if (copy->End2 > 0)
-      copy->End2 = copy->End2 - start;
-
-    ajFeatTrimOffRange (copy, 0, 1, end - start + 1, AJTRUE, AJTRUE);
-
-    ajFeattableAdd(ftable, copy);
-  }
-  ajFeattableDel(&old_feattable);
-  ajListIterDel(&iter);
+    return;
 }

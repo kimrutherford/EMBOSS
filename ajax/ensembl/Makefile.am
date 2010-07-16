@@ -9,7 +9,12 @@ CYGWIN_LDFLAGS = -no-undefined -Wl,--add-stdcall-alias -Wl,--export-all-symbols 
 CYGWIN_LDENSEMBL = -L../../plplot -L../expat -L../pcre -L../core -lajax -leplplot -leexpat -lepcre
 endif
 
-INCLUDES = -I$(top_srcdir)/plplot -I$(top_srcdir)/ajax/expat \
+if !ESYSTEMLIBS
+EXTRA_INCLUDES = -I$(top_srcdir)/ajax/expat
+endif
+
+
+INCLUDES = -I$(top_srcdir)/plplot $(EXTRA_INCLUDES) \
 -I$(top_srcdir)/ajax/pcre -I$(top_srcdir)/ajax/core
 
 ENSEMBLSRC = ensanalysis.c ensassembly.c ensassemblyexception.c \
@@ -42,7 +47,7 @@ ensvariation.h
 
 libensembl_la_SOURCES = $(ENSEMBLSRC)
 
-VERS_INF = -version-info 6:2:0
+VERS_INF = -version-info 6:3:0
 
 if ISCYGWIN
 LINKFLAGS = $(VERS_INF) $(CYGWIN_LDFLAGS) $(CYGWIN_LDENSEMBL)

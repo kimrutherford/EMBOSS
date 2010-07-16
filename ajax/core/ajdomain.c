@@ -45,6 +45,9 @@
 /* ============================ private data ============================= */
 /* ======================================================================= */
 
+
+
+
 /* @datastatic AjPScopcla *****************************************************
 **
 ** local Scopcla object.
@@ -60,7 +63,7 @@
 **
 **
 **
-** @attr Entry [AjPStr]      Domain identifer code. 
+** @attr Entry [AjPStr]      Domain identifier code.
 ** @attr Pdb [AjPStr]        Corresponding pdb identifier code.
 ** @attr Sccs [AjPStr]       Scop compact classification string.
 ** @attr Class [ajint]       SCOP sunid for class 
@@ -120,8 +123,8 @@ typedef struct AjSScopcla
 **                      'cf' (fold), 'sf' (superfamily), 'fa' (family), 'dm' 
 **                      (domain) or 'sp' (species).
 ** @attr Sccs [AjPStr]  Scop compact classification string.
-** @attr Entry [AjPStr] Domain identifer code (or '-' if Type!='px').
-** @attr Desc [AjPStr]  Description in english of the node.
+** @attr Entry [AjPStr] Domain identifier code (or '-' if Type!='px').
+** @attr Desc [AjPStr]  Description in English of the node.
 ** @attr Sunid [ajint]  SCOP sunid for node.
 ** @attr Padding [char[4]]  Padding to alignment boundary
 **
@@ -267,6 +270,9 @@ static AjPCathDom    domainCathDomNew(ajint nsegments);
 /* ======================================================================= */
 /* ========================== private functions ========================== */
 /* ======================================================================= */
+
+
+
 
 /* @funcstatic domainScopclaNew ***********************************************
 **
@@ -419,7 +425,7 @@ static AjPScopdes domainScopdesReadC(AjPFile inf, const char *entry)
     }
     
 
-    /* Read up to the correcty entry (line) */
+    /* Read up to the correct entry (line) */
     ajStrAssignC(&domainStrtentry,entry);
     ajStrFmtUpper(&domainStrtentry);
     
@@ -516,7 +522,7 @@ static AjPScopcla domainScopclaReadC(AjPFile inf, const char *entry)
     }
     
 
-    /* Read up to the correcty entry (line) */
+    /* Read up to the correct entry (line) */
     ajStrAssignC(&domainStrtentry,entry);
     ajStrFmtUpper(&domainStrtentry);
     
@@ -624,7 +630,7 @@ static AjPScopcla domainScopclaReadC(AjPFile inf, const char *entry)
     ajStrTokenDel(&bhandle);
 
     return ret;
-}	
+}
 
 
 
@@ -963,7 +969,7 @@ static void domainCathDomDel(AjPCathDom *ptr)
     
     return;
 }
-  
+
 
 
 
@@ -1015,10 +1021,10 @@ static void domainCathNameDel(AjPCathName *ptr)
     
     return;
 }
- 
- 
- 
-    
+
+
+
+
 /* @funcstatic domainSortNameId ***********************************************
 **
 ** Function to sort CathName objects by Id element.
@@ -1043,8 +1049,8 @@ static ajint domainSortNameId(const void *cath1, const void *cath2)
 }
 
 
- 
-  
+
+
 /* @funcstatic domainSortDomainID *********************************************
 **
 ** Function to sort CathDom objects by DomainID element.
@@ -1076,11 +1082,16 @@ static ajint domainSortDomainID(const void *DomID1, const void *DomID2)
 /* =========================== constructors ============================== */
 /* ======================================================================= */
 
+
+
+
 /* @section Constructors ****************************************************
 **
 ** These constructors return a pointer to a new instance of an object.
 **
 ****************************************************************************/
+
+
 
 
 /* @func ajCathReadAllNew **************************************************
@@ -1128,14 +1139,14 @@ AjPList  ajCathReadAllNew(AjPFile inf)
 ** @param [u] cathf   [AjPFile] Cath class file
 ** @param [u] domf    [AjPFile] Cath domain file
 ** @param [u] namesf  [AjPFile] Output file
-** @param [u] logf    [AjPFile] Log file
+** @param [u] flog    [AjPFile] Log file
 **
 ** @return [AjPList] List of Scop objects.
 ** @@
 ****************************************************************************/
 
 AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf, 
-			       AjPFile logf)
+			       AjPFile flog)
 { 
     AjPList ret = NULL;
     AjPStr CathNameLine    = NULL;  /* String used to hold line from namesf*/
@@ -1188,7 +1199,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
     ajint intI  = 0;  /* Identical family number as int */  
     ajint d;          /*Declare int for looping through domains*/   
     ajint s;          /*Declare int for looping through segments*/ 
-    ajint single_seg = 1;   /* Number of segments when no match founf in 
+    ajint single_seg = 1;   /* Number of segments when no match found in
 			      CathDomList */
     
     
@@ -1205,7 +1216,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
     AjPStr    tmptok = NULL;
     
     
-    /* Intitialise strings */
+    /* Initialise strings */
     tmptok          = ajStrNew();
     CathNameLine    = ajStrNew();
     CathDomLine     = ajStrNew();
@@ -1358,7 +1369,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
             */
 	    
 
-	    /*Convert string containing no. of segs to int */
+	    /*Convert string containing no. of segments to int */
 	    ajStrToInt(StrTokPtr, &(tmpNSegment)); 
 	    
 	    /* Create CathDom object giving tmpNSegment as argument */
@@ -1503,7 +1514,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 		ajStrAssignS(&(CathPtr->End[s]), 
 			  CathDomArray[idxCathDom]->End[s]); 
 			
-	    }      
+	    }   
 	}
 	/* no match found => only one domain in protein */
 	else				
@@ -1532,20 +1543,13 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 	    /* get Start and End residue numbers for each segment */ 
 	    ajStrAssignC(&(CathPtr->Start[0]), ".");
 	    ajStrAssignC(&(CathPtr->End[0]), ".");
-
-	    /*
-            ** Assign value of start to "." 
-	    ** urrggh! ((CathPtr->Start[0]) = ".");
-	    ** Assign value of end to "."
-	    ** yeek!	  ((CathPtr->End[0]) = ".");
-            */
 	}
 
 
 	/* Extract Pdb code from DomainId */
 	ajStrAssignSubS(&(CathPtr->Pdb), CathPtr->DomainID, 0,3);
 	
-	/* Extract chain identifer from DomainId */
+	/* Extract chain identifier from DomainId */
 	CathPtr->Chain=ajStrGetCharPos(CathPtr->DomainID, 4);
 		    
 	/*
@@ -1584,12 +1588,12 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 	** Superfamily_Id and store in temp. variable (format X.XX.XX.XX)
         */ 
 	    
-	/* Make string containg CATH id numbers */ 
+	/* Make string containing CATH id numbers */
 	ajFmtPrintS(&tmpNumString, "%d.%d.%d.%d", intC, intA, intT, intH); 
 
 	/* Binary search using temp. variable in AjSCathName */
 	
-	ajFmtPrintF(logf, "%S\n", tmpNumString);
+	ajFmtPrintF(flog, "%S\n", tmpNumString);
 	
 	/* Binary search of tmpNumString over array of CathName objects */
         idxCathName = domainCathNameBinSearch(tmpNumString, CathNameArray, 
@@ -1607,7 +1611,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 	    ajStrAssignC(&(CathPtr->Superfamily), ".");
 	    
 	    /*error	    (CathPtr->Superfamily) = "."); */
-        }               
+        }            
         
 	
 	/*
@@ -1616,11 +1620,11 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 	** and store in temp. variable (format X.XX.XX)
         */ 
 
-	/* Make string containg CAT id numbers */
+	/* Make string containing CAT id numbers */
         ajFmtPrintS(&tmpNumString, "%d.%d.%d", intC, intA, intT); 
 	
 	/* Binary search using temp. variable in AjSCathName */
-	ajFmtPrintF(logf, "%S\n", tmpNumString);
+	ajFmtPrintF(flog, "%S\n", tmpNumString);
 	/* Binary search of tmpNumString over array of CathName objects */
         idxCathName = domainCathNameBinSearch(tmpNumString, CathNameArray, 
 					   dimCathName); 
@@ -1635,7 +1639,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
             /* Write topology as a '.'  */
 	    ajStrAssignC(&(CathPtr->Topology), ".");
 	    /*error	    CathPtr->Topology) = "."); */
-        }                         
+        }                      
 
 
 	/*
@@ -1671,12 +1675,12 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 	
 
 	/*
-        ** Make string containg CA id numbers
+        ** Make string containing CA id numbers
 	**	ajFmtPrintS(&tmpNumString, "000%d.%d", intC, intA);
         */ 
 	
 	/* Binary search using temp. variable in AjSCathName */
-	ajFmtPrintF(logf, "%S\n", tmpNumString);
+	ajFmtPrintF(flog, "%S\n", tmpNumString);
 	/* Binary search of tmpNumString over array of CathName objects */
         idxCathName = domainCathNameBinSearch(tmpNumString, CathNameArray, 
 					   dimCathName); 
@@ -1693,7 +1697,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
             /* Write architecture as a '.' */
 	    ajStrAssignC(&(CathPtr->Architecture), ".");
 	    /*error	    (CathPtr->Architecture) = "."); */
-        }    
+        } 
 
 
 	/*
@@ -1709,7 +1713,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 
 
 	/* Binary search using temp. variable in AjSCathName */
-	ajFmtPrintF(logf, "%S\n", tmpNumString);
+	ajFmtPrintF(flog, "%S\n", tmpNumString);
 	/* Binary search of tmpNumString over array of CathName objects */
         idxCathName = domainCathNameBinSearch(tmpNumString, CathNameArray, 
 					   dimCathName); 
@@ -1725,7 +1729,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
             /* Write class as a '.' */
 	    ajStrAssignC(&(CathPtr->Class), ".");
 	    /*error	    (CathPtr->Class) = "."); */
-        }    
+        } 
 
 	/* Push the Cath object onto list */
 	ajListPushAppend(ret, CathPtr);
@@ -2661,7 +2665,7 @@ AjPScop ajScopReadCNew(AjPFile inf, const char *entry)
 	ajStrDel(&sse);
 	ajStrDel(&sss);
 	return NULL;
-    }    
+    } 
     
     while(ok && (!ajStrPrefixC(line,"//")))
     {
@@ -2849,12 +2853,17 @@ AjPScop ajScopReadCNew(AjPFile inf, const char *entry)
 /* =========================== destructors =============================== */
 /* ======================================================================= */
 
+
+
+
 /* @section Structure Destructors *******************************************
 **
 ** These destructors functions receive the address of the instance to be
 ** deleted.  The original pointer is set to NULL so is ready for re-use.
 **
 ****************************************************************************/
+
+
 
 
 /* @func ajDomainDel ********************************************************
@@ -3012,6 +3021,9 @@ void ajCathDel(AjPCath *ptr)
 /* ============================ Assignments ============================== */
 /* ======================================================================= */
 
+
+
+
 /* @section Assignments *****************************************************
 **
 ** These functions overwrite the instance provided as the first argument
@@ -3019,6 +3031,8 @@ void ajCathDel(AjPCath *ptr)
 ** create a new instance by assignment.
 **
 ****************************************************************************/
+
+
 
 
 /* @func ajDomainCopy *********************************************************
@@ -3194,6 +3208,9 @@ AjBool ajScopCopy(AjPScop *to, const AjPScop from)
 /* ============================= Modifiers =============================== */
 /* ======================================================================= */
 
+
+
+
 /* @section Modifiers *******************************************************
 **
 ** These functions use the contents of an instance and update them.
@@ -3208,13 +3225,15 @@ AjBool ajScopCopy(AjPScop *to, const AjPScop from)
 /* ========================== Operators ===================================*/
 /* ======================================================================= */
 
+
+
+
 /* @section Operators *******************************************************
 **
 ** These functions use the contents of an instance but do not make any 
 ** changes.
 **
 ****************************************************************************/
-
 
 
 
@@ -3337,6 +3356,9 @@ ajint ajCathMatchPdbId(const void *hit1, const void *hit2)
 /* ============================== Casts ===================================*/
 /* ======================================================================= */
 
+
+
+
 /* @section Casts ***********************************************************
 **
 ** These functions examine the contents of an instance and return some
@@ -3352,12 +3374,17 @@ ajint ajCathMatchPdbId(const void *hit1, const void *hit2)
 /* =========================== Reporters ==================================*/
 /* ======================================================================= */
 
+
+
+
 /* @section Reporters *******************************************************
 **
 ** These functions return the contents of an instance but do not make any 
 ** changes.
 **
 ****************************************************************************/
+
+
 
 
 /* @func ajDomainGetId ******************************************************
@@ -3387,7 +3414,7 @@ AjPStr ajDomainGetId(const AjPDomain obj)
 	ajWarn("Domain type not resolved in ajDomainGetId");
 
     return NULL;
-}		
+}
 
 
 
@@ -3418,7 +3445,7 @@ AjPStr ajDomainGetSeqPdb(const AjPDomain obj)
 	ajWarn("Domain type not resolved in ajDomainGetSeqPdb");
 
     return NULL;
-}		
+}
 
 
 
@@ -3449,7 +3476,7 @@ AjPStr ajDomainGetSeqSpr(const AjPDomain obj)
 	ajWarn("Domain type not resolved in ajDomainGetSeqSpr");
 
     return NULL;
-}	
+}
 
 
 
@@ -3480,7 +3507,7 @@ AjPStr ajDomainGetPdb(const AjPDomain obj)
 	ajWarn("Domain type not resolved in ajDomainGetSeqPdb");
 
     return NULL;
-}	
+}
 
 
 
@@ -3511,7 +3538,7 @@ AjPStr ajDomainGetAcc(const AjPDomain obj)
 	ajWarn("Domain type not resolved in ajDomainGetSeqPdb");
 
     return NULL;
-}	
+}
 
 
 
@@ -3525,6 +3552,7 @@ AjPStr ajDomainGetAcc(const AjPDomain obj)
 ** @return [AjPStr] Or NULL on error.
 ** @@
 ****************************************************************************/
+
 AjPStr ajDomainGetSpr(const AjPDomain obj)
 {
     if(!obj)
@@ -3541,7 +3569,7 @@ AjPStr ajDomainGetSpr(const AjPDomain obj)
 	ajWarn("Domain type not resolved in ajDomainGetSeqPdb");
 
     return NULL;
-}	
+}
 
 
 
@@ -3573,7 +3601,7 @@ ajint ajDomainGetN(const AjPDomain obj)
 	ajWarn("Domain type not resolved in ajDomainGetSeqPdb");
 
     return -1;
-}	
+}
 
 
 
@@ -3765,12 +3793,17 @@ ajint ajCathArrFindPdbid(AjPCath const *arr, ajint siz, const AjPStr id)
 /* ========================== Input & Output ============================= */
 /* ======================================================================= */
 
+
+
+
 /* @section Input and Output ************************************************
 **
 ** These functions use the contents of an instance but do not make any 
 ** changes.
 **
 ****************************************************************************/
+
+
 
 
 /* @func ajPdbWriteDomain **************************************************
@@ -3831,7 +3864,7 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
       ajFatal("Bad args passed to ajPdbWriteDomain");
 
 
-    /* Intitialise strings */
+    /* Initialise strings */
     seq    = ajStrNew();
     tmpseq = ajStrNew();
     tmpstr = ajStrNew();
@@ -3890,7 +3923,7 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 
 
     /* Start of main application loop */
-    /* Print out data up to co-ordinates list */
+    /* Print out data up to coordinates list */
     for(z=0;
 	z<scop->N;
 	z++,found_start=ajFalse, found_end=ajFalse, 
@@ -4568,7 +4601,7 @@ AjBool ajCathWrite(AjPFile outf, const AjPCath obj)
     ajStrDel(&tmp);
     
     return ajTrue;
-}    
+}
 
 
 
@@ -4605,7 +4638,7 @@ AjBool ajDomainWrite(AjPFile outf, const AjPDomain obj)
 
 
 
- 
+
 /* @func ajScopWrite *******************************************************
 **
 ** Write contents of a Scop object to a DCF file (domain classification 
@@ -4711,6 +4744,9 @@ AjBool ajScopWrite(AjPFile outf, const AjPScop obj)
 /* ======================== Miscellaneous =================================*/
 /* ======================================================================= */
 
+
+
+
 /* @section Miscellaneous ***************************************************
 **
 ** These functions may have diverse functions that do not fit into the other
@@ -4724,7 +4760,7 @@ AjBool ajScopWrite(AjPFile outf, const AjPScop obj)
 /* @func ajDomainDCFType ****************************************************
 **
 ** Reads a DCF file (domain classification file; see documentation for 
-** DOMAINATRIX "scopparse" application) and assertains the type of domains 
+** DOMAINATRIX "scopparse" application) and ascertains the type of domains
 ** (ajSCOP or ajCATH) within.
 ** 
 **

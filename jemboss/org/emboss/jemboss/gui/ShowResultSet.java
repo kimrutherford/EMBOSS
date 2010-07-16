@@ -26,6 +26,10 @@ import java.awt.*;
 //import java.awt.event.KeyEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
@@ -115,16 +119,21 @@ public class ShowResultSet extends JFrame
   public ShowResultSet(Hashtable reslist, Hashtable inputFiles, 
                        String project, JembossParams mysettings)
   {
-    super("Saved Results");
+    super("Saved Results - "+(project==null?"":project));
     rtp = new JTabbedPane();
 
     setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
     JScrollPane r1;
+    
+    String prjdir = null;
+    
+    if(project!=null)
+        prjdir = mysettings.getResultsHome()+project;
 
-    String stabs[] = addHashContentsToTab(reslist,rtp);
+    String stabs[] = addHashContentsToTab(reslist,rtp,prjdir,mysettings);
     if(inputFiles != null)
-      addHashContentsToTab(inputFiles,rtp);
+      addHashContentsToTab(inputFiles,rtp, prjdir,mysettings);
 
 // now load png files into pane
     for(int i=0; i<stabs.length;i++)
@@ -189,6 +198,8 @@ public class ShowResultSet extends JFrame
   public void setJMenuBar()
   {
     int index = rtp.getSelectedIndex();
+    if (index == -1)
+        return;
     String title = rtp.getTitleAt(index);
     if (toolbar != null)
         remove(toolbar);
@@ -250,7 +261,8 @@ public class ShowResultSet extends JFrame
   * @return	array of names of PNG tabs
   *
   */
-  private String[] addHashContentsToTab(Hashtable h,JTabbedPane rtp)
+  private String[] addHashContentsToTab(final Hashtable h,
+          final JTabbedPane rtp, final String prjdir, JembossParams settings)
   {
     JScrollPane r1;
 
@@ -261,7 +273,7 @@ public class ShowResultSet extends JFrame
 
     while (enumer.hasMoreElements())
     {
-      String thiskey = (String)enumer.nextElement().toString();
+      final String thiskey = (String)enumer.nextElement().toString();
       if(!thiskey.equals(cmd))
       {
         if( thiskey.endsWith("png") || thiskey.endsWith("html") ||
@@ -282,34 +294,92 @@ public class ShowResultSet extends JFrame
             rtp.add(thiskey,r1);
           }
         }
-//        else if (thiskey.endsWith("x3d")) // grout
-//        {
-//          GroutPanel panel = new GroutPanel()
-//          {
-//            protected void addDisposeOfGroutPanelMenuItem(JMenu menu)
-//            {
-//              JMenuItem menuItem = new JMenuItem("Close");
-//              menuItem.setAccelerator(KeyStroke.getKeyStroke(
-//                        KeyEvent.VK_E, ActionEvent.CTRL_MASK));
-//
-//              menuItem.addActionListener(new ActionListener()
-//              {
-//                public void actionPerformed(ActionEvent e)
-//                {
-//                  dispose();
-//                }
-//              });
-//              menu.add(menuItem);                         
-//            }
-//          };
-//
-//          if(h.get(thiskey) instanceof String)
-//            panel.setX3DFile((String)h.get(thiskey));
-//          else
-//            panel.setX3DFile(new String((byte[])h.get(thiskey)));
-//          rtp.add(thiskey,panel);
-//          setJMenuBar(panel.getMenuBar());
-//        }
+        else if( thiskey.endsWith(".pdf") || thiskey.endsWith(".svg") )
+        {
+            Box box = new Box(BoxLayout.Y_AXIS);
+            Object obj = h.get(thiskey);
+            if (settings.getDesktopSupportsOPENAction())
+            {
+                String fname;
+                JButton bt = new JButton("Open using default desktop viewer");               
+
+                if (prjdir!=null)
+                    fname =  prjdir+File.separator+thiskey;
+                else
+                {
+                    fname =  thiskey;
+                }
+
+                if (JembossParams.isJembossServer()|| !new File(fname).exists())
+                {
+                    File tmpf;
+                    FileOutputStream out;
+
+                    try {
+                        tmpf = File.createTempFile("jemboss_",
+                                thiskey.substring(thiskey.lastIndexOf('.')));
+                        out = new FileOutputStream(tmpf);
+
+                        if(obj instanceof byte[])
+                            out.write((byte[])obj);
+                        else
+                        {
+                            String s = (String)obj;
+
+                            for(int i=0;i<s.length();i++){
+                                out.write(s.charAt(i));
+                            }
+                        }
+
+                        out.close();
+                        tmpf.deleteOnExit();
+                        fname = tmpf.getAbsolutePath();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        fname=null;
+                    }
+                }
+
+                if(fname!=null)
+                {
+                    final String fname_ = fname;
+
+                    bt.addActionListener(new ActionListener()
+                    {
+                        public void actionPerformed(ActionEvent e)
+                        {
+
+                            try
+                            {
+                                Desktop.getDesktop().open(new File(fname_));
+                            }
+                            catch (IOException ex)
+                            {
+                                ex.printStackTrace();
+                                JOptionPane.showMessageDialog(rtp,
+                                        ex.getMessage(),"Error",
+                                        JOptionPane.ERROR_MESSAGE);
+                            }
+                        }
+                    }
+                    );
+                    box.add(bt);
+                }
+            }
+
+            JTextArea ta;
+
+            if(obj instanceof byte[])
+                ta = new JTextArea(new String((byte[])obj));
+            else
+                ta = new JTextArea((String)obj);
+
+            ta.setEditable(false);
+            r1 = new JScrollPane(ta);
+
+            box.add(r1);
+            rtp.add(thiskey,box);
+        }
         else
         {
           FileEditorDisplay fed = new FileEditorDisplay(thiskey,

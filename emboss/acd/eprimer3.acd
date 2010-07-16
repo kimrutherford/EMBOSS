@@ -4,8 +4,9 @@ application: eprimer3 [
   external: "primer3_core Part of the 'primer3' package, version 3.0,
 		      available from the Whitehead Institute.
 		      See: http://primer3.sourceforge.net/"
-  relations: "EDAM: PCR primer design"
-  relations: "EDAM: Microarray probe design"
+  relations: "/edam/topic/0000195 Polymerase chain reaction"
+  relations: "/edam/operation/0000308 PCR primer design"
+  relations: "/edam/operation/0000309 Microarray probe design"
 ]
 
 section: input [
@@ -18,7 +19,9 @@ section: input [
     type: "dna"
     help: "The sequence from which to choose primers. The sequence
            must be presented 5' to 3'"
-    relations: "EDAM: DNA sequence record"                                 
+    relations: "/edam/data/0001215 Pure DNA sequence"
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more" 
   ]
 
   toggle: primer [
@@ -26,7 +29,7 @@ section: input [
     information: "Pick PCR primer(s)"
     default: "Y"
     help: "Tell EPrimer3 to pick primer(s)"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   list: task [
@@ -43,7 +46,7 @@ section: input [
     help: "Tell EPrimer3 what task to perform. Legal values are 1:
            'Pick PCR primers', 2: 'Pick forward primer only', 3: 'Pick
            reverse primer only', 4: 'No primers needed'."
-    relations: "EDAM: Generic string array"                                
+    relations: "/edam/data/0001773 Tool-specific parameter"                                
   ]
 
   toggle: hybridprobe [
@@ -53,7 +56,7 @@ section: input [
     help: "An 'internal oligo' is intended to be used as a
            hybridization probe (hyb probe) to detect the PCR product after
            amplification."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   infile: mishyblibraryfile [
@@ -90,7 +93,8 @@ section: input [
            'N'). There are no restrictions on line length. \
            An empty value for this parameter indicates that no library should
            be used."
-    relations:  "EDAM: Primer3 internal oligo mishybridizing library"  
+    relations: "/edam/data/0001215 Pure DNA sequence"
+    relations:  "/edam/data/0000850 Sequence set"  
   ]
 
   infile: mispriminglibraryfile [
@@ -125,7 +129,8 @@ section: input [
            'N'). There are no restrictions on line length. \
            An empty value for this parameter indicates that no repeat library
            should be used."
-    relations:  "EDAM: Primer3 mispriming library file"                
+    relations: "/edam/data/0001215 Pure DNA sequence"
+    relations:  "/edam/data/0000850 Sequence set"  
   ]
 
 endsection: input
@@ -150,7 +155,7 @@ section: additional [
              the value of the objective function (where a lower number
              indicates a better primer pair). Caution: setting this parameter
              to a large value will increase running time."
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001694 Number of output entities"                                     
     ]
 
   endsection: programsection
@@ -171,7 +176,7 @@ section: additional [
              (start),(end) \
              where (start) is the index of the first base to consider, and
              (end) is the last in the primer-picking region."
-    relations: "EDAM: Generic integer range"                               
+    relations: "/edam/data/0001017 Sequence range"
     ]
 
     range: targetregion [
@@ -188,7 +193,7 @@ section: additional [
              and (end) is the last \
              E.g. 50,51 requires primers to surround the 2 bases at positions
              50 and 51."
-    relations: "EDAM: Generic integer range"                               
+    relations: "/edam/data/0001017 Sequence range"
     ]
 
     range: excludedregion [
@@ -206,7 +211,7 @@ section: additional [
              ALUs or LINEs. \
              E.g. 401,407 68,70 forbids selection of primers in the 7 bases
              starting at 401 and the 3 bases at 68."
-    relations: "EDAM: Generic integer range"                               
+    relations: "/edam/data/0001017 Sequence range"
     ]
 
     string: forwardinput [
@@ -217,7 +222,7 @@ section: additional [
              which to design reverse primers and optional internal oligos.
              Must be a substring of SEQUENCE."
       knowntype: "nucleotide sequence"
-    relations:  "EDAM: Nucleotide sequence"                            
+    relations:  "/edam/data/0001210 Pure nucleotide sequence"                            
     ]
 
     string: reverseinput [
@@ -228,7 +233,7 @@ section: additional [
              which to design forward primers and optional internal oligos.
              Must be a substring of the reverse strand of SEQUENCE."
       knowntype: "nucleotide sequence"
-    relations:  "EDAM: Nucleotide sequence"                            
+    relations:  "/edam/data/0001210 Pure nucleotide sequence"                            
     ]
 
   endsection: seqoptsection
@@ -247,7 +252,7 @@ section: additional [
              the 3' end of both the forward and reverse primer. (This
              parameter has no effect on the internal oligo if one is
              requested.)"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001773 Tool-specific parameter"                                     
     ]
 
     integer: osize [
@@ -257,7 +262,7 @@ section: additional [
       information: "Primer optimum size"
       help: "Optimum length (in bases) of a primer oligo. EPrimer3
              will attempt to pick primers close to this length."
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001249 Sequence length"                                     
     ]
 
     integer: minsize [
@@ -267,7 +272,7 @@ section: additional [
       information: "Primer minimum size"
       help: "Minimum acceptable length of a primer. Must be greater
              than 0 and less than or equal to MAX-SIZE."
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001249 Sequence length"
     ]
 
     integer: maxsize [
@@ -275,12 +280,14 @@ section: additional [
       default: "27"
       minimum: "$(minsize)"
       maximum: "35"
+      failrange: "N"
+      trueminimum: "N"
       information: "Primer maximum size"
       help: "Maximum acceptable length (in bases) of a primer.
              Currently this parameter cannot be larger than 35. This limit is
              governed by the maximum oligo size for which EPrimer3's
              melting-temperature is valid."
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001249 Sequence length"
     ]
 
     float: otm [
@@ -295,7 +302,7 @@ section: additional [
              Breslauer, Frank, Bloecker and Marky, Proc. Natl. Acad. Sci. USA,
              vol 83, pp 3746-3750. Please refer to the former paper for
              background discussion."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0002139 Melting temperature"
     ]
 
     float: mintm [
@@ -304,7 +311,7 @@ section: additional [
       information: "Primer minimum Tm"
       help: "Minimum acceptable melting temperature(Celsius) for a
              primer oligo."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0002139 Melting temperature"
     ]
 
     float: maxtm [
@@ -314,7 +321,7 @@ section: additional [
       information: "Primer maximum Tm"
       help: "Maximum acceptable melting temperature(Celsius) for a
              primer oligo."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0002139 Melting temperature"
     ]
 
     float: maxdifftm [
@@ -323,7 +330,7 @@ section: additional [
       information: "Maximum difference in Tm of primers"
       help: "Maximum acceptable (unsigned) difference between the
              melting temperatures of the forward and reverse primers."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0002139 Melting temperature"
     ]
 
     float: ogcpercent [
@@ -331,7 +338,7 @@ section: additional [
       default: "50.0"
       information: "Primer optimum GC percent"
       help: "Primer optimum GC percent."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001773 Tool-specific parameter"                                     
     ]
 
     float: mingc [
@@ -339,7 +346,7 @@ section: additional [
       default: "20.0"
       information: "Primer minimum GC percent"
       help: "Minimum allowable percentage of Gs and Cs in any primer."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001773 Tool-specific parameter"                                     
     ]
 
     float: maxgc [
@@ -349,7 +356,7 @@ section: additional [
       information: "Primer maximum GC percent"
       help: "Maximum allowable percentage of Gs and Cs in any primer
              generated by Primer."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001773 Tool-specific parameter"                                     
     ]
 
     float: saltconc [
@@ -359,7 +366,7 @@ section: additional [
       help: "The millimolar concentration of salt (usually KCl) in the
              PCR. EPrimer3 uses this argument to calculate oligo melting
              temperatures."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0002140 Concentration"
     ]
 
     float: dnaconc [
@@ -386,7 +393,7 @@ section: additional [
              PCR; fortunately PCR seems quite robust for a variety of oligo
              melting temperatures. \
              See ADVICE FOR PICKING PRIMERS."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0002140 Concentration"
     ]
 
     integer: maxpolyx [
@@ -396,7 +403,7 @@ section: additional [
       information: "Maximum polynucleotide repeat"
       help: "The maximum allowable length of a mononucleotide repeat
              in a primer, for example AAAAAA."
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001249 Sequence length"                                     
     ]
 
   endsection: primersection
@@ -413,7 +420,7 @@ section: additional [
       information: "Product optimum size"
       help: "The optimum size for the PCR product. 0 indicates that
              there is no optimum product size."
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001249 Sequence length"
     ]
 
     range: prange [
@@ -435,7 +442,7 @@ section: additional [
              regardless the value of the objective function for these pairs.
              Only if there are an insufficient number of primers in the first
              range will EPrimer3 return primers in a subsequent range."
-    relations: "EDAM: Generic integer range"                               
+    relations: "/edam/data/0001017 Sequence range"
     ]
 
     float: ptmopt [
@@ -444,7 +451,7 @@ section: additional [
       information: "Product optimum Tm"
       help: "The optimum melting temperature for the PCR product. 0
              indicates that there is no optimum temperature."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0002139 Melting temperature"
     ]
 
     float: ptmmin [
@@ -454,7 +461,7 @@ section: additional [
       help: "The minimum allowed melting temperature of the amplicon.
              Please see the documentation on the maximum melting temperature
              of the product for details."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0002139 Melting temperature"
     ]
 
     float: ptmmax [
@@ -471,7 +478,7 @@ section: additional [
              percent of Gs and Cs in the sequence, and length is the length
              of the sequence. \
              A similar formula is used by the prime primer selection program
-             in GCG http://www.gcg.com), which instead uses 675.0/length in
+             in GCG, which instead uses 675.0/length in
              the last term (after F. Baldino, Jr, M.-F. Chesselet, and M.E.
              Lewis, Methods in Enzymology 168:766 (1989) eqn (1) on page 766
              without the mismatch and formamide terms). The formulas here and
@@ -483,7 +490,7 @@ section: additional [
              temperature. If you are planning to use the PCR product for
              hybridization later this behavior will not give you the Tm under
              hybridization conditions."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0002139 Melting temperature"
     ]
 
   endsection: productsection
@@ -504,7 +511,7 @@ section: additional [
              pairs, where (start) is the index of the first base of an
              excluded region, and (end) is the last. Often one would make
              Target regions excluded regions for internal oligos."
-    relations: "EDAM: Generic integer range"                               
+    relations: "/edam/data/0001017 Sequence range"
     ]
 
     string: oligoinput [
@@ -515,7 +522,7 @@ section: additional [
              which to design forward and reverse primers. Must be a substring
              of SEQUENCE."
       knowntype: "nucleotide sequence"
-    relations:  "EDAM: Nucleotide sequence"                            
+    relations:  "/edam/data/0001210 Pure nucleotide sequence"                            
     ]
 
   endsection: oligosinput
@@ -532,7 +539,7 @@ section: additional [
       information: "Internal oligo optimum size"
       help: "Optimum length (in bases) of an internal oligo. EPrimer3
              will attempt to pick primers close to this length."
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001249 Sequence length"
     ]
 
     integer: ominsize [
@@ -543,7 +550,7 @@ section: additional [
       help: "Minimum acceptable length of an internal oligo. Must be
              greater than 0 and less than or equal to
              INTERNAL-OLIGO-MAX-SIZE."
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001249 Sequence length"
     ]
 
     integer: omaxsize [
@@ -551,12 +558,14 @@ section: additional [
       default: "27"
       minimum: "$(ominsize)"
       maximum: "35"
+      failrange: "N"
+      trueminimum: "N"
       information: "Internal oligo maximum size"
       help: "Maximum acceptable length (in bases) of an internal
              oligo. Currently this parameter cannot be larger than 35. This
              limit is governed by maximum oligo size for which EPrimer3's
              melting-temperature is valid."
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001249 Sequence length"
     ]
 
     float: otmopt [
@@ -571,7 +580,7 @@ section: additional [
              21, pp 6409-6412 and Breslauer, Frank, Bloecker and Marky, Proc.
              Natl. Acad. Sci. USA, vol 83, pp 3746-3750. Please refer to the
              former paper for background discussion."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0002139 Melting temperature"
     ]
 
     float: otmmin [
@@ -580,7 +589,7 @@ section: additional [
       information: "Internal oligo minimum Tm"
       help: "Minimum acceptable melting temperature(Celsius) for an
              internal oligo."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0002139 Melting temperature"
     ]
 
     float: otmmax [
@@ -590,7 +599,7 @@ section: additional [
       information: "Internal oligo maximum Tm"
       help: "Maximum acceptable melting temperature (Celsius) for an
              internal oligo."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0002139 Melting temperature"
     ]
 
     float: ogcopt [
@@ -598,7 +607,7 @@ section: additional [
       default: "50.0"
       information: "Internal oligo optimum GC percent"
       help: "Internal oligo optimum GC percent."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001773 Tool-specific parameter"
     ]
 
     float: ogcmin [
@@ -607,7 +616,7 @@ section: additional [
       information: "Internal oligo minimum GC"
       help: "Minimum allowable percentage of Gs and Cs in an internal
              oligo."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001773 Tool-specific parameter"
     ]
 
     float: ogcmax [
@@ -617,7 +626,7 @@ section: additional [
       information: "Internal oligo maximum GC"
       help: "Maximum allowable percentage of Gs and Cs in any internal
              oligo generated by Primer."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001773 Tool-specific parameter"
     ]
 
     float: osaltconc [
@@ -627,7 +636,7 @@ section: additional [
       help: "The millimolar concentration of salt (usually KCl) in the
              hybridization. EPrimer3 uses this argument to calculate
              internal oligo melting temperatures."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0002140 Concentration"
     ]
 
     float: odnaconc [
@@ -636,7 +645,7 @@ section: additional [
       information: "Internal oligo DNA concentration (nM)"
       help: "The nanomolar concentration of annealing internal oligo
              in the hybridization."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0002140 Concentration"
     ]
 
     float: oanyself [
@@ -662,7 +671,7 @@ section: additional [
              is not considered. Scores are non-negative, and a score of 0.00
              indicates that there is no reasonable local alignment between
              two oligos."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001772 Score"
     ]
 
     float: oendself [
@@ -670,6 +679,8 @@ section: additional [
       default: "12.00"
       minimum: "$(oanyself)"
       maximum: "9999.99"
+      failrange: "N"
+      trueminimum: "N"
       information: "Internal oligo maximum 3' self
                     complementarity"
       help: "The maximum allowable 3'-anchored global alignment score
@@ -686,7 +697,7 @@ section: additional [
              primer-dimer will not occur. We recommend that
              INTERNAL-OLIGO-SELF-END be set at least as high as
              INTERNAL-OLIGO-SELF-ANY."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001772 Score"
     ]
 
     integer: opolyxmax [
@@ -697,7 +708,7 @@ section: additional [
                     repeat"
       help: "The maximum allowable length of an internal oligo
              mononucleotide repeat, for example AAAAAA."
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001249 Sequence length"                                     
     ]
 
     float: omishybmax [
@@ -708,7 +719,7 @@ section: additional [
       help: "Similar to MAX-MISPRIMING except that this parameter
              applies to the similarity of candidate internal oligos to the
              library specified in INTERNAL-OLIGO-MISHYB-LIBRARY."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001773 Tool-specific parameter"                                       
     ]
 
   endsection: oligosection
@@ -728,7 +739,7 @@ section: advanced [
            provide information on the number of oligos and primer pairs that
            EPrimer3 examined, and statistics on the number discarded for
            various reasons."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: fileflag [
@@ -742,7 +753,7 @@ section: advanced [
            tag (which must be supplied). In addition, if the input tag TASK
            is 1 or 4, EPrimer3 produces a file (sequence-id).int, which lists
            all acceptable internal oligos."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   integer: firstbaseindex [
@@ -755,7 +766,7 @@ section: advanced [
            set this parameter to 0. (This parameter also affects the indexes
            in the contents of the files produced when the primer file flag is
            set.)"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001773 Tool-specific parameter"
   ]
 
   boolean: pickanyway [
@@ -763,7 +774,7 @@ section: advanced [
     information: "Pick anyway"
     help: "If true pick a primer pair even if LEFT-INPUT, RIGHT-INPUT,
            or INTERNAL-OLIGO-INPUT violates specific constraints."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   float: maxmispriming [
@@ -772,7 +783,7 @@ section: advanced [
     information: "Primer maximum mispriming"
     help: "The maximum allowed weighted similarity with any sequence
            in MISPRIMING-LIBRARY."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001773 Tool-specific parameter"
   ]
 
   float: pairmaxmispriming [
@@ -782,7 +793,7 @@ section: advanced [
     help: "The maximum allowed sum of weighted similarities of a
            primer pair (one similarity for each primer) with any single
            sequence in MISPRIMING-LIBRARY."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001773 Tool-specific parameter"
   ]
 
   integer: numnsaccepted [
@@ -791,7 +802,7 @@ section: advanced [
     information: "Maximum Ns accepted in a primer"
     help: "Maximum number of unknown bases (N) allowable in any
            primer."
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001773 Tool-specific parameter"
   ]
 
   float: selfany [
@@ -819,13 +830,15 @@ section: advanced [
            is not considered. Scores are non-negative, and a score of 0.00
            indicates that there is no reasonable local alignment between two
            oligos."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001772 Score"
   ]
 
   float: selfend [
     default: "3.00"
     minimum: "0.00"
     maximum: "$(selfany)"
+    failrange: "N"
+    trueminimum: "Y"
     information: "Maximum 3' self complementarity"
     help: "The maximum allowable 3'-anchored global alignment score
            when testing a single primer for self-complementarity, and the
@@ -851,7 +864,7 @@ section: advanced [
            (local) Complementarity parameter because the score of a local
            alignment will always be at least as great as the score of a
            global alignment."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001772 Score"
   ]
 
   section: primerweights [
@@ -875,7 +888,7 @@ section: advanced [
              Polymerase Chain Reaction' in BA White, Ed., 'Methods in
              Molecular Biology, Vol. 15: PCR Protocols: Current Methods and
              Applications', 1993, pp 31-40, Humana Press, Totowa NJ)."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001773 Tool-specific parameter"
     ]
 
   endsection: primerweights
@@ -891,7 +904,7 @@ section: output [
     parameter: "Y"
     knowntype: "primer3 output"
     information: "Whitehead primer3_core program output file"
-    relations:  "EDAM: Primer3 primer report"                                 
+    relations:  "/edam/data/0000922 Primer report"                                 
   ]
 
 endsection: output

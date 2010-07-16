@@ -23,13 +23,14 @@
 ******************************************************************************/
 
 #include "ajax.h"
+#include "expat.h"
 
 #define AJDOMDESTROY 1
 #define AJDOMKEEP 0
 
 #define AJDOM_TABLE_HINT 1000
 
-
+#define AJXML_BUFSIZ 8192
 
 
 static AjBool          domIsAncestor(const AjPDomNode node,
@@ -46,7 +47,7 @@ static void            domAddToMap(AjPDomNodeList list, AjPDomNode key,
 
 
 static AjPDomNode  domNodeListItemFiltered(const AjPDomNodeList list,
-					   ajint index, ajuint nodetype);
+					   ajint indx, ajuint nodetype);
 
 static void        domTraverse(AjPDomNodeList list, AjPDomNode node,
 			       const AjPStr tagname);
@@ -59,6 +60,36 @@ static AjPDomNode  domNodeCloneNode(AjPDomDocument ownerdocument,
 
 static void   domWriteEncoded(const AjPStr s, AjPFile outf);
 
+static AjPDomUserdata domUserdataNew(void);
+static void domUserdataDel(AjPDomUserdata *thys);
+
+static void domExpatStart(void *udata, const XML_Char *name,
+                          const XML_Char **atts);
+static void domExpatEnd(void *udata, const XML_Char *name);
+static void domExpatChardata(void *udata, const XML_Char *str,
+                             int len);
+static void domExpatCdataStart(void *udata);
+static void domExpatCdataEnd(void *udata);
+static void domExpatComment(void *udata, const XML_Char *str);
+static void domExpatXmlDecl(void *udata, const XML_Char *version,
+                            const XML_Char *encoding, int standalone);
+static void domExpatDoctypeStart(void *udata, const XML_Char *doctypename,
+                                 const XML_Char *sysid, const XML_Char *pubid,
+                                 int hasinternalsubset);
+static void domExpatDoctypeEnd(void *udata);
+static void domExpatElement(void *udata, const XML_Char *name,
+                            XML_Content *model);
+static void domExpatAttlist(void *udata, const XML_Char *name,
+                            const XML_Char *attname, const XML_Char *atttype,
+                            const XML_Char *deflt, int isrequired);
+static void domExpatEntity(void *udata, const XML_Char *entityname, int isparam,
+                           const XML_Char *value, int lenval,
+                           const XML_Char *base, const XML_Char *systemid,
+                           const XML_Char *publicid, const XML_Char *notname);
+static void domExpatNotation(void *udata, const XML_Char *notname,
+                             const XML_Char *base, const XML_Char *systemid,
+                             const XML_Char *publicid);
+static void domClearMapValues(void **key, void **value, void *cl);
 
 
 
@@ -115,7 +146,7 @@ static const char *nodeinfo[] =
 
 /* @funcstatic domRemoveFromMap **********************************************
 **
-** Remove a key/value pair from a DOM nodelist 
+** Remove a key/value pair from a DOM node list
 **
 ** @param [w] list [AjPDomNodeList] node list
 ** @param [r] key [const AjPDomNode] key
@@ -126,17 +157,16 @@ static const char *nodeinfo[] =
 static void domRemoveFromMap(AjPDomNodeList list, const AjPDomNode key)
 {
     AjPDomNode trukey;
-    AjPDomNodeEntry val;
+
     if(!list->table)
 	return;
 
-    val = ajTableRemoveKey(list->table,key, (void**) &trukey);
-
-    if(val)
-    {
-	AJFREE(val);
-	AJFREE(trukey);
-    }
+    /*
+    ** don't free the values, just remove them from the map
+    ** if(val)
+    */
+    
+    ajTableRemoveKey(list->table, key, (void**) &trukey);
 
     return;
 }
@@ -146,7 +176,7 @@ static void domRemoveFromMap(AjPDomNodeList list, const AjPDomNode key)
 
 /* @funcstatic domAddToMap ****************************************************
 **
-** Add a key/value pair to a DOM nodelist 
+** Add a key/value pair to a DOM node list
 **
 ** @param [w] list [AjPDomNodeList] node list
 ** @param [o] key [AjPDomNode] key
@@ -172,9 +202,30 @@ static void domAddToMap(AjPDomNodeList list, AjPDomNode key,
 
 
 
+/* @func ajDomNodeListGetLen ************************************************
+**
+** Return the length of a DOM node list
+**
+** @param [r] list [const AjPDomNodeList] node list
+** @return [ajint] Length (-1 if error)
+** @@
+******************************************************************************/
+
+ajint ajDomNodeListGetLen(const AjPDomNodeList list)
+{
+
+    if(!list)
+        return -1;
+
+    return list->length;
+}
+
+
+
+
 /* @func ajDomNodeListAppend *************************************************
 **
-** Append a child node to a DOM nodelist 
+** Append a child node to a DOM node list
 **
 ** @param [w] list [AjPDomNodeList] node list
 ** @param [u] child [AjPDomNode] child
@@ -241,7 +292,7 @@ AjPDomNodeEntry ajDomNodeListAppend(AjPDomNodeList list,
 
 /* @func ajDomNodeAppendChild ************************************************
 **
-** Appends an extra child at the end of the childnodes list of a node.
+** Appends an extra child at the end of the child nodes list of a node.
 ** If extrachild is already in the list, it is first removed.  
 **
 ** @param [w] node [AjPDomNode] node
@@ -257,7 +308,7 @@ AjPDomNode ajDomNodeAppendChild(AjPDomNode node, AjPDomNode extrachild)
     
     if(!node || !extrachild)
 	return NULL;
-
+    
     if(extrachild->ownerdocument != node->ownerdocument &&
        node->type != AJDOM_DOCUMENT_NODE &&
        extrachild->type != AJDOM_DOCUMENT_TYPE_NODE)
@@ -299,7 +350,7 @@ AjPDomNode ajDomNodeAppendChild(AjPDomNode node, AjPDomNode extrachild)
 	return NULL;
     }
 
-    ajDomRemoveChild(node,extrachild);
+    domDoRemoveChild(node,extrachild);
 
     if(!ajDomNodeListAppend(node->childnodes,extrachild))
 	return NULL;
@@ -339,7 +390,7 @@ AjPDomNode ajDomNodeAppendChild(AjPDomNode node, AjPDomNode extrachild)
 
 /* @funcstatic domUpdateNode *************************************************
 **
-** Update the commonparent entry of a node 
+** Update the common parent entry of a node
 **
 ** @param [w] node [AjPDomNode] node
 ** @return [void]
@@ -375,7 +426,7 @@ static void domUpdateNode(AjPDomNode node)
     return;
 }
 
-    
+
 
 
 /* @funcstatic domIsAncestor *************************************************
@@ -435,7 +486,7 @@ AjPDomNode ajDomRemoveChild(AjPDomNode node, AjPDomNode child)
 
 /* @func ajDomNodeListExists *************************************************
 **
-** Check whether a child exists in a nodelist 
+** Check whether a child exists in a node list
 **
 ** @param [u] list [AjPDomNodeList] list
 ** @param [r] child [const AjPDomNode] child
@@ -463,7 +514,7 @@ AjBool ajDomNodeListExists(AjPDomNodeList list, const AjPDomNode child)
 
 /* @funcstatic domDoLookupNode ***********************************************
 **
-** Return a pointer to a given node of a nodelist
+** Return a pointer to a given node of a node list
 **
 ** @param [r] list [const AjPDomNodeList] list
 ** @param [r] node [const AjPDomNode] node
@@ -486,7 +537,7 @@ static AjPDomNodeEntry domDoLookupNode(const AjPDomNodeList list,
 
 /* @func ajDomNodeListRemove *************************************************
 **
-** Remove a child from a nodelist 
+** Remove a child from a node list
 **
 ** @param [w] list [AjPDomNodeList] list
 ** @param [u] child [AjPDomNode] child
@@ -498,7 +549,6 @@ AjPDomNodeEntry ajDomNodeListRemove(AjPDomNodeList list, AjPDomNode child)
 {
     AjPDomNodeEntry e;
     AjPDomNode trukey;
-    AjPDomNodeEntry val;
 
     if(!list)
     {
@@ -517,9 +567,12 @@ AjPDomNodeEntry ajDomNodeListRemove(AjPDomNodeList list, AjPDomNode child)
     if(!e)
 	return NULL;
 
-    val = ajTableRemoveKey(list->table,child, (void**) &trukey);
-    AJFREE(val);
-    AJFREE(trukey);
+    /*
+    ** Don't delete the key/value - just remove them from the lookup
+    ** table. The value is still required
+    */
+
+    ajTableRemoveKey(list->table,child, (void**) &trukey);
 
     if(list->first == list->last)
     {
@@ -632,7 +685,7 @@ void ajDomDocumentDestroyNode(AjPDomDocument doc, AjPDomNode node)
 
     if(node->childnodes)
 	ajDomDocumentDestroyNodeList(doc,node->childnodes,AJDOMDESTROY);
-
+    
     switch(node->type)
     {
         case AJDOM_ELEMENT_NODE:
@@ -641,6 +694,7 @@ void ajDomDocumentDestroyNode(AjPDomDocument doc, AjPDomNode node)
             ajStrDel(&node->name);
             break;
         case AJDOM_TEXT_NODE:
+            ajStrDel(&node->name);
         case AJDOM_COMMENT_NODE:
         case AJDOM_CDATA_SECTION_NODE:
             ajStrDel(&node->value);
@@ -662,6 +716,7 @@ void ajDomDocumentDestroyNode(AjPDomDocument doc, AjPDomNode node)
             ajStrDel(&node->value);
             break;
         case AJDOM_DOCUMENT_NODE:
+            ajStrDel(&node->name);
             ajStrDel(&node->sub.Document.version);
             ajStrDel(&node->sub.Document.encoding);
             break;
@@ -692,7 +747,7 @@ void ajDomDocumentDestroyNode(AjPDomDocument doc, AjPDomNode node)
 
 /* @func ajDomDocumentDestroyNodeList ****************************************
 **
-** Frees a nodelist
+** Frees a node list
 **
 ** @param [w] doc [AjPDomDocument] document
 ** @param [w] list [AjPDomNodeList] list
@@ -724,11 +779,12 @@ void ajDomDocumentDestroyNodeList(AjPDomDocument doc, AjPDomNodeList list,
 	    }
 	}
 	
-
-	/* AJB: return to this */
 	if(list->table)
+        {
+            ajTableMapDel(list->table, domClearMapValues, NULL);
 	    ajTableFree(&list->table);
-
+        }
+        
 	AJFREE(list);
     }
 
@@ -738,9 +794,39 @@ void ajDomDocumentDestroyNodeList(AjPDomDocument doc, AjPDomNodeList list,
 
 
 
+/* @funcstatic domClearMapValues ************************************
+**
+** Clear only the values from the map table
+**
+** @param [r] key [void**] Standard argument, table key.
+** @param [r] value [void**] Standard argument, table data item.
+** @param [r] cl [void*] Standard argument, usually NULL
+**
+** @return [void]
+** @@
+*********************************************************************/
+
+static void domClearMapValues(void **key, void **value, void *cl)
+{
+    AjPDomNodeEntry entry = NULL;
+
+    entry = (AjPDomNodeEntry) *value;
+    AJFREE(entry);
+    
+    (void) cl;				/* make it used */
+    (void) key;
+
+    *value = NULL;
+
+    return;
+}
+
+
+
+
 /* @func ajDomCreateNodeList **************************************************
 **
-** Create a nodelist
+** Create a node list
 **
 ** @param [u] doc [AjPDomDocument] document
 ** @return [AjPDomNodeList] new list
@@ -951,7 +1037,7 @@ AjPDomDocument ajDomImplementationCreateDocumentC(const char *uri,
     AjPDomDocument doc     = NULL;
     AjPDomElement  element = NULL;
 
-    uri = NULL;
+    (void) uri;
 
     if(!(doc = ajDomDocumentCreateNode(NULL,AJDOM_DOCUMENT_NODE)))
     {
@@ -988,7 +1074,7 @@ AjPDomDocument ajDomImplementationCreateDocumentC(const char *uri,
 
 /* @func ajDomNodeMapGetItem ********************************************
 **
-** Returns the named node from a nodemap
+** Returns the named node from a node map
 **
 ** @param [r] map [const AjPDomNodeMap] map
 ** @param [r] name [const AjPStr] name
@@ -1011,7 +1097,7 @@ AjPDomNode ajDomNodeMapGetItem(const AjPDomNodeMap map, const AjPStr name)
 
 /* @func ajDomNodeMapGetItemC *******************************************
 **
-** Returns the named node from a nodemap
+** Returns the named node from a node map
 **
 ** @param [r] map [const AjPDomNodeMap] map
 ** @param [r] name [const char *] name
@@ -1102,7 +1188,7 @@ AjPStr ajDomElementGetAttributeC(const AjPDomElement element,
 
 /* @func ajDomNodeMapSetItem *******************************************
 **
-** Enter arg into the nodemap using name as the key.
+** Enter arg into the node map using name as the key.
 ** If a node with the same name already exists in the map it will be replaced
 ** with the new node and returned.
 ** The replaced node should usually be freed with DestroyNode.
@@ -1262,7 +1348,7 @@ AjPDomNode ajDomNodeMapItem(const AjPDomNodeMap map, ajint indexnum)
 
 /* @funcstatic domNodeListItemFiltered ***************************************
 **
-** Filter nodelist item
+** Filter node list item
 **
 ** @param [r] list [const AjPDomNodeList] list
 ** @param [r] indexnum [ajint] index
@@ -1578,7 +1664,7 @@ AjPDomNode ajDomElementRemoveAttributeNode(AjPDomElement element,
 
 /* @funcstatic domTraverse ***************************************************
 **
-** Preorder elements
+** Pre-order elements
 **
 ** @param [w] list [AjPDomNodeList] list
 ** @param [u] node [AjPDomNode] node
@@ -1609,7 +1695,7 @@ static void domTraverse(AjPDomNodeList list, AjPDomNode node,
 
 /* @funcstatic domTraverseC ***************************************************
 **
-** Preorder elements
+** Pre-order elements
 **
 ** @param [w] list [AjPDomNodeList] list
 ** @param [u] node [AjPDomNode] node
@@ -1640,13 +1726,13 @@ static void domTraverseC(AjPDomNodeList list, AjPDomNode node,
 
 /* @func ajDomElementGetElementsByTagName ************************************
 **
-** Perform a preorder traversal of the entire document.
-** Return a nodelist of the elements with the name tagname in the order
+** Perform a pre-order traversal of the entire document.
+** Return a node list of the elements with the name tagname in the order
 ** in which they are found.
 **
 ** @param [u] element [AjPDomElement] element
 ** @param [r] name [const AjPStr] name
-** @return [AjPDomNodeList] nodelist
+** @return [AjPDomNodeList] node list
 ** @@
 ******************************************************************************/
 
@@ -1665,13 +1751,13 @@ AjPDomNodeList ajDomElementGetElementsByTagName(AjPDomElement element,
 
 /* @func ajDomElementGetElementsByTagNameC ***********************************
 **
-** Perform a preorder traversal of the entire document.
-** Return a nodelist of the elements with the name tagname in the order
+** Perform a pre-order traversal of the entire document.
+** Return a node list of the elements with the name tagname in the order
 ** in which they are found.
 **
 ** @param [u] element [AjPDomElement] element
 ** @param [r] name [const char *] name
-** @return [AjPDomNodeList] nodelist
+** @return [AjPDomNodeList] node list
 ** @@
 ******************************************************************************/
 
@@ -1711,6 +1797,7 @@ void ajDomElementNormalise(AjPDomElement element)
     AjPDomNode node = NULL;
     AjPDomText last = NULL;
 
+
     if(element)
     {
 	for(node=element->firstchild; node; node=node->nextsibling)
@@ -1729,14 +1816,14 @@ void ajDomElementNormalise(AjPDomElement element)
 	    else
 	    {
 		last = NULL;
+
 		ajDomElementNormalise(node);
-	    }
+            }
 
 	    /* AJB: Would do a return here if exception */
 	}
     }
     
-
     return;
 }
 
@@ -2466,12 +2553,12 @@ AjPDomPi ajDomDocumentCreateProcessingInstructionC(AjPDomDocument doc,
 
 /* @func ajDomDocumentGetElementsByTagName ***********************************
 **
-** Perform a preorder traversal of the entire document. Return a nodelist
+** Perform a pre-order traversal of the entire document. Return a node list
 ** of the elements matching tagname in the order in which they are found.
 **
 ** @param [u] doc [AjPDomDocument] document
 ** @param [r] name [const AjPStr] name
-** @return [AjPDomNodeList] nodelist
+** @return [AjPDomNodeList] node list
 ** @@
 ******************************************************************************/
 
@@ -2495,12 +2582,12 @@ AjPDomNodeList ajDomDocumentGetElementsByTagName(AjPDomDocument doc,
 
 /* @func ajDomDocumentGetElementsByTagNameC **********************************
 **
-** Perform a preorder traversal of the entire document. Return a nodelist
+** Perform a pre-order traversal of the entire document. Return a node list
 ** of the elements matching tagname in the order in which they are found.
 **
 ** @param [u] doc [AjPDomDocument] document
 ** @param [r] name [const char *] name
-** @return [AjPDomNodeList] nodelist
+** @return [AjPDomNodeList] node list
 ** @@
 ******************************************************************************/
 
@@ -2543,7 +2630,7 @@ AjPDomDocumentType ajDomDocumentGetDoctype(const AjPDomDocument doc)
 /* @func ajDomDocumentGetDocumentElement *************************************
 **
 ** Get the root element of the document tree. The root element is also
-** accessible through the childnodes nodelist member, however the children
+** accessible through the child nodes node list member, however the children
 ** of a document may also be processing instructions, document type nodes,
 ** and comments which may precede the document element in the list. 
 **
@@ -2691,7 +2778,7 @@ AjPDomNode ajDomNodeInsertBefore(AjPDomNode node, AjPDomNode newchild,
 {
     AjPDomNode n = NULL;
     AjPDomNode nxt = NULL;
-    
+
     if(!node || !newchild)
 	return NULL;
 
@@ -2936,7 +3023,7 @@ AjPDomNode ajDomNodeReplaceChild(AjPDomNode node, AjPDomNode newchild,
 	ajWarn("ajDomNodeReplaceChild: Hierarchy Request Error\n");
 	return NULL;
     }
-    
+
     domDoRemoveChild(node,newchild);
 
     if(!ajDomNodeListExists(node->childnodes,oldchild))
@@ -2976,7 +3063,7 @@ AjPDomNode ajDomNodeReplaceChild(AjPDomNode node, AjPDomNode newchild,
 
 /* @func ajDomNodeListReplace *******************************************
 **
-** Replace oldchild with newchild in a nodelist.
+** Replace oldchild with newchild in a node list.
 **
 ** @param [u] list [AjPDomNodeList] list
 ** @param [u] newchild [AjPDomNode] node to insert
@@ -3679,6 +3766,899 @@ ajint ajDomWriteIndent(const AjPDomDocument node, AjPFile outf, ajint indent)
         case AJDOM_DOCUMENT_FRAGMENT_NODE:
             break;
     }
+
+    return 0;
+}
+
+
+
+
+/* @funcstatic domUserdataNew **********************************************
+**
+** Create userdata object
+**
+** @return [AjPDomUserdata] DOM Userdata for expat XML reading
+** @@
+******************************************************************************/
+
+static AjPDomUserdata domUserdataNew(void)
+{
+    AjPDomUserdata ret = NULL;
+
+    AJNEW0(ret);
+
+    ret->Buffer = ajStrNew();
+    ret->Stack  = ajListNew();
+    ret->Cdata  = ajFalse;
+
+    return ret;
+}
+
+
+
+
+/* @funcstatic domUserdataDel **********************************************
+**
+** Destroy userdata object
+**
+** @param [d] thys [AjPDomUserdata*] Userdata object pointer
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void domUserdataDel(AjPDomUserdata *thys)
+{
+    AjPDomUserdata pthis = NULL;
+
+    if(!thys)
+        return;
+
+    pthis = *thys;
+
+    if(!pthis)
+        return;
+
+    ajStrDel(&pthis->Buffer);
+    ajListFree(&pthis->Stack);
+
+    AJFREE(pthis);
+
+    *thys = NULL;
+
+    return;
+}
+
+
+
+
+/* @funcstatic domExpatStart ************************************************
+**
+** XML reading Expat start function
+**
+** @param [u] udata [void*] Userdata pointer
+** @param [r] name [const XML_Char*] Name
+** @param [r] atts [const XML_Char**] Attributes
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void domExpatStart(void *udata, const XML_Char *name,
+                          const XML_Char **atts)
+{
+    AjPDomUserdata userdata = NULL;
+    AjPDomDocument parent   = NULL;
+    AjPDomDocument child    = NULL;
+    ajint i = 0;
+    AjPStr sname = NULL;
+    
+
+    if(!udata || !name || !atts)
+        return;
+
+    userdata = (AjPDomUserdata) udata;
+    
+    ajListPeek(userdata->Stack,(void**)&parent);
+
+    if(!parent)
+        return;
+    
+    ajStrAssignC(&userdata->Buffer,name);
+
+    if(!(child = ajDomDocumentCreateElement(parent->ownerdocument,
+                                            userdata->Buffer)))
+        return;
+
+    if(!ajDomNodeAppendChild(parent,child))
+        return;
+
+    sname = ajStrNew();
+    
+    for(i=0; atts[i]; i+=2)
+    {
+        ajStrAssignC(&sname,atts[i]);
+        ajStrAssignC(&userdata->Buffer,atts[i+1]);
+
+        ajDomElementSetAttribute(child, sname, userdata->Buffer);
+    }
+
+    ajListPush(userdata->Stack,(void *) child);
+
+    ajStrDel(&sname);
+    
+    return;
+}
+
+
+
+
+/* @funcstatic domExpatEnd ************************************************
+**
+** XML reading Expat end function
+**
+** @param [u] udata [void*] Userdata pointer
+** @param [r] name [const XML_Char*] Name
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void domExpatEnd(void *udata, const XML_Char *name)
+{
+    AjPDomUserdata userdata = NULL;
+    AjPDomDocument node = NULL;
+    
+    userdata = (AjPDomUserdata) udata;
+    
+    ajListPop(userdata->Stack, (void **)&node);
+
+    (void) name;
+    
+    return;
+}
+
+
+
+
+/* @funcstatic domExpatChardata ************************************************
+**
+** XML reading Expat chardata function
+**
+** @param [u] udata [void*] Userdata pointer
+** @param [r] str [const XML_Char*] Char data
+** @param [r] len [int] Length
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void domExpatChardata(void *udata, const XML_Char *str,
+                             int len)
+{
+    AjPDomUserdata userdata = NULL;
+    AjPDomDocument parent   = NULL;
+    AjPDomText txt = NULL;
+    
+    if(!udata || !str || !len)
+        return;
+
+    /*
+    ** Care needs to be exercisedwith this function.
+    ** First, it may need several callbacks to recover long strings.
+    ** The operation might need to be converted to an append
+    ** and only create nodes if the strings are complete
+    **
+    ** Its main use is to maintain the whitepace formatting  in
+    ** the original XML file and could, in many cases, be
+    ** ignored.
+    */
+
+    userdata = (AjPDomUserdata) udata;
+    
+    ajListPeek(userdata->Stack,(void**)&parent);
+
+    if(!parent)
+        return;
+    
+    ajStrAssignLenC(&userdata->Buffer,str,len);
+
+    if(userdata->Cdata)
+    {
+        if(!(txt = ajDomDocumentCreateCDATASection(parent->ownerdocument,
+                                                   userdata->Buffer)))
+            return;
+    }
+    else
+    {
+        if(!(txt = ajDomDocumentCreateTextNode(parent->ownerdocument,
+                                               userdata->Buffer)))
+        return;
+    }
+    
+
+    ajDomNodeAppendChild(parent,txt);
+    
+    return;
+}
+
+
+
+
+/* @funcstatic domExpatCdataStart ********************************************
+**
+** XML reading Expat CDATA start function
+**
+** @param [u] udata [void*] Userdata pointer
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void domExpatCdataStart(void *udata)
+{
+    AjPDomUserdata userdata = NULL;
+
+    if(!udata)
+        return;
+
+    userdata = (AjPDomUserdata) udata;
+
+    userdata->Cdata = ajTrue;
+
+    return;
+}
+
+
+
+
+/* @funcstatic domExpatCdataEnd ************************************************
+**
+** XML reading Expat CDATA end function
+**
+** @param [u] udata [void*] Userdata pointer
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void domExpatCdataEnd(void *udata)
+{
+    AjPDomUserdata userdata = NULL;
+
+    if(!udata)
+        return;
+    
+    userdata = (AjPDomUserdata) udata;
+    
+    userdata->Cdata = ajFalse;
+    
+    return;
+}
+
+
+
+
+/* @funcstatic domExpatComment ***********************************************
+**
+** XML reading Expat comment function
+**
+** @param [u] udata [void*] Userdata pointer
+** @param [r] str [const XML_Char*] Char data
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void domExpatComment(void *udata, const XML_Char *str)
+{
+    AjPDomUserdata userdata = NULL;
+    AjPDomDocument parent   = NULL;
+    AjPDomComment comment = NULL;
+    
+    if(!udata || !str)
+        return;
+
+    userdata = (AjPDomUserdata) udata;
+    
+    ajListPeek(userdata->Stack,(void**)&parent);
+
+    if(!parent)
+        return;
+    
+    ajStrAssignC(&userdata->Buffer,str);
+
+    if((comment = ajDomDocumentCreateComment(parent->ownerdocument,
+                                             userdata->Buffer)))
+        ajDomNodeAppendChild(parent,comment);
+
+    return;
+}
+
+
+
+
+/* @funcstatic domExpatProcessing ********************************************
+**
+** XML reading Expat processing instruction function
+**
+** @param [u] udata [void*] Userdata pointer
+** @param [r] target [const XML_Char*] Char data
+** @param [r] str [const XML_Char*] Char data
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void domExpatProcessing(void *udata, const XML_Char *target,
+                               const XML_Char *str)
+{
+    AjPDomUserdata userdata = NULL;
+    AjPDomDocument parent   = NULL;
+    AjPDomPi pi = NULL;
+    AjPStr t = NULL;
+    
+    if(!udata || !target || !!str)
+        return;
+
+    userdata = (AjPDomUserdata) udata;
+    
+    ajListPeek(userdata->Stack,(void**)&parent);
+
+    if(!parent)
+        return;
+
+    t = ajStrNew();
+
+    ajStrAssignC(&t, target);
+    ajStrAssignC(&userdata->Buffer,str);
+
+    if((pi = ajDomDocumentCreateProcessingInstruction(parent->ownerdocument,
+                                                      t, userdata->Buffer)))
+        ajDomNodeAppendChild(parent, pi);
+
+    ajStrDel(&t);
+
+    return;
+}
+
+
+
+
+/* @funcstatic domExpatXmlDecl ********************************************
+**
+** XML reading Expat XML declaration function
+**
+** @param [u] udata [void*] Userdata pointer
+** @param [r] version [const XML_Char*] Version
+** @param [r] encoding [const XML_Char*] Encoding
+** @param [r] standalone [int] Standalone
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void domExpatXmlDecl(void *udata, const XML_Char *version,
+                            const XML_Char *encoding, int standalone)
+{
+    AjPDomUserdata userdata = NULL;
+    AjPDomDocument document   = NULL;
+
+    if(!udata)
+        return;
+
+    userdata = (AjPDomUserdata) udata;
+    
+    ajListPeek(userdata->Stack,(void**)&document);
+
+    if(!document)
+        return;
+
+    if(!document->sub.Document.version)
+        document->sub.Document.version = ajStrNew();
+
+    if(!document->sub.Document.encoding)
+        document->sub.Document.encoding = ajStrNew();
+
+    if(version)
+        ajStrAssignC(&document->sub.Document.version, version);
+    
+    if(encoding)
+        ajStrAssignC(&document->sub.Document.encoding, encoding);
+    
+    document->sub.Document.standalone = standalone;
+
+    return;
+}
+
+
+
+
+/* @funcstatic domExpatDoctypeStart ******************************************
+**
+** XML reading Expat Doctype start function
+**
+** @param [u] udata [void*] Userdata pointer
+** @param [r] doctypename [const XML_Char*] Doctype name
+** @param [r] sysid [const XML_Char*] Sysid
+** @param [r] pubid [const XML_Char*] Sysid
+** @param [r] hasinternalsubset [int] Internal subset flag
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void domExpatDoctypeStart(void *udata, const XML_Char *doctypename,
+                                 const XML_Char *sysid, const XML_Char *pubid,
+                                 int hasinternalsubset)
+{
+    AjPDomUserdata userdata = NULL;
+    AjPDomDocument doc      = NULL;
+    AjPDomDocumentType type = NULL;
+
+    (void) hasinternalsubset;
+
+
+    if(!udata)
+        return;
+
+    userdata = (AjPDomUserdata) udata;
+    
+    ajListPeek(userdata->Stack,(void**)&doc);
+
+    if(!doc)
+        return;
+
+    if(doc->sub.Document.doctype)
+    {
+        ajWarn("domExpatDoctypeStart: doctype already exists");
+        return;
+    }
+    
+    ajStrAssignC(&userdata->Buffer,doctypename);
+
+    if(!(type = ajDomImplementationCreateDocumentType(userdata->Buffer,NULL,
+                                                      NULL)))
+        return;
+
+    if(sysid)
+        ajStrAssignC(&type->sub.DocumentType.systemid,sysid);
+    
+    if(pubid)
+        ajStrAssignC(&type->sub.DocumentType.publicid,pubid);
+    
+    if(!ajDomNodeAppendChild(doc,type))
+        return;
+
+    doc->sub.Document.doctype = type;
+
+    ajListPush(userdata->Stack,(void *)type);
+    
+    return;
+}
+
+
+
+
+/* @funcstatic domExpatDoctypeEnd ********************************************
+**
+** XML reading Expat Doctype end function
+**
+** @param [u] udata [void*] Userdata pointer
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void domExpatDoctypeEnd(void *udata)
+{
+    AjPDomUserdata userdata = NULL;
+    AjPDomDocumentType type = NULL;
+    
+    if(!udata)
+        return;
+    
+    userdata = (AjPDomUserdata) udata;
+    
+    ajListPop(userdata->Stack, (void **)&type);
+
+    return;
+}
+
+
+
+
+/* @funcstatic domExpatElement **********************************************
+**
+** XML reading Expat Element function
+**
+** @param [u] udata [void*] Userdata pointer
+** @param [r] name [const XML_Char*] Name
+** @param [d] model [XML_Content*] Model
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void domExpatElement(void *udata, const XML_Char *name,
+                            XML_Content *model)
+{
+    udata = NULL;
+    name  = NULL;
+    
+    free(model);
+
+    return;
+}
+
+
+
+
+/* @funcstatic domExpatAttlist **********************************************
+**
+** XML reading Expat attribute list function
+**
+** @param [u] udata [void*] Userdata pointer
+** @param [r] name [const XML_Char*] Element name
+** @param [r] attname [const XML_Char*] Attribute Name
+** @param [r] atttype [const XML_Char*] Attribute Type
+** @param [r] deflt [const XML_Char*] Default
+** @param [r] isrequired [int] Required flag
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void domExpatAttlist(void *udata, const XML_Char *name,
+                            const XML_Char *attname, const XML_Char *atttype,
+                            const XML_Char *deflt, int isrequired)
+{
+    (void) udata;
+    (void) name;
+    (void) attname;
+    (void) atttype;
+    (void) deflt;
+    (void) isrequired;
+
+    return;
+}
+
+
+
+
+/* @funcstatic domExpatEntity **********************************************
+**
+** XML reading Expat entity function
+**
+** @param [u] udata [void*] Userdata pointer
+** @param [r] entityname [const XML_Char*] Entity name
+** @param [r] isparam [int] Flag for parameter entity
+** @param [r] value [const XML_Char*] Value
+** @param [r] lenval [int] Value length
+** @param [r] base [const XML_Char*] Base
+** @param [r] systemid [const XML_Char*] System ID
+** @param [r] publicid [const XML_Char*] Public ID
+** @param [r] notname [const XML_Char*] Notation name
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void domExpatEntity(void *udata, const XML_Char *entityname, int isparam,
+                           const XML_Char *value, int lenval,
+                           const XML_Char *base, const XML_Char *systemid,
+                           const XML_Char *publicid, const XML_Char *notname)
+{
+    AjPDomUserdata userdata = NULL;
+    AjPDomDocumentType doctype = NULL;
+    AjPDomEntity entity = NULL;
+
+    (void) base;
+    
+    if(isparam)
+        return;
+
+    if(!udata)
+        return;
+    
+    userdata = (AjPDomUserdata) udata;
+    
+    ajListPop(userdata->Stack, (void **)&doctype);
+    
+    if(!(entity = ajDomDocumentCreateNode(doctype->ownerdocument,
+                                          AJDOM_ENTITY_NODE)))
+        return;
+
+    ajStrAssignC(&entity->name, entityname);
+
+    if(value)
+        ajStrAssignLenC(&entity->value, value, lenval);
+
+    if(publicid)
+        ajStrAssignC(&entity->sub.Entity.publicid, publicid);
+    
+    if(systemid)
+        ajStrAssignC(&entity->sub.Entity.systemid, systemid);
+    
+    if(notname)
+        ajStrAssignC(&entity->sub.Entity.notationname, notname);
+    
+    ajDomNodeAppendChild(doctype, entity);
+    
+    return;
+}
+
+
+
+
+/* @funcstatic domExpatNotation **********************************************
+**
+** XML reading Expat notation function
+**
+** @param [u] udata [void*] Userdata pointer
+** @param [r] notname [const XML_Char*] Entity name
+** @param [r] base [const XML_Char*] Base
+** @param [r] systemid [const XML_Char*] System ID
+** @param [r] publicid [const XML_Char*] Public ID
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void domExpatNotation(void *udata, const XML_Char *notname,
+                             const XML_Char *base, const XML_Char *systemid,
+                             const XML_Char *publicid)
+{
+    AjPDomUserdata userdata = NULL;
+    AjPDomDocumentType doctype = NULL;
+    AjPDomNotation notation = NULL;
+
+    (void) base;
+    
+    if(!udata)
+        return;
+    
+    userdata = (AjPDomUserdata) udata;
+    
+    ajListPop(userdata->Stack, (void **)&doctype);
+    
+    if(!(notation = ajDomDocumentCreateNode(doctype->ownerdocument,
+                                            AJDOM_NOTATION_NODE)))
+        return;
+
+    ajStrAssignC(&notation->name, notname);
+
+    if(publicid)
+        ajStrAssignC(&notation->sub.Notation.publicid, publicid);
+    
+    if(systemid)
+        ajStrAssignC(&notation->sub.Notation.systemid, systemid);
+    
+    ajDomNodeAppendChild(doctype, notation);
+    
+    return;
+}
+
+
+
+
+/* @func ajDomReadFp **********************************************************
+**
+** Read XML into memory from a file pointer
+**
+** @param [u] node [AjPDomDocument] document to write
+** @param [u] stream [FILE*] stream
+** @return [ajint] zero OK, negative if error
+** @@
+******************************************************************************/
+
+ajint ajDomReadFp(AjPDomDocument node, FILE *stream)
+{
+    AjPDomUserdata userdata = NULL;
+    XML_Parser parser = NULL;
+    void *buf = NULL;
+    ajlong n = 0L;
+    ajint ret;
+    ajint done;
+    
+    if(!node || !stream)
+        return -1;
+
+    parser = XML_ParserCreate(NULL);
+    if(!parser)
+        return -1;
+    
+
+    
+    userdata = domUserdataNew();
+
+    node->ownerdocument = node;
+
+    ajListPush(userdata->Stack, (void *) node);
+
+    XML_SetElementHandler(parser,domExpatStart,domExpatEnd);
+    XML_SetCharacterDataHandler(parser,domExpatChardata);
+    XML_SetCdataSectionHandler(parser, domExpatCdataStart, domExpatCdataEnd);
+    XML_SetCommentHandler(parser, domExpatComment);
+    XML_SetProcessingInstructionHandler(parser, domExpatProcessing);
+    XML_SetXmlDeclHandler(parser, domExpatXmlDecl);
+    XML_SetDoctypeDeclHandler(parser, domExpatDoctypeStart, domExpatDoctypeEnd);
+    XML_SetElementDeclHandler(parser, domExpatElement);
+    XML_SetAttlistDeclHandler(parser, domExpatAttlist);
+    XML_SetEntityDeclHandler(parser, domExpatEntity);
+    XML_SetNotationDeclHandler(parser, domExpatNotation);
+    XML_SetUserData(parser, userdata);
+
+    ret = -1;
+    for(;;)
+    {
+        if(!(buf = XML_GetBuffer(parser, AJXML_BUFSIZ)))
+            break;
+
+        if(!(n = fread(buf,1,AJXML_BUFSIZ,stream)) && ferror(stream))
+            break;
+
+        if(!XML_ParseBuffer(parser, n , (done = feof(stream))))
+        {
+            ajWarn("ajFomRead: Expat error [%s] at XML line %d",
+                   XML_ErrorString(XML_GetErrorCode(parser)),
+                   XML_GetCurrentLineNumber(parser));
+            break;
+        }
+        
+        if(done)
+        {
+            ret = 0;
+            break;
+        }
+    }
+    
+    ajDomElementNormalise(node->sub.Document.documentelement);
+    
+    domUserdataDel(&userdata);
+
+    XML_ParserFree(parser);
+    
+    return ret;
+}
+
+
+
+
+/* @func ajDomReadFilebuff ****************************************************
+**
+** Read XML into memory from a file pointer
+**
+** @param [u] node [AjPDomDocument] document to write
+** @param [u] buff [AjPFilebuff] File buffer
+** @return [ajint] zero OK, negative if error
+** @@
+******************************************************************************/
+
+ajint ajDomReadFilebuff(AjPDomDocument node, AjPFilebuff buff)
+{
+    AjPDomUserdata userdata = NULL;
+    XML_Parser parser = NULL;
+    int done = 0;
+    ajint len = 0;
+    AjPStr line = NULL;
+    
+    parser = XML_ParserCreate(NULL);
+    if(!parser)
+        return -1;
+    
+    userdata = domUserdataNew();
+
+    node->ownerdocument = node;
+
+    ajListPush(userdata->Stack, (void *) node);
+
+    XML_SetElementHandler(parser,domExpatStart,domExpatEnd);
+    XML_SetCharacterDataHandler(parser,domExpatChardata);
+    XML_SetCdataSectionHandler(parser, domExpatCdataStart, domExpatCdataEnd);
+    XML_SetCommentHandler(parser, domExpatComment);
+    XML_SetProcessingInstructionHandler(parser, domExpatProcessing);
+    XML_SetXmlDeclHandler(parser, domExpatXmlDecl);
+    XML_SetDoctypeDeclHandler(parser, domExpatDoctypeStart, domExpatDoctypeEnd);
+    XML_SetElementDeclHandler(parser, domExpatElement);
+    XML_SetAttlistDeclHandler(parser, domExpatAttlist);
+    XML_SetEntityDeclHandler(parser, domExpatEntity);
+    XML_SetNotationDeclHandler(parser, domExpatNotation);
+    XML_SetUserData(parser, userdata);
+
+    line = ajStrNew();
+    
+    do
+    {
+        ajBuffreadLine(buff,&line);
+        done = ajFilebuffIsEmpty(buff);
+        len = ajStrGetLen(line);
+        
+        if(!XML_Parse(parser, line->Ptr, len, done))
+        {
+            ajWarn("ajDomReadFilebuff: %s at XML line %d\n",
+                   XML_ErrorString(XML_GetErrorCode(parser)),
+                   XML_GetCurrentLineNumber(parser));
+
+            ajStrDel(&line);
+            
+            return -1;
+        }
+
+    } while (!done);
+
+    ajDomElementNormalise(node->sub.Document.documentelement);
+    
+    domUserdataDel(&userdata);
+    
+    XML_ParserFree(parser);
+
+    ajStrDel(&line);
+    
+    return 0;
+}
+
+
+
+
+/* @func ajDomReadString *****************************************************
+**
+** Read XML into memory from a string
+**
+** @param [u] node [AjPDomDocument] document to write
+** @param [u] str [AjPStr] XML string
+** @return [ajint] zero OK, negative if error
+** @@
+******************************************************************************/
+
+ajint ajDomReadString(AjPDomDocument node, AjPStr str)
+{
+    AjPDomUserdata userdata = NULL;
+    XML_Parser parser = NULL;
+    int done = 0;
+    ajint len = 0;
+    
+    parser = XML_ParserCreate(NULL);
+    if(!parser)
+        return -1;
+    
+    userdata = domUserdataNew();
+
+    node->ownerdocument = node;
+
+    ajListPush(userdata->Stack, (void *) node);
+
+    XML_SetElementHandler(parser,domExpatStart,domExpatEnd);
+    XML_SetCharacterDataHandler(parser,domExpatChardata);
+    XML_SetCdataSectionHandler(parser, domExpatCdataStart, domExpatCdataEnd);
+    XML_SetCommentHandler(parser, domExpatComment);
+    XML_SetProcessingInstructionHandler(parser, domExpatProcessing);
+    XML_SetXmlDeclHandler(parser, domExpatXmlDecl);
+    XML_SetDoctypeDeclHandler(parser, domExpatDoctypeStart, domExpatDoctypeEnd);
+    XML_SetElementDeclHandler(parser, domExpatElement);
+    XML_SetAttlistDeclHandler(parser, domExpatAttlist);
+    XML_SetEntityDeclHandler(parser, domExpatEntity);
+    XML_SetNotationDeclHandler(parser, domExpatNotation);
+    XML_SetUserData(parser, userdata);
+
+    done = 1;
+    
+    len = ajStrGetLen(str);
+        
+    if(!XML_Parse(parser, str->Ptr, len, done))
+    {
+        ajWarn("ajDomReadString: %s at XML line %d\n",
+               XML_ErrorString(XML_GetErrorCode(parser)),
+               XML_GetCurrentLineNumber(parser));
+
+        return -1;
+    }
+
+    ajDomElementNormalise(node->sub.Document.documentelement);
+    
+    domUserdataDel(&userdata);
+    
+    XML_ParserFree(parser);
 
     return 0;
 }

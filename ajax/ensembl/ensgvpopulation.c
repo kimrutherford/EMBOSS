@@ -4,7 +4,7 @@
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @version $Revision: 1.1 $
+** @version $Revision: 1.10 $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -44,16 +44,7 @@
 /* ======================== private functions ========================= */
 /* ==================================================================== */
 
-extern EnsPMetainformationadaptor
-ensRegistryGetMetainformationadaptor(EnsPDatabaseadaptor dba);
-
-extern EnsPGvpopulationadaptor
-ensRegistryGetGvpopulationadaptor(EnsPDatabaseadaptor dba);
-
-extern EnsPGvsampleadaptor
-ensRegistryGetGvsampleadaptor(EnsPDatabaseadaptor dba);
-
-static AjBool gvPopulationadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
+static AjBool gvpopulationadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
                                                const AjPStr statement,
                                                EnsPAssemblymapper am,
                                                EnsPSlice slice,
@@ -119,7 +110,7 @@ static AjBool gvPopulationadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 **                                           Population Adaptor
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 ** @cc Bio::EnsEMBL::Variation::Sample::new
-** @param [u] gvs [EnsPGvvsample] Ensembl Genetic Variation Sample
+** @param [u] gvs [EnsPGvsample] Ensembl Genetic Variation Sample
 ** @cc Bio::EnsEMBL::Variation::Population::new
 ** @param [r] subpopulations [AjPList] AJAX List of Ensembl Genetic
 **                                     Variation (Sub-) Populations
@@ -343,7 +334,7 @@ void ensGvpopulationDel(EnsPGvpopulation *Pgvp)
 ** @nam4rule GetSubPopulation Return the AJAX List of Ensembl Genetic
 **                            Variation (sub-) Populations
 **
-** @argrule * population [const EnsPGvpopulation] Genetic Variation Population
+** @argrule * gvp [const EnsPGvpopulation] Genetic Variation Population
 **
 ** @valrule Adaptor [EnsPGvpopulationadaptor] Ensembl Genetic Variation
 **                                            Population Adaptor
@@ -363,6 +354,7 @@ void ensGvpopulationDel(EnsPGvpopulation *Pgvp)
 ** Get the Ensembl Genetic Variation Population Adaptor element of an
 ** Ensembl Genetic Variation Population.
 **
+** @cc Bio::EnsEMBL::Storable::adaptor
 ** @param [r] gvp [const EnsPGvpopulation] Ensembl Genetic Variation Population
 **
 ** @return [EnsPGvpopulationadaptor] Ensembl Genetic Variation
@@ -386,6 +378,7 @@ EnsPGvpopulationadaptor ensGvpopulationGetAdaptor(const EnsPGvpopulation gvp)
 ** Get the SQL database-internal identifier element of an
 ** Ensembl Genetic Variation Population.
 **
+** @cc Bio::EnsEMBL::Storable::dbID
 ** @param [r] gvp [const EnsPGvpopulation] Ensembl Genetic Variation Population
 **
 ** @return [ajuint] Internal database identifier
@@ -477,6 +470,7 @@ const AjPList ensGvpopulationGetSubPopulations(const EnsPGvpopulation gvp)
 ** Set the Ensembl Genetic Variation Population Adaptor element of an
 ** Ensembl Genetic Variation Population.
 **
+** @cc Bio::EnsEMBL::Storable::adaptor
 ** @param [u] gvp [EnsPGvpopulation] Ensembl Genetic Variation Population
 ** @param [r] gvpa [EnsPGvpopulationadaptor] Ensembl Genetic Variation
 **                                           Population Adaptor
@@ -504,6 +498,7 @@ AjBool ensGvpopulationSetAdaptor(EnsPGvpopulation gvp,
 ** Set the SQL database-internal identifier element of an
 ** Ensembl Genetic Variation Population.
 **
+** @cc Bio::EnsEMBL::Storable::dbID
 ** @param [u] gvp [EnsPGvpopulation] Ensembl Genetic Variation Population
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 **
@@ -585,19 +580,19 @@ AjBool ensGvpopulationAddSubPopulation(EnsPGvpopulation gvp,
 
 
 
-/* @func ensGvpopulationGetMemSize ********************************************
+/* @func ensGvpopulationGetMemsize ********************************************
 **
 ** Get the memory size in bytes of an Ensembl Genetic Variation Population.
 **
 ** @param [r] gvp [const EnsPGvpopulation] Ensembl Genetic Variation Population
 **
-** @return [ajuint] Memory size
+** @return [ajulong] Memory size
 ** @@
 ******************************************************************************/
 
-ajuint ensGvpopulationGetMemSize(const EnsPGvpopulation gvp)
+ajulong ensGvpopulationGetMemsize(const EnsPGvpopulation gvp)
 {
-    ajuint size = 0;
+    ajulong size = 0;
 
     AjIList iter = NULL;
 
@@ -606,9 +601,9 @@ ajuint ensGvpopulationGetMemSize(const EnsPGvpopulation gvp)
     if(!gvp)
         return 0;
 
-    size += (ajuint) sizeof (EnsOGvpopulation);
+    size += sizeof (EnsOGvpopulation);
 
-    size += ensGvsampleGetMemSize(gvp->Gvsample);
+    size += ensGvsampleGetMemsize(gvp->Gvsample);
 
     /*
     ** Summarise the AJAX List of Ensembl Genetic Variation
@@ -621,7 +616,7 @@ ajuint ensGvpopulationGetMemSize(const EnsPGvpopulation gvp)
     {
         subgvp = (EnsPGvpopulation) ajListIterGet(iter);
 
-        size += ensGvpopulationGetMemSize(subgvp);
+        size += ensGvpopulationGetMemsize(subgvp);
     }
 
     ajListIterDel(&iter);
@@ -726,18 +721,20 @@ AjBool ensGvpopulationTrace(const EnsPGvpopulation gvp, ajuint level)
 ** Functions for manipulating Ensembl Genetic Variation Population Adaptor
 ** objects
 **
+** @cc Bio::EnsEMBL::Variation::DBSQL::PopulationAdaptor CVS Revision: 1.21
+**
 ** @nam2rule Gvpopulationadaptor
 **
 ******************************************************************************/
 
-static const char *gvPopulationadaptorTables[] =
+static const char *gvpopulationadaptorTables[] =
 {
     "sample",
     "population",
     NULL
 };
 
-static const char *gvPopulationadaptorColumns[] =
+static const char *gvpopulationadaptorColumns[] =
 {
     "sample.sample_id",
     "sample.name",
@@ -747,20 +744,20 @@ static const char *gvPopulationadaptorColumns[] =
     NULL
 };
 
-static EnsOBaseadaptorLeftJoin gvPopulationadaptorLeftJoin[] =
+static EnsOBaseadaptorLeftJoin gvpopulationadaptorLeftJoin[] =
 {
     {NULL, NULL}
 };
 
-static const char *gvPopulationadaptorDefaultCondition =
-"sample.sample_id = population.sample_id";
+static const char *gvpopulationadaptorDefaultCondition =
+    "sample.sample_id = population.sample_id";
 
-static const char *gvPopulationadaptorFinalCondition = NULL;
-
-
+static const char *gvpopulationadaptorFinalCondition = NULL;
 
 
-/* @funcstatic gvPopulationadaptorFetchAllBySQL *******************************
+
+
+/* @funcstatic gvpopulationadaptorFetchAllBySQL *******************************
 **
 ** Fetch all Ensembl Genetic Variation Population objects via an SQL statement.
 **
@@ -775,7 +772,7 @@ static const char *gvPopulationadaptorFinalCondition = NULL;
 ** @@
 ******************************************************************************/
 
-static AjBool gvPopulationadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
+static AjBool gvpopulationadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
                                                const AjPStr statement,
                                                EnsPAssemblymapper am,
                                                EnsPSlice slice,
@@ -784,7 +781,7 @@ static AjBool gvPopulationadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
     ajuint identifier = 0;
     ajuint ssize      = 0;
 
-    AjEnum esdisplay = ensEGvsampleDisplayNULL;
+    EnsEGvsampleDisplay esdisplay = ensEGvsampleDisplayNULL;
 
     AjPSqlstatement sqls = NULL;
     AjISqlrow sqli       = NULL;
@@ -800,8 +797,8 @@ static AjBool gvPopulationadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
     EnsPGvsample gvs         = NULL;
     EnsPGvsampleadaptor gvsa = NULL;
 
-    if(ajDebugTest("gvPopulationadaptorFetchAllBySQL"))
-        ajDebug("gvPopulationadaptorFetchAllBySQL\n"
+    if(ajDebugTest("gvpopulationadaptorFetchAllBySQL"))
+        ajDebug("gvpopulationadaptorFetchAllBySQL\n"
                 "  dba %p\n"
                 "  statement %p\n"
                 "  am %p\n"
@@ -857,6 +854,8 @@ static AjBool gvPopulationadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
                                  gvs,
                                  (AjPList) NULL);
 
+        ajListPushAppend(gvps, (void *) gvp);
+
         ensGvsampleDel(&gvs);
 
         ajStrDel(&sname);
@@ -866,7 +865,7 @@ static AjBool gvPopulationadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 
     ajSqlrowiterDel(&sqli);
 
-    ajSqlstatementDel(&sqls);
+    ensDatabaseadaptorSqlstatementDel(dba, &sqls);
 
     return ajTrue;
 }
@@ -878,6 +877,17 @@ static AjBool gvPopulationadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 **
 ** Default constructor for an Ensembl Genetic Variation Population Adaptor.
 **
+** Ensembl Object Adaptors are singleton objects in the sense that a single
+** instance of an Ensembl Object Adaptor connected to a particular database is
+** sufficient to instantiate any number of Ensembl Objects from the database.
+** Each Ensembl Object will have a weak reference to the Object Adaptor that
+** instantiated it. Therefore, Ensembl Object Adaptors should not be
+** instantiated directly, but rather obtained from the Ensembl Registry,
+** which will in turn call this function if neccessary.
+**
+** @see ensRegistryGetDatabaseadaptor
+** @see ensRegistryGetGvpopulationadaptor
+**
 ** @cc Bio::EnsEMBL::Variation::DBSQL::PopulationAdaptor::new
 ** @param [r] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
@@ -886,18 +896,20 @@ static AjBool gvPopulationadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 ** @@
 ******************************************************************************/
 
-EnsPGvpopulationadaptor ensGvpopulationadaptorNew(EnsPDatabaseadaptor dba)
+EnsPGvpopulationadaptor ensGvpopulationadaptorNew(
+    EnsPDatabaseadaptor dba)
 {
     if(!dba)
         return NULL;
 
-    return ensBaseadaptorNew(dba,
-                             gvPopulationadaptorTables,
-                             gvPopulationadaptorColumns,
-                             gvPopulationadaptorLeftJoin,
-                             gvPopulationadaptorDefaultCondition,
-                             gvPopulationadaptorFinalCondition,
-                             gvPopulationadaptorFetchAllBySQL);
+    return ensBaseadaptorNew(
+        dba,
+        gvpopulationadaptorTables,
+        gvpopulationadaptorColumns,
+        gvpopulationadaptorLeftJoin,
+        gvpopulationadaptorDefaultCondition,
+        gvpopulationadaptorFinalCondition,
+        gvpopulationadaptorFetchAllBySQL);
 }
 
 
@@ -906,6 +918,12 @@ EnsPGvpopulationadaptor ensGvpopulationadaptorNew(EnsPDatabaseadaptor dba)
 /* @func ensGvpopulationadaptorDel ********************************************
 **
 ** Default destructor for an Ensembl Gentic Variation Population Adaptor.
+**
+** Ensembl Object Adaptors are singleton objects that are registered in the
+** Ensembl Registry and weakly referenced by Ensembl Objects that have been
+** instantiated by it. Therefore, Ensembl Object Adaptors should never be
+** destroyed directly. Upon exit, the Ensembl Registry will call this function
+** if required.
 **
 ** @param [d] Pgvpa [EnsPGvpopulationadaptor*] Ensembl Genetic Variation
 **                                             Population Adaptor address
@@ -1023,7 +1041,7 @@ AjBool ensGvpopulationadaptorFetchByIdentifier(
 ** @param [u] gvpa [EnsPGvpopulationadaptor] Ensembl Genetic Variation
 **                                           Population Adaptor
 ** @param [r] name [const AjPStr] Ensembl Genetic Variation Population name
-** @param [w] Pgvp [EnsPGvpopulation] Ensembl Genetic Variation Population
+** @param [w] Pgvp [EnsPGvpopulation*] Ensembl Genetic Variation Population
 **                                    address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
@@ -1093,9 +1111,9 @@ AjBool ensGvpopulationadaptorFetchByName(
 
 
 
-/* @func ensGvindividualadaptorFetchAllBySynonym ******************************
+/* @func ensGvpopulationadaptorFetchAllBySynonym ******************************
 **
-** Fetch all Ensembl Genetic Variation Individuals by an
+** Fetch a Ensembl Genetic Variation Population by an
 ** Ensembl Genetic Variation Sample synonym.
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::PopulationAdaptor::
@@ -1232,7 +1250,7 @@ AjBool ensGvpopulationadaptorFetchAllBySuperPopulation(
 
     dba = ensBaseadaptorGetDatabaseadaptor(gvpa);
 
-    gvPopulationadaptorFetchAllBySQL(dba,
+    gvpopulationadaptorFetchAllBySQL(dba,
                                      statement,
                                      (EnsPAssemblymapper) NULL,
                                      (EnsPSlice) NULL,
@@ -1315,7 +1333,7 @@ AjBool ensGvpopulationadaptorFetchAllBySubPopulation(
 
     dba = ensBaseadaptorGetDatabaseadaptor(gvpa);
 
-    gvPopulationadaptorFetchAllBySQL(dba,
+    gvpopulationadaptorFetchAllBySQL(dba,
                                      statement,
                                      (EnsPAssemblymapper) NULL,
                                      (EnsPSlice) NULL,
@@ -1399,7 +1417,7 @@ AjBool ensGvpopulationadaptorFetchAllByIndvividual(
 
     dba = ensBaseadaptorGetDatabaseadaptor(gvpa);
 
-    gvPopulationadaptorFetchAllBySQL(dba,
+    gvpopulationadaptorFetchAllBySQL(dba,
                                      statement,
                                      (EnsPAssemblymapper) NULL,
                                      (EnsPSlice) NULL,
@@ -1418,7 +1436,7 @@ AjBool ensGvpopulationadaptorFetchAllByIndvividual(
 ** Fetch the Ensembl Genetic Variation Population, which is used as a default
 ** in the LD display of the pairwise LD data.
 **
-** @param [r] gvpa [const EnsPGvpopulationAdaptor] Ensembl Genetic Variation
+** @param [r] gvpa [const EnsPGvpopulationadaptor] Ensembl Genetic Variation
 **                                                 Population Adaptor
 ** @param [wP] Pgvp [EnsPGvpopulation*] Ensembl Genetic Variation Population
 **                                      address
@@ -1475,6 +1493,48 @@ AjBool ensGvpopulationadaptorFetchDefaultLDPopulation(
     ajListFree(&mis);
 
     ajStrDel(&key);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensGvpopulationadaptorFetchAllLDPopulations **************************
+**
+** Fetch all Ensembl Genetic Variation Populations, which can be used
+** in the LD display of the pairwise LD data.
+**
+** @param [r] gvpa [const EnsPGvpopulationAdaptor] Ensembl Genetic Variation
+**                                                 Population Adaptor
+** @param [wP] Pgvp [EnsPGvpopulation*] Ensembl Genetic Variation Population
+**                                      address
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensGvpopulationadaptorFetchAllLDPopulations(
+    const EnsPGvpopulationadaptor gvpa,
+    AjPList gvps)
+{
+    AjPStr constraint = NULL;
+
+    if(!gvpa)
+        return ajFalse;
+
+    if(!gvps)
+        return ajFalse;
+
+    constraint = ajStrNewC("sample.display = 'LD'");
+
+    ensBaseadaptorGenericFetch(gvpa,
+                               constraint,
+                               (EnsPAssemblymapper) NULL,
+                               (EnsPSlice) NULL,
+                               gvps);
+
+    ajStrDel(&constraint);
 
     return ajTrue;
 }

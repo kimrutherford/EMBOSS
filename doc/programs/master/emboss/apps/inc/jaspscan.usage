@@ -14,8 +14,11 @@ Jaspar matrix set
          N : CNE
          O : POLII
          S : SPLICE
+         B : PBM
+         L : PBM_HLH
+         H : PBM_HOMEO
 Matrix set [C]: <b></b>
-Comma separated matrix list [all]: <b>ma0079</b>
+Comma separated matrix list [all]: <b>ma0079.1</b>
 Threshold percentage [80.0]: <b></b>
 Output report [m23100.jaspscan]: <b></b>
 

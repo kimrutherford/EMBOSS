@@ -37,8 +37,6 @@ static float wobble_get_mean(const char *bases, const char *s);
 
 
 
-
-
 /* @prog wobble ***************************************************************
 **
 ** Wobble base plot

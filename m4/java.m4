@@ -9,9 +9,10 @@ AC_DEFUN([CHECK_JAVA],
 # Handle user hints
 #
 [AC_MSG_CHECKING(if java include directory given)
-AC_ARG_WITH(java,
-[  --with-java=DIR         root directory path of java installation
-  --without-java          to disable java],
+AC_ARG_WITH([java],
+    [AS_HELP_STRING([--with-java=DIR],
+        [root directory path of java installation])]
+    [AS_HELP_STRING([--without-java], [to disable java])],
 [if test "$withval" != no ; then
   AC_MSG_RESULT(yes)
   JALT_HOME="$withval"
@@ -58,8 +59,9 @@ AC_DEFUN([CHECK_JAVAOS],
 # Handle user hints
 #
 [AC_MSG_CHECKING(if java OS include directory given)
-AC_ARG_WITH(javaos,
-[  --with-javaos=DIR       root directory path of java installation include OS],
+AC_ARG_WITH([javaos],
+    [AS_HELP_STRING([--with-javaos=DIR],
+        [root directory path of java installation include OS])],
 [if test "$withval" != no ; then
   AC_MSG_RESULT(yes)
 	  if test -d $withval ; then
@@ -94,8 +96,8 @@ AC_DEFUN([CHECK_AUTH],
 # Handle user authorisation
 #
 [AC_MSG_CHECKING(if any authorisation type is given)
-AC_ARG_WITH(auth,
-[  --with-auth=AUTHTYPE [   defaults PAM] ],
+AC_ARG_WITH([auth],
+    [AS_HELP_STRING([--with-auth=@<:@AUTHTYPE@:>@], [defaults to PAM])],
 [if test "$withval" != no ; then
   AC_MSG_RESULT(yes)
 
@@ -168,8 +170,9 @@ AC_DEFUN([CHECK_THREADS],
 # Handle jemboss threading options
 #
 [AC_MSG_CHECKING(if any threading type is given)
-AC_ARG_WITH(thread,
-[  --with-thread=TYPE [     thread type [default=linux]] ],
+AC_ARG_WITH([thread],
+    [AS_HELP_STRING([--with-thread=@<:@TYPE@:>@],
+        [thread type @<:@default=linux@:>@])],
 [if test "$withval" != no ; then
   AC_MSG_RESULT(yes)
 

@@ -141,10 +141,11 @@ public class RunEmbossApplication2
       while((nc = stderrRead.read(c,0,100)) != -1)
         stderr = stderr.append(new String(c,0,nc));
     }
-    catch (IOException io)
+    catch (Exception io)
     {
+        io.printStackTrace();
       System.err.println("RunEmbossApplication2: Error in "+
-                                "collecting standard out");
+                                "collecting standard error output");
     }
     finally
     {

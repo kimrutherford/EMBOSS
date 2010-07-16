@@ -144,7 +144,6 @@ ajuint     embDbiSortWriteFields (const AjPStr dbname, const AjPStr release,
 				 const AjPStr field,  ajuint maxFieldLen,
 				 ajuint nfiles, ajuint nentries,
 				 AjBool cleanup, const AjPStr sortopt);
-void      embDbiSysCmd (const AjPStr cmdstr);
 void      embDbiWriteDivision (const AjPStr indexdir,
 			       const AjPStr dbname, const AjPStr release,
 			       const char date[4],

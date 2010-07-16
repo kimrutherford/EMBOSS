@@ -24,6 +24,31 @@ while (<>) {
 	$funcname = $1;
 	$newfunc = 1;
     }
+    if (/^Function list (\S+)/) {
+	$funcline = $_;
+	$funcname = $1;
+	$newfunc = 1;
+    }
+    elsif (/^Obsolete (\S+)/) {
+	$funcline = $_;
+	$funcname = $1;
+	$newfunc = 1;
+    }
+    elsif (/^Datasection (\S+)/) {
+	$funcline = $_;
+	$funcname = $1;
+	$newfunc = 1;
+    }
+    elsif (/^Section (\S+)/) {
+	$funcline = $_;
+	$funcname = $1;
+	$newfunc = 1;
+    }
+    elsif (/^Filesection (\S+)/) {
+	$funcline = $_;
+	$funcname = $1;
+	$newfunc = 1;
+    }
     elsif (/^Static function (\S+)/) {
 	$funcline = $_;
 	$funcname = $1;

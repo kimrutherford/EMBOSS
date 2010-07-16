@@ -4,7 +4,7 @@
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @version $Revision: 1.5 $
+** @version $Revision: 1.8 $
 ** @@
 **
 ** Bio::EnsEMBL::Utils::Cache CVS Revision: 1.2
@@ -50,7 +50,7 @@
 **
 ** @attr Key [void*] Key data address
 ** @attr Value [void*] Value data address
-** @attr Bytes [ajuint] Byte size of this node including key and value data
+** @attr Bytes [ajulong] Byte size of this node including key and value data
 ** @attr Dirty [AjBool] Flag to mark that value data has not been written back
 ** @@
 ******************************************************************************/
@@ -59,7 +59,7 @@ typedef struct CacheSNode
 {
     void *Key;
     void *Value;
-    ajuint Bytes;
+    ajulong Bytes;
     AjBool Dirty;
 } CacheONode;
 
@@ -119,7 +119,7 @@ static CachePNode cacheNodeNew(const EnsPCache cache, void* key, void* value)
 
     /* Add the size of the Ensembl Cache Node itself. */
 
-    node->Bytes += (ajuint) sizeof (CacheONode);
+    node->Bytes += sizeof (CacheONode);
 
     switch(cache->Type)
     {
@@ -135,7 +135,7 @@ static CachePNode cacheNodeNew(const EnsPCache cache, void* key, void* value)
 
             /* Add the size of unsigned integer key data. */
 
-            node->Bytes += (ajuint) sizeof (ajuint);
+            node->Bytes += sizeof (ajuint);
 
             break;
 
@@ -147,7 +147,7 @@ static CachePNode cacheNodeNew(const EnsPCache cache, void* key, void* value)
 
             /* Add the size of AJAX String key data. */
 
-            node->Bytes += (ajuint) sizeof (AjOStr);
+            node->Bytes += sizeof (AjOStr);
 
             node->Bytes += ajStrGetRes((AjPStr) node->Key);
 
@@ -381,12 +381,18 @@ static AjBool cacheNodeRemove(EnsPCache cache, const CachePNode node)
 **
 ******************************************************************************/
 
+
+
+
 /* @datasection [EnsPCache] Ensembl Cache *************************************
 **
 ** Functions for Ensembl Caches
 **
 **
 ******************************************************************************/
+
+
+
 
 /* @section functions *********************************************************
 **
@@ -395,18 +401,21 @@ static AjBool cacheNodeRemove(EnsPCache cache, const CachePNode node)
 **
 ******************************************************************************/
 
+
+
+
 /* @func ensCacheNew **********************************************************
 **
 ** Default constructor for an Ensembl Cache.
 **
-** @param [r] type [AjEnum] Ensembl Cache type
-**                          (ensECacheTypeNumeric or ensECacheTypeAlphaNumeric)
-** @param [r] maxbytes [ajuint] Maximum number of bytes held in the cache
+** @param [r] type [EnsECacheType] Ensembl Cache type
+**                 (ensECacheTypeNumeric or ensECacheTypeAlphaNumeric)
+** @param [r] maxbytes [ajulong] Maximum number of bytes held in the cache
 ** @param [r] maxcount [ajuint] Maximum number of objects to be cached
-** @param [r] maxsize [ajuint] Maximum size of an object to be cached
+** @param [r] maxsize [ajulong] Maximum size of an object to be cached
 ** @param [f] Freference [void* function] Object-specific referencing function
 ** @param [f] Fdelete [void function] Object-specific deletion function
-** @param [f] Fsize [ajuint function] Object-specific memory sizing function
+** @param [f] Fsize [ajulong function] Object-specific memory sizing function
 ** @param [f] Fread [void* function] Object-specific reading function
 ** @param [f] Fwrite [AjBool function] Object-specific writing function
 ** @param [r] synchron [AjBool] ajTrue: Immediately write-back value data
@@ -424,13 +433,13 @@ static AjBool cacheNodeRemove(EnsPCache cache, const CachePNode node)
 ** functions and object-specific read and write back functions.
 ******************************************************************************/
 
-EnsPCache ensCacheNew(AjEnum type,
-                      ajuint maxbytes,
+EnsPCache ensCacheNew(EnsECacheType type,
+                      ajulong maxbytes,
                       ajuint maxcount,
-                      ajuint maxsize,
+                      ajulong maxsize,
                       void* Freference(void* value),
                       void Fdelete(void** value),
-                      ajuint Fsize(const void* value),
+                      ajulong Fsize(const void* value),
                       void* Fread(const void* key),
                       AjBool Fwrite(const void* value),
                       AjBool synchron,
@@ -445,9 +454,9 @@ EnsPCache ensCacheNew(AjEnum type,
     if(debug)
         ajDebug("ensCacheNew\n"
                 "  type %d\n"
-                "  maxbytes %u\n"
+                "  maxbytes %Lu\n"
                 "  maxcount %u\n"
-                "  maxsize %u\n"
+                "  maxsize %Lu\n"
                 "  Freference %p\n"
                 "  Fdelete %p\n"
                 "  Fsize %p\n"
@@ -484,19 +493,19 @@ EnsPCache ensCacheNew(AjEnum type,
     /* TODO: Find and set a sensible value here! */
 
     if(debug)
-        ajDebug("ensCacheNew maxbytes %u, maxcount %u, maxsize %u.\n",
+        ajDebug("ensCacheNew maxbytes %Lu, maxcount %u, maxsize %Lu.\n",
                 maxbytes, maxcount, maxsize);
 
     if(maxbytes && (maxbytes < 1000))
-        ajFatal("ensCacheNew cannot set a maximum bytes limit (%u) under "
-                "1000, as each Cache Node requires %u bytes alone.",
-                maxbytes, sizeof(CachePNode));
+        ajFatal("ensCacheNew cannot set a maximum bytes limit (%Lu) under "
+                "1000, as each Cache Node requires %Lu bytes alone.",
+                maxbytes, sizeof (CachePNode));
 
     /* TODO: Find and set a sensible value here! */
 
     if(maxsize && (maxsize < 3))
-        ajFatal("ensCacheNew cannot set a maximum size limit (%u) under "
-                "3 bytes. maximum bytes %u maximum count %u.",
+        ajFatal("ensCacheNew cannot set a maximum size limit (%Lu) under "
+                "3 bytes. maximum bytes %Lu maximum count %u.",
                 maxsize, maxbytes, maxcount);
 
     /*
@@ -924,10 +933,10 @@ AjBool ensCacheTrace(const EnsPCache cache, ajuint level)
             "%S  Table %p length: %u\n"
             "%S  Type %d\n"
             "%S  Synchron %B\n"
-            "%S  MaxBytes %u\n"
+            "%S  MaxBytes %Lu\n"
             "%S  MaxCount %u\n"
-            "%S  MaxSize %u\n"
-            "%S  Bytes %u\n"
+            "%S  MaxSize %Lu\n"
+            "%S  Bytes %Lu\n"
             "%S  Count %u\n"
             "%S  Dropped %u\n"
             "%S  Removed %u\n"

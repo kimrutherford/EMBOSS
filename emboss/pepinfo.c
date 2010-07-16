@@ -51,6 +51,9 @@ static ajint seq_end;
 static ajint win_mid;
 static ajint seq_begin;
 
+
+
+
 /* @prog pepinfo **************************************************************
 **
 ** Plots simple amino acid properties in parallel

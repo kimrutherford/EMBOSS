@@ -30,6 +30,8 @@ static AjPStr featMotifNuc = NULL;
 static AjPStr featMotifProt = NULL;
 
 
+
+
 /* @func embPatlistSeqSearch **************************************************
 **
 ** The main search function of patterns. It compiles the patterns and searches

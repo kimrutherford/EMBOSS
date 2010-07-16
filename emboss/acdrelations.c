@@ -93,6 +93,9 @@
 **
 ******************************************************************************/
 
+
+
+
 /* @datastatic PEdamdat *******************************************************
 **
 ** edamdat object
@@ -122,6 +125,7 @@ typedef struct SEdamdat
 
 
 
+
 /* @datastatic PEdam **********************************************************
 **
 ** edam object
@@ -141,6 +145,7 @@ typedef struct SEdam
   ajint Padding;
 } OEdam;
 #define PEdam OEdam*
+
 
 
 
@@ -165,6 +170,7 @@ typedef struct SKtypedat
   AjPStr edam;   
 } OKtypedat;
 #define PKtypedat OKtypedat*
+
 
 
 
@@ -221,18 +227,90 @@ static void acdrelations_procacdfile
              PKtype T);
 
 
-PEdamdat  ajEdamdatNew(void);
-PEdam     ajEdamNew(void);
+static PEdamdat  acdrelations_EdamdatNew(void);
+static PEdam     acdrelations_EdamNew(void);
 
-void      ajEdamdatDel(PEdamdat *P);
-void      ajEdamDel(PEdam *P);
+static void      acdrelations_EdamdatDel(PEdamdat *P);
+static void      acdrelations_EdamDel(PEdam *P);
 
-PKtypedat ajKtypedatNew(void);
-PKtype    ajKtypeNew(void);
+static PKtypedat acdrelations_KtypedatNew(void);
+static PKtype    acdrelations_KtypeNew(void);
 
-void      ajKtypedatDel(PKtypedat *P);
-void      ajKtypeDel(PKtype *P);
+static void      acdrelations_KtypedatDel(PKtypedat *P);
+static void      acdrelations_KtypeDel(PKtype *P);
 
+
+
+
+/* @prog acdrelations ********************************************************
+**
+** Add relations: attribute to ACD files. 
+** 
+*****************************************************************************/
+
+int main(ajint argc, char **argv)
+{
+  /* Variable declarations */
+  AjPFile   inf_edam   = NULL;  /* Name of EDAM data (input) file   */
+  AjPFile   acdoutf    = NULL;  /* Name of ACD (output) file        */
+  
+  AjPList   acdinlist  = NULL;  /* List of ACD file names (input)   */
+  AjPFile   acdinf     = NULL;  /* Name of ACD (input) file         */
+  AjPStr    acdname    = NULL;  /* Name of current acd file         */
+  AjPDirout acdoutdir  = NULL;  /* Directory for ACD files (output) */
+
+  AjPFile   inf_ktype  = NULL;  /* Name of knowntypes.standard file */
+  
+  PEdam   edam         = NULL;  /* EDAM relations data              */
+  PKtype  ktype        = NULL;  /* Data from knowntype.standard     */
+
+
+  
+  /* Read data from acd. */
+  embInitP("acdrelations",argc,argv,"MYEMBOSS");
+    
+  /* ACD data handling */
+  inf_edam   = ajAcdGetDatafile("inedamfile");
+  inf_ktype  = ajAcdGetInfile("intypefile");
+  acdinlist  = ajAcdGetDirlist("indir");  
+  acdoutdir  = ajAcdGetOutdir("outdir");
+  
+  /* Read data file */  
+  edam  = acdrelations_EdamNew();
+  ktype = acdrelations_KtypeNew();
+    
+  acdrelations_readdatfile(inf_edam, &edam);
+  acdrelations_readtypefile(inf_ktype, &ktype);
+
+
+  /*  Main application loop. Process each ACD file in turn.  */
+  while(ajListPop(acdinlist,(void **)&acdname))
+  {
+      if(!(acdinf = ajFileNewInNameS(acdname)))   
+          ajFatal("Cannot open input ACD file %S\n", acdname);
+      
+      ajFilenameTrimPath(&acdname);
+            
+      if(!(acdoutf = ajFileNewOutNameDirS(acdname, acdoutdir)))
+          ajFatal("Cannot open output ACD file %S\n", acdname);
+
+      acdrelations_procacdfile(acdinf, acdoutf, edam, ktype);
+      
+      ajFileClose(&acdinf);
+      ajFileClose(&acdoutf);
+  }
+  
+  /* Clean up and exit */
+  ajFileClose(&inf_edam);
+  ajFileClose(&inf_ktype);
+  ajListFree(&acdinlist);
+  ajDiroutDel(&acdoutdir);
+
+  acdrelations_EdamDel(&edam);
+
+  ajExit();
+  return 0;
+}
 
 
 
@@ -243,12 +321,15 @@ void      ajKtypeDel(PKtype *P);
 **
 ******************************************************************************/
 
+
+
+
 /* @funcstatic acdrelations_readdatfile ***************************************
 **
 ** Read the data file edamtoacd.dat and write edam object.
 **
-** @param [r] inf [AjPFile] Handle on edamtoacd.dat 
-** @param [r] P   [PEdam*]  edam object to write
+** @param [u] inf [AjPFile] Handle on edamtoacd.dat 
+** @param [u] P   [PEdam*]  edam object to write
 ** @return [void] 
 ** @@
 ******************************************************************************/
@@ -323,7 +404,7 @@ static void acdrelations_readdatfile
       }
       
       /* Write PEdamdat structure & push onto list */
-      dattmp = ajEdamdatNew();
+      dattmp = acdrelations_EdamdatNew();
       ajStrRemoveWhite(&acdtype);
       ajStrAssignS(&dattmp->acdtype, acdtype);
       ajStrAssignS(&dattmp->edam, relations);
@@ -355,8 +436,8 @@ static void acdrelations_readdatfile
 **
 ** Read the data file knowntypes.standard and write ktype object
 **
-** @param [r] inf [AjPFile]  Handle on knowntypes.standard
-** @param [r] T   [PKtype*]  ktype object to write
+** @param [u] inf [AjPFile]  Handle on knowntypes.standard
+** @param [u] T   [PKtype*]  ktype object to write
 ** @return [void] 
 ** @@
 ******************************************************************************/
@@ -388,7 +469,7 @@ static void acdrelations_readtypefile
             continue;
 
         /* Create object for holding line */
-        dattmp = ajKtypedatNew();
+        dattmp = acdrelations_KtypedatNew();
         
         /* Tokenise line delimited by '|'
            Parse first token (value of knowntype: attribute) */
@@ -427,10 +508,10 @@ static void acdrelations_readtypefile
 ** Process ACD file and write new ACD file with new relations: attributes
 ** added (replaced if necessary).
 **
-** @param [r] inf  [AjPFile] ACD input file
-** @param [r] outf [AjPFile] ACD output file
-** @param [r] P    [PEdam]   edam object
-** @param [r] T    [PKtype]  ktype object
+** @param [u] inf  [AjPFile] ACD input file
+** @param [u] outf [AjPFile] ACD output file
+** @param [u] P    [PEdam]   edam object
+** @param [u] T    [PKtype]  ktype object
 ** @return [void] 
 ** @@
 ******************************************************************************/
@@ -549,14 +630,14 @@ static void acdrelations_procacdfile
 ** increasing precedence, i.e. the last line is highest and the relations:
 ** value will be used if all conditions are met.
 **
-** @param [r] outf    [AjPFile] ACD output file
-** @param [r] acdtype [AjPStr ] ACD datatype, e.g. "align"
-** @param [r] strarr  [AjPStr*] All ACD attribute lines (whitespace removed)
+** @param [u] outf    [AjPFile] ACD output file
+** @param [u] acdtype [AjPStr] ACD datatype, e.g. "align"
+** @param [u] strarr  [AjPStr*] All ACD attribute lines (whitespace removed)
 **                              for the the current ACD data item (of type
 **                              acdtype).  One line per array element.
 ** @param [r] n       [ajint]   Size of strarr
-** @param [r] P       [PEdam]   edam object to write
-** @param [r] T       [PKtype]  ktype object to read
+** @param [u] P       [PEdam]   edam object to write
+** @param [u] T       [PKtype]  ktype object to read
 ** @return [void] 
 ** @@
 ******************************************************************************/
@@ -683,7 +764,7 @@ static void acdrelations_writerelations
 
 
 
-/* @funcstatic ajEdamdatNew ***************************************************
+/* @funcstatic acdrelations_EdamdatNew ****************************************
 **
 ** edamdat constructor
 ** The array is NOT allocated 
@@ -691,7 +772,7 @@ static void acdrelations_writerelations
 ** @return [PEdamdat] New object
 ** @@
 ******************************************************************************/
-PEdamdat  ajEdamdatNew(void)
+static PEdamdat  acdrelations_EdamdatNew(void)
 {
   PEdamdat ret;
 
@@ -708,7 +789,7 @@ PEdamdat  ajEdamdatNew(void)
 
 
 
-/* @funcstatic ajEdamNew ******************************************************
+/* @funcstatic acdrelations_EdamNew *******************************************
 **
 ** edam constructor
 ** The array is NOT allocated 
@@ -716,7 +797,7 @@ PEdamdat  ajEdamdatNew(void)
 ** @return [PEdam] New object
 ** @@
 ******************************************************************************/
-PEdam     ajEdamNew(void)
+static PEdam     acdrelations_EdamNew(void)
 {
   PEdam ret;
 
@@ -732,22 +813,22 @@ PEdam     ajEdamNew(void)
 
 
 
-/* @funcstatic ajEdamdatDel ***************************************************
+/* @funcstatic acdrelations_EdamdatDel ****************************************
 **
 ** edamdat destructor
 **
-** @param [r] P       [PEdamdat*]  edamdat object to delete
+** @param [d] P       [PEdamdat*]  edamdat object to delete
 ** @return [void] 
 ** @@
 ******************************************************************************/
-void        ajEdamdatDel(PEdamdat *P)
+static void        acdrelations_EdamdatDel(PEdamdat *P)
 {
   int i;
 
   if(!P)
-    ajFatal("Null arg error 1 in ajEdamdatDel");
+    ajFatal("Null arg error 1 in acdrelations_EdamdatDel");
   else if(!(*P))
-    ajFatal("Null arg error 2 in ajEdamdatDel");
+    ajFatal("Null arg error 2 in acdrelations_EdamdatDel");
 
   ajStrDel(&(*P)->acdtype);
   ajStrDel(&(*P)->edam);
@@ -769,27 +850,27 @@ void        ajEdamdatDel(PEdamdat *P)
 
 
 
-/* @funcstatic ajEdamDel ******************************************************
+/* @funcstatic acdrelations_EdamDel *******************************************
 **
 ** edam destructor
 **
-** @param [r] P       [PEdam*]  edam object to delete
+** @param [d] P       [PEdam*]  edam object to delete
 ** @return [void] 
 ** @@
 ******************************************************************************/
-void        ajEdamDel(PEdam *P)
+static void        acdrelations_EdamDel(PEdam *P)
 {
   int i;
 
   if(!P)
-    ajFatal("Null arg error 1 in ajEdamDel");
+    ajFatal("Null arg error 1 in acdrelations_EdamDel");
   else if(!(*P))
-    ajFatal("Null arg error 2 in ajEdamDel");
+    ajFatal("Null arg error 2 in acdrelations_EdamDel");
 
   if((*P)->n)
     {
         for(i=0;i<(*P)->n;i++)
-            ajEdamdatDel(&(*P)->dat[i]);
+            acdrelations_EdamdatDel(&(*P)->dat[i]);
         AJFREE((*P)->dat);
     }
 
@@ -803,7 +884,7 @@ void        ajEdamDel(PEdam *P)
 
 
 
-/* @funcstatic ajKtypedatNew **************************************************
+/* @funcstatic acdrelations_KtypedatNew ***************************************
 **
 ** ktypedat constructor
 **
@@ -811,7 +892,7 @@ void        ajEdamDel(PEdam *P)
 ** @@
 ******************************************************************************/
 
-PKtypedat  ajKtypedatNew(void)
+static PKtypedat  acdrelations_KtypedatNew(void)
 {
   PKtypedat ret;
 
@@ -827,14 +908,14 @@ PKtypedat  ajKtypedatNew(void)
 
 
 
-/* @funcstatic ajKtypeNew *****************************************************
+/* @funcstatic acdrelations_KtypeNew ******************************************
 **
 ** ktype constructor
 **
 ** @return [PKtype] New object
 ** @@
 ******************************************************************************/
-PKtype     ajKtypeNew(void)
+static PKtype     acdrelations_KtypeNew(void)
 {
   PKtype ret;
 
@@ -850,20 +931,20 @@ PKtype     ajKtypeNew(void)
 
 
 
-/* @funcstatic ajKtypedatDel **************************************************
+/* @funcstatic acdrelations_KtypedatDel ***************************************
 **
 ** ktypedat destructor
 **
-** @param [r] P       [PKtypedat*] ktypedat object to delete
+** @param [d] P       [PKtypedat*] ktypedat object to delete
 ** @return [void] 
 ** @@
 ******************************************************************************/
-void        ajKtypedatDel(PKtypedat *P)
+static void        acdrelations_KtypedatDel(PKtypedat *P)
 {
   if(!P)
-    ajFatal("Null arg error 1 in ajKtypedatDel");
+    ajFatal("Null arg error 1 in acdrelations_KtypedatDel");
   else if(!(*P))
-    ajFatal("Null arg error 2 in ajKtypedatDel");
+    ajFatal("Null arg error 2 in acdrelations_KtypedatDel");
 
   ajStrDel(&(*P)->acdtype);
   ajStrDel(&(*P)->edam);
@@ -879,27 +960,27 @@ void        ajKtypedatDel(PKtypedat *P)
 
 
 
-/* @funcstatic ajKtypeDel **************************************************
+/* @funcstatic acdrelations_KtypeDel ******************************************
 **
 ** ktype destructor
 **
-** @param [r] P       [PKtype*] ktype object to delete
+** @param [d] P       [PKtype*] ktype object to delete
 ** @return [void] 
 ** @@
 ******************************************************************************/
-void        ajKtypeDel(PKtype *P)
+static void        acdrelations_KtypeDel(PKtype *P)
 {
   int i;
 
   if(!P)
-    ajFatal("Null arg error 1 in ajKtypeDel");
+    ajFatal("Null arg error 1 in acdrelations_KtypeDel");
   else if(!(*P))
-    ajFatal("Null arg error 2 in ajKtypeDel");
+    ajFatal("Null arg error 2 in acdrelations_KtypeDel");
 
   if((*P)->n)
     {
         for(i=0;i<(*P)->n;i++)
-            ajKtypedatDel(&(*P)->dat[i]);
+            acdrelations_KtypedatDel(&(*P)->dat[i]);
         AJFREE((*P)->dat);
     }
 
@@ -907,78 +988,4 @@ void        ajKtypeDel(PKtype *P)
   *P=NULL;
 
   return;
-}
-
-
-
-
-
-/* @prog acdrelations ********************************************************
-**
-** Add relations: attribute to ACD files. 
-** 
-*****************************************************************************/
-
-int main(ajint argc, char **argv)
-{
-  /* Variable declarations */
-  AjPFile   inf_edam   = NULL;  /* Name of EDAM data (input) file   */
-  AjPFile   acdoutf    = NULL;  /* Name of ACD (output) file        */
-  
-  AjPList   acdinlist  = NULL;  /* List of ACD file names (input)   */
-  AjPFile   acdinf     = NULL;  /* Name of ACD (input) file         */
-  AjPStr    acdname    = NULL;  /* Name of current acd file         */
-  AjPDirout acdoutdir  = NULL;  /* Directory for ACD files (output) */
-
-  AjPFile   inf_ktype  = NULL;  /* Name of knowntypes.standard file */
-  
-  PEdam   edam         = NULL;  /* EDAM relations data              */
-  PKtype  ktype        = NULL;  /* Data from knowntype.standard     */
-
-
-  
-  /* Read data from acd. */
-  embInitP("acdrelations",argc,argv,"MYEMBOSS");
-    
-  /* ACD data handling */
-  inf_edam   = ajAcdGetDatafile("infileedam");
-  inf_ktype  = ajAcdGetInfile("infiletype");
-  acdinlist  = ajAcdGetDirlist("indir");  
-  acdoutdir  = ajAcdGetOutdir("outdir");
-  
-  /* Read data file */  
-  edam  = ajEdamNew();
-  ktype = ajKtypeNew();
-    
-  acdrelations_readdatfile(inf_edam, &edam);
-  acdrelations_readtypefile(inf_ktype, &ktype);
-
-
-  /*  Main application loop. Process each ACD file in turn.  */
-  while(ajListPop(acdinlist,(void **)&acdname))
-  {
-      if(!(acdinf = ajFileNewInNameS(acdname)))   
-          ajFatal("Cannot open input ACD file %S\n", acdname);
-      
-      ajFilenameTrimPath(&acdname);
-            
-      if(!(acdoutf = ajFileNewOutNameDirS(acdname, acdoutdir)))
-          ajFatal("Cannot open output ACD file %S\n", acdname);
-
-      acdrelations_procacdfile(acdinf, acdoutf, edam, ktype);
-      
-      ajFileClose(&acdinf);
-      ajFileClose(&acdoutf);
-  }
-  
-  /* Clean up and exit */
-  ajFileClose(&inf_edam);
-  ajFileClose(&inf_ktype);
-  ajListFree(&acdinlist);
-  ajDiroutDel(&acdoutdir);
-
-  ajEdamDel(&edam);
-
-  ajExit();
-  return 0;
 }

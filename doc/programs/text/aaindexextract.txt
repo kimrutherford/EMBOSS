@@ -43,7 +43,7 @@ AAINDEX database file: aaindex1.test
 Command line arguments
 
 Extract amino acid property data from AAINDEX
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     AAINDEX database file
@@ -237,7 +237,7 @@ Notes
    and aaindex3 for the amino-acid pair-wise contact potentials. All data
    are derived from the published literature. The file aaindex1 is
    required by aaindexextract and can be downloaded from the AAINDEX site:
-   ftp://ftp.genome.ad.jp/pub/db/genomenet/aaindex/aaindex1.
+   ftp://ftp.genome.ad.jp/pub/db/community/aaindex/aaindex1.
 
    aaindexextract will write to the EMBOSS data directory data/AAINDEX. If
    you cannot find the output files then it is likely the data directory
@@ -297,9 +297,12 @@ See also
 
 Author(s)
 
-   Peter Rice (pmr (c) ebi.ac.uk)
+   Peter Rice
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

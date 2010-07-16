@@ -39,7 +39,7 @@ double             ajRandomDouble (void);
 void               ajRandomSeed (void);
 void               ajCvtRecToPol (float x, float y,
                                   float *radius, float *angle);
-ajint              ajRound (ajint i, ajint round);
+ajint              ajRound (ajint i, ajint vround);
 float              ajRoundFloat (float a, ajint nbits);
 unsigned long long ajMathCrc64(const AjPStr thys);
 ajuint             ajMathCrc32(const AjPStr thys);

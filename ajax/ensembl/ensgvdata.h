@@ -11,12 +11,13 @@ extern "C"
 
 
 
-/* @data EnsPGvsampleadaptor **************************************************
+/* #data EnsPGvsampleadaptor **************************************************
 **
 ** Ensembl Genetic Variation Sample Adaptor.
+** Defined as an alias in EnsPBaseadaptor
 **
-** @alias EnsPBaseadaptor
-** @@
+** #alias EnsPBaseadaptor
+** ##
 ******************************************************************************/
 
 #define EnsPGvsampleadaptor EnsPBaseadaptor
@@ -24,20 +25,20 @@ extern "C"
 
 
 
-/******************************************************************************
+/* EnsEGvsampleDisplay ********************************************************
 **
 ** Ensembl Genetic Variation Sample Display enumeration.
 **
 ******************************************************************************/
 
-enum EnsEGvsampleDisplay
+typedef enum EnsOGvsampleDisplay
 {
     ensEGvsampleDisplayNULL,
     ensEGvsampleDisplayReference,
     ensEGvsampleDisplayDefault,
     ensEGvsampleDisplayDisplayable,
     ensEGvsampleDisplayUndisplayable
-};
+} EnsEGvsampleDisplay;
 
 
 
@@ -57,7 +58,7 @@ enum EnsEGvsampleDisplay
 ** @cc Bio::EnsEMBL::Variation::Sample
 ** @attr Name [AjPStr] Name
 ** @attr Description [AjPStr] Description
-** @attr Display [AjEnum] Display
+** @attr Display [EnsEGvsampleDisplay] Display
 ** @attr Size [ajuint] Size
 ** @@
 ******************************************************************************/
@@ -69,7 +70,7 @@ typedef struct EnsSGvsample
     EnsPGvsampleadaptor Adaptor;
     AjPStr Name;
     AjPStr Description;
-    AjEnum Display;
+    EnsEGvsampleDisplay Display;
     ajuint Size;
 } EnsOGvsample;
 
@@ -78,12 +79,13 @@ typedef struct EnsSGvsample
 
 
 
-/* @data EnsPGvindividualadaptor **********************************************
+/* #data EnsPGvindividualadaptor **********************************************
 **
 ** Ensembl Genetic Variation Individual Adaptor.
+** Defined as an alias in EnsPBaseadaptor
 **
-** @alias EnsPBaseadaptor
-** @@
+** #alias EnsPBaseadaptor
+** ##
 ******************************************************************************/
 
 #define EnsPGvindividualadaptor EnsPBaseadaptor
@@ -91,30 +93,30 @@ typedef struct EnsSGvsample
 
 
 
-/******************************************************************************
+/* EnsEGvindividualGender *****************************************************
 **
 ** Ensembl Genetic Variation Individual Gender enumeration.
 **
 ******************************************************************************/
 
-enum EnsEGvindividualGender
+typedef enum EnsOGvindividualGender
 {
     ensEGvindividualGenderNULL,
     ensEGvindividualGenderMale,
     ensEGvindividualGenderFemale,
     ensEGvindividualGenderUnknown
-};
+} EnsEGvindividualGender;
 
 
 
 
-/******************************************************************************
+/* EnsEGvindividualType *******************************************************
 **
 ** Ensembl Genetic Variation Individual Type enumeration.
 **
 ******************************************************************************/
 
-enum EnsEGvindividualType
+typedef enum EnsOGvindividualType
 {
     ensEGvindividualTypeNULL,
     ensEGvindividualTypeFullyInbred,
@@ -122,7 +124,7 @@ enum EnsEGvindividualType
     ensEGvindividualTypeOutbred,
     ensEGvindividualTypeMutant,
     ensEGvindividualTypeUnknown
-};
+} EnsEGvindividualType;
 
 
 
@@ -144,8 +146,8 @@ enum EnsEGvindividualType
 ** @cc Bio::EnsEMBL::Variation::Individual
 ** @attr Father [struct EnsSGvindividual*] Father Individual
 ** @attr Mother [struct EnsSGvindividual*] Mother Individual
-** @attr Gender [AjEnum] Gender
-** @attr Type [AjEnum] Type
+** @attr Gender [EnsEGvindividualGender] Gender
+** @attr Type [EnsEGvindividualType] Type
 ** @attr Description [AjPStr] Description
 ** @@
 ******************************************************************************/
@@ -158,8 +160,8 @@ typedef struct EnsSGvindividual
     EnsPGvsample Gvsample;
     struct EnsSGvindividual* Father;
     struct EnsSGvindividual* Mother;
-    AjEnum Gender;
-    AjEnum Type;
+    EnsEGvindividualGender Gender;
+    EnsEGvindividualType Type;
     AjPStr Description;
 } EnsOGvindividual;
 
@@ -168,12 +170,13 @@ typedef struct EnsSGvindividual
 
 
 
-/* @data EnsPGvpopulationadaptor **********************************************
+/* #data EnsPGvpopulationadaptor **********************************************
 **
 ** Ensembl Genetic Variation Population Adaptor.
+** Defined as an alias in EnsPBaseadaptor
 **
-** @alias EnsPBaseadaptor
-** @@
+** #alias EnsPBaseadaptor
+** ##
 ******************************************************************************/
 
 #define EnsPGvpopulationadaptor EnsPBaseadaptor
@@ -215,7 +218,7 @@ typedef struct EnsSGvpopulation
 
 
 
-#endif
+#endif /* ensgvdata_h */
 
 #ifdef __cplusplus
 }

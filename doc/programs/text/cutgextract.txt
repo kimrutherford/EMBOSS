@@ -47,7 +47,7 @@ General log output file [outfile.cutgextract]:
 Command line arguments
 
 Extract codon usage tables from CUTG database
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-directory]         dirlist    [.] Codon usage directories
@@ -67,6 +67,9 @@ Version: EMBOSS:6.2.0
                                   (Any string)
 
    Associated qualifiers:
+
+   "-directory" associated qualifiers
+   -extension1         string     Default file extension
 
    "-outfile" associated qualifiers
    -odirectory2        string     Output directory
@@ -174,9 +177,12 @@ See also
 
 Author(s)
 
-   Alan Bleasby (ajb (c) ebi.ac.uk)
+   Alan Bleasby
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

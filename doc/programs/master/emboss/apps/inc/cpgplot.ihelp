@@ -1,5 +1,5 @@
 Identify and plot CpG islands in nucleotide sequence(s)
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -9,7 +9,7 @@ Version: EMBOSS:6.2.0
                                   within a window whose size is set by this
                                   parameter. The window is moved down the
                                   sequence and these statistics are calculated
-                                  at each postition that the window is moved
+                                  at each position that the window is moved
                                   to. (Integer 1 or more)
    -minlen             integer    [200] This sets the minimum length that a
                                   CpG island has to be before it is reported.
@@ -29,7 +29,8 @@ Version: EMBOSS:6.2.0
                                   details of any CpG islands that are found.
 *  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tek, tekt, none, data, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif, pdf,
+                                  svg, pdf, svg)
   [-outfeat]           featout    [unknown.gff] File for output features
 
    Additional (Optional) qualifiers: (none)

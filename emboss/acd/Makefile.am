@@ -1,6 +1,7 @@
 
 pkgdata_DATA = aaindexextract.acd abiview.acd acdc.acd acdlog.acd \
-	acdpretty.acd acdrelations.acd acdtable.acd acdtrace.acd acdvalid.acd ajbad.acd \
+	acdpretty.acd acdrelations.acd acdtable.acd acdtrace.acd \
+	acdvalid.acd ajbad.acd \
 	ajfeatest.acd ajtest.acd aligncopy.acd aligncopypair.acd antigenic.acd \
 	backtranambig.acd backtranseq.acd banana.acd \
 	biosed.acd btwisted.acd cai.acd chaos.acd charge.acd checktrans.acd \
@@ -11,8 +12,9 @@ pkgdata_DATA = aaindexextract.acd abiview.acd acdc.acd acdlog.acd \
 	dbifasta.acd dbiflat.acd dbigcg.acd dbxfasta.acd dbxflat.acd \
 	dbxgcg.acd dbxreport.acd dbxstat.acd \
 	degapseq.acd density.acd descseq.acd \
-	diffseq.acd digest.acd \
-	distmat.acd dotmatcher.acd dotpath.acd dottup.acd dreg.acd \
+	diffseq.acd digest.acd distmat.acd \
+	domtesta.acd domtestb.acd domtestc.acd domtestd.acd \
+	dotmatcher.acd dotpath.acd dottup.acd dreg.acd \
 	edialign.acd \
 	einverted.acd embossdata.acd embossversion.acd emma.acd emowse.acd \
 	edamclean.acd ensembltest.acd \
@@ -27,6 +29,8 @@ pkgdata_DATA = aaindexextract.acd abiview.acd acdc.acd acdlog.acd \
         infoseq.acd intconv.acd \
 	isochore.acd jaspextract.acd jaspscan.acd lindna.acd listor.acd \
 	makenucseq.acd makeprotseq.acd marscan.acd \
+	martattributes.acd martdatasets.acd martfilters.acd  martquery.acd \
+	martregistry.acd martseqs.acd \
 	maskambignuc.acd maskambigprot.acd maskfeat.acd maskseq.acd \
 	matcher.acd megamerger.acd \
 	merger.acd msbar.acd mwcontam.acd mwfilter.acd

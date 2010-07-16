@@ -1027,6 +1027,9 @@ static ajint tmap_peak1(ajint start, ajint stopp, float *parameter)
 #define MAX_TM_LANGD 30
 #define MIN_TM_LANGD 25
 
+
+
+
 /* @funcstatic tmap_summa1 ****************************************************
 **
 ** Sums the values for 'parameter' in span 'start' to 'stopp'

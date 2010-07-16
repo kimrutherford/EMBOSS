@@ -96,7 +96,7 @@ extern "C"
  *  i.e. dbno + offset + refoffset
  */
 #define BT_DOFFROFF (sizeof(ajint) + sizeof(ajlong) + sizeof(ajlong))
-    
+
 
 
 
@@ -104,7 +104,7 @@ extern "C"
 **
 ** Btree node
 **
-** @attr BlockOffset [ajlong] Offset within mainindex
+** @attr BlockOffset [ajlong] Offset within main index
 ** @attr Nkeys [ajint] Number of keys filled
 ** @attr TotLen [ajint] Total length of keys
 ** @attr Left [ajlong] Left Sibling
@@ -212,7 +212,7 @@ typedef struct AjSBtWild
 **
 ** Bucket structure on disc
 **
-** Key, filenumber, ftell ID, subkey page (char*, ajint, ajlong, ajlong)
+** Key, file number, ftell ID, subkey page (char*, ajint, ajlong, ajlong)
 **
 ** @attr NodeType [ajint] Node type
 ** @attr Nentries [ajint] Number of entries
@@ -260,7 +260,7 @@ typedef struct AjSBtNumId
 **
 ** Offset bucket structure on disc
 **
-** Key, filenumber, ftell ID, subkey page (char*, ajint, ajlong, ajlong)
+** Key, file number, ftell ID, subkey page (char*, ajint, ajlong, ajlong)
 **
 ** @attr NodeType [ajint] Node type
 ** @attr Nentries [ajint] Number of entries
@@ -516,6 +516,8 @@ typedef struct AjSBtpage
     char Padding[4];
 } AjOBtpage;
 #define AjPBtpage AjOBtpage*
+
+
 
 
 /* @data AjPBtcache ***************************************************

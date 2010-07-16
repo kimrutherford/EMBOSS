@@ -15,6 +15,9 @@ extern "C"
 #define AJWORD   32			/* Size of a word		*/
 #define AJBPS    1			/* Bits per state		*/
 
+
+
+
 /* @data AjPPatBYPNode *******************************************************
 **
 ** AJAX data structure for nodes in Baeza-Yates & Perleberg algorithm
@@ -32,6 +35,9 @@ typedef struct AjSPatBYPNode
     char  Padding[4];
 } AjOPatBYPNode;
 #define AjPPatBYPNode AjOPatBYPNode*
+
+
+
 
 /* @data AjPPatComp **********************************************************
 **
@@ -74,6 +80,9 @@ typedef struct AjSPatComp
 } AjOPatComp;
 #define AjPPatComp AjOPatComp*
 
+
+
+
 /* @data AjPPatternSeq ********************************************************
 **
 ** Ajax sequence pattern object.
@@ -109,6 +118,9 @@ typedef struct AjSPatternSeq {
 } AjOPatternSeq;
 
 #define AjPPatternSeq AjOPatternSeq*
+
+
+
 
 /* @data AjPPatternRegex ******************************************************
 **
@@ -152,6 +164,9 @@ typedef struct AjSPatternRegex {
 #define AJ_PAT_TYPE_PRO 1
 #define AJ_PAT_TYPE_NUCL 2
 
+
+
+
 /* @data AjPPatlistSeq ********************************************************
 **
 ** Ajax Pattern List object.
@@ -185,6 +200,9 @@ typedef struct AjSPatlistSeq {
 } AjOPatlistSeq;
 
 #define AjPPatlistSeq AjOPatlistSeq*
+
+
+
 
 /* @data AjPPatlistRegex ******************************************************
 **

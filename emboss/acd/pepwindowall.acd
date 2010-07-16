@@ -1,7 +1,8 @@
 application: pepwindowall [
   documentation: "Draw Kyte-Doolittle hydropathy plot for a protein alignment"
   groups: "Protein:Composition"
-  relations: "EDAM: Protein sequence hydropathy calculation"
+  relations: "/edam/topic/0000137 Protein hydropathy"
+  relations: "/edam/operation/0000401 Protein sequence hydropathy calculation"
 ]
 
 section: input [
@@ -14,7 +15,7 @@ section: input [
     help: "File containing a sequence alignment"
     type: "gapprotein"
     aligned: "Y"
-    relations: "EDAM: Protein sequence alignment data"                     
+    relations: "/edam/data/0001384 Protein sequence alignment"                     
   ]
 
   datafile: datafile [
@@ -23,7 +24,7 @@ section: input [
     directory: "AAINDEX"
     default: "Enakai.dat"
     knowntype: "aaindex data"
-    relations:  "EDAM: Amino acid index"                               
+    relations:  "/edam/data/0001501 Amino acid index"                               
   ]
 
 endsection: input
@@ -39,14 +40,14 @@ section: additional [
     default: "19"
     minimum: "1"
     maximum: "200"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001251 Window size"
   ]
 
   boolean: normalize [
     additional: "Y"
     information: "Normalize data values"
     default: "N"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
   
 
@@ -62,7 +63,7 @@ section: output [
     multiple: "$(sequences.count)"
     gytitle: "Hydropathy"
     gtitle: "Kyte-Doolittle Plot"
-    relations: "EDAM: EMBOSS graph file"                                   
+    relations: "/edam/data/0001522 Protein sequence hydropathy plot"                                   
   ]
 
 endsection: output

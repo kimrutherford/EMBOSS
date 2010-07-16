@@ -43,7 +43,7 @@ output sequence [dna.fasta]: aligned.consambig
 Command line arguments
 
 Create an ambiguous consensus sequence from a multiple alignment
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqset     File containing a sequence alignment.
@@ -209,9 +209,12 @@ See also
 
 Author(s)
 
-   Jon              Ison (jison (c) ebi.ac.uk)
+   Jon              Ison
    European         Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton,         Cambridge CB10 1SD, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

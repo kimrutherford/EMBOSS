@@ -38,7 +38,7 @@ output sequence(s) [l48662.fasta]:
 Command line arguments
 
 Shuffles a set of sequences maintaining composition
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -224,8 +224,11 @@ See also
 
 Author(s)
 
-   Michael          Schmitz (mschmitz (c) lbl.gov)
+   Michael          Schmitz formerly at:
    Lawrence         Berkeley Labs, USA
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

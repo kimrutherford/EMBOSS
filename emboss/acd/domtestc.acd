@@ -1,0 +1,18 @@
+application: domtestc [
+  documentation: "Create and write out some typical XML"
+  groups: "Edit"
+  relations: "/edam/topic/0000220 File handling"
+  relations: "/edam/operation/0000336 File debugging"
+]
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    information: "XML output file"
+  ]
+
+endsection: output

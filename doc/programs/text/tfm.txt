@@ -186,7 +186,7 @@ maskseq       Write a sequence with masked regions
 newseq        Create a sequence file from a typed-in sequence
 nohtml        Remove mark-up (e.g. HTML tags) from an ASCII text file
 noreturn      Remove carriage return from ASCII files
-nospace       Remove all whitespace from an ASCII text file
+nospace       Remove whitespace from an ASCII text file
 notab         Replace tabs with spaces in an ASCII text file
 notseq        Write to file a subset of an input stream of sequences
 nthseq        Write to file a single sequence from an input stream of sequences
@@ -486,7 +486,7 @@ seqwords    Generates DHF files from keyword search of UniProt
 siggen      Generates a sparse protein signature from an alignment
 siggenlig   Generates ligand-binding signatures from a CON file
 sigscan     Generates hits (DHF file) from a signature search
-sigscanlig  Searches ligand-signature library & writes hits (LHF file)
+sigscanlig  Searches ligand-signature library and writes hits (LHF file)
 
 PROTEIN COMPOSITION
 backtranambig Back-translate a protein sequence to ambiguous nucleotide sequence
@@ -564,7 +564,7 @@ domainsse      Add secondary structure records to a DCF file
 hetparse       Converts heterogen group dictionary to EMBL-like format
 jaspextract    Extract data from JASPAR
 pdbparse       Parses PDB files and writes protein CCF files
-pdbplus        Add accessibility & secondary structure to a CCF file
+pdbplus        Add accessibility and secondary structure to a CCF file
 pdbtosp        Convert swissprot:PDB codes file to EMBL-like format
 printsextract  Extract data from PRINTS database for use by pscan
 prosextract    Processes the PROSITE motif database for use by patmatmotifs
@@ -818,7 +818,7 @@ newcpgseek     Identify and report CpG-rich regions in nucleotide sequence(s)
 newseq         Create a sequence file from a typed-in sequence
 nohtml         Remove mark-up (e.g. HTML tags) from an ASCII text file
 noreturn       Remove carriage return from ASCII files
-nospace        Remove all whitespace from an ASCII text file
+nospace        Remove whitespace from an ASCII text file
 notab          Replace tabs with spaces in an ASCII text file
 notseq         Write to file a subset of an input stream of sequences
 nthseq         Write to file a single sequence from an input stream of sequences
@@ -841,7 +841,7 @@ pasteseq       Insert one sequence into another
 patmatdb       Searches protein sequences with a sequence motif
 patmatmotifs   Scan a protein sequence with motifs from the PROSITE database
 pdbparse       Parses PDB files and writes protein CCF files
-pdbplus        Add accessibility & secondary structure to a CCF file
+pdbplus        Add accessibility and secondary structure to a CCF file
 pdbtosp        Convert swissprot:PDB codes file to EMBL-like format
 pepcoil        Predicts coiled coil regions in protein sequences
 pepinfo        Plot amino acid properties of a protein sequence in parallel
@@ -899,7 +899,7 @@ sigcleave      Reports on signal cleavage sites in a protein sequence
 siggen         Generates a sparse protein signature from an alignment
 siggenlig      Generates ligand-binding signatures from a CON file
 sigscan        Generates hits (DHF file) from a signature search
-sigscanlig     Searches ligand-signature library & writes hits (LHF file)
+sigscanlig     Searches ligand-signature library and writes hits (LHF file)
 silent         Find restriction sites to insert (mutate) with no translation cha
 nge
 sirna          Finds siRNA duplexes in mRNA
@@ -1031,7 +1031,7 @@ Finds programs by keywords in their short description
 Command line arguments
 
 Finds programs by keywords in their short description
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-search]            string     Enter a word or words here and a
@@ -1259,16 +1259,17 @@ UTILS MISC
    information on configured databases textsearch Search the textual
    description of sequence(s) tfm Displays full documentation for an
    application whichdb Search all sequence databases for an entry and
-   retrieve it Author(s) Gary Williams (gwilliam (c) rfcgr.mrc.ac.uk) MRC
-   Rosalind Franklin Centre for Genomics Research Wellcome Trust Genome
-   Campus, Hinxton, Cambridge, CB10 1SB, UK History Target users This
-   program is intended to be used by everyone and everything, from naive
-   users to embedded scripts. Comments None
+   retrieve it Author(s) Gary Williams formerly at: MRC Rosalind Franklin
+   Centre for Genomics Research Wellcome Trust Genome Campus, Hinxton,
+   Cambridge, CB10 1SB, UK Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
+   History Target users This program is intended to be used by everyone
+   and everything, from naive users to embedded scripts. Comments None
 
 Command line arguments
 
 Displays full documentation for an application
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-program]           string     Enter the name of an EMBOSS program (Any
@@ -1408,9 +1409,12 @@ See also
 
 Author(s)
 
-   Gary             Williams (gwilliam (c) rfcgr.mrc.ac.uk)
+   Gary             Williams formerly at:
    MRC              Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome           Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

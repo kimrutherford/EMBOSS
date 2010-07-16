@@ -34,7 +34,7 @@ Output file [outfile.infobase]:
 Command line arguments
 
 Return information on a given nucleotide base
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-code]              string     [ABCDGHKMNRSTUVWXY] Enter IUPAC nucleotide
@@ -168,9 +168,12 @@ See also
 
 Author(s)
 
-   Jon              Ison (jison (c) ebi.ac.uk)
+   Jon              Ison
    European         Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton,         Cambridge CB10 1SD, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

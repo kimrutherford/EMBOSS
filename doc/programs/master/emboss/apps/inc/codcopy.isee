@@ -114,7 +114,7 @@
 
 <tr>
 <td><a href="nospace.html">nospace</a></td>
-<td>Remove all whitespace from an ASCII text file</td>
+<td>Remove whitespace from an ASCII text file</td>
 </tr>
 
 <tr>

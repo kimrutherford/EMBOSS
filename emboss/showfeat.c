@@ -266,7 +266,12 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
 {
     AjIList    iter = NULL ;
     AjPFeature gf   = NULL ;
-    AjPFeattable feat;
+    void **array   = NULL ;
+    AjPFeature *fullfeats   = NULL ;
+    ajuint *featindex = NULL;
+    const AjPFeattable feat;
+    AjPList featlist = NULL;
+    AjPList fullfeatlist = NULL;
     AjPStr lineout;
     char strandout   = '\0';
     AjBool first     = ajTrue;
@@ -290,11 +295,15 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
     AjPStr key = NULL;
     AjBool val = ajFalse;
 
+    ajuint i;
+    ajuint isize;
+    ajuint jsize;
+    ajuint j = 0;
+
     /* get the feature table of the sequence */
-    feat = ajSeqGetFeatCopy(seq);
+    feat = ajSeqGetFeat(seq);
     if(!feat)
 	return;
-
 
     lineout = ajStrNew();
     tagstmp = ajStrNewC("");
@@ -303,24 +312,55 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
 
     if(ajFeattableGetSize(feat))
     {
+        isize = ajListToarray(feat->Features, (void***) &array);
+        fullfeats = (AjPFeature*) array;
+
+        featlist = ajListNew();
+        AJCNEW0(featindex, isize);
+
+        jsize = 0;
+        for(i=0;fullfeats[i];i++)
+        {
+            if(ajFeatIsChild(fullfeats[i]))
+                continue;
+             ajListPushAppend(featlist, fullfeats[i]);
+           featindex[jsize++] = i;
+        }
+
 	if(!ajStrCmpC(sortlist, "source"))
 	    /* sort by: sense, source, type, start */
-	    ajListSort(feat->Features, showfeat_CompareFeatSource);
+	    ajListToindex(featlist, featindex, showfeat_CompareFeatSource);
 	else if(!ajStrCmpC(sortlist, "start"))
-	    /* sort by: sense, start, type, source, source */
-	    ajListSort(feat->Features, showfeat_CompareFeatPos);
+	    /* sort by: sense, start, type, source */
+	    ajListToindex(featlist, featindex, showfeat_CompareFeatPos);
 	else if(!ajStrCmpC(sortlist, "type"))
 	    /* type */
 	    /* sort by: sense, type, source, start */
-	    ajListSort(feat->Features, showfeat_CompareFeatType);
+	    ajListToindex(featlist, featindex, showfeat_CompareFeatType);
 	/* else - no sort */
 
-	iter = ajListIterNewread(feat->Features) ;
+	if(!ajStrCmpC(sortlist, "nosort"))
+        {
+            iter = ajListIterNewread(feat->Features);
+        }
+        else 
+        {
+            fullfeatlist = ajListNew();
+            j = 0;
+            for(i=0;i<jsize;i++) 
+            {
+                j = featindex[i];
+                ajListPushAppend(fullfeatlist, fullfeats[j++]);
+                while(j < isize && ajFeatIsChild(fullfeats[j]))
+                      ajListPushAppend(fullfeatlist, fullfeats[j++]);
+            }
+            iter = ajListIterNewread(fullfeatlist);
+        }
+        AJFREE(featindex);
 
 	while(!ajListIterDone(iter))
 	{
 	    gf = ajListIterGet(iter);
-
             /* see if its a child of a multiple join */
 	    child = ajFalse;
             if(ajFeatIsMultiple(gf))
@@ -339,7 +379,6 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
 	    else
 	    	want_multiple_line = ajFalse;
 
-
 	    /* check that the feature is within the range we wish to display */
 	    if(beg+1 > (ajint)ajFeatGetEnd(gf) || 
 	       end+1 < (ajint)ajFeatGetStart(gf))
@@ -357,11 +396,13 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
 	    if(!unknown && ajFeatGetStrand(gf) == '\0')
 		continue;
 
+            ajStrSetClear(&tagstmp);
 	    /* check that we want to output this match of source, type */
-	    if(!embMiscMatchPatternDelimC(ajFeatGetSource(gf),
-                                          matchsource,",;|") ||
-	       !showfeat_MatchPatternTags(gf, matchtag, matchvalue,
+	    if(!showfeat_MatchPatternTags(gf, matchtag, matchvalue,
 					  stricttags, &tagstmp, values))
+                continue;
+            if(!embMiscMatchPatternDelimC(ajFeatGetSource(gf),
+                                          matchsource,",;|"))
 		continue;
 
             if(ajStrGetLen(matchtype))
@@ -510,15 +551,15 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
 
     }
 
-
-    ajFeattableDel(&feat);
-
     ajStrDel(&tagstmp);
     ajStrDel(&tagsout);
     ajStrDel(&posout);
     ajStrDel(&lineout);
     ajStrDel(&sourceout);
     ajStrDel(&typeout);
+    ajListFree(&featlist);
+    ajListFree(&fullfeatlist);
+    AJFREE(array);
 
     return;
 }

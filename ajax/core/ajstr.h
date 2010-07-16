@@ -68,7 +68,7 @@ typedef AjPStr* AjPPStr;
 ** @alias AjSStrIter
 ** @alias AjOStrIter
 **
-** @new ajStrIter Creates and initializes an iterator for a string
+** @new ajStrIter Creates and initialises an iterator for a string
 **
 ** @delete ajStrIterFree Destructor for a string iterator
 **
@@ -292,7 +292,7 @@ AjBool     ajStrQuoteStrip(AjPStr *Pstr);
 AjBool     ajStrQuoteStripAll(AjPStr *Pstr);
 AjBool     ajStrRemoveDupchar(AjPStr* Pstr);
 AjBool     ajStrRemoveGap(AjPStr* thys);
-    AjBool     ajStrRemoveGapF(AjPStr* thys, float *Pfloat);
+AjBool     ajStrRemoveGapF(AjPStr* thys, float *Pfloat);
 AjBool     ajStrRemoveHtml(AjPStr* pthis);
 AjBool     ajStrRemoveLastNewline(AjPStr* Pstr);
 AjBool     ajStrRemoveSetC(AjPStr* Pstr, const char *txt);
@@ -402,7 +402,8 @@ AjBool     ajStrToHex (const AjPStr str, ajint* Pval);
 AjBool     ajStrToInt (const AjPStr str, ajint* Pval);
 AjBool     ajStrToLong (const AjPStr thys, ajlong* result);
 AjBool     ajStrToUint (const AjPStr str, ajuint* Pval);
-
+AjBool     ajStrToUlong(const AjPStr str, ajulong* Pval);
+    
 /* datatype to string conversion functions */
 
 AjBool     ajStrFromBool (AjPStr* Pstr, AjBool val);

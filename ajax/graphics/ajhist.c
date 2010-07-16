@@ -34,11 +34,15 @@
 
 ajint aj_hist_mark=GRAPH_HIST;
 
+
+
+
 /* @filesection ajhist *******************************************************
 **
 ** @nam1rule aj Function belongs to the AJAX library.
 **
 */
+
 
 
 
@@ -70,6 +74,9 @@ ajint aj_hist_mark=GRAPH_HIST;
 **
 ******************************************************************************/
 
+
+
+
 /* @func ajHistogramClose ******************************************************
 **
 ** Closes the histograms window.
@@ -87,6 +94,8 @@ void ajHistogramClose(void)
 }
 
 
+
+
 /* @obsolete ajHistClose
 ** @rename ajHistogramClose
 */
@@ -96,6 +105,7 @@ __deprecated void ajHistClose(void)
 
     return;
 }
+
 
 
 
@@ -113,6 +123,9 @@ void ajHistogramSetMark(ajint mark)
   return;
 }
 
+
+
+
 /* @obsolete ajHistSetMark
 ** @rename ajHistogramSetMark
 */
@@ -123,6 +136,8 @@ __deprecated void ajHistSetMark(ajint mark)
 }
 
 
+
+
 /* @datasection [AjPHist] Histogram object *************************************
 **
 ** Function is for manipulating an AjPHist histogram object
@@ -130,6 +145,9 @@ __deprecated void ajHistSetMark(ajint mark)
 ** @nam2rule Hist
 **
 ******************************************************************************/
+
+
+
 
 /* @section Constructors ******************************************************
 **
@@ -148,6 +166,9 @@ __deprecated void ajHistSetMark(ajint mark)
 ** @valrule * [AjPHist] New histogram object
 **
 ******************************************************************************/
+
+
+
 
 /* @func ajHistNew ************************************************************
 **
@@ -210,7 +231,7 @@ AjPHist ajHistNew(ajuint numofsets, ajuint numofpoints)
 ** @param [r] numofsets [ajuint] Number of sets of data.
 ** @param [r] numofpoints [ajuint] Number of data points per set.
 ** @param [u] graph [AjPGraph] Graph object, device, multi and name are set.
-**                             The orignial AjPGraph object will be used
+**                             The original AjPGraph object will be used
 **                             by the AjPHist
 ** @return [AjPHist] histogram structure.
 ** @@
@@ -230,9 +251,10 @@ AjPHist ajHistNewG(ajuint numofsets, ajuint numofpoints, AjPGraph graph)
 
 
 
+
 /* @section Destructors *******************************************************
 **
-** Destriuctors for histogram objects
+** Destructors for histogram objects
 **
 ** @fdata [AjPHist]
 ** @fcategory delete
@@ -244,6 +266,9 @@ AjPHist ajHistNewG(ajuint numofsets, ajuint numofpoints, AjPGraph graph)
 ** @valrule * [void]
 **
 ******************************************************************************/
+
+
+
 
 /* @func ajHistDel ************************************************************
 **
@@ -292,6 +317,8 @@ void ajHistDel(AjPHist* phist)
 }
 
 
+
+
 /* @obsolete ajHistDelete
 ** @rename ajHistDel
 */
@@ -300,6 +327,8 @@ __deprecated void ajHistDelete(AjPHist* phist)
     ajHistDel(phist);
     return;
 }
+
+
 
 
 /* @section Display ***********************************************************
@@ -316,6 +345,9 @@ __deprecated void ajHistDelete(AjPHist* phist)
 ** @valrule * [void]
 **
 ******************************************************************************/
+
+
+
 
 /* @func ajHistDisplay ********************************************************
 **
@@ -698,6 +730,9 @@ void ajHistDisplay(const AjPHist thys)
 **
 ******************************************************************************/
 
+
+
+
 /* @func ajHistSetMono ********************************************************
 **
 ** Set patterns instead of colours for printing to B/W printers etc.
@@ -716,6 +751,9 @@ void ajHistSetMono(AjPHist thys, AjBool set)
     return;
 }
 
+
+
+
 /* @obsolete ajHistSetBlackandWhite
 ** @rename ajHistSetMono
 */
@@ -723,6 +761,8 @@ __deprecated void ajHistSetBlackandWhite(AjPHist thys, AjBool set)
 {
     ajHistSetMono(thys, set);
 }
+
+
 
 
 /* @func ajHistSetRlabelC *****************************************************
@@ -741,6 +781,8 @@ void ajHistSetRlabelC(AjPHist thys, const char* txt)
 
     return;
 }
+
+
 
 
 /* @obsolete ajHistSetYAxisRightC
@@ -792,6 +834,9 @@ void ajHistSetXlabelC(AjPHist thys, const char* txt)
     return;
 }
 
+
+
+
 /* @obsolete ajHistSetXAxisC
 ** @rename ajHistSetXlabelC
 */
@@ -800,6 +845,7 @@ __deprecated void ajHistSetXAxisC(AjPHist thys, const char* strng)
     ajHistSetXlabelC(thys, strng);
     return;
 }
+
 
 
 
@@ -821,6 +867,8 @@ void ajHistSetYlabelC(AjPHist thys, const char* txt)
 }
 
 
+
+
 /* @obsolete ajHistSetYAxisLeftC
 ** @rename ajHistSetYlabelC
 */
@@ -829,6 +877,7 @@ __deprecated void ajHistSetYAxisLeftC(AjPHist thys, const char* strng)
     ajHistSetYlabelC(thys, strng);
     return;
 }
+
 
 
 
@@ -859,6 +908,8 @@ void ajHistSetmultiColour(AjPHist thys, ajuint indexnum, ajint colour)
 }
 
 
+
+
 /* @obsolete ajHistSetColour
 ** @rename ajHistSetmltiColour
 */
@@ -867,6 +918,8 @@ __deprecated void ajHistSetColour(AjPHist thys, ajuint indexnum, ajint colour)
     ajHistSetmultiColour(thys, indexnum, colour);
     return;
 }
+
+
 
 
 /* @func ajHistSetmultiPattern ************************************************
@@ -894,6 +947,8 @@ void ajHistSetmultiPattern(AjPHist thys, ajuint indexnum, ajint style)
 
     return;
 }
+
+
 
 
 /* @obsolete ajHistSetPattern
@@ -948,6 +1003,8 @@ __deprecated void ajHistSetMultiTitleC(AjPHist hist, ajint indexnum,
 }
 
 
+
+
 /* @func ajHistSetmultiTitleS **************************************************
 **
 ** Set ptr for title for index'th set..
@@ -974,6 +1031,8 @@ void ajHistSetmultiTitleS(AjPHist thys, ajuint indexnum, const AjPStr str)
 }
 
 
+
+
 /* @obsolete ajHistSetMultiTitle
 ** @rename ajHistSetmultiTitleS
 */
@@ -983,6 +1042,8 @@ __deprecated void ajHistSetMultiTitle(AjPHist hist, ajint indexnum,
     ajHistSetmultiTitleS(hist, indexnum, title);
     return;
 }
+
+
 
 
 /* @func ajHistSetmultiXlabelC ************************************************
@@ -1012,6 +1073,8 @@ void ajHistSetmultiXlabelC(AjPHist thys, ajuint indexnum, const char *txt)
 }
 
 
+
+
 /* @obsolete ajHistSetMultiXTitleC
 ** @rename ajHistSetmultiXlabelC
 */
@@ -1021,6 +1084,8 @@ __deprecated void ajHistSetMultiXTitleC(AjPHist hist, ajint indexnum,
     ajHistSetmultiXlabelC(hist, indexnum, title);
     return;
 }
+
+
 
 
 /* @func ajHistSetmultiXlabelS *************************************************
@@ -1049,6 +1114,8 @@ void ajHistSetmultiXlabelS(AjPHist thys, ajuint indexnum, const AjPStr str)
 }
 
 
+
+
 /* @obsolete ajHistSetMultiXTitle
 ** @rename ajHistSetmultiXlabelS
 */
@@ -1058,6 +1125,8 @@ __deprecated void ajHistSetMultiXTitle(AjPHist hist, ajint indexnum,
     ajHistSetmultiXlabelS(hist, indexnum, title);
     return;
 }
+
+
 
 
 /* @func ajHistSetmultiYlabelC ************************************************
@@ -1099,6 +1168,8 @@ __deprecated void ajHistSetMultiYTitleC(AjPHist hist, ajint indexnum,
 }
 
 
+
+
 /* @func ajHistSetmultiYlabelS *************************************************
 **
 ** Set ptr for Y axis title for index'th set..
@@ -1138,6 +1209,8 @@ __deprecated void ajHistSetMultiYTitle(AjPHist hist, ajint indexnum,
 }
 
 
+
+
 /* @section Histogram data management *****************************************
 **
 ** Functions to manage the data values associated with a histogram object
@@ -1158,6 +1231,9 @@ __deprecated void ajHistSetMultiYTitle(AjPHist hist, ajint indexnum,
 ** @valrule * [void]
 **
 ******************************************************************************/
+
+
+
 
 /* @func ajHistDataAdd ********************************************************
 **
@@ -1189,6 +1265,8 @@ void ajHistDataAdd(AjPHist thys, ajuint indexnum, PLFLT *data)
 }
 
 
+
+
 /* @obsolete ajHistSetPtrToData
 ** @rename ajHistDataAdd
 */
@@ -1197,6 +1275,8 @@ __deprecated void ajHistSetPtrToData(AjPHist thys, ajint indexnum, PLFLT *data)
     ajHistDataAdd(thys, indexnum, data);
     return;
 }
+
+
 
 
 /* @func ajHistDataCopy *******************************************************
@@ -1232,6 +1312,8 @@ void ajHistDataCopy(AjPHist thys, ajuint indexnum, PLFLT const *srcdata)
 
     return;
 }
+
+
 
 
 /* @obsolete ajHistCopyData

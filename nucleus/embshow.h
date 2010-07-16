@@ -318,6 +318,9 @@ typedef struct EmbSShowNote {
 
 /********* assorted structures ***********/
 
+
+
+
 /* @data EmbPShowREsite *******************************************************
 **
 ** NUCLEUS data structure for Restriction Enzyme cut site position list node

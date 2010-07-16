@@ -30,6 +30,9 @@ static void union_CopyFeatures (const AjPFeattable old_feattable,
                                 ajulong offset,
                                 const AjPFeature source_feature);
 
+
+
+
 /* @prog union *************************************************************
 **
 ** Reads sequence fragments and builds one sequence
@@ -237,44 +240,47 @@ static void union_CopyFeatures (const AjPFeattable old_feattable,
     ajulong new_length;
     AjIList iter;
 
-    outseq_name = ajStrNew();
-
-    new_length = ajListGetLength(new_feattable->Features);
-    iter = ajListIterNewread(old_feattable->Features);
-
-    while(!ajListIterDone(iter))
+    if(ajFeattableGetSize(old_feattable))
     {
-	gf = ajListIterGet(iter);
-	type = ajFeatGetType(gf);
+        outseq_name = ajStrNew();
 
-	copy = ajFeatNewFeat(gf);
-    
-	/* FIXME */
-	copy->Start += (ajuint) offset;
-	copy->End += (ajuint) offset;
-	copy->Start2 += (ajuint) offset;
-	copy->End2 += (ajuint) offset;
-    
-	if (source_feature != NULL)
-	{
-	    source_feature_type = ajFeatGetType(source_feature);
+        new_length = ajListGetLength(new_feattable->Features);
+        iter = ajListIterNewread(old_feattable->Features);
 
-	    if (ajStrMatchS(type, source_feature_type) &&
-		ajFeatGetStart(copy) == ajFeatGetStart (source_feature) &&
-		ajFeatGetEnd(copy) == ajFeatGetEnd (source_feature))
+        while(!ajListIterDone(iter))
+        {
+	    gf = ajListIterGet(iter);
+	    type = ajFeatGetType(gf);
+
+	    copy = ajFeatNewFeat(gf);
+    
+	    /* FIXME */
+	    copy->Start += (ajuint) offset;
+	    copy->End += (ajuint) offset;
+	    copy->Start2 += (ajuint) offset;
+	    copy->End2 += (ajuint) offset;
+    
+	    if (source_feature != NULL)
 	    {
+	        source_feature_type = ajFeatGetType(source_feature);
 
-		if (ajFeatGetTagC(gf,"origid",1,&outseq_name))
-		{
-		    /* don't duplicate src features if there's one already */
-		    continue;
-		}
+	        if (ajStrMatchS(type, source_feature_type) &&
+		    ajFeatGetStart(copy) == ajFeatGetStart (source_feature) &&
+		    ajFeatGetEnd(copy) == ajFeatGetEnd (source_feature))
+	        {
+
+		    if (ajFeatGetTagC(gf,"origid",1,&outseq_name))
+		    {
+		        /* don't duplicate src features if got already */
+		        continue;
+		    }
+	        }
 	    }
-	}
     
-	/* FIXME */
-	copy->Group += (ajuint) new_length;
-	ajFeattableAdd(new_feattable, copy);
+	    /* FIXME */
+	    copy->Group += (ajuint) new_length;
+	    ajFeattableAdd(new_feattable, copy);
+	}
     }
 
     return;

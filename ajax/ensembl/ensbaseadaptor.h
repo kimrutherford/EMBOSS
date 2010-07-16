@@ -22,7 +22,7 @@ EnsPBaseadaptor ensBaseadaptorNew(
     EnsPDatabaseadaptor dba,
     const char **Ptables,
     const char **Pcolumns,
-    EnsOBaseadaptorLeftJoin *left_join,
+    EnsOBaseadaptorLeftJoin *leftjoin,
     const char *condition,
     const char *final,
     AjBool Fquery(EnsPDatabaseadaptor dba,
@@ -55,10 +55,10 @@ AjBool ensBaseadaptorGetMultiSpecies(const EnsPBaseadaptor ba);
 ajuint ensBaseadaptorGetSpeciesIdentifier(const EnsPBaseadaptor ba);
 
 AjBool ensBaseadaptorEscapeC(EnsPBaseadaptor ba, char **Ptxt,
-                              const AjPStr str);
+                             const AjPStr str);
 
 AjBool ensBaseadaptorEscapeS(EnsPBaseadaptor ba, AjPStr *Pstr,
-                              const AjPStr str);
+                             const AjPStr str);
 
 AjBool ensBaseadaptorGenericFetch(const EnsPBaseadaptor ba,
                                   const AjPStr constraint,
@@ -66,18 +66,24 @@ AjBool ensBaseadaptorGenericFetch(const EnsPBaseadaptor ba,
                                   EnsPSlice slice,
                                   AjPList objects);
 
-void *ensBaseadaptorFetchByIdentifier(const EnsPBaseadaptor ba, ajuint identifier);
+void *ensBaseadaptorFetchByIdentifier(const EnsPBaseadaptor ba,
+                                      ajuint identifier);
 
 AjBool ensBaseadaptorFetchAllByIdentifiers(const EnsPBaseadaptor ba,
-                                           AjPList idlist,
+                                           const AjPList identifiers,
                                            AjPList objects);
 
 AjBool ensBaseadaptorFetchAll(const EnsPBaseadaptor ba, AjPList objects);
 
 AjBool ensBaseadaptorFetchAllIdentifiers(const EnsPBaseadaptor ba,
-				  AjPStr table,
-				  AjPStr prikey,
-				  AjPList idlist);
+                                         const AjPStr table,
+                                         const AjPStr primary,
+                                         AjPList identifiers);
+
+AjBool ensBaseadaptorFetchAllStrings(const EnsPBaseadaptor ba,
+                                     const AjPStr table,
+                                     const AjPStr primary,
+                                     AjPList strings);
 
 /*
 ** End of prototype definitions
@@ -86,7 +92,7 @@ AjBool ensBaseadaptorFetchAllIdentifiers(const EnsPBaseadaptor ba,
 
 
 
-#endif
+#endif /* ensbaseadaptor_h */
 
 #ifdef __cplusplus
 }

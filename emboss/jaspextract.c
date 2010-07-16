@@ -22,49 +22,58 @@
 
 #include "emboss.h"
 
+#ifdef WIN32
+#include <direct.h>
+#endif
+
+#define PFMNUMGUESS 2000
+#define MATRIXFILE "matrix_list.txt"
 
 
 
-/* @datastatic JaspDir **************************************************
+
+/* @datastatic JaspPrefix **************************************************
 **
 ** JASPAR data directory structure
 **
-** @alias JaspSDir
-** @alias JaspODir
+** @alias SJaspPrefix
+** @alias OJaspPrefix
 **
-** @attr namactual [AjPStr] name of Jaspar source subdirectory
-** @attr namdata [AjPStr] name of Jaspar subdirectory in EMBOSS_DATA area
+** @attr Prefix [const char*] Filename prefix of pfm files
+** @attr Directory [const char*] Directory name for files of a given prefix
 ** @@
 ******************************************************************************/
 
-typedef struct JaspSDir
+typedef struct SJaspPrefix
 {
-    AjPStr namactual;
-    AjPStr namdata;
-} JaspODir;
-#define JaspPDir JaspODir*
+    const char* Prefix;
+    const char* Directory;
+} OJaspPrefix;
 
-
-
-
-static void jaspextract_check(const AjPStr directory, AjPList dlist);
-static void jaspextract_copy(AjPList dlist);
-
-static void jaspextract_jddel(JaspPDir *thys);
-static JaspPDir jaspextract_jdnew(void);
-
-
-
-
-static const char *jdirnames[] = {
-    "JASPAR_CORE",
-    "JASPAR_FAM",
-    "JASPAR_PHYLOFACTS",
-    "JASPAR_CNE",
-    "JASPAR_POLII",
-    "JASPAR_SPLICE",
-    NULL
+static OJaspPrefix Jprefix[] =
+{
+    {"PB", "JASPAR_PBM"},
+    {"PL", "JASPAR_PBM_HLH"},
+    {"PH", "JASPAR_PBM_HOMEO"},
+    {"MA", "JASPAR_CORE"},
+    {"CN", "JASPAR_CNE"},
+    {"MF", "JASPAR_FAM"},
+    {"PF", "JASPAR_PHYLOFACTS"},
+    {"POL", "JASPAR_POLII"},
+    {"SA", "JASPAR_SPLICE"},
+    {"SD", "JASPAR_SPLICE"},
+    {NULL, NULL}
 };
+
+
+
+
+static void jaspextract_openoutdirs(void);
+static void jaspextract_copyfiles(AjPStr directory);
+static void jaspextract_readmatrixlist(AjPTable mtable, const AjPStr directory);
+static void jaspextract_getjaspdirs(AjPList jdirlist);
+static void jaspextract_writematrixfile(const AjPTable mtable,
+                                        const AjPStr directory);
 
 
 
@@ -81,21 +90,37 @@ static const char *jdirnames[] = {
 
 int main(int argc, char **argv)
 {
+
     AjPStr directory = NULL;
-    AjPList dlist = NULL;
+    AjPTable mtable = NULL;
+
+    AjPList jdirlist = NULL;
+    AjPStr  jdirloc  = NULL;
     
     embInit("jaspextract",argc,argv);
 
     directory = ajAcdGetDirectoryName("directory");
 
-    dlist = ajListNew();
+    mtable = ajTablestrNewLen(PFMNUMGUESS);
+    jdirlist = ajListNew();
     
-    jaspextract_check(directory, dlist);
+    jaspextract_openoutdirs();
+    jaspextract_copyfiles(directory);
 
-    jaspextract_copy(dlist);
+    jaspextract_readmatrixlist(mtable, directory);
+    
+    jaspextract_getjaspdirs(jdirlist);
 
+    while(ajListPop(jdirlist,(void **)&jdirloc))
+    {
+        jaspextract_writematrixfile(mtable, jdirloc);
+        ajStrDel(&jdirloc);
+    }
+    
+    ajTablestrFree(&mtable);
     ajStrDel(&directory);
-
+    ajListFree(&jdirlist);
+    
     embExit();
 
     return 0;
@@ -104,208 +129,349 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic jaspextract_check ***********************************************
+/* @funcstatic jaspextract_openoutdirs **************************************
 **
-** Checks whether specific JASPAR subdirectories exist
-**
-** @param [r] directory [const AjPStr] jaspar directory
-** @param [w] dlist     [AjPList] jaspar directory list
+** Checks whether JASPAR output subdirectories exist in the current
+** EMBOSS data area. Create them if not. Open them.
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void jaspextract_check(const AjPStr directory, AjPList dlist)
+static void jaspextract_openoutdirs(void)
 {
-    AjPStr entry  = NULL;
-    AjPStr nbase  = NULL;
+    const AjPStr datadir = NULL;
+    AjPStr dir = NULL;
+    const char *p = NULL;
     
-    AjPList flist = NULL;
-    ajint i = 0;
-
-    JaspPDir jdir = NULL;
+    ajuint i = 0;
     
+    datadir = ajDatafileValuePath();
+    if(!datadir)
+        ajFatal("jaspextract: Cannot determine the EMBOSS data directory");
+
+    dir  = ajStrNew();
     
+    i = 0;
 
-    flist = ajListNew();
+    while(Jprefix[i].Directory)
+    {
+        ajFmtPrintS(&dir,"%S%s",datadir,Jprefix[i].Directory);
+
+        if(!ajFilenameExistsDir(dir))
+        {
+            p = ajStrGetPtr(dir);
+#ifndef WIN32
+            mkdir(p,0755);
+#else
+            _mkdir(p);
+#endif
+        }
+        
+        if(!ajFilenameExistsDir(dir))
+            ajFatal("jaspextract: No such directory %S",
+                    dir);
+
+        ++i;
+    }
+    
+    ajStrDel(&dir);
+    
+    return;
+}
 
 
-    ajFilelistAddPathDir(flist, directory);
+
+
+/* @funcstatic jaspextract_copyfiles *****************************************
+**
+** Copy datafiles into the EMBOSS data area
+**
+** @param [u] directory [AjPStr] jaspar source flatfile directory
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void jaspextract_copyfiles(AjPStr directory)
+{
+    AjPStr matrixfile = NULL;
+    AjPList flist     = NULL;
+    
+    AjPStr wild  = NULL;
+    AjPStr entry = NULL;
+    AjPStr bname = NULL;
+    AjPStr line  = NULL;
+    AjPStr dest  = NULL;
+
+    const AjPStr datadir = NULL;
+    
+    ajuint preflen = 0;
+    ajuint i       = 0;
+    const char *p  = NULL;
+
+    AjPFile inf   = NULL;
+    AjPFile outf  = NULL;    
+    
+    matrixfile = ajStrNew();
+    flist      = ajListNew();
+    wild       = ajStrNewC("*.pfm");
+    bname      = ajStrNew();
+    line       = ajStrNew();
+    dest       = ajStrNew();
+
+
+    datadir = ajDatafileValuePath();
+    if(!datadir)
+        ajFatal("jaspextract: Cannot determine the EMBOSS data directory");
+    
+    ajFmtPrintS(&matrixfile,"%S%s",directory,MATRIXFILE);
+
+    if(!ajFilenameExistsRead(matrixfile))
+        ajFatal("jaspextract: Directory (%S) doesn't appear to be a JASPAR "
+                "one\nNo matrix_list.txt file found",directory);
+    
+    ajFilelistAddPathWild(flist, directory, wild);
 
 
     while(ajListPop(flist,(void **)&entry))
     {
-        ajDebug("jaspextract_check '%S'\n", entry);
+        ajStrAssignS(&bname,entry);
+        ajFilenameTrimPath(&bname);
         
-        if(!ajFilenameExistsRead(entry))
-            continue;
-
-        ajStrAssignS(&nbase,entry);
-	ajFilenameTrimPath(&nbase);
-
         i = 0;
-        while(jdirnames[i])
+
+        while(Jprefix[i].Prefix)
         {
-            if(ajStrPrefixC(nbase,jdirnames[i]))
+            if(!ajStrPrefixC(bname,Jprefix[i].Prefix))
             {
-                jdir = jaspextract_jdnew();
-                ajStrAssignS(&jdir->namactual,entry);
-                ajStrAssignC(&jdir->namdata,jdirnames[i]);
-                ajListPush(dlist,(void *)jdir);
-                ajDebug("found %d: '%s' => '%S' '%S'\n",
-                        i, jdirnames[i], jdir->namactual, jdir->namdata);
+                ++i;
+                continue;
             }
-            
+
+            preflen = strlen(Jprefix[i].Prefix);
+            p = ajStrGetPtr(bname);
+            if(p[preflen]>='0' && p[preflen]<='9')
+                break;
 
             ++i;
         }
 
-        ajStrDel(&entry);
+        if(!Jprefix[i].Prefix)
+        {
+            ajStrDel(&entry);
+            continue;
+        }
+
+
+        ajFmtPrintS(&dest,"%S%s%c%S",datadir,Jprefix[i].Directory,SLASH_CHAR,
+                    bname);
+
+        outf = ajFileNewOutNameS(dest);
+        if(!outf)
+            ajFatal("Cannot open output file %S",dest);
+
+        /* Avoid UNIX copy for portability */
+        inf  = ajFileNewInNameS(entry);
+        if(!inf)
+            ajFatal("Cannot open input file: %S",entry);
+
+        while(ajReadlineTrim(inf,&line))
+            ajFmtPrintF(outf,"%S\n",line);
+
+        ajFileClose(&inf);
+        ajFileClose(&outf);
+        
+        ajStrDel(&entry);        
+
     }
-
-
-    ajStrDel(&nbase);
-
+    
     ajListFree(&flist);
     
+    ajStrDel(&wild);
+    ajStrDel(&dest);
+    ajStrDel(&line);
+    ajStrDel(&bname);
+    ajStrDel(&matrixfile);
+
     return;
 }
 
 
 
 
-/* @funcstatic jaspextract_copy ***********************************************
+/* @funcstatic jaspextract_readmatrixlist *************************************
 **
-** Copy datafile into the EMBOSS  data area
+** Read the matrix_list.txt file
 **
-** @param [u] dlist [AjPList] jaspar directory list
+** @param [u] mtable [AjPTable] Table for pfm entry descriptions
+** @param [r] directory [const AjPStr] Directory containing matrix_list.txt
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void jaspextract_copy(AjPList dlist)
+static void jaspextract_readmatrixlist(AjPTable mtable, const AjPStr directory)
+{
+    const AjPStr datadir = NULL;
+
+    AjPStr matrixfile = NULL;
+    AjPFile inf = NULL;
+
+    AjPStr line  = NULL;
+    AjPStr key   = NULL;
+    AjPStr value = NULL;
+    
+    matrixfile = ajStrNew();
+    
+
+    datadir = ajDatafileValuePath();
+    if(!datadir)
+        ajFatal("jaspextract: Cannot determine the EMBOSS data directory");
+    
+    ajFmtPrintS(&matrixfile,"%S%s",directory,MATRIXFILE);
+
+    if(!ajFilenameExistsRead(matrixfile))
+        ajFatal("jaspextract: Directory (%S) doesn't appear to be a JASPAR "
+                "one\nNo matrix_list.txt file found",directory);
+
+
+    inf  = ajFileNewInNameS(matrixfile);
+    if(!inf)
+        ajFatal("Cannot open input file: %S",matrixfile);
+
+    while(ajReadline(inf,&line))
+    {
+        key = ajStrNew();
+        
+        if(ajFmtScanS(line,"%S",&key) != 1)
+        {
+            ajStrDel(&key);
+            continue;
+        }
+
+        value = ajStrNew();
+        ajStrAssignS(&value,line);
+
+        ajTablePut(mtable,(void *)key, (void *)value);
+    }
+    
+
+    ajFileClose(&inf);
+    
+    ajStrDel(&matrixfile);
+    ajStrDel(&line);
+        
+    return;
+}
+
+
+
+
+/* @funcstatic jaspextract_getjaspdirs ****************************************
+**
+** Construct a list of JASPAR_ directory locations in the EMBOSS data area
+**
+** @param [u] jdirlist [AjPList] List for JASPAR_ directory locations
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void jaspextract_getjaspdirs(AjPList jdirlist)
+{
+    const AjPStr datadir = NULL;
+    AjPStr line = NULL;
+    
+    ajuint n = 0;
+    ajuint i = 0;
+    
+    datadir = ajDatafileValuePath();
+    if(!datadir)
+        ajFatal("jaspextract: Cannot determine the EMBOSS data directory");
+
+
+    n = ajFilelistAddPathDir(jdirlist, datadir);
+
+    
+    for(i=0; i < n; ++i)
+    {
+        ajListPop(jdirlist,(void **)&line);
+
+        if(ajStrFindC(line,"JASPAR_") != -1)
+            ajListPushAppend(jdirlist,(void *)line);
+        else
+            ajStrDel(&line);
+    }
+
+    return;
+}
+
+
+
+
+/* @funcstatic jaspextract_writematrixfile **********************************
+**
+** Writes a matrix_list.txt file in a JASPAR_ directory
+**
+** @param [r] mtable [const AjPTable] Table of matrix definitions 
+** @param [r] directory [const AjPStr] JASPAR_ directory location
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void jaspextract_writematrixfile(const AjPTable mtable,
+                                        const AjPStr directory)
 {
     AjPStr wild   = NULL;
     AjPList flist = NULL;
-    AjPStr entry  = NULL;
-    AjPStr nbase  = NULL;
-    AjPStr dfile  = NULL;
-    AjPFile inf   = NULL;
-    AjPFile outf  = NULL;
-    AjPStr line   = NULL;
-
-    JaspPDir jdir = NULL;
+    AjPStr key    = NULL;
+    AjPStr fname  = NULL;
+    AjPStr dest   = NULL;
+    AjPStr value  = NULL;
     
+    AjPFile outf = NULL;
     
-    wild   = ajStrNewC("*");
-    flist  = ajListNew();
-    nbase  = ajStrNew();
-    dfile  = ajStrNew();
-    line   = ajStrNew();
+    const char *p = NULL;
+    char *q = NULL;
+    
+    wild = ajStrNewC("*.pfm");
+    flist = ajListNew();
+    key   = ajStrNew();
+    dest  = ajStrNew();
+    
+    ajFmtPrintS(&dest,"%S%c%s",directory,SLASH_CHAR,MATRIXFILE);
+    
+    outf = ajFileNewOutNameS(dest);
+    if(!outf)
+        ajFatal("Cannot open output file %S",dest);
 
+    ajFilelistAddPathWild(flist, directory, wild);
 
-
-
-    while(ajListPop(dlist,(void **)&jdir))
+    while(ajListPop(flist,(void**)&fname))
     {
-        ajFilelistAddPathWild(flist, jdir->namactual,wild);
-        ajDebug("jaspextract_copy '%S' '%S'\n",
-                jdir->namactual, wild);
-        while(ajListPop(flist,(void **)&entry))
-        {
-            ajStrAssignS(&nbase,entry);
-            ajFilenameTrimPath(&nbase);
-            ajFmtPrintS(&dfile,"%S%c%S",jdir->namdata,SLASH_CHAR,nbase);
-            ajDebug("copying '%S' => '%S'\n",
-                    entry, dfile);
-            /* Avoid UNIX copy for portability */
-            inf  = ajFileNewInNameS(entry);
-            if(!inf)
-                ajFatal("Cannot open input file: %S",entry);
+        ajFilenameTrimPath(&fname);        
 
-            outf = ajDatafileNewOutNameS(dfile);
-            if(!outf)
-                ajFatal("Cannot open output file: %S",dfile);
+        p = ajStrGetPtr(fname);
+        q = strrchr(p,(int)'.');
+        ajStrAssignSubC(&key,p,0,q-p-1);
+        
+        value = (AjPStr) ajTableFetch(mtable, (const void *)key);
 
-            while(ajReadlineTrim(inf,&line))
-                ajFmtPrintF(outf,"%S\n",line);
+        if(value)
+            ajFmtPrintF(outf,"%S",value);
 
-            ajFileClose(&inf);
-            ajFileClose(&outf);
-
-            ajStrDel(&entry);
-        }
-
-        jaspextract_jddel(&jdir);
+        ajStrDel(&fname);
     }
     
-
-    ajListFree(&flist);
-    ajListFree(&dlist);
+        
+    ajFileClose(&outf);
     
     ajStrDel(&wild);
-    ajStrDel(&dfile);
-    ajStrDel(&nbase);
-    ajStrDel(&line);
+    ajStrDel(&dest);
+    ajStrDel(&key);
+    ajListFree(&flist);
     
     return;
 }
-
-
-
-
-/* @funcstatic jaspextract_jdnew ***********************************************
-**
-** Create a jaspar directory structure
-**
-** @return [JaspPDir] Jaspar directory structure
-** @@
-******************************************************************************/
-
-static JaspPDir jaspextract_jdnew(void)
-{
-    JaspPDir ret = NULL;
-
-    AJNEW(ret);
-
-    ret->namactual = ajStrNew();
-    ret->namdata   = ajStrNew();
-
-    return ret;
-}
-
-
-
-
-/* @funcstatic jaspextract_jddel ***********************************************
-**
-** Delete a Jaspar directory structure
-**
-** @param [w] thys [JaspPDir*] jaspar directory structure
-**
-** @return [void]
-** @@
-******************************************************************************/
-
-static void jaspextract_jddel(JaspPDir *thys)
-{
-    JaspPDir pthis = NULL;
-
-    if(!thys)
-        return;
-
-    if(!*thys)
-        return;
-    
-    pthis = *thys;
-
-    ajStrDel(&pthis->namactual);
-    ajStrDel(&pthis->namdata);
-    AJFREE(*thys);
-
-    *thys = NULL;
-
-    return;
-}
-

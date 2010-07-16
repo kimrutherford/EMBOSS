@@ -63,7 +63,7 @@ Replace or delete sequence sections
 Command line arguments
 
 Replace or delete sequence sections
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     (Gapped) sequence(s) filename and optional
@@ -190,11 +190,16 @@ FT                   /note="ubiquitin like part"
 FT   CDS             57..458
 FT                   /gene="fau"
 FT                   /db_xref="GDB:135476"
+FT                   /db_xref="GOA:P35544"
 FT                   /db_xref="GOA:P62861"
 FT                   /db_xref="HGNC:3597"
-FT                   /db_xref="HSSP:1GJZ"
+FT                   /db_xref="InterPro:IPR000626"
 FT                   /db_xref="InterPro:IPR006846"
+FT                   /db_xref="InterPro:IPR019954"
+FT                   /db_xref="InterPro:IPR019955"
+FT                   /db_xref="InterPro:IPR019956"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P62861"
 FT                   /protein_id="CAA46716.1"
 FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
 FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
@@ -229,7 +234,7 @@ ID   AMIR_PSEAE              Reviewed;         196 AA.
 AC   P10932;
 DT   01-JUL-1989, integrated into UniProtKB/Swiss-Prot.
 DT   08-DEC-2000, sequence version 2.
-DT   16-JUN-2009, entry version 72.
+DT   18-MAY-2010, entry version 81.
 DE   RecName: Full=Aliphatic amidase regulator;
 GN   Name=amiR; OrderedLocusNames=PA3363;
 OS   Pseudomonas aeruginosa.
@@ -273,30 +278,30 @@ RA   Pearl L.H.;
 RT   "Crystal structure and induction mechanism of AmiC-AmiR: a ligand-
 RT   regulated transcription antitermination complex.";
 RL   EMBO J. 18:5175-5186(1999).
-CC   -!- FUNCTION: Positive controlling element of amiE, the gene for
+CC   -!- FUNCTION: Positive controlling element of AmiE, the gene for
 CC       aliphatic amidase. Acts as a transcriptional antitermination
 
 
   [Part of this file has been deleted for brevity]
 
-DR   RefSeq; NP_252053.1; -.
-DR   PDB; 1QO0; X-ray; 2.25 A; D/E=1-196.
-DR   PDBsum; 1QO0; -.
 DR   GeneID; 880573; -.
 DR   GenomeReviews; AE004091_GR; PA3363.
 DR   KEGG; pae:PA3363; -.
 DR   PseudoCAP; PA3363; -.
-DR   HOGENOM; P10932; -.
-DR   OMA; P10932; QLQRIGC.
-DR   BioCyc; PAER208964:PA3363-MON; -.
+DR   HOGENOM; HBG638444; -.
+DR   OMA; QLQRIGC; -.
+DR   ProtClustDB; CLSK867929; -.
+DR   BioCyc; PAER208964:PA3363-MONOMER; -.
 DR   GO; GO:0006350; P:transcription; IEA:UniProtKB-KW.
 DR   GO; GO:0031564; P:transcription antitermination; IEA:UniProtKB-KW.
 DR   InterPro; IPR005561; AmiR_NasR_reg.
+DR   InterPro; IPR011006; CheY-like.
 DR   InterPro; IPR008327; Sig_transdc_resp-reg_antiterm.
-DR   InterPro; IPR011991; Wing_hlx_DNA_bd.
+DR   InterPro; IPR011991; WHTH_trsnscrt_rep_DNA-bd.
 DR   Gene3D; G3DSA:1.10.10.10; Wing_hlx_DNA_bd; 1.
 DR   Pfam; PF03861; ANTAR; 1.
 DR   PIRSF; PIRSF036382; RR_antiterm; 1.
+DR   SUPFAM; SSF52172; CheY_like; 1.
 DR   PROSITE; PS50921; ANTAR; 1.
 PE   1: Evidence at protein level;
 KW   3D-structure; Complete proteome; Transcription;
@@ -422,7 +427,7 @@ See also
    newseq           Create a sequence file from a typed-in sequence
    nohtml           Remove mark-up (e.g. HTML tags) from an ASCII text file
    noreturn         Remove carriage return from ASCII files
-   nospace          Remove all whitespace from an ASCII text file
+   nospace          Remove whitespace from an ASCII text file
    notab            Replace tabs with spaces in an ASCII text file
    notseq           Write to file a subset of an input stream of sequences
    nthseq           Write to file a single sequence from an input stream of
@@ -447,9 +452,12 @@ See also
 
 Author(s)
 
-   Alan Bleasby (ajb (c) ebi.ac.uk)
+   Alan Bleasby
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

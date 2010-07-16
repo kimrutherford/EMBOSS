@@ -4,7 +4,7 @@
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @version $Revision: 1.5 $
+** @version $Revision: 1.14 $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -43,44 +43,55 @@
 /* ======================== private functions ========================= */
 /* ==================================================================== */
 
-extern EnsPMetainformationadaptor
-ensRegistryGetMetainformationadaptor(EnsPDatabaseadaptor dba);
+static AjBool gvsourceadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
+                                           const AjPStr statement,
+                                           EnsPAssemblymapper am,
+                                           EnsPSlice slice,
+                                           AjPList gvss);
 
-extern EnsPGvindividualadaptor
-ensRegistryGetGvindividualadaptor(EnsPDatabaseadaptor dba);
+static AjBool gvsourceadaptorCacheInsert(EnsPGvsourceadaptor gvsa,
+                                         EnsPGvsource *Pgvs);
 
-extern EnsPGvpopulationadaptor
-ensRegistryGetGvpopulationadaptor(EnsPDatabaseadaptor dba);
+static AjBool gvsourceadaptorCacheInit(EnsPGvsourceadaptor gvsa);
 
-extern EnsPGvsampleadaptor
-ensRegistryGetGvsampleadaptor(EnsPDatabaseadaptor dba);
+static void gvsourceadaptorCacheClearIdentifier(void **key,
+                                                void **value,
+                                                void *cl);
 
-extern EnsPGvvariationadaptor
-ensRegistryGetGvvariationadaptor(EnsPDatabaseadaptor dba);
+static void gvsourceadaptorCacheClearName(void **key,
+                                          void **value,
+                                          void *cl);
 
-extern EnsPSliceadaptor
-ensRegistryGetSliceadaptor(EnsPDatabaseadaptor dba);
+static AjBool gvsourceadaptorCacheExit(EnsPGvsourceadaptor gvsa);
 
-static void gvVariationadaptorClearAlleles(void **key, void **value, void *cl);
+static void gvsourceadaptorFetchAll(const void *key, void **value, void *cl);
 
-static void gvVariationadaptorClearPopulations(void **key,
+static void gvvariationadaptorClearAlleles(void **key, void **value, void *cl);
+
+static void gvvariationadaptorClearPopulations(void **key,
                                                void **value,
                                                void *cl);
 
-static void gvVariationadaptorClearSynonyms(void **key,
+static void gvvariationadaptorClearSynonyms(void **key,
                                             void **value,
                                             void *cl);
 
-static AjBool gvVariationadaptorFetchAllBySQL(EnsPGvvariationadaptor gvva,
+static AjBool gvvariationadaptorFetchAllBySQL(EnsPGvvariationadaptor gvva,
                                               const AjPStr statement,
                                               AjPList gvvs);
 
-static AjBool gvVariationadaptorFetchFlankFromCore(EnsPGvvariationadaptor gvva,
+static AjBool gvvariationadaptorFetchFlankFromCore(EnsPGvvariationadaptor gvva,
                                                    ajuint srid,
                                                    ajint srstart,
                                                    ajint srend,
                                                    ajint srstrand,
                                                    AjPStr *Psequence);
+
+static int gvvariationfeatureCompareStartAscending(const void* P1,
+                                                   const void* P2);
+
+static int gvvariationfeatureCompareStartDescending(const void* P1,
+                                                    const void* P2);
 
 
 
@@ -489,6 +500,13 @@ ensGvalleleGetSubSNPIdentifier(const EnsPGvallele gva)
 
 
 
+/*
+** TODO: subsnp_handle is not implemented.
+** Since this method queries the database it should be probably implemented
+** in the Allele Adaptor?
+*/
+
+
 /* @section element assignment ************************************************
 **
 ** Functions for assigning elements of an
@@ -669,30 +687,30 @@ ensGvalleleSetSubSNPIdentifier(EnsPGvallele gva, ajuint subsnpid)
 
 
 
-/* @func ensGvalleleGetMemSize ************************************************
+/* @func ensGvalleleGetMemsize ************************************************
 **
 ** Get the memory size in bytes of an Ensembl Genetic Variation Allele.
 **
 ** @param [r] gva [const EnsPGvallele] Ensembl Genetic Variation Allele
 **
-** @return [ajuint] Memory size
+** @return [ajulong] Memory size
 ** @@
 ******************************************************************************/
 
-ajuint ensGvalleleGetMemSize(const EnsPGvallele gva)
+ajulong ensGvalleleGetMemsize(const EnsPGvallele gva)
 {
-    ajuint size = 0;
+    ajulong size = 0;
 
     if(!gva)
         return 0;
 
-    size += (ajuint) sizeof (EnsOGvallele);
+    size += sizeof (EnsOGvallele);
 
-    size += ensGvpopulationGetMemSize(gva->Gvpopulation);
+    size += ensGvpopulationGetMemsize(gva->Gvpopulation);
 
     if(gva->Allele)
     {
-        size += (ajuint) sizeof (AjOStr);
+        size += sizeof (AjOStr);
 
         size += ajStrGetRes(gva->Allele);
     }
@@ -774,6 +792,8 @@ AjBool ensGvalleleTrace(const EnsPGvallele gva, ajuint level)
 /* @datasection [EnsPGvgenotype] Genetic Variation Genotype *******************
 **
 ** Functions for manipulating Ensembl Genetic Variation Genotype objects
+**
+** @cc Bio::EnsEMBL::Variation::Genotype CVS Revision: 1.3
 **
 ** @nam2rule Gvgenotype
 **
@@ -1129,7 +1149,7 @@ AjPStr ensGvgenotypeGetAllele2(const EnsPGvgenotype gvg)
 ** Set the Ensembl Genetic Variation Genotype Adaptor element of an
 ** Ensembl Genetic Variation Genotype.
 **
-** @param [u] gvg [EnsPGvvsample] Ensembl Genetic Variation Genotype
+** @param [u] gvg [EnsPGvgenotype] Ensembl Genetic Variation Genotype
 ** @param [u] gvga [EnsPGvgenotypeadaptor] Ensembl Genetic Variation
 **                                         Genotype Adaptor
 **
@@ -1229,35 +1249,35 @@ AjBool ensGvgenotypeSetAllele2(EnsPGvgenotype gvg, AjPStr allele2)
 
 
 
-/* @func ensGvgenotypeGetMemSize **********************************************
+/* @func ensGvgenotypeGetMemsize **********************************************
 **
 ** Get the memory size in bytes of an Ensembl Genetic Variation Genotype.
 **
 ** @param [r] gvg [const EnsPGvgenotype] Ensembl Genetic Variation Genotype
 **
-** @return [ajuint] Memory size
+** @return [ajulong] Memory size
 ** @@
 ******************************************************************************/
 
-ajuint ensGvgenotypeGetMemSize(const EnsPGvgenotype gvg)
+ajulong ensGvgenotypeGetMemsize(const EnsPGvgenotype gvg)
 {
-    ajuint size = 0;
+    ajulong size = 0;
 
     if(!gvg)
         return 0;
 
-    size += (ajuint) sizeof (EnsOGvgenotype);
+    size += sizeof (EnsOGvgenotype);
 
     if(gvg->Allele1)
     {
-        size += (ajuint) sizeof (AjOStr);
+        size += sizeof (AjOStr);
 
         size += ajStrGetRes(gvg->Allele1);
     }
 
     if(gvg->Allele2)
     {
-        size += (ajuint) sizeof (AjOStr);
+        size += sizeof (AjOStr);
 
         size += ajStrGetRes(gvg->Allele2);
     }
@@ -1330,6 +1350,1745 @@ AjBool ensGvgenotypeTrace(const EnsPGvgenotype gvg, ajuint level)
 
 
 
+/* @datasection [EnsPGvsource] Genetic Variation Source ***********************
+**
+** Functions for manipulating Ensembl Genetic Variation Source objects
+**
+** @cc Bio::EnsEMBL::Variation::*
+**
+** @nam2rule Gvsource
+**
+******************************************************************************/
+
+
+
+
+/* @section constructors ******************************************************
+**
+** All constructors return a new Ensembl Genetic Variation Source by pointer.
+** It is the responsibility of the user to first destroy any previous
+** Genetic Variation Source. The target pointer does not need to be
+** initialised to NULL, but it is good programming practice to do so anyway.
+**
+** @fdata [EnsPGvsource]
+** @fnote None
+**
+** @nam3rule New Constructor
+** @nam4rule NewObj Constructor with existing object
+** @nam4rule NewRef Constructor by incrementing the reference counter
+**
+** @argrule Obj object [EnsPGvsource] Ensembl Genetic Variation Source
+** @argrule Ref object [EnsPGvsource] Ensembl Genetic Variation Source
+**
+** @valrule * [EnsPGvsource] Ensembl Genetic Variation Source
+**
+** @fcategory new
+******************************************************************************/
+
+
+
+
+/* @func ensGvsourceNew *******************************************************
+**
+** Default constructor for an Ensembl Genetic Variation Source.
+**
+** @cc Bio::EnsEMBL::Storable::new
+** @param [r] gvsa [EnsPGvsourceadaptor] Ensembl Genetic Variation
+**                                       Source Adaptor
+** @param [r] identifier [ajuint] SQL database-internal identifier
+** @cc Bio::EnsEMBL::Variation::*::new
+** @param [u] name [AjPStr] Name
+** @param [u] version [AjPStr] Version
+** @param [u] description [AjPStr] Description
+** @param [u] url [AjPStr] Uniform Resource Locator
+**
+** @return [EnsPGvsource] Ensembl Genetic Variation Source
+** @@
+******************************************************************************/
+
+EnsPGvsource ensGvsourceNew(EnsPGvsourceadaptor gvsa,
+                            ajuint identifier,
+                            AjPStr name,
+                            AjPStr version,
+                            AjPStr description,
+                            AjPStr url)
+{
+    EnsPGvsource gvs = NULL;
+
+    AJNEW0(gvs);
+
+    gvs->Use = 1;
+
+    gvs->Identifier = identifier;
+
+    gvs->Adaptor = gvsa;
+
+    if(name)
+        gvs->Name = ajStrNewRef(name);
+
+    if(version)
+        gvs->Version = ajStrNewRef(version);
+
+    if(description)
+        gvs->Description = ajStrNewRef(description);
+
+    if(url)
+        gvs->URL = ajStrNewRef(url);
+
+    return gvs;
+}
+
+
+
+
+/* @func ensGvsourceNewObj ****************************************************
+**
+** Object-based constructor function, which returns an independent object.
+**
+** @param [r] object [const EnsPGvsource] Ensembl Genetic Variation Source
+**
+** @return [EnsPGvsource] Ensembl Genetic Variation Source or NULL
+** @@
+******************************************************************************/
+
+EnsPGvsource ensGvsourceNewObj(const EnsPGvsource object)
+{
+    EnsPGvsource gvs = NULL;
+
+    if(!object)
+        return NULL;
+
+    AJNEW0(gvs);
+
+    gvs->Use = 1;
+
+    gvs->Identifier = object->Identifier;
+
+    gvs->Adaptor = object->Adaptor;
+
+    if(object->Name)
+        gvs->Name = ajStrNewRef(object->Name);
+
+    if(object->Version)
+        gvs->Version = ajStrNewRef(object->Version);
+
+    if(object->Description)
+        gvs->Description = ajStrNewRef(object->Description);
+
+    if(object->URL)
+        gvs->URL = ajStrNewRef(object->URL);
+
+    return gvs;
+}
+
+
+
+
+/* @func ensGvsourceNewRef ****************************************************
+**
+** Ensembl Object referencing function, which returns a pointer to the
+** Ensembl Object passed in and increases its reference count.
+**
+** @param [u] gvs [EnsPGvsource] Ensembl Genetic Variation Source
+**
+** @return [EnsPGvsource] Ensembl Genetic Variation Source
+** @@
+******************************************************************************/
+
+EnsPGvsource ensGvsourceNewRef(EnsPGvsource gvs)
+{
+    if(!gvs)
+        return NULL;
+
+    gvs->Use++;
+
+    return gvs;
+}
+
+
+
+
+/* @section destructors *******************************************************
+**
+** Destruction destroys all internal data structures and frees the
+** memory allocated for the Ensembl Genetic Variation Source.
+**
+** @fdata [EnsPGvsource]
+** @fnote None
+**
+** @nam3rule Del Destroy (free) a Genetic Variation Source object
+**
+** @argrule * Pgvs [EnsPGvsource*] Genetic Variation Source object address
+**
+** @valrule * [void]
+**
+** @fcategory delete
+******************************************************************************/
+
+
+
+
+/* @func ensGvsourceDel *******************************************************
+**
+** Default destructor for an Ensembl Genetic Variation Source.
+**
+** @param [d] Pgvs [EnsPGvsource*] Ensembl Genetic Variation Source address
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ensGvsourceDel(EnsPGvsource *Pgvs)
+{
+    EnsPGvsource pthis = NULL;
+
+    if(!Pgvs)
+        return;
+
+    if(!*Pgvs)
+        return;
+
+    if(ajDebugTest("ensGvsourceDel"))
+    {
+        ajDebug("ensGvsourceDel\n"
+                "  *Pgvs %p\n",
+                *Pgvs);
+
+        ensGvsourceTrace(*Pgvs, 1);
+    }
+
+    pthis = *Pgvs;
+
+    pthis->Use--;
+
+    if(pthis->Use)
+    {
+        *Pgvs = NULL;
+
+        return;
+    }
+
+    ajStrDel(&pthis->Name);
+    ajStrDel(&pthis->Version);
+    ajStrDel(&pthis->Description);
+    ajStrDel(&pthis->URL);
+
+    AJFREE(pthis);
+
+    *Pgvs = NULL;
+
+    return;
+}
+
+
+
+
+/* @section element retrieval *************************************************
+**
+** Functions for returning elements of an
+** Ensembl Genetic Variation Source object.
+**
+** @fdata [EnsPGvsource]
+** @fnote None
+**
+** @nam3rule Get Return Genetic Variation Source attribute(s)
+** @nam4rule GetAdaptor Return the Ensembl Genetic Variation Source Adaptor
+** @nam4rule GetIdentifier Return the SQL database-internal identifier
+** @nam4rule GetName Return the name
+** @nam4rule GetVersion Return the version
+** @nam4rule GetDescription Return the description
+** @nam4rule GetURL Return the Uniform Resource Locator
+**
+** @argrule * gvs [const EnsPGvsource] Genetic Variation Source
+**
+** @valrule Adaptor [EnsPGvsourceadaptor] Ensembl Genetic Variation
+**                                        Source Adaptor
+** @valrule Identifier [ajuint] SQL database-internal identifier
+** @valrule Name [AjPStr] Name
+** @valrule Version [AjPStr] Version
+** @valrule Description [AjPStr] Description
+** @valrule URL [AjPStr] Uniform Resource Locator
+**
+** @fcategory use
+******************************************************************************/
+
+
+
+
+/* @func ensGvsourceGetAdaptor ************************************************
+**
+** Get the Ensembl Genetic Variation Source Adaptor element of an
+** Ensembl Genetic Variation Source.
+**
+** @param [r] gvs [const EnsPGvsource] Ensembl Genetic Variation Source
+**
+** @return [EnsPGvsourceadaptor] Ensembl Genetic Variation Source Adaptor
+** @@
+******************************************************************************/
+
+EnsPGvsourceadaptor ensGvsourceGetAdaptor(const EnsPGvsource gvs)
+{
+    if(!gvs)
+        return NULL;
+
+    return gvs->Adaptor;
+}
+
+
+
+
+/* @func ensGvsourceGetIdentifier *********************************************
+**
+** Get the SQL database-internal identifier element of an
+** Ensembl Genetic Variation Source.
+**
+** @param [r] gvs [const EnsPGvsource] Ensembl Genetic Variation Source
+**
+** @return [ajuint] Internal database identifier
+** @@
+******************************************************************************/
+
+ajuint ensGvsourceGetIdentifier(const EnsPGvsource gvs)
+{
+    if(!gvs)
+        return 0;
+
+    return gvs->Identifier;
+}
+
+
+
+
+
+/* @func ensGvsourceGetName ***************************************************
+**
+** Get the name element of an Ensembl Genetic Variation Source.
+**
+** @param [r] gvs [const EnsPGvsource] Ensembl Genetic Variation Source
+**
+** @return [AjPStr] Name
+** @@
+******************************************************************************/
+
+AjPStr ensGvsourceGetName(const EnsPGvsource gvs)
+{
+    if(!gvs)
+        return 0;
+
+    return gvs->Name;
+}
+
+
+
+
+
+/* @func ensGvsourceGetVersion ************************************************
+**
+** Get the version element of an Ensembl Genetic Variation Source.
+**
+** @param [r] gvs [const EnsPGvsource] Ensembl Genetic Variation Source
+**
+** @return [AjPStr] Version
+** @@
+******************************************************************************/
+
+AjPStr ensGvsourceGetVersion(const EnsPGvsource gvs)
+{
+    if(!gvs)
+        return 0;
+
+    return gvs->Version;
+}
+
+
+
+
+
+/* @func ensGvsourceGetDescription ********************************************
+**
+** Get the description element of an Ensembl Genetic Variation Source.
+**
+** @param [r] gvs [const EnsPGvsource] Ensembl Genetic Variation Source
+**
+** @return [AjPStr] Description
+** @@
+******************************************************************************/
+
+AjPStr ensGvsourceGetDescription(const EnsPGvsource gvs)
+{
+    if(!gvs)
+        return 0;
+
+    return gvs->Description;
+}
+
+
+
+
+
+/* @func ensGvsourceGetURL ****************************************************
+**
+** Get the Uniform Resource Locator element of an
+** Ensembl Genetic Variation Source.
+**
+** @param [r] gvs [const EnsPGvsource] Ensembl Genetic Variation Source
+**
+** @return [AjPStr] Uniform Resource Locator
+** @@
+******************************************************************************/
+
+AjPStr ensGvsourceGetURL(const EnsPGvsource gvs)
+{
+    if(!gvs)
+        return 0;
+
+    return gvs->URL;
+}
+
+
+
+
+
+/* @section element assignment ************************************************
+**
+** Functions for assigning elements of an
+** Ensembl Genetic Variation Source object.
+**
+** @fdata [EnsPGvsource]
+** @fnote None
+**
+** @nam3rule Set Set one element of a Genetic Variation Source
+** @nam4rule SetAdaptor Set the Ensembl Genetic Variation Source Adaptor
+** @nam4rule SetIdentifier Set the SQL database-internal identifier
+** @nam4rule SetName Set the name
+** @nam4rule SetVersion Set the version
+** @nam4rule SetDescription Set the description
+** @nam4rule SetURL Set the Uniform Resource Locator
+**
+** @argrule * gvs [EnsPGvsource] Ensembl Genetic Variation Source object
+**
+** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @fcategory modify
+******************************************************************************/
+
+
+
+
+/* @func ensGvsourceSetAdaptor ************************************************
+**
+** Set the Ensembl Genetic Variation Source Adaptor element of an
+** Ensembl Genetic Variation Source.
+**
+** @param [u] gvs [EnsPGvsource] Ensembl Genetic Variation Source
+** @param [u] gvsa [EnsPGvsourceadaptor] Ensembl Genetic Variation
+**                                       Source Adaptor
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensGvsourceSetAdaptor(EnsPGvsource gvs, EnsPGvsourceadaptor gvsa)
+{
+    if(!gvs)
+        return ajFalse;
+
+    gvs->Adaptor = gvsa;
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensGvsourceSetIdentifier *********************************************
+**
+** Set the SQL database-internal identifier element of an
+** Ensembl Genetic Variation Source.
+**
+** @param [u] gvs [EnsPGvsource] Ensembl Genetic Variation Source
+** @param [r] identifier [ajuint] SQL database-internal identifier
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensGvsourceSetIdentifier(EnsPGvsource gvs, ajuint identifier)
+{
+    if(!gvs)
+        return ajFalse;
+
+    gvs->Identifier = identifier;
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensGvsourceSetName ***************************************************
+**
+** Set the name element of an Ensembl Genetic Variation Source.
+**
+** @param [u] gvs [EnsPGvsource] Ensembl Genetic Variation Source
+** @param [u] name [AjPStr] Name
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensGvsourceSetName(EnsPGvsource gvs, AjPStr name)
+{
+    if(!gvs)
+        return ajFalse;
+
+    ajStrDel(&gvs->Name);
+
+    if(name)
+        gvs->Name = ajStrNewRef(name);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensGvsourceSetVersion ************************************************
+**
+** Set the version element of an Ensembl Genetic Variation Source.
+**
+** @param [u] gvs [EnsPGvsource] Ensembl Genetic Variation Source
+** @param [u] version [AjPStr] Version
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensGvsourceSetVersion(EnsPGvsource gvs, AjPStr version)
+{
+    if(!gvs)
+        return ajFalse;
+
+    ajStrDel(&gvs->Version);
+
+    if(version)
+        gvs->Version = ajStrNewRef(version);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensGvsourceSetDescription ********************************************
+**
+** Set the description element of an Ensembl Genetic Variation Source.
+**
+** @param [u] gvs [EnsPGvsource] Ensembl Genetic Variation Source
+** @param [u] description [AjPStr] Description
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensGvsourceSetDescription(EnsPGvsource gvs, AjPStr description)
+{
+    if(!gvs)
+        return ajFalse;
+
+    ajStrDel(&gvs->Description);
+
+    if(description)
+        gvs->Description = ajStrNewRef(description);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensGvsourceSetURL ****************************************************
+**
+** Set the Uniform Resopurce Locator element of an
+** Ensembl Genetic Variation Source.
+**
+** @param [u] gvs [EnsPGvsource] Ensembl Genetic Variation Source
+** @param [u] url [AjPStr] Uniform Resopurce Locator
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensGvsourceSetURL(EnsPGvsource gvs, AjPStr url)
+{
+    if(!gvs)
+        return ajFalse;
+
+    ajStrDel(&gvs->URL);
+
+    if(url)
+        gvs->URL = ajStrNewRef(url);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensGvsourceGetMemsize ************************************************
+**
+** Get the memory size in bytes of an Ensembl Genetic Variation Source.
+**
+** @param [r] gvs [const EnsPGvsource] Ensembl Genetic Variation Source
+**
+** @return [ajulong] Memory size
+** @@
+******************************************************************************/
+
+ajulong ensGvsourceGetMemsize(const EnsPGvsource gvs)
+{
+    ajulong size = 0;
+
+    if(!gvs)
+        return 0;
+
+    size += sizeof (EnsOGvsource);
+
+    if(gvs->Name)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(gvs->Name);
+    }
+
+    if(gvs->Version)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(gvs->Version);
+    }
+
+    if(gvs->Description)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(gvs->Description);
+    }
+
+    if(gvs->URL)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(gvs->URL);
+    }
+
+    return size;
+}
+
+
+
+
+/* @section debugging *********************************************************
+**
+** Functions for reporting of an Ensembl Genetic Variation Source object.
+**
+** @fdata [EnsPGvsource]
+** @nam3rule Trace Report Ensembl Genetic Variation Source elements to
+**                 debug file
+**
+** @argrule Trace gvs [const EnsPGvsource] Ensembl Genetic Variation Source
+** @argrule Trace level [ajuint] Indentation level
+**
+** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @fcategory misc
+******************************************************************************/
+
+
+
+
+/* @func ensGvsourceTrace *****************************************************
+**
+** Trace an Ensembl Genetic Variation Source.
+**
+** @param [r] gvs [const EnsPGvsource] Ensembl Genetic Variation Source
+** @param [r] level [ajuint] Indentation level
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensGvsourceTrace(const EnsPGvsource gvs, ajuint level)
+{
+    AjPStr indent = NULL;
+
+    if(!gvs)
+        return ajFalse;
+
+    indent = ajStrNew();
+
+    ajStrAppendCountK(&indent, ' ', level * 2);
+
+    ajDebug("%SensGvsourceTrace %p\n"
+            "%S  Use %u\n"
+            "%S  Identifier %u\n"
+            "%S  Adaptor %p\n"
+            "%S  Name '%S'\n"
+            "%S  Version '%S'\n"
+            "%S  Description '%S'\n"
+            "%S  URL '%S'\n",
+            indent, gvs,
+            indent, gvs->Use,
+            indent, gvs->Identifier,
+            indent, gvs->Adaptor,
+            indent, gvs->Name,
+            indent, gvs->Version,
+            indent, gvs->Description,
+            indent, gvs->URL);
+
+    ajStrDel(&indent);
+
+    return ajTrue;
+}
+
+
+
+
+/* @datasection [EnsPGvsourceadaptor] Ensembl Genetic Variation Source Adaptor
+**
+** Functions for manipulating Ensembl Genetic Variation Source Adaptor objects
+**
+** @cc Bio::EnsEMBL::Variation::DBSQL::*Adaptor
+**
+** @nam2rule Gvsourceadaptor
+**
+******************************************************************************/
+
+static const char *gvsourceadaptorTables[] =
+{
+    "source",
+    NULL
+};
+
+static const char *gvsourceadaptorColumns[] =
+{
+    "source.source_id",
+    "source.name",
+    "source.version",
+    "source.description",
+    "source.url",
+    NULL
+};
+
+static EnsOBaseadaptorLeftJoin gvsourceadaptorLeftJoin[] =
+{
+    {NULL, NULL}
+};
+
+static const char *gvsourceadaptorDefaultCondition = NULL;
+
+static const char *gvsourceadaptorFinalCondition = NULL;
+
+
+
+
+/* @funcstatic gvsourceadaptorFetchAllBySQL ***********************************
+**
+** Run a SQL statement against an Ensembl Database Adaptor and consolidate the
+** results into an AJAX List of Ensembl Genetic Variation Source objects.
+**
+** @cc Bio::EnsEMBL::Variation::DBSQL::*Adaptor::_objFromHashref
+** @param [r] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [r] statement [const AjPStr] SQL statement
+** @param [uN] am [EnsPAssemblymapper] Ensembl Assembly Mapper
+** @param [uN] slice [EnsPSlice] Ensembl Slice
+** @param [u] gvss [AjPList] AJAX List of Ensembl Genetic Variation Sources
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+static AjBool gvsourceadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
+                                           const AjPStr statement,
+                                           EnsPAssemblymapper am,
+                                           EnsPSlice slice,
+                                           AjPList gvss)
+{
+    ajuint identifier = 0;
+
+    AjPSqlstatement sqls = NULL;
+    AjISqlrow sqli       = NULL;
+    AjPSqlrow sqlr       = NULL;
+
+    AjPStr name        = NULL;
+    AjPStr version     = NULL;
+    AjPStr description = NULL;
+    AjPStr url         = NULL;
+
+    EnsPGvsource gvs         = NULL;
+    EnsPGvsourceadaptor gvsa = NULL;
+
+    if(ajDebugTest("gvsourceadaptorFetchAllBySQL"))
+        ajDebug("gvsourceadaptorFetchAllBySQL\n"
+                "  dba %p\n"
+                "  statement %p\n"
+                "  am %p\n"
+                "  slice %p\n"
+                "  gvss %p\n",
+                dba,
+                statement,
+                am,
+                slice,
+                gvss);
+
+    if(!dba)
+        return ajFalse;
+
+    if(!statement)
+        return ajFalse;
+
+    if(!gvss)
+        return ajFalse;
+
+    gvsa = ensRegistryGetGvsourceadaptor(dba);
+
+    sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
+
+    sqli = ajSqlrowiterNew(sqls);
+
+    while(!ajSqlrowiterDone(sqli))
+    {
+        identifier  = 0;
+        name        = ajStrNew();
+        version     = ajStrNew();
+        description = ajStrNew();
+        url         = ajStrNew();
+
+        sqlr = ajSqlrowiterGet(sqli);
+
+        ajSqlcolumnToUint(sqlr, &identifier);
+        ajSqlcolumnToStr(sqlr, &name);
+        ajSqlcolumnToStr(sqlr, &version);
+        ajSqlcolumnToStr(sqlr, &description);
+        ajSqlcolumnToStr(sqlr, &url);
+
+        gvs = ensGvsourceNew(gvsa,
+                             identifier,
+                             name,
+                             version,
+                             description,
+                             url);
+
+        ajListPushAppend(gvss, (void *) gvs);
+
+        ajStrDel(&name);
+        ajStrDel(&version);
+        ajStrDel(&description);
+        ajStrDel(&url);
+    }
+
+    ajSqlrowiterDel(&sqli);
+
+    ensDatabaseadaptorSqlstatementDel(dba, &sqls);
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic gvsourceadaptorCacheInsert *************************************
+**
+** Insert an Ensembl Genetic Variation Source into the Ensembl Genetic
+** Variation Source Adaptor-internal cache. If a Source with the same name
+** element is already present in the adaptor cache, the Source is deleted and
+** a pointer to the cached Source is returned.
+**
+** @param [u] gvsa [EnsPGvsourceadaptor] Ensembl Genetic Variation
+**                                       Source Adaptor
+** @param [u] Pgvs [EnsPGvsource*] Ensembl Genetic Variation Source address
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+static AjBool gvsourceadaptorCacheInsert(EnsPGvsourceadaptor gvsa,
+                                         EnsPGvsource *Pgvs)
+{
+    ajuint *Pidentifier = NULL;
+
+    EnsPGvsource gvs1 = NULL;
+    EnsPGvsource gvs2 = NULL;
+
+    if(!gvsa)
+        return ajFalse;
+
+    if(!gvsa->CacheByIdentifier)
+        return ajFalse;
+
+    if(!gvsa->CacheByName)
+        return ajFalse;
+
+    if(!Pgvs)
+        return ajFalse;
+
+    if(!*Pgvs)
+        return ajFalse;
+
+    /* Search the identifer cache. */
+
+    gvs1 = (EnsPGvsource) ajTableFetch(
+        gvsa->CacheByIdentifier,
+        (const void *) &((*Pgvs)->Identifier));
+
+    /* Search the name cache. */
+
+    gvs2 = (EnsPGvsource) ajTableFetch(
+        gvsa->CacheByName,
+        (const void *) (*Pgvs)->Name);
+
+    if((!gvs1) && (!gvs2))
+    {
+        /* Insert into the identifier cache. */
+
+        AJNEW0(Pidentifier);
+
+        *Pidentifier = (*Pgvs)->Identifier;
+
+        ajTablePut(gvsa->CacheByIdentifier,
+                   (void *) Pidentifier,
+                   (void *) ensGvsourceNewRef(*Pgvs));
+
+        /* Insert into the name cache. */
+
+        ajTablePut(gvsa->CacheByName,
+                   (void *) ajStrNewS((*Pgvs)->Name),
+                   (void *) ensGvsourceNewRef(*Pgvs));
+    }
+
+    if(gvs1 && gvs2 && (gvs1 == gvs2))
+    {
+        ajDebug("gvsourceadaptorCacheInsert replaced Ensembl Genetic "
+                "Variation Source %p with one already cached %p.\n",
+                *Pgvs, gvs1);
+
+        ensGvsourceDel(Pgvs);
+
+        ensGvsourceNewRef(gvs1);
+
+        Pgvs = &gvs1;
+    }
+
+    if(gvs1 && gvs2 && (gvs1 != gvs2))
+        ajDebug("gvsourceadaptorCacheInsert detected an Ensembl Genetic "
+                "Variation Source in the identifier and name cache with "
+                "identical names ('%S' and '%S') but different addresses "
+                "(%p and %p).\n",
+                gvs1->Name, gvs2->Name, gvs1, gvs2);
+
+    if(gvs1 && (!gvs2))
+        ajDebug("gvsourceadaptorCacheInsert detected an Ensembl Analysis "
+                "in the identifier, but not in the name cache.\n");
+
+    if((!gvs1) && gvs2)
+        ajDebug("gvsourceadaptorCacheInsert detected an Ensembl Analysis "
+                "in the name, but not in the identifier cache.\n");
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic gvsourceadaptorCacheRemove *************************************
+**
+** Remove an Ensembl Genetic Variation Source from the Ensembl Genetic
+** Variation Source Adaptor-internal cache.
+**
+** @param [u] gvsa [EnsPGvsourceadaptor] Ensembl Genetic Variation
+**                                       Source Adaptor
+** @param [u] gvs [EnsPGvsource] Ensembl Genetic Variation Source
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+#if AJFALSE
+
+static AjBool gvsourceadaptorCacheRemove(EnsPGvsourceadaptor gvsa,
+                                         EnsPGvsource gvs)
+{
+    ajuint *Pidentifier = NULL;
+
+    AjPStr key = NULL;
+
+    EnsPGvsource gvs1 = NULL;
+    EnsPGvsource gvs2 = NULL;
+
+    if(!gvsa)
+        return ajFalse;
+
+    if(!gvs)
+        return ajFalse;
+
+    /* Remove the table nodes. */
+
+    gvs1 = (EnsPGvsource)
+        ajTableRemoveKey(gvsa->CacheByIdentifier,
+                         (const void *) &gvs->Identifier,
+                         (void **) &Pidentifier);
+
+    gvs2 = (EnsPGvsource)
+        ajTableRemoveKey(gvsa->CacheByName,
+                         (const void *) gvs->Name,
+                         (void **) &key);
+
+    if(gvs1 && (!gvs2))
+        ajWarn("gvsourceadaptorCacheRemove could remove Ensembl Genetic "
+               "Variation Source with identifier %u and name '%S' only from "
+               "the identifier cache.\n",
+               gvs->Identifier,
+               gvs->Name);
+
+    if((!gvs1) && gvs2)
+        ajWarn("gvsourceadaptorCacheRemove could remove Ensembl Genetic "
+               "Variation Source with identifier %u and name '%S' only from "
+               "the name cache.\n",
+               gvs->Identifier,
+               gvs->Name);
+
+    /* Delete the keys. */
+
+    AJFREE(Pidentifier);
+
+    ajStrDel(&key);
+
+    /* Delete (or at least de-reference) the Ensembl Analyses. */
+
+    ensGvsourceDel(&gvs1);
+    ensGvsourceDel(&gvs2);
+
+    return ajTrue;
+}
+
+#endif
+
+
+
+
+/* @funcstatic gvsourceadaptorCacheInit ***************************************
+**
+** Initialise the internal Ensembl Genetic Variation Source cache of an
+** Ensembl Genetic Variation Source Adaptor.
+**
+** @param [u] gvsa [EnsPGvsourceadaptor] Ensembl Genetic Variation
+**                                       Source Adaptor
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+static AjBool gvsourceadaptorCacheInit(EnsPGvsourceadaptor gvsa)
+{
+    AjPList gvss = NULL;
+
+    EnsPGvsource gvs = NULL;
+
+    if(ajDebugTest("gvsourceadaptorCacheInit"))
+        ajDebug("gvsourceadaptorCacheInit\n"
+                "  gvsa %p\n",
+                gvsa);
+
+    if(!gvsa)
+        return ajFalse;
+
+    if(gvsa->CacheByIdentifier)
+        return ajFalse;
+    else
+        gvsa->CacheByIdentifier =
+            ajTableNewFunctionLen(0, ensTableCmpUint, ensTableHashUint);
+
+    if(gvsa->CacheByName)
+        return ajFalse;
+    else
+        gvsa->CacheByName = ajTablestrNewCaseLen(0);
+
+    gvss = ajListNew();
+
+    ensBaseadaptorGenericFetch(gvsa->Adaptor,
+                               (const AjPStr) NULL,
+                               (EnsPAssemblymapper) NULL,
+                               (EnsPSlice) NULL,
+                               gvss);
+
+    while(ajListPop(gvss, (void **) &gvsa))
+    {
+        gvsourceadaptorCacheInsert(gvsa, &gvs);
+
+        /*
+        ** Both caches hold internal references to the
+        ** Ensembl Genetic Variation Source objects.
+        */
+
+        ensGvsourceDel(&gvs);
+    }
+
+    ajListFree(&gvss);
+
+    return ajTrue;
+}
+
+
+
+
+/* @section constructors ******************************************************
+**
+** All constructors return a new Ensembl Genetic Variation Source Adaptor by
+** pointer. It is the responsibility of the user to first destroy any previous
+** Ensembl Genetic Variation Source Adaptor. The target pointer does not need
+** to be initialised to NULL, but it is good programming practice to do so
+** anyway.
+**
+** @fdata [EnsPGvsourceadaptor]
+** @fnote None
+**
+** @nam3rule New Constructor
+**
+** @argrule New dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+**
+** @valrule * [EnsPGvsourceadaptor] Ensembl Genetic Variation Source Adaptor
+**
+** @fcategory new
+******************************************************************************/
+
+
+
+
+/* @func ensGvsourceadaptorNew ************************************************
+**
+** Default constructor for an Ensembl Genetic Variation Source Adaptor.
+**
+** Ensembl Object Adaptors are singleton objects in the sense that a single
+** instance of an Ensembl Object Adaptor connected to a particular database is
+** sufficient to instantiate any number of Ensembl Objects from the database.
+** Each Ensembl Object will have a weak reference to the Object Adaptor that
+** instantiated it. Therefore, Ensembl Object Adaptors should not be
+** instantiated directly, but rather obtained from the Ensembl Registry,
+** which will in turn call this function if neccessary.
+**
+** @see ensRegistryGetDatabaseadaptor
+** @see ensRegistryGetGvsourceadaptor
+**
+** @cc Bio::EnsEMBL::Variation::DBSQL::*::new
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+**
+** @return [EnsPGvsourceadaptor] Ensembl Genetic Variation Source Adaptor
+**                               or NULL
+** @@
+******************************************************************************/
+
+EnsPGvsourceadaptor ensGvsourceadaptorNew(EnsPDatabaseadaptor dba)
+{
+    EnsPGvsourceadaptor gvsa = NULL;
+
+    if(!dba)
+        return NULL;
+
+    if(ajDebugTest("ensGvsourceadaptorNew"))
+        ajDebug("ensGvsourceadaptorNew\n"
+                "  dba %p\n",
+                dba);
+
+    AJNEW0(gvsa);
+
+    gvsa->Adaptor = ensBaseadaptorNew(
+        dba,
+        gvsourceadaptorTables,
+        gvsourceadaptorColumns,
+        gvsourceadaptorLeftJoin,
+        gvsourceadaptorDefaultCondition,
+        gvsourceadaptorFinalCondition,
+        gvsourceadaptorFetchAllBySQL);
+
+    /*
+    ** NOTE: The cache cannot be initialised here because the
+    ** gvsourceadaptorCacheInit function calls ensBaseadaptorGenericFetch,
+    ** which calls gvsourceadaptorFetchAllBySQL, which calls
+    ** ensRegistryGetGvsourceadaptor. At that point, however, the
+    ** Ensembl Genetic Variation Source Adaptor has not been stored in the
+    ** Ensembl Registry. Therefore, each ensGvsourceadaptorFetch function
+    ** has to test the presence of the adaptor-internal cache and eventually
+    ** initialise before accessing it.
+    **
+    **  gvsourceadaptorCacheInit(aa);
+    */
+
+    return gvsa;
+}
+
+
+
+
+/* @funcstatic gvsourceadaptorCacheClearIdentifier ****************************
+**
+** An ajTableMapDel 'apply' function to clear the Ensembl Genetic Variation
+** Source Adaptor-internal Ensembl Genetic Variation Source cache.
+** This function deletes the unsigned integer identifier key and the
+** Ensembl Genetic Variation value data.
+**
+** @param [u] key [void**] AJAX unsigned integer key data address
+** @param [u] value [void**] Ensembl Genetic Variation Source
+**                           value data address
+** @param [u] cl [void*] Standard, passed in from ajTableMapDel
+** @see ajTableMapDel
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void gvsourceadaptorCacheClearIdentifier(void **key,
+                                                void **value,
+                                                void *cl)
+{
+    if(!key)
+        return;
+
+    if(!*key)
+        return;
+
+    if(!value)
+        return;
+
+    if(!*value)
+        return;
+
+    (void) cl;
+
+    AJFREE(*key);
+
+    ensGvsourceDel((EnsPGvsource *) value);
+
+    return;
+}
+
+
+
+
+/* @funcstatic gvsourceadaptorCacheClearName **********************************
+**
+** An ajTableMapDel 'apply' function to clear the Ensembl Genetic Variation
+** Source Adaptor-internal Ensembl Genetic Variation Source cache.
+** This function deletes the AJAX String key data and the
+** Ensembl Genetic Variation Source value data.
+**
+** @param [u] key [void**] AJAX String key data address
+** @param [u] value [void**] Ensembl Genetic Variation Source
+**                           value data address
+** @param [u] cl [void*] Standard, passed in from ajTableMapDel
+** @see ajTableMapDel
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void gvsourceadaptorCacheClearName(void **key,
+                                          void **value,
+                                          void *cl)
+{
+    if(!key)
+        return;
+
+    if(!*key)
+        return;
+
+    if(!value)
+        return;
+
+    if(!*value)
+        return;
+
+    (void) cl;
+
+    ajStrDel((AjPStr *) key);
+
+    ensGvsourceDel((EnsPGvsource *) value);
+
+    return;
+}
+
+
+
+
+/* @funcstatic gvsourceadaptorCacheExit ***************************************
+**
+** Clears the internal Ensembl Genetic Variation Source cache of an
+** Ensembl Genetic Variation Source Adaptor.
+**
+** @param [u] gvsa [EnsPGvsourceadaptor] Ensembl Genetic Variation
+**                                       Source Adaptor
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+static AjBool gvsourceadaptorCacheExit(EnsPGvsourceadaptor gvsa)
+{
+    if(!gvsa)
+        return ajFalse;
+
+    /* Clear and delete the identifier cache. */
+
+    ajTableMapDel(gvsa->CacheByIdentifier,
+                  gvsourceadaptorCacheClearIdentifier,
+                  NULL);
+
+    ajTableFree(&gvsa->CacheByIdentifier);
+
+    /* Clear and delete the name cache. */
+
+    ajTableMapDel(gvsa->CacheByName,
+                  gvsourceadaptorCacheClearName,
+                  NULL);
+
+    ajTableFree(&gvsa->CacheByName);
+
+    return ajTrue;
+}
+
+
+
+
+/* @section destructors *******************************************************
+**
+** Destruction destroys all internal data structures and frees the
+** memory allocated for the Ensembl Genetic Variation Source Adaptor.
+**
+** @fdata [EnsPGvsourceadaptor]
+** @fnote None
+**
+** @nam3rule Del Destroy (free) an Ensembl Genetic Variation Source Adaptor
+**               object.
+**
+** @argrule * Pgvsa [EnsPGvsourceadaptor*] Ensembl Genetic Variation
+**                                         Source Adaptor object address
+**
+** @valrule * [void]
+**
+** @fcategory delete
+******************************************************************************/
+
+
+
+
+/* @func ensGvsourceadaptorDel *********************************************
+**
+** Default destructor for an Ensembl Genetic Variation Source Adaptor.
+** This function also clears the internal caches.
+**
+** Ensembl Object Adaptors are singleton objects that are registered in the
+** Ensembl Registry and weakly referenced by Ensembl Objects that have been
+** instantiated by it. Therefore, Ensembl Object Adaptors should never be
+** destroyed directly. Upon exit, the Ensembl Registry will call this function
+** if required.
+**
+** @param [d] Pgvsa [EnsPGvsourceadaptor*] Ensembl Genetic Variation Source
+**                                         Adaptor address
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ensGvsourceadaptorDel(EnsPGvsourceadaptor* Pgvsa)
+{
+    EnsPGvsourceadaptor pthis = NULL;
+
+    if(!Pgvsa)
+        return;
+
+    if(!*Pgvsa)
+        return;
+
+    pthis = *Pgvsa;
+
+    gvsourceadaptorCacheExit(pthis);
+
+    ensBaseadaptorDel(&pthis->Adaptor);
+
+    AJFREE(pthis);
+
+    *Pgvsa = NULL;
+
+    return;
+}
+
+
+
+
+/* @section element retrieval *************************************************
+**
+** Functions for returning elements of an
+** Ensembl Genetic Variation Source Adaptor object.
+**
+** @fdata [EnsPGvsourceadaptor]
+** @fnote None
+**
+** @nam3rule Get Return Ensembl Genetic Variation Source Adaptor attribute(s)
+** @nam4rule GetAdaptor Return the Ensembl Base Adaptor
+**
+** @argrule * gvsa [const EnsPGvsourceadaptor] Ensembl Genetic Variation
+**                                             Source Adaptor
+**
+** @valrule Adaptor [EnsPBaseadaptor] Ensembl Base Adaptor
+**
+** @fcategory use
+******************************************************************************/
+
+
+
+
+/* @func ensGvsourceadaptorGetBaseadaptor *************************************
+**
+** Get the Ensembl Base Adaptor element of an
+** Ensembl Genetic Variation Source Adaptor.
+**
+** @param [r] gvsa [const EnsPGvsourceadaptor] Ensembl Genetic Variation
+**                                             Source Adaptor
+**
+** @return [EnsPBaseadaptor] Ensembl Base Adaptor
+** @@
+******************************************************************************/
+
+EnsPBaseadaptor ensGvsourceadaptorGetBaseadaptor(
+    const EnsPGvsourceadaptor gvsa)
+{
+    if(!gvsa)
+        return NULL;
+
+    return gvsa->Adaptor;
+}
+
+
+
+
+/* @func ensGvsourceadaptorGetDatabaseadaptor *********************************
+**
+** Get the Ensembl Database Adaptor element of an
+** Ensembl Genetic Variation Source Adaptor.
+**
+** @param [r] gvsa [const EnsPGvsourceadaptor] Ensembl Genetic Variation
+**                                             Source Adaptor
+**
+** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @@
+******************************************************************************/
+
+EnsPDatabaseadaptor ensGvsourceadaptorGetDatabaseadaptor(
+    const EnsPGvsourceadaptor gvsa)
+{
+    if(!gvsa)
+        return NULL;
+
+    return ensBaseadaptorGetDatabaseadaptor(gvsa->Adaptor);
+}
+
+
+
+
+/* @section object retrieval **************************************************
+**
+** Functions for retrieving Ensembl Genetic Variation Source objects from an
+** Ensembl Variation database.
+**
+** @fdata [EnsPGvsourceadaptor]
+** @fnote None
+**
+** @nam3rule Fetch Retrieve Ensembl Genetic Variation Source object(s)
+** @nam4rule FetchAll Retrieve all Ensembl Genetic Variation Source objects
+** @nam5rule FetchAllBy Retrieve all Ensembl Genetic Variation Source objects
+**                      matching a criterion
+** @nam4rule FetchBy Retrieve one Ensembl Genetic Variation Source object
+**                   matching a criterion
+**
+** @argrule * aa [EnsPAnalysisadaptor] Ensembl Genetic Variation Source Adaptor
+** @argrule FetchAll [AjPList] AJAX List of Ensembl Genetic Variation Source
+**                             objects
+**
+** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @fcategory use
+******************************************************************************/
+
+
+
+
+/* @funcstatic gvsourceadaptorFetchAll ****************************************
+**
+** An ajTableMap 'apply' function to return all
+** Ensembl Genetic Variation Source objects from the
+** Ensembl Genetic Variation Source Adaptor-internal cache.
+**
+** @param [u] key [const void *] AJAX unsigned integer key data address
+** @param [u] value [void**] Ensembl Genetic Variation Source
+**                           value data address
+** @param [u] cl [void*] AJAX List of Ensembl Genetic Variation Source objects,
+**                       passed in via ajTableMap
+** @see ajTableMap
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void gvsourceadaptorFetchAll(const void *key, void **value, void *cl)
+{
+    if(!key)
+        return;
+
+    if(!value)
+        return;
+
+    if(!*value)
+        return;
+
+    if(!cl)
+        return;
+
+    ajListPushAppend((AjPList) cl,
+                     (void *) ensGvsourceNewRef(*((EnsPGvsource *) value)));
+
+    return;
+}
+
+
+
+
+/* @func ensGvsourceadaptorFetchAll *******************************************
+**
+** Fetch all Ensembl Genetic Variation Sources.
+**
+** The caller is responsible for deleting the Ensembl Genetic Variation Source
+** before deleting the AJAX List.
+**
+** @cc Bio::EnsEMBL::Variation::DBSQL::*Adaptor::fetch_all
+** @param [r] gvsa [EnsPGvsourceadaptor] Ensembl Genetic Variation
+**                                       Source Adaptor
+** @param [u] gvss [AjPList] AJAX List of Ensembl Genetic Variation Sources
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensGvsourceadaptorFetchAll(EnsPGvsourceadaptor gvsa,
+                                  AjPList gvss)
+{
+    if(!gvsa)
+        return ajFalse;
+
+    if(!gvss)
+        return ajFalse;
+
+    if(!gvsa->CacheByIdentifier)
+        gvsourceadaptorCacheInit(gvsa);
+
+    ajTableMap(gvsa->CacheByIdentifier,
+               gvsourceadaptorFetchAll,
+               (void *) gvss);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensGvsourceadaptorFetchByIdentifier **********************************
+**
+** Fetch an Ensembl Genetic Variation Source by its SQL database-internal
+** identifier.
+** The caller is responsible for deleting the Ensembl Genetic Variation Source.
+**
+** @cc Bio::EnsEMBL::Variation::DBSQL::*Adaptor::fetch_by_dbID
+** @param [r] gvsa [EnsPGvsourceadaptor] Ensembl Genetic Variation
+**                                       Source Adaptor
+** @param [r] identifier [ajuint] SQL database-internal identifier
+** @param [wP] Pgvs [EnsPGvsource*] Ensembl Genetic Variation Source address
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensGvsourceadaptorFetchByIdentifier(EnsPGvsourceadaptor gvsa,
+                                           ajuint identifier,
+                                           EnsPGvsource *Pgvs)
+{
+    AjPList gvss = NULL;
+
+    AjPStr constraint = NULL;
+
+    EnsPGvsource gvs = NULL;
+
+    if(!gvsa)
+        return ajFalse;
+
+    if(!identifier)
+        return ajFalse;
+
+    if(!Pgvs)
+        return ajFalse;
+
+    /*
+    ** Initally, search the identifier cache.
+    ** For any object returned by the AJAX Table the reference counter needs
+    ** to be incremented manually.
+    */
+
+    if(!gvsa->CacheByIdentifier)
+        gvsourceadaptorCacheInit(gvsa);
+
+    *Pgvs = (EnsPGvsource)
+        ajTableFetch(gvsa->CacheByIdentifier, (const void *) &identifier);
+
+    if(*Pgvs)
+    {
+        ensGvsourceNewRef(*Pgvs);
+
+        return ajTrue;
+    }
+
+    /* For a cache miss re-query the database. */
+
+    constraint = ajFmtStr("source.source_id = %u", identifier);
+
+    gvss = ajListNew();
+
+    ensBaseadaptorGenericFetch(gvsa->Adaptor,
+                               constraint,
+                               (EnsPAssemblymapper) NULL,
+                               (EnsPSlice) NULL,
+                               gvss);
+
+    if(ajListGetLength(gvss) > 1)
+        ajWarn("ensGvsourceadaptorFetchByIdentifier got more than one "
+               "Ensembl Genetic Variation Sources for (PRIMARY KEY) "
+               "identifier %u.\n",
+               identifier);
+
+    ajListPop(gvss, (void **) Pgvs);
+
+    gvsourceadaptorCacheInsert(gvsa, Pgvs);
+
+    while(ajListPop(gvss, (void **) &gvs))
+    {
+        gvsourceadaptorCacheInsert(gvsa, &gvs);
+
+        ensGvsourceDel(&gvs);
+    }
+
+    ajListFree(&gvss);
+
+    ajStrDel(&constraint);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensGvsourceadaptorFetchByName ****************************************
+**
+** Fetch an Ensembl Genetic Variation Source by its name.
+** The caller is responsible for deleting the Ensembl Genetic Variation Source.
+**
+** @cc Bio::EnsEMBL::Variation::DBSQL::*Adaptor::fetch_by_logic_name
+** @param [r] gvsa [EnsPGvsourceadaptor] Ensembl Genetic Variation
+**                                       Source Adaptor
+** @param [r] name [const AjPStr] Ensembl Genetic Variation Source name
+** @param [wP] Pgvs [EnsPGvsource*] Ensembl Genetic Variation Source address
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensGvsourceadaptorFetchByName(EnsPGvsourceadaptor gvsa,
+                                     const AjPStr name,
+                                     EnsPGvsource *Pgvs)
+{
+    char *txtname = NULL;
+
+    AjPList gvss = NULL;
+
+    AjPStr constraint = NULL;
+
+    EnsPGvsource gvs = NULL;
+
+    if(!gvsa)
+        return ajFalse;
+
+    if((!name) && (!ajStrGetLen(name)))
+        return ajFalse;
+
+    if(!Pgvs)
+        return ajFalse;
+
+    /*
+    ** Initally, search the name cache.
+    ** For any object returned by the AJAX Table the reference counter needs
+    ** to be incremented manually.
+    */
+
+    if(!gvsa->CacheByName)
+        gvsourceadaptorCacheInit(gvsa);
+
+    *Pgvs = (EnsPGvsource)
+        ajTableFetch(gvsa->CacheByName, (const void *) name);
+
+    if(*Pgvs)
+    {
+        ensGvsourceNewRef(*Pgvs);
+
+        return ajTrue;
+    }
+
+    /* In case of a cache miss, re-query the database. */
+
+    ensBaseadaptorEscapeC(gvsa->Adaptor, &txtname, name);
+
+    constraint = ajFmtStr("source.name = '%s'", txtname);
+
+    ajCharDel(&txtname);
+
+    gvss = ajListNew();
+
+    ensBaseadaptorGenericFetch(gvsa->Adaptor,
+                               constraint,
+                               (EnsPAssemblymapper) NULL,
+                               (EnsPSlice) NULL,
+                               gvss);
+
+    if(ajListGetLength(gvss) > 1)
+        ajWarn("ensGvsourceadaptorFetchByName got more than one "
+               "Ensembl Genetic Variation Source for (UNIQUE) name '%S'.\n",
+               name);
+
+    ajListPop(gvss, (void **) Pgvs);
+
+    gvsourceadaptorCacheInsert(gvsa, Pgvs);
+
+    while(ajListPop(gvss, (void **) &gvs))
+    {
+        gvsourceadaptorCacheInsert(gvsa, &gvs);
+
+        ensGvsourceDel(&gvs);
+    }
+
+    ajListFree(&gvss);
+
+    ajStrDel(&constraint);
+
+    return ajTrue;
+}
+
+
+
+
 /* @datasection [EnsPGvvariation] Genetic Variation Variation *****************
 **
 ** Functions for manipulating Ensembl Genetic Variation Variation objects
@@ -1340,7 +3099,7 @@ AjBool ensGvgenotypeTrace(const EnsPGvgenotype gvg, ajuint level)
 **
 ******************************************************************************/
 
-static const char *gvVariationValidationState[] =
+static const char *gvvariationValidationState[] =
 {
     "cluster",
     "freq",
@@ -1390,15 +3149,15 @@ static const char *gvVariationValidationState[] =
 **                                          Variation Adaptor
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 ** @cc Bio::EnsEMBL::Variation::Variation::new
+** @param [u] gvs [AjPStr] Ensembl Genetic Variation Source
 ** @param [u] name [AjPStr] Name
-** @param [u] source [AjPStr] Source
 ** @param [u] ancestralallele [AjPStr] Ancestral allele
 ** @param [r] synonyms [AjPTable] Synonyms, keys are source databases and
 **                                values are AJAX Lists of AJAX Strings of
 **                                synonyms
 ** @param [r] alleles [AjPList] AJAX List of Ensembl Alleles
-** @param [r] validationstates [AjPList] AJAX List of validation state
-**                                       AJAX Strings
+** @param [u] validationstates [AjPStr] Comma-separated list of
+**                                      validation states
 ** @param [u] moltype [AjPStr] Molecule type
 ** @param [u] fiveflank [AjPStr] Five prime flanking sequence
 ** @param [u] threeflank [AjPStr] Three prime flanking sequence
@@ -1410,12 +3169,12 @@ static const char *gvVariationValidationState[] =
 
 EnsPGvvariation ensGvvariationNew(EnsPGvvariationadaptor gvva,
                                   ajuint identifier,
+                                  EnsPGvsource gvs,
                                   AjPStr name,
-                                  AjPStr source,
                                   AjPStr ancestralallele,
                                   AjPTable synonyms,
                                   AjPList alleles,
-                                  AjPList validationstates,
+                                  AjPStr validationstates,
                                   AjPStr moltype,
                                   AjPStr fiveflank,
                                   AjPStr threeflank,
@@ -1430,13 +3189,16 @@ EnsPGvvariation ensGvvariationNew(EnsPGvvariationadaptor gvva,
     AjPList list = NULL;
 
     AjPStr synonym = NULL;
-    AjPStr vstate  = NULL;
 
     EnsPGvallele gva = NULL;
 
     EnsPGvvariation gvv = NULL;
 
-    /* FIXME: Input restrictions are missing. */
+    if(!gvs)
+        return NULL;
+
+    if(!name)
+        return NULL;
 
     AJNEW0(gvv);
 
@@ -1446,11 +3208,10 @@ EnsPGvvariation ensGvvariationNew(EnsPGvvariationadaptor gvva,
 
     gvv->Adaptor = gvva;
 
+    gvv->Gvsource = ensGvsourceNewRef(gvs);
+
     if(name)
         gvv->Name = ajStrNewRef(name);
-
-    if(source)
-        gvv->Source = ajStrNewRef(source);
 
     if(ancestralallele)
         gvv->AncestralAllele = ajStrNewRef(ancestralallele);
@@ -1506,23 +3267,6 @@ EnsPGvvariation ensGvvariationNew(EnsPGvvariationadaptor gvva,
 
     ajListIterDel(&iter);
 
-    /* Copy the AJAX List of validation state AJAX Strings. */
-
-    gvv->ValidationStates = ajListstrNew();
-
-    iter = ajListIterNew(validationstates);
-
-    while(!ajListIterDone(iter))
-    {
-        vstate = (AjPStr) ajListIterGet(iter);
-
-        if(vstate)
-            ajListPushAppend(gvv->ValidationStates,
-                             (void *) ajStrNewRef(vstate));
-    }
-
-    ajListIterDel(&iter);
-
     if(moltype)
         gvv->MoleculeType = ajStrNewRef(moltype);
 
@@ -1534,6 +3278,9 @@ EnsPGvvariation ensGvvariationNew(EnsPGvvariationadaptor gvva,
 
     if(faileddescription)
         gvv->FailedDescription = ajStrNewRef(faileddescription);
+
+    gvv->ValidationStates =
+        ensGvvariationValidationStatesFromSet(validationstates);
 
     return gvv;
 }
@@ -1563,7 +3310,6 @@ EnsPGvvariation ensGvvariationNewObj(const EnsPGvvariation object)
     AjPList list = NULL;
 
     AjPStr synonym = NULL;
-    AjPStr vstate = NULL;
 
     EnsPGvallele gva = NULL;
 
@@ -1580,11 +3326,10 @@ EnsPGvvariation ensGvvariationNewObj(const EnsPGvvariation object)
 
     gvv->Adaptor = object->Adaptor;
 
+    gvv->Gvsource = ensGvsourceNewRef(object->Gvsource);
+
     if(object->Name)
         gvv->Name = ajStrNewRef(object->Name);
-
-    if(object->Source)
-        gvv->Source = ajStrNewRef(object->Source);
 
     /*
     ** Copy the AJAX Table of AJAX String key data (source database) and
@@ -1661,25 +3406,6 @@ EnsPGvvariation ensGvvariationNewObj(const EnsPGvvariation object)
 
     ajListIterDel(&iter);
 
-    /* Copy the AJAX List of variation state AJAX Strings. */
-
-    /* FIXME: The variation API stores those as a bit score! */
-
-    gvv->ValidationStates = ajListNew();
-
-    iter = ajListIterNew(object->ValidationStates);
-
-    while(!ajListIterDone(iter))
-    {
-        vstate = (AjPStr) ajListIterGet(iter);
-
-        if(vstate)
-            ajListPushAppend(gvv->ValidationStates,
-                             (void *) ajStrNewRef(vstate));
-    }
-
-    ajListIterDel(&iter);
-
     if(object->MoleculeType)
         gvv->MoleculeType = ajStrNewRef(object->MoleculeType);
 
@@ -1691,6 +3417,8 @@ EnsPGvvariation ensGvvariationNewObj(const EnsPGvvariation object)
 
     if(object->FailedDescription)
         gvv->FailedDescription = ajStrNewRef(object->FailedDescription);
+
+    gvv->ValidationStates = object->ValidationStates;
 
     return gvv;
 }
@@ -1793,8 +3521,9 @@ void ensGvvariationDel(EnsPGvvariation *Pgvv)
         return;
     }
 
+    ensGvsourceDel(&pthis->Gvsource);
+
     ajStrDel(&pthis->Name);
-    ajStrDel(&pthis->Source);
 
     /*
     ** Clear the AJAX Table of AJAX String key data (source database) and
@@ -1831,13 +3560,6 @@ void ensGvvariationDel(EnsPGvvariation *Pgvv)
 
     ajListFree(&pthis->Gvalleles);
 
-    /* Clear the AJAX List of validation state AJAX Strings. */
-
-    while(ajListPop(pthis->ValidationStates, (void **) &synonym))
-        ajStrDel(&synonym);
-
-    ajListFree(&pthis->ValidationStates);
-
     ajStrDel(&pthis->MoleculeType);
     ajStrDel(&pthis->FivePrimeFlank);
     ajStrDel(&pthis->ThreePrimeFlank);
@@ -1864,8 +3586,8 @@ void ensGvvariationDel(EnsPGvvariation *Pgvv)
 ** @nam3rule Get Return Genetic Variation Variation attribute(s)
 ** @nam4rule GetAdaptor Return the Ensembl Genetic Variation Variation Adaptor
 ** @nam4rule GetIdentifier Return the SQL database-internal identifier
+** @nam4rule GetGvsource Return the Ensembl Genetic Variation Source
 ** @nam4rule GetName Return the name
-** @nam4rule GetSource Return the source
 ** @nam4rule GetSynoyms Return synonms
 ** @nam4rule GetAncestralAllele Return the ancestral allele
 ** @nam4rule GetGvalleles Return Ensembl Genetic Variation Alleles
@@ -1880,12 +3602,12 @@ void ensGvvariationDel(EnsPGvvariation *Pgvv)
 ** @valrule Adaptor [EnsPGvvariationadaptor] Ensembl Genetic Variation
 **                                           Variation Adaptor
 ** @valrule Identifier [ajuint] SQL database-internal identifier
+** @valrule Gvsource [EnsPGvsource] Ensembl Genetic Variation Source
 ** @valrule Name [AjPStr] Name
-** @valrule Source [AjPStr] Source
 ** @valrule Synonyms [const AjPTable] Synoyms
 ** @valrule AncestralAllele [AjPStr] Ancestral allele
 ** @valrule Gvalleles [const AjPList] Ensembl Genetic Variation Alleles
-** @valrule ValidationStates [const AjPList] Validation states
+** @valrule ValidationStates [ajuint] Validation states
 ** @valrule MoleculeType [AjPStr] Molecule type
 ** @valrule fiveprimeflank [AjPStr] Five prime flank
 ** @valrule threeprimeflank [AjPStr] Three prime flank
@@ -1902,6 +3624,7 @@ void ensGvvariationDel(EnsPGvvariation *Pgvv)
 ** Get the Ensembl Genetic Variation Variation Adaptor element of an
 ** Ensembl Genetic Variation Variation.
 **
+** @cc Bio::EnsEMBL::Storable::adaptor
 ** @param [r] gvv [const EnsPGvvariation] Ensembl Genetic Variation Variation
 **
 ** @return [EnsPGvvariationadaptor] Ensembl Genetic Variation
@@ -1925,6 +3648,7 @@ EnsPGvvariationadaptor ensGvvariationGetAdaptor(const EnsPGvvariation gvv)
 ** Get the SQL database-internal identifier element of an
 ** Ensembl Genetic Variation Variation.
 **
+** @cc Bio::EnsEMBL::Storable::dbID
 ** @param [r] gvv [const EnsPGvvariation] Ensembl Genetic Variation Variation
 **
 ** @return [ajuint] Internal database identifier
@@ -1937,6 +3661,31 @@ ajuint ensGvvariationGetIdentifier(const EnsPGvvariation gvv)
         return 0;
 
     return gvv->Identifier;
+}
+
+
+
+
+/* @func ensGvvariationGetGvsource ********************************************
+**
+** Get the Ensembl Genetic Variation Source element of an
+** Ensembl Genetic Variation Variation.
+**
+** @cc Bio::EnsEMBL::Variation::Variation::source
+** @cc Bio::EnsEMBL::Variation::Variation::source_description
+** @cc Bio::EnsEMBL::Variation::Variation::source_url
+** @param [r] gvv [const EnsPGvvariation] Ensembl Genetic Variation Variation
+**
+** @return [EnsPGvsource] Ensembl Genetic Variation Source
+** @@
+******************************************************************************/
+
+EnsPGvsource ensGvvariationGetGvsource(const EnsPGvvariation gvv)
+{
+    if(!gvv)
+        return NULL;
+
+    return gvv->Gvsource;
 }
 
 
@@ -1964,34 +3713,13 @@ AjPStr ensGvvariationGetName(const EnsPGvvariation gvv)
 
 
 
-/* @func ensGvvariationGetSource **********************************************
-**
-** Get the source element of an Ensembl Genetic Variation Variation.
-**
-** @cc Bio::EnsEMBL::Variation::Variation::source
-** @param [r] gvv [const EnsPGvvariation] Ensembl Genetic Variation Variation
-**
-** @return [AjPStr] Source
-** @@
-******************************************************************************/
-
-AjPStr ensGvvariationGetSource(const EnsPGvvariation gvv)
-{
-    if(!gvv)
-        return NULL;
-
-    return gvv->Source;
-}
-
-
-
-
 /* @func ensGvvariationGetSynonyms ********************************************
 **
 ** Get the synonyms element of an Ensembl Genetic Variation Variation.
 ** Synonyms are stored in an AJAX Table of source AJAX String key data and
 ** AJAX List value data. The AJAX Lists contain synonym AJAX Strings.
 **
+** @cc Bio::EnsEMBL::Variation::Variation::get_all_synonyms
 ** @param [r] gvv [const EnsPGvvariation] Ensembl Genetic Variation Variation
 ** @see ensGvvariationFetchAllSynonyms
 ** @see ensGvvariationFetchAllSynonymSources
@@ -2064,14 +3792,14 @@ const AjPList ensGvvariationGetGvalleles(const EnsPGvvariation gvv)
 ** @cc Bio::EnsEMBL::Variation::Variation::get_all_validation_states
 ** @param [r] gvv [const EnsPGvvariation] Ensembl Genetic Variation Variation
 **
-** @return [const AjPList] AJAX List of AJAX String validation states
+** @return [ajuint] Validation states
 ** @@
 ******************************************************************************/
 
-const AjPList ensGvvariationGetValidationStates(const EnsPGvvariation gvv)
+ajuint ensGvvariationGetValidationStates(const EnsPGvvariation gvv)
 {
     if(!gvv)
-        return NULL;
+        return 0;
 
     return gvv->ValidationStates;
 }
@@ -2179,8 +3907,10 @@ AjPStr ensGvvariationGetFailedDescription(const EnsPGvvariation gvv)
 ** @nam3rule Set Set one element of a Genetic Variation Variation
 ** @nam4rule SetAdaptor Set the Ensembl Genetic Variation Variation Adaptor
 ** @nam4rule SetIdentifier Set the SQL database-internal identifier
+** @nam4rule SetGvsource Set the Ensembl Genetic Variation Source
 ** @nam4rule SetName Set the name
-** @nam4rule SetSource Set the source
+** @nam4rule SetSourceDescription Set the source description
+** @nam4rule SetSourceURL Set the source URL
 ** @nam4rule SetAncestralAllele Set the ancestral allele
 ** @nam4rule SetMoleculeType Set the molecule type
 ** @nam4rule SetFivePrimeFlank Set the five prime flank
@@ -2202,6 +3932,7 @@ AjPStr ensGvvariationGetFailedDescription(const EnsPGvvariation gvv)
 ** Set the Ensembl Genetic Variation Variation Adaptor element of an
 ** Ensembl Genetic Variation Variation.
 **
+** @cc Bio::EnsEMBL::Storable::adaptor
 ** @param [u] gvv [EnsPGvvariation] Ensembl Genetic Variation Variation
 ** @param [r] gvva [EnsPGvvariationadaptor] Ensembl Genetic Variation
 **                                          Variation Adaptor
@@ -2229,6 +3960,7 @@ AjBool ensGvvariationSetAdaptor(EnsPGvvariation gvv,
 ** Set the SQL database-internal identifier element of an
 ** Ensembl Genetic Variation Variation.
 **
+** @cc Bio::EnsEMBL::Storable::dbID
 ** @param [u] gvv [EnsPGvvariation] Ensembl Genetic Variation Variation
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 **
@@ -2236,7 +3968,8 @@ AjBool ensGvvariationSetAdaptor(EnsPGvvariation gvv,
 ** @@
 ******************************************************************************/
 
-AjBool ensGvvariationSetIdentifier(EnsPGvvariation gvv, ajuint identifier)
+AjBool ensGvvariationSetIdentifier(EnsPGvvariation gvv,
+                                   ajuint identifier)
 {
     if(!gvv)
         return ajFalse;
@@ -2249,10 +3982,42 @@ AjBool ensGvvariationSetIdentifier(EnsPGvvariation gvv, ajuint identifier)
 
 
 
+/* @func ensGvvariationSetGvsource ********************************************
+**
+** Set the Ensembl Genetic Variation Source element of an
+** Ensembl Genetic Variation Variation.
+**
+** @cc Bio::EnsEMBL::Variation::Variation::source
+** @cc Bio::EnsEMBL::Variation::Variation::source_description
+** @cc Bio::EnsEMBL::Variation::Variation::source_url
+** @param [u] gvv [EnsPGvvariation] Ensembl Genetic Variation Variation
+** @param [u] gvs [AjPStr] Ensembl Genetic Variation Source
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensGvvariationSetGvsource(EnsPGvvariation gvv,
+                                 EnsPGvsource gvs)
+{
+    if(!gvv)
+        return ajFalse;
+
+    ensGvsourceDel(&gvv->Gvsource);
+
+    gvv->Gvsource = ensGvsourceNewRef(gvs);
+
+    return ajTrue;
+}
+
+
+
+
 /* @func ensGvvariationSetName ************************************************
 **
 ** Set the name element of an Ensembl Genetic Variation Variation.
 **
+** @cc Bio::EnsEMBL::Variation::Variation::name
 ** @param [u] gvv [EnsPGvvariation] Ensembl Genetic Variation Variation
 ** @param [u] name [AjPStr] Name
 **
@@ -2260,7 +4025,8 @@ AjBool ensGvvariationSetIdentifier(EnsPGvvariation gvv, ajuint identifier)
 ** @@
 ******************************************************************************/
 
-AjBool ensGvvariationSetName(EnsPGvvariation gvv, AjPStr name)
+AjBool ensGvvariationSetName(EnsPGvvariation gvv,
+                             AjPStr name)
 {
     if(!gvv)
         return ajFalse;
@@ -2276,37 +4042,11 @@ AjBool ensGvvariationSetName(EnsPGvvariation gvv, AjPStr name)
 
 
 
-/* @func ensGvvariationSetSource **********************************************
-**
-** Set the source element of an Ensembl Genetic Variation Variation.
-**
-** @param [u] gvv [EnsPGvvariation] Ensembl Genetic Variation Variation
-** @param [u] source [AjPStr] Source
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-AjBool ensGvvariationSetSource(EnsPGvvariation gvv, AjPStr source)
-{
-    if(!gvv)
-        return ajFalse;
-
-    ajStrDel(&gvv->Source);
-
-    if(source)
-        gvv->Source = ajStrNewRef(source);
-
-    return ajTrue;
-}
-
-
-
-
 /* @func ensGvvariationSetAncestralAllele *************************************
 **
 ** Set the ancestral allele element of an Ensembl Genetic Variation Variation.
 **
+** @cc Bio::EnsEMBL::Variation::Variation::ancestral_allele
 ** @param [u] gvv [EnsPGvvariation] Ensembl Genetic Variation Variation
 ** @param [u] ancestralallele [AjPStr] Ancestral allele
 **
@@ -2335,6 +4075,7 @@ AjBool ensGvvariationSetAncestralAllele(EnsPGvvariation gvv,
 **
 ** Set the molecule type element of an Ensembl Genetic Variation Variation.
 **
+** @cc Bio::EnsEMBL::Variation::Variation::moltype
 ** @param [u] gvv [EnsPGvvariation] Ensembl Genetic Variation Variation
 ** @param [u] moltype [AjPStr] Molecule type
 **
@@ -2342,7 +4083,8 @@ AjBool ensGvvariationSetAncestralAllele(EnsPGvvariation gvv,
 ** @@
 ******************************************************************************/
 
-AjBool ensGvvariationSetMoleculeType(EnsPGvvariation gvv, AjPStr moltype)
+AjBool ensGvvariationSetMoleculeType(EnsPGvvariation gvv,
+                                     AjPStr moltype)
 {
     if(!gvv)
         return ajFalse;
@@ -2362,6 +4104,7 @@ AjBool ensGvvariationSetMoleculeType(EnsPGvvariation gvv, AjPStr moltype)
 **
 ** Set the five prime flank element of an Ensembl Genetic Variation Variation.
 **
+** @cc Bio::EnsEMBL::Variation::Variation::five_prime_flanking_seq
 ** @param [u] gvv [EnsPGvvariation] Ensembl Genetic Variation Variation
 ** @param [u] fiveflank [AjPStr] Five prime flank
 **
@@ -2390,6 +4133,7 @@ AjBool ensGvvariationSetFivePrimeFlank(EnsPGvvariation gvv,
 **
 ** Set the three prime flank element of an Ensembl Genetic Variation Variation.
 **
+** @cc Bio::EnsEMBL::Variation::Variation::three_prime_flanking_seq
 ** @param [u] gvv [EnsPGvvariation] Ensembl Genetic Variation Variation
 ** @param [u] threeflank [AjPStr] Three prime flank
 **
@@ -2419,6 +4163,7 @@ AjBool ensGvvariationSetThreePrimeFlank(EnsPGvvariation gvv,
 ** Set the failed description element of an
 ** Ensembl Genetic Variation Variation.
 **
+** @cc Bio::EnsEMBL::Variation::Variation::failed_description
 ** @param [u] gvv [EnsPGvvariation] Ensembl Genetic Variation Variation
 ** @param [u] faileddescription [AjPStr] Failed description
 **
@@ -2443,77 +4188,119 @@ AjBool ensGvvariationSetFailedDescription(EnsPGvvariation gvv,
 
 
 
-/* @func ensGvvariationGetMemSize *********************************************
+/* @func ensGvvariationGetMemsize *********************************************
 **
 ** Get the memory size in bytes of an
 ** Ensembl Genetic Variation Variation.
 **
 ** @param [r] gvv [const EnsPGvvariation] Ensembl Genetic Variation Variation
 **
-** @return [ajuint] Memory size
+** @return [ajulong] Memory size
 ** @@
 ******************************************************************************/
 
-ajuint ensGvvariationGetMemSize(const EnsPGvvariation gvv)
+ajulong ensGvvariationGetMemsize(const EnsPGvvariation gvv)
 {
-    ajuint size = 0;
+    void **keyarray = NULL;
+    void **valarray = NULL;
+
+    register ajuint i = 0;
+
+    ajulong size = 0;
+
+    AjIList iter = NULL;
+
+    AjPStr synonym = NULL;
+
+    EnsPGvallele gva = NULL;
 
     if(!gvv)
         return 0;
 
-    size += (ajuint) sizeof (EnsOGvvariation);
+    size += sizeof (EnsOGvvariation);
+
+    size += ensGvsourceGetMemsize(gvv->Gvsource);
 
     if(gvv->Name)
     {
-        size += (ajuint) sizeof (AjOStr);
+        size += sizeof (AjOStr);
 
         size += ajStrGetRes(gvv->Name);
     }
 
-    if(gvv->Source)
-    {
-        size += (ajuint) sizeof (AjOStr);
+    /* Summarise the AJAX Table of Synonms. */
 
-        size += ajStrGetRes(gvv->Source);
+    ajTableToarrayKeysValues(gvv->Synonyms, &keyarray, &valarray);
+
+    for(i = 0; keyarray[i]; i++)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes((AjPStr) keyarray[i]);
+
+        size += sizeof (AjOList);
+
+        iter = ajListIterNew((AjPList) valarray[i]);
+
+        while(!ajListIterDone(iter))
+        {
+            synonym = (AjPStr) ajListIterGet(iter);
+
+            size += sizeof (AjOStr);
+
+            size += ajStrGetRes(synonym);
+        }
+
+        ajListIterDel(&iter);
     }
 
-    /* FIXME: AJAX Table of Synonms is missing! */
+    AJFREE(keyarray);
+    AJFREE(valarray);
 
     if(gvv->AncestralAllele)
     {
-        size += (ajuint) sizeof (AjOStr);
+        size += sizeof (AjOStr);
 
         size += ajStrGetRes(gvv->AncestralAllele);
     }
 
-    /* FIXME: AJAX List of Ensembl Genetic Variation Alleles is missing! */
+    /* Summarise the AJAX List of Ensembl Genetic Variation Alleles. */
 
-    /* FIXME: AJAX List of AJAX String validation states is missing! */
+    iter = ajListIterNew(gvv->Gvalleles);
+
+    while(!ajListIterDone(iter))
+    {
+        gva = (EnsPGvallele) ajListIterGet(iter);
+
+        size += ensGvalleleGetMemsize(gva);
+    }
+
+    ajListIterDel(&iter);
 
     if(gvv->MoleculeType)
     {
-        size += (ajuint) sizeof (AjOStr);
+        size += sizeof (AjOStr);
 
         size += ajStrGetRes(gvv->MoleculeType);
     }
 
     if(gvv->FivePrimeFlank)
     {
-        size += (ajuint) sizeof (AjOStr);
+        size += sizeof (AjOStr);
 
         size += ajStrGetRes(gvv->FivePrimeFlank);
     }
 
     if(gvv->ThreePrimeFlank)
     {
-        size += (ajuint) sizeof (AjOStr);
+        size += sizeof (AjOStr);
 
         size += ajStrGetRes(gvv->ThreePrimeFlank);
     }
 
     if(gvv->FailedDescription)
     {
-        size += (ajuint) sizeof (AjOStr);
+        size += sizeof (AjOStr);
 
         size += ajStrGetRes(gvv->FailedDescription);
     }
@@ -2557,7 +4344,18 @@ ajuint ensGvvariationGetMemSize(const EnsPGvvariation gvv)
 
 AjBool ensGvvariationTrace(const EnsPGvvariation gvv, ajuint level)
 {
-    AjPStr indent = NULL;
+    void **keyarray = NULL;
+    void **valarray = NULL;
+
+    register ajuint i = 0;
+
+    AjIList iter = NULL;
+
+    AjPStr indent  = NULL;
+    AjPStr synonym = NULL;
+    AjPStr states  = NULL;
+
+    EnsPGvallele gva = NULL;
 
     if(!gvv)
         return ajFalse;
@@ -2566,42 +4364,84 @@ AjBool ensGvvariationTrace(const EnsPGvvariation gvv, ajuint level)
 
     ajStrAppendCountK(&indent, ' ', level * 2);
 
-    ajDebug("ensGvvariationTrace %p\n"
+    ajDebug("%SensGvvariationTrace %p\n"
             "%S  Use %u\n"
             "%S  Identifier %u\n"
             "%S  Adaptor %p\n"
+            "%S  Gvsource %p\n"
             "%S  Name '%S'\n"
-            "%S  Source '%S'\n"
             "%S  Synonyms %p\n"
             "%S  AncestralAllele '%S'\n"
             "%S  Gvalleles %p\n"
-            "%S  ValidationStates %p\n"
             "%S  MoleculeType '%S'\n"
             "%S  FivePrimeFlank '%S'\n"
             "%S  ThreePrimeFlank '%S'\n"
-            "%S  FailedDescription '%S'\n",
+            "%S  FailedDescription '%S'\n"
+            "%S  ValidationStates %u\n",
             indent, gvv,
             indent, gvv->Use,
             indent, gvv->Identifier,
             indent, gvv->Adaptor,
+            indent, gvv->Gvsource,
             indent, gvv->Name,
-            indent, gvv->Source,
             indent, gvv->Synonyms,
             indent, gvv->AncestralAllele,
             indent, gvv->Gvalleles,
-            indent, gvv->ValidationStates,
             indent, gvv->MoleculeType,
             indent, gvv->FivePrimeFlank,
             indent, gvv->ThreePrimeFlank,
-            indent, gvv->FailedDescription);
+            indent, gvv->FailedDescription,
+            indent, gvv->ValidationStates);
+
+    states = ajStrNew();
+
+    ensGvvariationValidationStatesToSet(gvv->ValidationStates, &states);
+
+    ajDebug("%S  Validation States SQL set: '%S'\n", indent, states);
+
+    ajStrDel(&states);
+
+    ensGvsourceTrace(gvv->Gvsource, level + 1);
+
+    /* Trace the AJAX Table of Synonyms! */
+
+    ajDebug("%S  Synonyms:\n", indent);
+
+    ajTableToarrayKeysValues(gvv->Synonyms, &keyarray, &valarray);
+
+    for(i = 0; keyarray[i]; i++)
+    {
+        ajDebug("%S    '%S'", indent, (AjPStr) keyarray[i]);
+
+        iter = ajListIterNew((AjPList) valarray[i]);
+
+        while(!ajListIterDone(iter))
+        {
+            synonym = (AjPStr) ajListIterGet(iter);
+
+            ajDebug("%S      '%S'", indent, synonym);
+        }
+
+        ajListIterDel(&iter);
+    }
+
+    AJFREE(keyarray);
+    AJFREE(valarray);
+
+    /* Trace the AJAX List of Ensembl Genetic Variation Alleles. */
+
+    iter = ajListIterNew(gvv->Gvalleles);
+
+    while(!ajListIterDone(iter))
+    {
+        gva = (EnsPGvallele) ajListIterGet(iter);
+
+        ensGvalleleTrace(gva, level + 1);
+    }
+
+    ajListIterDel(&iter);
 
     ajStrDel(&indent);
-
-    /* FIXME: AJAX Table of Synonms is missing! */
-
-    /* FIXME: AJAX List of Ensembl Genetic Variation Alleles is missing! */
-
-    /* FIXME: AJAX List of AJAX String validation states is missing! */
 
     return ajTrue;
 }
@@ -2701,6 +4541,33 @@ AjBool ensGvvariationAddGvallele(EnsPGvvariation gvv, EnsPGvallele gva)
 
 
 
+/* @func ensGvvariationAddValidationState *************************************
+**
+** Add a validation state to an Ensembl Genetic Variation Variation.
+**
+** @cc Bio::EnsEMBL::Variation::Variation::add_validation_state
+** @param [u] gvv [EnsPGvvariation] Ensembl Genetic Variation Variation
+** @param [r] state [EnsEGvvariationValidationState] Ensembl Genetic
+**                                                   Variation Variation state
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensGvvariationAddValidationState(EnsPGvvariation gvv,
+                                        EnsEGvvariationValidationState state)
+{
+    if(!gvv)
+        return ajFalse;
+
+    gvv->ValidationStates |= (1 << state);
+
+    return ajTrue;
+}
+
+
+
+
 /* @func ensGvvariationValidationStateFromStr *********************************
 **
 ** Convert an AJAX String into an Ensembl Genetic Variaton Variation
@@ -2708,19 +4575,25 @@ AjBool ensGvvariationAddGvallele(EnsPGvvariation gvv, EnsPGvallele gva)
 **
 ** @param [r] state [const AjPStr] Validation state string
 **
-** @return [AjEnum] Ensembl Genetic Variation validation state element or
-**                  ensEGvvariationValidationStateNULL
+** @return [EnsEGvvariationValidationState] Ensembl Genetic Variation
+**                                          Variation validation state or
+**                                          ensEGvvariationValidationStateNULL
 ** @@
 ******************************************************************************/
 
-AjEnum ensGvvariationValidationStateFromStr(const AjPStr state)
+EnsEGvvariationValidationState ensGvvariationValidationStateFromStr(
+    const AjPStr state)
 {
-    register ajint i = 0;
+    register EnsEGvvariationValidationState i =
+        ensEGvvariationValidationStateNULL;
 
-    AjEnum estate = ensEGvvariationValidationStateNULL;
+    EnsEGvvariationValidationState estate =
+        ensEGvvariationValidationStateNULL;
 
-    for(i = 1; gvVariationValidationState[i]; i++)
-        if(ajStrMatchC(state, gvVariationValidationState[i]))
+    for(i = ensEGvvariationValidationStateCluster;
+        gvvariationValidationState[i];
+        i++)
+        if(ajStrMatchC(state, gvvariationValidationState[i]))
             estate = i;
 
     if(!estate)
@@ -2738,28 +4611,115 @@ AjEnum ensGvvariationValidationStateFromStr(const AjPStr state)
 ** Convert an Ensembl Genetic Variation Variation validation state element
 ** into a C-type (char*) string.
 **
-** @param [r] state [const AjEnum] Ensembl Genetic Variation Variation
-**                                 validation state enumerator
+** @param [r] state [EnsEGvvariationValidationState] Ensembl Genetic Variation
+**                                                   Variation validation state
 **
 ** @return [const char*] Ensembl Genetic Variation Variation validation state
 **                       C-type (char*) string
 ** @@
 ******************************************************************************/
 
-const char* ensGvvariationValidationStateToChar(const AjEnum state)
+const char* ensGvvariationValidationStateToChar(
+    EnsEGvvariationValidationState state)
 {
-    register ajint i = 0;
+    register EnsEGvvariationValidationState i =
+        ensEGvvariationValidationStateNULL;
 
     if(!state)
         return NULL;
 
-    for(i = 1; gvVariationValidationState[i] && (i < state); i++);
+    for(i = ensEGvvariationValidationStateCluster;
+        gvvariationValidationState[i] && (i < state);
+        i++);
 
-    if(!gvVariationValidationState[i])
+    if(!gvvariationValidationState[i])
         ajDebug("ensGvvariationValidationStateToChar encountered an "
                 "out of boundary error on gender %d.\n", state);
 
-    return gvVariationValidationState[i];
+    return gvvariationValidationState[i];
+}
+
+
+
+
+/* @func ensGvvariationValidationStatesFromSet ********************************
+**
+** Convert an AJAX String representing a comma-separared SQL set of validation
+** states into an Ensembl Genetic Variaton Variation validation state element.
+** The validation states are represented as bits of an AJAX unsigned integer.
+**
+** @param [r] set [const AjPStr] Comma-separated SQL set
+**
+** @return [ajuint] Ensembl Genetic Variation Variation validation state or 0
+** @@
+******************************************************************************/
+
+ajuint ensGvvariationValidationStatesFromSet(const AjPStr set)
+{
+    ajuint states = 0;
+
+    AjPStr state = NULL;
+
+    AjPStrTok token = NULL;
+
+    if(!set)
+        return 0;
+
+    /* Split the comma-separated list of validation states. */
+
+    token = ajStrTokenNewC(set, ",");
+
+    state = ajStrNew();
+
+    while(ajStrTokenNextParse(&token, &state))
+        states |= (1 << ensGvvariationValidationStateFromStr(state));
+
+    ajStrDel(&state);
+
+    ajStrTokenDel(&token);
+
+    return states;
+}
+
+
+
+
+/* @func ensGvvariationValidationStatesToSet **********************************
+**
+** Convert an AJAX Integer into an AJAX String representing a comma-separared
+** SQL set of Ensembl Genetic Variation Variation validation states.
+** The validation states are represented as bits of an AJAX unsigned integer.
+**
+** The caller is responsible for deleting the AJAX String.
+**
+** @param [r] set [const AjPStr] Comma-separated SQL set
+**
+** @return [ajuint] Ensembl Genetic Variation Variation validation state or 0
+** @@
+******************************************************************************/
+
+AjBool ensGvvariationValidationStatesToSet(ajuint states, AjPStr *Pstr)
+{
+    register ajuint i = 0;
+
+    if(*Pstr)
+        ajStrAssignClear(Pstr);
+    else
+        *Pstr = ajStrNew();
+
+    for(i = 1; gvvariationValidationState[i]; i++)
+        if(states & (1 << i))
+        {
+            ajStrAppendC(Pstr, gvvariationValidationState[i]);
+            ajStrAppendC(Pstr, ",");
+        }
+
+    /* Remove the last comma if one exists. */
+
+    if(ajStrGetLen(*Pstr) > 0)
+        ajStrCutEnd(Pstr, 1);
+
+    return ajTrue;
 }
 
 
@@ -2952,7 +4912,7 @@ ensGvvariationFetchHandleBySynonym(EnsPGvvariation gvv,
 
 
 
-/* @funcstatic gvVariationadaptorClearAlleles *********************************
+/* @funcstatic gvvariationadaptorClearAlleles *********************************
 **
 ** An ajTableMapDel 'apply' function to clear the Ensembl Genetic Variation
 ** Variation Adaptor-internal Genetic Variation Alleles cache. This function
@@ -2969,7 +4929,7 @@ ensGvvariationFetchHandleBySynonym(EnsPGvvariation gvv,
 ** @@
 ******************************************************************************/
 
-static void gvVariationadaptorClearAlleles(void **key, void **value, void *cl)
+static void gvvariationadaptorClearAlleles(void **key, void **value, void *cl)
 {
     if(!key)
         return;
@@ -2995,7 +4955,7 @@ static void gvVariationadaptorClearAlleles(void **key, void **value, void *cl)
 
 
 
-/* @funcstatic gvVariationadaptorClearPopulations *****************************
+/* @funcstatic gvvariationadaptorClearPopulations *****************************
 **
 ** An ajTableMapDel 'apply' function to clear the Ensembl Genetic Variation
 ** Variation Adaptor-internal Genetic Variation Population cache. This function
@@ -3012,7 +4972,7 @@ static void gvVariationadaptorClearAlleles(void **key, void **value, void *cl)
 ** @@
 ******************************************************************************/
 
-static void gvVariationadaptorClearPopulations(void **key, void **value,
+static void gvvariationadaptorClearPopulations(void **key, void **value,
                                                void *cl)
 {
     if(!key)
@@ -3039,7 +4999,7 @@ static void gvVariationadaptorClearPopulations(void **key, void **value,
 
 
 
-/* @funcstatic gvVariationadaptorClearSynonyms ********************************
+/* @funcstatic gvvariationadaptorClearSynonyms ********************************
 **
 ** An ajTableMapDel 'apply' function to clear the Ensembl Genetic Variation
 ** Variation Adaptor-internal synonym cache. This function deletes the
@@ -3054,7 +5014,7 @@ static void gvVariationadaptorClearPopulations(void **key, void **value,
 ** @@
 ******************************************************************************/
 
-static void gvVariationadaptorClearSynonyms(void **key, void **value, void *cl)
+static void gvvariationadaptorClearSynonyms(void **key, void **value, void *cl)
 {
     if(!key)
         return;
@@ -3080,7 +5040,7 @@ static void gvVariationadaptorClearSynonyms(void **key, void **value, void *cl)
 
 
 
-/* @funcstatic gvVariationadaptorFetchAllBySQL ********************************
+/* @funcstatic gvvariationadaptorFetchAllBySQL ********************************
 **
 ** Fetch all Ensembl Genetic Variation Variation objects via an SQL statement.
 **
@@ -3094,7 +5054,7 @@ static void gvVariationadaptorClearSynonyms(void **key, void **value, void *cl)
 ** @@
 ******************************************************************************/
 
-static AjBool gvVariationadaptorFetchAllBySQL(EnsPGvvariationadaptor gvva,
+static AjBool gvvariationadaptorFetchAllBySQL(EnsPGvvariationadaptor gvva,
                                               const AjPStr statement,
                                               AjPList gvvs)
 {
@@ -3106,18 +5066,16 @@ static AjBool gvVariationadaptorFetchAllBySQL(EnsPGvvariationadaptor gvva,
     ajuint allelessid     = 0;
     ajuint cidentifier    = 0;
     ajuint calleleid      = 0;
+    ajuint sourceid       = 0;
 
     ajuint *Pidentifier = NULL;
-
-    AjPList vlist = NULL;
 
     AjPSqlstatement sqls = NULL;
     AjISqlrow sqli       = NULL;
     AjPSqlrow sqlr       = NULL;
 
     AjPStr name            = NULL;
-    AjPStr vstatus         = NULL;
-    AjPStr source          = NULL;
+    AjPStr vstates         = NULL;
     AjPStr ancestralallele = NULL;
     AjPStr allelestr       = NULL;
     AjPStr moltype         = NULL;
@@ -3126,9 +5084,6 @@ static AjBool gvVariationadaptorFetchAllBySQL(EnsPGvvariationadaptor gvva,
     AjPStr synsource       = NULL;
     AjPStr failed          = NULL;
     AjPStr key             = NULL;
-    AjPStr vtoken          = NULL;
-
-    AjPStrTok token = NULL;
 
     AjPTable alleles     = NULL;
     AjPTable populations = NULL;
@@ -3141,6 +5096,9 @@ static AjBool gvVariationadaptorFetchAllBySQL(EnsPGvvariationadaptor gvva,
     EnsPGvpopulationadaptor gvpa = NULL;
 
     EnsPGvvariation gvv = NULL;
+
+    EnsPGvsource gvs         = NULL;
+    EnsPGvsourceadaptor gvsa = NULL;
 
     if(!gvva)
         return ajFalse;
@@ -3159,34 +5117,36 @@ static AjBool gvVariationadaptorFetchAllBySQL(EnsPGvvariationadaptor gvva,
 
     gvpa = ensRegistryGetGvpopulationadaptor(gvva);
 
+    gvsa = ensRegistryGetGvsourceadaptor(gvva);
+
     sqls = ensDatabaseadaptorSqlstatementNew(gvva, statement);
 
     sqli = ajSqlrowiterNew(sqls);
 
     while(!ajSqlrowiterDone(sqli))
     {
-        identifier     = 0;
-        name           = ajStrNew();
-        vstatus        = ajStrNew();
-        vtoken         = ajStrNew();
-        source         = ajStrNew();
-        alleleid       = 0;
-        allelessid     = 0;
-        allelestr      = ajStrNew();
-        allelefreq     = 0;
-        allelesampleid = 0;
-        moltype        = ajStrNew();
-        synname        = ajStrNew();
-        synhandle      = ajStrNew();
-        synsource      = ajStrNew();
-        failed         = ajStrNew();
+        identifier      = 0;
+        sourceid        = 0;
+        name            = ajStrNew();
+        vstates         = ajStrNew();
+        ancestralallele = ajStrNew();
+        alleleid        = 0;
+        allelessid      = 0;
+        allelestr       = ajStrNew();
+        allelefreq      = 0;
+        allelesampleid  = 0;
+        moltype         = ajStrNew();
+        synname         = ajStrNew();
+        synhandle       = ajStrNew();
+        synsource       = ajStrNew();
+        failed          = ajStrNew();
 
         sqlr = ajSqlrowiterGet(sqli);
 
         ajSqlcolumnToUint(sqlr, &identifier);
+        ajSqlcolumnToUint(sqlr, &sourceid);
         ajSqlcolumnToStr(sqlr, &name);
-        ajSqlcolumnToStr(sqlr, &vstatus);
-        ajSqlcolumnToStr(sqlr, &source);
+        ajSqlcolumnToStr(sqlr, &vstates);
         ajSqlcolumnToStr(sqlr, &ancestralallele);
         ajSqlcolumnToUint(sqlr, &alleleid);
         ajSqlcolumnToUint(sqlr, &allelessid);
@@ -3201,26 +5161,16 @@ static AjBool gvVariationadaptorFetchAllBySQL(EnsPGvvariationadaptor gvva,
 
         if(cidentifier != identifier)
         {
-            /* Split the comma-separated list of validation states. */
-
-            token = ajStrTokenNewC(vstatus, ",");
-
-            vlist = ajListNew();
-
-            while(ajStrTokenNextParse(&token, &vtoken))
-                ajListPushAppend(vlist, (void *) ajStrNewS(vtoken));
-
-            if(ajListGetLength(vlist) == 0)
-                ajListPushAppend(vlist, (void *) ajStrNew());
+            ensGvsourceadaptorFetchByIdentifier(gvsa, sourceid, &gvs);
 
             gvv = ensGvvariationNew(gvva,
                                     identifier,
+                                    gvs,
                                     name,
-                                    source,
                                     ancestralallele,
                                     (AjPTable) NULL, /* synonyms */
                                     (AjPList) NULL, /* alleles */
-                                    vlist,
+                                    vstates,
                                     moltype,
                                     (AjPStr) NULL, /* fiveflank */
                                     (AjPStr) NULL, /* threeflank */
@@ -3228,12 +5178,7 @@ static AjBool gvVariationadaptorFetchAllBySQL(EnsPGvvariationadaptor gvva,
 
             ajListPushAppend(gvvs, (void *) gvv);
 
-            /* Clear the AJAX List of validation states. */
-
-            while(ajListPop(vlist, (void **) &vtoken))
-                ajStrDel(&vtoken);
-
-            ajListFree(&vlist);
+            ensGvsourceDel(&gvs);
 
             cidentifier = identifier;
         }
@@ -3304,8 +5249,7 @@ static AjBool gvVariationadaptorFetchAllBySQL(EnsPGvvariationadaptor gvva,
         }
 
         ajStrDel(&name);
-        ajStrDel(&vstatus);
-        ajStrDel(&source);
+        ajStrDel(&vstates);
         ajStrDel(&ancestralallele);
         ajStrDel(&allelestr);
         ajStrDel(&moltype);
@@ -3317,23 +5261,23 @@ static AjBool gvVariationadaptorFetchAllBySQL(EnsPGvvariationadaptor gvva,
 
     ajSqlrowiterDel(&sqli);
 
-    ajSqlstatementDel(&sqls);
+    ensDatabaseadaptorSqlstatementDel(gvva, &sqls);
 
     /* Clear the AJAX Table of Ensembl Genetic Variation Populations. */
 
-    ajTableMapDel(populations, gvVariationadaptorClearPopulations, NULL);
+    ajTableMapDel(populations, gvvariationadaptorClearPopulations, NULL);
 
     ajTableFree(&populations);
 
     /* Clear the AJAX Table of Ensembl Genetic Variation Alleles. */
 
-    ajTableMapDel(alleles, gvVariationadaptorClearAlleles, NULL);
+    ajTableMapDel(alleles, gvvariationadaptorClearAlleles, NULL);
 
     ajTableFree(&alleles);
 
     /* Clear the AJAX Table of Synonyms. */
 
-    ajTableMapDel(synonyms, gvVariationadaptorClearSynonyms, NULL);
+    ajTableMapDel(synonyms, gvvariationadaptorClearSynonyms, NULL);
 
     ajTableFree(&synonyms);
 
@@ -3383,9 +5327,9 @@ AjBool ensGvvariationadaptorFetchByIdentifier(EnsPGvvariationadaptor gvva,
     statement = ajFmtStr(
         "SELECT "
         "variation.variation_id, "
+        "variation.source_id, "
         "variation.name, "
         "variation.validation_status, "
-        "source1.name, "
         "variation.ancestral_allele, "
         "allele.allele_id, "
         "allele.subsnp_id, "
@@ -3435,7 +5379,7 @@ AjBool ensGvvariationadaptorFetchByIdentifier(EnsPGvvariationadaptor gvva,
 
     variations = ajListNew();
 
-    gvVariationadaptorFetchAllBySQL(gvva, statement, variations);
+    gvvariationadaptorFetchAllBySQL(gvva, statement, variations);
 
     if(ajListGetLength(variations) > 1)
         ajWarn("ensGvvariationadaptorFetchByIdentifier go more than one "
@@ -3480,8 +5424,8 @@ AjBool ensGvvariationadaptorFetchByName(EnsPGvvariationadaptor gvva,
                                         const AjPStr source,
                                         EnsPGvvariation *Pgvv)
 {
-    char *Ptxtname   = NULL;
-    char *Ptxtsource = NULL;
+    char *txtname   = NULL;
+    char *txtsource = NULL;
 
     AjPList gvvs = NULL;
 
@@ -3499,15 +5443,15 @@ AjBool ensGvvariationadaptorFetchByName(EnsPGvvariationadaptor gvva,
     if(!Pgvv)
         return ajFalse;
 
-    ensDatabaseadaptorEscapeC(gvva, &Ptxtname, name);
+    ensDatabaseadaptorEscapeC(gvva, &txtname, name);
 
     if(source && ajStrGetLen(source))
     {
-        ensDatabaseadaptorEscapeC(gvva, &Ptxtsource, source);
+        ensDatabaseadaptorEscapeC(gvva, &txtsource, source);
 
-        extra = ajFmtStr("AND source1.name = '%s' ", Ptxtsource);
+        extra = ajFmtStr("AND source1.name = '%s' ", txtsource);
 
-        ajCharDel(&Ptxtsource);
+        ajCharDel(&txtsource);
     }
     else
         extra = ajStrNew();
@@ -3515,9 +5459,9 @@ AjBool ensGvvariationadaptorFetchByName(EnsPGvvariationadaptor gvva,
     statement = ajFmtStr(
         "SELECT "
         "variation.variation_id, "
+        "variation.source_id, "
         "variation.name, "
         "variation.validation_status, "
-        "source1.name, "
         "variation.ancestral_allele, "
         "allele.allele_id, "
         "allele.subsnp_id, "
@@ -3589,12 +5533,12 @@ AjBool ensGvvariationadaptorFetchByName(EnsPGvvariationadaptor gvva,
         "%S "
         "ORDER BY "
         "allele.allele_id",
-        Ptxtname,
+        txtname,
         extra);
 
     gvvs = ajListNew();
 
-    gvVariationadaptorFetchAllBySQL(gvva, statement, gvvs);
+    gvvariationadaptorFetchAllBySQL(gvva, statement, gvvs);
 
     ajStrDel(&statement);
 
@@ -3608,9 +5552,9 @@ AjBool ensGvvariationadaptorFetchByName(EnsPGvvariationadaptor gvva,
         statement = ajFmtStr(
             "SELECT "
             "variation.variation_id, "
+            "variation.source_id, "
             "variation.name, "
             "variation.validation_status, "
-            "source1.name, "
             "variation.ancestral_allele, "
             "allele.allele_id, "
             "allele.subsnp_id, "
@@ -3655,10 +5599,10 @@ AjBool ensGvvariationadaptorFetchByName(EnsPGvvariationadaptor gvva,
             "%S "
             "ORDER BY "
             "allele.allele_id",
-            Ptxtname,
+            txtname,
             extra);
 
-        gvVariationadaptorFetchAllBySQL(gvva, statement, gvvs);
+        gvvariationadaptorFetchAllBySQL(gvva, statement, gvvs);
 
         ajStrDel(&statement);
     }
@@ -3675,7 +5619,7 @@ AjBool ensGvvariationadaptorFetchByName(EnsPGvvariationadaptor gvva,
 
     ajListFree(&gvvs);
 
-    ajCharDel(&Ptxtname);
+    ajCharDel(&txtname);
 
     ajStrDel(&extra);
 
@@ -3692,8 +5636,8 @@ AjBool ensGvvariationadaptorFetchByName(EnsPGvvariationadaptor gvva,
 ** Ensembl Genetic Variation Variations before deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::VariationAdaptor::fetch_all_by_source
-** @param [u] gvva [const EnsPGvvariationadaptor] Ensembl Genetic Variation
-**                                                Variation Adaptor
+** @param [u] gvva [EnsPGvvariationadaptor] Ensembl Genetic Variation
+**                                          Variation Adaptor
 ** @param [r] source [const AjPStr] Source
 ** @param [r] primary [AjBool] Primary
 ** @param [u] gvvs [AjPList] AJAX List of Ensembl Genetic Variation Variations
@@ -3707,7 +5651,7 @@ AjBool ensGvvariationadaptorFetchAllBySource(EnsPGvvariationadaptor gvva,
                                              AjBool primary,
                                              AjPList gvvs)
 {
-    char *Ptxtsource = NULL;
+    char *txtsource = NULL;
 
     AjPStr statement = NULL;
 
@@ -3720,14 +5664,14 @@ AjBool ensGvvariationadaptorFetchAllBySource(EnsPGvvariationadaptor gvva,
     if(!gvvs)
         return ajFalse;
 
-    ensDatabaseadaptorEscapeC(gvva, &Ptxtsource, source);
+    ensDatabaseadaptorEscapeC(gvva, &txtsource, source);
 
     statement = ajFmtStr(
         "SELECT "
         "variation.variation_id, "
+        "variation.source_id, "
         "variation.name, "
         "variation.validation_status, "
-        "source1.name, "
         "variation.ancestral_allele, "
         "allele.allele_id, "
         "allele.subsnp_id, "
@@ -3776,9 +5720,9 @@ AjBool ensGvvariationadaptorFetchAllBySource(EnsPGvvariationadaptor gvva,
         "source1.source_id "
         "AND "
         "source1.name = '%s'",
-        Ptxtsource);
+        txtsource);
 
-    gvVariationadaptorFetchAllBySQL(gvva, statement, gvvs);
+    gvvariationadaptorFetchAllBySQL(gvva, statement, gvvs);
 
     ajStrDel(&statement);
 
@@ -3792,9 +5736,9 @@ AjBool ensGvvariationadaptorFetchAllBySource(EnsPGvvariationadaptor gvva,
         statement = ajFmtStr(
             "SELECT "
             "variation.variation_id, "
+            "variation.source_id, "
             "variation.name, "
             "variation.validation_status, "
-            "source1.name, "
             "variation.ancestral_allele, "
             "allele.allele_id, "
             "allele.subsnp_id, "
@@ -3835,16 +5779,16 @@ AjBool ensGvvariationadaptorFetchAllBySource(EnsPGvvariationadaptor gvva,
             "source2.name = '%s' "
             "ORDER BY "
             "variation.variation_id",
-            Ptxtsource);
+            txtsource);
 
         /* need to merge both lists, trying to avoid duplicates. */
 
-        gvVariationadaptorFetchAllBySQL(gvva, statement, gvvs);
+        gvvariationadaptorFetchAllBySQL(gvva, statement, gvvs);
 
         ajStrDel(&statement);
     }
 
-    ajCharDel(&Ptxtsource);
+    ajCharDel(&txtsource);
 
     return ajTrue;
 }
@@ -3852,7 +5796,7 @@ AjBool ensGvvariationadaptorFetchAllBySource(EnsPGvvariationadaptor gvva,
 
 
 
-/* @func ensGvvariationAdaptorFetchAllByGgvopulation **************************
+/* @func ensGvvariationadaptorFetchAllByGvpopulation **************************
 **
 ** Fetch all Ensembl Genetic Variation Variations via an
 ** Ensembl Genetic Variation Population.
@@ -3870,7 +5814,7 @@ AjBool ensGvvariationadaptorFetchAllBySource(EnsPGvvariationadaptor gvva,
 ** @@
 ******************************************************************************/
 
-AjBool ensGvvariationAdaptorFetchAllByGvpopulation(EnsPGvvariationadaptor gvva,
+AjBool ensGvvariationadaptorFetchAllByGvpopulation(EnsPGvvariationadaptor gvva,
                                                    const EnsPGvpopulation gvp,
                                                    AjPList gvvs)
 {
@@ -3888,9 +5832,9 @@ AjBool ensGvvariationAdaptorFetchAllByGvpopulation(EnsPGvvariationadaptor gvva,
     statement = ajFmtStr(
         "SELECT "
         "variation.variation_id, "
+        "variation.source_id, "
         "variation.name, "
         "variation.validation_status, "
-        "source1.name, "
         "variation.ancestral_allele, "
         "allele.allele_id, "
         "allele.subsnp_id, "
@@ -3938,7 +5882,7 @@ AjBool ensGvvariationAdaptorFetchAllByGvpopulation(EnsPGvvariationadaptor gvva,
         "allele.smaple_id = %u",
         ensGvpopulationGetIdentifier(gvp));
 
-    gvVariationadaptorFetchAllBySQL(gvva, statement, gvvs);
+    gvvariationadaptorFetchAllBySQL(gvva, statement, gvvs);
 
     ajStrDel(&statement);
 
@@ -3961,6 +5905,8 @@ AjBool ensGvvariationAdaptorFetchAllByGvpopulation(EnsPGvvariationadaptor gvva,
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
+** NOTE: In this implementation, Ensembl Genetic Variation Sources are modelled
+** as an independent class. See ensGvsourceadaptorFetchAll().
 ******************************************************************************/
 
 AjBool ensGvvariationadaptorFetchAllSources(EnsPGvvariationadaptor gvva,
@@ -4000,7 +5946,7 @@ AjBool ensGvvariationadaptorFetchAllSources(EnsPGvvariationadaptor gvva,
 
     ajSqlrowiterDel(&sqli);
 
-    ajSqlstatementDel(&sqls);
+    ensDatabaseadaptorSqlstatementDel(gvva, &sqls);
 
     ajStrDel(&statement);
 
@@ -4010,16 +5956,16 @@ AjBool ensGvvariationadaptorFetchAllSources(EnsPGvvariationadaptor gvva,
 
 
 
-/* @func ensGvvariationAdaptorFetchSourceVersion ******************************
+/* @func ensGvvariationadaptorFetchSourceVersion ******************************
 **
 ** Fetch the version of a source.
 ** The caller is responsible for deleting the AJAX String.
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::VariationAdaptor::get_source_version
-** @param [r] gvva [const EnsPGvvariationadaptor] Ensembl Genetic Variation
-**                                                Variation Adaptor
+** @param [u] gvva [EnsPGvvariationadaptor] Ensembl Genetic Variation
+**                                          Variation Adaptor
 ** @param [r] source [const AjPStr] Source
-** @param [u] version [AjPStr] Version
+** @param [u] Pversion [AjPStr*] Version returned
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
@@ -4029,7 +5975,7 @@ AjBool ensGvvariationadaptorFetchSourceVersion(EnsPGvvariationadaptor gvva,
                                                const AjPStr source,
                                                AjPStr *Pversion)
 {
-    char *Ptxtsource = NULL;
+    char *txtsource = NULL;
 
     AjPSqlstatement sqls = NULL;
     AjISqlrow sqli       = NULL;
@@ -4047,13 +5993,13 @@ AjBool ensGvvariationadaptorFetchSourceVersion(EnsPGvvariationadaptor gvva,
     if(!Pversion)
         return ajFalse;
 
-    ensDatabaseadaptorEscapeC(gvva, &Ptxtsource, source);
+    ensDatabaseadaptorEscapeC(gvva, &txtsource, source);
 
     statement = ajFmtStr(
         "SELECT version from source where name ='%s'",
-        Ptxtsource);
+        txtsource);
 
-    ajCharDel(&Ptxtsource);
+    ajCharDel(&txtsource);
 
     sqls = ensDatabaseadaptorSqlstatementNew(gvva, statement);
 
@@ -4074,7 +6020,7 @@ AjBool ensGvvariationadaptorFetchSourceVersion(EnsPGvvariationadaptor gvva,
 
     ajSqlrowiterDel(&sqli);
 
-    ajSqlstatementDel(&sqls);
+    ensDatabaseadaptorSqlstatementDel(gvva, &sqls);
 
     ajStrDel(&statement);
 
@@ -4090,9 +6036,9 @@ AjBool ensGvvariationadaptorFetchSourceVersion(EnsPGvvariationadaptor gvva,
 ** The caller is responsible for deleting the AJAX String.
 **
 ** @cc Bio::EnsEMBL::Variation::DBSQL::VariationAdaptor::get_default_source
-** @param [r] gvva [const EnsPGVVariationAdaptor] Ensembl Genetic Variation
-**                                                Variation Adaptor
-** @param [u] source [AjStr] Source
+** @param [u] gvva [EnsPGvvariationadaptor] Ensembl Genetic Variation
+**                                          Variation Adaptor
+** @param [u] Psource [AjPStr*] Source address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
@@ -4144,13 +6090,34 @@ AjBool ensGvvariationadaptorFetchDefaultSource(EnsPGvvariationadaptor gvva,
 
 
 
-static AjBool gvVariationadaptorFetchFlankFromCore(EnsPGvvariationadaptor gvva,
+/* @funcstatic gvvariationadaptorFetchFlankFromCore ***************************
+**
+** Fetch the flanking sequence from the corresponding Ensembl Core Database.
+**
+** The caller is responsible for deleting the AJAX String.
+**
+** @cc Bio::EnsEMBL::Variation::DBSQL::VariationAdaptor::_get_flank_from_core
+** @param [r] gvva [const EnsPGvvariationadaptor] Ensembl Genetic Variation
+**                                                Variation Adaptor
+** @param [r] srid [ajuint] Ensembl Sequence Region identifier
+** @param [r] srstart [ajint] Ensembl Sequence Region start
+** @param [r] srend [ajint] Ensembl Sequence Region end
+** @param [r] srstrand [ajint] Ensembl Sequence Region strand
+** @param [wP] Psequence [AjPStr*] Flanking sequence
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+static AjBool gvvariationadaptorFetchFlankFromCore(EnsPGvvariationadaptor gvva,
                                                    ajuint srid,
                                                    ajint srstart,
                                                    ajint srend,
                                                    ajint srstrand,
                                                    AjPStr *Psequence)
 {
+    EnsPDatabaseadaptor rsa = NULL;
+
     EnsPSlice slice      = NULL;
     EnsPSliceadaptor sla = NULL;
 
@@ -4163,33 +6130,16 @@ static AjBool gvVariationadaptorFetchFlankFromCore(EnsPGvvariationadaptor gvva,
     if(!Psequence)
         return ajFalse;
 
-    sla = ensRegistryGetSliceadaptor(gvva);
+    rsa = ensRegistryGetReferenceadaptor(gvva);
 
-    /*
-    ** FIXME: The Registry does not provide a DNA adaptor function as of
-    ** yet. The function above will not work!
-    ** The Perl API uses the following functions:
-
-    if(defined $self->db()->dnadb()){
-    my $slice_adaptor = $self->db()->dnadb()->get_SliceAdaptor();
-    ...
-    }
-
-    ** TODO: We need a function to return the Ensembl Database Addptor that
-    ** is connected to the DNA database for any particular
-    ** Ensembl Database Adaptor.
-    ** Maybe we should have an Ensembl Database Adaptor of type 'reference',
-    ** which has to be explicitly registered. It it is present it will be
-    ** returned, if not, the Database Adaptor with type 'core' will be!
-    ** This could work, but requires changes to the registry!
-    */
+    sla = ensRegistryGetSliceadaptor(rsa);
 
     if(sla)
     {
         ensSliceadaptorFetchBySeqregionIdentifier(sla, srid, 0, 0, 0, &slice);
 
         if(!slice)
-            ajWarn("gvVariationadaptorFetchFlankFromCore could not get an "
+            ajWarn("gvvariationadaptorFetchFlankFromCore could not get an "
                    "Ensembl Slice for Ensembl Sequence region identifier %u.",
                    srid);
 
@@ -4200,18 +6150,33 @@ static AjBool gvVariationadaptorFetchFlankFromCore(EnsPGvvariationadaptor gvva,
                                     Psequence);
     }
 
-    /*
-    ** FIXME: The Perl API has the following two lines twice, but $flank isn't
-    ** used. This is inefficient.
-    my $flank = $slice->subseq($seq_region_start,$seq_region_end,$seq_region_strand);
-    return $slice->subseq($seq_region_start,$seq_region_end,$seq_region_strand);
-    */
-
     return ajTrue;
 }
 
 
 
+
+/* @func ensGvvariationadaptorFetchFlankingSequence ***************************
+**
+** Fetch the flanking sequence of an Ensembl Variation.
+**
+** If the flanking sequence is not in the flankinq_sequence table of the
+** Ensembl Genetic Variation database the sequence is retrieved from the
+** corresponding Ensembl Core database.
+**
+** The caller is responsible for deleting the AJAX Strings.
+**
+** @cc Bio::EnsEMBL::Variation::DBSQL::VariationAdaptor::get_flanking_sequence
+** @param [r] gvva [const EnsPGvvariationadaptor] Ensembl Genetic Variation
+**                                                Variation Adaptor
+** @param [r] variationid [ajuint] Ensembl Genetic Variation
+**                                 Variation identifier
+** @param [wP] Pfiveseq [AjPStr*] 5' flanking sequence
+** @param [wP] Pthreeseq [AjPStr*] 3' flanking sequence
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
 
 AjBool ensGvvariationadaptorFetchFlankingSequence(EnsPGvvariationadaptor gvva,
                                                   ajuint variationid,
@@ -4291,7 +6256,7 @@ AjBool ensGvvariationadaptorFetchFlankingSequence(EnsPGvvariationadaptor gvva,
         if(!ajStrGetLen(useq))
         {
             if(srid)
-                gvVariationadaptorFetchFlankFromCore(gvva,
+                gvvariationadaptorFetchFlankFromCore(gvva,
                                                      srid,
                                                      usrstart,
                                                      usrend,
@@ -4310,18 +6275,18 @@ AjBool ensGvvariationadaptorFetchFlankingSequence(EnsPGvvariationadaptor gvva,
         if(!ajStrGetLen(dseq))
         {
             if(srid)
-                gvVariationadaptorFetchFlankFromCore(gvva,
+                gvvariationadaptorFetchFlankFromCore(gvva,
                                                      srid,
                                                      dsrstart,
                                                      dsrend,
                                                      srstrand,
                                                      &dseq);
             else
-                ajWarn("ensGVVariationAdaptorFetchFlankingSequence "
+                ajWarn("ensGvvariationAdaptorFetchFlankingSequence "
                        "could not get "
                        "Ensembl Sequence Region identifier for "
                        "Ensembl Genetic Variation Variation %u.",
-                       variationid);    
+                       variationid);
         }
 
         ajStrAssignS(Pthreeseq, dseq);
@@ -4332,7 +6297,7 @@ AjBool ensGvvariationadaptorFetchFlankingSequence(EnsPGvvariationadaptor gvva,
 
     ajSqlrowiterDel(&sqli);
 
-    ajSqlstatementDel(&sqls);
+    ensDatabaseadaptorSqlstatementDel(gvva, &sqls);
 
     ajStrDel(&statement);
 
@@ -4416,7 +6381,11 @@ EnsPGvvariationfeature ensGvvariationfeatureNew(
 {
     EnsPGvvariationfeature gvvf = NULL;
 
-    /* FIXME: Input restrictions are missing. */
+    if(!feature)
+        return NULL;
+
+    if(!gvv)
+        return NULL;
 
     AJNEW0(gvvf);
 
@@ -4916,7 +6885,7 @@ AjBool ensGvvariationfeatureSetAdaptor(EnsPGvvariationfeature gvvf,
 
 
 
-/* @func ensGvvariationSetIdentifier ******************************************
+/* @func ensGvvariationfeatureSetIdentifier ***********************************
 **
 ** Set the SQL database-internal identifier element of an
 ** Ensembl Genetic Variation Variation Feature.
@@ -5145,7 +7114,7 @@ AjBool ensGvvariationfeatureSetMapWeight(EnsPGvvariationfeature gvvf,
 
 
 
-/* @func ensGvvariationfeatureGetMemSize **************************************
+/* @func ensGvvariationfeatureGetMemsize **************************************
 **
 ** Get the memory size in bytes of an
 ** Ensembl Genetic Variation Variation Feature.
@@ -5153,47 +7122,47 @@ AjBool ensGvvariationfeatureSetMapWeight(EnsPGvvariationfeature gvvf,
 ** @param [r] gvvf [const EnsPGvvariationfeature] Ensembl Genetic Variation
 **                                                Variation Feature
 **
-** @return [ajuint] Memory size
+** @return [ajulong] Memory size
 ** @@
 ******************************************************************************/
 
-ajuint ensGvvariationfeatureGetMemSize(const EnsPGvvariationfeature gvvf)
+ajulong ensGvvariationfeatureGetMemsize(const EnsPGvvariationfeature gvvf)
 {
-    ajuint size = 0;
+    ajulong size = 0;
 
     if(!gvvf)
         return 0;
 
-    size += (ajuint) sizeof (EnsOGvvariationfeature);
+    size += sizeof (EnsOGvvariationfeature);
 
-    size += ensFeatureGetMemSize(gvvf->Feature);
+    size += ensFeatureGetMemsize(gvvf->Feature);
 
-    size += ensGvvariationGetMemSize(gvvf->Gvvariation);
+    size += ensGvvariationGetMemsize(gvvf->Gvvariation);
 
     if(gvvf->Name)
     {
-        size += (ajuint) sizeof (AjOStr);
+        size += sizeof (AjOStr);
 
         size += ajStrGetRes(gvvf->Name);
     }
 
     if(gvvf->Source)
     {
-        size += (ajuint) sizeof (AjOStr);
+        size += sizeof (AjOStr);
 
         size += ajStrGetRes(gvvf->Source);
     }
 
     if(gvvf->ValidationCode)
     {
-        size += (ajuint) sizeof (AjOStr);
+        size += sizeof (AjOStr);
 
         size += ajStrGetRes(gvvf->ValidationCode);
     }
 
     if(gvvf->ConsequenceType)
     {
-        size += (ajuint) sizeof (AjOStr);
+        size += sizeof (AjOStr);
 
         size += ajStrGetRes(gvvf->ConsequenceType);
     }
@@ -5249,7 +7218,7 @@ AjBool ensGvvariationfeatureTrace(const EnsPGvvariationfeature gvvf,
 
     ajStrAppendCountK(&indent, ' ', level * 2);
 
-    ajDebug("ensGvvariationfeatureTrace %p\n"
+    ajDebug("%SensGvvariationfeatureTrace %p\n"
             "%S  Use %u\n"
             "%S  Identifier %u\n"
             "%S  Adaptor %p\n"
@@ -5277,6 +7246,158 @@ AjBool ensGvvariationfeatureTrace(const EnsPGvvariationfeature gvvf,
     ensFeatureTrace(gvvf->Feature, level + 1);
 
     ensGvvariationTrace(gvvf->Gvvariation, level + 1);
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic gvvariationfeatureCompareStartAscending ************************
+**
+** Comparison function to sort Ensembl Genetic Variation Variation Feature by
+** their Ensembl Feature start coordinate in ascending order.
+**
+** @param [r] P1 [const void*] Ensembl Genetic Variation
+**                             Variation Feature address 1
+** @param [r] P2 [const void*] Ensembl Genetic Variation
+**                             Variation Feature address 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+** @@
+******************************************************************************/
+
+static int gvvariationfeatureCompareStartAscending(const void* P1,
+                                                   const void* P2)
+{
+    const EnsPGvvariationfeature gvvf1 = NULL;
+    const EnsPGvvariationfeature gvvf2 = NULL;
+
+    gvvf1 = *(EnsPGvvariationfeature const *) P1;
+    gvvf2 = *(EnsPGvvariationfeature const *) P2;
+
+    if(ajDebugTest("gvvariationfeatureCompareStartAscending"))
+        ajDebug("gvvariationfeatureCompareStartAscending\n"
+                "  gvvf1 %p\n"
+                "  gvvf2 %p\n",
+                gvvf1,
+                gvvf2);
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if(gvvf1 && (!gvvf2))
+        return -1;
+
+    if((!gvvf1) && (!gvvf2))
+        return 0;
+
+    if((!gvvf1) && gvvf2)
+        return +1;
+
+    return ensFeatureCompareStartAscending(gvvf1->Feature, gvvf2->Feature);
+}
+
+
+
+
+/* @func ensGvvariationfeatureSortByStartAscending ****************************
+**
+** Sort Ensembl Genetic Variation Variation Feature by their
+** Ensembl Feature start coordinate in ascending order.
+**
+** @param [u] gvvfs [AjPList] AJAX List of Ensembl Genetic Variation
+**                            Variation Features
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensGvvariationfeatureSortByStartAscending(AjPList gvvfs)
+{
+    if(!gvvfs)
+        return ajFalse;
+
+    ajListSort(gvvfs, gvvariationfeatureCompareStartAscending);
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic gvvariationfeatureCompareStartDescending ***********************
+**
+** Comparison function to sort Ensembl Genetic Variation Variation Feature by
+** their Ensembl Feature start coordinate in descending order.
+**
+** @param [r] P1 [const void*] Ensembl Genetic Variation
+**                             Variation Feature address 1
+** @param [r] P2 [const void*] Ensembl Genetic Variation
+**                             Variation Feature address 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+** @@
+******************************************************************************/
+
+static int gvvariationfeatureCompareStartDescending(const void* P1,
+                                                    const void* P2)
+{
+    const EnsPGvvariationfeature gvvf1 = NULL;
+    const EnsPGvvariationfeature gvvf2 = NULL;
+
+    gvvf1 = *(EnsPGvvariationfeature const *) P1;
+    gvvf2 = *(EnsPGvvariationfeature const *) P2;
+
+    if(ajDebugTest("gvvariationfeatureCompareStartDescending"))
+        ajDebug("gvvariationfeatureCompareStartDescending\n"
+                "  gvvf1 %p\n"
+                "  gvvf2 %p\n",
+                gvvf1,
+                gvvf2);
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if(gvvf1 && (!gvvf2))
+        return -1;
+
+    if((!gvvf1) && (!gvvf2))
+        return 0;
+
+    if((!gvvf1) && gvvf2)
+        return +1;
+
+    return ensFeatureCompareStartDescending(gvvf1->Feature, gvvf2->Feature);
+}
+
+
+
+
+/* @func ensGvvariationfeatureSortByStartDescending ***************************
+**
+** Sort Ensembl Genetic Variation Variation Feature by their
+** Ensembl Feature start coordinate in descending order.
+**
+** @param [u] gvvfs [AjPList] AJAX List of Ensembl Genetic Variation
+**                            Variation Features
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensGvvariationfeatureSortByStartDescending(AjPList gvvfs)
+{
+    if(!gvvfs)
+        return ajFalse;
+
+    ajListSort(gvvfs, gvvariationfeatureCompareStartDescending);
 
     return ajTrue;
 }

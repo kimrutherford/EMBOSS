@@ -22,8 +22,8 @@ EnsPGvindividual ensGvindividualNew(EnsPGvindividualadaptor gvia,
                                     EnsPGvsample gvs,
                                     EnsPGvindividual father,
                                     EnsPGvindividual mother,
-                                    AjEnum gender,
-                                    AjEnum type,
+                                    EnsEGvindividualGender gender,
+                                    EnsEGvindividualType type,
                                     AjPStr description);
 
 EnsPGvindividual ensGvindividualNewObj(const EnsPGvindividual object);
@@ -42,44 +42,55 @@ EnsPGvindividual ensGvindividualGetFather(const EnsPGvindividual gvi);
 
 EnsPGvindividual ensGvindividualGetMother(const EnsPGvindividual gvi);
 
-AjEnum ensGvindividualGetGender(const EnsPGvindividual gvi);
+EnsEGvindividualGender ensGvindividualGetGender(const EnsPGvindividual gvi);
 
-AjEnum ensGvindividualGetType(const EnsPGvindividual gvi);
+EnsEGvindividualType ensGvindividualGetType(const EnsPGvindividual gvi);
 
 AjPStr ensGvindividualGetDescription(const EnsPGvindividual gvi);
 
 AjBool ensGvindividualSetAdaptor(EnsPGvindividual gvi,
                                  EnsPGvindividualadaptor gvia);
 
-AjBool ensGvindividualSetIdentifier(EnsPGvindividual gvi, ajuint identifier);
+AjBool ensGvindividualSetIdentifier(EnsPGvindividual gvi,
+                                    ajuint identifier);
 
-AjBool ensGvindividualSetGvsample(EnsPGvindividual gvi, EnsPGvsample gvs);
+AjBool ensGvindividualSetGvsample(EnsPGvindividual gvi,
+                                  EnsPGvsample gvs);
 
-AjBool ensGvindividualSetFather(EnsPGvindividual gvi, EnsPGvindividual father);
+AjBool ensGvindividualSetFather(EnsPGvindividual gvi,
+                                EnsPGvindividual father);
 
-AjBool ensGvindividualSetMother(EnsPGvindividual gvi, EnsPGvindividual mother);
+AjBool ensGvindividualSetMother(EnsPGvindividual gvi,
+                                EnsPGvindividual mother);
 
-AjBool ensGvindividualSetGender(EnsPGvindividual gvi, AjEnum gender);
+AjBool ensGvindividualSetGender(EnsPGvindividual gvi,
+                                EnsEGvindividualGender gender);
 
-AjBool ensGvindividualSetType(EnsPGvindividual gvi, AjEnum type);
+AjBool ensGvindividualSetType(EnsPGvindividual gvi,
+                              EnsEGvindividualType type);
 
-AjBool ensGvindividualSetDescription(EnsPGvindividual gvi, AjPStr description);
+AjBool ensGvindividualSetDescription(EnsPGvindividual gvi,
+                                     AjPStr description);
 
-AjEnum ensGvindividualGenderFromStr(const AjPStr gender);
+EnsEGvindividualGender ensGvindividualGenderFromStr(const AjPStr gender);
 
-AjEnum ensGvindividualTypeFromStr(const AjPStr type);
+EnsEGvindividualType ensGvindividualTypeFromStr(const AjPStr type);
 
-const char *ensGvindividualGenderToChar(const AjEnum gender);
+const char *ensGvindividualGenderToChar(EnsEGvindividualGender gender);
 
-const char *ensGvindividualTypeToChar(const AjEnum type);
+const char *ensGvindividualTypeToChar(EnsEGvindividualType type);
 
-ajuint ensGvindividualGetMemSize(const EnsPGvindividual gvi);
+ajulong ensGvindividualGetMemsize(const EnsPGvindividual gvi);
 
 AjBool ensGvindividualTrace(const EnsPGvindividual gvi, ajuint level);
 
 /* Ensembl Genetic Variation Individual Adaptor */
 
-EnsPGvindividualadaptor ensGvindividualadaptorNew(EnsPDatabaseadaptor dba);
+EnsPGvindividualadaptor ensRegistryGetGvindividualadaptor(
+    EnsPDatabaseadaptor dba);
+
+EnsPGvindividualadaptor ensGvindividualadaptorNew(
+    EnsPDatabaseadaptor dba);
 
 void ensGvindividualadaptorDel(EnsPGvindividualadaptor *Pgvia);
 
@@ -137,7 +148,7 @@ AjBool ensGvindividualadaptorFetchAllStrainsWithCoverage(
 
 
 
-#endif
+#endif /* ensgvindividual_h */
 
 #ifdef __cplusplus
 }

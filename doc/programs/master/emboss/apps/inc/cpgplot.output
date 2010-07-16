@@ -25,7 +25,7 @@ U68037 from 1 to 1218
 ##sequence-region U68037 1 924
 #!Date 2010-01-15
 #!Type DNA
-#!Source-version EMBOSS 6.2.0
+#!Source-version EMBOSS 6.3.0
 U68037	cpgplot	sequence_feature	104	509	0.000	+	.	ID="U68037.1"
 U68037	cpgplot	sequence_feature	596	924	0.000	+	.	ID="U68037.2"
 </pre>

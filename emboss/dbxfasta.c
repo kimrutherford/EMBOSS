@@ -44,6 +44,8 @@ static AjBool dbxfasta_ParseFasta(EmbPBtreeEntry entry, AjPRegexp typeexp,
 static AjPRegexp dbxfasta_getExpr(const AjPStr idformat, ajint *type);
 
 
+
+
 /* @prog dbxfasta ************************************************************
 **
 ** Index a flat file database

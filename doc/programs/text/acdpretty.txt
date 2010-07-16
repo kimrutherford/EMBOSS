@@ -177,9 +177,12 @@ See also
 
 Author(s)
 
-   Peter Rice (pmr (c) ebi.ac.uk)
+   Peter Rice
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

@@ -1,12 +1,12 @@
 ########################################
 # Program: dbiflat
-# Rundate: Wed 15 Jul 2009 12:00:00
+# Rundate: Thu 15 Jul 2010 12:00:00
 # Dbname: SWISSNEW
 # Release: 0.0
-# Date: 15/07/09
-# CurrentDirectory: /data2/users/pmr/cvsemboss/test/swnew/
+# Date: 15/07/10
+# CurrentDirectory: /homes/pmr/devemboss/test/swnew/
 # IndexDirectory: ./
-# IndexDirectoryPath: /data2/users/pmr/cvsemboss/test/swnew/
+# IndexDirectoryPath: /homes/pmr/devemboss/test/swnew/
 # Maxindex: 0
 # Fields: 6
 #   Field 1: id
@@ -16,7 +16,7 @@
 #   Field 5: key
 #   Field 6: org
 # Directory: ./
-# DirectoryPath: /data2/users/pmr/cvsemboss/test/swnew/
+# DirectoryPath: /homes/pmr/devemboss/test/swnew/
 # Filenames: *.dat
 # Exclude: 
 # Files: 1
@@ -33,7 +33,7 @@ filename: 'trembl.dat'
    acc: 9
     sv: 9
    des: 60
-   key: 27
+   key: 28
    org: 189
 
 Index acc: maxlen 6 items 9

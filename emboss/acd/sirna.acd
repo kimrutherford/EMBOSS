@@ -1,7 +1,8 @@
 application: sirna [
   documentation: "Finds siRNA duplexes in mRNA"
   groups: "Nucleic:Composition"
-  relations: "EDAM: siRNA duplex identification"
+  relations: "/edam/topic/0000118 siRNA analysis"
+  relations: "/edam/operation/0002008 siRNA duplex identification"
 ]
 
 section: input [
@@ -13,7 +14,9 @@ section: input [
     parameter: "Y"
     type: "DNA"
     features: "Y"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0001215 Pure DNA sequence"                                     
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more" 
   ]
 
   section: seqinsection [
@@ -30,7 +33,7 @@ section: input [
              that start with a purine and so can be expressed from Pol III
              expression vectors. This is the NARN(17)YNN pattern that has
              been suggested by Tuschl et al."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
     ]
 
     boolean: aa [
@@ -42,7 +45,7 @@ section: input [
              regions that start with AA will be favoured by giving them a
              higher score, but regions that do not start with AA will also be
              reported."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
     ]
 
     boolean: tt [
@@ -54,7 +57,7 @@ section: input [
              regions that end with TT will be favoured by giving them a
              higher score, but regions that do not end with TT will also be
              reported."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
     ]
 
     boolean: polybase [
@@ -65,7 +68,7 @@ section: input [
              that have no repeat of 4 or more of any bases in a row will be
              reported. No regions will ever be reported that have 4 or more
              G's in a row."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
     ]
 
   endsection: seqinsection
@@ -92,7 +95,7 @@ section: output [
     rformat: "table"
     taglist: "float:gc=GC% string:forward=Sense_siRNA
               string:reverse=Antisense_siRNA"
-    relations: "EDAM: EMBOSS report"                                       
+    relations: "/edam/data/0002169 siRNA report"                                       
   ]
 
   seqoutall: outseq [
@@ -101,7 +104,9 @@ section: output [
            the siRNAs are selected from. You may use it to do searches of
            mRNA databases (e.g. REFSEQ) to confirm that the probes are unique
            to the gene you wish to use it on."
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0001215 Pure DNA sequence"                                     
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more"
   ]
 
   boolean: context [
@@ -119,7 +124,7 @@ section: output [
            e.g. '(AA)' to give you some context for the probe region. YOU
            SHOULD NOT INCLUDE THE TWO BASES IN BRACKETS WHEN YOU PLACE AN
            ORDER FOR THE PROBES."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
 endsection: output

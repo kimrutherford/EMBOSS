@@ -57,7 +57,7 @@ protein output sequence(s) [makeseq.fasta]:
 Command line arguments
 
 Create random protein sequences
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
    -pepstatsfile       infile     This file should be a pepstats output file.
@@ -124,8 +124,8 @@ PEPSTATS of LACI_ECOLI from 1 to 360
 Molecular weight = 38590.16             Residues = 360
 Average Residue Weight  = 107.195       Charge   = 1.5
 Isoelectric Point = 6.8820
-A280 Molar Extinction Coefficient  = 21620
-A280 Extinction Coefficient 1mg/ml = 0.56
+A280 Molar Extinction Coefficients  = 22920 (reduced)   23045 (cystine bridges)
+A280 Extinction Coefficients 1mg/ml = 0.594 (reduced)   0.597 (cystine bridges)
 Improbability of expression in inclusion bodies = 0.660
 
 Residue         Number          Mole%           DayhoffStat
@@ -446,7 +446,7 @@ See also
    newseq           Create a sequence file from a typed-in sequence
    nohtml           Remove mark-up (e.g. HTML tags) from an ASCII text file
    noreturn         Remove carriage return from ASCII files
-   nospace          Remove all whitespace from an ASCII text file
+   nospace          Remove whitespace from an ASCII text file
    notab            Replace tabs with spaces in an ASCII text file
    notseq           Write to file a subset of an input stream of sequences
    nthseq           Write to file a single sequence from an input stream of
@@ -473,6 +473,9 @@ Author(s)
 
    This application was contributed by Henrikki Almusa, Medicel, Helsinki,
    Finland
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

@@ -27,12 +27,12 @@
 
 
 
-/* @datastatic AjPRinfo *******************************************************
+/* @datastatic PRinfo *******************************************************
 **
 ** recoder internals for RE information
 **
-** @alias AjSRinfo
-** @alias AjORinfo
+** @alias SRinfo
+** @alias ORinfo
 **
 ** @attr code [AjPStr] structure for silent mutation info
 ** @attr site [AjPStr] Undocumented
@@ -44,7 +44,7 @@
 ** @attr Padding [char[4]] Padding to alignment boundary
 ******************************************************************************/
 
-typedef struct AjSRinfo
+typedef struct SRinfo
 {
     AjPStr code;
     AjPStr site;
@@ -54,18 +54,18 @@ typedef struct AjSRinfo
     ajint cut3;
     ajint cut4;
     char Padding[4];
-} AjORinfo;
-#define AjPRinfo AjORinfo*
+} ORinfo;
+#define PRinfo ORinfo*
 
 
 
 
-/* @datastatic AjPSilent ******************************************************
+/* @datastatic PSilent ******************************************************
 **
 ** recoder internals for silent sites
 **
-** @alias AjSSilent
-** @alias AjOSilent
+** @alias SSilent
+** @alias OSilent
 **
 ** @attr code [AjPStr] Undocumented
 ** @attr site [AjPStr] Undocumented
@@ -79,7 +79,7 @@ typedef struct AjSRinfo
 ** @attr Padding [char[2]] Padding to alignment boundary
 ******************************************************************************/
 
-typedef struct AjSSilent
+typedef struct SSilent
 {
     AjPStr code;
     AjPStr site;
@@ -91,8 +91,8 @@ typedef struct AjSSilent
     char   obase;
     char   nbase;
     char Padding[2];
-} AjOSilent;
-#define AjPSilent AjOSilent*
+} OSilent;
+#define PSilent OSilent*
 
 
 
@@ -103,8 +103,8 @@ static AjPList silent_mismatch(const AjPStr sstr, AjPList ressite,
 			       ajint radj, AjBool rev, ajint end,
 			       AjBool tshow);
 static ajint silent_restr_read(AjPList *relist, const AjPStr enzymes);
-static AjPSilent silent_checktrans(const AjPStr seq,const EmbPMatMatch match,
-				const AjPRinfo rlp, ajint begin, ajint radj,
+static PSilent silent_checktrans(const AjPStr seq,const EmbPMatMatch match,
+				const PRinfo rlp, ajint begin, ajint radj,
 				AjBool rev, ajint end);
 static void silent_fmt_sequence(const char* title, const AjPStr seq,
 				AjPStr* tailstr,
@@ -259,8 +259,6 @@ int main(int argc, char **argv)
 
 
 
-
-
 /* @funcstatic silent_relistdel ***********************************************
 **
 ** Undocumented.
@@ -271,7 +269,7 @@ int main(int argc, char **argv)
 
 static void silent_relistdel(AjPList* relist)
 {
-    AjPRinfo rlp = NULL;
+    PRinfo rlp = NULL;
     
     while(ajListPop(*relist,(void **)&rlp))
     {
@@ -281,6 +279,8 @@ static void silent_relistdel(AjPList* relist)
     }
     ajListFree(relist);
 }
+
+
 
 
 /* @funcstatic silent_mismatch ************************************************
@@ -307,7 +307,7 @@ static AjPList silent_mismatch(const AjPStr sstr, AjPList relist,
 			       ajint radj,AjBool rev, ajint end,
 			       AjBool tshow)
 {
-    AjPSilent res;
+    PSilent res;
     AjPList results;
     AjPStr str;                          /*holds RS patterns*/
     AjPStr tstr;
@@ -320,7 +320,7 @@ static AjPList silent_mismatch(const AjPStr sstr, AjPList relist,
     AjPList patlist = NULL;            /*a list for pattern matches.
                                              a list of ..*/
     EmbPMatMatch match;                /*..AjMatMatch structures*/
-    AjPRinfo rlp = NULL;
+    PRinfo rlp = NULL;
     AjPStr pep   = NULL;               /*string to hold protein*/
     AjPTrn table = NULL;               /*object to hold translation table*/
 
@@ -428,7 +428,7 @@ static ajint silent_restr_read(AjPList *relist,const AjPStr enzymes)
 
     AjPStr refilename = NULL;
     register ajint RStotal = 0;
-    AjPRinfo rinfo = NULL;
+    PRinfo rinfo = NULL;
     AjBool isall = ajFalse;
     ajint ne = 0;
     ajint i;
@@ -457,8 +457,11 @@ static ajint silent_restr_read(AjPList *relist,const AjPStr enzymes)
             isall = ajFalse;
     }
 
-    while(embPatRestrictReadEntry(rptr,fin))
+    while(!ajFileIsEof(fin))
     {
+        if(!embPatRestrictReadEntry(rptr,fin))
+	    continue;
+
      	if(!isall)
 	{
 		for(i=0;i<ne;++i)
@@ -501,20 +504,20 @@ static ajint silent_restr_read(AjPList *relist,const AjPStr enzymes)
 **
 ** @param [r] seq [const AjPStr] sequence
 ** @param [r] match [const EmbPMatMatch] pattern match
-** @param [r] rlp [const AjPRinfo] RE information
+** @param [r] rlp [const PRinfo] RE information
 ** @param [r] begin [ajint] start position
 ** @param [r] radj [ajint] reverse numbering adjustment
 ** @param [r] rev [AjBool] do complement
 ** @param [r] end [ajint] end position
-** @return [AjPSilent] silent mutation object or NULL if not found
+** @return [PSilent] silent mutation object or NULL if not found
 ** @@
 ******************************************************************************/
 
-static AjPSilent silent_checktrans(const AjPStr seq,const EmbPMatMatch match,
-				const AjPRinfo rlp, ajint begin, ajint radj,
+static PSilent silent_checktrans(const AjPStr seq,const EmbPMatMatch match,
+				const PRinfo rlp, ajint begin, ajint radj,
 				AjBool rev, ajint end)
 {
-    AjPSilent ret;
+    PSilent ret;
     const char *p = NULL;
     const char *q = NULL;
     const char *s = NULL;
@@ -721,7 +724,7 @@ static void silent_fmt_sequence(const char* title,
 static void silent_fmt_hits(AjPList hits, AjPFeattable feat,
 			    AjBool silent, AjBool rev)
 {
-    AjPSilent res;
+    PSilent res;
     AjPFeature sf = NULL;
     AjPStr tmpFeatStr = NULL;
 
@@ -780,7 +783,7 @@ static void silent_fmt_hits(AjPList hits, AjPFeattable feat,
 static void silent_split_hits(AjPList *hits, AjPList *silents,
 			      AjPList *nonsilents, AjBool allmut)
 {
-    AjPSilent res;
+    PSilent res;
 
     while(ajListPop(*hits,(void **)&res))
     {
@@ -819,5 +822,5 @@ static void silent_split_hits(AjPList *hits, AjPList *silents,
 
 static ajint silent_basecompare(const void *a, const void *b)
 {
-    return((*(AjPSilent const *)a)->base)-((*(AjPSilent const *)b)->base);
+    return((*(PSilent const *)a)->base)-((*(PSilent const *)b)->base);
 }

@@ -1,7 +1,8 @@
 application: mwcontam [
   documentation: "Find weights common to multiple molecular weights files"
   groups: "Protein:Composition"
-  relations: "EDAM: Protein molecular weight calculation"
+  relations: "/edam/topic/0000141 Proteolysis and peptide mass"
+  relations: "/edam/operation/0000398 Protein molecular weight calculation"
 ]
 
 section: input [
@@ -13,7 +14,7 @@ section: input [
     parameter: "Y"
     information: "Molecular weights file list"
     knowntype: "molecular weights"
-    relations:  "EDAM: Amino acid molecular weight data"               
+    relations:  "/edam/data/0001505 Amino acid molecular weight data"               
   ]
 
 endsection: input
@@ -27,7 +28,7 @@ section: required [
     standard: "Y"
     information: "Ppm tolerance"
     default: "50.0"
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001773 Tool-specific parameter"
   ]
 
 endsection: required
@@ -42,7 +43,7 @@ section: output [
     extension: "mwcontam"
     knowntype: "molecular weights"
     information: "Molecular weights output file"
-    relations:  "EDAM: Amino acid molecular weight data"               
+    relations:  "/edam/data/0001505 Amino acid molecular weight data"               
   ]
 
 endsection: output

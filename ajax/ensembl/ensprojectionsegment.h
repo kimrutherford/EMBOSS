@@ -46,7 +46,8 @@ typedef struct EnsSProjectionsegment
 ** Prototype definitions
 */
 
-EnsPProjectionsegment ensProjectionsegmentNew(ajuint srcstart, ajuint srcend,
+EnsPProjectionsegment ensProjectionsegmentNew(ajuint srcstart,
+                                              ajuint srcend,
                                               EnsPSlice trgslice);
 
 EnsPProjectionsegment ensProjectionsegmentNewRef(EnsPProjectionsegment ps);
@@ -68,7 +69,7 @@ AjBool ensProjectionsegmentTrace(const EnsPProjectionsegment ps, ajuint level);
 
 
 
-#endif
+#endif /* ensprojectionsegment_h */
 
 #ifdef __cplusplus
 }

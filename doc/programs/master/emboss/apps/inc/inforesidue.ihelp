@@ -1,5 +1,5 @@
 Return information on a given amino acid residue
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-code]              string     [ABCDEFGHIJKLMNOPQRSTUVWXYZ] Enter IUPAC

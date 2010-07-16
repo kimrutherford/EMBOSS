@@ -11,7 +11,7 @@ Wiki
 
 Function
 
-   Remove all whitespace from an ASCII text file
+   Remove whitespace from an ASCII text file
 
 Description
 
@@ -24,7 +24,7 @@ Usage
 
 
 % nospace
-Remove all whitespace from an ASCII text file
+Remove whitespace from an ASCII text file
 ASCII text file: seqspace.txt
 ASCII text output file [seqspace.nospace]:
 
@@ -34,14 +34,18 @@ ASCII text output file [seqspace.nospace]:
 
 Command line arguments
 
-Remove all whitespace from an ASCII text file
-Version: EMBOSS:6.2.0
+Remove whitespace from an ASCII text file
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     ASCII text file
   [-outfile]           outfile    [*.nospace] ASCII text output file
 
-   Additional (Optional) qualifiers: (none)
+   Additional (Optional) qualifiers:
+   -menu               menu       [all] Remove whitespace (Values: all (all
+                                  whitespace); end (trailing whitespace);
+                                  excess (multiple whitespace characters))
+
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
@@ -256,9 +260,12 @@ See also
 
 Author(s)
 
-   Jon Ison (jison (c) ebi.ac.uk)
+   Jon Ison
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

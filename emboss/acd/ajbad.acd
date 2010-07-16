@@ -1,7 +1,8 @@
 application: ajbad [
   documentation: "Test file for ACD parsing"
   groups: "Test"
-  relations: "EDAM: File debugging"
+  relations: "/edam/topic/0000220 File handling"
+  relations: "/edam/operation/0000336 File debugging"
 ]
 
 section: input [
@@ -14,24 +15,26 @@ section: input [
     information: "Sequence type"
     valid: "valid value test"
     knowntype: "sequence type"
-    relations:  "EDAM: EMBOSS sequence type"                           
+    relations:  "/edam/data/0001110 EMBOSS sequence type"                           
   ]
 
   sequence: sequence [
     parameter: "y"
     type: "$(typea)"
-    relations: "EDAM: Sequence"                                            
+    relations: "/edam/data/0000848 Sequence"                                            
+    relations: "/edam/data/0000849 Sequence record" 
   ]
 
   sequence: bsequence [
     parameter: "y"
     type: "$(seqa.type)"
-    relations: "EDAM: Sequence"                                            
+    relations: "/edam/data/0000848 Sequence"                                            
+    relations: "/edam/data/0000849 Sequence record" 
   ]
 
   codon: cod [
     name: "eco"
-    relations: "EDAM: Codon usage table"                                   
+    relations: "/edam/data/0001597 Codon usage table"                                   
   ]
 
 endsection: input
@@ -47,7 +50,7 @@ section: required [
     expected: "expected value"
     information: "Second type"
     knowntype: "sequence type"
-    relations:  "EDAM: EMBOSS sequence type"                           
+    relations:  "/edam/data/0001110 EMBOSS sequence type"                           
   ]
 
   string: date [
@@ -57,7 +60,7 @@ section: required [
     information: "Index date"
     pattern: "^([0-9]+.[0-9]+.[0-9]+)?$"
     knowntype: "date"
-    relations:  "EDAM: Date"                                           
+relations: "/edam/data/0002156 Date"
   ]
 
 endsection: required
@@ -70,13 +73,13 @@ section: advanced [
   integer: a [
     minimum: "0"
     information: "First number"
-    relations: "EDAM: Generic integer"                                     
+relations: "/edam/data/0001773 Tool-specific parameter"
   ]
 
   integer: b [
     default: "15"
     information: "Second number"
-    relations: "EDAM: Generic integer"                                     
+relations: "/edam/data/0001773 Tool-specific parameter"
   ]
 
   float: c [
@@ -85,7 +88,7 @@ section: advanced [
     precision: "2"
     default: "1.6"
     information: "Third number"
-    relations: "EDAM: Generic float"                                       
+relations: "/edam/data/0001773 Tool-specific parameter"
   ]
 
 endsection: advanced
@@ -98,7 +101,7 @@ section: output [
   outfile: outfile [
     parameter: "y"
     knowntype: "ajbad output"
-    relations: "EDAM: Free text file"                                      
+    relations: "/edam/data/0000969 Free text"                                      
   ]
 
 endsection: output

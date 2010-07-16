@@ -1,5 +1,5 @@
 Extract codon usage tables from CUTG database
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-directory]         dirlist    [.] Codon usage directories
@@ -19,6 +19,9 @@ Version: EMBOSS:6.2.0
                                   (Any string)
 
    Associated qualifiers:
+
+   "-directory" associated qualifiers
+   -extension1         string     Default file extension
 
    "-outfile" associated qualifiers
    -odirectory2        string     Output directory

@@ -5,9 +5,10 @@ application: skipredundant
   gui: "yes"
   batch: "yes"
   cpu: "low"
-  relations: "EDAM: Sequence file handling"
-  relations: "EDAM: Sequence redundancy"
-  relations: "EDAM: Pairwise sequence alignment"
+  relations: "/edam/topic/0000220 File handling"
+  relations: "/edam/operation/0002121 Sequence file handling"
+  relations: "/edam/operation/0000290 Sequence redundancy removal"
+  relations: "/edam/operation/0000491 Pairwise sequence alignment"
 ]
 
 
@@ -24,7 +25,7 @@ toggle: feature
 [
     information: "Use feature information"
     help: "Sequence feature information will be retained if this option is set."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
 ]
 
 seqset: sequences
@@ -33,7 +34,9 @@ seqset: sequences
     type: "gapany"
     features: "$(feature)"
     aligned: "N"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0000848 Sequence" 
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more"
 ]
 
 matrixf: datafile 
@@ -45,7 +48,7 @@ matrixf: datafile
            sequences. By default it is the file 'EBLOSUM62' (for proteins) or
            the file 'EDNAFULL' (for nucleic sequences). These files are
            found in the 'data' directory of the EMBOSS installation."
-    relations: "EDAM: Float comparison matrix"                             
+    relations: "/edam/data/0001447 Comparison matrix (floats)"                             
 ]
 
 endsection: input
@@ -85,7 +88,7 @@ list: mode
     codedelimiter: ":"
     header: "Redundancy removal options"
     information: "Select number"
-    relations: "EDAM: Generic string array"                                
+    relations: "/edam/data/0001773 Tool-specific parameter"                                
 ]
 
 float: threshold 
@@ -99,7 +102,8 @@ float: threshold
            achieve greater than this threshold the shortest sequence is
            discarded."
     default: "95.0"
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0002146 Threshold"
+
 ]
 
 float: minthreshold
@@ -113,7 +117,7 @@ float: minthreshold
            proteins have a percentage sequence similarity that lies outside
            an acceptable range the shortest sequence is discarded."
     default: "30.0"
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0002146 Threshold"
 ]
 
 float: maxthreshold
@@ -127,7 +131,7 @@ float: maxthreshold
            proteins have a percentage sequence similarity that lies outside
            an acceptable range the shortest sequence is discarded."
     default: "90.0"
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0002146 Threshold"
 ]
 
 float: gapopen 
@@ -144,7 +148,7 @@ float: gapopen
            matrix. The default value assumes you are using the EBLOSUM62
            matrix for protein sequences, and the EDNAFULL matrix for
            nucleotide sequences."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001397 Gap opening penalty"
 ]
 
 float: gapextend 
@@ -165,7 +169,7 @@ float: gapextend
            you would expect many single base gaps. You can get this result by
            setting the gap open penalty to zero (or very low) and using the
            gap extension penalty to control gap scoring."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001398 Gap extension penalty"
 ]
 
 endsection: required
@@ -196,7 +200,9 @@ seqoutall: outseq
     parameter: "Y"
     features:  "$(feature)"
     extension: "keep"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0000848 Sequence" 
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more"
 ]
 
 seqoutall: redundantoutseq
@@ -207,7 +213,9 @@ seqoutall: redundantoutseq
     features:  "$(feature)"
     extension: "redundant"
     information: "Redundant sequences (optional)"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0000848 Sequence" 
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more"
 ]
 
 endsection: output

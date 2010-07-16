@@ -35,8 +35,21 @@
 /* ========================== include files =========================== */
 /* ==================================================================== */
 
+#include <math.h>
+#include "ajax.h"
+#include <stdarg.h>
+#include <errno.h>
+#include <ctype.h>
+#include <limits.h>
+#include <float.h>
+#include <string.h>
+
 #ifndef HAVE_MEMMOVE
 #include <sys/types.h>
+
+
+
+
 /* @header memmove ************************************************************
 **
 ******************************************************************************/
@@ -46,16 +59,6 @@ static void* memmove(void *dst, const void* src, size_t len)
     return (void *)bcopy(src, dst, len);
 }
 #endif
-
-
-#include <math.h>
-#include "ajax.h"
-#include <stdarg.h>
-#include <errno.h>
-#include <ctype.h>
-#include <limits.h>
-#include <float.h>
-#include <string.h>
 
 
 
@@ -89,11 +92,13 @@ static void   strCloneL(AjPStr* pthis, ajuint size);
 
 #ifdef AJ_SAVESTATS
 static ajlong strAlloc     = 0;
+static ajlong strExtra     = 0;
 static ajlong strFree      = 0;
 static ajlong strFreeCount = 0;
 static ajlong strCount     = 0;
 static ajlong strTotal     = 0;
 #endif
+
 
 
 
@@ -142,6 +147,8 @@ static ajlong strTotal     = 0;
 ** @fcategory new
 **
 ******************************************************************************/
+
+
 
 
 /* @func ajCharNewC ***********************************************************
@@ -218,7 +225,7 @@ __deprecated char  *ajCharNew(const AjPStr str)
 /* @func ajCharNewRes *********************************************************
 **
 ** A text string constructor which allocates memory for a string of the 
-** specified length and intialises the contents as an empty string.
+** specified length and initialises the contents as an empty string.
 **
 ** @param [r] size [ajuint] Length of the Cstring, excluding the trailing NULL.
 ** @return [char*] A new text string with no contents.
@@ -396,6 +403,8 @@ char* ajCharNull (void)
 ******************************************************************************/
 
 
+
+
 /* @func ajCharDel ***********************************************************
 **
 ** A text string destructor to free memory for a text string.
@@ -445,6 +454,9 @@ __deprecated void  ajCharFree(char** txt)
 ** @valrule   * [AjBool]
 ** @fcategory modify
 */
+
+
+
 
 /* @func ajCharFmtLower *******************************************************
 **
@@ -568,6 +580,8 @@ __deprecated void  ajCharToUpper(char* txt)
 ** @valrule   * [AjBool] True on success
 ** @fcategory use
 */
+
+
 
 
 /* @func ajCharMatchC *********************************************************
@@ -1210,7 +1224,7 @@ AjBool ajCharPrefixC(const char* txt, const char* txt2)
     if(!ilen)				/* no prefix */
 	return ajFalse;
 
-    if(ilen > strlen(txt))		/* pref longer */
+    if(ilen > strlen(txt))		/* prefix longer */
 	return ajFalse;
 
     if(strncmp(txt, txt2, ilen))    /* +1 or -1 for a failed match */
@@ -1252,7 +1266,7 @@ AjBool ajCharPrefixS(const char* txt, const AjPStr str)
     if(!str)
 	return ajFalse;
 
-    if(str->Len > strlen(txt))	/* pref longer */
+    if(str->Len > strlen(txt))	/* prefix longer */
 	return ajFalse;
 
     if(strncmp(txt, MAJSTRGETPTR(str), str->Len)) /* +1 or -1 for
@@ -1398,11 +1412,11 @@ AjBool ajCharSuffixC(const char* txt, const char* txt2)
     jlen   = strlen(txt);
     jstart = jlen - ilen;
 
-    if(ilen > jlen)			/* suff longer */
+    if(ilen > jlen)			/* suffix longer */
 	return ajFalse;
 
     if(strncmp(&txt[jstart], txt2, ilen)) /* +1 or -1 for a
-					      failed match */
+					             			failed match */
 	return ajFalse;
 
     return ajTrue;
@@ -1447,11 +1461,11 @@ AjBool ajCharSuffixS(const char* txt, const AjPStr str)
     jlen   = strlen(txt);
     jstart = jlen - str->Len;
 
-    if(str->Len > jlen)		/* suff longer */
+    if(str->Len > jlen)		/* suffix longer */
 	return ajFalse;
 
     if(strncmp(&txt[jstart], MAJSTRGETPTR(str), str->Len)) /* +1 or -1 for a
-							failed match */
+															  failed match */
 	return ajFalse;
 
     return ajTrue;
@@ -1501,7 +1515,7 @@ AjBool ajCharSuffixCaseC(const char* txt, const char* txt2)
     jlen   = strlen(txt);
     jstart = jlen - ilen;
 
-    if(ilen > jlen)			/* suff longer */
+    if(ilen > jlen)			/* suffix longer */
 	return ajFalse;
 
     cp = &txt[jstart];
@@ -1548,7 +1562,7 @@ AjBool ajCharSuffixCaseS(const char* txt, const AjPStr str)
     jlen   = strlen(txt);
     jstart = jlen - str->Len;
 
-    if(str->Len > jlen)		/* suff longer */
+    if(str->Len > jlen)		/* suffix longer */
 	return ajFalse;
 
     cp = &txt[jstart];
@@ -1587,6 +1601,8 @@ AjBool ajCharSuffixCaseS(const char* txt, const AjPStr str)
 **         in length and content.
 ** @fcategory use
 */
+
+
 
 
 /* @func ajCharCmpCase ********************************************************
@@ -1943,12 +1959,14 @@ __deprecated ajint  ajStrCmpWildCC(const char* str, const char* text)
 */
 
 
+
+
 /* @func ajCharParseC *********************************************************
 **
 ** Simple token parsing from text string using a specified set of delimiters.
 **
 ** @param [r] txt [const char*] String to be parsed (first call) or
-**        NULL for followup calls using the same string, as for the
+**        NULL for follow-up calls using the same string, as for the
 **        C RTL function strtok which is eventually called.
 ** @param [r] txtdelim [const char*] Delimiter(s) to be used between tokens.
 ** @return [AjPStr] Token
@@ -2029,6 +2047,7 @@ __deprecated const AjPStr  ajStrTokCC (const char* txt, const char* delim)
 
 
 
+
 /* @section constructors ******************************************************
 **
 ** Functions for constructing string objects, possibly with a starting string. 
@@ -2051,6 +2070,8 @@ __deprecated const AjPStr  ajStrTokCC (const char* txt, const char* delim)
 ** @valrule   *     [AjPStr] New string
 ** @fcategory new
 */
+
+
 
 
 /* @func ajStrNew *************************************************************
@@ -2282,7 +2303,10 @@ AjPStr ajStrNewResS(const AjPStr str, ajuint size)
 {
     AjPStr thys;
 
-    thys = ajStrNewResLenC(str->Ptr, size, str->Len);
+    if(str)
+        thys = ajStrNewResLenC(str->Ptr, size, str->Len);
+    else
+        thys = ajStrNewResLenC("", size, 0);
 
     return thys;
 }
@@ -2414,7 +2438,7 @@ static void strCloneL(AjPStr* Pstr, ajuint size)
 /* @funcstatic strNew ******************************************************
 **
 ** Internal constructor for modifiable AJAX strings. Used by all the string
-** parameterized constructors to allocate the space for the text string.
+** Parameterised constructors to allocate the space for the text string.
 ** The only exception is ajStrNew which returns a clone of the null string.
 **
 ** @param [rE] size [ajuint] size of the reserved space, including the
@@ -2473,6 +2497,7 @@ static AjPStr strNew(ajuint size)
 
 
 
+
 /* @macro MAJSTRDEL ***********************************************************
 **
 ** Default string destructor which frees memory for a string.
@@ -2487,6 +2512,8 @@ static AjPStr strNew(ajuint size)
 ** @return [void]
 ** @@
 ******************************************************************************/
+
+
 
 
 /* @func ajStrDel *************************************************************
@@ -2690,6 +2717,8 @@ void ajStrDelarray(AjPStr** PPstr)
 */
 
 
+
+
 /* @func ajStrAssignC *********************************************************
 **
 ** Copy a text string to a string.
@@ -2823,10 +2852,20 @@ AjBool ajStrAssignS(AjPStr* Pstr, const AjPStr str)
 {
     AjBool ret = ajFalse;
     AjPStr thys;
+    ajuint size;
+    ajuint roundsize = STRSIZE;
 
     if(!*Pstr)
     {
-	*Pstr = ajStrNewS(str);
+        if(str) {
+            size = str->Len + 1;
+            if(size >= LONGSTR)
+                roundsize = ajRound(size, LONGSTR);
+            else
+                roundsize = ajRound(size, STRSIZE);
+        }
+
+	*Pstr = ajStrNewResS(str,roundsize);
 
 	return ajTrue;
     }
@@ -3296,7 +3335,7 @@ __deprecated AjBool  ajStrAssSubC(AjPStr* pthis, const char* txt,
 **
 ** Copies a substring of a string to a string.
 **
-** The substring is defined from character positions beginpos to endpos.
+** The substring is defined from character positions pos1 to pos2.
 **
 ** ajTrue is returned if target was
 ** (re)allocated, ajFalse is returned otherwise. 
@@ -3312,7 +3351,7 @@ __deprecated AjBool  ajStrAssSubC(AjPStr* pthis, const char* txt,
 ** @param [r] pos2 [ajint] End position in src of substring
 **              {negative values count from the end of the string
 **               with -1 as the last position}
-** @return [AjBool] ajTrue if pthis was (re)allocated, ajFalse otherwise
+** @return [AjBool] ajTrue if Pstr was (re)allocated, ajFalse otherwise
 ** @release 1.0.0 
 ** @@
 ******************************************************************************/
@@ -3420,6 +3459,7 @@ __deprecated AjBool  ajStrAssSub(AjPStr* pthis, const AjPStr src,
 ** @fcategory modify
 ** @@
 */
+
 
 
 
@@ -3795,7 +3835,7 @@ __deprecated AjBool  ajStrAppSub(AjPStr* pthis, const AjPStr src,
 
 /* @func ajStrInsertC *********************************************************
 **
-** Insert a text string into a string at a specified postion.
+** Insert a text string into a string at a specified position.
 **
 ** @param [u] Pstr [AjPStr*] Target string
 ** @param [r] pos [ajint] Position where text is to be inserted.
@@ -3876,7 +3916,7 @@ AjBool ajStrInsertC(AjPStr* Pstr, ajint pos, const char* txt )
 
 /* @func ajStrInsertK *********************************************************
 **
-** Inserts a character into a string at a specified postion.
+** Inserts a character into a string at a specified position.
 **
 ** @param [u] Pstr [AjPStr*] Target string
 ** @param [r] pos [ajint] Position where text is to be inserted.
@@ -3899,7 +3939,7 @@ AjBool ajStrInsertK(AjPStr* Pstr, ajint pos, char chr )
 
 /* @func ajStrInsertS *********************************************************
 **
-** Inserts a text string into a string at a specified postion.
+** Inserts a text string into a string at a specified position.
 **
 ** @param [u] Pstr [AjPStr*] Target string
 ** @param [r] pos [ajint] Position where text is to be inserted.
@@ -4215,7 +4255,7 @@ __deprecated AjBool  ajStrReplaceK( AjPStr* pthis, ajint ibegin,
 
 /* @func ajStrPasteMaxC *******************************************************
 **
-** Overwrite one string with a specifed number of characters from a text 
+** Overwrite one string with a specified number of characters from a text
 ** string.
 ** 
 ** Replaces string at pos ands add len characters from text string txt.
@@ -4282,14 +4322,14 @@ __deprecated AjBool  ajStrReplaceC( AjPStr* pthis, ajint begin,
 
 /* @func ajStrPasteMaxS *******************************************************
 **
-** Overwrite one string with a specifed number of characters from another 
+** Overwrite one string with a specified number of characters from another
 ** string. 
 
 ** Replaces string at pos and add len characters from string str.
 ** Or to the end of the existing string
 **
 ** @param [u] Pstr [AjPStr*] Target string
-** @param [r] pos [ajint] Start position in tagret string.
+** @param [r] pos [ajint] Start position in target string.
 ** @param [r] str [const AjPStr] Replacement string
 ** @param [r] len [ajuint] Number of characters to copy from text.
 ** @return [AjBool] ajTrue on success
@@ -4339,7 +4379,7 @@ __deprecated AjBool  ajStrReplace( AjPStr* pthis, ajint begin,
 ** @nam5rule  KeepSetAscii     Keep a range of ASCII characters.
 ** @nam5rule  KeepSetAlpha     Also remove non-alphabetic.
 ** @nam6rule  KeepSetAlphaRest  Also remove non-alphabetic and report non-space
-** @nam3rule  Quote            Editing quotes in qtrings
+** @nam3rule  Quote            Editing quotes in quoted strings
 ** @nam4rule  QuoteStrip       Removing quotes
 ** @nam5rule  QuoteStripAll    Removing internal and external quotes
 ** @nam3rule  Remove           Remove individual characters from a string.
@@ -4366,7 +4406,7 @@ __deprecated AjBool  ajStrReplace( AjPStr* pthis, ajint begin,
 ** @nam4rule  TrimWhite        Trim whitespace only.
 ** @nam5rule  TrimWhiteEnd     Trim whitespace from end.
 ** @nam5rule  TrimWhiteStart   Trim whitespace from start.
-** @suffix F  Float array to be kept in step with one valule per character
+** @suffix F  Float array to be kept in step with one value per character
 **
 ** @argrule   *        Pstr  [AjPStr*] Modifiable string
 ** @argrule   Pos      pos   [ajint]   First position to be deleted.
@@ -4392,6 +4432,7 @@ __deprecated AjBool  ajStrReplace( AjPStr* pthis, ajint begin,
 **
 ** @fcategory modify
 */
+
 
 
 
@@ -5342,6 +5383,8 @@ AjBool ajStrRemoveDupchar(AjPStr* Pstr)
 
     return ajTrue;
 }
+
+
 
 
 /* @func ajStrRemoveGap *******************************************************
@@ -6313,7 +6356,7 @@ AjBool ajStrTruncateLen(AjPStr* Pstr, ajuint len)
 ** @param [u] Pstr [AjPStr*] target string
 ** @param [r] pos [ajint] First position to be deleted. Negative values
 **                        count from the end
-** @return [AjBool] True is string was feallocated
+** @return [AjBool] True is string was reallocated
 ** @@
 ******************************************************************************/
 
@@ -6382,6 +6425,9 @@ __deprecated AjBool  ajStrTruncate(AjPStr* Pstr, ajint pos)
 **
 ** @fcategory modify
 */
+
+
+
 
 /* @func ajStrExchangeCC ****************************************************
 **
@@ -6576,6 +6622,9 @@ AjBool ajStrExchangeSC(AjPStr* Pstr, const AjPStr str,
 
     return ajTrue;
 }
+
+
+
 
 /* @func ajStrExchangeSS ******************************************************
 **
@@ -6974,7 +7023,7 @@ __deprecated AjBool  ajStrRev(AjPStr* pthis)
 ** @fnote      None.
 ** @nam3rule   Calc   Calculate a value (not in categories above) derived from
 **                    elements of a string object.
-** @nam4rule   CalcCount Counts occurence of character(s) in string.
+** @nam4rule   CalcCount Counts occurrence of character(s) in string.
 ** @nam4rule   CalcWhole Tests whether range refers to whole string.
 ** @nam3rule   Has    Check whether string contains certain character(s).
 ** @nam4rule   HasParentheses Contains parentheses.
@@ -6991,9 +7040,9 @@ __deprecated AjBool  ajStrRev(AjPStr* pthis)
 ** @nam4rule   IsHex          Represents hex value.
 ** @nam4rule   IsInt          Represents integer value.
 ** @nam4rule   IsLong         Represents long value.
-** @nam4rule   IsLower        No uppercase alphabetic characters.
+** @nam4rule   IsLower        No upper case alphabetic characters.
 ** @nam4rule   IsNum          Decimal digits only.
-** @nam4rule   IsUpper        No lowercase alphabetic characters.
+** @nam4rule   IsUpper        No lower case alphabetic characters.
 ** @nam4rule   IsWhite        Whitespace characters only.
 ** @nam4rule   IsWild         One or more wildcard characters.
 ** @nam4rule   IsWord         Non-whitespace characters only. 
@@ -7015,6 +7064,8 @@ __deprecated AjBool  ajStrRev(AjPStr* pthis)
 **
 ** @fcategory use
 */
+
+
 
 
 /* @func ajStrCalcCountC ******************************************************
@@ -7366,6 +7417,8 @@ AjBool ajStrIsCharsetS(const AjPStr str, const AjPStr str2)
 
     return ajTrue;
 }
+
+
 
 
 /* @func ajStrIsCharsetCaseC **************************************************
@@ -7911,7 +7964,7 @@ AjBool ajStrWhole(const AjPStr str, ajint pos1, ajint pos2)
 ** @nam5rule   GetCharPos    Retrieve a single character
 ** @nam4rule   GetLen     Retrieve length
 ** @nam4rule   GetPtr     Retrieve char* pointer
-** @nam4rule   GetRes     Retrieve eserved memory size
+** @nam4rule   GetRes     Retrieve reserved memory size
 ** @nam4rule   GetPtr         Retrieve additional space available
 ** @nam4rule   GetRoom         Retrieve additional space available
 ** @nam4rule   GetUse     Retrieve use (reference) count
@@ -7933,6 +7986,9 @@ AjBool ajStrWhole(const AjPStr str, ajint pos1, ajint pos2)
 **
 ** @fcategory use
 */
+
+
+
 
 /* @func ajStrGetAsciiCommon ***************************************************
 **
@@ -8490,6 +8546,9 @@ AjBool ajStrGetValid(const AjPStr str)
 ** @fcategory modify
 */
 
+
+
+
 /* @func ajStrGetuniquePtr ****************************************************
 **
 ** Makes the string value unique by copying any string with a reference count
@@ -8550,6 +8609,8 @@ __deprecated char  *ajStrStrMod(AjPStr *pthis)
 ** @return [AjPStr] The new string pointer, or NULL for failure
 ** @@
 ******************************************************************************/
+
+
 
 
 /* @func ajStrGetuniqueStr ****************************************************
@@ -8632,9 +8693,12 @@ __deprecated AjBool  ajStrMod(AjPStr* pthis)
 ** @fcategory modify
 */
 
+
+
+
 /* @func ajStrSetClear ********************************************************
 **
-** Clears all elemements in a string object.
+** Clears all elements in a string object.
 **
 ** If the string is already empty nothing happens. If the string has data, 
 ** it makes sure the string is modifiable and sets it to empty.
@@ -8716,6 +8780,9 @@ AjBool ajStrSetRes(AjPStr* Pstr, ajuint size)
 
     if(thys->Res < savesize)
     {
+#ifdef AJ_SAVESTATS
+        strExtra += savesize - thys->Res;
+#endif
 	AJRESIZE(thys->Ptr, savesize);
 	thys->Res = savesize;
 
@@ -8789,7 +8856,12 @@ AjBool ajStrSetResRound(AjPStr* Pstr, ajuint size)
 	else
 	  roundsize = ajRound(size, STRSIZE);
 
+#ifdef AJ_SAVESTATS
+        strExtra += roundsize - thys->Res;
+#endif
         AJRESIZE(thys->Ptr, roundsize);
+
+
         thys->Res = roundsize;
 
 	return ajTrue;
@@ -8929,12 +9001,13 @@ __deprecated void  ajStrFixI(AjPStr* pthis, ajint ilen)
 **
 ** @nam3rule  To            Convert string value to a different datatype.
 ** @nam4rule  ToBool        Convert to boolean
-** @nam4rule  ToDouble        Convert to double
-** @nam4rule  ToFloat        Convert to float
-** @nam4rule  ToHex        Convert to hexadecimal
-** @nam4rule  ToInt        Convert to integer
+** @nam4rule  ToDouble      Convert to double
+** @nam4rule  ToFloat       Convert to float
+** @nam4rule  ToHex         Convert to hexadecimal
+** @nam4rule  ToInt         Convert to integer
 ** @nam4rule  ToLong        Convert to long
 ** @nam4rule  ToUint        Convert to unsigned integer
+** @nam4rule  ToUlong       Convert to unsigned long integer
 **
 ** @argrule * str [const AjPStr] String
 ** @argrule ToBool Pval [AjBool*] Boolean return value
@@ -8944,11 +9017,15 @@ __deprecated void  ajStrFixI(AjPStr* pthis, ajint ilen)
 ** @argrule ToInt Pval [ajint*] Integer return value
 ** @argrule ToLong Pval [ajlong*] Long integer return value
 ** @argrule ToUint Pval [ajuint*] Unsigned integer return value
+** @argrule ToUlong Pval [ajulong*] Unsigned long integer return value
 **
 ** @valrule * [AjBool] True on success
 **
 ** @fcategory cast
 */
+
+
+
 
 /* @func ajStrToBool **********************************************************
 **
@@ -9327,6 +9404,52 @@ AjBool ajStrToUint(const AjPStr str, ajuint* Pval)
 
 
 
+/* @func ajStrToUlong **********************************************************
+**
+** Converts a string into an unsigned long integer value.
+**
+** Uses the strtoul call in the C RTL.
+**
+** @param [r] str [const AjPStr] String
+** @param [w] Pval [ajulong*] String represented as an integer.
+** @return [AjBool] ajTrue if the string had a valid integer value.
+** @cre an empty string returns ajFalse.
+** @see ajStrIsInt
+** @@
+******************************************************************************/
+
+AjBool ajStrToUlong(const AjPStr str, ajulong* Pval)
+{
+    AjBool ret = ajFalse;
+    const char* cp;
+    ajulong l;
+    char* ptr;
+
+    *Pval = 0;
+
+    if(!str)
+	return ret;
+
+    if(!str->Len)
+	return ret;
+
+    cp = str->Ptr;
+
+    errno = 0;
+    l = strtoul(cp, &ptr, 10);
+
+    if(!*ptr && errno != ERANGE)
+    {
+	*Pval = l;
+	ret = ajTrue;
+    }
+
+    return ret;
+}
+
+
+
+
 /* @section datatype to string conversion functions ***************************
 **
 ** Functions for converting datatypes to strings.
@@ -9357,6 +9480,9 @@ AjBool ajStrToUint(const AjPStr str, ajuint* Pval)
 **
 ** @fcategory derive
 */
+
+
+
 
 /* @func ajStrFromBool ********************************************************
 **
@@ -9622,7 +9748,7 @@ AjBool ajStrFromUint(AjPStr* Pstr, ajuint val)
 ** @nam4rule  FmtLower    Convert to lower case.
 ** @nam5rule  FmtLowerSub Convert sub-string.
 ** @nam4rule  FmtQuote    Enclose in double quotes
-** @nam4rule  FmtTitle    Convert first character of string to uppercase. 
+** @nam4rule  FmtTitle    Convert first character of string to upper case.
 ** @nam4rule  FmtUpper    Convert to upper case.
 ** @nam5rule  FmtUpperSub Substring only
 ** @nam4rule  FmtWrap     Wrap with newlines
@@ -9643,11 +9769,14 @@ AjBool ajStrFromUint(AjPStr* Pstr, ajuint val)
 ** @fcategory modify
 */
 
+
+
+
 /* @func ajStrFmtBlock ********************************************************
 **
 ** Splits a string into words (blocks) of a given size by inserting spaces.
 **
-** Mainly intended for sequence ouput formats
+** Mainly intended for sequence output formats
 **
 ** @param [u] Pstr [AjPStr*] String.
 ** @param [r] len [ajuint] Block size
@@ -9993,7 +10122,7 @@ __deprecated AjBool  ajStrToUpperII(AjPStr* pthis, ajint begin, ajint end)
 ** Newline characters are inserted, at white space if possible,
 ** with a break at whitespace following the preferred character
 ** if found, or at the last whitespace, or just at the line width if there
-** is no whitespace found (it does happen with long hyphenated  enzyme names)
+** is no whitespace found (it does happen with long hyphenated enzyme names)
 **
 ** @param [u] Pstr [AjPStr*] Target string
 ** @param [r] width [ajuint] Line width
@@ -10739,7 +10868,7 @@ AjBool ajStrPrefixC(const AjPStr str, const char* txt2)
     if(!ilen)				/* no prefix */
 	return ajFalse;
 
-    if(ilen > MAJSTRGETLEN(str))		/* pref longer */
+    if(ilen > MAJSTRGETLEN(str))		/* prefix longer */
 	return ajFalse;
 
     if(strncmp(MAJSTRGETPTR(str), txt2, ilen)) /* +1 or -1 for a failed match */
@@ -10772,7 +10901,7 @@ AjBool ajStrPrefixS(const AjPStr str, const AjPStr str2)
     if(!str2->Len)			/* no prefix */
 	return ajFalse;
 
-    if(str2->Len > MAJSTRGETLEN(str))	/* pref longer */
+    if(str2->Len > MAJSTRGETLEN(str))	/* prefix longer */
 	return ajFalse;
 
     if(strncmp(MAJSTRGETPTR(str),
@@ -10835,6 +10964,8 @@ AjBool ajStrPrefixCaseS(const AjPStr str, const AjPStr str2)
 }
 
 
+
+
 /* @obsolete ajStrPrefixCase
 ** @rename ajStrPrefixCaseS
 */
@@ -10868,7 +10999,7 @@ AjBool ajStrSuffixC(const AjPStr str, const char* txt2)
     ilen   = strlen(txt2);
     istart = str->Len - ilen;
 
-    if(ilen > MAJSTRGETLEN(str))		/* suff longer */
+    if(ilen > MAJSTRGETLEN(str))		/* suffix longer */
 	return ajFalse;
 
     if(strncmp(&str->Ptr[istart], txt2, ilen)) /* +1 or -1 for a
@@ -10996,6 +11127,7 @@ AjBool ajStrSuffixCaseS(const AjPStr str, const AjPStr str2)
 
 
 
+
 /* @macro MAJSTRCMPC **********************************************************
 **
 ** Finds the sort order of a string and a text string.
@@ -11009,6 +11141,9 @@ AjBool ajStrSuffixCaseS(const AjPStr str, const AjPStr str2)
 **         in length and content.
 ** @@
 ******************************************************************************/
+
+
+
 
 /* @func ajStrCmpC ************************************************************
 **
@@ -11077,6 +11212,9 @@ __deprecated int  ajStrNCmpC(const AjPStr str, const char* txt, ajint len)
 **         in length and content.
 ** @@
 ******************************************************************************/
+
+
+
 
 /* @func ajStrCmpS ************************************************************
 **
@@ -11337,14 +11475,14 @@ __deprecated int  ajStrCmp(const void* str, const void* str2)
 ** @fdata      [AjPStr]
 ** @fnote     None.
 **
-** @nam3rule  Find          Locate first occurence of a string
+** @nam3rule  Find          Locate first occurrence of a string
 **                          within another string. 
 ** @nam4rule  FindAny       Any in a set of characters from the start
 ** @nam4rule  FindCase      Case insensitive
 ** @nam4rule  FindNext      Next in a set of characters from a given position
 ** @nam4rule  FindRest      Any not in a set of characters
 ** @nam5rule  FindRestCase  Any not in a set of characters, case insensitive
-** @nam3rule  Findlast      Locate last occurence of a string
+** @nam3rule  Findlast      Locate last occurrence of a string
 **
 ** @argrule * str [const AjPStr] String
 ** @argrule FindNext pos1 [ajint] String position to search from
@@ -11357,6 +11495,7 @@ __deprecated int  ajStrCmp(const void* str, const void* str2)
 **
 ** @fcategory use
 */
+
 
 
 
@@ -11583,7 +11722,7 @@ __deprecated ajint  ajStrFindCase(const AjPStr str, const AjPStr str2)
 
 /* @func ajStrFindNextC *******************************************************
 **
-** Finds the next occurrence in a string of any character in a second 
+** Finds the next occurrence in a string of a second 
 ** (text) string.
 **
 ** @param [r] str [const AjPStr] String
@@ -11598,13 +11737,14 @@ ajint ajStrFindNextC(const AjPStr str, ajint pos1, const char* txt2)
 {
     ajuint i;
     ajuint jpos;
+    char *cp;
 
     jpos = ajCvtSposToPosStart(str->Len, 0, pos1);
+    cp = strstr(&str->Ptr[jpos], txt2);
+    if(!cp)
+        return -1;
 
-    i = jpos + strcspn(&str->Ptr[jpos], txt2);
-
-    if(i == str->Len)
-	return -1;
+    i = cp - str->Ptr;
 
     return i;
 }
@@ -11659,13 +11799,16 @@ ajint ajStrFindNextS(const AjPStr str, ajint pos1, const AjPStr str2)
 {
     ajuint i;
     ajuint jpos;
+    char *cp;
 
     jpos = ajCvtSposToPosStart(str->Len, 0, pos1);
 
-    i = jpos + strcspn(&str->Ptr[jpos], str2->Ptr);
+    cp = strstr(&str->Ptr[jpos], str2->Ptr);
 
-    if(i == str->Len)
-	return -1;
+    if(!cp)
+        return -1;
+
+    i = cp - str->Ptr;
 
     return i;
 }
@@ -11945,6 +12088,7 @@ ajint ajStrFindlastS(const AjPStr str, const AjPStr str2)
 
 
 
+
 /* @func ajStrExtractFirst ****************************************************
 **
 ** Returns a word from the start of a string, and the remainder of the string
@@ -12081,9 +12225,9 @@ AjBool ajStrExtractWord(const AjPStr str, AjPStr* Prest, AjPStr* Pword)
 ** function have internal memories of the last position.
 **
 ** @param [r] str [const AjPStr] String to be parsed (first call) or
-**        NULL for followup calls using the same string, as for the
+**        NULL for follow-up calls using the same string, as for the
 **        C RTL function strtok which is eventually called.
-** @param [r] txtdelim [const char*] Delimiter(s) to be used betwen tokens.
+** @param [r] txtdelim [const char*] Delimiter(s) to be used between tokens.
 ** @return [const AjPStr] Token returned, when all tokens are parsed
 **                  a NULL is returned.
 ** @@
@@ -12394,7 +12538,7 @@ __deprecated ajint  ajStrListToArray(const AjPStr thys, AjPStr **array)
 ** Tokenise a string using whitespace and return tokens from the string. 
 **
 ** @param [r] str [const AjPStr] String to be parsed (first call) or
-**        NULL for followup calls using the same string, as for the
+**        NULL for follow-up calls using the same string, as for the
 **        C RTL function strtok which is eventually called.
 ** @return [const AjPStr] Token
 ** @error NULL if no further token is found.
@@ -12405,6 +12549,7 @@ const AjPStr ajStrParseWhite(const AjPStr str)
 {
     return ajStrParseC(str, " \t\n\r");
 }
+
 
 
 
@@ -12440,6 +12585,9 @@ __deprecated const AjPStr  ajStrTok(const AjPStr str)
 **
 ** @fcategory misc
 */
+
+
+
 
 /* @func ajStrProbe ***********************************************************
 **
@@ -12490,19 +12638,22 @@ void ajStrStat(const char* title)
 {
 #ifdef AJ_SAVESTATS
     static ajlong statAlloc     = 0;
+    static ajlong statExtra     = 0;
     static ajlong statCount     = 0;
     static ajlong statFree      = 0;
     static ajlong statFreeCount = 0;
     static ajlong statTotal     = 0;
 
     ajDebug("String usage statistics since last call %s:\n", title);
-    ajDebug("String usage (bytes): %Ld allocated, %Ld freed\n",
-	    strAlloc - statAlloc, strFree - statFree);
+    ajDebug("String usage (bytes): %Ld allocated, %Ld resize, %Ld freed\n",
+	    strAlloc - statAlloc, strExtra - statExtra,
+            strFree - statFree);
     ajDebug("String usage (number): %Ld allocated, %Ld freed, %Ld in use\n",
 	    strTotal - statTotal, strFreeCount - statFreeCount,
 	    strCount - statCount);
 
     statAlloc     = strAlloc;
+    statExtra     = strExtra;
     statCount     = strCount;
     statFree      = strFree;
     statFreeCount = strFreeCount;
@@ -12645,6 +12796,9 @@ void ajStrTraceTitle(const AjPStr str, const char* title)
 ** @fcategory misc
 */
 
+
+
+
 /* @func ajStrExit ************************************************************
 **
 ** Prints a summary of string usage with debug calls.
@@ -12656,9 +12810,10 @@ void ajStrTraceTitle(const AjPStr str, const char* title)
 void ajStrExit(void)
 {
 #ifdef AJ_SAVESTATS
-    ajDebug("String usage (bytes): %Ld allocated, %Ld freed, %Ld in use\n",
-	    strAlloc, strFree,
-	    (strAlloc - strFree));
+    ajDebug("String usage (bytes): %Ld allocated, %Ld resized, "
+            "%Ld freed, %Ld in use\n",
+	    strAlloc, strExtra, strFree,
+	    (strAlloc + strExtra - strFree));
     ajDebug("String usage (number): %Ld allocated, %Ld freed %Ld in use\n",
 	    strTotal, strFreeCount, strCount);
 #endif
@@ -12745,6 +12900,7 @@ __deprecated ajint  ajCharPos(const char* thys, ajint ipos)
 
 
 
+
 /* @section string constant constructors ***************************************
 **
 ** Functions for constructing string constant objects 
@@ -12760,6 +12916,9 @@ __deprecated ajint  ajCharPos(const char* thys, ajint ipos)
 ** @valrule   *     [const AjPStr] New string
 ** @fcategory new
 */
+
+
+
 
 /* @func ajStrConstS *******************************************************
 **
@@ -12805,6 +12964,9 @@ const AjPStr ajStrConstEmpty(void)
 **
 ******************************************************************************/
 
+
+
+
 /* @section constructors ******************************************************
 **
 ** @fdata [AjIStr]
@@ -12818,6 +12980,7 @@ const AjPStr ajStrConstEmpty(void)
 **
 ** @fcategory new
 ******************************************************************************/
+
 
 
 
@@ -12959,6 +13122,9 @@ __deprecated void  ajStrIterFree(AjIStr* iter)
 ** @fcategory use
 */
 
+
+
+
 /* @func ajStrIterDone ******************************************************
 **
 ** Tests whether a string iterator has completed yet.
@@ -13017,6 +13183,9 @@ __deprecated AjBool  ajStrIterBackDone(AjIStr iter)
 ** @fcategory modify
 */
 
+
+
+
 /* @func ajStrIterBegin *******************************************************
 **
 ** Sets a string iterator to its start condition,
@@ -13064,6 +13233,9 @@ void ajStrIterEnd(AjIStr iter)
 **
 ** @fcategory cast
 */
+
+
+
 
 /* @func ajStrIterGetC *******************************************************
 **
@@ -13113,6 +13285,9 @@ char ajStrIterGetK(const AjIStr iter)
 ** @fcategory modify
 */
 
+
+
+
 /* @func ajStrIterPutK ********************************************************
 **
 ** Replaces the character at the current string iterator position.
@@ -13146,6 +13321,8 @@ void ajStrIterPutK(AjIStr iter, char chr)
 **
 ** @fcategory modify
 */
+
+
 
 
 /* @func ajStrIterNext ********************************************************
@@ -13235,6 +13412,9 @@ __deprecated AjBool  ajStrIterMoreBack(AjIStr iter)
 **
 ******************************************************************************/
 
+
+
+
 /* @section constructors ******************************************************
 **
 ** @fdata [AjPStrTok]
@@ -13248,6 +13428,8 @@ __deprecated AjBool  ajStrIterMoreBack(AjIStr iter)
 **
 ** @fcategory new
 */
+
+
 
 
 /* @func ajStrTokenNewC *******************************************************
@@ -13333,6 +13515,9 @@ AjPStrTok ajStrTokenNewS(const AjPStr str, const AjPStr strdelim)
 ** @fcategory delete
 */
 
+
+
+
 /* @func ajStrTokenDel ******************************************************
 **
 ** String token parser destructor which frees memory for a string token 
@@ -13386,6 +13571,9 @@ __deprecated void  ajStrTokenClear(AjPStrTok* token)
 **
 ** @fcategory assign
 */
+
+
+
 
 /* @func ajStrTokenAssign ****************************************************
 **
@@ -13519,6 +13707,9 @@ AjBool ajStrTokenAssignS(AjPStrTok* Ptoken, const AjPStr str,
 ** @fcategory modify
 */
 
+
+
+
 /* @func ajStrTokenReset ******************************************************
 **
 ** Clears the strings from a string token parser object.
@@ -13561,6 +13752,9 @@ void ajStrTokenReset(AjPStrTok* Ptoken)
 **
 ** @fcategory misc
 */
+
+
+
 
 /* @func ajStrTokenTrace ******************************************************
 **
@@ -13609,6 +13803,9 @@ void ajStrTokenTrace(const AjPStrTok token)
 **
 ** @fcategory modify
 */
+
+
+
 
 /* @func ajStrTokenNextFind *************************************************
 **

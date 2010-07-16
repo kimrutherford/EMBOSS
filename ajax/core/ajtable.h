@@ -14,6 +14,7 @@ struct binding {
 
 
 
+
 /* @data AjPTable *************************************************************
 **
 ** Hash table object. Tables are key/value pairs with a simple hash function

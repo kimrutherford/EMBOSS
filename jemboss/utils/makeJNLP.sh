@@ -143,6 +143,7 @@ mv Jemboss.jar jnlp
 cp lib/*jar jnlp
 cp lib/axis/*jar jnlp
 cp images/Jemboss_logo_large.gif jnlp
+cp images/jay64.jpg jnlp
 cp utils/template.html jnlp/index.html
 cp utils/jws-launch-button.png jnlp/jws-launch-button.png
 cd jnlp
@@ -224,7 +225,7 @@ echo '           <description>Jemboss</description>'    >> $JNLP
 echo '           <description kind="short">A Java user interface to EMBOSS.' \
                                                         >> $JNLP
 echo '           </description>'                        >> $JNLP
-echo '           <icon href="Jemboss_logo_large.gif"/>' >> $JNLP
+echo '           <icon href="jay64.jpg"/>' >> $JNLP
 echo '             <shortcut online="true">'            >> $JNLP
 echo '               <desktop/>'                        >> $JNLP
 echo '               <menu submenu="Jemboss"/>'         >> $JNLP

@@ -40,6 +40,9 @@ static AjBool aj_melt_saveshift = 1;
 
 static float meltProbScore(const AjPStr seq1, const AjPStr seq2, ajint len);
 
+
+
+
 /* @func ajMeltInit **********************************************************
 **
 ** Initialises melt entropies, enthalpies and energies. Different data
@@ -50,7 +53,6 @@ static float meltProbScore(const AjPStr seq1, const AjPStr seq2, ajint len);
 ** @param  [r]  savesize [ajint] Size of array to save, or zero if none
 ** @return [void] Number of energies to save
 ******************************************************************************/
-
 
 void ajMeltInit(AjBool isdna, ajint savesize)
 {
@@ -439,6 +441,7 @@ float ajMeltTemp(const AjPStr strand, ajint len, ajint shift, float saltconc,
 
 
 
+
 /* @obsolete ajTm
 ** @rename ajMeltTemp
 */
@@ -615,14 +618,14 @@ float ajMeltTempSave(const char *strand, ajint pos, ajint len, float saltconc,
 
     entropy = -10.8 - sumEntropy;
 
-    /* Added for santalucia */
+    /* Added for santa lucia */
     entropy += (len-1) * (log10((double) (saltconc/1000.0))) *
 	(float) 0.368;
 
 
     enthalpy = -sumEnthalpy;
 
-    /* logsalt removed for santalucia */
+    /* logsalt removed for santa lucia */
     dTm = ((enthalpy*1000.0) / (entropy+LogDNA)) + /*LogSalt*/ - To;
     Tm = (float) dTm; /* slight loss of precision here but no matter */
 
@@ -645,7 +648,6 @@ __deprecated float ajTm2(const char *strand, ajint pos,
     return ajMeltTempSave(strand, pos, len, saltconc, DNAconc, isDNA,
                           saveentr, saveenth, saveener);
 }
-
 
 
 
@@ -673,6 +675,7 @@ float ajMeltTempProd(float gc, float saltconc, ajint len)
 
     return ptm;
 }
+
 
 
 

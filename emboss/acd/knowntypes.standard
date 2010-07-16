@@ -20,6 +20,7 @@ blast_nucleotide_dbname             | string         |  "EDAM: BLAST database na
 blast_protein_dbname                | string         |  "EDAM: BLAST database name"                            | Blast protein database name
 caf_project                         | file           |  "EDAM: Common Assembly Format (CAF) project file"      | CAF assembly project file
 cds_sequence                        | sequence       |  "EDAM: Nucleotide sequence"                            | Coding
+cirdna_mapping_commands             | file           |                                                 | Commands to the cirdna drawing program
 clique_input                        | file           |  "EDAM: PHYLIP discrete states file"                    | Phylip clique program input
 clique_output                       | file           |  "EDAM: PHYLIP cliques file"                            | Phylip clique program output
 codon_list                          | string         |  "EDAM: Codon string"                                   | Codon triplet(s)
@@ -139,7 +140,7 @@ input_directory                     | directory      |  "EDAM: Directory name"  
 integer_gap_extension               | integer        |  "EDAM: Integer gap extension penalty"                  | Affine gap extension penalty
 integer_gap_penalty                 | integer        |  "EDAM: Integer gap opening penalty"                    | Affine gap penalty
 integer_long_data                   | file           |                                                         | Standard format information on int and long data
-einverted_output                    | file           |  "EDAM: Sanger inverted repeat sequence map report"     | Sanger Centre program inverted output
+inverted_output                     | file           |  "EDAM: Sanger inverted repeat sequence map report"     | Sanger Centre program inverted output
 jaspar_database                     | file           |  "EDAM: JASPAR database"                                | JASPAR database
 jaspar_matrix_id		    | string	     |  "EDAM: JASPAR profile identifier"                      | JASPAR matrix identifier
 keywords                            | file           |  "EDAM: Keywords"                                       | Keywords file

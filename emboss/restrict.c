@@ -59,6 +59,7 @@ static void restrict_namecheck(const AjPStr enzymes, AjPFile enzfile);
 
 
 
+
 /* @prog restrict *************************************************************
 **
 ** Finds restriction enzyme cleavage sites
@@ -951,8 +952,11 @@ static void restrict_namecheck(const AjPStr enzymes, AjPFile enzfile)
     
     ne = ajArrCommaList(enzymes,&ea);
 
-    while(embPatRestrictReadEntry(enz,enzfile))
+    while(!ajFileIsEof(enzfile))
     {
+        if(!embPatRestrictReadEntry(enz,enzfile))
+	    continue;
+
         key = ajStrNew();
         ajStrAssignS(&key,enz->cod);
         ajStrFmtUpper(&key);

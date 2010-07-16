@@ -1,10 +1,10 @@
 /******************************************************************************
-** @source Ensembl diTag functions
+** @source Ensembl Ditag functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @version $Revision: 1.3 $
+** @version $Revision: 1.15 $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -36,7 +36,20 @@
 /* ========================== private data ============================ */
 /* ==================================================================== */
 
-static const char *diTagFeatureSide[] =
+/* ditagfeatureSide ***********************************************************
+**
+** The Ditag Feature side is enumerated in both, the SQL table
+** definition and the data structure. The following strings are used for
+** conversion in database operations and correspond to
+** EnsEDitagfeatureSide.
+**
+** L: left or start feature
+** R: right or end feature
+** F: tags with only one feature (e.g. CAGE tags, which only have a 5' tag)
+**
+******************************************************************************/
+
+static const char *ditagfeatureSide[] =
 {
     NULL,
     "L",
@@ -52,35 +65,27 @@ static const char *diTagFeatureSide[] =
 /* ======================== private functions ========================= */
 /* ==================================================================== */
 
-extern EnsPAnalysisadaptor
-ensRegistryGetAnalysisadaptor(EnsPDatabaseadaptor dba);
-
-extern EnsPAssemblymapperadaptor
-ensRegistryGetAssemblymapperadaptor(EnsPDatabaseadaptor dba);
-
-extern EnsPDitagfeatureadaptor
-ensRegistryGetDitagfeatureadaptor(EnsPDatabaseadaptor dba);
-
-extern EnsPSliceadaptor
-ensRegistryGetSliceadaptor(EnsPDatabaseadaptor dba);
-
-static AjBool diTagadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
+static AjBool ditagadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
                                         const AjPStr statement,
                                         AjPList list);
 
-static AjBool diTagFeatureadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
+static int ditagfeatureCompareStartAscending(const void* P1, const void* P2);
+
+static int ditagfeatureCompareStartDescending(const void* P1, const void* P2);
+
+static AjBool ditagfeatureadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
                                                const AjPStr statement,
                                                EnsPAssemblymapper am,
                                                EnsPSlice slice,
                                                AjPList dtfs);
 
-static void *diTagFeatureadaptorCacheReference(void *value);
+static void *ditagfeatureadaptorCacheReference(void *value);
 
-static void diTagFeatureadaptorCacheDelete(void **value);
+static void ditagfeatureadaptorCacheDelete(void **value);
 
-static ajuint diTagFeatureadaptorCacheSize(const void *value);
+static ajulong ditagfeatureadaptorCacheSize(const void *value);
 
-static EnsPFeature diTagFeatureadaptorGetFeature(const void *value);
+static EnsPFeature ditagfeatureadaptorGetFeature(const void *value);
 
 
 
@@ -98,7 +103,7 @@ static EnsPFeature diTagFeatureadaptorGetFeature(const void *value);
 **
 ** Functions for manipulating Ensembl Ditag objects
 **
-** @cc Bio::EnsEMBL::Map::Ditag CVS Revision: 1.4
+** @cc Bio::EnsEMBL::Map::Ditag CVS Revision: 1.6
 **
 ** @nam2rule Ditag
 **
@@ -137,7 +142,7 @@ static EnsPFeature diTagFeatureadaptorGetFeature(const void *value);
 ** Default constructor for an Ensembl Ditag.
 **
 ** @cc Bio::EnsEMBL::Storable
-** @param [r] adaptor [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [r] dta [EnsPDitagadaptor] Ensembl Ditag Adaptor
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 ** @cc Bio::EnsEMBL::Map::Ditag::new
 ** @param [u] name [AjPStr] Name
@@ -149,7 +154,7 @@ static EnsPFeature diTagFeatureadaptorGetFeature(const void *value);
 ** @@
 ******************************************************************************/
 
-EnsPDitag ensDitagNew(EnsPDatabaseadaptor adaptor,
+EnsPDitag ensDitagNew(EnsPDitagadaptor dta,
                       ajuint identifier,
                       AjPStr name,
                       AjPStr type,
@@ -157,24 +162,24 @@ EnsPDitag ensDitagNew(EnsPDatabaseadaptor adaptor,
                       ajuint count)
 {
     EnsPDitag dt = NULL;
-    
+
     AJNEW0(dt);
-    
+
     dt->Use        = 1;
     dt->Identifier = identifier;
-    dt->Adaptor    = adaptor;
-    
+    dt->Adaptor    = dta;
+
     if(name)
         dt->Name = ajStrNewRef(name);
-    
+
     if(type)
         dt->Type = ajStrNewRef(type);
-    
+
     if(sequence)
         dt->Sequence = ajStrNewRef(sequence);
-    
+
     dt->Count = count;
-    
+
     return dt;
 }
 
@@ -194,27 +199,27 @@ EnsPDitag ensDitagNew(EnsPDatabaseadaptor adaptor,
 EnsPDitag ensDitagNewObj(const EnsPDitag object)
 {
     EnsPDitag dt = NULL;
-    
+
     if(!object)
-	return NULL;
-    
+        return NULL;
+
     AJNEW0(dt);
-    
+
     dt->Use        = 1;
     dt->Identifier = object->Identifier;
     dt->Adaptor    = object->Adaptor;
-    
+
     if(object->Name)
         dt->Name = ajStrNewRef(object->Name);
-    
+
     if(object->Type)
         dt->Type = ajStrNewRef(object->Type);
-    
+
     if(object->Sequence)
         dt->Sequence = ajStrNewRef(object->Sequence);
-    
+
     dt->Count = object->Count;
-    
+
     return dt;
 }
 
@@ -235,10 +240,10 @@ EnsPDitag ensDitagNewObj(const EnsPDitag object)
 EnsPDitag ensDitagNewRef(EnsPDitag dt)
 {
     if(!dt)
-	return NULL;
-    
+        return NULL;
+
     dt->Use++;
-    
+
     return dt;
 }
 
@@ -278,37 +283,39 @@ EnsPDitag ensDitagNewRef(EnsPDitag dt)
 void ensDitagDel(EnsPDitag *Pdt)
 {
     EnsPDitag pthis = NULL;
-    /*
-     ajDebug("ensDitagDel\n"
-	     "  *Pdt %p\n",
-	     *Pdt);
-     
-     ensDitagTrace(*Pdt, 1);
-     */
-    
+
     if(!Pdt)
         return;
-    
+
     if(!*Pdt)
         return;
 
+    if(ajDebugTest("ensDitagDel"))
+    {
+        ajDebug("ensDitagDel\n"
+                "  *Pdt %p\n",
+                *Pdt);
+
+        ensDitagTrace(*Pdt, 1);
+    }
+
     pthis = *Pdt;
-    
+
     pthis->Use--;
-    
+
     if(pthis->Use)
     {
-	*Pdt = NULL;
-	
-	return;
+        *Pdt = NULL;
+
+        return;
     }
-    
+
     ajStrDel(&pthis->Name);
     ajStrDel(&pthis->Type);
     ajStrDel(&pthis->Sequence);
-    
+
     AJFREE(*Pdt);
-    
+
     return;
 }
 
@@ -323,7 +330,7 @@ void ensDitagDel(EnsPDitag *Pdt)
 ** @fnote None
 **
 ** @nam3rule Get Return Ditag attribute(s)
-** @nam4rule GetAdaptor Return the Ensembl Database Adaptor
+** @nam4rule GetAdaptor Return the Ensembl Ditag Adaptor
 ** @nam4rule GetIdentifier Return the SQL database-internal identifier
 ** @nam4rule GetName Return the name
 ** @nam4rule GetType Return the type
@@ -332,7 +339,7 @@ void ensDitagDel(EnsPDitag *Pdt)
 **
 ** @argrule * dt [const EnsPDitag] Ditag
 **
-** @valrule Adaptor [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @valrule Adaptor [EnsPDitagadaptor] Ensembl Ditag Adaptor
 ** @valrule Identifier [ajuint] SQL database-internal identifier
 ** @valrule Name [AjPStr] Name
 ** @valrule Type [AjPStr] Type
@@ -347,20 +354,20 @@ void ensDitagDel(EnsPDitag *Pdt)
 
 /* @func ensDitagGetAdaptor ***************************************************
 **
-** Get the Ensembl Database Adaptor element of an Ensembl Ditag.
+** Get the Ensembl Ditag Adaptor element of an Ensembl Ditag.
 **
 ** @cc Bio::EnsEMBL::Storable::adaptor
 ** @param [r] dt [const EnsPDitag] Ensembl Ditag
 **
-** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @return [EnsPDitagadaptor] Ensembl Ditag Adaptor or NULL
 ** @@
 ******************************************************************************/
 
-EnsPDatabaseadaptor ensDitagGetAdaptor(const EnsPDitag dt)
+EnsPDitagadaptor ensDitagGetAdaptor(const EnsPDitag dt)
 {
     if(!dt)
         return NULL;
-    
+
     return dt->Adaptor;
 }
 
@@ -382,7 +389,7 @@ ajuint ensDitagGetIdentifier(const EnsPDitag dt)
 {
     if(!dt)
         return 0;
-    
+
     return dt->Identifier;
 }
 
@@ -404,7 +411,7 @@ AjPStr ensDitagGetName(const EnsPDitag dt)
 {
     if(!dt)
         return NULL;
-    
+
     return dt->Name;
 }
 
@@ -426,7 +433,7 @@ AjPStr ensDitagGetType(const EnsPDitag dt)
 {
     if(!dt)
         return NULL;
-    
+
     return dt->Type;
 }
 
@@ -448,7 +455,7 @@ AjPStr ensDitagGetSequence(const EnsPDitag dt)
 {
     if(!dt)
         return NULL;
-    
+
     return dt->Sequence;
 }
 
@@ -470,7 +477,7 @@ ajuint ensDitagGetCount(const EnsPDitag dt)
 {
     if(!dt)
         return 0;
-    
+
     return dt->Count;
 }
 
@@ -485,7 +492,7 @@ ajuint ensDitagGetCount(const EnsPDitag dt)
 ** @fnote None
 **
 ** @nam3rule Set Set one element of an Ensembl Ditag
-** @nam4rule SetAdaptor Set the Ensembl Database Adaptor
+** @nam4rule SetAdaptor Set the Ensembl Ditag Adaptor
 ** @nam4rule SetIdentifier Set the SQL database-internal identifier
 ** @nam4rule SetName Set the name
 ** @nam4rule SetType Set the type
@@ -504,23 +511,23 @@ ajuint ensDitagGetCount(const EnsPDitag dt)
 
 /* @func ensDitagSetAdaptor ***************************************************
 **
-** Set the Ensembl Database Adaptor element of an Ensembl Ditag.
+** Set the Ensembl Ditag Adaptor element of an Ensembl Ditag.
 **
 ** @cc Bio::EnsEMBL::Storable::adaptor
 ** @param [u] dt [EnsPDitag] Ensembl Ditag
-** @param [r] adaptor [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [r] dta [EnsPDitagadaptor] Ensembl Ditag Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensDitagSetAdaptor(EnsPDitag dt, EnsPDatabaseadaptor adaptor)
+AjBool ensDitagSetAdaptor(EnsPDitag dt, EnsPDitagadaptor dta)
 {
     if(!dt)
         return ajFalse;
-    
-    dt->Adaptor = adaptor;
-    
+
+    dt->Adaptor = dta;
+
     return ajTrue;
 }
 
@@ -544,9 +551,9 @@ AjBool ensDitagSetIdentifier(EnsPDitag dt, ajuint identifier)
 {
     if(!dt)
         return ajFalse;
-    
+
     dt->Identifier = identifier;
-    
+
     return ajTrue;
 }
 
@@ -569,11 +576,11 @@ AjBool ensDitagSetName(EnsPDitag dt, AjPStr name)
 {
     if(!dt)
         return ajFalse;
-    
+
     ajStrDel(&dt->Name);
-    
+
     dt->Name = ajStrNewRef(name);
-    
+
     return ajTrue;
 }
 
@@ -596,11 +603,11 @@ AjBool ensDitagSetType(EnsPDitag dt, AjPStr type)
 {
     if(!dt)
         return ajFalse;
-    
+
     ajStrDel(&dt->Type);
-    
+
     dt->Type = ajStrNewRef(type);
-    
+
     return ajTrue;
 }
 
@@ -623,11 +630,11 @@ AjBool ensDitagSetSequence(EnsPDitag dt, AjPStr sequence)
 {
     if(!dt)
         return ajFalse;
-    
+
     ajStrDel(&dt->Sequence);
-    
+
     dt->Sequence = ajStrNewRef(sequence);
-    
+
     return ajTrue;
 }
 
@@ -650,9 +657,9 @@ AjBool ensDitagSetCount(EnsPDitag dt, ajuint count)
 {
     if(!dt)
         return ajFalse;
-    
+
     dt->Count = count;
-    
+
     return ajTrue;
 }
 
@@ -691,90 +698,90 @@ AjBool ensDitagSetCount(EnsPDitag dt, ajuint count)
 AjBool ensDitagTrace(const EnsPDitag dt, ajuint level)
 {
     AjPStr indent = NULL;
-    
+
     if(!dt)
-	return ajFalse;
-    
+        return ajFalse;
+
     indent = ajStrNew();
-    
+
     ajStrAppendCountK(&indent, ' ', level * 2);
-    
+
     ajDebug("%SensDitagTrace %p\n"
-	    "%S  Use %u\n"
-	    "%S  Identifier %u\n"
-	    "%S  Adaptor %p\n"
-	    "%S  Name '%S'\n"
-	    "%S  Type '%S'\n"
-	    "%S  Sequence '%S'\n"
-	    "%S  Count %u\n",
-	    indent, dt,
-	    indent, dt->Use,
-	    indent, dt->Identifier,
-	    indent, dt->Adaptor,
-	    indent, dt->Name,
-	    indent, dt->Type,
-	    indent, dt->Sequence,
-	    indent, dt->Count);
-    
+            "%S  Use %u\n"
+            "%S  Identifier %u\n"
+            "%S  Adaptor %p\n"
+            "%S  Name '%S'\n"
+            "%S  Type '%S'\n"
+            "%S  Sequence '%S'\n"
+            "%S  Count %u\n",
+            indent, dt,
+            indent, dt->Use,
+            indent, dt->Identifier,
+            indent, dt->Adaptor,
+            indent, dt->Name,
+            indent, dt->Type,
+            indent, dt->Sequence,
+            indent, dt->Count);
+
     ajStrDel(&indent);
-    
+
     return ajTrue;
 }
 
 
 
 
-/* @func ensDitagGetMemSize ***************************************************
+/* @func ensDitagGetMemsize ***************************************************
 **
 ** Get the memory size in bytes of an Ensembl Ditag.
 **
 ** @param [r] dt [const EnsPDitag] Ensembl Ditag
 **
-** @return [ajuint] Memory size
+** @return [ajulong] Memory size
 ** @@
 ******************************************************************************/
 
-ajuint ensDitagGetMemSize(const EnsPDitag dt)
+ajulong ensDitagGetMemsize(const EnsPDitag dt)
 {
-    ajuint size = 0;
-    
+    ajulong size = 0;
+
     if(!dt)
-	return 0;
-    
-    size += (ajuint) sizeof (EnsODitag);
-    
+        return 0;
+
+    size += sizeof (EnsODitag);
+
     if(dt->Name)
     {
-	size += (ajuint) sizeof (AjOStr);
-	
-	size += ajStrGetRes(dt->Name);
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(dt->Name);
     }
-    
+
     if(dt->Type)
     {
-	size += (ajuint) sizeof (AjOStr);
-	
-	size += ajStrGetRes(dt->Type);
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(dt->Type);
     }
-    
+
     if(dt->Sequence)
     {
-	size += (ajuint) sizeof (AjOStr);
-	
-	size += ajStrGetRes(dt->Sequence);
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(dt->Sequence);
     }
-    
+
     return size;
 }
 
 
 
 
-/* @datasection [EnsPDatabaseadaptor] Ensembl Database Adaptor ****************
+/* @datasection [EnsPDitagadaptor] Ensembl Ditag Adaptor **********************
 **
 ** Functions for manipulating Ensembl Ditag Adaptor objects
 **
-** @cc Bio::EnsEMBL::Map::DBSQL::Ditagadaptor CVS Revision: 1.6
+** @cc Bio::EnsEMBL::Map::DBSQL::DitagAdaptor CVS Revision: 1.8
 **
 ** @nam2rule Ditagadaptor
 **
@@ -782,12 +789,13 @@ ajuint ensDitagGetMemSize(const EnsPDitag dt)
 
 
 
-/* @funcstatic diTagadaptorFetchAllBySQL **************************************
+
+/* @funcstatic ditagadaptorFetchAllBySQL **************************************
 **
 ** Run a SQL statement against an Ensembl Database Adaptor and consolidate the
 ** results into an AJAX List of Ensembl Ditag objects.
 **
-** @cc Bio::EnsEMBL::Map::DBSQL::Ditagadaptor::_fetch
+** @cc Bio::EnsEMBL::Map::DBSQL::DitagAdaptor::_fetch
 ** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 ** @param [r] statement [const AjPStr] SQL statement
 ** @param [u] list [AjPList] AJAX List of Ensembl Ditags
@@ -796,66 +804,112 @@ ajuint ensDitagGetMemSize(const EnsPDitag dt)
 ** @@
 ******************************************************************************/
 
-static AjBool diTagadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
+static AjBool ditagadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
                                         const AjPStr statement,
                                         AjPList list)
 {
     ajuint identifier = 0;
     ajuint count      = 0;
-    
+
     AjPSqlstatement sqls = NULL;
     AjISqlrow sqli       = NULL;
     AjPSqlrow sqlr       = NULL;
-    
+
     AjPStr name     = NULL;
     AjPStr type     = NULL;
     AjPStr sequence = NULL;
-    
-    EnsPDitag dt = NULL;
-    
+
+    EnsPDitag dt         = NULL;
+    EnsPDitagadaptor dta = NULL;
+
     if(!dba)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!(statement && ajStrGetLen(statement)))
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!list)
-	return ajFalse;
-    
+        return ajFalse;
+
+    dta = ensRegistryGetDitagadaptor(dba);
+
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
-    
+
     sqli = ajSqlrowiterNew(sqls);
-    
+
     while(!ajSqlrowiterDone(sqli))
     {
-	identifier = 0;
-	name       = ajStrNew();
-	type       = ajStrNew();
-	sequence   = ajStrNew();
-	count      = 0;
-	
+        identifier = 0;
+        name       = ajStrNew();
+        type       = ajStrNew();
+        sequence   = ajStrNew();
+        count      = 0;
+
         sqlr = ajSqlrowiterGet(sqli);
-	
+
         ajSqlcolumnToUint(sqlr, &identifier);
-	ajSqlcolumnToStr(sqlr, &name);
-	ajSqlcolumnToStr(sqlr, &type);
-	ajSqlcolumnToStr(sqlr, &sequence);
+        ajSqlcolumnToStr(sqlr, &name);
+        ajSqlcolumnToStr(sqlr, &type);
+        ajSqlcolumnToStr(sqlr, &sequence);
         ajSqlcolumnToUint(sqlr, &count);
-	
-	dt = ensDitagNew(dba, identifier, name, type, sequence, count);
-	
-	ajListPushAppend(list, (void *) dt);
-	
-	ajStrDel(&name);
-	ajStrDel(&type);
-	ajStrDel(&sequence);
+
+        dt = ensDitagNew(dta, identifier, name, type, sequence, count);
+
+        ajListPushAppend(list, (void *) dt);
+
+        ajStrDel(&name);
+        ajStrDel(&type);
+        ajStrDel(&sequence);
     }
-    
+
     ajSqlrowiterDel(&sqli);
-    
-    ajSqlstatementDel(&sqls);
-    
+
+    ensDatabaseadaptorSqlstatementDel(dba, &sqls);
+
     return ajTrue;
+}
+
+
+
+
+/* @section element retrieval *************************************************
+**
+** Functions for returning elements of an Ensembl Ditag Adaptor object.
+**
+** @fdata [EnsPDitagadaptor]
+** @fnote None
+**
+** @nam3rule Get Return Ensembl Ditag Adaptor attribute(s)
+** @nam4rule GetAdaptor Return the Ensembl Database Adaptor
+**
+** @argrule * dta [const EnsPDitagadaptor] Ensembl Ditag Adaptor
+**
+** @valrule Adaptor [EnsPDatabasedaptor] Ensembl Database Adaptor
+**
+** @fcategory use
+******************************************************************************/
+
+
+
+
+/* @func ensDitagadaptorGetDatabaseadaptor ************************************
+**
+** Get the Ensembl Database Adaptor element of an Ensembl Ditag Adaptor.
+** The Ensembl Ditag Adaptor is just an alias for the
+** Ensembl Database Adaptor.
+**
+** @param [u] dta [EnsPDitagadaptor] Ensembl Ditag Adaptor
+**
+** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
+** @@
+******************************************************************************/
+
+EnsPDatabaseadaptor ensDitagadaptorGetDatabaseadaptor(EnsPDitagadaptor dta)
+{
+    if(!dta)
+        return NULL;
+
+    return dta;
 }
 
 
@@ -866,7 +920,7 @@ static AjBool diTagadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 ** Functions for retrieving Ensembl Ditag objects from an
 ** Ensembl Core database.
 **
-** @fdata [EnsPDatabaseadaptor]
+** @fdata [EnsPDitagadaptor]
 ** @fnote None
 **
 ** @nam3rule Fetch Retrieve Ensembl Ditag object(s)
@@ -876,7 +930,7 @@ static AjBool diTagadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 ** @nam4rule FetchBy Retrieve one Ensembl Ditag object
 **                   matching a criterion
 **
-** @argrule * adaptor [const EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @argrule * adaptor [const EnsPDitagadaptor] Ensembl Ditag Adaptor
 ** @argrule FetchAll [AjPList] AJAX List of Ensembl Ditag objects
 **
 ** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
@@ -893,8 +947,8 @@ static AjBool diTagadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 **
 ** The caller is responsible for deleting the Ensembl Ditag.
 **
-** @cc Bio::EnsEMBL::Map::DBSQL::Ditagadaptor::fetch_by_dbID
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @cc Bio::EnsEMBL::Map::DBSQL::DitagAdaptor::fetch_by_dbID
+** @param [u] dta [EnsPDitagadaptor] Ensembl Ditag Adaptor
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 ** @param [wP] Pdt [EnsPDitag*] Ensembl Ditag address
 **
@@ -902,62 +956,63 @@ static AjBool diTagadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 ** @@
 ******************************************************************************/
 
-AjBool ensDitagadaptorFetchByIdentifier(EnsPDatabaseadaptor dba,
+AjBool ensDitagadaptorFetchByIdentifier(EnsPDitagadaptor dta,
                                         ajuint identifier,
                                         EnsPDitag *Pdt)
 {
     AjBool value = AJFALSE;
-    
+
     AjPList dts = NULL;
-    
+
     AjPStr statement = NULL;
-    
+
     EnsPDitag dt = NULL;
-    
-    if(!dba)
-	return ajFalse;
-    
+
+    if(!dta)
+        return ajFalse;
+
     if(!identifier)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!Pdt)
-	return ajFalse;
-    
+        return ajFalse;
+
     *Pdt = NULL;
-    
-    statement = ajFmtStr("SELECT "
-			 "ditag.ditag_id, "
-			 "ditag.name, "
-			 "ditag.type, "
-			 "ditag.tag_count, "
-			 "ditag.sequence "
-			 "FROM "
-			 "ditag "
-			 "WHERE "
-			 "ditag.ditag_id = %u",
-			 identifier);
-    
+
+    statement = ajFmtStr(
+        "SELECT "
+        "ditag.ditag_id, "
+        "ditag.name, "
+        "ditag.type, "
+        "ditag.tag_count, "
+        "ditag.sequence "
+        "FROM "
+        "ditag "
+        "WHERE "
+        "ditag.ditag_id = %u",
+        identifier);
+
     dts = ajListNew();
-    
-    value = diTagadaptorFetchAllBySQL(dba, statement, dts);
-    
+
+    value = ditagadaptorFetchAllBySQL(dta, statement, dts);
+
     if(ajListGetLength(dts) == 0)
-	ajDebug("ensDitagadaptorFetchByIdentifier got no Ensembl Ditag "
-		"for identifier %u.\n", identifier);
-    
+        ajDebug("ensDitagadaptorFetchByIdentifier got no Ensembl Ditag "
+                "for identifier %u.\n", identifier);
+
     if(ajListGetLength(dts) > 1)
-	ajWarn("ensDitagadaptorFetchByIdentifier got more than one "
-	       "Ensembl Ditag for identifier %u.\n", identifier);
-    
+        ajWarn("ensDitagadaptorFetchByIdentifier got more than one "
+               "Ensembl Ditag for identifier %u.\n", identifier);
+
     ajListPop(dts, (void **) Pdt);
-    
+
     while(ajListPop(dts, (void **) &dt))
-	ensDitagDel(&dt);
-    
+        ensDitagDel(&dt);
+
     ajListFree(&dts);
-    
+
     ajStrDel(&statement);
-    
+
     return value;
 }
 
@@ -971,10 +1026,10 @@ AjBool ensDitagadaptorFetchByIdentifier(EnsPDatabaseadaptor dba,
 ** The caller is responsible for deleting the Ensembl Ditags before
 ** deleting the AJAX List.
 **
-** @cc Bio::EnsEMBL::Map::DBSQL::Ditagadaptor::fetch_all
-** @cc Bio::EnsEMBL::Map::DBSQL::Ditagadaptor::fetch_all_by_name
-** @cc Bio::EnsEMBL::Map::DBSQL::Ditagadaptor::fetch_all_by_type
-** @param [u] dba [const EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @cc Bio::EnsEMBL::Map::DBSQL::DitagAdaptor::fetch_all
+** @cc Bio::EnsEMBL::Map::DBSQL::DitagAdaptor::fetch_all_by_name
+** @cc Bio::EnsEMBL::Map::DBSQL::DitagAdaptor::fetch_all_by_type
+** @param [u] dta [EnsPDitagadaptor] Ensembl Ditag Adaptor
 ** @param [rN] name [const AjPStr] Name
 ** @param [rN] type [const AjPStr] Type
 ** @param [u] dts [AjPList] AJAX List of Ensembl Ditags
@@ -983,61 +1038,66 @@ AjBool ensDitagadaptorFetchByIdentifier(EnsPDatabaseadaptor dba,
 ** @@
 ******************************************************************************/
 
-AjBool ensDitagadaptorFetchAll(EnsPDatabaseadaptor dba,
+AjBool ensDitagadaptorFetchAll(EnsPDitagadaptor dta,
                                const AjPStr name,
                                const AjPStr type,
                                AjPList dts)
 {
     char *txtname = NULL;
     char *txttype = NULL;
-    
+
     AjBool value = AJFALSE;
-    
+
     AjPStr statement = NULL;
-    
-    if(!dba)
-	return ajFalse;
-    
+
+    EnsPDatabaseadaptor dba = NULL;
+
+    if(!dta)
+        return ajFalse;
+
     if(!dts)
-	return ajFalse;
-    
+        return ajFalse;
+
+    dba = ensDitagadaptorGetDatabaseadaptor(dta);
+
     if(name && ajStrGetLen(name))
-	ensDatabaseadaptorEscapeC(dba, &txtname, name);
-    
+        ensDatabaseadaptorEscapeC(dba, &txtname, name);
+
     if(type && ajStrGetLen(type))
-	ensDatabaseadaptorEscapeC(dba, &txttype, type);
-    
-    statement = ajStrNewC("SELECT "
-			  "ditag.ditag_id, "
-			  "ditag.name, "
-			  "ditag.type, "
-			  "ditag.tag_count, "
-			  "ditag.sequence "
-			  "FROM "
-			  "ditag");
-    
+        ensDatabaseadaptorEscapeC(dba, &txttype, type);
+
+    statement = ajStrNewC(
+        "SELECT "
+        "ditag.ditag_id, "
+        "ditag.name, "
+        "ditag.type, "
+        "ditag.tag_count, "
+        "ditag.sequence "
+        "FROM "
+        "ditag");
+
     if(txtname || txttype)
-	ajStrAppendC(&statement, " WHERE");
-    
+        ajStrAppendC(&statement, " WHERE");
+
     if(txtname)
-	ajFmtPrintAppS(&statement, " ditag.name = '%s'", txtname);
-    
+        ajFmtPrintAppS(&statement, " ditag.name = '%s'", txtname);
+
     if(txttype)
     {
-	if(txtname)
-	    ajStrAppendC(&statement, " AND");
-	
-	ajFmtPrintAppS(&statement, " ditag.type = '%s'", txttype);
+        if(txtname)
+            ajStrAppendC(&statement, " AND");
+
+        ajFmtPrintAppS(&statement, " ditag.type = '%s'", txttype);
     }
-    
+
     ajCharDel(&txtname);
-    
+
     ajCharDel(&txttype);
-    
-    value = diTagadaptorFetchAllBySQL(dba, statement, dts);
-    
+
+    value = ditagadaptorFetchAllBySQL(dta, statement, dts);
+
     ajStrDel(&statement);
-    
+
     return value;
 }
 
@@ -1051,8 +1111,8 @@ AjBool ensDitagadaptorFetchAll(EnsPDatabaseadaptor dba,
 ** The caller is responsible for deleting the Ensembl Ditags before
 ** deleting the AJAX List.
 **
-** @cc Bio::EnsEMBL::Map::DBSQL::Ditagadaptor::fetch_all_by_name
-** @param [u] dba [const EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @cc Bio::EnsEMBL::Map::DBSQL::DitagAdaptor::fetch_all_by_name
+** @param [u] dta [EnsPDitagadaptor] Ensembl Ditag Adaptor
 ** @param [r] name [const AjPStr] Name
 ** @param [u] dts [AjPList] AJAX List of Ensembl Ditags
 **
@@ -1060,45 +1120,50 @@ AjBool ensDitagadaptorFetchAll(EnsPDatabaseadaptor dba,
 ** @@
 ******************************************************************************/
 
-AjBool ensDitagadaptorFetchAllByName(EnsPDatabaseadaptor dba,
+AjBool ensDitagadaptorFetchAllByName(EnsPDitagadaptor dta,
                                      const AjPStr name,
                                      AjPList dts)
 {
     char *txtname = NULL;
-    
+
     AjBool value = AJFALSE;
-    
+
     AjPStr statement = NULL;
-    
+
+    EnsPDatabaseadaptor dba = NULL;
+
     if(!dba)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!name)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!dts)
-	return ajFalse;
-    
+        return ajFalse;
+
+    dba = ensDitagadaptorGetDatabaseadaptor(dta);
+
     ensDatabaseadaptorEscapeC(dba, &txtname, name);
-    
-    statement = ajFmtStr("SELECT "
-			 "ditag.ditag_id, "
-			 "ditag.name, "
-			 "ditag.type, "
-			 "ditag.tag_count, "
-			 "ditag.sequence "
-			 "FROM "
-			 "ditag "
-			 "WHERE "
-			 "ditag.name = '%s'",
-			 txtname);
-    
+
+    statement = ajFmtStr(
+        "SELECT "
+        "ditag.ditag_id, "
+        "ditag.name, "
+        "ditag.type, "
+        "ditag.tag_count, "
+        "ditag.sequence "
+        "FROM "
+        "ditag "
+        "WHERE "
+        "ditag.name = '%s'",
+        txtname);
+
     ajCharDel(&txtname);
-    
-    value = diTagadaptorFetchAllBySQL(dba, statement, dts);
-    
+
+    value = ditagadaptorFetchAllBySQL(dta, statement, dts);
+
     ajStrDel(&statement);
-    
+
     return value;
 }
 
@@ -1112,8 +1177,8 @@ AjBool ensDitagadaptorFetchAllByName(EnsPDatabaseadaptor dba,
 ** The caller is responsible for deleting the Ensembl Ditags before
 ** deleting the AJAX List.
 **
-** @cc Bio::EnsEMBL::Map::DBSQL::Ditagadaptor::fetch_all_by_type
-** @param [u] dba [const EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @cc Bio::EnsEMBL::Map::DBSQL::DitagAdaptor::fetch_all_by_type
+** @param [u] dta [EnsPDitagadaptor] Ensembl Ditag Adaptor
 ** @param [r] type [const AjPStr] Type
 ** @param [u] dts [AjPList] AJAX List of Ensembl Ditags
 **
@@ -1121,45 +1186,50 @@ AjBool ensDitagadaptorFetchAllByName(EnsPDatabaseadaptor dba,
 ** @@
 ******************************************************************************/
 
-AjBool ensDitagadaptorFetchAllByType(EnsPDatabaseadaptor dba,
+AjBool ensDitagadaptorFetchAllByType(EnsPDitagadaptor dta,
                                      const AjPStr type,
                                      AjPList dts)
 {
     char *txttype = NULL;
-    
+
     AjBool value = AJFALSE;
-    
+
     AjPStr statement = NULL;
-    
-    if(!dba)
-	return ajFalse;
-    
+
+    EnsPDatabaseadaptor dba = NULL;
+
+    if(!dta)
+        return ajFalse;
+
     if(!type)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!dts)
-	return ajFalse;
-    
+        return ajFalse;
+
+    dba = ensDitagadaptorGetDatabaseadaptor(dta);
+
     ensDatabaseadaptorEscapeC(dba, &txttype, type);
-    
-    statement = ajFmtStr("SELECT "
-			 "ditag.ditag_id, "
-			 "ditag.name, "
-			 "ditag.type, "
-			 "ditag.tag_count, "
-			 "ditag.sequence "
-			 "FROM "
-			 "ditag "
-			 "WHERE "
-			 "ditag.type = '%s'",
-			 txttype);
-    
+
+    statement = ajFmtStr(
+        "SELECT "
+        "ditag.ditag_id, "
+        "ditag.name, "
+        "ditag.type, "
+        "ditag.tag_count, "
+        "ditag.sequence "
+        "FROM "
+        "ditag "
+        "WHERE "
+        "ditag.type = '%s'",
+        txttype);
+
     ajCharDel(&txttype);
-    
-    value = diTagadaptorFetchAllBySQL(dba, statement, dts);
-    
+
+    value = ditagadaptorFetchAllBySQL(dta, statement, dts);
+
     ajStrDel(&statement);
-    
+
     return value;
 }
 
@@ -1170,7 +1240,7 @@ AjBool ensDitagadaptorFetchAllByType(EnsPDatabaseadaptor dba,
 **
 ** Functions for manipulating Ensembl Ditag Feature objects
 **
-** @cc Bio::EnsEMBL::Map::DitagFeature CVS Revision: 1.11
+** @cc Bio::EnsEMBL::Map::DitagFeature CVS Revision: 1.12
 **
 ** @nam2rule Ditagfeature
 **
@@ -1209,63 +1279,63 @@ AjBool ensDitagadaptorFetchAllByType(EnsPDatabaseadaptor dba,
 ** Default constructor for an Ensembl Ditag Feature.
 **
 ** @cc Bio::EnsEMBL::Storable
-** @param [r] adaptor [EnsPDitagfeatureadaptor] Ensembl Ditag Feature Adaptor
+** @param [r] dtfa [EnsPDitagfeatureadaptor] Ensembl Ditag Feature Adaptor
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 ** @cc Bio::EnsEMBL::Feature::new
 ** @param [u] feature [EnsPFeature] Ensembl Feature
 ** @cc Bio::EnsEMBL::Map::DitagFeature::new
 ** @param [u] dt [EnsPDitag] Ensembl Ditag
 ** @param [u] cigar [AjPStr] CIGAR line
-** @param [r] side [AjEnum] Side
+** @param [r] side [EnsEDitagfeatureSide] Side
 ** @param [r] tstart [ajint] Target start
 ** @param [r] tend [ajint] Target end
 ** @param [r] tstrand [ajint] Target strand
 ** @param [r] pairid [ajuint] Pair identifier
 **
-** @return [EnsPDitag] Ensembl Ditag or NULL
+** @return [EnsPDitagfeature] Ensembl Ditag Feature or NULL
 ** @@
 ******************************************************************************/
 
-EnsPDitagfeature ensDitagfeatureNew(EnsPDitagfeatureadaptor adaptor,
+EnsPDitagfeature ensDitagfeatureNew(EnsPDitagfeatureadaptor dtfa,
                                     ajuint identifier,
                                     EnsPFeature feature,
                                     EnsPDitag dt,
                                     AjPStr cigar,
-                                    AjEnum side,
+                                    EnsEDitagfeatureSide side,
                                     ajint tstart,
                                     ajint tend,
                                     ajint tstrand,
                                     ajuint pairid)
 {
     EnsPDitagfeature dtf = NULL;
-    
+
     if(!feature)
-	return NULL;
-    
+        return NULL;
+
     if((tstrand < -1) || (tstrand > 1))
     {
-	ajDebug("ensDitagfeatureNew got target strand not -1, 0 or +1.\n");
-	
-	return NULL;
+        ajDebug("ensDitagfeatureNew got target strand not -1, 0 or +1.\n");
+
+        return NULL;
     }
-    
+
     AJNEW0(dtf);
-    
+
     dtf->Use        = 1;
     dtf->Identifier = identifier;
-    dtf->Adaptor    = adaptor;
+    dtf->Adaptor    = dtfa;
     dtf->Feature    = ensFeatureNewRef(feature);
     dtf->Ditag      = ensDitagNewRef(dt);
-    
+
     if(cigar)
         dtf->Cigar = ajStrNewRef(cigar);
-    
+
     dtf->Side           = side;
     dtf->TargetStart    = tstart;
     dtf->TargetEnd      = tend;
     dtf->TargetStrand   = tstrand;
     dtf->PairIdentifier = pairid;
-    
+
     return dtf;
 }
 
@@ -1285,27 +1355,27 @@ EnsPDitagfeature ensDitagfeatureNew(EnsPDitagfeatureadaptor adaptor,
 EnsPDitagfeature ensDitagfeatureNewObj(const EnsPDitagfeature object)
 {
     EnsPDitagfeature dtf = NULL;
-    
+
     if(!object)
-	return NULL;
-    
+        return NULL;
+
     AJNEW0(dtf);
-    
+
     dtf->Use        = 1;
     dtf->Identifier = object->Identifier;
     dtf->Adaptor    = object->Adaptor;
     dtf->Feature    = ensFeatureNewRef(object->Feature);
     dtf->Ditag      = ensDitagNewRef(object->Ditag);
-    
-    if (object->Cigar)
+
+    if(object->Cigar)
         dtf->Cigar = ajStrNewRef(object->Cigar);
-    
+
     dtf->Side           = object->Side;
     dtf->TargetStart    = object->TargetStart;
     dtf->TargetEnd      = object->TargetEnd;
     dtf->TargetStrand   = object->TargetStrand;
     dtf->PairIdentifier = object->PairIdentifier;
-    
+
     return dtf;
 }
 
@@ -1326,10 +1396,10 @@ EnsPDitagfeature ensDitagfeatureNewObj(const EnsPDitagfeature object)
 EnsPDitagfeature ensDitagfeatureNewRef(EnsPDitagfeature dtf)
 {
     if(!dtf)
-	return NULL;
-    
+        return NULL;
+
     dtf->Use++;
-    
+
     return dtf;
 }
 
@@ -1369,42 +1439,43 @@ EnsPDitagfeature ensDitagfeatureNewRef(EnsPDitagfeature dtf)
 void ensDitagfeatureDel(EnsPDitagfeature *Pdtf)
 {
     EnsPDitagfeature pthis = NULL;
-    
-    /*
-     ajDebug("ensDitagfeatureDel\n"
-	     "  *Pdtf %p\n",
-	     *Pdtf);
-     
-     ensDitagfeatureTrace(*Pdtf, 1);
-     */
-    
+
     if(!Pdtf)
         return;
-    
+
     if(!*Pdtf)
         return;
 
+    if(ajDebugTest("ensDitagfeatureDel"))
+    {
+        ajDebug("ensDitagfeatureDel\n"
+                "  *Pdtf %p\n",
+                *Pdtf);
+
+        ensDitagfeatureTrace(*Pdtf, 1);
+    }
+
     pthis = *Pdtf;
-    
+
     pthis->Use--;
-    
+
     if(pthis->Use)
     {
-	*Pdtf = NULL;
-	
-	return;
+        *Pdtf = NULL;
+
+        return;
     }
-    
+
     ensFeatureDel(&pthis->Feature);
-    
+
     ensDitagDel(&pthis->Ditag);
-    
+
     ajStrDel(&pthis->Cigar);
-    
+
     AJFREE(pthis);
 
     *Pdtf = NULL;
-    
+
     return;
 }
 
@@ -1437,7 +1508,7 @@ void ensDitagfeatureDel(EnsPDitagfeature *Pdtf)
 ** @valrule Feature [EnsPFeature] Ensembl Feature
 ** @valrule Ditag [EnsPDitag] Ensembl Ditag
 ** @valrule Cigar [AjPStr] CIGAR line
-** @valrule Side [AjEnum] Side
+** @valrule Side [EnsEDitagfeatureSide] Side
 ** @valrule TargetStart [ajint] Target start
 ** @valrule TargetEnd [ajint] Target end
 ** @valrule TargetStrand [ajint] Target strand
@@ -1464,7 +1535,7 @@ EnsPDitagfeatureadaptor ensDitagfeatureGetAdaptor(const EnsPDitagfeature dtf)
 {
     if(!dtf)
         return NULL;
-    
+
     return dtf->Adaptor;
 }
 
@@ -1487,7 +1558,7 @@ ajuint ensDitagfeatureGetIdentifier(const EnsPDitagfeature dtf)
 {
     if(!dtf)
         return 0;
-    
+
     return dtf->Identifier;
 }
 
@@ -1508,7 +1579,7 @@ EnsPFeature ensDitagfeatureGetFeature(const EnsPDitagfeature dtf)
 {
     if(!dtf)
         return NULL;
-    
+
     return dtf->Feature;
 }
 
@@ -1530,7 +1601,7 @@ EnsPDitag ensDitagfeatureGetDitag(const EnsPDitagfeature dtf)
 {
     if(!dtf)
         return NULL;
-    
+
     return dtf->Ditag;
 }
 
@@ -1552,7 +1623,7 @@ AjPStr ensDitagfeatureGetCigar(const EnsPDitagfeature dtf)
 {
     if(!dtf)
         return NULL;
-    
+
     return dtf->Cigar;
 }
 
@@ -1566,15 +1637,15 @@ AjPStr ensDitagfeatureGetCigar(const EnsPDitagfeature dtf)
 ** @cc Bio::EnsEMBL::Map::DitagFeature::ditag_side
 ** @param [r] dtf [const EnsPDitagfeature] Ensembl Ditag Feature
 **
-** @return [AjEnum] Side
+** @return [EnsEDitagfeatureSide] Side or ensEDitagfeatureSideNULL
 ** @@
 ******************************************************************************/
 
-AjEnum ensDitagfeatureGetSide(const EnsPDitagfeature dtf)
+EnsEDitagfeatureSide ensDitagfeatureGetSide(const EnsPDitagfeature dtf)
 {
     if(!dtf)
         return ensEDitagfeatureSideNULL;
-    
+
     return dtf->Side;
 }
 
@@ -1596,7 +1667,7 @@ ajint ensDitagfeatureGetTargetStart(const EnsPDitagfeature dtf)
 {
     if(!dtf)
         return 0;
-    
+
     return dtf->TargetStart;
 }
 
@@ -1618,7 +1689,7 @@ ajint ensDitagfeatureGetTargetEnd(const EnsPDitagfeature dtf)
 {
     if(!dtf)
         return 0;
-    
+
     return dtf->TargetEnd;
 }
 
@@ -1640,7 +1711,7 @@ ajint ensDitagfeatureGetTargetStrand(const EnsPDitagfeature dtf)
 {
     if(!dtf)
         return 0;
-    
+
     return dtf->TargetStrand;
 }
 
@@ -1662,7 +1733,7 @@ ajuint ensDitagfeatureGetPairIdentifier(const EnsPDitagfeature dtf)
 {
     if(!dtf)
         return 0;
-    
+
     return dtf->PairIdentifier;
 }
 
@@ -1703,20 +1774,20 @@ ajuint ensDitagfeatureGetPairIdentifier(const EnsPDitagfeature dtf)
 **
 ** @cc Bio::EnsEMBL::Storable::adaptor
 ** @param [u] dtf [EnsPDitagfeature] Ensembl Ditag Feature
-** @param [r] adaptor [EnsPDitagfeatureadaptor] Ensembl Ditag Feature Adaptor
+** @param [r] dtfa [EnsPDitagfeatureadaptor] Ensembl Ditag Feature Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
 AjBool ensDitagfeatureSetAdaptor(EnsPDitagfeature dtf,
-                                 EnsPDitagfeatureadaptor adaptor)
+                                 EnsPDitagfeatureadaptor dtfa)
 {
     if(!dtf)
         return ajFalse;
-    
-    dtf->Adaptor = adaptor;
-    
+
+    dtf->Adaptor = dtfa;
+
     return ajTrue;
 }
 
@@ -1740,9 +1811,9 @@ AjBool ensDitagfeatureSetIdentifier(EnsPDitagfeature dtf, ajuint identifier)
 {
     if(!dtf)
         return ajFalse;
-    
+
     dtf->Identifier = identifier;
-    
+
     return ajTrue;
 }
 
@@ -1764,11 +1835,11 @@ AjBool ensDitagfeatureSetFeature(EnsPDitagfeature dtf, EnsPFeature feature)
 {
     if(!dtf)
         return ajFalse;
-    
-    ensFeatureDel(&(dtf->Feature));
-    
+
+    ensFeatureDel(&dtf->Feature);
+
     dtf->Feature = ensFeatureNewRef(feature);
-    
+
     return ajTrue;
 }
 
@@ -1791,11 +1862,11 @@ AjBool ensDitagfeatureSetDitag(EnsPDitagfeature dtf, EnsPDitag dt)
 {
     if(!dtf)
         return ajFalse;
-    
-    ensDitagDel(&(dtf->Ditag));
-    
+
+    ensDitagDel(&dtf->Ditag);
+
     dtf->Ditag = ensDitagNewRef(dt);
-    
+
     return ajTrue;
 }
 
@@ -1818,11 +1889,11 @@ AjBool ensDitagfeatureSetCigar(EnsPDitagfeature dtf, AjPStr cigar)
 {
     if(!dtf)
         return ajFalse;
-    
+
     ajStrDel(&dtf->Cigar);
-    
+
     dtf->Cigar = ajStrNewRef(cigar);
-    
+
     return ajTrue;
 }
 
@@ -1835,19 +1906,19 @@ AjBool ensDitagfeatureSetCigar(EnsPDitagfeature dtf, AjPStr cigar)
 **
 ** @cc Bio::EnsEMBL::Map::DitagFeature::ditag_side
 ** @param [u] dtf [EnsPDitagfeature] Ensembl Ditag Feature
-** @param [r] side [AjEnum] Side
+** @param [r] side [EnsEDitagfeatureSide] Side
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensDitagfeatureSetSide(EnsPDitagfeature dtf, AjEnum side)
+AjBool ensDitagfeatureSetSide(EnsPDitagfeature dtf, EnsEDitagfeatureSide side)
 {
     if(!dtf)
         return ajFalse;
-    
+
     dtf->Side = side;
-    
+
     return ajTrue;
 }
 
@@ -1870,9 +1941,9 @@ AjBool ensDitagfeatureSetTargetStart(EnsPDitagfeature dtf, ajint tstart)
 {
     if(!dtf)
         return ajFalse;
-    
+
     dtf->TargetStart = tstart;
-    
+
     return ajTrue;
 }
 
@@ -1895,9 +1966,9 @@ AjBool ensDitagfeatureSetTargetEnd(EnsPDitagfeature dtf, ajint tend)
 {
     if(!dtf)
         return ajFalse;
-    
+
     dtf->TargetEnd = tend;
-    
+
     return ajTrue;
 }
 
@@ -1920,9 +1991,9 @@ AjBool ensDitagfeatureSetTargetStrand(EnsPDitagfeature dtf, ajint tstrand)
 {
     if(!dtf)
         return ajFalse;
-    
+
     dtf->TargetStrand = tstrand;
-    
+
     return ajTrue;
 }
 
@@ -1945,9 +2016,9 @@ AjBool ensDitagfeatureSetPairIdentifier(EnsPDitagfeature dtf, ajuint pairid)
 {
     if(!dtf)
         return ajFalse;
-    
+
     dtf->PairIdentifier = pairid;
-    
+
     return ajTrue;
 }
 
@@ -1986,81 +2057,81 @@ AjBool ensDitagfeatureSetPairIdentifier(EnsPDitagfeature dtf, ajuint pairid)
 AjBool ensDitagfeatureTrace(const EnsPDitagfeature dtf, ajuint level)
 {
     AjPStr indent = NULL;
-    
+
     if(!dtf)
-	return ajFalse;
-    
+        return ajFalse;
+
     indent = ajStrNew();
-    
+
     ajStrAppendCountK(&indent, ' ', level * 2);
-    
+
     ajDebug("%SensDitagfeatureTrace %p\n"
-	    "%S  Use %u\n"
-	    "%S  Identifier %u\n"
-	    "%S  Adaptor %p\n"
-	    "%S  Feature %p\n"
-	    "%S  Ditag %p\n"
-	    "%S  Cigar '%S'\n"
-	    "%S  Side '%s'\n"
-	    "%S  TargetStart %d\n"
-	    "%S  TargetEnd %d\n"
-	    "%S  TargetStrand %d\n"
-	    "%S  PairIdentifier %u\n",
-	    indent, dtf,
-	    indent, dtf->Use,
-	    indent, dtf->Identifier,
-	    indent, dtf->Adaptor,
-	    indent, dtf->Feature,
-	    indent, dtf->Ditag,
-	    indent, dtf->Cigar,
-	    indent, ensDitagfeatureSideToChar(dtf->Side),
-	    indent, dtf->TargetStart,
-	    indent, dtf->TargetEnd,
-	    indent, dtf->TargetStrand,
-	    indent, dtf->PairIdentifier);
-    
+            "%S  Use %u\n"
+            "%S  Identifier %u\n"
+            "%S  Adaptor %p\n"
+            "%S  Feature %p\n"
+            "%S  Ditag %p\n"
+            "%S  Cigar '%S'\n"
+            "%S  Side '%s'\n"
+            "%S  TargetStart %d\n"
+            "%S  TargetEnd %d\n"
+            "%S  TargetStrand %d\n"
+            "%S  PairIdentifier %u\n",
+            indent, dtf,
+            indent, dtf->Use,
+            indent, dtf->Identifier,
+            indent, dtf->Adaptor,
+            indent, dtf->Feature,
+            indent, dtf->Ditag,
+            indent, dtf->Cigar,
+            indent, ensDitagfeatureSideToChar(dtf->Side),
+            indent, dtf->TargetStart,
+            indent, dtf->TargetEnd,
+            indent, dtf->TargetStrand,
+            indent, dtf->PairIdentifier);
+
     ensFeatureTrace(dtf->Feature, level + 1);
-    
+
     ensDitagTrace(dtf->Ditag, level + 1);
-    
+
     ajStrDel(&indent);
-    
+
     return ajTrue;
 }
 
 
 
 
-/* @func ensDitagfeatureGetMemSize ********************************************
+/* @func ensDitagfeatureGetMemsize ********************************************
 **
 ** Get the memory size in bytes of an Ensembl Ditag Feature.
 **
 ** @param [r] dtf [const EnsPDitagfeature] Ensembl Ditag Feature
 **
-** @return [ajuint] Memory size
+** @return [ajulong] Memory size
 ** @@
 ******************************************************************************/
 
-ajuint ensDitagfeatureGetMemSize(const EnsPDitagfeature dtf)
+ajulong ensDitagfeatureGetMemsize(const EnsPDitagfeature dtf)
 {
-    ajuint size = 0;
-    
+    ajulong size = 0;
+
     if(!dtf)
-	return 0;
-    
-    size += (ajuint) sizeof (EnsODitagfeature);
-    
-    size += ensFeatureGetMemSize(dtf->Feature);
-    
-    size += ensDitagGetMemSize(dtf->Ditag);
-    
+        return 0;
+
+    size += sizeof (EnsODitagfeature);
+
+    size += ensFeatureGetMemsize(dtf->Feature);
+
+    size += ensDitagGetMemsize(dtf->Ditag);
+
     if(dtf->Cigar)
     {
-	size += (ajuint) sizeof (AjOStr);
-	
-	size += ajStrGetRes(dtf->Cigar);
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(dtf->Cigar);
     }
-    
+
     return size;
 }
 
@@ -2073,25 +2144,25 @@ ajuint ensDitagfeatureGetMemSize(const EnsPDitagfeature dtf)
 **
 ** @param [r] side [const AjPStr] Ensembl Ditag Feature side string
 **
-** @return [AjEnum] Ensembl Ditag Feature side element or
-**                  ensEDitagfeatureSideNULL
+** @return [EnsEDitagfeatureSide] Ensembl Ditag Feature side or
+**                                ensEDitagfeatureSideNULL
 ** @@
 ******************************************************************************/
 
-AjEnum ensDitagfeatureSideFromStr(const AjPStr side)
+EnsEDitagfeatureSide ensDitagfeatureSideFromStr(const AjPStr side)
 {
-    register ajint i = 0;
-    
-    AjEnum eside = ensEDitagfeatureSideNULL;
-    
-    for(i = 1; diTagFeatureSide[i]; i++)
-	if (ajStrMatchC(side, diTagFeatureSide[i]))
-	    eside = i;
-    
+    register EnsEDitagfeatureSide i = ensEDitagfeatureSideNULL;
+
+    EnsEDitagfeatureSide eside = ensEDitagfeatureSideNULL;
+
+    for(i = ensEDitagfeatureSideLeft; ditagfeatureSide[i]; i++)
+        if(ajStrMatchC(side, ditagfeatureSide[i]))
+            eside = i;
+
     if(!eside)
-	ajDebug("ensDitagfeatureSideFromStr encountered "
-		"unexpected string '%S'.\n", side);
-    
+        ajDebug("ensDitagfeatureSideFromStr encountered "
+                "unexpected string '%S'.\n", side);
+
     return eside;
 }
 
@@ -2102,26 +2173,172 @@ AjEnum ensDitagfeatureSideFromStr(const AjPStr side)
 **
 ** Convert an Ensembl Ditag Feature side element into a C-type (char*) string.
 **
-** @param [r] side [const AjEnum] Ensembl Ditag Feature side enumerator
+** @param [r] side [EnsEDitagfeatureSide] Ensembl Ditag Feature side
 **
 ** @return [const char*] Ensembl Ditag Feature side C-type (char*) string
 ** @@
 ******************************************************************************/
 
-const char* ensDitagfeatureSideToChar(const AjEnum side)
+const char* ensDitagfeatureSideToChar(EnsEDitagfeatureSide side)
 {
-    register ajint i = 0;
-    
+    register EnsEDitagfeatureSide i = ensEDitagfeatureSideNULL;
+
     if(!side)
-	return NULL;
-    
-    for(i = 1; diTagFeatureSide[i] && (i < side); i++);
-    
-    if(!diTagFeatureSide[i])
-	ajDebug("ensDitagfeatureSideToChar encountered an "
-		"out of boundary error on gender %d.\n", side);
-    
-    return diTagFeatureSide[i];
+        return NULL;
+
+    for(i = ensEDitagfeatureSideLeft;
+        ditagfeatureSide[i] && (i < side);
+        i++);
+
+    if(!ditagfeatureSide[i])
+        ajDebug("ensDitagfeatureSideToChar encountered an "
+                "out of boundary error on gender %d.\n", side);
+
+    return ditagfeatureSide[i];
+}
+
+
+
+
+/* @funcstatic ditagfeatureCompareStartAscending ******************************
+**
+** Comparison function to sort Ensembl Ditag Features by their
+** Ensembl Feature start coordinate in ascending order.
+**
+** @param [r] P1 [const void*] Ensembl Ditag Feature address 1
+** @param [r] P2 [const void*] Ensembl Ditag Feature address 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+** @@
+******************************************************************************/
+
+static int ditagfeatureCompareStartAscending(const void* P1, const void* P2)
+{
+    const EnsPDitagfeature dtf1 = NULL;
+    const EnsPDitagfeature dtf2 = NULL;
+
+    dtf1 = *(EnsPDitagfeature const *) P1;
+    dtf2 = *(EnsPDitagfeature const *) P2;
+
+    if(ajDebugTest("ditagfeatureCompareStartAscending"))
+        ajDebug("ditagfeatureCompareStartAscending\n"
+                "  dtf1 %p\n"
+                "  dtf2 %p\n",
+                dtf1,
+                dtf2);
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if(dtf1 && (!dtf2))
+        return -1;
+
+    if((!dtf1) && (!dtf2))
+        return 0;
+
+    if((!dtf1) && dtf2)
+        return +1;
+
+    return ensFeatureCompareStartAscending(dtf1->Feature, dtf2->Feature);
+}
+
+
+
+
+/* @func ensDitagfeatureSortByStartAscending **********************************
+**
+** Sort Ensembl Ditag Features by their Ensembl Feature start coordinate
+** in ascending order.
+**
+** @param [u] dtfs [AjPList] AJAX List of Ensembl Ditag Fatures
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensDitagfeatureSortByStartAscending(AjPList dtfs)
+{
+    if(!dtfs)
+        return ajFalse;
+
+    ajListSort(dtfs, ditagfeatureCompareStartAscending);
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic ditagfeatureCompareStartDescending *****************************
+**
+** Comparison function to sort Ensembl Ditag Features by their
+** Ensembl Feature start coordinate in descending order.
+**
+** @param [r] P1 [const void*] Ensembl Ditag Feature address 1
+** @param [r] P2 [const void*] Ensembl Ditag Feature address 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+** @@
+******************************************************************************/
+
+static int ditagfeatureCompareStartDescending(const void* P1, const void* P2)
+{
+    const EnsPDitagfeature dtf1 = NULL;
+    const EnsPDitagfeature dtf2 = NULL;
+
+    dtf1 = *(EnsPDitagfeature const *) P1;
+    dtf2 = *(EnsPDitagfeature const *) P2;
+
+    if(ajDebugTest("ditagfeatureCompareStartDescending"))
+        ajDebug("ditagfeatureCompareStartDescending\n"
+                "  dtf1 %p\n"
+                "  dtf2 %p\n",
+                dtf1,
+                dtf2);
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if(dtf1 && (!dtf2))
+        return -1;
+
+    if((!dtf1) && (!dtf2))
+        return 0;
+
+    if((!dtf1) && dtf2)
+        return +1;
+
+    return ensFeatureCompareStartDescending(dtf1->Feature, dtf2->Feature);
+}
+
+
+
+
+/* @func ensDitagfeatureSortByStartDescending *********************************
+**
+** Sort Ensembl Ditag Features by their Ensembl Feature start coordinate
+** in descending order.
+**
+** @param [u] dtfs [AjPList] AJAX List of Ensembl Ditag Fatures
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensDitagfeatureSortByStartDescending(AjPList dtfs)
+{
+    if(!dtfs)
+        return ajFalse;
+
+    ajListSort(dtfs, ditagfeatureCompareStartDescending);
+
+    return ajTrue;
 }
 
 
@@ -2131,7 +2348,7 @@ const char* ensDitagfeatureSideToChar(const AjEnum side)
 **
 ** Functions for manipulating Ensembl Ditag Feature Adaptor objects
 **
-** @cc Bio::EnsEMBL::Map::DBSQL::Ditagfeatureadaptor CVS Revision: 1.16
+** @cc Bio::EnsEMBL::Map::DBSQL::DitagFeatureAdaptor CVS Revision: 1.18
 **
 ** @nam2rule Ditagfeatureadaptor
 **
@@ -2142,14 +2359,14 @@ const char* ensDitagfeatureSideToChar(const AjEnum side)
 ** allow for selection of Ditag Features on the basis of a Ditag type.
 */
 
-static const char *diTagFeatureadaptorTables[] =
+static const char *ditagfeatureadaptorTables[] =
 {
     "ditag_feature",
     "ditag",
     (const char *) NULL
 };
 
-static const char *diTagFeatureadaptorColumns[] =
+static const char *ditagfeatureadaptorColumns[] =
 {
     "ditag_feature.ditag_feature_id",
     "ditag_feature.seq_region_id",
@@ -2167,74 +2384,35 @@ static const char *diTagFeatureadaptorColumns[] =
     (const char *) NULL
 };
 
-static EnsOBaseadaptorLeftJoin diTagFeatureadaptorLeftJoin[] =
+static EnsOBaseadaptorLeftJoin ditagfeatureadaptorLeftJoin[] =
 {
     {(const char *) NULL, (const char *) NULL}
 };
 
-static const char *diTagFeatureadaptorDefaultCondition =
-"ditag_feature.ditag_id = ditag.ditag_id";
+static const char *ditagfeatureadaptorDefaultCondition =
+    "ditag_feature.ditag_id = ditag.ditag_id";
 
-static const char *diTagFeatureadaptorFinalCondition = NULL;
-
-/*
-** TODO: Remove this?
- static const char *diTagFeatureDitagadaptorTables[] =
- {
-     "ditag_feature",
-     "ditag",
-     (const char *) NULL
- };
- 
- static const char *diTagFeatureDitagadaptorColumns[] =
- {
-     "ditag_feature.ditag_feature_id",
-     "ditag_feature.seq_region_id",
-     "ditag_feature.seq_region_start",
-     "ditag_feature.seq_region_end",
-     "ditag_feature.seq_region_strand",
-     "ditag_feature.analysis_id",
-     "ditag_feature.ditag_id",
-     "ditag_feature.hit_start",
-     "ditag_feature.hit_end",
-     "ditag_feature.hit_strand",
-     "ditag_feature.cigar_line",
-     "ditag_feature.ditag_side",
-     "ditag_feature.ditag_pair_id",
-     "ditag.ditag_id",
-     "ditag.name",
-     "ditag.type",
-     "ditag.tag_count",
-     "ditag.sequence",
-     (const char *) NULL
- };
- 
- static const char *diTagFeatureDitagadaptorDefaultCondition =
- "ditag_feature.ditag_id = ditag.ditag_id";
- 
- static const char *diTagFeatureDitagadaptorFinalCondition =
- "ORDER BY ditag_feature.ditag_id, ditag_feature.ditag_pair_id";
- */
+static const char *ditagfeatureadaptorFinalCondition = NULL;
 
 
 
 
-/* @funcstatic diTagFeatureadaptorFetchAllBySQL *******************************
+/* @funcstatic ditagfeatureadaptorFetchAllBySQL *******************************
 **
 ** Fetch all Ensembl Ditag Feature objects via an SQL statement.
 **
-** @cc Bio::EnsEMBL::Map::DBSQL::Ditagfeatureadaptor::_fetch
+** @cc Bio::EnsEMBL::Map::DBSQL::DitagFeatureAdaptor::_fetch
 ** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 ** @param [r] statement [const AjPStr] SQL statement
-** @param [u] am [EnsPAssemblymapper] Ensembl Assembly Mapper
-** @param [r] slice [EnsPSlice] Ensembl Slice
+** @param [uN] am [EnsPAssemblymapper] Ensembl Assembly Mapper
+** @param [uN] slice [EnsPSlice] Ensembl Slice
 ** @param [u] dtfs [AjPList] AJAX List of Ensembl Ditag Features
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-static AjBool diTagFeatureadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
+static AjBool ditagfeatureadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
                                                const AjPStr statement,
                                                EnsPAssemblymapper am,
                                                EnsPSlice slice,
@@ -2246,7 +2424,7 @@ static AjBool diTagFeatureadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
     ajint sllength = 0;
     ajint srstrand = 0;
     ajint dtstrand = 0;
-    
+
     ajuint identifier = 0;
     ajuint srid       = 0;
     ajuint srstart    = 0;
@@ -2256,354 +2434,356 @@ static AjBool diTagFeatureadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
     ajuint dtstart    = 0;
     ajuint dtend      = 0;
     ajuint dtpairid   = 0;
-    
-    AjEnum eside = ensEDitagfeatureSideNULL;
-    
+
+    EnsEDitagfeatureSide eside = ensEDitagfeatureSideNULL;
+
     AjPList mrs = NULL;
-    
+
     AjPSqlstatement sqls = NULL;
     AjISqlrow sqli       = NULL;
     AjPSqlrow sqlr       = NULL;
-    
+
     AjPStr cigar = NULL;
     AjPStr side  = NULL;
-    
+
     EnsPAnalysis analysis  = NULL;
     EnsPAnalysisadaptor aa = NULL;
-    
+
     EnsPAssemblymapperadaptor ama = NULL;
-    
-    EnsPDitag dt = NULL;
-    
+
+    EnsPDitag dt         = NULL;
+    EnsPDitagadaptor dta = NULL;
+
     EnsPDitagfeature dtf         = NULL;
     EnsPDitagfeatureadaptor dtfa = NULL;
-    
+
     EnsPFeature feature = NULL;
-    
+
     EnsPMapperresult mr = NULL;
-    
+
     EnsPSlice srslice   = NULL;
     EnsPSliceadaptor sa = NULL;
-    
+
+    if(ajDebugTest("ditagfeatureadaptorFetchAllBySQL"))
+        ajDebug("ditagfeatureadaptorFetchAllBySQL\n"
+                "  dba %p\n"
+                "  statement %p\n"
+                "  am %p\n"
+                "  slice %p\n"
+                "  dtfs %p\n",
+                dba,
+                statement,
+                am,
+                slice,
+                dtfs);
+
     if(!dba)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!statement)
-	return ajFalse;
-    
-    (void) am;
-    
-    (void) slice;
-    
+        return ajFalse;
+
     if(!dtfs)
-	return ajFalse;
-    
+        return ajFalse;
+
     aa = ensRegistryGetAnalysisadaptor(dba);
-    
+
+    dta = ensRegistryGetDitagadaptor(dba);
+
     dtfa = ensRegistryGetDitagfeatureadaptor(dba);
-    
+
     sa = ensRegistryGetSliceadaptor(dba);
-    
+
     if(slice)
-	ama = ensRegistryGetAssemblymapperadaptor(dba);
-    
+        ama = ensRegistryGetAssemblymapperadaptor(dba);
+
     mrs = ajListNew();
-    
+
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
-    
+
     sqli = ajSqlrowiterNew(sqls);
-    
+
     while(!ajSqlrowiterDone(sqli))
     {
-	identifier = 0;
-	srid = 0;
-	srstart = 0;
-	srend = 0;
-	srstrand = 0;
-	analysisid = 0;
-	dtid = 0;
-	dtstart = 0;
-	dtend = 0;
-	dtstrand = 0;
-	cigar = ajStrNew();
-	side = ajStrNew();
-	dtpairid = 0;
-	
-	sqlr = ajSqlrowiterGet(sqli);
-	
-	ajSqlcolumnToUint(sqlr, &identifier);
-	ajSqlcolumnToUint(sqlr, &srid);
-	ajSqlcolumnToUint(sqlr, &srstart);
-	ajSqlcolumnToUint(sqlr, &srend);
-	ajSqlcolumnToInt(sqlr, &srstrand);
-	ajSqlcolumnToUint(sqlr, &analysisid);
-	ajSqlcolumnToUint(sqlr, &dtid);
-	ajSqlcolumnToUint(sqlr, &dtstart);
-	ajSqlcolumnToUint(sqlr, &dtend);
-	ajSqlcolumnToInt(sqlr, &dtstrand);
-	ajSqlcolumnToStr(sqlr, &cigar);
-	ajSqlcolumnToStr(sqlr, &side);
-	ajSqlcolumnToUint(sqlr, &dtpairid);
-	
-	/*
-	** Since the Ensembl SQL schema defines Sequence Region start and end
-	** coordinates as unsigned integers for all Features, the range needs
-	** checking.
-	*/
-	
-	if(srstart <= INT_MAX)
-	    slstart = (ajint) srstart;
-	else
-	    ajFatal("diTagFeatureadaptorFetchAllBySQL got a "
-		    "Sequence Region start coordinate (%u) outside the "
-		    "maximum integer limit (%d).",
-		    srstart, INT_MAX);
-	
-	if(srend <= INT_MAX)
-	    slend = (ajint) srend;
-	else
-	    ajFatal("diTagFeatureadaptorFetchAllBySQL got a "
-		    "Sequence Region end coordinate (%u) outside the "
-		    "maximum integer limit (%d).",
-		    srend, INT_MAX);
-	
-	slstrand = srstrand;
-	
-	/* Fetch a Slice spanning the entire Sequence Region. */
-	
-	ensSliceadaptorFetchBySeqregionIdentifier(sa, srid, 0, 0, 0, &srslice);
-	
-	/*
-	** Increase the reference counter of the Ensembl Assembly Mapper if
-	** one has been specified, otherwise fetch it from the database if a
-	** destination Slice has been specified.
-	*/
-	
-	/*
-	** FIXME: The Perl API does not retrieve an Assembly Mapper if it has
-	** not been passed in!
-	*/
-	
-	if(am)
-	    am = ensAssemblymapperNewRef(am);
-	
-	if((! am) &&
-           slice &&
-           (! ensCoordsystemMatch(ensSliceGetCoordsystem(slice),
-                                  ensSliceGetCoordsystem(srslice))))
-	    am = ensAssemblymapperadaptorFetchByCoordsystems(
-                ama,
-                ensSliceGetCoordsystem(slice),
-                ensSliceGetCoordsystem(srslice));
-	
-	/*
-	** Remap the Feature coordinates to another Ensembl Coordinate System
-	** if an Ensembl Assembly Mapper is defined at this point.
-	*/
-	
-	if(am)
-	{
-	    ensAssemblymapperFastMap(
+        identifier = 0;
+        srid = 0;
+        srstart = 0;
+        srend = 0;
+        srstrand = 0;
+        analysisid = 0;
+        dtid = 0;
+        dtstart = 0;
+        dtend = 0;
+        dtstrand = 0;
+        cigar = ajStrNew();
+        side = ajStrNew();
+        dtpairid = 0;
+
+        sqlr = ajSqlrowiterGet(sqli);
+
+        ajSqlcolumnToUint(sqlr, &identifier);
+        ajSqlcolumnToUint(sqlr, &srid);
+        ajSqlcolumnToUint(sqlr, &srstart);
+        ajSqlcolumnToUint(sqlr, &srend);
+        ajSqlcolumnToInt(sqlr, &srstrand);
+        ajSqlcolumnToUint(sqlr, &analysisid);
+        ajSqlcolumnToUint(sqlr, &dtid);
+        ajSqlcolumnToUint(sqlr, &dtstart);
+        ajSqlcolumnToUint(sqlr, &dtend);
+        ajSqlcolumnToInt(sqlr, &dtstrand);
+        ajSqlcolumnToStr(sqlr, &cigar);
+        ajSqlcolumnToStr(sqlr, &side);
+        ajSqlcolumnToUint(sqlr, &dtpairid);
+
+        /*
+        ** Since the Ensembl SQL schema defines Sequence Region start and end
+        ** coordinates as unsigned integers for all Features, the range needs
+        ** checking.
+        */
+
+        if(srstart <= INT_MAX)
+            slstart = (ajint) srstart;
+        else
+            ajFatal("ditagfeatureadaptorFetchAllBySQL got a "
+                    "Sequence Region start coordinate (%u) outside the "
+                    "maximum integer limit (%d).",
+                    srstart, INT_MAX);
+
+        if(srend <= INT_MAX)
+            slend = (ajint) srend;
+        else
+            ajFatal("ditagfeatureadaptorFetchAllBySQL got a "
+                    "Sequence Region end coordinate (%u) outside the "
+                    "maximum integer limit (%d).",
+                    srend, INT_MAX);
+
+        slstrand = srstrand;
+
+        /* Fetch a Slice spanning the entire Sequence Region. */
+
+        ensSliceadaptorFetchBySeqregionIdentifier(sa, srid, 0, 0, 0, &srslice);
+
+        /*
+        ** Increase the reference counter of the Ensembl Assembly Mapper if
+        ** one has been specified, otherwise fetch it from the database if a
+        ** destination Slice has been specified.
+        */
+
+        if(am)
+            am = ensAssemblymapperNewRef(am);
+        else if(slice && (!ensCoordsystemMatch(
+                              ensSliceGetCoordsystem(slice),
+                              ensSliceGetCoordsystem(srslice))))
+            am = ensAssemblymapperadaptorFetchBySlices(ama, slice, srslice);
+
+        /*
+        ** Remap the Feature coordinates to another Ensembl Coordinate System
+        ** if an Ensembl Assembly Mapper is defined at this point.
+        */
+
+        if(am)
+        {
+            ensAssemblymapperFastMap(
                 am,
                 ensSliceGetSeqregion(srslice),
                 slstart,
                 slend,
                 slstrand,
                 mrs);
-	    
-	    /*
-	    ** The ensAssemblymapperFastMap function returns at best one
-	    ** Ensembl Mapper Result.
-	    */
-	    
-	    ajListPop(mrs, (void **) &mr);
-	    
-	    /*
-	    ** Skip Features that map to gaps or
-	    ** Coordinate System boundaries.
-	    */
-	    
-	    if(ensMapperresultGetType(mr) != ensEMapperresultCoordinate)
-	    {
-		/* Load the next Feature but destroy first! */
-		
-		ajStrDel(&cigar);
-		ajStrDel(&side);
-		
-		ensSliceDel(&srslice);
-		
-		ensAssemblymapperDel(&am);
-		
-		ensMapperresultDel(&mr);
-		
-		continue;
-	    }
-	    
-	    srid = ensMapperresultGetObjectIdentifier(mr);
-	    
-	    slstart = ensMapperresultGetStart(mr);
-	    
-	    slend = ensMapperresultGetEnd(mr);
-	    
-	    slstrand = ensMapperresultGetStrand(mr);
-	    
-	    /*
-	    ** Delete the Sequence Region Slice and fetch a Slice in the
-	    ** Coordinate System we just mapped to.
-	    */
-	    
-	    ensSliceDel(&srslice);
-	    
-	    ensSliceadaptorFetchBySeqregionIdentifier(
+
+            /*
+            ** The ensAssemblymapperFastMap function returns at best one
+            ** Ensembl Mapper Result.
+            */
+
+            ajListPop(mrs, (void **) &mr);
+
+            /*
+            ** Skip Features that map to gaps or
+            ** Coordinate System boundaries.
+            */
+
+            if(ensMapperresultGetType(mr) != ensEMapperresultCoordinate)
+            {
+                /* Load the next Feature but destroy first! */
+
+                ajStrDel(&cigar);
+                ajStrDel(&side);
+
+                ensSliceDel(&srslice);
+
+                ensAssemblymapperDel(&am);
+
+                ensMapperresultDel(&mr);
+
+                continue;
+            }
+
+            srid = ensMapperresultGetObjectIdentifier(mr);
+
+            slstart = ensMapperresultGetStart(mr);
+
+            slend = ensMapperresultGetEnd(mr);
+
+            slstrand = ensMapperresultGetStrand(mr);
+
+            /*
+            ** Delete the Sequence Region Slice and fetch a Slice in the
+            ** Coordinate System we just mapped to.
+            */
+
+            ensSliceDel(&srslice);
+
+            ensSliceadaptorFetchBySeqregionIdentifier(
                 sa,
                 srid,
                 0,
                 0,
                 0,
                 &srslice);
-	    
-	    ensMapperresultDel(&mr);
-	}
-	
-	/*
-	** Convert Sequence Region Slice coordinates to destination Slice
-	** coordinates, if a destination Slice has been provided.
-	*/
-	
-	if(slice)
-	{
-	    /* Check that the length of the Slice is within range. */
-	    
-	    if(ensSliceGetLength(slice) <= INT_MAX)
-		sllength = (ajint) ensSliceGetLength(slice);
-	    else
-		ajFatal("diTagFeatureadaptorFetchAllBySQL got a Slice, "
-			"which length (%u) exceeds the "
-			"maximum integer limit (%d).",
-			ensSliceGetLength(slice), INT_MAX);
-	    
-	    /*
-	    ** Nothing needs to be done if the destination Slice starts at 1
-	    ** and is on the forward strand.
-	    */
-	    
-	    if((ensSliceGetStart(slice) != 1) ||
-		(ensSliceGetStrand(slice) < 0))
-	    {
-		if(ensSliceGetStrand(slice) >= 0)
-		{
-		    slstart = slstart - ensSliceGetStart(slice) + 1;
-		    
-		    slend = slend - ensSliceGetStart(slice) + 1;
-		}
-		else
-		{
-		    slend = ensSliceGetEnd(slice) - slstart + 1;
-		    
-		    slstart = ensSliceGetEnd(slice) - slend + 1;
-		    
-		    slstrand *= -1;
-		}
-	    }
-	    
-	    /*
-	    ** Throw away Features off the end of the requested Slice or on
-	    ** any other than the requested Slice.
-	    */
-	    
-	    if((slend < 1) ||
-		(slstart > sllength) ||
-		(srid != ensSliceGetSeqregionIdentifier(slice)))
-	    {
-		/* Load the next Feature but destroy first! */
-		
-		ajStrDel(&cigar);
-		ajStrDel(&side);
-		
-		ensSliceDel(&srslice);
-		
-		ensAssemblymapperDel(&am);
-		
-		continue;
-	    }
-	    
-	    /* Delete the Sequence Region Slice and set the requested Slice. */
-	    
-	    ensSliceDel(&srslice);
-	    
-	    srslice = ensSliceNewRef(slice);
-	}
-	
-	ensAnalysisadaptorFetchByIdentifier(aa, analysisid, &analysis);
-	
-	feature = ensFeatureNewS(analysis, srslice, slstart, slend, slstrand);
-	
-	ensDitagadaptorFetchByIdentifier(dba, dtid, &dt);
-	
-	eside = ensDitagfeatureSideFromStr(side);
-	
-	dtf = ensDitagfeatureNew(dtfa,
-				 identifier,
-				 feature,
-				 dt,
-				 cigar,
-				 eside,
-				 dtstart,
-				 dtend,
-				 dtstrand,
-				 dtpairid);
-	
-	ajListPushAppend(dtfs, (void *) dtf);
-	
-	ensDitagDel(&dt);
-	
-	ensFeatureDel(&feature);
-	
-	ensAnalysisDel(&analysis);
-	
-	ajStrDel(&cigar);
-	ajStrDel(&side);
-	
-	ensSliceDel(&srslice);
-	
-	ensAssemblymapperDel(&am);
+
+            ensMapperresultDel(&mr);
+        }
+
+        /*
+        ** Convert Sequence Region Slice coordinates to destination Slice
+        ** coordinates, if a destination Slice has been provided.
+        */
+
+        if(slice)
+        {
+            /* Check that the length of the Slice is within range. */
+
+            if(ensSliceGetLength(slice) <= INT_MAX)
+                sllength = (ajint) ensSliceGetLength(slice);
+            else
+                ajFatal("ditagfeatureadaptorFetchAllBySQL got a Slice, "
+                        "which length (%u) exceeds the "
+                        "maximum integer limit (%d).",
+                        ensSliceGetLength(slice), INT_MAX);
+
+            /*
+            ** Nothing needs to be done if the destination Slice starts at 1
+            ** and is on the forward strand.
+            */
+
+            if((ensSliceGetStart(slice) != 1) ||
+               (ensSliceGetStrand(slice) < 0))
+            {
+                if(ensSliceGetStrand(slice) >= 0)
+                {
+                    slstart = slstart - ensSliceGetStart(slice) + 1;
+
+                    slend = slend - ensSliceGetStart(slice) + 1;
+                }
+                else
+                {
+                    slend = ensSliceGetEnd(slice) - slstart + 1;
+
+                    slstart = ensSliceGetEnd(slice) - slend + 1;
+
+                    slstrand *= -1;
+                }
+            }
+
+            /*
+            ** Throw away Features off the end of the requested Slice or on
+            ** any other than the requested Slice.
+            */
+
+            if((slend < 1) ||
+               (slstart > sllength) ||
+               (srid != ensSliceGetSeqregionIdentifier(slice)))
+            {
+                /* Load the next Feature but destroy first! */
+
+                ajStrDel(&cigar);
+                ajStrDel(&side);
+
+                ensSliceDel(&srslice);
+
+                ensAssemblymapperDel(&am);
+
+                continue;
+            }
+
+            /* Delete the Sequence Region Slice and set the requested Slice. */
+
+            ensSliceDel(&srslice);
+
+            srslice = ensSliceNewRef(slice);
+        }
+
+        ensAnalysisadaptorFetchByIdentifier(aa, analysisid, &analysis);
+
+        feature = ensFeatureNewS(analysis, srslice, slstart, slend, slstrand);
+
+        ensDitagadaptorFetchByIdentifier(dta, dtid, &dt);
+
+        eside = ensDitagfeatureSideFromStr(side);
+
+        dtf = ensDitagfeatureNew(dtfa,
+                                 identifier,
+                                 feature,
+                                 dt,
+                                 cigar,
+                                 eside,
+                                 dtstart,
+                                 dtend,
+                                 dtstrand,
+                                 dtpairid);
+
+        ajListPushAppend(dtfs, (void *) dtf);
+
+        ensDitagDel(&dt);
+
+        ensFeatureDel(&feature);
+
+        ensAnalysisDel(&analysis);
+
+        ajStrDel(&cigar);
+        ajStrDel(&side);
+
+        ensSliceDel(&srslice);
+
+        ensAssemblymapperDel(&am);
     }
-    
+
     ajSqlrowiterDel(&sqli);
-    
-    ajSqlstatementDel(&sqls);
-    
+
+    ensDatabaseadaptorSqlstatementDel(dba, &sqls);
+
     ajListFree(&mrs);
-    
+
     return ajTrue;
 }
 
 
 
 
-/* @funcstatic diTagFeatureadaptorCacheReference ******************************
+/* @funcstatic ditagfeatureadaptorCacheReference ******************************
 **
 ** Wrapper function to reference an Ensembl Ditag Feature
 ** from an Ensembl Cache.
 **
-** @param [r] value [void *] Ensembl Ditag Feature
+** @param [r] value [void*] Ensembl Ditag Feature
 **
-** @return [void *] Ensembl Ditag Feature or NULL
+** @return [void*] Ensembl Ditag Feature or NULL
 ** @@
 ******************************************************************************/
 
-static void *diTagFeatureadaptorCacheReference(void *value)
+static void* ditagfeatureadaptorCacheReference(void *value)
 {
     if(!value)
-	return NULL;
-    
+        return NULL;
+
     return (void *) ensDitagfeatureNewRef((EnsPDitagfeature) value);
 }
 
 
 
 
-/* @funcstatic diTagFeatureadaptorCacheDelete *********************************
+/* @funcstatic ditagfeatureadaptorCacheDelete *********************************
 **
 ** Wrapper function to delete an Ensembl Ditag Feature
 ** from an Ensembl Cache.
@@ -2614,42 +2794,42 @@ static void *diTagFeatureadaptorCacheReference(void *value)
 ** @@
 ******************************************************************************/
 
-static void diTagFeatureadaptorCacheDelete(void **value)
+static void ditagfeatureadaptorCacheDelete(void **value)
 {
     if(!value)
-	return;
-    
+        return;
+
     ensDitagfeatureDel((EnsPDitagfeature *) value);
-    
+
     return;
 }
 
 
 
 
-/* @funcstatic DitagfeatureadaptorCacheSize ***********************************
+/* @funcstatic ditagfeatureadaptorCacheSize ***********************************
 **
 ** Wrapper function to determine the memory size of an Ensembl Ditag Feature
 ** via an Ensembl Cache.
 **
 ** @param [r] value [const void*] Ensembl Ditag Feature
 **
-** @return [ajuint] Memory size
+** @return [ajulong] Memory size
 ** @@
 ******************************************************************************/
 
-static ajuint diTagFeatureadaptorCacheSize(const void *value)
+static ajulong ditagfeatureadaptorCacheSize(const void *value)
 {
     if(!value)
-	return 0;
-    
-    return ensDitagfeatureGetMemSize((const EnsPDitagfeature) value);
+        return 0;
+
+    return ensDitagfeatureGetMemsize((const EnsPDitagfeature) value);
 }
 
 
 
 
-/* @funcstatic diTagFeatureadaptorGetFeature **********************************
+/* @funcstatic ditagfeatureadaptorGetFeature **********************************
 **
 ** Wrapper function to get the Ensembl Feature of an
 ** Ensembl Ditag Feature from an Ensembl Feature Adaptor.
@@ -2660,11 +2840,11 @@ static ajuint diTagFeatureadaptorCacheSize(const void *value)
 ** @@
 ******************************************************************************/
 
-static EnsPFeature diTagFeatureadaptorGetFeature(const void *value)
+static EnsPFeature ditagfeatureadaptorGetFeature(const void *value)
 {
     if(!value)
-	return NULL;
-    
+        return NULL;
+
     return ensDitagfeatureGetFeature((const EnsPDitagfeature) value);
 }
 
@@ -2682,12 +2862,8 @@ static EnsPFeature diTagFeatureadaptorGetFeature(const void *value)
 ** @fnote None
 **
 ** @nam3rule New Constructor
-** @nam4rule NewObj Constructor with existing object
-** @nam4rule NewRef Constructor by incrementing the reference counter
 **
 ** @argrule New dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
-** @argrule Obj object [EnsPDitagfeatureadaptor] Ensembl Ditag Feature Adaptor
-** @argrule Ref object [EnsPDitagfeatureadaptor] Ensembl Ditag Feature Adaptor
 **
 ** @valrule * [EnsPDitagfeatureadaptor] Ensembl Ditag Feature Adaptor
 **
@@ -2701,39 +2877,51 @@ static EnsPFeature diTagFeatureadaptorGetFeature(const void *value)
 **
 ** Default Ensembl Ditag Feature Adaptor constructor.
 **
-** @cc Bio::EnsEMBL::Map::DBSQL::Ditagfeatureadaptor::new
+** Ensembl Object Adaptors are singleton objects in the sense that a single
+** instance of an Ensembl Object Adaptor connected to a particular database is
+** sufficient to instantiate any number of Ensembl Objects from the database.
+** Each Ensembl Object will have a weak reference to the Object Adaptor that
+** instantiated it. Therefore, Ensembl Object Adaptors should not be
+** instantiated directly, but rather obtained from the Ensembl Registry,
+** which will in turn call this function if neccessary.
+**
+** @see ensRegistryGetDatabaseadaptor
+** @see ensRegistryGetDitagfeatureadaptor
+**
+** @cc Bio::EnsEMBL::Map::DBSQL::DitagFeatureAdaptor::new
 ** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
 ** @return [EnsPDitagfeatureadaptor] Ensembl Ditag Feature Adaptor or NULL
 ** @@
 ******************************************************************************/
 
-EnsPDitagfeatureadaptor ensDitagfeatureadaptorNew(EnsPDatabaseadaptor dba)
+EnsPDitagfeatureadaptor ensDitagfeatureadaptorNew(
+    EnsPDatabaseadaptor dba)
 {
-    EnsPDitagfeatureadaptor adaptor = NULL;
-    
+    EnsPDitagfeatureadaptor dtfa = NULL;
+
     if(!dba)
-	return NULL;
-    
-    AJNEW0(adaptor);
-    
-    adaptor->Adaptor =
-	ensFeatureadaptorNew(dba,
-			     diTagFeatureadaptorTables,
-			     diTagFeatureadaptorColumns,
-			     diTagFeatureadaptorLeftJoin,
-			     diTagFeatureadaptorDefaultCondition,
-			     diTagFeatureadaptorFinalCondition,
-			     diTagFeatureadaptorFetchAllBySQL,
-			     (void* (*)(const void* key)) NULL, /* Fread */
-			     diTagFeatureadaptorCacheReference,
-			     (AjBool (*)(const void* value)) NULL, /* Fwrite */
-			     diTagFeatureadaptorCacheDelete,
-			     diTagFeatureadaptorCacheSize,
-			     diTagFeatureadaptorGetFeature,
-			     "Ditag Feature");
-    
-    return adaptor;
+        return NULL;
+
+    AJNEW0(dtfa);
+
+    dtfa->Adaptor = ensFeatureadaptorNew(
+        dba,
+        ditagfeatureadaptorTables,
+        ditagfeatureadaptorColumns,
+        ditagfeatureadaptorLeftJoin,
+        ditagfeatureadaptorDefaultCondition,
+        ditagfeatureadaptorFinalCondition,
+        ditagfeatureadaptorFetchAllBySQL,
+        (void* (*)(const void* key)) NULL,
+        ditagfeatureadaptorCacheReference,
+        (AjBool (*)(const void* value)) NULL,
+        ditagfeatureadaptorCacheDelete,
+        ditagfeatureadaptorCacheSize,
+        ditagfeatureadaptorGetFeature,
+        "Ditag Feature");
+
+    return dtfa;
 }
 
 
@@ -2749,8 +2937,8 @@ EnsPDitagfeatureadaptor ensDitagfeatureadaptorNew(EnsPDatabaseadaptor dba)
 **
 ** @nam3rule Del Destroy (free) an Ensembl Ditag Feature Adaptor object.
 **
-** @argrule * Padaptor [EnsPDitagfeatureadaptor*] Ensembl Ditag Feature
-**                                                Adaptor object address
+** @argrule * Pdtfa [EnsPDitagfeatureadaptor*] Ensembl Ditag Feature
+**                                             Adaptor object address
 **
 ** @valrule * [void]
 **
@@ -2764,45 +2952,52 @@ EnsPDitagfeatureadaptor ensDitagfeatureadaptorNew(EnsPDatabaseadaptor dba)
 **
 ** Default destructor for an Ensembl Ditag Feature Adaptor.
 **
-** @param [d] Padaptor [EnsPDitagfeatureadaptor*] Ensembl Ditag Feature
-**                                                Adaptor address
+** Ensembl Object Adaptors are singleton objects that are registered in the
+** Ensembl Registry and weakly referenced by Ensembl Objects that have been
+** instantiated by it. Therefore, Ensembl Object Adaptors should never be
+** destroyed directly. Upon exit, the Ensembl Registry will call this function
+** if required.
+**
+** @param [d] Pdtfa [EnsPDitagfeatureadaptor*] Ensembl Ditag Feature
+**                                             Adaptor address
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ensDitagfeatureadaptorDel(EnsPDitagfeatureadaptor *Padaptor)
+void ensDitagfeatureadaptorDel(EnsPDitagfeatureadaptor *Pdtfa)
 {
     EnsPDitagfeatureadaptor pthis = NULL;
-    
-    if(!Padaptor)
-	return;
-    
-    if(!*Padaptor)
-	return;
 
-    pthis = *Padaptor;
-    
+    if(!Pdtfa)
+        return;
+
+    if(!*Pdtfa)
+        return;
+
+    pthis = *Pdtfa;
+
     ensFeatureadaptorDel(&pthis->Adaptor);
-    
+
     AJFREE(pthis);
 
-    *Padaptor = NULL;
-    
+    *Pdtfa = NULL;
+
     return;
 }
 
 
 
 
-/* @func ensDitagfeatureadaptorFetchByIdentifier ******************************
+/* @func ensDitagadaptorFetchAllByIdentifier **********************************
 **
 ** Fetch an Ensembl Ditag Feature via its SQL database-internal identifier.
 **
 ** The caller is responsible for deleting the Ensembl Ditag Feature.
 **
-** @cc Bio::EnsEMBL::Map::DBSQL::Ditagfeatureadaptor::fetch_by_dbID
-** @param [r] adaptor [const EnsPDitagfeatureadaptor] Ensembl Ditag Feature Adaptor
+** @cc Bio::EnsEMBL::Map::DBSQL::DitagFeatureAdaptor::fetch_by_dbID
+** @param [r] dtfa [const EnsPDitagfeatureadaptor] Ensembl Ditag
+**                                                 Feature Adaptor
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 ** @param [wP] Pdtf [EnsPDitagfeature*] Ensembl Ditag Feature address
 **
@@ -2810,25 +3005,26 @@ void ensDitagfeatureadaptorDel(EnsPDitagfeatureadaptor *Padaptor)
 ** @@
 ******************************************************************************/
 
-AjBool ensDitagadaptorFetchAllByIdentifier(const EnsPDitagfeatureadaptor adaptor,
-                                           ajuint identifier,
-                                           EnsPDitagfeature *Pdtf)
+AjBool ensDitagadaptorFetchAllByIdentifier(
+    const EnsPDitagfeatureadaptor dtfa,
+    ajuint identifier,
+    EnsPDitagfeature *Pdtf)
 {
     EnsPBaseadaptor ba = NULL;
-    
-    if(!adaptor)
-	return ajFalse;
-    
+
+    if(!dtfa)
+        return ajFalse;
+
     if(!identifier)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!Pdtf)
-	return ajFalse;
-    
-    ba = ensFeatureadaptorGetBaseadaptor(adaptor->Adaptor);
-    
+        return ajFalse;
+
+    ba = ensFeatureadaptorGetBaseadaptor(dtfa->Adaptor);
+
     *Pdtf = (EnsPDitagfeature) ensBaseadaptorFetchByIdentifier(ba, identifier);
-    
+
     return ajTrue;
 }
 
@@ -2842,47 +3038,48 @@ AjBool ensDitagadaptorFetchAllByIdentifier(const EnsPDitagfeatureadaptor adaptor
 ** The caller is responsible for deleting the Ensembl Ditag Features before
 ** deleting the AJAX List.
 **
-** @cc Bio::EnsEMBL::Map::DBSQL::Ditagfeatureadaptor::fetch_all_by_ditagID
-** @param [r] adaptor [EnsPDitagfeatureadaptor] Ensembl Ditag
-**                                                    Feature Adaptor
-** @param [r] ditag [const EnsPDitag] Ensembl Ditag
+** @cc Bio::EnsEMBL::Map::DBSQL::DitagFeatureAdaptor::fetch_all_by_ditagID
+** @param [r] dtfa [const EnsPDitagfeatureadaptor] Ensembl Ditag
+**                                           Feature Adaptor
+** @param [r] dt [const EnsPDitag] Ensembl Ditag
 ** @param [u] dtfs [AjPList] AJAX List of Ensembl Ditag Features
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensDitagfeatureadaptorFetchAllByDitag(const EnsPDitagfeatureadaptor adaptor,
-                                             const EnsPDitag dt,
-                                             AjPList dtfs)
+AjBool ensDitagfeatureadaptorFetchAllByDitag(
+    const EnsPDitagfeatureadaptor dtfa,
+    const EnsPDitag dt,
+    AjPList dtfs)
 {
     AjBool value = AJFALSE;
-    
+
     AjPStr constraint = NULL;
-    
+
     EnsPBaseadaptor ba = NULL;
-    
-    if(!adaptor)
-	return ajFalse;
-    
+
+    if(!dtfa)
+        return ajFalse;
+
     if(!dt)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!dtfs)
-	return ajFalse;
-    
-    ba = ensFeatureadaptorGetBaseadaptor(adaptor->Adaptor);
-    
+        return ajFalse;
+
+    ba = ensFeatureadaptorGetBaseadaptor(dtfa->Adaptor);
+
     constraint = ajFmtStr("ditag_feature.ditag_id = %u", dt->Identifier);
-    
+
     value = ensBaseadaptorGenericFetch(ba,
-				       constraint,
-				       (EnsPAssemblymapper) NULL,
-				       (EnsPSlice) NULL,
-				       dtfs);
-    
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       dtfs);
+
     ajStrDel(&constraint);
-    
+
     return value;
 }
 
@@ -2896,10 +3093,10 @@ AjBool ensDitagfeatureadaptorFetchAllByDitag(const EnsPDitagfeatureadaptor adapt
 ** The caller is responsible for deleting the Ensembl Ditag Features before
 ** deleting the AJAX List.
 **
-** @cc Bio::EnsEMBL::Map::DBSQL::Ditagfeatureadaptor::fetch_all
-** @cc Bio::EnsEMBL::Map::DBSQL::Ditagfeatureadaptor::fetch_all_by_type
-** @param [r] adaptor [const EnsPDitagfeatureadaptor] Ensembl Ditag
-**                                                    Feature Adaptor
+** @cc Bio::EnsEMBL::Map::DBSQL::DitagFeatureAdaptor::fetch_all
+** @cc Bio::EnsEMBL::Map::DBSQL::DitagFeatureAdaptor::fetch_all_by_type
+** @param [r] dtfa [const EnsPDitagfeatureadaptor] Ensembl Ditag
+**                                                 Feature Adaptor
 ** @param [rN] type [const AjPStr] Ensembl Ditag type
 ** @param [u] dtfs [AjPList] AJAX List of Ensembl Ditag Features
 **
@@ -2907,48 +3104,49 @@ AjBool ensDitagfeatureadaptorFetchAllByDitag(const EnsPDitagfeatureadaptor adapt
 ** @@
 ******************************************************************************/
 
-AjBool ensDitagfeatureadaptorFetchAllByType(const EnsPDitagfeatureadaptor adaptor,
-                                            const AjPStr type,
-                                            AjPList dtfs)
+AjBool ensDitagfeatureadaptorFetchAllByType(
+    const EnsPDitagfeatureadaptor dtfa,
+    const AjPStr type,
+    AjPList dtfs)
 {
     char *txttype = NULL;
-    
+
     AjBool value = AJFALSE;
-    
+
     AjPStr constraint = NULL;
-    
+
     EnsPBaseadaptor ba = NULL;
-    
-    if(!adaptor)
-	return ajFalse;
-    
+
+    if(!dtfa)
+        return ajFalse;
+
     if(!(type && ajStrGetLen(type)))
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!dtfs)
-	return ajFalse;
-    
-    ba = ensFeatureadaptorGetBaseadaptor(adaptor->Adaptor);
-    
+        return ajFalse;
+
+    ba = ensFeatureadaptorGetBaseadaptor(dtfa->Adaptor);
+
     ensBaseadaptorEscapeC(ba, &txttype, type);
-    
+
     /*
     ** NOTE: For this query the ditag_feature and the ditag tables need to be
     ** permanently joined.
     */
-    
+
     constraint = ajFmtStr("ditag.type = '%s'", txttype);
-    
+
     ajCharDel(&txttype);
-    
+
     value = ensBaseadaptorGenericFetch(ba,
-				       constraint,
-				       (EnsPAssemblymapper) NULL,
-				       (EnsPSlice) NULL,
-				       dtfs);
-    
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       dtfs);
+
     ajStrDel(&constraint);
-    
+
     return value;
 }
 
@@ -2962,9 +3160,9 @@ AjBool ensDitagfeatureadaptorFetchAllByType(const EnsPDitagfeatureadaptor adapto
 ** The caller is responsible for deleting the Ensembl Ditag Features before
 ** deleting the AJAX List.
 **
-** @cc Bio::EnsEMBL::Map::DBSQL::Ditagfeatureadaptor::fetch_all_by_Slice
-** @param [r] adaptor [const EnsPDitagfeatureadaptor] Ensembl Ditag
-**                                                    Feature Adaptor
+** @cc Bio::EnsEMBL::Map::DBSQL::DitagFeatureAdaptor::fetch_all_by_Slice
+** @param [r] dtfa [const EnsPDitagfeatureadaptor] Ensembl Ditag
+**                                                 Feature Adaptor
 ** @param [r] slice [EnsPSlice] Ensembl Slice
 ** @param [rN] type [const AjPStr] Ensembl Ditag type
 ** @param [rN] anname [const AjPStr] Ensembl Analysis name
@@ -2974,44 +3172,45 @@ AjBool ensDitagfeatureadaptorFetchAllByType(const EnsPDitagfeatureadaptor adapto
 ** @@
 ******************************************************************************/
 
-AjBool ensDitagfeatureadaptorFetchAllBySlice(const EnsPDitagfeatureadaptor adaptor,
-                                             EnsPSlice slice,
-                                             const AjPStr type,
-                                             const AjPStr anname,
-                                             AjPList dtfs)
+AjBool ensDitagfeatureadaptorFetchAllBySlice(
+    const EnsPDitagfeatureadaptor dtfa,
+    EnsPSlice slice,
+    const AjPStr type,
+    const AjPStr anname,
+    AjPList dtfs)
 {
     char *txttype = NULL;
-    
+
     AjBool value = AJFALSE;
-    
+
     AjPStr constraint = NULL;
-    
-    if(!adaptor)
-	return ajFalse;
-    
+
+    if(!dtfa)
+        return ajFalse;
+
     if(!slice)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!dtfs)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(type && ajStrGetLen(type))
     {
-	ensFeatureadaptorEscapeC(adaptor->Adaptor, &txttype, type);
-	
-	constraint = ajFmtStr("ditag.type = '%s'", txttype);
-	
-	ajCharDel(&txttype);
+        ensFeatureadaptorEscapeC(dtfa->Adaptor, &txttype, type);
+
+        constraint = ajFmtStr("ditag.type = '%s'", txttype);
+
+        ajCharDel(&txttype);
     }
-    
-    value = ensFeatureadaptorFetchAllBySliceConstraint(adaptor->Adaptor,
-						       slice,
-						       constraint,
-						       anname,
-						       dtfs);
-    
+
+    value = ensFeatureadaptorFetchAllBySliceConstraint(dtfa->Adaptor,
+                                                       slice,
+                                                       constraint,
+                                                       anname,
+                                                       dtfs);
+
     ajStrDel(&constraint);
-    
+
     return value;
 }
 
@@ -3020,64 +3219,121 @@ AjBool ensDitagfeatureadaptorFetchAllBySlice(const EnsPDitagfeatureadaptor adapt
 
 #if AJFALSE
 
-AjBool ensDitagFeatureadaptorFetchPairsBySlice(const EnsPDitagfeatureadaptor adaptor,
-                                               EnsPSlice slice,
-                                               const AjPStr type,
-                                               const AjPStr anname,
-                                               AjPList dtfs)
+AjBool ensDitagFeatureadaptorFetchPairsBySlice(
+    const EnsPDitagfeatureadaptor dtfa,
+    EnsPSlice slice,
+    const AjPStr type,
+    const AjPStr anname,
+    AjPList dtfs)
 {
     char *txttype = NULL;
-    
+
     AjBool value = AJFALSE;
-    
+
     AjPStr constraint = NULL;
-    
-    if(!adaptor)
-	return ajFalse;
-    
+
+    if(!dtfa)
+        return ajFalse;
+
     if(!slice)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!dtfs)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(type && ajStrGetLen(type))
     {
-	ensFeatureadaptorEscapeC(adaptor->Adaptor, &txttype, type);
-	
-	constraint = ajFmtStr("ditag.type = '%s'", txttype);
-	
-	ajCharDel(&txttype);
+        ensFeatureadaptorEscapeC(dtfa->Adaptor, &txttype, type);
+
+        constraint = ajFmtStr("ditag.type = '%s'", txttype);
+
+        ajCharDel(&txttype);
     }
-    
+
     /*
     ** FIXME: This would be problematic in multi-threaded environments.
-    **  ensFeatureadaptorSetFinalCondition(adaptor->Adaptor,
-    **  <#const char * final#>)
+    ** ensFeatureadaptorSetFinalCondition(dtfa->Adaptor,
+    ** <#const char * final#>)
+    **
+    ** TODO: Maybe this could be solved by having two EnsPFeatureadaptor
+    ** objects wrapped up under this EnsPDitagfeatureadaptor.
+    ** One adaptor could implement the simple join condition, while the other
+    ** one could implement the extended join. Could the same be applied to
+    ** the Exon Adaptor? A problem that could remain is that the two
+    ** Feature Adaptors have separate Feature caches.
     */
-    
-    value = ensFeatureadaptorFetchAllBySliceConstraint(adaptor->Adaptor,
-						       slice,
-						       constraint,
-						       anname,
-						       dtfs);
-    
+
+    value = ensFeatureadaptorFetchAllBySliceConstraint(dtfa->Adaptor,
+                                                       slice,
+                                                       constraint,
+                                                       anname,
+                                                       dtfs);
+
     ajStrDel(&constraint);
-    
+
     /*
     ** FIXME: Finish this. Since it is not simply possible to append a
     ** GROUP BY df.ditag_id, df.ditag_pair_id condition, the results would
     ** need to be calculated by means of Lists and Tables here.
     ** It would be possible to append the condition via
-    ** ensFeatureadaptorSetFinalCondition(adaptor->Adaptor,
+    ** ensFeatureadaptorSetFinalCondition(dtfa->Adaptor,
     ** <#const char * final#>),
     ** but this would be problematic in a multi-threaded environment.
     ** Could a separate EnsPDitagFeaturepairadaptor be the solution?
-    ** A similr prolem exists for the EnsPExonadaptor and the
+    ** A similar prolem exists for the EnsPExonadaptor and the
     ** ExonTranscript Adaptor ...
     */
-    
+
     return value;
 }
 
 #endif
+
+
+
+
+/* @func ensDitagfeatureadaptorFetchAllIdentifiers ****************************
+**
+** Fetch all SQL database-internal identifiers of Ensembl Ditag Features.
+**
+** The caller is responsible for deleting the AJAX unsigned integers before
+** deleting the AJAX List.
+**
+** @cc Bio::EnsEMBL::DBSQL::DitagFeatureAdaptor::list_dbIDs
+** @param [u] dtfa [const EnsPDitagfeatureadaptor] Ensembl Ditag
+**                                                 Feature Adaptor
+** @param [u] identifiers [AjPList] AJAX List of AJAX unsigned integers
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensDitagfeatureadaptorFetchAllIdentifiers(
+    const EnsPDitagfeatureadaptor dtfa,
+    AjPList identifiers)
+{
+    AjBool value = AJFALSE;
+
+    AjPStr table = NULL;
+
+    EnsPBaseadaptor ba = NULL;
+
+    if(!dtfa)
+        return ajFalse;
+
+    if(!identifiers)
+        return ajFalse;
+
+    ba = ensFeatureadaptorGetBaseadaptor(dtfa->Adaptor);
+
+    table = ajStrNewC("ditag_feature");
+
+    value = ensBaseadaptorFetchAllIdentifiers(ba,
+                                              table,
+                                              (AjPStr) NULL,
+                                              identifiers);
+
+    ajStrDel(&table);
+
+    return value;
+}

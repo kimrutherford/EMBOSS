@@ -2,7 +2,8 @@ application: jaspscan [
   documentation: "Scans DNA sequences for transcription
                   factors"
   groups: "Nucleic:Transcription"
-  relations: "EDAM: Transcription factor binding site prediction"
+  relations: "/edam/topic/0000110 Transcription regulatory sequence analysis"
+  relations: "/edam/operation/0000445 Transcription factor binding site prediction"
 ]
 
 section: input [
@@ -13,7 +14,9 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "DNA"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0000848 Sequence" 
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more" 
   ]
 
   list: menu [
@@ -21,13 +24,13 @@ section: input [
     default: "C"
     minimum: "1"
     maximum: "1"
-    values: "C:Core,F:Fam,P:Phylofacts,N:CNE,O:POLII,S:SPLICE"
+    values: "C:Core,F:Fam,P:Phylofacts,N:CNE,O:POLII,S:SPLICE,B:PBM,L:PBM_HLH,H:PBM_HOMEO"
     delimiter: ","
     codedelimiter: ":"
     header: "Jaspar matrix set"
     information: "Matrix set"
     button: "Y"
-    relations: "EDAM: Generic string array"                                
+    relations: "/edam/data/0001773 Tool-specific parameter"                                
   ]
 
 
@@ -38,7 +41,7 @@ section: input [
     help: "The name 'all' reads in all matrix files from the selected \
            JASPAR matrix set. You can specify individual matrices by giving \
            their names with commas between then, such as: \
-           'ma0001,ma0015'. \
+           'ma0001.1,ma0015*'. \
            The case of the names is not important. You can specify a file of \
            matrix names to read in by giving the name of the file holding the \
            matrix names with a '@' character in front of it, for example, \
@@ -49,13 +52,13 @@ section: input [
            for. \
            An example of a file of matrix names is: \
            ! my matrices \
-           ma0001, ma0002 \
+           ma0001.1, ma0002.1 \
            ! other matrices \
-           ma0010 \
-           ma0032 \
-           ma0053"
+           ma0010.1 \
+           ma0032* \
+           ma0053.1"
     knowntype: "jaspar matrix id"
-    relations:  "EDAM: JASPAR profile identifier"                      
+    relations:  "/edam/data/0001119 JASPAR profile identifier"                      
   ]
 
 
@@ -72,7 +75,7 @@ section: required [
     information: "Threshold percentage"
     help: "If the matrix score is greater than or equal to this percentage \
              then a hit will be reported"
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0002146 Threshold"
   ]
 
 endsection: required
@@ -91,7 +94,7 @@ section: additional [
            list. Matrices are specified in the same way as for the \
            selection list."
     knowntype: "jaspar matrix id"
-    relations:  "EDAM: JASPAR profile identifier"                      
+    relations:  "/edam/data/0001119 JASPAR profile identifier"
   ]
 
   boolean: both [
@@ -99,7 +102,7 @@ section: additional [
     default: "N"
     information: "Scan both strands"
     help: "If set then both the forward and reverse strands are searched"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
 endsection: additional
@@ -115,11 +118,12 @@ section: output [
     multiple: "Y"
     taglist: "float:pc=Score_Percent
               str:id=ID str:name=Name str:species=Species str:class=Class
-              str:supergroup=Supergroup str:pseq=Protein_Seq
-              str:exp=Experiment str:pmid=Source_PMID float:info=Info_Content
-              str:jaspar=Closest_Jaspar str:transfac=Closest_Transfac
+              str:supergroup=Supergroup str:fam=Family str:paz=Pazar_TF_ID
+	      str:pseq=Protein_Seq str:exp=Experiment str:pmid=Source_PMID
+	      float:info=Info_Content str:jaspar=Closest_Jaspar
+	      str:transfac=Closest_Transfac
               float:mcs=MCS_Score str:built=Built_From"
-    relations: "EDAM: EMBOSS report"                                       
+    relations: "/edam/data/0001315 Transcription factor binding site report"                                       
   ]
 
 endsection: output

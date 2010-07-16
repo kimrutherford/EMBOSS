@@ -2,7 +2,8 @@ application: finddb
 [
   documentation: "Search for a database by keyword"
   groups: "Display, Information"
-  relations: "EDAM: Database information"
+  relations: "/edam/topic/0000088 Literature and documentation"
+  relations: "/edam/operation/0000516 Database information retrieval"
 ]
 
 section: input 
@@ -17,7 +18,7 @@ section: input
       additional: "Y"
       information: "Keyword(s) to search for in database information"
       knowntype: "emboss database name"
-    relations:  "EDAM: Generic database name"                          
+    relations:  "/edam/data/0001056 Database name"                          
   ]
 
 endsection: input
@@ -37,7 +38,7 @@ section: additional
     additional: "Y"
     default: "N"
     information: "Search all available sections of information"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: name 
@@ -45,7 +46,7 @@ section: additional
     additional: "Y"
     default: "Y"
     information: "Search the database names only"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: server  
@@ -53,7 +54,7 @@ section: additional
     additional: "Y"
     default: "Y"
     information: "Search the database server URL only"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: desc 
@@ -61,7 +62,7 @@ section: additional
     additional: "Y"
     default: "Y"
     information: "Search the database descriptions only"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
 endsection: additional
@@ -94,7 +95,7 @@ section: output
     additional: "Y"
     default: "stdout"
     knowntype: "finddb output"
-    relations: "EDAM: Free text file"                                      
+    relations: "/edam/data/0000969 Free text"                                      
   ]
 
 endsection: output

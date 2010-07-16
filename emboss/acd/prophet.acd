@@ -5,7 +5,8 @@ application: prophet [
   gui: "yes"
   batch: "yes"
   cpu: "medium"
-  relations: "EDAM: Sequence-profile alignment"
+  relations: "/edam/topic/0000188 Sequence profiles"
+  relations: "/edam/operation/0000300 Sequence-profile alignment"
 ]
 
 section: input [
@@ -16,14 +17,16 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "any"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0000848 Sequence" 
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more" 
   ]
 
   infile: infile [
     parameter: "Y"
     information: "Profile or weight matrix file"
     knowntype: "profile or matrix"
-    relations:  "EDAM: Sequence profile"                               
+    relations:  "/edam/data/0001354 Sequence profile"                               
   ]
 
 endsection: input
@@ -39,7 +42,7 @@ section: required [
     minimum: "0.0"
     maximum: "100.0"
     information: "Gap opening coefficient"
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001397 Gap opening penalty"
   ]
 
   float: gapextend [
@@ -48,7 +51,7 @@ section: required [
     minimum: "0.0"
     maximum: "100.0"
     information: "Gap extension coefficient"
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001398 Gap extension penalty"
   ]
 
 endsection: required
@@ -61,7 +64,7 @@ section: output [
   align: outfile [
     parameter: "Y"
     aformat: "simple"
-    relations: "EDAM: Sequence alignment data"                             
+    relations: "/edam/data/0000863 Sequence alignment"                             
   ]
 
 endsection: output

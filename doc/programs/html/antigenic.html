@@ -78,9 +78,9 @@ known segmental epitopes.</p>
 
 % <b>antigenic </b>
 Finds antigenic sites in proteins
-Input protein sequence(s): <b>tsw:actb1_fugru</b>
+Input protein sequence(s): <b>tsw:actb1_takru</b>
 Minimum length of antigenic region [6]: <b></b>
-Output report [actb1_fugru.antigenic]: <b></b>
+Output report [actb1_takru.antigenic]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -96,9 +96,9 @@ By using the '-rformat gff' qualifier, a GFF file of the predicted regions can b
 
 % <b>antigenic -rformat gff </b>
 Finds antigenic sites in proteins
-Input protein sequence(s): <b>tsw:actb1_fugru</b>
+Input protein sequence(s): <b>tsw:actb1_takru</b>
 Minimum length of antigenic region [6]: <b></b>
-Output report [actb1_fugru.antigenic]: <b></b>
+Output report [actb1_takru.antigenic]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -120,7 +120,7 @@ IT IS DONE FOR YOU.
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Finds antigenic sites in proteins
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -565,22 +565,22 @@ The input sequence can be one or more protein sequences.
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
 
-'tsw:actb1_fugru' is a sequence entry in the example protein database 'tsw'
+'tsw:actb1_takru' is a sequence entry in the example protein database 'tsw'
 <p>
-<p><h3>Database entry: tsw:actb1_fugru</h3>
+<p><h3>Database entry: tsw:actb1_takru</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
-ID   ACTB1_FUGRU             Reviewed;         375 AA.
+ID   ACTB1_TAKRU             Reviewed;         375 AA.
 AC   P68142; P53484;
 DT   25-OCT-2004, integrated into UniProtKB/Swiss-Prot.
 DT   25-OCT-2004, sequence version 1.
-DT   16-JUN-2009, entry version 31.
+DT   02-MAR-2010, entry version 39.
 DE   RecName: Full=Actin, cytoplasmic 1;
 DE   AltName: Full=Beta-actin A;
 DE   Contains:
 DE     RecName: Full=Actin, cytoplasmic 1, N-terminally processed;
 GN   Name=actba;
-OS   Fugu rubripes (Japanese pufferfish) (Takifugu rubripes).
+OS   Takifugu rubripes (Japanese pufferfish) (Fugu rubripes).
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
 OC   Actinopterygii; Neopterygii; Teleostei; Euteleostei; Neoteleostei;
 OC   Acanthomorpha; Acanthopterygii; Percomorpha; Tetraodontiformes;
@@ -617,15 +617,17 @@ CC   Distributed under the Creative Commons Attribution-NoDerivs License
 CC   -----------------------------------------------------------------------
 DR   EMBL; U37499; AAC59889.1; -; Genomic_DNA.
 DR   PIR; S71124; S71124.
-DR   HSSP; P02570; 1HLU.
-DR   SMR; P68142; 4-371.
-DR   HOVERGEN; P68142; -.
-DR   OMA; P68142; EKMTQIL.
-DR   GO; GO:0005737; C:cytoplasm; IEA:UniProtKB-SubCell.
+DR   SMR; P68142; 2-375.
+DR   Ensembl; ENSTRUT00000013141; ENSTRUP00000013080; ENSTRUG00000005447; Takifugu rubripes.
+DR   eggNOG; fiNOG04759; -.
+DR   InParanoid; P68142; -.
+DR   PhylomeDB; P68142; -.
+DR   GO; GO:0005737; C:cytoplasm; IEA:UniProtKB-KW.
 DR   GO; GO:0005856; C:cytoskeleton; IEA:UniProtKB-SubCell.
 DR   GO; GO:0005524; F:ATP binding; IEA:UniProtKB-KW.
 DR   GO; GO:0005515; F:protein binding; IEA:InterPro.
 DR   InterPro; IPR004000; Actin-like.
+DR   InterPro; IPR020902; Actin/actin-like_CS.
 DR   InterPro; IPR004001; Actin_CS.
 DR   PANTHER; PTHR11937; Actin_like; 1.
 DR   Pfam; PF00022; Actin; 1.
@@ -674,7 +676,7 @@ The output is a standard EMBOSS report file.
 The results can be output in one of several styles by using the
 command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
 the name of the required format.  The available format names are: embl,
-genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+genbank, gff, pir, swiss, debug, listfile, dbmotif, diffseq, excel,
 feattable, motif, regions, seqtable, simple, srs, table, tagseq
 
 <p>
@@ -694,21 +696,21 @@ By default <b>antigenic</b> writes a 'motif' report file.
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: actb1_fugru.antigenic</h3>
+<p><h3>File: actb1_takru.antigenic</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ########################################
 # Program: antigenic
 # Rundate: Fri 15 Jan 2010 12:00:00
 # Commandline: antigenic
-#    -sequence tsw:actb1_fugru
+#    -sequence tsw:actb1_takru
 # Report_format: motif
-# Report_file: actb1_fugru.antigenic
+# Report_file: actb1_takru.antigenic
 ########################################
 
 #=======================================
 #
-# Sequence: ACTB1_FUGRU     from: 1   to: 375
+# Sequence: ACTB1_TAKRU     from: 1   to: 375
 # HitCount: 18
 #=======================================
 
@@ -807,32 +809,32 @@ Max_score_pos at "*"
 
 <a name="output.2"></a>
 <h3>Output files for usage example 2</h3>
-<p><h3>File: actb1_fugru.antigenic</h3>
+<p><h3>File: actb1_takru.antigenic</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 3
-##sequence-region ACTB1_FUGRU 1 375
+##sequence-region ACTB1_TAKRU 1 375
 #!Date 2010-01-15
 #!Type Protein
-#!Source-version EMBOSS 6.2.0
-ACTB1_FUGRU	antigenic	epitope	214	222	1.207	+	.	ID="ACTB1_FUGRU.1";note="*pos 218"
-ACTB1_FUGRU	antigenic	epitope	131	145	1.187	+	.	ID="ACTB1_FUGRU.2";note="*pos 137"
-ACTB1_FUGRU	antigenic	epitope	5	12	1.166	+	.	ID="ACTB1_FUGRU.3";note="*pos 8"
-ACTB1_FUGRU	antigenic	epitope	27	38	1.164	+	.	ID="ACTB1_FUGRU.4";note="*pos 32"
-ACTB1_FUGRU	antigenic	epitope	160	183	1.136	+	.	ID="ACTB1_FUGRU.5";note="*pos 173"
-ACTB1_FUGRU	antigenic	epitope	367	372	1.135	+	.	ID="ACTB1_FUGRU.6";note="*pos 372"
-ACTB1_FUGRU	antigenic	epitope	93	108	1.116	+	.	ID="ACTB1_FUGRU.7";note="*pos 103"
-ACTB1_FUGRU	antigenic	epitope	295	301	1.113	+	.	ID="ACTB1_FUGRU.8";note="*pos 296"
-ACTB1_FUGRU	antigenic	epitope	256	266	1.110	+	.	ID="ACTB1_FUGRU.9";note="*pos 264"
-ACTB1_FUGRU	antigenic	epitope	336	352	1.107	+	.	ID="ACTB1_FUGRU.10";note="*pos 347"
-ACTB1_FUGRU	antigenic	epitope	62	76	1.102	+	.	ID="ACTB1_FUGRU.11";note="*pos 68"
-ACTB1_FUGRU	antigenic	epitope	232	250	1.086	+	.	ID="ACTB1_FUGRU.12";note="*pos 245"
-ACTB1_FUGRU	antigenic	epitope	327	332	1.083	+	.	ID="ACTB1_FUGRU.13";note="*pos 330"
-ACTB1_FUGRU	antigenic	epitope	317	323	1.074	+	.	ID="ACTB1_FUGRU.14";note="*pos 320"
-ACTB1_FUGRU	antigenic	epitope	186	192	1.068	+	.	ID="ACTB1_FUGRU.15";note="*pos 191"
-ACTB1_FUGRU	antigenic	epitope	40	46	1.066	+	.	ID="ACTB1_FUGRU.16";note="*pos 43"
-ACTB1_FUGRU	antigenic	epitope	269	275	1.045	+	.	ID="ACTB1_FUGRU.17";note="*pos 269"
-ACTB1_FUGRU	antigenic	epitope	51	57	1.034	+	.	ID="ACTB1_FUGRU.18";note="*pos 52"
+#!Source-version EMBOSS 6.3.0
+ACTB1_TAKRU	antigenic	epitope	214	222	1.207	+	.	ID="ACTB1_TAKRU.1";note="*pos 218"
+ACTB1_TAKRU	antigenic	epitope	131	145	1.187	+	.	ID="ACTB1_TAKRU.2";note="*pos 137"
+ACTB1_TAKRU	antigenic	epitope	5	12	1.166	+	.	ID="ACTB1_TAKRU.3";note="*pos 8"
+ACTB1_TAKRU	antigenic	epitope	27	38	1.164	+	.	ID="ACTB1_TAKRU.4";note="*pos 32"
+ACTB1_TAKRU	antigenic	epitope	160	183	1.136	+	.	ID="ACTB1_TAKRU.5";note="*pos 173"
+ACTB1_TAKRU	antigenic	epitope	367	372	1.135	+	.	ID="ACTB1_TAKRU.6";note="*pos 372"
+ACTB1_TAKRU	antigenic	epitope	93	108	1.116	+	.	ID="ACTB1_TAKRU.7";note="*pos 103"
+ACTB1_TAKRU	antigenic	epitope	295	301	1.113	+	.	ID="ACTB1_TAKRU.8";note="*pos 296"
+ACTB1_TAKRU	antigenic	epitope	256	266	1.110	+	.	ID="ACTB1_TAKRU.9";note="*pos 264"
+ACTB1_TAKRU	antigenic	epitope	336	352	1.107	+	.	ID="ACTB1_TAKRU.10";note="*pos 347"
+ACTB1_TAKRU	antigenic	epitope	62	76	1.102	+	.	ID="ACTB1_TAKRU.11";note="*pos 68"
+ACTB1_TAKRU	antigenic	epitope	232	250	1.086	+	.	ID="ACTB1_TAKRU.12";note="*pos 245"
+ACTB1_TAKRU	antigenic	epitope	327	332	1.083	+	.	ID="ACTB1_TAKRU.13";note="*pos 330"
+ACTB1_TAKRU	antigenic	epitope	317	323	1.074	+	.	ID="ACTB1_TAKRU.14";note="*pos 320"
+ACTB1_TAKRU	antigenic	epitope	186	192	1.068	+	.	ID="ACTB1_TAKRU.15";note="*pos 191"
+ACTB1_TAKRU	antigenic	epitope	40	46	1.066	+	.	ID="ACTB1_TAKRU.16";note="*pos 43"
+ACTB1_TAKRU	antigenic	epitope	269	275	1.045	+	.	ID="ACTB1_TAKRU.17";note="*pos 269"
+ACTB1_TAKRU	antigenic	epitope	51	57	1.034	+	.	ID="ACTB1_TAKRU.18";note="*pos 52"
 </pre>
 </td></tr></table><p>
 
@@ -1087,19 +1089,23 @@ None.
     Author(s)
 </H2>
 
-Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
+Alan Bleasby 
 <br>
 European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
 
 
 <p>
 Original program "ANTIGENIC" by Peter Rice (EGCG 1991)
 
-Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
+Peter Rice
 <br>
 European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
 <H2>
     History
 </H2>

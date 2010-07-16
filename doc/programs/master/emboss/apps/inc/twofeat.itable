@@ -23,7 +23,7 @@
 <td>-atype</td>
 <td>string</td>
 <td>By default every feature in the feature table is allowed. You can set this to be any feature type you wish to allow.
-See http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www.expasy.ch/txt/userman.txt for a list of the Swissprot feature types.
+See http://www.ebi.ac.uk/embl/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www.expasy.org/sprot/userman.html for a list of the Swissprot feature types.
 The type may be wildcarded by using '*'.
 If you wish to allow more than one type, separate their names with the character '|', eg:
 *UTR | intron</td>
@@ -35,7 +35,7 @@ If you wish to allow more than one type, separate their names with the character
 <td>-btype</td>
 <td>string</td>
 <td>By default every feature in the feature table is allowed. You can set this to be any feature type you wish to allow.
-See http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www.expasy.ch/txt/userman.txt for a list of the Swissprot feature types.
+See http://www.ebi.ac.uk/embl/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www.expasy.org/sprot/userman.html for a list of the Swissprot feature types.
 The type may be wildcarded by using '*'.
 If you wish to allow more than one type, separate their names with the character '|', eg:
 *UTR | intron</td>
@@ -233,7 +233,7 @@ You can allow any or no overlaps, specify that they must or must not overlap, th
 <tr bgcolor="#FFFFCC">
 <td>-typeout</td>
 <td>string</td>
-<td>If you have specified that the pairs of features that are found should be reported as one feature in the ouput, then you can specify the 'type' name of the new feature here. By default every feature in the feature table is allowed. See http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www.expasy.ch/txt/userman.txt for a list of the Swissprot feature types. If you specify an invalid feature type name, then the default name 'misc_feature' is used.</td>
+<td>If you have specified that the pairs of features that are found should be reported as one feature in the ouput, then you can specify the 'type' name of the new feature here. By default every feature in the feature table is allowed. See http://www.ebi.ac.uk/embl/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www.expasy.org/sprot/userman.html for a list of the Swissprot feature types. If you specify an invalid feature type name, then the default name 'misc_feature' is used.</td>
 <td>Any string</td>
 <td>misc_feature</td>
 </tr>

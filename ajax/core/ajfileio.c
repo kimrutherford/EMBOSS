@@ -27,6 +27,9 @@
 
 static void   filebuffLineAdd(AjPFilebuff thys, const AjPStr line);
 
+
+
+
 /* @filesection ajfile ********************************************************
 **
 ** @nam1rule aj Function belongs to the AJAX library.
@@ -67,6 +70,9 @@ static void   filebuffLineAdd(AjPFilebuff thys, const AjPStr line);
 **
 ** @fcategory input
 */
+
+
+
 
 /* @func ajReadline ***********************************************************
 **
@@ -163,9 +169,11 @@ AjBool ajReadlinePos(AjPFile file, AjPStr* Pdest, ajlong* Ppos)
     ajint jlen;
     ajint ipos;
     ajuint buffsize;
-    size_t iread;
     const char* pnewline = NULL;
- 
+#ifndef __ppc__
+    size_t iread;
+#endif
+    
     MAJSTRDEL(Pdest);
 
     if(file->Buffsize)
@@ -456,7 +464,7 @@ __deprecated AjBool ajFileGetsTrimL(AjPFile thys, AjPStr* pdest, ajlong* fpos)
 ** @nam3rule Uint8 Binary read of an 8 byte unsigned integer
 ** @nam3rule Str Binary read of a string
 ** @suffix Endian Data in file is big-endian
-** @suffix Local Data in file  is in local endianness
+** @suffix Local Data in file  is in local endian-ness
 **
 ** @argrule Readbin file [AjPFile] File object
 ** @argrule Binary count [size_t] Number of elements to read
@@ -479,6 +487,8 @@ __deprecated AjBool ajFileGetsTrimL(AjPFile thys, AjPStr* pdest, ajlong* fpos)
 ** @fcategory input
 **
 ******************************************************************************/
+
+
 
 
 /* @func ajReadbinBinary *****************************************************
@@ -1291,6 +1301,7 @@ size_t ajReadbinUint8Local(AjPFile file, ajulong *Pu8)
 
 
 
+
 /* @obsolete ajFileOutHeader
 ** @remove Not used
 */
@@ -1530,6 +1541,7 @@ size_t ajWritebinNewline(AjPFile file)
 
 
 
+
 /* @func ajWritebinStr *******************************************************
 **
 ** Writes a string to a binary file
@@ -1605,6 +1617,9 @@ __deprecated ajint ajFileWriteStr(AjPFile thys, const AjPStr str, ajuint len)
 **
 ******************************************************************************/
 
+
+
+
 /* @func ajWriteline *******************************************************
 **
 ** Writes a string to a file, including any newline characters
@@ -1678,7 +1693,7 @@ AjBool ajWritelineSpace(AjPFile file, const AjPStr line)
 
 /* @datasection [AjPFilebuff] Buffered file object *****************************
 **
-** Function is for manipulating ibuffered nput files and returns or
+** Function is for manipulating buffered input files and returns or
 ** takes at least one AjPFilebuff argument.
 ** 
 */
@@ -1710,6 +1725,9 @@ AjBool ajWritelineSpace(AjPFile file, const AjPStr line)
 **
 ** @fcategory input
 */
+
+
+
 
 /* @func ajBuffreadLine *******************************************************
 **

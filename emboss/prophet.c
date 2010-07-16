@@ -46,6 +46,8 @@ static void prophet_scan_profile(const AjPStr substr, const AjPStr pname,
 /* JISON AjPAlign align replaces AjPOutfile outf */
 
 
+
+
 /* @prog prophet **************************************************************
 **
 ** Gapped alignment for profiles
@@ -211,6 +213,7 @@ int main(int argc, char **argv)
 
 
 
+
 /* @funcstatic prophet_getType ************************************************
 **
 ** Undocumented.
@@ -356,8 +359,6 @@ static void prophet_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
 
     return;
 }
-
-
 
 
 

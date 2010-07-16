@@ -103,7 +103,7 @@ seqret-embl1 = seqret -auto tembl:x65923
 seqret-emblmany = seqret -auto 'tembl:m*'
 embossdata = embossdata -fetch -file Eamino.dat -outfile ./Eamino.dat -auto
 embossversion = embossversion -auto
-emowse = emowse 'tsw:*fugru' ../../data/test.mowse -auto
+emowse = emowse 'tsw:*takru' ../../data/test.mowse -auto
 entrails =test= entrails -auto
 entret = entret tembl:x65923 -auto
 equicktandem = equicktandem tembl:x65923 -auto

@@ -1,7 +1,8 @@
 application: infoseq [
   documentation: "Display basic information about sequences"
   groups: "Information"
-  relations: "EDAM: Sequence description"
+  relations: "/edam/topic/0000155 Sequence retrieval"
+  relations: "/edam/operation/0000229 Sequence description"
 ]
 
 section: input [
@@ -12,7 +13,9 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "gapany"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0000848 Sequence" 
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more" 
   ]
 
 endsection: input
@@ -31,7 +34,7 @@ section: advanced [
            delimited by a character, which you may specify by using the
            -delimiter option. In other words, if -columns is set on, the
            -delimiter option is overriden."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   string: delimiter [
@@ -42,7 +45,7 @@ section: advanced [
            could be a space character, a tab character, a pipe character or
            any other character or string."
     knowntype: "output delimiter"
-    relations:  "EDAM: Generic string"                                 
+    relations: "/edam/data/0002152 Rendering parameter"
   ]
 
 endsection: advanced
@@ -58,7 +61,7 @@ section: output [
     knowntype: "infoseq output"
     help: "If you enter the name of a file here then this program will
            write the sequence details into that file."
-    relations:  "EDAM:Sequence information report"                         
+    relations:  "/edam/data/0000855 Sequence annotation"                         
   ]
 
   boolean: html [
@@ -66,7 +69,7 @@ section: output [
     default: "N"
     information: "Format output as an HTML table"
     outputmodifier: "Y"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: only [
@@ -77,73 +80,79 @@ section: output [
            '-nohead -noname -noacc -notype -nopgc -nodesc' \
            to get only the length output, you can specify \
            '-only -length'"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: heading [
     default: "Y"
     information: "Display column headings"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: usa [
     default: "@(!$(only))"
     information: "Display the USA of the sequence"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: database [
     default: "@(!$(only))"
     information: "Display 'database' column"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: name [
     default: "@(!$(only))"
     information: "Display 'name' column"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: accession [
     default: "@(!$(only))"
     information: "Display 'accession' column"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: gi [
     default: "N"
     information: "Display 'GI' column"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: seqversion [
     default: "N"
     information: "Display 'version' column"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: type [
     default: "@(!$(only))"
     information: "Display 'type' column"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: length [
     default: "@(!$(only))"
     information: "Display 'length' column"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: pgc [
     default: "@(!$(only))"
     information: "Display 'percent GC content' column"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
+  ]
+
+  boolean: organism [
+    default: "@(!$(only))"
+    information: "Display 'organism' column"
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: description [
     default: "@(!$(only))"
     information: "Display 'description' column"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
 endsection: output

@@ -1,5 +1,5 @@
 Display the trace in an ABI sequencer file
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     ABI sequencing trace file
@@ -7,7 +7,8 @@ Version: EMBOSS:6.2.0
                                   filename and optional format (output USA)
    -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tek, tekt, none, data, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif, pdf,
+                                  svg, pdf, svg)
 
    Additional (Optional) qualifiers:
    -startbase          integer    [0] First base to report or display (Integer

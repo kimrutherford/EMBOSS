@@ -24,7 +24,10 @@ enum AjEXrefType {
     XREF_MAX            /* to test we are within bounds */
 };
 
-typedef struct SeqSAccess SeqSAccess;
+typedef struct AjSSeqAccess AjSSeqAccess;
+
+
+
 
 /* @data AjPSeqDesc ***********************************************************
 **
@@ -63,7 +66,8 @@ typedef struct AjSSeqDesc {
 #define AjPSeqDesc AjOSeqDesc*
 
 
-    
+
+
 /* @data AjPSeqSubdesc *********************************************************
 **
 ** Ajax sequence sub-description object.
@@ -97,7 +101,8 @@ typedef struct AjSSeqSubdesc {
 #define AjPSeqSubdesc AjOSeqSubdesc*
 
 
-    
+
+
 /* @data AjPSeqGene ***********************************************************
 **
 ** Ajax genes object.
@@ -109,8 +114,8 @@ typedef struct AjSSeqSubdesc {
 ** @alias AjOSeqGene
 **
 ** @attr Name [AjPStr] Gene standard name
-** @attr Synonyms [AjPStr] Accepted synonynms
-** @attr Orf [AjPStr] Recognized open reading frame (ORF) names
+** @attr Synonyms [AjPStr] Accepted synonyms
+** @attr Orf [AjPStr] Recognised open reading frame (ORF) names
 **                         usually for sequencing projects in progress
 ** @attr Oln [AjPStr] Ordered locus name(s) representing order on chromosome
 ** @@
@@ -125,7 +130,8 @@ typedef struct AjSSeqGene {
 #define AjPSeqGene AjOSeqGene*
 
 
-    
+
+
 /* @data AjPSeqDate ***********************************************************
 **
 ** Ajax sequence dates object.
@@ -162,7 +168,8 @@ typedef struct AjSSeqDate {
 #define AjPSeqDate AjOSeqDate*
 
 
-    
+
+
 /* @data AjPSeqRef ***********************************************************
 **
 ** Ajax sequence citation object.
@@ -183,7 +190,7 @@ typedef struct AjSSeqDate {
 ** @attr Loctype [AjPStr] Location type
 ** @attr Number [ajuint] Reference number. This may be used in the feature
 **                       table and references can disappear so the position
-**                       in the lst is not enough
+**                       in the list is not enough
 ** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
@@ -203,7 +210,8 @@ typedef struct AjSSeqRef {
 #define AjPSeqRef AjOSeqRef*
 
 
-    
+
+
 /* @data AjPSeqXref ***********************************************************
 **
 ** Ajax sequence cross-reference object.
@@ -240,6 +248,8 @@ typedef struct AjSSeqXref {
 #define AjPSeqXref AjOSeqXref*
 
 
+
+
 /* @data AjPSeqQuery **********************************************************
 **
 ** Ajax Sequence Query object.
@@ -248,7 +258,7 @@ typedef struct AjSSeqXref {
 ** This can refer to an entry name (or "id"), and accession number or
 ** other queriable items.
 **
-** ajpseqquery is created with the entry specification part of a USA
+** AjPSeqQuery is created with the entry specification part of a USA
 ** (Uniform Sequence Address). The syntax is currently related to that
 ** used by SRS release 5.1.
 **
@@ -276,17 +286,25 @@ typedef struct AjSSeqXref {
 ** @attr Filename [AjPStr] Individual filename
 ** @attr Exclude [AjPStr] File wildcards to exclude (spaced)
 ** @attr DbFields [AjPStr] Query fields (plus id and acc)
+** @attr DbFilter [AjPStr] Additional query filter(s) to restrict results
 ** @attr DbProxy [AjPStr] Proxy host
-** @attr DbHttpVer [AjPStr] HTTP Version
+** @attr DbHttpVer [AjPStr] HTTP version
+** @attr DbIdentifier [AjPStr] Field name of unique identifier
+** @attr DbAccession [AjPStr] Field name of secondary identifier
+** @attr DbSequence [AjPStr] Field name of sequence string
+** @attr DbReturn [AjPStr] Comma separated field named to be returned
+** @attr ServerVer [AjPStr] Server version
 ** @attr Field [AjPStr] Query field
 ** @attr QryString [AjPStr] Query term
 ** @attr Application [AjPStr] External application command
 ** @attr Fpos [ajlong] File position from fseek
 ** @attr Type [enum AjEQryType] Enumerated query type
 ** @attr QryDone [AjBool] Has the query been done yet
-** @attr Access [SeqSAccess*] Access function : see ajseqdb.h
+** @attr Access [AjSSeqAccess*] Access function : see ajseqdb.h
 ** @attr QryData [void*] Private data for access function
 ** @attr Wild [AjBool] True if query contains '*' or '?'
+** @attr CountEntries [ajuint] Number of entries processed
+** @attr TotalEntries [ajuint] Number of entries found
 ** @attr Padding [char[4]] Padding to alignment boundary
 **
 ** @new ajSeqQueryNew Default constructor
@@ -320,17 +338,25 @@ typedef struct AjSSeqQuery {
   AjPStr Filename;
   AjPStr Exclude;
   AjPStr DbFields;
+  AjPStr DbFilter;
   AjPStr DbProxy;
   AjPStr DbHttpVer;
+  AjPStr DbIdentifier;
+  AjPStr DbAccession;
+  AjPStr DbSequence;
+  AjPStr DbReturn;
+  AjPStr ServerVer;
   AjPStr Field;
   AjPStr QryString;
   AjPStr Application;
   ajlong Fpos;
   enum AjEQryType Type;
   AjBool QryDone;
-  SeqSAccess* Access;
+  AjSSeqAccess* Access;
   void* QryData;
   AjBool Wild;
+  ajuint CountEntries;
+  ajuint TotalEntries;
   char Padding[4];
 } AjOSeqQuery;
 
@@ -395,11 +421,14 @@ typedef struct AjSSeqQuery {
 ** @attr Lower [AjBool] true: convert to lower case -slower
 ** @attr Upper [AjBool] true: convert to upper case -supper
 ** @attr Text [AjBool] true: save full text of entry
+** @attr ChunkEntries [AjBool] true: access method returns entries in chunks
+**                             and should be called again when input is empty
 ** @attr Count [ajint] count of entries so far. Used when ACD reads first
 **                     sequence and we need to reuse it in a Next loop
 ** @attr Filecount [ajint] Number of files read - used by seqsetall input
 ** @attr Fileseqs [ajint] Number of seqs in file - used by seqsetall input
 ** @attr Rev [AjBool] Reverse/complement if true
+** @attr Padding [char[4]] Padding to alignment boundary
 ** @attr Fpos [ajlong] File position (fseek) for building USA
 ** @attr Query [AjPSeqQuery] Query data - see AjPSeqQuery
 ** @attr Data [void*] Format data for reuse, e.g. multiple sequence input
@@ -442,10 +471,12 @@ typedef struct AjSSeqin {
   AjBool Lower;
   AjBool Upper;
   AjBool Text;
+  AjBool ChunkEntries;
   ajint Count;
   ajint Filecount;
   ajint Fileseqs;
   AjBool Rev;
+  char Padding[4];
   ajlong Fpos;
   AjPSeqQuery Query;
   void *Data;
@@ -458,7 +489,7 @@ typedef struct AjSSeqin {
 
 
 
-/* @data SeqPAccess ***********************************************************
+/* @data AjPSeqAccess *********************************************************
 **
 ** Ajax Sequence Access database reading object.
 **
@@ -472,37 +503,40 @@ typedef struct AjSSeqin {
 ** This should be a static data object but is needed for the definition
 ** of AjPSeqin.
 **
-** @alias SeqSAccess
+** @alias AjSSeqAccess
+** @alias AjOSeqAccess
+**
 ** @new ajSeqMethod returns a copy of a known access method definition.
 ** @other AjPSeqin Sequence input
 **
 ** @attr Name [const char*] Access method name used in emboss.default
+** @attr Access [(AjBool*)] Access function
+** @attr AccessFree [(AjBool*)] Access cleanup function
+** @attr Desc [const char*] Description
 ** @attr Alias [AjBool] Alias for another name
 ** @attr Entry [AjBool] Supports retrieval of single entries
 ** @attr Query [AjBool] Supports retrieval of selected entries
 ** @attr All [AjBool] Supports retrieval of all entries
-** @attr Access [(AjBool*)] Access function
-** @attr AccessFree [(AjBool*)] Access cleanup function
-** @attr Desc [const char*] Description
+** @attr Chunked [AjBool] Supports retrieval of entries in chunks
 ** @@
 ******************************************************************************/
 
-typedef struct SeqSAccess {
+typedef struct AjSSeqAccess {
   const char *Name;
+  AjBool (*Access) (AjPSeqin seqin);
+  AjBool (*AccessFree) (void* qry);
+  const char* Desc;
   AjBool Alias;
   AjBool Entry;
   AjBool Query;
   AjBool All;
-  AjBool (*Access) (AjPSeqin seqin);
-  AjBool (*AccessFree) (void* qry);
-  const char* Desc;
-} SeqOAccess;
+  AjBool Chunked;
+} AjOSeqAccess;
 
-#define SeqPAccess SeqOAccess*
+#define AjPSeqAccess AjOSeqAccess*
 
 
 
-    
 
 /* @data AjPSeq ***************************************************************
 **
@@ -624,6 +658,7 @@ typedef struct AjSSeq {
 } AjOSeq;
 
 #define AjPSeq AjOSeq*
+
 
 
 

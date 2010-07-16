@@ -89,6 +89,9 @@ enum enumAtomWindowPoint
 /* for unavailable angles (360 deg is an impossible torsion angle) */
 const float FUnavailableAngle = 360.0;
 
+
+
+
 /* @prog psiphi **************************************************************
 ** 
 ** protein structure C-alpha psi and phi angles given neighbour co-ordinates

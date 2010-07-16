@@ -1,5 +1,5 @@
 Find restriction enzymes producing a specific overhang
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -14,8 +14,8 @@ Version: EMBOSS:6.2.0
                                   methylation data file
    -min                integer    [1] Minimum cuts per RE (Integer from 1 to
                                   1000)
-   -max                integer    [2000000000] Maximum cuts per RE (Integer up
-                                  to 2000000000)
+   -max                integer    [2000000000] Maximum cuts per RE (Any
+                                  integer value)
    -single             boolean    [N] Force single site only cuts
    -threeprime         boolean    [N] Use 3' overhang e.g. BamHI has CTAG as a
                                   5' overhang, and ApaI has CCGG as 3'

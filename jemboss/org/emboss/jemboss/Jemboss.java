@@ -390,6 +390,8 @@ public class Jemboss implements ActionListener
     }
     else
       withSoap = true;
+    
+    JembossParams.setStandaloneMode(!withSoap);
 
     new Jemboss();
   }

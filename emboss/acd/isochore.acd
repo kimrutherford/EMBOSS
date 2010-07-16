@@ -1,7 +1,8 @@
 application: isochore [
   documentation: "Plots isochores in DNA sequences"
   groups: "Nucleic:Composition"
-  relations: "EDAM: CpG island and isochores identification"
+  relations: "/edam/topic/0000157 Sequence composition"
+  relations: "/edam/operation/0000430 CpG island and isochores identification"
 ]
 
 section: input [
@@ -12,7 +13,8 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "dna"
-    relations: "EDAM: Pure DNA sequence"                                   
+    relations: "/edam/data/0001215 Pure DNA sequence"                          
+    relations: "/edam/data/0000849 Sequence record"          
   ]
 
 endsection: input
@@ -27,8 +29,11 @@ section: additional [
     default: "1000"
     minimum: "1"
     maximum: "@($(sequence.end)/2)"
+    failrange: "N"
+    trueminimum: "Y"
     information: "Window size"
-    relations: "EDAM: Generic integer"                                     
+    warnrange: "N"                                  
+    relations: "/edam/data/0001251 Window size"
   ]
 
   integer: shift [
@@ -37,7 +42,10 @@ section: additional [
     minimum: "1"
     maximum: "@($(sequence.end)/10)"
     information: "Shift increment"
-    relations: "EDAM: Generic integer"                                     
+    failrange: "N"
+    trueminimum: "Y"  
+    warnrange: "N"                                  
+    relations: "/edam/data/0002141 Window step size"
   ]
 
 endsection: additional
@@ -51,12 +59,12 @@ section: output [
     parameter: "Y"
     extension: "iso"
     knowntype: "isochore output"
-    relations:  "EDAM:CpG island and isochore report"                      
+    relations:  "/edam/data/0001304 CpG island and isochore report"                      
   ]
 
   xygraph: graph [
     standard: "Y"
-    relations: "EDAM: EMBOSS graph file"                                   
+    relations: "/edam/data/0001304 CpG island and isochore report"                                   
   ]
 
 endsection: output

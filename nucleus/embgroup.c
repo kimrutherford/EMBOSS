@@ -59,6 +59,7 @@ static AjPStr grpStr2 = NULL;
 
 
 
+
 /* @func embGrpGetProgGroups **************************************************
 **
 ** Optionally constructs a path to the directory of normal EMBOSS or
@@ -175,6 +176,7 @@ void embGrpGetProgGroups(AjPList glist, AjPList alpha, char * const env[],
 
     return;
 }
+
 
 
 

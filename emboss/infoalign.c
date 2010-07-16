@@ -45,6 +45,8 @@ static void infoalign_Compare(const AjPSeq ref, const AjPSeq seq,
 #define NOLIMIT 0
 
 
+
+
 /* @prog infoalign ************************************************************
 **
 ** Information on a multiple sequence alignment

@@ -24,6 +24,8 @@ import java.io.*;
 import java.util.Vector;
 import java.util.Enumeration;
 
+import javax.swing.JOptionPane;
+
 
 /**
 *
@@ -196,6 +198,18 @@ public class Consensus
       {
         s1 = getResidue(seqs,i,k); 
         m1 = mat.getMatrixIndex(s1);
+        
+        if(m1 == -1)
+        {
+            JOptionPane.showMessageDialog(null,
+                    "<html>Jemboss Alignment Viewer; " +
+                    "cannot find the residue <em>'"+ s1 +
+                    "'</em> in the scoring matrix <em>'" +
+                    mat.getCurrentMatrixName()+"'</em></html>",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
         if(matching[m1] == 0.f)
         {
           for(j=0;j<nseqs;j++)

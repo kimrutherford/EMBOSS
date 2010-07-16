@@ -4,41 +4,48 @@ DB srsembl [ method: "srswww" format: "embl"
     url: "http://srs.ebi.ac.uk/srs7bin/cgi-bin/wgetz"
     dbalias: "emblrelease"
     type: "N"
+    serverversion: "7.1.3"
 ]
 
 DB srspir [ method: "srswww" format: "pir"
     url: "http://srs.ebi.ac.uk/srs7bin/cgi-bin/wgetz"
     dbalias: "pir"
     type: "P"
+    serverversion: "7.1.3"
 ]
 
 DB srssw [ method: "srswww" format: "swiss"
     url: "http://srs.ebi.ac.uk/srs7bin/cgi-bin/wgetz"
     dbalias: "swissprot"
     type: "P"
+    serverversion: "7.1.3"
 ]
 
 DB srsswnew [ method: "srswww" format: "swiss"
     url: "http://srs.ebi.ac.uk/srs7bin/cgi-bin/wgetz"
     dbalias: "sptrembl"
     type: "P"
+    serverversion: "7.1.3"
 ]
 
 DB srsrefseqn [ method: "srswww" format: "refseq"
     url: "http://srs.ebi.ac.uk/srs7bin/cgi-bin/wgetz"
     dbalias: "refseq"
     type: "N"
+    serverversion: "7.1.3"
 ]
 
 DB srsrefseqp [ method: "srswww" format: "refseq"
     url: "http://srs.ebi.ac.uk/srs7bin/cgi-bin/wgetz"
     dbalias: "refseq"
     type: "P"
+    serverversion: "7.1.3"
 ]
 
 DB srsgenbank [ method: "srswww" format: "genbank"
     url: "http://genius.embnet.dkfz-heidelberg.de/menu/cgi-bin/srs7.1.3.1/wgetz"
     dbalias: "genbank"
     type: "N"
-   ]
+    serverversion: "7.1.3"
+]
 

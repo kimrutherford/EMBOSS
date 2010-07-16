@@ -1,5 +1,5 @@
 Generate residue/base frequency table or plot
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-seqall]            seqall     Sequence(s) filename and optional format, or
@@ -7,7 +7,8 @@ Version: EMBOSS:6.2.0
    -letters            string     [gc] Residue letters (Any string)
 *  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tek, tekt, none, data, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif, pdf,
+                                  svg, pdf, svg)
 *  -outfile            outfile    [*.freak] Output file name
 
    Additional (Optional) qualifiers:

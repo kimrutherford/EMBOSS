@@ -36,58 +36,63 @@ build_triplet = @build@
 host_triplet = @host@
 check_PROGRAMS = acdlog$(EXEEXT) acdrelations$(EXEEXT) acdxsd$(EXEEXT) \
 	ajtest$(EXEEXT) complex$(EXEEXT) corbatest$(EXEEXT) \
-	edamclean$(EXEEXT) ensembltest$(EXEEXT) entrails$(EXEEXT) \
-	entrailsbook$(EXEEXT) entrailshtml$(EXEEXT) \
+	domtesta$(EXEEXT) domtestb$(EXEEXT) domtestc$(EXEEXT) \
+	domtestd$(EXEEXT) edamclean$(EXEEXT) ensembltest$(EXEEXT) \
+	entrails$(EXEEXT) entrailsbook$(EXEEXT) entrailshtml$(EXEEXT) \
 	entrailswiki$(EXEEXT) histogramtest$(EXEEXT) intconv$(EXEEXT) \
-	origsplitter$(EXEEXT) origunion$(EXEEXT) newcoils$(EXEEXT) \
-	patmattest$(EXEEXT) prima$(EXEEXT) primers$(EXEEXT) \
-	seqinfo$(EXEEXT) seqretall$(EXEEXT) seqretallfeat$(EXEEXT) \
-	seqretset$(EXEEXT) seqretsingle$(EXEEXT) seqrettype$(EXEEXT) \
-	sqltest$(EXEEXT) testplot$(EXEEXT) treetypedisplay$(EXEEXT)
+	origsplitter$(EXEEXT) origunion$(EXEEXT) \
+	martattributes$(EXEEXT) martdatasets$(EXEEXT) \
+	martfilters$(EXEEXT) martquery$(EXEEXT) martregistry$(EXEEXT) \
+	martseqs$(EXEEXT) newcoils$(EXEEXT) patmattest$(EXEEXT) \
+	prima$(EXEEXT) primers$(EXEEXT) seqinfo$(EXEEXT) \
+	seqretall$(EXEEXT) seqretallfeat$(EXEEXT) seqretset$(EXEEXT) \
+	seqretsingle$(EXEEXT) seqrettype$(EXEEXT) sqltest$(EXEEXT) \
+	testplot$(EXEEXT) treetypedisplay$(EXEEXT)
 bin_PROGRAMS = aaindexextract$(EXEEXT) abiview$(EXEEXT) acdc$(EXEEXT) \
-	acdpretty$(EXEEXT) acdtable$(EXEEXT) acdtrace$(EXEEXT) \
-	acdvalid$(EXEEXT) aligncopy$(EXEEXT) aligncopypair$(EXEEXT) \
-	antigenic$(EXEEXT) backtranambig$(EXEEXT) backtranseq$(EXEEXT) \
-	banana$(EXEEXT) biosed$(EXEEXT) btwisted$(EXEEXT) cai$(EXEEXT) \
-	chaos$(EXEEXT) charge$(EXEEXT) checktrans$(EXEEXT) \
-	chips$(EXEEXT) cirdna$(EXEEXT) codcmp$(EXEEXT) \
-	codcopy$(EXEEXT) coderet$(EXEEXT) compseq$(EXEEXT) \
-	cons$(EXEEXT) consambig$(EXEEXT) cpgplot$(EXEEXT) \
-	cpgreport$(EXEEXT) cusp$(EXEEXT) cutgextract$(EXEEXT) \
-	cutseq$(EXEEXT) dan$(EXEEXT) dbiblast$(EXEEXT) \
-	dbifasta$(EXEEXT) dbiflat$(EXEEXT) dbigcg$(EXEEXT) \
-	dbxfasta$(EXEEXT) dbxflat$(EXEEXT) dbxgcg$(EXEEXT) \
-	degapseq$(EXEEXT) density$(EXEEXT) descseq$(EXEEXT) \
-	diffseq$(EXEEXT) digest$(EXEEXT) distmat$(EXEEXT) \
-	dotmatcher$(EXEEXT) dotpath$(EXEEXT) dottup$(EXEEXT) \
-	dreg$(EXEEXT) edialign$(EXEEXT) einverted$(EXEEXT) \
-	embossdata$(EXEEXT) embossversion$(EXEEXT) emma$(EXEEXT) \
-	emowse$(EXEEXT) entret$(EXEEXT) epestfind$(EXEEXT) \
-	eprimer3$(EXEEXT) equicktandem$(EXEEXT) est2genome$(EXEEXT) \
-	etandem$(EXEEXT) extractalign$(EXEEXT) extractfeat$(EXEEXT) \
-	extractseq$(EXEEXT) featcopy$(EXEEXT) featreport$(EXEEXT) \
-	findkm$(EXEEXT) freak$(EXEEXT) fuzznuc$(EXEEXT) \
-	fuzzpro$(EXEEXT) fuzztran$(EXEEXT) garnier$(EXEEXT) \
-	geecee$(EXEEXT) getorf$(EXEEXT) helixturnhelix$(EXEEXT) \
-	hmoment$(EXEEXT) iep$(EXEEXT) infoalign$(EXEEXT) \
-	infobase$(EXEEXT) inforesidue$(EXEEXT) infoseq$(EXEEXT) \
-	isochore$(EXEEXT) jaspextract$(EXEEXT) jaspscan$(EXEEXT) \
-	jembossctl$(EXEEXT) lindna$(EXEEXT) listor$(EXEEXT) \
-	makenucseq$(EXEEXT) makeprotseq$(EXEEXT) marscan$(EXEEXT) \
-	maskambignuc$(EXEEXT) maskambigprot$(EXEEXT) maskfeat$(EXEEXT) \
-	maskseq$(EXEEXT) matcher$(EXEEXT) megamerger$(EXEEXT) \
-	merger$(EXEEXT) msbar$(EXEEXT) mwcontam$(EXEEXT) \
-	mwfilter$(EXEEXT) needle$(EXEEXT) needleall$(EXEEXT) \
-	newcpgreport$(EXEEXT) newcpgseek$(EXEEXT) newseq$(EXEEXT) \
-	nohtml$(EXEEXT) noreturn$(EXEEXT) nospace$(EXEEXT) \
-	notab$(EXEEXT) notseq$(EXEEXT) nthseq$(EXEEXT) \
-	nthseqset$(EXEEXT) octanol$(EXEEXT) oddcomp$(EXEEXT) \
-	palindrome$(EXEEXT) pasteseq$(EXEEXT) patmatdb$(EXEEXT) \
-	patmatmotifs$(EXEEXT) pepcoil$(EXEEXT) pepinfo$(EXEEXT) \
-	pepnet$(EXEEXT) pepstats$(EXEEXT) pepwheel$(EXEEXT) \
-	pepwindow$(EXEEXT) pepwindowall$(EXEEXT) plotcon$(EXEEXT) \
-	plotorf$(EXEEXT) polydot$(EXEEXT) preg$(EXEEXT) \
-	prettyplot$(EXEEXT) prettyseq$(EXEEXT) primersearch$(EXEEXT) \
+	acdgalaxy$(EXEEXT) acdpretty$(EXEEXT) acdtable$(EXEEXT) \
+	acdtrace$(EXEEXT) acdvalid$(EXEEXT) aligncopy$(EXEEXT) \
+	aligncopypair$(EXEEXT) antigenic$(EXEEXT) \
+	backtranambig$(EXEEXT) backtranseq$(EXEEXT) banana$(EXEEXT) \
+	biosed$(EXEEXT) btwisted$(EXEEXT) cai$(EXEEXT) chaos$(EXEEXT) \
+	charge$(EXEEXT) checktrans$(EXEEXT) chips$(EXEEXT) \
+	cirdna$(EXEEXT) codcmp$(EXEEXT) codcopy$(EXEEXT) \
+	coderet$(EXEEXT) compseq$(EXEEXT) cons$(EXEEXT) \
+	consambig$(EXEEXT) cpgplot$(EXEEXT) cpgreport$(EXEEXT) \
+	cusp$(EXEEXT) cutgextract$(EXEEXT) cutseq$(EXEEXT) \
+	dan$(EXEEXT) dbiblast$(EXEEXT) dbifasta$(EXEEXT) \
+	dbiflat$(EXEEXT) dbigcg$(EXEEXT) dbxfasta$(EXEEXT) \
+	dbxflat$(EXEEXT) dbxgcg$(EXEEXT) degapseq$(EXEEXT) \
+	density$(EXEEXT) descseq$(EXEEXT) diffseq$(EXEEXT) \
+	digest$(EXEEXT) distmat$(EXEEXT) dotmatcher$(EXEEXT) \
+	dotpath$(EXEEXT) dottup$(EXEEXT) dreg$(EXEEXT) \
+	edialign$(EXEEXT) einverted$(EXEEXT) embossdata$(EXEEXT) \
+	embossversion$(EXEEXT) emma$(EXEEXT) emowse$(EXEEXT) \
+	entret$(EXEEXT) epestfind$(EXEEXT) eprimer3$(EXEEXT) \
+	equicktandem$(EXEEXT) est2genome$(EXEEXT) etandem$(EXEEXT) \
+	extractalign$(EXEEXT) extractfeat$(EXEEXT) extractseq$(EXEEXT) \
+	featcopy$(EXEEXT) featreport$(EXEEXT) findkm$(EXEEXT) \
+	freak$(EXEEXT) fuzznuc$(EXEEXT) fuzzpro$(EXEEXT) \
+	fuzztran$(EXEEXT) garnier$(EXEEXT) geecee$(EXEEXT) \
+	getorf$(EXEEXT) helixturnhelix$(EXEEXT) hmoment$(EXEEXT) \
+	iep$(EXEEXT) infoalign$(EXEEXT) infobase$(EXEEXT) \
+	inforesidue$(EXEEXT) infoseq$(EXEEXT) isochore$(EXEEXT) \
+	jaspextract$(EXEEXT) jaspscan$(EXEEXT) jembossctl$(EXEEXT) \
+	lindna$(EXEEXT) listor$(EXEEXT) makenucseq$(EXEEXT) \
+	makeprotseq$(EXEEXT) marscan$(EXEEXT) maskambignuc$(EXEEXT) \
+	maskambigprot$(EXEEXT) maskfeat$(EXEEXT) maskseq$(EXEEXT) \
+	matcher$(EXEEXT) megamerger$(EXEEXT) merger$(EXEEXT) \
+	msbar$(EXEEXT) mwcontam$(EXEEXT) mwfilter$(EXEEXT) \
+	needle$(EXEEXT) needleall$(EXEEXT) newcpgreport$(EXEEXT) \
+	newcpgseek$(EXEEXT) newseq$(EXEEXT) nohtml$(EXEEXT) \
+	noreturn$(EXEEXT) nospace$(EXEEXT) notab$(EXEEXT) \
+	notseq$(EXEEXT) nthseq$(EXEEXT) nthseqset$(EXEEXT) \
+	octanol$(EXEEXT) oddcomp$(EXEEXT) palindrome$(EXEEXT) \
+	pasteseq$(EXEEXT) patmatdb$(EXEEXT) patmatmotifs$(EXEEXT) \
+	pepcoil$(EXEEXT) pepinfo$(EXEEXT) pepnet$(EXEEXT) \
+	pepstats$(EXEEXT) pepwheel$(EXEEXT) pepwindow$(EXEEXT) \
+	pepwindowall$(EXEEXT) plotcon$(EXEEXT) plotorf$(EXEEXT) \
+	polydot$(EXEEXT) preg$(EXEEXT) prettyplot$(EXEEXT) \
+	prettyseq$(EXEEXT) primersearch$(EXEEXT) \
 	printsextract$(EXEEXT) profit$(EXEEXT) prophecy$(EXEEXT) \
 	prophet$(EXEEXT) prosextract$(EXEEXT) pscan$(EXEEXT) \
 	psiphi$(EXEEXT) rebaseextract$(EXEEXT) recoder$(EXEEXT) \
@@ -112,10 +117,11 @@ subdir = emboss
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in COPYING
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/amd64.m4 \
-	$(top_srcdir)/m4/general.m4 $(top_srcdir)/m4/java.m4 \
-	$(top_srcdir)/m4/lf_x11.m4 $(top_srcdir)/m4/mysql.m4 \
-	$(top_srcdir)/m4/pngdriver.m4 $(top_srcdir)/m4/postgresql.m4 \
-	$(top_srcdir)/m4/sgi.m4 $(top_srcdir)/configure.in
+	$(top_srcdir)/m4/general.m4 $(top_srcdir)/m4/hpdf.m4 \
+	$(top_srcdir)/m4/java.m4 $(top_srcdir)/m4/lf_x11.m4 \
+	$(top_srcdir)/m4/mysql.m4 $(top_srcdir)/m4/pngdriver.m4 \
+	$(top_srcdir)/m4/postgresql.m4 $(top_srcdir)/m4/sgi.m4 \
+	$(top_srcdir)/configure.in
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -130,8 +136,7 @@ am__DEPENDENCIES_1 =
 aaindexextract_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_abiview_OBJECTS = abiview.$(OBJEXT)
 abiview_OBJECTS = $(am_abiview_OBJECTS)
@@ -139,8 +144,7 @@ abiview_LDADD = $(LDADD)
 abiview_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_acdc_OBJECTS = acdc.$(OBJEXT)
 acdc_OBJECTS = $(am_acdc_OBJECTS)
@@ -148,17 +152,23 @@ acdc_LDADD = $(LDADD)
 acdc_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
+am_acdgalaxy_OBJECTS = acdgalaxy.$(OBJEXT)
+acdgalaxy_OBJECTS = $(am_acdgalaxy_OBJECTS)
+acdgalaxy_LDADD = $(LDADD)
+acdgalaxy_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_acdlog_OBJECTS = acdlog.$(OBJEXT)
 acdlog_OBJECTS = $(am_acdlog_OBJECTS)
 acdlog_LDADD = $(LDADD)
 acdlog_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_acdpretty_OBJECTS = acdpretty.$(OBJEXT)
 acdpretty_OBJECTS = $(am_acdpretty_OBJECTS)
@@ -166,8 +176,7 @@ acdpretty_LDADD = $(LDADD)
 acdpretty_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_acdrelations_OBJECTS = acdrelations.$(OBJEXT)
 acdrelations_OBJECTS = $(am_acdrelations_OBJECTS)
@@ -175,8 +184,7 @@ acdrelations_LDADD = $(LDADD)
 acdrelations_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_acdtable_OBJECTS = acdtable.$(OBJEXT)
 acdtable_OBJECTS = $(am_acdtable_OBJECTS)
@@ -184,8 +192,7 @@ acdtable_LDADD = $(LDADD)
 acdtable_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_acdtrace_OBJECTS = acdtrace.$(OBJEXT)
 acdtrace_OBJECTS = $(am_acdtrace_OBJECTS)
@@ -193,8 +200,7 @@ acdtrace_LDADD = $(LDADD)
 acdtrace_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_acdvalid_OBJECTS = acdvalid.$(OBJEXT)
 acdvalid_OBJECTS = $(am_acdvalid_OBJECTS)
@@ -202,8 +208,7 @@ acdvalid_LDADD = $(LDADD)
 acdvalid_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_acdxsd_OBJECTS = acdxsd.$(OBJEXT)
 acdxsd_OBJECTS = $(am_acdxsd_OBJECTS)
@@ -211,8 +216,7 @@ acdxsd_LDADD = $(LDADD)
 acdxsd_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_ajtest_OBJECTS = ajtest.$(OBJEXT)
 ajtest_OBJECTS = $(am_ajtest_OBJECTS)
@@ -220,8 +224,7 @@ ajtest_LDADD = $(LDADD)
 ajtest_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_aligncopy_OBJECTS = aligncopy.$(OBJEXT)
 aligncopy_OBJECTS = $(am_aligncopy_OBJECTS)
@@ -229,8 +232,7 @@ aligncopy_LDADD = $(LDADD)
 aligncopy_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_aligncopypair_OBJECTS = aligncopypair.$(OBJEXT)
 aligncopypair_OBJECTS = $(am_aligncopypair_OBJECTS)
@@ -238,8 +240,7 @@ aligncopypair_LDADD = $(LDADD)
 aligncopypair_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_antigenic_OBJECTS = antigenic.$(OBJEXT)
 antigenic_OBJECTS = $(am_antigenic_OBJECTS)
@@ -247,8 +248,7 @@ antigenic_LDADD = $(LDADD)
 antigenic_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_backtranambig_OBJECTS = backtranambig.$(OBJEXT)
 backtranambig_OBJECTS = $(am_backtranambig_OBJECTS)
@@ -256,8 +256,7 @@ backtranambig_LDADD = $(LDADD)
 backtranambig_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_backtranseq_OBJECTS = backtranseq.$(OBJEXT)
 backtranseq_OBJECTS = $(am_backtranseq_OBJECTS)
@@ -265,8 +264,7 @@ backtranseq_LDADD = $(LDADD)
 backtranseq_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_banana_OBJECTS = banana.$(OBJEXT)
 banana_OBJECTS = $(am_banana_OBJECTS)
@@ -274,8 +272,7 @@ banana_LDADD = $(LDADD)
 banana_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_biosed_OBJECTS = biosed.$(OBJEXT)
 biosed_OBJECTS = $(am_biosed_OBJECTS)
@@ -283,8 +280,7 @@ biosed_LDADD = $(LDADD)
 biosed_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_btwisted_OBJECTS = btwisted.$(OBJEXT)
 btwisted_OBJECTS = $(am_btwisted_OBJECTS)
@@ -292,8 +288,7 @@ btwisted_LDADD = $(LDADD)
 btwisted_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_cai_OBJECTS = cai.$(OBJEXT)
 cai_OBJECTS = $(am_cai_OBJECTS)
@@ -301,8 +296,7 @@ cai_LDADD = $(LDADD)
 cai_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_chaos_OBJECTS = chaos.$(OBJEXT)
 chaos_OBJECTS = $(am_chaos_OBJECTS)
@@ -310,8 +304,7 @@ chaos_LDADD = $(LDADD)
 chaos_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_charge_OBJECTS = charge.$(OBJEXT)
 charge_OBJECTS = $(am_charge_OBJECTS)
@@ -319,8 +312,7 @@ charge_LDADD = $(LDADD)
 charge_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_checktrans_OBJECTS = checktrans.$(OBJEXT)
 checktrans_OBJECTS = $(am_checktrans_OBJECTS)
@@ -328,8 +320,7 @@ checktrans_LDADD = $(LDADD)
 checktrans_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_chips_OBJECTS = chips.$(OBJEXT)
 chips_OBJECTS = $(am_chips_OBJECTS)
@@ -337,8 +328,7 @@ chips_LDADD = $(LDADD)
 chips_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_cirdna_OBJECTS = cirdna.$(OBJEXT)
 cirdna_OBJECTS = $(am_cirdna_OBJECTS)
@@ -346,8 +336,7 @@ cirdna_LDADD = $(LDADD)
 cirdna_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_codcmp_OBJECTS = codcmp.$(OBJEXT)
 codcmp_OBJECTS = $(am_codcmp_OBJECTS)
@@ -355,8 +344,7 @@ codcmp_LDADD = $(LDADD)
 codcmp_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 codcopy_SOURCES = codcopy.c
 codcopy_OBJECTS = codcopy.$(OBJEXT)
@@ -364,8 +352,7 @@ codcopy_LDADD = $(LDADD)
 codcopy_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_coderet_OBJECTS = coderet.$(OBJEXT)
 coderet_OBJECTS = $(am_coderet_OBJECTS)
@@ -373,8 +360,7 @@ coderet_LDADD = $(LDADD)
 coderet_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_complex_OBJECTS = complex.$(OBJEXT)
 complex_OBJECTS = $(am_complex_OBJECTS)
@@ -382,8 +368,7 @@ complex_LDADD = $(LDADD)
 complex_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_compseq_OBJECTS = compseq.$(OBJEXT)
 compseq_OBJECTS = $(am_compseq_OBJECTS)
@@ -391,8 +376,7 @@ compseq_LDADD = $(LDADD)
 compseq_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_cons_OBJECTS = cons.$(OBJEXT)
 cons_OBJECTS = $(am_cons_OBJECTS)
@@ -400,8 +384,7 @@ cons_LDADD = $(LDADD)
 cons_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_consambig_OBJECTS = consambig.$(OBJEXT)
 consambig_OBJECTS = $(am_consambig_OBJECTS)
@@ -409,8 +392,7 @@ consambig_LDADD = $(LDADD)
 consambig_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_corbatest_OBJECTS = corbatest.$(OBJEXT)
 corbatest_OBJECTS = $(am_corbatest_OBJECTS)
@@ -418,8 +400,7 @@ corbatest_LDADD = $(LDADD)
 corbatest_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_cpgplot_OBJECTS = cpgplot.$(OBJEXT)
 cpgplot_OBJECTS = $(am_cpgplot_OBJECTS)
@@ -427,8 +408,7 @@ cpgplot_LDADD = $(LDADD)
 cpgplot_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_cpgreport_OBJECTS = cpgreport.$(OBJEXT)
 cpgreport_OBJECTS = $(am_cpgreport_OBJECTS)
@@ -436,8 +416,7 @@ cpgreport_LDADD = $(LDADD)
 cpgreport_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_cusp_OBJECTS = cusp.$(OBJEXT)
 cusp_OBJECTS = $(am_cusp_OBJECTS)
@@ -445,8 +424,7 @@ cusp_LDADD = $(LDADD)
 cusp_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_cutgextract_OBJECTS = cutgextract.$(OBJEXT)
 cutgextract_OBJECTS = $(am_cutgextract_OBJECTS)
@@ -454,8 +432,7 @@ cutgextract_LDADD = $(LDADD)
 cutgextract_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_cutseq_OBJECTS = cutseq.$(OBJEXT)
 cutseq_OBJECTS = $(am_cutseq_OBJECTS)
@@ -463,8 +440,7 @@ cutseq_LDADD = $(LDADD)
 cutseq_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_dan_OBJECTS = dan.$(OBJEXT)
 dan_OBJECTS = $(am_dan_OBJECTS)
@@ -472,8 +448,7 @@ dan_LDADD = $(LDADD)
 dan_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_dbiblast_OBJECTS = dbiblast.$(OBJEXT)
 dbiblast_OBJECTS = $(am_dbiblast_OBJECTS)
@@ -481,8 +456,7 @@ dbiblast_LDADD = $(LDADD)
 dbiblast_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_dbifasta_OBJECTS = dbifasta.$(OBJEXT)
 dbifasta_OBJECTS = $(am_dbifasta_OBJECTS)
@@ -490,8 +464,7 @@ dbifasta_LDADD = $(LDADD)
 dbifasta_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_dbiflat_OBJECTS = dbiflat.$(OBJEXT)
 dbiflat_OBJECTS = $(am_dbiflat_OBJECTS)
@@ -499,8 +472,7 @@ dbiflat_LDADD = $(LDADD)
 dbiflat_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_dbigcg_OBJECTS = dbigcg.$(OBJEXT)
 dbigcg_OBJECTS = $(am_dbigcg_OBJECTS)
@@ -508,8 +480,7 @@ dbigcg_LDADD = $(LDADD)
 dbigcg_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_dbxfasta_OBJECTS = dbxfasta.$(OBJEXT)
 dbxfasta_OBJECTS = $(am_dbxfasta_OBJECTS)
@@ -517,8 +488,7 @@ dbxfasta_LDADD = $(LDADD)
 dbxfasta_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_dbxflat_OBJECTS = dbxflat.$(OBJEXT)
 dbxflat_OBJECTS = $(am_dbxflat_OBJECTS)
@@ -526,8 +496,7 @@ dbxflat_LDADD = $(LDADD)
 dbxflat_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_dbxgcg_OBJECTS = dbxgcg.$(OBJEXT)
 dbxgcg_OBJECTS = $(am_dbxgcg_OBJECTS)
@@ -535,8 +504,7 @@ dbxgcg_LDADD = $(LDADD)
 dbxgcg_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_degapseq_OBJECTS = degapseq.$(OBJEXT)
 degapseq_OBJECTS = $(am_degapseq_OBJECTS)
@@ -544,8 +512,7 @@ degapseq_LDADD = $(LDADD)
 degapseq_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_density_OBJECTS = density.$(OBJEXT)
 density_OBJECTS = $(am_density_OBJECTS)
@@ -553,8 +520,7 @@ density_LDADD = $(LDADD)
 density_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_descseq_OBJECTS = descseq.$(OBJEXT)
 descseq_OBJECTS = $(am_descseq_OBJECTS)
@@ -562,8 +528,7 @@ descseq_LDADD = $(LDADD)
 descseq_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_diffseq_OBJECTS = diffseq.$(OBJEXT)
 diffseq_OBJECTS = $(am_diffseq_OBJECTS)
@@ -571,8 +536,7 @@ diffseq_LDADD = $(LDADD)
 diffseq_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_digest_OBJECTS = digest.$(OBJEXT)
 digest_OBJECTS = $(am_digest_OBJECTS)
@@ -580,8 +544,7 @@ digest_LDADD = $(LDADD)
 digest_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_distmat_OBJECTS = distmat.$(OBJEXT)
 distmat_OBJECTS = $(am_distmat_OBJECTS)
@@ -589,8 +552,39 @@ distmat_LDADD = $(LDADD)
 distmat_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(am__DEPENDENCIES_1)
+domtesta_SOURCES = domtesta.c
+domtesta_OBJECTS = domtesta.$(OBJEXT)
+domtesta_LDADD = $(LDADD)
+domtesta_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
+	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
+	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(am__DEPENDENCIES_1)
+domtestb_SOURCES = domtestb.c
+domtestb_OBJECTS = domtestb.$(OBJEXT)
+domtestb_LDADD = $(LDADD)
+domtestb_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
+	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
+	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(am__DEPENDENCIES_1)
+domtestc_SOURCES = domtestc.c
+domtestc_OBJECTS = domtestc.$(OBJEXT)
+domtestc_LDADD = $(LDADD)
+domtestc_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
+	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
+	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(am__DEPENDENCIES_1)
+domtestd_SOURCES = domtestd.c
+domtestd_OBJECTS = domtestd.$(OBJEXT)
+domtestd_LDADD = $(LDADD)
+domtestd_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
+	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
+	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_dotmatcher_OBJECTS = dotmatcher.$(OBJEXT)
 dotmatcher_OBJECTS = $(am_dotmatcher_OBJECTS)
@@ -598,8 +592,7 @@ dotmatcher_LDADD = $(LDADD)
 dotmatcher_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_dotpath_OBJECTS = dotpath.$(OBJEXT)
 dotpath_OBJECTS = $(am_dotpath_OBJECTS)
@@ -607,8 +600,7 @@ dotpath_LDADD = $(LDADD)
 dotpath_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_dottup_OBJECTS = dottup.$(OBJEXT)
 dottup_OBJECTS = $(am_dottup_OBJECTS)
@@ -616,8 +608,7 @@ dottup_LDADD = $(LDADD)
 dottup_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_dreg_OBJECTS = dreg.$(OBJEXT)
 dreg_OBJECTS = $(am_dreg_OBJECTS)
@@ -625,8 +616,7 @@ dreg_LDADD = $(LDADD)
 dreg_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_edamclean_OBJECTS = edamclean.$(OBJEXT)
 edamclean_OBJECTS = $(am_edamclean_OBJECTS)
@@ -634,8 +624,7 @@ edamclean_LDADD = $(LDADD)
 edamclean_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_edialign_OBJECTS = edialign.$(OBJEXT)
 edialign_OBJECTS = $(am_edialign_OBJECTS)
@@ -643,8 +632,7 @@ edialign_LDADD = $(LDADD)
 edialign_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_einverted_OBJECTS = einverted.$(OBJEXT)
 einverted_OBJECTS = $(am_einverted_OBJECTS)
@@ -652,8 +640,7 @@ einverted_LDADD = $(LDADD)
 einverted_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_embossdata_OBJECTS = embossdata.$(OBJEXT)
 embossdata_OBJECTS = $(am_embossdata_OBJECTS)
@@ -661,8 +648,7 @@ embossdata_LDADD = $(LDADD)
 embossdata_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_embossversion_OBJECTS = embossversion.$(OBJEXT)
 embossversion_OBJECTS = $(am_embossversion_OBJECTS)
@@ -670,8 +656,7 @@ embossversion_LDADD = $(LDADD)
 embossversion_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_emma_OBJECTS = emma.$(OBJEXT)
 emma_OBJECTS = $(am_emma_OBJECTS)
@@ -679,8 +664,7 @@ emma_LDADD = $(LDADD)
 emma_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_emowse_OBJECTS = emowse.$(OBJEXT)
 emowse_OBJECTS = $(am_emowse_OBJECTS)
@@ -688,8 +672,7 @@ emowse_LDADD = $(LDADD)
 emowse_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_ensembltest_OBJECTS = ensembltest.$(OBJEXT)
 ensembltest_OBJECTS = $(am_ensembltest_OBJECTS)
@@ -697,8 +680,7 @@ ensembltest_LDADD = $(LDADD)
 ensembltest_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_entrails_OBJECTS = entrails.$(OBJEXT)
 entrails_OBJECTS = $(am_entrails_OBJECTS)
@@ -706,8 +688,7 @@ entrails_LDADD = $(LDADD)
 entrails_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_entrailsbook_OBJECTS = entrailsbook.$(OBJEXT)
 entrailsbook_OBJECTS = $(am_entrailsbook_OBJECTS)
@@ -715,8 +696,7 @@ entrailsbook_LDADD = $(LDADD)
 entrailsbook_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_entrailshtml_OBJECTS = entrailshtml.$(OBJEXT)
 entrailshtml_OBJECTS = $(am_entrailshtml_OBJECTS)
@@ -724,8 +704,7 @@ entrailshtml_LDADD = $(LDADD)
 entrailshtml_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_entrailswiki_OBJECTS = entrailswiki.$(OBJEXT)
 entrailswiki_OBJECTS = $(am_entrailswiki_OBJECTS)
@@ -733,8 +712,7 @@ entrailswiki_LDADD = $(LDADD)
 entrailswiki_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_entret_OBJECTS = entret.$(OBJEXT)
 entret_OBJECTS = $(am_entret_OBJECTS)
@@ -742,8 +720,7 @@ entret_LDADD = $(LDADD)
 entret_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_epestfind_OBJECTS = epestfind.$(OBJEXT)
 epestfind_OBJECTS = $(am_epestfind_OBJECTS)
@@ -751,8 +728,7 @@ epestfind_LDADD = $(LDADD)
 epestfind_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_eprimer3_OBJECTS = eprimer3.$(OBJEXT)
 eprimer3_OBJECTS = $(am_eprimer3_OBJECTS)
@@ -760,8 +736,7 @@ eprimer3_LDADD = $(LDADD)
 eprimer3_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_equicktandem_OBJECTS = equicktandem.$(OBJEXT)
 equicktandem_OBJECTS = $(am_equicktandem_OBJECTS)
@@ -769,8 +744,7 @@ equicktandem_LDADD = $(LDADD)
 equicktandem_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_est2genome_OBJECTS = est2genome.$(OBJEXT)
 est2genome_OBJECTS = $(am_est2genome_OBJECTS)
@@ -778,8 +752,7 @@ est2genome_LDADD = $(LDADD)
 est2genome_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_etandem_OBJECTS = etandem.$(OBJEXT)
 etandem_OBJECTS = $(am_etandem_OBJECTS)
@@ -787,8 +760,7 @@ etandem_LDADD = $(LDADD)
 etandem_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_extractalign_OBJECTS = extractalign.$(OBJEXT)
 extractalign_OBJECTS = $(am_extractalign_OBJECTS)
@@ -796,8 +768,7 @@ extractalign_LDADD = $(LDADD)
 extractalign_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_extractfeat_OBJECTS = extractfeat.$(OBJEXT)
 extractfeat_OBJECTS = $(am_extractfeat_OBJECTS)
@@ -805,8 +776,7 @@ extractfeat_LDADD = $(LDADD)
 extractfeat_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_extractseq_OBJECTS = extractseq.$(OBJEXT)
 extractseq_OBJECTS = $(am_extractseq_OBJECTS)
@@ -814,8 +784,7 @@ extractseq_LDADD = $(LDADD)
 extractseq_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_featcopy_OBJECTS = featcopy.$(OBJEXT)
 featcopy_OBJECTS = $(am_featcopy_OBJECTS)
@@ -823,8 +792,7 @@ featcopy_LDADD = $(LDADD)
 featcopy_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_featreport_OBJECTS = featreport.$(OBJEXT)
 featreport_OBJECTS = $(am_featreport_OBJECTS)
@@ -832,8 +800,7 @@ featreport_LDADD = $(LDADD)
 featreport_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_findkm_OBJECTS = findkm.$(OBJEXT)
 findkm_OBJECTS = $(am_findkm_OBJECTS)
@@ -841,8 +808,7 @@ findkm_LDADD = $(LDADD)
 findkm_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_freak_OBJECTS = freak.$(OBJEXT)
 freak_OBJECTS = $(am_freak_OBJECTS)
@@ -850,8 +816,7 @@ freak_LDADD = $(LDADD)
 freak_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_fuzznuc_OBJECTS = fuzznuc.$(OBJEXT)
 fuzznuc_OBJECTS = $(am_fuzznuc_OBJECTS)
@@ -859,8 +824,7 @@ fuzznuc_LDADD = $(LDADD)
 fuzznuc_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_fuzzpro_OBJECTS = fuzzpro.$(OBJEXT)
 fuzzpro_OBJECTS = $(am_fuzzpro_OBJECTS)
@@ -868,8 +832,7 @@ fuzzpro_LDADD = $(LDADD)
 fuzzpro_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_fuzztran_OBJECTS = fuzztran.$(OBJEXT)
 fuzztran_OBJECTS = $(am_fuzztran_OBJECTS)
@@ -877,8 +840,7 @@ fuzztran_LDADD = $(LDADD)
 fuzztran_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_garnier_OBJECTS = garnier.$(OBJEXT)
 garnier_OBJECTS = $(am_garnier_OBJECTS)
@@ -886,8 +848,7 @@ garnier_LDADD = $(LDADD)
 garnier_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_geecee_OBJECTS = geecee.$(OBJEXT)
 geecee_OBJECTS = $(am_geecee_OBJECTS)
@@ -895,8 +856,7 @@ geecee_LDADD = $(LDADD)
 geecee_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_getorf_OBJECTS = getorf.$(OBJEXT)
 getorf_OBJECTS = $(am_getorf_OBJECTS)
@@ -904,8 +864,7 @@ getorf_LDADD = $(LDADD)
 getorf_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_helixturnhelix_OBJECTS = helixturnhelix.$(OBJEXT)
 helixturnhelix_OBJECTS = $(am_helixturnhelix_OBJECTS)
@@ -913,8 +872,7 @@ helixturnhelix_LDADD = $(LDADD)
 helixturnhelix_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_histogramtest_OBJECTS = histogramtest.$(OBJEXT)
 histogramtest_OBJECTS = $(am_histogramtest_OBJECTS)
@@ -922,8 +880,7 @@ histogramtest_LDADD = $(LDADD)
 histogramtest_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_hmoment_OBJECTS = hmoment.$(OBJEXT)
 hmoment_OBJECTS = $(am_hmoment_OBJECTS)
@@ -931,8 +888,7 @@ hmoment_LDADD = $(LDADD)
 hmoment_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_iep_OBJECTS = iep.$(OBJEXT)
 iep_OBJECTS = $(am_iep_OBJECTS)
@@ -940,8 +896,7 @@ iep_LDADD = $(LDADD)
 iep_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_infoalign_OBJECTS = infoalign.$(OBJEXT)
 infoalign_OBJECTS = $(am_infoalign_OBJECTS)
@@ -949,8 +904,7 @@ infoalign_LDADD = $(LDADD)
 infoalign_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_infobase_OBJECTS = infobase.$(OBJEXT)
 infobase_OBJECTS = $(am_infobase_OBJECTS)
@@ -958,8 +912,7 @@ infobase_LDADD = $(LDADD)
 infobase_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_inforesidue_OBJECTS = inforesidue.$(OBJEXT)
 inforesidue_OBJECTS = $(am_inforesidue_OBJECTS)
@@ -967,8 +920,7 @@ inforesidue_LDADD = $(LDADD)
 inforesidue_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_infoseq_OBJECTS = infoseq.$(OBJEXT)
 infoseq_OBJECTS = $(am_infoseq_OBJECTS)
@@ -976,8 +928,7 @@ infoseq_LDADD = $(LDADD)
 infoseq_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_intconv_OBJECTS = intconv.$(OBJEXT)
 intconv_OBJECTS = $(am_intconv_OBJECTS)
@@ -985,8 +936,7 @@ intconv_LDADD = $(LDADD)
 intconv_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_isochore_OBJECTS = isochore.$(OBJEXT)
 isochore_OBJECTS = $(am_isochore_OBJECTS)
@@ -994,8 +944,7 @@ isochore_LDADD = $(LDADD)
 isochore_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_jaspextract_OBJECTS = jaspextract.$(OBJEXT)
 jaspextract_OBJECTS = $(am_jaspextract_OBJECTS)
@@ -1003,8 +952,7 @@ jaspextract_LDADD = $(LDADD)
 jaspextract_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_jaspscan_OBJECTS = jaspscan.$(OBJEXT)
 jaspscan_OBJECTS = $(am_jaspscan_OBJECTS)
@@ -1012,8 +960,7 @@ jaspscan_LDADD = $(LDADD)
 jaspscan_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_jembossctl_OBJECTS = jembossctl.$(OBJEXT)
 jembossctl_OBJECTS = $(am_jembossctl_OBJECTS)
@@ -1021,8 +968,7 @@ jembossctl_LDADD = $(LDADD)
 jembossctl_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_lindna_OBJECTS = lindna.$(OBJEXT)
 lindna_OBJECTS = $(am_lindna_OBJECTS)
@@ -1030,8 +976,7 @@ lindna_LDADD = $(LDADD)
 lindna_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_listor_OBJECTS = listor.$(OBJEXT)
 listor_OBJECTS = $(am_listor_OBJECTS)
@@ -1039,8 +984,7 @@ listor_LDADD = $(LDADD)
 listor_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 makenucseq_SOURCES = makenucseq.c
 makenucseq_OBJECTS = makenucseq.$(OBJEXT)
@@ -1048,8 +992,7 @@ makenucseq_LDADD = $(LDADD)
 makenucseq_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 makeprotseq_SOURCES = makeprotseq.c
 makeprotseq_OBJECTS = makeprotseq.$(OBJEXT)
@@ -1057,8 +1000,7 @@ makeprotseq_LDADD = $(LDADD)
 makeprotseq_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_marscan_OBJECTS = marscan.$(OBJEXT)
 marscan_OBJECTS = $(am_marscan_OBJECTS)
@@ -1066,8 +1008,55 @@ marscan_LDADD = $(LDADD)
 marscan_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(am__DEPENDENCIES_1)
+am_martattributes_OBJECTS = martattributes.$(OBJEXT)
+martattributes_OBJECTS = $(am_martattributes_OBJECTS)
+martattributes_LDADD = $(LDADD)
+martattributes_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+am_martdatasets_OBJECTS = martdatasets.$(OBJEXT)
+martdatasets_OBJECTS = $(am_martdatasets_OBJECTS)
+martdatasets_LDADD = $(LDADD)
+martdatasets_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+am_martfilters_OBJECTS = martfilters.$(OBJEXT)
+martfilters_OBJECTS = $(am_martfilters_OBJECTS)
+martfilters_LDADD = $(LDADD)
+martfilters_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+am_martquery_OBJECTS = martquery.$(OBJEXT)
+martquery_OBJECTS = $(am_martquery_OBJECTS)
+martquery_LDADD = $(LDADD)
+martquery_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+am_martregistry_OBJECTS = martregistry.$(OBJEXT)
+martregistry_OBJECTS = $(am_martregistry_OBJECTS)
+martregistry_LDADD = $(LDADD)
+martregistry_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+am_martseqs_OBJECTS = martseqs.$(OBJEXT)
+martseqs_OBJECTS = $(am_martseqs_OBJECTS)
+martseqs_LDADD = $(LDADD)
+martseqs_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
+	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
+	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_maskambignuc_OBJECTS = maskambignuc.$(OBJEXT)
 maskambignuc_OBJECTS = $(am_maskambignuc_OBJECTS)
@@ -1075,8 +1064,7 @@ maskambignuc_LDADD = $(LDADD)
 maskambignuc_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_maskambigprot_OBJECTS = maskambigprot.$(OBJEXT)
 maskambigprot_OBJECTS = $(am_maskambigprot_OBJECTS)
@@ -1084,8 +1072,7 @@ maskambigprot_LDADD = $(LDADD)
 maskambigprot_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_maskfeat_OBJECTS = maskfeat.$(OBJEXT)
 maskfeat_OBJECTS = $(am_maskfeat_OBJECTS)
@@ -1093,8 +1080,7 @@ maskfeat_LDADD = $(LDADD)
 maskfeat_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_maskseq_OBJECTS = maskseq.$(OBJEXT)
 maskseq_OBJECTS = $(am_maskseq_OBJECTS)
@@ -1102,8 +1088,7 @@ maskseq_LDADD = $(LDADD)
 maskseq_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_matcher_OBJECTS = matcher.$(OBJEXT)
 matcher_OBJECTS = $(am_matcher_OBJECTS)
@@ -1111,8 +1096,7 @@ matcher_LDADD = $(LDADD)
 matcher_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_megamerger_OBJECTS = megamerger.$(OBJEXT)
 megamerger_OBJECTS = $(am_megamerger_OBJECTS)
@@ -1120,8 +1104,7 @@ megamerger_LDADD = $(LDADD)
 megamerger_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_merger_OBJECTS = merger.$(OBJEXT)
 merger_OBJECTS = $(am_merger_OBJECTS)
@@ -1129,8 +1112,7 @@ merger_LDADD = $(LDADD)
 merger_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_msbar_OBJECTS = msbar.$(OBJEXT)
 msbar_OBJECTS = $(am_msbar_OBJECTS)
@@ -1138,8 +1120,7 @@ msbar_LDADD = $(LDADD)
 msbar_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_mwcontam_OBJECTS = mwcontam.$(OBJEXT)
 mwcontam_OBJECTS = $(am_mwcontam_OBJECTS)
@@ -1147,8 +1128,7 @@ mwcontam_LDADD = $(LDADD)
 mwcontam_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_mwfilter_OBJECTS = mwfilter.$(OBJEXT)
 mwfilter_OBJECTS = $(am_mwfilter_OBJECTS)
@@ -1156,8 +1136,7 @@ mwfilter_LDADD = $(LDADD)
 mwfilter_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_needle_OBJECTS = needle.$(OBJEXT)
 needle_OBJECTS = $(am_needle_OBJECTS)
@@ -1165,8 +1144,7 @@ needle_LDADD = $(LDADD)
 needle_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_needleall_OBJECTS = needleall.$(OBJEXT)
 needleall_OBJECTS = $(am_needleall_OBJECTS)
@@ -1174,8 +1152,7 @@ needleall_LDADD = $(LDADD)
 needleall_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_newcoils_OBJECTS = newcoils.$(OBJEXT)
 newcoils_OBJECTS = $(am_newcoils_OBJECTS)
@@ -1183,8 +1160,7 @@ newcoils_LDADD = $(LDADD)
 newcoils_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_newcpgreport_OBJECTS = newcpgreport.$(OBJEXT)
 newcpgreport_OBJECTS = $(am_newcpgreport_OBJECTS)
@@ -1192,8 +1168,7 @@ newcpgreport_LDADD = $(LDADD)
 newcpgreport_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_newcpgseek_OBJECTS = newcpgseek.$(OBJEXT)
 newcpgseek_OBJECTS = $(am_newcpgseek_OBJECTS)
@@ -1201,8 +1176,7 @@ newcpgseek_LDADD = $(LDADD)
 newcpgseek_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_newseq_OBJECTS = newseq.$(OBJEXT)
 newseq_OBJECTS = $(am_newseq_OBJECTS)
@@ -1210,8 +1184,7 @@ newseq_LDADD = $(LDADD)
 newseq_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_nohtml_OBJECTS = nohtml.$(OBJEXT)
 nohtml_OBJECTS = $(am_nohtml_OBJECTS)
@@ -1219,8 +1192,7 @@ nohtml_LDADD = $(LDADD)
 nohtml_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_noreturn_OBJECTS = noreturn.$(OBJEXT)
 noreturn_OBJECTS = $(am_noreturn_OBJECTS)
@@ -1228,8 +1200,7 @@ noreturn_LDADD = $(LDADD)
 noreturn_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_nospace_OBJECTS = nospace.$(OBJEXT)
 nospace_OBJECTS = $(am_nospace_OBJECTS)
@@ -1237,8 +1208,7 @@ nospace_LDADD = $(LDADD)
 nospace_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_notab_OBJECTS = notab.$(OBJEXT)
 notab_OBJECTS = $(am_notab_OBJECTS)
@@ -1246,8 +1216,7 @@ notab_LDADD = $(LDADD)
 notab_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_notseq_OBJECTS = notseq.$(OBJEXT)
 notseq_OBJECTS = $(am_notseq_OBJECTS)
@@ -1255,8 +1224,7 @@ notseq_LDADD = $(LDADD)
 notseq_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_nthseq_OBJECTS = nthseq.$(OBJEXT)
 nthseq_OBJECTS = $(am_nthseq_OBJECTS)
@@ -1264,8 +1232,7 @@ nthseq_LDADD = $(LDADD)
 nthseq_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_nthseqset_OBJECTS = nthseqset.$(OBJEXT)
 nthseqset_OBJECTS = $(am_nthseqset_OBJECTS)
@@ -1273,8 +1240,7 @@ nthseqset_LDADD = $(LDADD)
 nthseqset_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_octanol_OBJECTS = octanol.$(OBJEXT)
 octanol_OBJECTS = $(am_octanol_OBJECTS)
@@ -1282,8 +1248,7 @@ octanol_LDADD = $(LDADD)
 octanol_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_oddcomp_OBJECTS = oddcomp.$(OBJEXT)
 oddcomp_OBJECTS = $(am_oddcomp_OBJECTS)
@@ -1291,8 +1256,7 @@ oddcomp_LDADD = $(LDADD)
 oddcomp_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_origsplitter_OBJECTS = origsplitter.$(OBJEXT)
 origsplitter_OBJECTS = $(am_origsplitter_OBJECTS)
@@ -1300,8 +1264,7 @@ origsplitter_LDADD = $(LDADD)
 origsplitter_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_origunion_OBJECTS = origunion.$(OBJEXT)
 origunion_OBJECTS = $(am_origunion_OBJECTS)
@@ -1309,8 +1272,7 @@ origunion_LDADD = $(LDADD)
 origunion_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_palindrome_OBJECTS = palindrome.$(OBJEXT)
 palindrome_OBJECTS = $(am_palindrome_OBJECTS)
@@ -1318,8 +1280,7 @@ palindrome_LDADD = $(LDADD)
 palindrome_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_pasteseq_OBJECTS = pasteseq.$(OBJEXT)
 pasteseq_OBJECTS = $(am_pasteseq_OBJECTS)
@@ -1327,8 +1288,7 @@ pasteseq_LDADD = $(LDADD)
 pasteseq_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_patmatdb_OBJECTS = patmatdb.$(OBJEXT)
 patmatdb_OBJECTS = $(am_patmatdb_OBJECTS)
@@ -1336,8 +1296,7 @@ patmatdb_LDADD = $(LDADD)
 patmatdb_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_patmatmotifs_OBJECTS = patmatmotifs.$(OBJEXT)
 patmatmotifs_OBJECTS = $(am_patmatmotifs_OBJECTS)
@@ -1345,8 +1304,7 @@ patmatmotifs_LDADD = $(LDADD)
 patmatmotifs_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_patmattest_OBJECTS = patmattest.$(OBJEXT)
 patmattest_OBJECTS = $(am_patmattest_OBJECTS)
@@ -1354,8 +1312,7 @@ patmattest_LDADD = $(LDADD)
 patmattest_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_pepcoil_OBJECTS = pepcoil.$(OBJEXT)
 pepcoil_OBJECTS = $(am_pepcoil_OBJECTS)
@@ -1363,8 +1320,7 @@ pepcoil_LDADD = $(LDADD)
 pepcoil_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_pepinfo_OBJECTS = pepinfo.$(OBJEXT)
 pepinfo_OBJECTS = $(am_pepinfo_OBJECTS)
@@ -1372,8 +1328,7 @@ pepinfo_LDADD = $(LDADD)
 pepinfo_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_pepnet_OBJECTS = pepnet.$(OBJEXT)
 pepnet_OBJECTS = $(am_pepnet_OBJECTS)
@@ -1381,8 +1336,7 @@ pepnet_LDADD = $(LDADD)
 pepnet_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_pepstats_OBJECTS = pepstats.$(OBJEXT)
 pepstats_OBJECTS = $(am_pepstats_OBJECTS)
@@ -1390,8 +1344,7 @@ pepstats_LDADD = $(LDADD)
 pepstats_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_pepwheel_OBJECTS = pepwheel.$(OBJEXT)
 pepwheel_OBJECTS = $(am_pepwheel_OBJECTS)
@@ -1399,8 +1352,7 @@ pepwheel_LDADD = $(LDADD)
 pepwheel_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_pepwindow_OBJECTS = pepwindow.$(OBJEXT)
 pepwindow_OBJECTS = $(am_pepwindow_OBJECTS)
@@ -1408,8 +1360,7 @@ pepwindow_LDADD = $(LDADD)
 pepwindow_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_pepwindowall_OBJECTS = pepwindowall.$(OBJEXT)
 pepwindowall_OBJECTS = $(am_pepwindowall_OBJECTS)
@@ -1417,8 +1368,7 @@ pepwindowall_LDADD = $(LDADD)
 pepwindowall_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_plotcon_OBJECTS = plotcon.$(OBJEXT)
 plotcon_OBJECTS = $(am_plotcon_OBJECTS)
@@ -1426,8 +1376,7 @@ plotcon_LDADD = $(LDADD)
 plotcon_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_plotorf_OBJECTS = plotorf.$(OBJEXT)
 plotorf_OBJECTS = $(am_plotorf_OBJECTS)
@@ -1435,8 +1384,7 @@ plotorf_LDADD = $(LDADD)
 plotorf_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_polydot_OBJECTS = polydot.$(OBJEXT)
 polydot_OBJECTS = $(am_polydot_OBJECTS)
@@ -1444,8 +1392,7 @@ polydot_LDADD = $(LDADD)
 polydot_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_preg_OBJECTS = preg.$(OBJEXT)
 preg_OBJECTS = $(am_preg_OBJECTS)
@@ -1453,8 +1400,7 @@ preg_LDADD = $(LDADD)
 preg_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_prettyplot_OBJECTS = prettyplot.$(OBJEXT)
 prettyplot_OBJECTS = $(am_prettyplot_OBJECTS)
@@ -1462,8 +1408,7 @@ prettyplot_LDADD = $(LDADD)
 prettyplot_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_prettyseq_OBJECTS = prettyseq.$(OBJEXT)
 prettyseq_OBJECTS = $(am_prettyseq_OBJECTS)
@@ -1471,8 +1416,7 @@ prettyseq_LDADD = $(LDADD)
 prettyseq_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_prima_OBJECTS = prima.$(OBJEXT)
 prima_OBJECTS = $(am_prima_OBJECTS)
@@ -1480,8 +1424,7 @@ prima_LDADD = $(LDADD)
 prima_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_primers_OBJECTS = primers.$(OBJEXT)
 primers_OBJECTS = $(am_primers_OBJECTS)
@@ -1489,8 +1432,7 @@ primers_LDADD = $(LDADD)
 primers_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_primersearch_OBJECTS = primersearch.$(OBJEXT)
 primersearch_OBJECTS = $(am_primersearch_OBJECTS)
@@ -1498,8 +1440,7 @@ primersearch_LDADD = $(LDADD)
 primersearch_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_printsextract_OBJECTS = printsextract.$(OBJEXT)
 printsextract_OBJECTS = $(am_printsextract_OBJECTS)
@@ -1507,8 +1448,7 @@ printsextract_LDADD = $(LDADD)
 printsextract_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_profit_OBJECTS = profit.$(OBJEXT)
 profit_OBJECTS = $(am_profit_OBJECTS)
@@ -1516,8 +1456,7 @@ profit_LDADD = $(LDADD)
 profit_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_prophecy_OBJECTS = prophecy.$(OBJEXT)
 prophecy_OBJECTS = $(am_prophecy_OBJECTS)
@@ -1525,8 +1464,7 @@ prophecy_LDADD = $(LDADD)
 prophecy_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_prophet_OBJECTS = prophet.$(OBJEXT)
 prophet_OBJECTS = $(am_prophet_OBJECTS)
@@ -1534,8 +1472,7 @@ prophet_LDADD = $(LDADD)
 prophet_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_prosextract_OBJECTS = prosextract.$(OBJEXT)
 prosextract_OBJECTS = $(am_prosextract_OBJECTS)
@@ -1543,8 +1480,7 @@ prosextract_LDADD = $(LDADD)
 prosextract_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_pscan_OBJECTS = pscan.$(OBJEXT)
 pscan_OBJECTS = $(am_pscan_OBJECTS)
@@ -1552,8 +1488,7 @@ pscan_LDADD = $(LDADD)
 pscan_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_psiphi_OBJECTS = psiphi.$(OBJEXT)
 psiphi_OBJECTS = $(am_psiphi_OBJECTS)
@@ -1561,8 +1496,7 @@ psiphi_LDADD = $(LDADD)
 psiphi_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_rebaseextract_OBJECTS = rebaseextract.$(OBJEXT)
 rebaseextract_OBJECTS = $(am_rebaseextract_OBJECTS)
@@ -1570,8 +1504,7 @@ rebaseextract_LDADD = $(LDADD)
 rebaseextract_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_recoder_OBJECTS = recoder.$(OBJEXT)
 recoder_OBJECTS = $(am_recoder_OBJECTS)
@@ -1579,8 +1512,7 @@ recoder_LDADD = $(LDADD)
 recoder_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_redata_OBJECTS = redata.$(OBJEXT)
 redata_OBJECTS = $(am_redata_OBJECTS)
@@ -1588,8 +1520,7 @@ redata_LDADD = $(LDADD)
 redata_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_remap_OBJECTS = remap.$(OBJEXT)
 remap_OBJECTS = $(am_remap_OBJECTS)
@@ -1597,8 +1528,7 @@ remap_LDADD = $(LDADD)
 remap_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_restover_OBJECTS = restover.$(OBJEXT)
 restover_OBJECTS = $(am_restover_OBJECTS)
@@ -1606,8 +1536,7 @@ restover_LDADD = $(LDADD)
 restover_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_restrict_OBJECTS = restrict.$(OBJEXT)
 restrict_OBJECTS = $(am_restrict_OBJECTS)
@@ -1615,8 +1544,7 @@ restrict_LDADD = $(LDADD)
 restrict_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_revseq_OBJECTS = revseq.$(OBJEXT)
 revseq_OBJECTS = $(am_revseq_OBJECTS)
@@ -1624,8 +1552,7 @@ revseq_LDADD = $(LDADD)
 revseq_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_seealso_OBJECTS = seealso.$(OBJEXT)
 seealso_OBJECTS = $(am_seealso_OBJECTS)
@@ -1633,8 +1560,7 @@ seealso_LDADD = $(LDADD)
 seealso_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_seqinfo_OBJECTS = seqinfo.$(OBJEXT)
 seqinfo_OBJECTS = $(am_seqinfo_OBJECTS)
@@ -1642,8 +1568,7 @@ seqinfo_LDADD = $(LDADD)
 seqinfo_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_seqmatchall_OBJECTS = seqmatchall.$(OBJEXT)
 seqmatchall_OBJECTS = $(am_seqmatchall_OBJECTS)
@@ -1651,8 +1576,7 @@ seqmatchall_LDADD = $(LDADD)
 seqmatchall_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_seqret_OBJECTS = seqret.$(OBJEXT)
 seqret_OBJECTS = $(am_seqret_OBJECTS)
@@ -1660,8 +1584,7 @@ seqret_LDADD = $(LDADD)
 seqret_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_seqretall_OBJECTS = seqretall.$(OBJEXT)
 seqretall_OBJECTS = $(am_seqretall_OBJECTS)
@@ -1669,8 +1592,7 @@ seqretall_LDADD = $(LDADD)
 seqretall_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_seqretallfeat_OBJECTS = seqretallfeat.$(OBJEXT)
 seqretallfeat_OBJECTS = $(am_seqretallfeat_OBJECTS)
@@ -1678,8 +1600,7 @@ seqretallfeat_LDADD = $(LDADD)
 seqretallfeat_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_seqretset_OBJECTS = seqretset.$(OBJEXT)
 seqretset_OBJECTS = $(am_seqretset_OBJECTS)
@@ -1687,8 +1608,7 @@ seqretset_LDADD = $(LDADD)
 seqretset_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_seqretsetall_OBJECTS = seqretsetall.$(OBJEXT)
 seqretsetall_OBJECTS = $(am_seqretsetall_OBJECTS)
@@ -1696,8 +1616,7 @@ seqretsetall_LDADD = $(LDADD)
 seqretsetall_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_seqretsingle_OBJECTS = seqretsingle.$(OBJEXT)
 seqretsingle_OBJECTS = $(am_seqretsingle_OBJECTS)
@@ -1705,8 +1624,7 @@ seqretsingle_LDADD = $(LDADD)
 seqretsingle_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_seqretsplit_OBJECTS = seqretsplit.$(OBJEXT)
 seqretsplit_OBJECTS = $(am_seqretsplit_OBJECTS)
@@ -1714,8 +1632,7 @@ seqretsplit_LDADD = $(LDADD)
 seqretsplit_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_seqrettype_OBJECTS = seqrettype.$(OBJEXT)
 seqrettype_OBJECTS = $(am_seqrettype_OBJECTS)
@@ -1723,8 +1640,7 @@ seqrettype_LDADD = $(LDADD)
 seqrettype_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_showalign_OBJECTS = showalign.$(OBJEXT)
 showalign_OBJECTS = $(am_showalign_OBJECTS)
@@ -1732,8 +1648,7 @@ showalign_LDADD = $(LDADD)
 showalign_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_showdb_OBJECTS = showdb.$(OBJEXT)
 showdb_OBJECTS = $(am_showdb_OBJECTS)
@@ -1741,8 +1656,7 @@ showdb_LDADD = $(LDADD)
 showdb_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_showfeat_OBJECTS = showfeat.$(OBJEXT)
 showfeat_OBJECTS = $(am_showfeat_OBJECTS)
@@ -1750,8 +1664,7 @@ showfeat_LDADD = $(LDADD)
 showfeat_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_showorf_OBJECTS = showorf.$(OBJEXT)
 showorf_OBJECTS = $(am_showorf_OBJECTS)
@@ -1759,8 +1672,7 @@ showorf_LDADD = $(LDADD)
 showorf_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_showpep_OBJECTS = showpep.$(OBJEXT)
 showpep_OBJECTS = $(am_showpep_OBJECTS)
@@ -1768,8 +1680,7 @@ showpep_LDADD = $(LDADD)
 showpep_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_showseq_OBJECTS = showseq.$(OBJEXT)
 showseq_OBJECTS = $(am_showseq_OBJECTS)
@@ -1777,8 +1688,7 @@ showseq_LDADD = $(LDADD)
 showseq_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_shuffleseq_OBJECTS = shuffleseq.$(OBJEXT)
 shuffleseq_OBJECTS = $(am_shuffleseq_OBJECTS)
@@ -1786,8 +1696,7 @@ shuffleseq_LDADD = $(LDADD)
 shuffleseq_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_sigcleave_OBJECTS = sigcleave.$(OBJEXT)
 sigcleave_OBJECTS = $(am_sigcleave_OBJECTS)
@@ -1795,8 +1704,7 @@ sigcleave_LDADD = $(LDADD)
 sigcleave_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_silent_OBJECTS = silent.$(OBJEXT)
 silent_OBJECTS = $(am_silent_OBJECTS)
@@ -1804,8 +1712,7 @@ silent_LDADD = $(LDADD)
 silent_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_sirna_OBJECTS = sirna.$(OBJEXT)
 sirna_OBJECTS = $(am_sirna_OBJECTS)
@@ -1813,8 +1720,7 @@ sirna_LDADD = $(LDADD)
 sirna_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_sixpack_OBJECTS = sixpack.$(OBJEXT)
 sixpack_OBJECTS = $(am_sixpack_OBJECTS)
@@ -1822,8 +1728,7 @@ sixpack_LDADD = $(LDADD)
 sixpack_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_sizeseq_OBJECTS = sizeseq.$(OBJEXT)
 sizeseq_OBJECTS = $(am_sizeseq_OBJECTS)
@@ -1831,8 +1736,7 @@ sizeseq_LDADD = $(LDADD)
 sizeseq_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_skipredundant_OBJECTS = skipredundant.$(OBJEXT)
 skipredundant_OBJECTS = $(am_skipredundant_OBJECTS)
@@ -1840,8 +1744,7 @@ skipredundant_LDADD = $(LDADD)
 skipredundant_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_skipseq_OBJECTS = skipseq.$(OBJEXT)
 skipseq_OBJECTS = $(am_skipseq_OBJECTS)
@@ -1849,8 +1752,7 @@ skipseq_LDADD = $(LDADD)
 skipseq_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 splitsource_SOURCES = splitsource.c
 splitsource_OBJECTS = splitsource.$(OBJEXT)
@@ -1858,8 +1760,7 @@ splitsource_LDADD = $(LDADD)
 splitsource_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_splitter_OBJECTS = splitter.$(OBJEXT)
 splitter_OBJECTS = $(am_splitter_OBJECTS)
@@ -1867,8 +1768,7 @@ splitter_LDADD = $(LDADD)
 splitter_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_sqltest_OBJECTS = sqltest.$(OBJEXT)
 sqltest_OBJECTS = $(am_sqltest_OBJECTS)
@@ -1876,8 +1776,7 @@ sqltest_LDADD = $(LDADD)
 sqltest_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_stretcher_OBJECTS = stretcher.$(OBJEXT)
 stretcher_OBJECTS = $(am_stretcher_OBJECTS)
@@ -1885,8 +1784,7 @@ stretcher_LDADD = $(LDADD)
 stretcher_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_stssearch_OBJECTS = stssearch.$(OBJEXT)
 stssearch_OBJECTS = $(am_stssearch_OBJECTS)
@@ -1894,8 +1792,7 @@ stssearch_LDADD = $(LDADD)
 stssearch_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_supermatcher_OBJECTS = supermatcher.$(OBJEXT)
 supermatcher_OBJECTS = $(am_supermatcher_OBJECTS)
@@ -1903,8 +1800,7 @@ supermatcher_LDADD = $(LDADD)
 supermatcher_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_syco_OBJECTS = syco.$(OBJEXT)
 syco_OBJECTS = $(am_syco_OBJECTS)
@@ -1912,8 +1808,7 @@ syco_LDADD = $(LDADD)
 syco_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_tcode_OBJECTS = tcode.$(OBJEXT)
 tcode_OBJECTS = $(am_tcode_OBJECTS)
@@ -1921,8 +1816,7 @@ tcode_LDADD = $(LDADD)
 tcode_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_testplot_OBJECTS = testplot.$(OBJEXT)
 testplot_OBJECTS = $(am_testplot_OBJECTS)
@@ -1930,8 +1824,7 @@ testplot_LDADD = $(LDADD)
 testplot_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_textsearch_OBJECTS = textsearch.$(OBJEXT)
 textsearch_OBJECTS = $(am_textsearch_OBJECTS)
@@ -1939,8 +1832,7 @@ textsearch_LDADD = $(LDADD)
 textsearch_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_tfextract_OBJECTS = tfextract.$(OBJEXT)
 tfextract_OBJECTS = $(am_tfextract_OBJECTS)
@@ -1948,8 +1840,7 @@ tfextract_LDADD = $(LDADD)
 tfextract_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_tfm_OBJECTS = tfm.$(OBJEXT)
 tfm_OBJECTS = $(am_tfm_OBJECTS)
@@ -1957,8 +1848,7 @@ tfm_LDADD = $(LDADD)
 tfm_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_tfscan_OBJECTS = tfscan.$(OBJEXT)
 tfscan_OBJECTS = $(am_tfscan_OBJECTS)
@@ -1966,8 +1856,7 @@ tfscan_LDADD = $(LDADD)
 tfscan_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_tmap_OBJECTS = tmap.$(OBJEXT)
 tmap_OBJECTS = $(am_tmap_OBJECTS)
@@ -1975,8 +1864,7 @@ tmap_LDADD = $(LDADD)
 tmap_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_tranalign_OBJECTS = tranalign.$(OBJEXT)
 tranalign_OBJECTS = $(am_tranalign_OBJECTS)
@@ -1984,8 +1872,7 @@ tranalign_LDADD = $(LDADD)
 tranalign_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_transeq_OBJECTS = transeq.$(OBJEXT)
 transeq_OBJECTS = $(am_transeq_OBJECTS)
@@ -1993,8 +1880,7 @@ transeq_LDADD = $(LDADD)
 transeq_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_treetypedisplay_OBJECTS = treetypedisplay.$(OBJEXT)
 treetypedisplay_OBJECTS = $(am_treetypedisplay_OBJECTS)
@@ -2002,8 +1888,7 @@ treetypedisplay_LDADD = $(LDADD)
 treetypedisplay_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_trimest_OBJECTS = trimest.$(OBJEXT)
 trimest_OBJECTS = $(am_trimest_OBJECTS)
@@ -2011,8 +1896,7 @@ trimest_LDADD = $(LDADD)
 trimest_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_trimseq_OBJECTS = trimseq.$(OBJEXT)
 trimseq_OBJECTS = $(am_trimseq_OBJECTS)
@@ -2020,8 +1904,7 @@ trimseq_LDADD = $(LDADD)
 trimseq_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_trimspace_OBJECTS = trimspace.$(OBJEXT)
 trimspace_OBJECTS = $(am_trimspace_OBJECTS)
@@ -2029,8 +1912,7 @@ trimspace_LDADD = $(LDADD)
 trimspace_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_twofeat_OBJECTS = twofeat.$(OBJEXT)
 twofeat_OBJECTS = $(am_twofeat_OBJECTS)
@@ -2038,8 +1920,7 @@ twofeat_LDADD = $(LDADD)
 twofeat_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_union_OBJECTS = union.$(OBJEXT)
 union_OBJECTS = $(am_union_OBJECTS)
@@ -2047,8 +1928,7 @@ union_LDADD = $(LDADD)
 union_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_vectorstrip_OBJECTS = vectorstrip.$(OBJEXT)
 vectorstrip_OBJECTS = $(am_vectorstrip_OBJECTS)
@@ -2056,8 +1936,7 @@ vectorstrip_LDADD = $(LDADD)
 vectorstrip_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_water_OBJECTS = water.$(OBJEXT)
 water_OBJECTS = $(am_water_OBJECTS)
@@ -2065,8 +1944,7 @@ water_LDADD = $(LDADD)
 water_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_whichdb_OBJECTS = whichdb.$(OBJEXT)
 whichdb_OBJECTS = $(am_whichdb_OBJECTS)
@@ -2074,8 +1952,7 @@ whichdb_LDADD = $(LDADD)
 whichdb_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_wobble_OBJECTS = wobble.$(OBJEXT)
 wobble_OBJECTS = $(am_wobble_OBJECTS)
@@ -2083,8 +1960,7 @@ wobble_LDADD = $(LDADD)
 wobble_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_wordcount_OBJECTS = wordcount.$(OBJEXT)
 wordcount_OBJECTS = $(am_wordcount_OBJECTS)
@@ -2092,8 +1968,7 @@ wordcount_LDADD = $(LDADD)
 wordcount_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_wordfinder_OBJECTS = wordfinder.$(OBJEXT)
 wordfinder_OBJECTS = $(am_wordfinder_OBJECTS)
@@ -2101,8 +1976,7 @@ wordfinder_LDADD = $(LDADD)
 wordfinder_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_wordmatch_OBJECTS = wordmatch.$(OBJEXT)
 wordmatch_OBJECTS = $(am_wordmatch_OBJECTS)
@@ -2110,8 +1984,7 @@ wordmatch_LDADD = $(LDADD)
 wordmatch_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
-	../ajax/core/libajax.la ../ajax/zlib/libezlib.la \
-	../ajax/expat/libeexpat.la ../ajax/pcre/libepcre.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_wossname_OBJECTS = wossname.$(OBJEXT)
 wossname_OBJECTS = $(am_wossname_OBJECTS)
@@ -2119,8 +1992,7 @@ wossname_LDADD = $(LDADD)
 wossname_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 am_yank_OBJECTS = yank.$(OBJEXT)
 yank_OBJECTS = $(am_yank_OBJECTS)
@@ -2128,8 +2000,7 @@ yank_LDADD = $(LDADD)
 yank_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -2145,9 +2016,10 @@ LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
 SOURCES = $(aaindexextract_SOURCES) $(abiview_SOURCES) $(acdc_SOURCES) \
-	$(acdlog_SOURCES) $(acdpretty_SOURCES) $(acdrelations_SOURCES) \
-	$(acdtable_SOURCES) $(acdtrace_SOURCES) $(acdvalid_SOURCES) \
-	$(acdxsd_SOURCES) $(ajtest_SOURCES) $(aligncopy_SOURCES) \
+	$(acdgalaxy_SOURCES) $(acdlog_SOURCES) $(acdpretty_SOURCES) \
+	$(acdrelations_SOURCES) $(acdtable_SOURCES) \
+	$(acdtrace_SOURCES) $(acdvalid_SOURCES) $(acdxsd_SOURCES) \
+	$(ajtest_SOURCES) $(aligncopy_SOURCES) \
 	$(aligncopypair_SOURCES) $(antigenic_SOURCES) \
 	$(backtranambig_SOURCES) $(backtranseq_SOURCES) \
 	$(banana_SOURCES) $(biosed_SOURCES) $(btwisted_SOURCES) \
@@ -2162,6 +2034,7 @@ SOURCES = $(aaindexextract_SOURCES) $(abiview_SOURCES) $(acdc_SOURCES) \
 	$(dbxfasta_SOURCES) $(dbxflat_SOURCES) $(dbxgcg_SOURCES) \
 	$(degapseq_SOURCES) $(density_SOURCES) $(descseq_SOURCES) \
 	$(diffseq_SOURCES) $(digest_SOURCES) $(distmat_SOURCES) \
+	domtesta.c domtestb.c domtestc.c domtestd.c \
 	$(dotmatcher_SOURCES) $(dotpath_SOURCES) $(dottup_SOURCES) \
 	$(dreg_SOURCES) $(edamclean_SOURCES) $(edialign_SOURCES) \
 	$(einverted_SOURCES) $(embossdata_SOURCES) \
@@ -2182,7 +2055,10 @@ SOURCES = $(aaindexextract_SOURCES) $(abiview_SOURCES) $(acdc_SOURCES) \
 	$(intconv_SOURCES) $(isochore_SOURCES) $(jaspextract_SOURCES) \
 	$(jaspscan_SOURCES) $(jembossctl_SOURCES) $(lindna_SOURCES) \
 	$(listor_SOURCES) makenucseq.c makeprotseq.c \
-	$(marscan_SOURCES) $(maskambignuc_SOURCES) \
+	$(marscan_SOURCES) $(martattributes_SOURCES) \
+	$(martdatasets_SOURCES) $(martfilters_SOURCES) \
+	$(martquery_SOURCES) $(martregistry_SOURCES) \
+	$(martseqs_SOURCES) $(maskambignuc_SOURCES) \
 	$(maskambigprot_SOURCES) $(maskfeat_SOURCES) \
 	$(maskseq_SOURCES) $(matcher_SOURCES) $(megamerger_SOURCES) \
 	$(merger_SOURCES) $(msbar_SOURCES) $(mwcontam_SOURCES) \
@@ -2227,10 +2103,10 @@ SOURCES = $(aaindexextract_SOURCES) $(abiview_SOURCES) $(acdc_SOURCES) \
 	$(wordfinder_SOURCES) $(wordmatch_SOURCES) $(wossname_SOURCES) \
 	$(yank_SOURCES)
 DIST_SOURCES = $(aaindexextract_SOURCES) $(abiview_SOURCES) \
-	$(acdc_SOURCES) $(acdlog_SOURCES) $(acdpretty_SOURCES) \
-	$(acdrelations_SOURCES) $(acdtable_SOURCES) \
-	$(acdtrace_SOURCES) $(acdvalid_SOURCES) $(acdxsd_SOURCES) \
-	$(ajtest_SOURCES) $(aligncopy_SOURCES) \
+	$(acdc_SOURCES) $(acdgalaxy_SOURCES) $(acdlog_SOURCES) \
+	$(acdpretty_SOURCES) $(acdrelations_SOURCES) \
+	$(acdtable_SOURCES) $(acdtrace_SOURCES) $(acdvalid_SOURCES) \
+	$(acdxsd_SOURCES) $(ajtest_SOURCES) $(aligncopy_SOURCES) \
 	$(aligncopypair_SOURCES) $(antigenic_SOURCES) \
 	$(backtranambig_SOURCES) $(backtranseq_SOURCES) \
 	$(banana_SOURCES) $(biosed_SOURCES) $(btwisted_SOURCES) \
@@ -2245,6 +2121,7 @@ DIST_SOURCES = $(aaindexextract_SOURCES) $(abiview_SOURCES) \
 	$(dbxfasta_SOURCES) $(dbxflat_SOURCES) $(dbxgcg_SOURCES) \
 	$(degapseq_SOURCES) $(density_SOURCES) $(descseq_SOURCES) \
 	$(diffseq_SOURCES) $(digest_SOURCES) $(distmat_SOURCES) \
+	domtesta.c domtestb.c domtestc.c domtestd.c \
 	$(dotmatcher_SOURCES) $(dotpath_SOURCES) $(dottup_SOURCES) \
 	$(dreg_SOURCES) $(edamclean_SOURCES) $(edialign_SOURCES) \
 	$(einverted_SOURCES) $(embossdata_SOURCES) \
@@ -2265,7 +2142,10 @@ DIST_SOURCES = $(aaindexextract_SOURCES) $(abiview_SOURCES) \
 	$(intconv_SOURCES) $(isochore_SOURCES) $(jaspextract_SOURCES) \
 	$(jaspscan_SOURCES) $(jembossctl_SOURCES) $(lindna_SOURCES) \
 	$(listor_SOURCES) makenucseq.c makeprotseq.c \
-	$(marscan_SOURCES) $(maskambignuc_SOURCES) \
+	$(marscan_SOURCES) $(martattributes_SOURCES) \
+	$(martdatasets_SOURCES) $(martfilters_SOURCES) \
+	$(martquery_SOURCES) $(martregistry_SOURCES) \
+	$(martseqs_SOURCES) $(maskambignuc_SOURCES) \
 	$(maskambigprot_SOURCES) $(maskfeat_SOURCES) \
 	$(maskseq_SOURCES) $(matcher_SOURCES) $(megamerger_SOURCES) \
 	$(merger_SOURCES) $(msbar_SOURCES) $(mwcontam_SOURCES) \
@@ -2400,6 +2280,7 @@ ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EHAVEANT = @EHAVEANT@
 EMBOSS_TOP = @EMBOSS_TOP@
+ESYSTEMLIBS = @ESYSTEMLIBS@
 EXEEXT = @EXEEXT@
 FGREP = @FGREP@
 GREP = @GREP@
@@ -2439,6 +2320,7 @@ PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
 PACKAGE_NAME = @PACKAGE_NAME@
 PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
+PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PCRE_DATE = @PCRE_DATE@
@@ -2530,8 +2412,9 @@ EXTRA_DIST = emboss.default.template
 @ISAIXIA64_TRUE@@ISSHARED_TRUE@ -lacd -lajaxdb -lensembl -lajaxg -lajax -leexpat -lepcre -lezlib
 
 AM_CFLAGS = $(AIX_CFLAGS) $(WARN_CFLAGS) $(DEVWARN_CFLAGS)
+@ESYSTEMLIBS_FALSE@EXTRA_INCLUDES = -I$(top_srcdir)/ajax/expat -I$(top_srcdir)/ajax/zlib
 INCLUDES = -I$(top_srcdir)/nucleus -I$(top_srcdir)/ajax/pcre \
-	-I$(top_srcdir)/ajax/expat -I$(top_srcdir)/ajax/zlib \
+	$(EXTRA_INCLUDES) \
 	-I$(top_srcdir)/ajax/core -I$(top_srcdir)/ajax/graphics \
 	-I$(top_srcdir)/ajax/ensembl -I$(top_srcdir)/ajax/ajaxdb \
 	-I$(top_srcdir)/ajax/acd -I$(top_srcdir)/plplot
@@ -2539,6 +2422,7 @@ INCLUDES = -I$(top_srcdir)/nucleus -I$(top_srcdir)/ajax/pcre \
 aaindexextract_SOURCES = aaindexextract.c
 abiview_SOURCES = abiview.c
 acdc_SOURCES = acdc.c
+acdgalaxy_SOURCES = acdgalaxy.c
 acdpretty_SOURCES = acdpretty.c
 acdtable_SOURCES = acdtable.c
 acdtrace_SOURCES = acdtrace.c
@@ -2626,6 +2510,12 @@ jembossctl_SOURCES = jembossctl.c
 lindna_SOURCES = lindna.c
 listor_SOURCES = listor.c
 marscan_SOURCES = marscan.c
+martattributes_SOURCES = martattributes.c
+martdatasets_SOURCES = martdatasets.c
+martfilters_SOURCES = martfilters.c
+martquery_SOURCES = martquery.c
+martregistry_SOURCES = martregistry.c
+martseqs_SOURCES = martseqs.c
 maskambignuc_SOURCES = maskambignuc.c
 maskambigprot_SOURCES = maskambigprot.c
 maskfeat_SOURCES = maskfeat.c
@@ -2755,10 +2645,11 @@ seqrettype_SOURCES = seqrettype.c
 sqltest_SOURCES = sqltest.c
 testplot_SOURCES = testplot.c
 treetypedisplay_SOURCES = treetypedisplay.c
+@ESYSTEMLIBS_FALSE@EXTRA_LDS = ../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la
 LDADD = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
+	$(EXTRA_LDS) \
 	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(XLIB)
 
@@ -2858,6 +2749,9 @@ abiview$(EXEEXT): $(abiview_OBJECTS) $(abiview_DEPENDENCIES)
 acdc$(EXEEXT): $(acdc_OBJECTS) $(acdc_DEPENDENCIES) 
 	@rm -f acdc$(EXEEXT)
 	$(LINK) $(acdc_OBJECTS) $(acdc_LDADD) $(LIBS)
+acdgalaxy$(EXEEXT): $(acdgalaxy_OBJECTS) $(acdgalaxy_DEPENDENCIES) 
+	@rm -f acdgalaxy$(EXEEXT)
+	$(LINK) $(acdgalaxy_OBJECTS) $(acdgalaxy_LDADD) $(LIBS)
 acdlog$(EXEEXT): $(acdlog_OBJECTS) $(acdlog_DEPENDENCIES) 
 	@rm -f acdlog$(EXEEXT)
 	$(LINK) $(acdlog_OBJECTS) $(acdlog_LDADD) $(LIBS)
@@ -3005,6 +2899,18 @@ digest$(EXEEXT): $(digest_OBJECTS) $(digest_DEPENDENCIES)
 distmat$(EXEEXT): $(distmat_OBJECTS) $(distmat_DEPENDENCIES) 
 	@rm -f distmat$(EXEEXT)
 	$(LINK) $(distmat_OBJECTS) $(distmat_LDADD) $(LIBS)
+domtesta$(EXEEXT): $(domtesta_OBJECTS) $(domtesta_DEPENDENCIES) 
+	@rm -f domtesta$(EXEEXT)
+	$(LINK) $(domtesta_OBJECTS) $(domtesta_LDADD) $(LIBS)
+domtestb$(EXEEXT): $(domtestb_OBJECTS) $(domtestb_DEPENDENCIES) 
+	@rm -f domtestb$(EXEEXT)
+	$(LINK) $(domtestb_OBJECTS) $(domtestb_LDADD) $(LIBS)
+domtestc$(EXEEXT): $(domtestc_OBJECTS) $(domtestc_DEPENDENCIES) 
+	@rm -f domtestc$(EXEEXT)
+	$(LINK) $(domtestc_OBJECTS) $(domtestc_LDADD) $(LIBS)
+domtestd$(EXEEXT): $(domtestd_OBJECTS) $(domtestd_DEPENDENCIES) 
+	@rm -f domtestd$(EXEEXT)
+	$(LINK) $(domtestd_OBJECTS) $(domtestd_LDADD) $(LIBS)
 dotmatcher$(EXEEXT): $(dotmatcher_OBJECTS) $(dotmatcher_DEPENDENCIES) 
 	@rm -f dotmatcher$(EXEEXT)
 	$(LINK) $(dotmatcher_OBJECTS) $(dotmatcher_LDADD) $(LIBS)
@@ -3164,6 +3070,24 @@ makeprotseq$(EXEEXT): $(makeprotseq_OBJECTS) $(makeprotseq_DEPENDENCIES)
 marscan$(EXEEXT): $(marscan_OBJECTS) $(marscan_DEPENDENCIES) 
 	@rm -f marscan$(EXEEXT)
 	$(LINK) $(marscan_OBJECTS) $(marscan_LDADD) $(LIBS)
+martattributes$(EXEEXT): $(martattributes_OBJECTS) $(martattributes_DEPENDENCIES) 
+	@rm -f martattributes$(EXEEXT)
+	$(LINK) $(martattributes_OBJECTS) $(martattributes_LDADD) $(LIBS)
+martdatasets$(EXEEXT): $(martdatasets_OBJECTS) $(martdatasets_DEPENDENCIES) 
+	@rm -f martdatasets$(EXEEXT)
+	$(LINK) $(martdatasets_OBJECTS) $(martdatasets_LDADD) $(LIBS)
+martfilters$(EXEEXT): $(martfilters_OBJECTS) $(martfilters_DEPENDENCIES) 
+	@rm -f martfilters$(EXEEXT)
+	$(LINK) $(martfilters_OBJECTS) $(martfilters_LDADD) $(LIBS)
+martquery$(EXEEXT): $(martquery_OBJECTS) $(martquery_DEPENDENCIES) 
+	@rm -f martquery$(EXEEXT)
+	$(LINK) $(martquery_OBJECTS) $(martquery_LDADD) $(LIBS)
+martregistry$(EXEEXT): $(martregistry_OBJECTS) $(martregistry_DEPENDENCIES) 
+	@rm -f martregistry$(EXEEXT)
+	$(LINK) $(martregistry_OBJECTS) $(martregistry_LDADD) $(LIBS)
+martseqs$(EXEEXT): $(martseqs_OBJECTS) $(martseqs_DEPENDENCIES) 
+	@rm -f martseqs$(EXEEXT)
+	$(LINK) $(martseqs_OBJECTS) $(martseqs_LDADD) $(LIBS)
 maskambignuc$(EXEEXT): $(maskambignuc_OBJECTS) $(maskambignuc_DEPENDENCIES) 
 	@rm -f maskambignuc$(EXEEXT)
 	$(LINK) $(maskambignuc_OBJECTS) $(maskambignuc_LDADD) $(LIBS)
@@ -3528,6 +3452,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/aaindexextract.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/abiview.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/acdc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/acdgalaxy.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/acdlog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/acdpretty.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/acdrelations.Po@am__quote@
@@ -3577,6 +3502,10 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/diffseq.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/digest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/distmat.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/domtesta.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/domtestb.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/domtestc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/domtestd.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dotmatcher.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dotpath.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dottup.Po@am__quote@
@@ -3630,6 +3559,12 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/makenucseq.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/makeprotseq.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/marscan.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/martattributes.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/martdatasets.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/martfilters.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/martquery.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/martregistry.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/martseqs.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/maskambignuc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/maskambigprot.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/maskfeat.Po@am__quote@

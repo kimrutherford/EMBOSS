@@ -92,6 +92,9 @@ static AjPTable messDebugTestTable = NULL;
 ** @@
 ******************************************************************************/
 
+
+
+
 /* @macro ajMessCrash *********************************************************
 **
 ** Crash error message to standard error.
@@ -196,6 +199,9 @@ static void messDump(const char *message);
 ** the information and a macro version of ajMessCrash (see regular.h), the
 ** structure elements are retrieved using access functions.
 ******************************************************************************/
+
+
+
 
 /* @datastatic MessPErrorInfo *************************************************
 **
@@ -1027,6 +1033,7 @@ __noreturn void  ajMessVCrashFL(const char *format, va_list args)
 
 
 
+
 /* @func ajMessGetMessageC **************************************************
 **
 ** Returns the current message text.
@@ -1039,6 +1046,7 @@ const char* ajMessGetMessageC(void)
 {
     return messbuf;
 }
+
 
 
 
@@ -1080,6 +1088,8 @@ const char* ajMessGetSysmessageC(void)
 
     return messErrMess;
 }
+
+
 
 
 /* @obsolete ajMessSysErrorText
@@ -1256,7 +1266,7 @@ static char* messGetFilename(const char *path)
 /*
 ** When AJAX needs to crash because there has been an unrecoverable
 ** error the file and line number of the code that detected the error
-** need to be outputted. Here are the functions to do it.
+** need to be output. Here are the functions to do it.
 **
 ** Applications can optionally initialise the error handling section of the
 ** message package, currently the program name can be set (argv[0] in the
@@ -1323,6 +1333,10 @@ void ajMessSetErr(const char *filename, ajint line_num)
 
 
 /* Access functions for message error data.                                  */
+
+
+
+
 /* @funcstatic messGetErrorProgram ********************************************
 **
 ** Returns the stored program name.
@@ -1373,6 +1387,9 @@ static ajint messGetErrorLine(void)
 
 /* set a file to read for all the messages. NB if this is not set
 Then a default one will be read */
+
+
+
 
 /* @func ajMessErrorSetFile ***************************************************
 **
@@ -1618,6 +1635,9 @@ void ajMessCodesDelete(void)
     messTableDelete(&messErrorTable);
 }
 
+
+
+
 /* @funcstatic messTableDelete ************************************************
 **
 ** Delete a table, simply freeing the key and value
@@ -1653,6 +1673,8 @@ static void messTableDelete(AjPTable* table)
 
     return;
 }
+
+
 
 
 /* @func ajDebug **************************************************************
@@ -1853,6 +1875,7 @@ FILE* ajMessGetDebugfile(void)
 
 
 
+
 /* @obsolete ajDebugFile
 ** @rename ajMessGetDebugfile
 */
@@ -1861,6 +1884,7 @@ __deprecated FILE* ajDebugFile(void)
 {
     return ajMessGetDebugfile();
 }
+
 
 
 
@@ -1999,6 +2023,9 @@ void ajMessExit(void)
 
     return;
 }
+
+
+
 
 /* @func ajMessExitDebug *******************************************************
 **

@@ -166,7 +166,7 @@ gene* | embl</td>
 <td>-typematch</td>
 <td>string</td>
 <td>By default any feature type in the feature table is shown. You can set this to match any feature type you wish to show.
-See http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www.expasy.ch/txt/userman.txt for a list of the Swissprot feature types.
+See http://www.ebi.ac.uk/embl/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www.expasy.org/sprot/userman.html for a list of the Swissprot feature types.
 The type may be wildcarded by using '*'.
 If you wish to show more than one type, separate their names with the character '|', eg:
 *UTR | intron</td>
@@ -178,7 +178,7 @@ If you wish to show more than one type, separate their names with the character 
 <td>-sensematch</td>
 <td>integer</td>
 <td>By default any feature type in the feature table is shown. You can set this to match any feature sense you wish to show. 0 - any sense, 1 - forward sense, -1 - reverse sense</td>
-<td>Any integer value</td>
+<td>Integer from -1 to 1</td>
 <td>0 - any sense, 1 - forward sense, -1 - reverse sense</td>
 </tr>
 
@@ -214,7 +214,7 @@ gene | label</td>
 <tr bgcolor="#FFFFCC">
 <td>-valuematch</td>
 <td>string</td>
-<td>Tag values are the values associated with a feature tag. Tags are the types of extra values that a feature may have. For example in the EMBL feature table, a 'CDS' type of feature may have the tags '/codon', '/codon_start', '/db_xref', '/EC_number', '/evidence', '/exception', '/function', '/gene', '/label', '/map', '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo', '/standard_name', '/translation', '/transl_except', '/transl_table', or '/usedin'. Only some of these tags can have values, for example '/gene' can have the value of the gene name. By default any feature tag value in the feature table is shown. You can set this to match any feature tag valueyou wish to show.
+<td>Tag values are the values associated with a feature tag. Tags are the types of extra values that a feature may have. For example in the EMBL feature table, a 'CDS' type of feature may have the tags '/codon', '/codon_start', '/db_xref', '/EC_number', '/evidence', '/exception', '/function', '/gene', '/label', '/map', '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo', '/standard_name', '/translation', '/transl_except', '/transl_table', or '/usedin'. Only some of these tags can have values, for example '/gene' can have the value of the gene name. By default any feature tag value in the feature table is shown. You can set this to match any feature tag value you wish to show.
 The tag value may be wildcarded by using '*'.
 If you wish to show more than one tag value, separate their names with the character '|', eg:
 pax* | 10</td>
@@ -262,7 +262,7 @@ pax* | 10</td>
 <td>-maxcuts</td>
 <td>integer</td>
 <td>This sets the maximum number of cuts for any restriction enzyme that will be considered. Any enzymes that cut more times than this will be ignored.</td>
-<td>Integer up to 2000000000</td>
+<td>Any integer value</td>
 <td>2000000000</td>
 </tr>
 
@@ -309,7 +309,7 @@ pax* | 10</td>
 <tr bgcolor="#FFFFCC">
 <td>-plasmid</td>
 <td>boolean</td>
-<td>If this is set then this allows searches for restriction enzyme recognition site and cut postions that span the end of the sequence to be considered.</td>
+<td>If this is set then this allows searches for restriction enzyme recognition site and cut positions that span the end of the sequence to be considered.</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>

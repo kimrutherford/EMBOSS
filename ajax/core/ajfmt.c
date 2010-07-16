@@ -19,8 +19,8 @@
 ** @author Copyright (C) 1998 Peter Rice
 ** @author Copyright (C) 1999 Alan Bleasby
 ** @version 1.0
-** @modified Copyright (C) 2001 Alan Bleasby. Added ajFmtScanS functs
-** @modified Copyright (C) 2003 Jon Ison. Added ajFmtScanC functs
+** @modified Copyright (C) 2001 Alan Bleasby. Added ajFmtScanS functions
+** @modified Copyright (C) 2003 Jon Ison. Added ajFmtScanC functions
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -59,6 +59,9 @@ typedef void (*Fmt_S) (const char *fmt, const char **pos, VALIST ap, int width,
 
 
 /*static Fmt_T  fmtRegister(ajint code, Fmt_T cvt);*/
+
+
+
 
 /* @datastatic FmtPBuf ********************************************************
 **
@@ -961,6 +964,9 @@ static void cvt_uF(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 
 static const Except_T Fmt_Overflow = { "Formatting Overflow" };
 
+
+
+
 /* @funclist Fmt_T ************************************************************
 **
 ** Conversion functions called for each conversion code.
@@ -1481,12 +1487,12 @@ ajint ajFmtPrintCL(char* buf, ajint size, const char* fmt, ...)
 ** It starts with an initial size of 20 then doubles until the
 ** fmt output fits.
 **
-** The caller is reponsible for deleting the AjPStr afterwards.
+** The caller is responsible for deleting the AjPStr afterwards.
 **
 ** @param [r] fmt [const char*] Format string.
 ** @param [v] [...] Variable length argument list
 **
-** @return [AjPStr] fnew AjPStr with Ptr holding formatted chars
+** @return [AjPStr] new AjPStr with Ptr holding formatted chars
 ** @@
 ******************************************************************************/
 
@@ -1941,6 +1947,8 @@ void ajFmtVfmt(int put(int c, void* cl), void* cl, const char* fmt,
 //}
 //
 */
+
+
 
 
 /* @func ajFmtPutd ************************************************************
@@ -2412,7 +2420,7 @@ static ajint fmtVscan(const char *thys,const char *fmt,va_list ap)
 **
 ** Conversion for %S to load a string
 **
-** @param [r] fmt [const char*] Format string at conv char posn
+** @param [r] fmt [const char*] Format string at conv char position
 ** @param [w] pos [const char**] Input string current position
 ** @param [r] ap [VALIST] Original arguments at current position
 ** @param [r] width [ajint] Width
@@ -2464,7 +2472,7 @@ static void scvt_uS(const char *fmt, const char **pos, VALIST ap, ajint width,
 **
 ** Conversion for %d to load an integer
 **
-** @param [r] fmt [const char*] Format string at conv char posn
+** @param [r] fmt [const char*] Format string at conv char position
 ** @param [w] pos [const char**] Input string current position
 ** @param [r] ap [VALIST] Original arguments at current position
 ** @param [r] width [ajint] Width
@@ -2550,7 +2558,7 @@ static void scvt_d(const char *fmt, const char **pos, VALIST ap, ajint width,
 **
 ** Conversion for %x to load an unsigned hexadecimal
 **
-** @param [r] fmt [const char*] Format string at conv char posn
+** @param [r] fmt [const char*] Format string at conv char position
 ** @param [w] pos [const char**] Input string current position
 ** @param [r] ap [VALIST] Original arguments at current position
 ** @param [r] width [ajint] Width
@@ -2651,7 +2659,7 @@ static void scvt_x(const char *fmt, const char **pos, VALIST ap, ajint width,
 **
 ** Conversion for %f to load a float/double
 **
-** @param [r] fmt [const char*] Format string at conv char posn
+** @param [r] fmt [const char*] Format string at conv char position
 ** @param [w] pos [const char**] Input string current position
 ** @param [r] ap [VALIST] Original arguments at current position
 ** @param [r] width [ajint] Width
@@ -2737,7 +2745,7 @@ static void scvt_f(const char *fmt, const char **pos, VALIST ap, ajint width,
 **
 ** Conversion for %s to load a char *
 **
-** @param [r] fmt [const char*] Format string at conv char posn
+** @param [r] fmt [const char*] Format string at conv char position
 ** @param [w] pos [const char**] Input string current position
 ** @param [r] ap [VALIST] Original arguments at current position
 ** @param [r] width [ajint] Width
@@ -2792,7 +2800,7 @@ static void scvt_s(const char *fmt, const char **pos, VALIST ap, ajint width,
 **
 ** Conversion for %o to load an unsigned octal
 **
-** @param [r] fmt [const char*] Format string at conv char posn
+** @param [r] fmt [const char*] Format string at conv char position
 ** @param [w] pos [const char**] Input string current position
 ** @param [r] ap [VALIST] Original arguments at current position
 ** @param [r] width [ajint] Width
@@ -2896,7 +2904,7 @@ static void scvt_o(const char *fmt, const char **pos, VALIST ap, ajint width,
 **
 ** Conversion for %u to load an unsigned integer
 **
-** @param [r] fmt [const char*] Format string at conv char posn
+** @param [r] fmt [const char*] Format string at conv char position
 ** @param [w] pos [const char**] Input string current position
 ** @param [r] ap [VALIST] Original arguments at current position
 ** @param [r] width [ajint] Width
@@ -3002,7 +3010,7 @@ static void scvt_u(const char *fmt, const char **pos, VALIST ap, ajint width,
 **
 ** Conversion for %p to load a pointer of type void * as hexadecimal
 **
-** @param [r] fmt [const char*] Format string at conv char posn
+** @param [r] fmt [const char*] Format string at conv char position
 ** @param [w] pos [const char**] Input string current position
 ** @param [r] ap [VALIST] Original arguments at current position
 ** @param [r] width [ajint] Width
@@ -3068,7 +3076,7 @@ static void scvt_p(const char *fmt, const char **pos, VALIST ap, ajint width,
 **
 ** Conversion for %B to load a boolean (integer or YyNnTtFf)
 **
-** @param [r] fmt [const char*] Format string at conv char posn
+** @param [r] fmt [const char*] Format string at conv char position
 ** @param [w] pos [const char**] Input string current position
 ** @param [r] ap [VALIST] Original arguments at current position
 ** @param [r] width [ajint] Width
@@ -3196,7 +3204,7 @@ static void scvt_uB(const char *fmt, const char **pos, VALIST ap, ajint width,
 **
 ** Conversion for %c to load a character
 **
-** @param [r] fmt [const char*] Format string at conv char posn
+** @param [r] fmt [const char*] Format string at conv char position
 ** @param [w] pos [const char**] Input string current position
 ** @param [r] ap [VALIST] Original arguments at current position
 ** @param [r] width [ajint] Width
@@ -3245,7 +3253,7 @@ static void scvt_c(const char *fmt, const char **pos, VALIST ap, ajint width,
 **
 ** Conversion for %B to load a boolean (YyNnTtFf)
 **
-** @param [r] fmt [const char*] Format string at conv char posn
+** @param [r] fmt [const char*] Format string at conv char position
 ** @param [w] pos [const char**] Input string current position
 ** @param [r] ap [VALIST] Original arguments at current position
 ** @param [r] width [ajint] Width
@@ -3307,7 +3315,7 @@ static void scvt_b(const char *fmt, const char **pos, VALIST ap, ajint width,
 **
 ** Conversion for %z to load a char **
 **
-** @param [r] fmt [const char*] Format string at conv char posn
+** @param [r] fmt [const char*] Format string at conv char position
 ** @param [w] pos [const char**] Input string current position
 ** @param [r] ap [VALIST] Original arguments at current position
 ** @param [r] width [ajint] Width

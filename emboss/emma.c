@@ -38,7 +38,7 @@ static AjPStr emma_getUniqueFileName(void);
 **
 ******************************************************************************/
 
-int main(int argc, char **argv, char **env)
+int main(int argc, char **argv)
 {
 
     AjPSeqall seqall = NULL;
@@ -390,16 +390,8 @@ int main(int argc, char **argv, char **env)
 
 /*    ajFmtError("..%s..\n\n", ajStrGetPtr( cmd)); */
     ajDebug("Executing '%S'\n", cmd);
-#ifndef WIN32
-    ajSysSystemEnv(cmd, env);
-#else
-    if(system(ajStrGetPtr(cmd)) == -1)
-    {
-        fprintf(stderr,"Command: %s\n",ajStrGetPtr(cmd));
-	ajFatal("clustalw execution failure");
-    }
 
-#endif
+    ajSysExecS(cmd);
 
     /* produce alignment file only if one was produced */
     if(!only_dend)
@@ -440,15 +432,15 @@ int main(int argc, char **argv, char **env)
 	    ajFmtPrintF(dend_outfile, "%s\n", ajStrGetPtr( line));
 
 	ajFileClose(&tmp_dendfile);
-	ajSysFileUnlink(tmp_dendfilename);
+	ajSysFileUnlinkS(tmp_dendfilename);
     }
     }
 
 
-    ajSysFileUnlink( tmpFilename);
+    ajSysFileUnlinkS(tmpFilename);
 
     if(!only_dend)
-	ajSysFileUnlink(tmp_aln_outfile);
+	ajSysFileUnlinkS(tmp_aln_outfile);
 
     ajStrDel(&pw_matrix);
     ajStrDel(&matrix);

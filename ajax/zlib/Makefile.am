@@ -13,8 +13,10 @@ ZLIBSRC = adler32.c compress.c crc32.c deflate.c gzio.c infback.c inffast.c \
 inflate.c inftrees.c trees.c uncompr.c zutil.c
 
 # Uncomment and amend when there are some real headers
-include_HEADERS = crc32.h deflate.h inffast.h inffixed.h inflate.h \
+pkginclude_HEADERS = crc32.h deflate.h inffast.h inffixed.h inflate.h \
 inftrees.h trees.h zconf.h zlibemboss.h zlib.h zutil.h
+
+pkgincludedir = $(includedir)/ezlib
 
 libezlib_la_SOURCES = $(ZLIBSRC)
 

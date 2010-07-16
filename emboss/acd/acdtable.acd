@@ -3,5 +3,6 @@ application: acdtable [
                   ACD file"
   gui: "no"
   groups: "Acd"
-  relations: "EDAM: Application information"
+   relations: "/edam/topic/0000088 Literature and documentation"
+  relations: "/edam/operation/0000515 Tool information retrieval"
 ]

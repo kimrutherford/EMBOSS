@@ -1,5 +1,5 @@
 Finds siRNA duplexes in mRNA
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -16,9 +16,9 @@ Version: EMBOSS:6.2.0
                                   sequence in the other output file, or use
                                   the qualifier '-context' which will display
                                   the 23 bases of the forward sequence in this
-                                  report withthe first two bases in brackets.
-                                  These first two bases do not form part of
-                                  the siRNA probe to be ordered.
+                                  report with the first two bases in
+                                  brackets. These first two bases do not form
+                                  part of the siRNA probe to be ordered.
   [-outseq]            seqoutall  [<sequence>.<format>] This is a file of the
                                   sequences of the 23 base regions that the
                                   siRNAs are selected from. You may use it to

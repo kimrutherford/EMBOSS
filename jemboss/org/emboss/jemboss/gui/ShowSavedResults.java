@@ -113,10 +113,6 @@ public class ShowSavedResults extends JFrame
 
     this("Saved results list"+(Jemboss.withSoap ? " on server":""));
      
-    Dimension d = new Dimension(270,270);
-    ss.setPreferredSize(d);
-//  ss.setMaximumSize(d);
-
     try
     {
       final ResultList reslist = new ResultList(mysettings);

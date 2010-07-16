@@ -36,7 +36,7 @@ Output file [l46634.geecee]:
 Command line arguments
 
 Calculate fractional GC content of nucleic acid sequences
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -215,10 +215,12 @@ See also
 
 Author(s)
 
-   Richard Bruskiewich (r.bruskiewich@cgiar.org)
-   while he was at:
+   Richard Bruskiewich formerly at:
    Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
    CB10 1SA, UK.
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

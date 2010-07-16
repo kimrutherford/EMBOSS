@@ -106,7 +106,7 @@ static ajint emowse_seq_comp(ajint bidx, ajint thys, const AjPSeq seq,
 static ajint emowse_get_index(double actmw, double maxmw, double minmw,
 			      EmbPMolFrag const *frags,
 			      ajint fno, double *bestmw,
-			      ajint *index, ajint thys, const AjPSeq seq,
+			      ajint *myindex, ajint thys, const AjPSeq seq,
 			      EmbPMdata const *data);
 
 static ajint emowse_seq_search(const AjPStr substr, AjPStr* s);

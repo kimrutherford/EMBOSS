@@ -40,8 +40,8 @@ int main(int argc, char **argv)
     AjPStr algb;
     AjPStr ss;
 
-    ajuint    lena;
-    ajuint    lenb;
+    ajint    lena;
+    ajint    lenb;
 
     const char   *p;
     const char   *q;
@@ -49,7 +49,6 @@ int main(int argc, char **argv)
     ajint start1 = 0;
     ajint start2 = 0;
 
-    float *path;
     ajint *compass;
     float* ix;
     float* iy;
@@ -69,7 +68,7 @@ int main(int argc, char **argv)
     float score;
 
     AjBool dobrief = ajTrue;
-    AjBool endweight = ajFalse; /* whether end gap penalties should be applied */
+    AjBool endweight = ajFalse; /* should end gap penalties be applied */
 
     float id   = 0.;
     float sim  = 0.;
@@ -98,11 +97,10 @@ int main(int argc, char **argv)
     gapopen = ajRoundFloat(gapopen, 8);
     gapextend = ajRoundFloat(gapextend, 8);
 
-    AJCNEW(path, maxarr);
-    AJCNEW(compass, maxarr);
-    AJCNEW(m, maxarr);
-    AJCNEW(ix, maxarr);
-    AJCNEW(iy, maxarr);
+    AJCNEW0(compass, maxarr);
+    AJCNEW0(m, maxarr);
+    AJCNEW0(ix, maxarr);
+    AJCNEW0(iy, maxarr);
 
     alga  = ajStrNew();
     algb  = ajStrNew();
@@ -118,29 +116,26 @@ int main(int argc, char **argv)
 	ajSeqTrim(b);
 	lenb = ajSeqGetLen(b);
 
-	if(lenb > (ULONG_MAX/(ajulong)(lena+1)))
-	   ajFatal("Sequences too big. Try 'stretcher' or 'supermatcher'");
+	if(lenb > (LONG_MAX/(ajlong)(lena+1)))
+	   ajFatal("Sequences too big. Try 'stretcher'");
 
 	len = lena*lenb;
 
 	if(len>maxarr)
 	{
 	    stlen = (size_t) len;
-	    AJCRESIZETRY(path,stlen);
-	    if(!path)
-		ajDie("Sequences too big. Try 'stretcher'");
-	    AJCRESIZETRY(compass,stlen);
+	    AJCRESIZETRY0(compass,(size_t)maxarr,stlen);
 	    if(!compass)
 		ajDie("Sequences too big. Try 'stretcher'");
-        AJCRESIZETRY(m,stlen);
-        if(!m)
-        ajDie("Sequences too big. Try 'stretcher'");
-        AJCRESIZETRY(ix,stlen);
-        if(!ix)
-        ajDie("Sequences too big. Try 'stretcher'");
-        AJCRESIZETRY(iy,stlen);
-        if(!iy)
-        ajDie("Sequences too big. Try 'stretcher'");
+	    AJCRESIZETRY0(m,(size_t)maxarr,stlen);
+	    if(!m)
+		ajDie("Sequences too big. Try 'stretcher'");
+	    AJCRESIZETRY0(ix,(size_t)maxarr,stlen);
+	    if(!ix)
+		ajDie("Sequences too big. Try 'stretcher'");
+	    AJCRESIZETRY0(iy,(size_t)maxarr,stlen);
+	    if(!iy)
+		ajDie("Sequences too big. Try 'stretcher'");
 	    maxarr=len;
 	}
 
@@ -153,8 +148,8 @@ int main(int argc, char **argv)
 
 	score = embAlignPathCalcWithEndGapPenalties(p, q, lena, lenb,
 	        gapopen, gapextend, endgapopen, endgapextend,
-	        &start1, &start2, path, sub, cvt,
-	        m, ix, iy, compass, ajTrue, endweight);
+	        &start1, &start2, sub, cvt,
+	        m, ix, iy, compass, ajFalse, endweight);
 
 
 
@@ -195,7 +190,6 @@ int main(int argc, char **argv)
     ajSeqDel(&b);
 
     AJFREE(compass);
-    AJFREE(path);
     AJFREE(ix);
     AJFREE(iy);
     AJFREE(m);

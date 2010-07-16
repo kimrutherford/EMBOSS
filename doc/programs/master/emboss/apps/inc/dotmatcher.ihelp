@@ -1,5 +1,5 @@
 Draw a threshold dotplot of two sequences
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-asequence]         sequence   Sequence filename and optional format, or
@@ -8,10 +8,12 @@ Version: EMBOSS:6.2.0
                                   reference (input USA)
 *  -graph              graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tek, tekt, none, data, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif, pdf,
+                                  svg, pdf, svg)
 *  -xygraph            xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tek, tekt, none, data, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif, pdf,
+                                  svg, pdf, svg)
 
    Additional (Optional) qualifiers:
    -matrixfile         matrix     [EBLOSUM62 for protein, EDNAFULL for DNA]
@@ -22,7 +24,7 @@ Version: EMBOSS:6.2.0
                                   files are found in the 'data' directory of
                                   the EMBOSS installation.
    -windowsize         integer    [10] Window size over which to test
-                                  threshhold (Integer 3 or more)
+                                  threshold (Integer 3 or more)
    -threshold          integer    [23] Threshold (Integer 0 or more)
 
    Advanced (Unprompted) qualifiers:

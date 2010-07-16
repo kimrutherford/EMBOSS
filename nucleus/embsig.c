@@ -32,6 +32,9 @@
 /* ============================ private data ============================= */
 /* ======================================================================= */
 
+
+
+
 /* @datastatic EmbPHitidx *****************************************************
 **
 ** Nucleus Hitidx object.
@@ -56,6 +59,8 @@ typedef struct EmbSHitidx
     EmbPHitlist  lptr;
 }EmbOHitidx;
 #define EmbPHitidx EmbOHitidx*
+
+
 
 
 /* @datastatic EmbPSigcell ****************************************************
@@ -154,6 +159,10 @@ static AjBool       embHitlistReadFoldFasta(AjPFile scopf,
 /* ======================================================================= */
 /* ========================== private functions ========================== */
 /* ======================================================================= */
+
+
+
+
 /* @func embSigdatNew *******************************************************
 **
 ** Sigdat object constructor. This is normally called by the 
@@ -280,7 +289,6 @@ void embSigposDel(EmbPSigpos *pthis)
     
     return; 
 }
-
 
 
 
@@ -813,6 +821,9 @@ static AjBool embHitlistReadFoldFasta(AjPFile scopf, const AjPStr fam,
 /* =========================== constructors ============================== */
 /* ======================================================================= */
 
+
+
+
 /* @section Constructors ****************************************************
 **
 ** All constructors return a pointer to a new instance. It is the 
@@ -821,6 +832,9 @@ static AjBool embHitlistReadFoldFasta(AjPFile scopf, const AjPStr fam,
 ** programming practice to do so anyway.
 **
 ****************************************************************************/
+
+
+
 
 /* @func embHitlistNew ******************************************************
 **
@@ -954,12 +968,18 @@ EmbPSignature embSignatureNew(ajuint n)
 /* =========================== destructors =============================== */
 /* ======================================================================= */
 
+
+
+
 /* @section Structure Destructors *******************************************
 **
 ** All destructor functions receive the address of the instance to be
 ** deleted.  The original pointer is set to NULL so is ready for re-use.
 **
 ****************************************************************************/
+
+
+
 
 /* @func embHitlistDel ******************************************************
 **
@@ -1129,6 +1149,9 @@ void embSignatureDel(EmbPSignature *ptr)
 /* ============================ Assignments ============================== */
 /* ======================================================================= */
 
+
+
+
 /* @section Assignments *****************************************************
 **
 ** These functions overwrite the instance provided as the first argument
@@ -1136,6 +1159,8 @@ void embSignatureDel(EmbPSignature *ptr)
 ** create a new instance by assignment.
 **
 ****************************************************************************/
+
+
 
 
 /* @func embHitMerge ********************************************************
@@ -1262,6 +1287,9 @@ EmbPHit embHitMerge(const EmbPHit hit1, const EmbPHit hit2)
 /* ============================= Modifiers =============================== */
 /* ======================================================================= */
 
+
+
+
 /* @section Modifiers *******************************************************
 **
 ** These functions use the contents of an instance and update them.
@@ -1275,12 +1303,17 @@ EmbPHit embHitMerge(const EmbPHit hit1, const EmbPHit hit2)
 /* ========================== Operators ===================================*/
 /* ======================================================================= */
 
+
+
+
 /* @section Operators *******************************************************
 **
 ** These functions use the contents of an instance but do not make any 
 ** changes.
 **
 ****************************************************************************/
+
+
 
 
 /* @func embHitlistMatchFold ************************************************
@@ -1434,6 +1467,9 @@ ajint embMatchSN(const void *hit1, const void *hit2)
 /* ============================== Casts ===================================*/
 /* ======================================================================= */
 
+
+
+
 /* @section Casts ***********************************************************
 **
 ** These functions examine the contents of an instance and return some
@@ -1450,12 +1486,18 @@ ajint embMatchSN(const void *hit1, const void *hit2)
 /* =========================== Reporters ==================================*/
 /* ======================================================================= */
 
+
+
+
 /* @section Reporters *******************************************************
 **
 ** These functions return the contents of an instance but do not make any 
 ** changes.
 **
 ****************************************************************************/
+
+
+
 
 /* @func embHitsOverlap *****************************************************
 **
@@ -1525,11 +1567,17 @@ AjBool embHitsOverlap(const EmbPHit hit1, const EmbPHit hit2, ajuint n)
 /* ========================== Input & Output ============================= */
 /* ======================================================================= */
 
+
+
+
 /* @section Input & output **************************************************
 **
 ** These functions are used for formatted input and output to file.    
 **
 ****************************************************************************/
+
+
+
 
 /* @func embHitReadFasta ****************************************************
 **
@@ -3772,12 +3820,16 @@ AjBool embSignatureHitsWrite(AjPFile outf, const EmbPSignature sig,
 /* ======================== Miscellaneous =================================*/
 /* ======================================================================= */
 
+
+
+
 /* @section Miscellaneous ***************************************************
 **
 ** These functions may have diverse functions that do not fit into the other
 ** categories. 
 **
 ****************************************************************************/
+
 
 
 

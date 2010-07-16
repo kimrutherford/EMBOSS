@@ -66,7 +66,7 @@ typedef struct SValue
 #define PValue OValue*
 
 
- 
+
 
 /* @prog sirna ****************************************************************
 **

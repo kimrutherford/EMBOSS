@@ -40,7 +40,9 @@ __declspec(dllimport) AjPStr acdInputSave;
 #endif
 #endif
 
-    
+
+
+
 /* @data AjPError *************************************************************
 **
 ** Ajax error message levels object

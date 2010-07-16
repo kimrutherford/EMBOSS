@@ -4,7 +4,7 @@
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @version $Revision: 1.5 $
+** @version $Revision: 1.18 $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -36,118 +36,93 @@
 /* ======================== private functions ========================= */
 /* ==================================================================== */
 
-extern EnsPAnalysisadaptor
-ensRegistryGetAnalysisadaptor(EnsPDatabaseadaptor dba);
+static int featureCompareStartAscending(const void* P1, const void* P2);
 
-extern EnsPAssemblyexceptionadaptor
-ensRegistryGetAssemblyexceptionadaptor(EnsPDatabaseadaptor dba);
+static int featureCompareStartDescending(const void* P1, const void* P2);
 
-extern EnsPAssemblyexceptionfeatureadaptor
-ensRegistryGetAssemblyexceptionfeatureadaptor(EnsPDatabaseadaptor dba);
-
-extern EnsPAssemblymapperadaptor
-ensRegistryGetAssemblymapperadaptor(EnsPDatabaseadaptor dba);
-
-extern EnsPCoordsystemadaptor
-ensRegistryGetCoordsystemadaptor(EnsPDatabaseadaptor dba);
-
-extern EnsPDNAAlignFeatureadaptor
-ensRegistryGetDNAAlignFeatureadaptor(EnsPDatabaseadaptor dba);
-
-extern EnsPExternaldatabaseadaptor
-ensRegistryGetExternaldatabaseadaptor(EnsPDatabaseadaptor dba);
-
-extern EnsPMetainformationadaptor
-ensRegistryGetMetainformationadaptor(EnsPDatabaseadaptor dba);
-
-extern EnsPMetacoordinateadaptor
-ensRegistryGetMetacoordinateadaptor(EnsPDatabaseadaptor dba);
-
-extern EnsPProteinalignfeatureadaptor
-ensRegistryGetProteinalignfeatureadaptor(EnsPDatabaseadaptor dba);
-
-extern EnsPProteinfeatureadaptor
-ensRegistryGetProteinfeatureadaptor(EnsPDatabaseadaptor dba);
-
-extern EnsPSimplefeatureadaptor
-ensRegistryGetSimplefeatureadaptor(EnsPDatabaseadaptor dba);
-
-extern EnsPSliceadaptor
-ensRegistryGetSliceadaptor(EnsPDatabaseadaptor dba);
-
-static AjBool featureAdaptorAnalysisNameToConstraint(
-    const EnsPFeatureadaptor adaptor,
+static AjBool featureadaptorAnalysisNameToConstraint(
+    const EnsPFeatureadaptor fa,
     AjPStr* Pconstraint,
     const AjPStr anname);
 
-static AjBool featureAdaptorRemap(EnsPFeatureadaptor adaptor,
+static AjBool featureadaptorRemap(EnsPFeatureadaptor fa,
                                   AjPList objects,
                                   EnsPAssemblymapper am,
                                   EnsPSlice slice);
 
-static AjBool featureAdaptorSliceFetch(EnsPFeatureadaptor adaptor,
+static AjBool featureadaptorSliceFetch(EnsPFeatureadaptor fa,
                                        EnsPSlice slice,
                                        AjPStr constraint,
                                        AjPList objects);
 
-static int baseAlignFeatureCompareSourceFeatureStart(const void* P1,
-                                                     const void* P2);
-
-static AjBool baseAlignFeatureParseFeatures(EnsPBasealignfeature baf,
+static AjBool basealignfeatureParseFeatures(EnsPBasealignfeature baf,
                                             AjPList objects);
 
-static AjBool baseAlignFeatureParseCigar(const EnsPBasealignfeature baf,
+static AjBool basealignfeatureParseCigar(const EnsPBasealignfeature baf,
                                          AjPList fps);
 
-static void *baseAlignFeatureadaptorCacheReference(void *value);
+static int basealignfeatureCompareSourceFeatureStartAscending(const void* P1,
+                                                              const void* P2);
 
-static void baseAlignFeatureadaptorCacheDelete(void **value);
+static int basealignfeatureCompareSourceFeatureStartDescending(const void* P1,
+                                                               const void* P2);
 
-static ajuint baseAlignFeatureadaptorCacheSize(const void *value);
+static void *basealignfeatureadaptorCacheReference(void *value);
 
-static EnsPFeature baseAlignFeatureadaptorGetFeature(const void *value);
+static void basealignfeatureadaptorCacheDelete(void **value);
 
-static AjBool dnaAlignFeatureadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
-                                                  const AjPStr statement,
-                                                  EnsPAssemblymapper mapper,
-                                                  EnsPSlice slice,
-                                                  AjPList bafs);
+static ajulong basealignfeatureadaptorCacheSize(const void *value);
 
-static AjBool proteinAlignFeatureadaptorFetchAllBySQL(
+static EnsPFeature basealignfeatureadaptorGetFeature(const void *value);
+
+static AjBool dnaalignfeatureadaptorFetchAllBySQL(
     EnsPDatabaseadaptor dba,
     const AjPStr statement,
-    EnsPAssemblymapper mapper,
+    EnsPAssemblymapper am,
     EnsPSlice slice,
     AjPList bafs);
 
-static AjBool proteinFeatureadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
-                                                 const AjPStr statement,
-                                                 EnsPAssemblymapper mapper,
-                                                 EnsPSlice slice,
-                                                 AjPList pfs);
+static AjBool proteinalignfeatureadaptorFetchAllBySQL(
+    EnsPDatabaseadaptor dba,
+    const AjPStr statement,
+    EnsPAssemblymapper am,
+    EnsPSlice slice,
+    AjPList bafs);
 
-static AjBool simpleFeatureadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
-                                                const AjPStr statement,
-                                                EnsPAssemblymapper mapper,
-                                                EnsPSlice slice,
-                                                AjPList sfs);
+static AjBool proteinfeatureadaptorFetchAllBySQL(
+    EnsPDatabaseadaptor dba,
+    const AjPStr statement,
+    EnsPAssemblymapper am,
+    EnsPSlice slice,
+    AjPList pfs);
 
-static void *simpleFeatureadaptorCacheReference(void *value);
+static int simplefeatureCompareStartAscending(const void* P1, const void* P2);
 
-static void simpleFeatureadaptorCacheDelete(void **value);
+static int simplefeatureCompareStartDescending(const void* P1, const void* P2);
 
-static ajuint simpleFeatureadaptorCacheSize(const void *value);
+static AjBool simplefeatureadaptorFetchAllBySQL(
+    EnsPDatabaseadaptor dba,
+    const AjPStr statement,
+    EnsPAssemblymapper am,
+    EnsPSlice slice,
+    AjPList sfs);
 
-static EnsPFeature simpleFeatureadaptorGetFeature(const void *value);
+static void *simplefeatureadaptorCacheReference(void *value);
 
-static AjBool assemblyExceptionFeatureadaptorCacheInit(
+static void simplefeatureadaptorCacheDelete(void **value);
+
+static ajulong simplefeatureadaptorCacheSize(const void *value);
+
+static EnsPFeature simplefeatureadaptorGetFeature(const void *value);
+
+static AjBool assemblyexceptionfeatureadaptorCacheInit(
     EnsPAssemblyexceptionfeatureadaptor aefa);
 
-static AjBool assemblyExceptionFeatureadaptorCacheClear(
-    EnsPAssemblyexceptionfeatureadaptor adaptor);
+static AjBool assemblyexceptionfeatureadaptorCacheClear(
+    EnsPAssemblyexceptionfeatureadaptor eafa);
 
-static AjBool assemblyExceptionFeatureadaptorRemap(
-    EnsPAssemblyexceptionfeatureadaptor adaptor,
+static AjBool assemblyexceptionfeatureadaptorRemap(
+    EnsPAssemblyexceptionfeatureadaptor aefa,
     AjPList aefs,
     EnsPAssemblymapper am,
     EnsPSlice slice);
@@ -155,7 +130,7 @@ static AjBool assemblyExceptionFeatureadaptorRemap(
 
 
 
-static ajuint ensFeatureadaptorMaxSplitQuerySeqregions = 3;
+static ajuint featureadaptorMaxSplitQuerySeqregions = 3;
 
 
 
@@ -231,32 +206,32 @@ EnsPFeature ensFeatureNewS(EnsPAnalysis analysis,
                            ajint strand)
 {
     EnsPFeature feature = NULL;
-    
+
     if(!slice)
     {
         ajDebug("ensFeatureNewS reqires an Ensembl Slice.\n");
-	
-	return NULL;
+
+        return NULL;
     }
-    
+
     if(start && end && (start > (end + 1)))
     {
         ajDebug("ensFeatureNewS start (%u) must be less than or equal to "
                 "end (%u) + 1.\n", start, end);
-	
+
         return NULL;
     }
-    
+
     if((strand < -1) || (strand > 1))
     {
         ajDebug("ensFeatureNewS strand (%d) must be +1, 0 or -1.\n",
                 strand);
-	
+
         return NULL;
     }
-    
+
     AJNEW0(feature);
-    
+
     feature->Analysis     = ensAnalysisNewRef(analysis);
     feature->Slice        = ensSliceNewRef(slice);
     feature->SequenceName = NULL;
@@ -264,7 +239,7 @@ EnsPFeature ensFeatureNewS(EnsPAnalysis analysis,
     feature->End          = end;
     feature->Strand       = strand;
     feature->Use          = 1;
-    
+
     return feature;
 }
 
@@ -296,44 +271,44 @@ EnsPFeature ensFeatureNewN(EnsPAnalysis analysis,
                            ajint strand)
 {
     EnsPFeature feature = NULL;
-    
+
     if(!seqname)
     {
         ajDebug("ensFeatureNewN requires a sequence name.\n");
-	
-	return NULL;
+
+        return NULL;
     }
-    
+
     if(start && end && (start > (end + 1)))
     {
         ajDebug("ensFeatureNewN start (%u) must be less than or equal to "
                 "end (%u) + 1.\n", start, end);
-	
+
         return NULL;
     }
-    
+
     if((strand < -1) || (strand > 1))
     {
         ajDebug("ensFeatureNewN strand (%d) must be +1, 0 or -1.\n",
                 strand);
-	
+
         return NULL;
     }
-    
+
     AJNEW0(feature);
-    
+
     feature->Analysis = ensAnalysisNewRef(analysis);
-    
+
     feature->Slice = NULL;
-    
+
     if(seqname)
         feature->SequenceName = ajStrNewRef(seqname);
-    
+
     feature->Start  = start;
     feature->End    = end;
     feature->Strand = strand;
     feature->Use    = 1;
-    
+
     return feature;
 }
 
@@ -353,21 +328,21 @@ EnsPFeature ensFeatureNewN(EnsPAnalysis analysis,
 EnsPFeature ensFeatureNewObj(const EnsPFeature object)
 {
     EnsPFeature feature = NULL;
-    
+
     AJNEW0(feature);
-    
+
     feature->Analysis = ensAnalysisNewRef(object->Analysis);
     feature->Slice    = ensSliceNewRef(object->Slice);
-    
+
     if(object->SequenceName)
         feature->SequenceName = ajStrNewRef(object->SequenceName);
-    
+
     feature->Start  = object->Start;
     feature->End    = object->End;
     feature->Strand = object->Strand;
-    
+
     feature->Use = 1;
-    
+
     return feature;
 }
 
@@ -388,10 +363,10 @@ EnsPFeature ensFeatureNewObj(const EnsPFeature object)
 EnsPFeature ensFeatureNewRef(EnsPFeature feature)
 {
     if(!feature)
-	return NULL;
-    
+        return NULL;
+
     feature->Use++;
-    
+
     return feature;
 }
 
@@ -431,34 +406,34 @@ EnsPFeature ensFeatureNewRef(EnsPFeature feature)
 void ensFeatureDel(EnsPFeature *Pfeature)
 {
     EnsPFeature pthis = NULL;
-    
+
     if(!Pfeature)
         return;
-    
+
     if(!*Pfeature)
         return;
 
     pthis = *Pfeature;
-    
+
     pthis->Use--;
-    
+
     if(pthis->Use)
     {
-	*Pfeature = NULL;
-	
-	return;
+        *Pfeature = NULL;
+
+        return;
     }
-    
+
     ensAnalysisDel(&pthis->Analysis);
-    
+
     ensSliceDel(&pthis->Slice);
-    
+
     ajStrDel(&pthis->SequenceName);
-    
+
     AJFREE(pthis);
 
     *Pfeature = NULL;
-    
+
     return;
 }
 
@@ -510,7 +485,7 @@ EnsPAnalysis ensFeatureGetAnalysis(const EnsPFeature feature)
 {
     if(!feature)
         return NULL;
-    
+
     return feature->Analysis;
 }
 
@@ -532,7 +507,7 @@ EnsPSlice ensFeatureGetSlice(const EnsPFeature feature)
 {
     if(!feature)
         return NULL;
-    
+
     return feature->Slice;
 }
 
@@ -546,7 +521,7 @@ EnsPSlice ensFeatureGetSlice(const EnsPFeature feature)
 ** @cc Bio::EnsEMBL::Feature::seqname
 ** @param [r] feature [const EnsPFeature] Ensembl Feature
 **
-** @return [AjPStr*] Sequence name or NULL
+** @return [AjPStr] Sequence name or NULL
 ** @@
 ******************************************************************************/
 
@@ -554,7 +529,7 @@ AjPStr ensFeatureGetSequenceName(const EnsPFeature feature)
 {
     if(!feature)
         return NULL;
-    
+
     return feature->SequenceName;
 }
 
@@ -576,7 +551,7 @@ ajint ensFeatureGetStart(const EnsPFeature feature)
 {
     if(!feature)
         return 0;
-    
+
     return feature->Start;
 }
 
@@ -598,7 +573,7 @@ ajint ensFeatureGetEnd(const EnsPFeature feature)
 {
     if(!feature)
         return 0;
-    
+
     return feature->End;
 }
 
@@ -620,7 +595,7 @@ ajint ensFeatureGetStrand(const EnsPFeature feature)
 {
     if(!feature)
         return 0;
-    
+
     return feature->Strand;
 }
 
@@ -668,11 +643,11 @@ AjBool ensFeatureSetAnalysis(EnsPFeature feature, EnsPAnalysis analysis)
 {
     if(!feature)
         return ajFalse;
-    
+
     ensAnalysisDel(&feature->Analysis);
-    
+
     feature->Analysis = ensAnalysisNewRef(analysis);
-    
+
     return ajTrue;
 }
 
@@ -695,11 +670,11 @@ AjBool ensFeatureSetSlice(EnsPFeature feature, EnsPSlice slice)
 {
     if(!feature)
         return ajFalse;
-    
+
     ensSliceDel(&feature->Slice);
-    
+
     feature->Slice = ensSliceNewRef(slice);
-    
+
     return ajTrue;
 }
 
@@ -722,11 +697,11 @@ AjBool ensFeatureSetSequenceName(EnsPFeature feature, AjPStr seqname)
 {
     if(!feature)
         return ajFalse;
-    
+
     ajStrDel(&feature->SequenceName);
-    
+
     feature->SequenceName = ajStrNewRef(seqname);
-    
+
     return ajTrue;
 }
 
@@ -749,9 +724,9 @@ AjBool ensFeatureSetStart(EnsPFeature feature, ajint start)
 {
     if(!feature)
         return ajFalse;
-    
+
     feature->Start = start;
-    
+
     return ajTrue;
 }
 
@@ -774,9 +749,9 @@ AjBool ensFeatureSetEnd(EnsPFeature feature, ajint end)
 {
     if(!feature)
         return ajFalse;
-    
+
     feature->End = end;
-    
+
     return ajTrue;
 }
 
@@ -799,9 +774,9 @@ AjBool ensFeatureSetStrand(EnsPFeature feature, ajint strand)
 {
     if(!feature)
         return ajFalse;
-    
+
     feature->Strand = strand;
-    
+
     return ajTrue;
 }
 
@@ -840,37 +815,37 @@ AjBool ensFeatureSetStrand(EnsPFeature feature, ajint strand)
 AjBool ensFeatureTrace(const EnsPFeature feature, ajuint level)
 {
     AjPStr indent = NULL;
-    
+
     if(!feature)
-	return ajFalse;
-    
+        return ajFalse;
+
     indent = ajStrNew();
-    
+
     ajStrAppendCountK(&indent, ' ', level * 2);
-    
+
     ajDebug("%SensFeatureTrace %p\n"
-	    "%S  Slice %p\n"
-	    "%S  Start %d\n"
-	    "%S  End %d\n"
-	    "%S  Strand %d\n"
-	    "%S  Analysis %p\n"
-	    "%S  SequenceName '%S'\n"
-	    "%S  Use %u\n",
-	    indent, feature,
-	    indent, feature->Slice,
-	    indent, feature->Start,
-	    indent, feature->End,
-	    indent, feature->Strand,
-	    indent, feature->Analysis,
-	    indent, feature->SequenceName,
-	    indent, feature->Use);
-    
+            "%S  Slice %p\n"
+            "%S  Start %d\n"
+            "%S  End %d\n"
+            "%S  Strand %d\n"
+            "%S  Analysis %p\n"
+            "%S  SequenceName '%S'\n"
+            "%S  Use %u\n",
+            indent, feature,
+            indent, feature->Slice,
+            indent, feature->Start,
+            indent, feature->End,
+            indent, feature->Strand,
+            indent, feature->Analysis,
+            indent, feature->SequenceName,
+            indent, feature->Use);
+
     ensSliceTrace(feature->Slice, level + 1);
-    
+
     ensAnalysisTrace(feature->Analysis, level + 1);
-    
+
     ajStrDel(&indent);
-    
+
     return ajTrue;
 }
 
@@ -892,43 +867,43 @@ ajuint ensFeatureGetLength(const EnsPFeature feature)
 {
     if(!feature)
         return 0;
-    
+
     return (feature->End - feature->Start + 1);
 }
 
 
 
 
-/* @func ensFeatureGetMemSize *************************************************
+/* @func ensFeatureGetMemsize *************************************************
 **
 ** Get the memory size in bytes of an Ensembl Feature.
 **
 ** @param [r] feature [const EnsPFeature] Ensembl Feature
 **
-** @return [ajuint] Memory size
+** @return [ajulong] Memory size
 ** @@
 ******************************************************************************/
 
-ajuint ensFeatureGetMemSize(const EnsPFeature feature)
+ajulong ensFeatureGetMemsize(const EnsPFeature feature)
 {
-    ajuint size = 0;
-    
+    ajulong size = 0;
+
     if(!feature)
-	return 0;
-    
-    size += (ajuint) sizeof (EnsOFeature);
-    
-    size += ensSliceGetMemSize(feature->Slice);
-    
-    size += ensAnalysisGetMemSize(feature->Analysis);
-    
-    if (feature->SequenceName)
+        return 0;
+
+    size += sizeof (EnsOFeature);
+
+    size += ensSliceGetMemsize(feature->Slice);
+
+    size += ensAnalysisGetMemsize(feature->Analysis);
+
+    if(feature->SequenceName)
     {
-	size += (ajuint) sizeof (AjOStr);
-	
-	size += ajStrGetRes(feature->SequenceName);
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(feature->SequenceName);
     }
-    
+
     return size;
 }
 
@@ -950,10 +925,10 @@ const EnsPSeqregion ensFeatureGetSeqregion(const EnsPFeature feature)
 {
     if(!feature)
         return NULL;
-    
+
     if(!feature->Slice)
-	return NULL;
-    
+        return NULL;
+
     return ensSliceGetSeqregion(feature->Slice);
 }
 
@@ -976,10 +951,10 @@ const AjPStr ensFeatureGetSeqregionName(const EnsPFeature feature)
 {
     if(!feature)
         return NULL;
-    
+
     if(!feature->Slice)
-	return NULL;
-    
+        return NULL;
+
     return ensSliceGetSeqregionName(feature->Slice);
 }
 
@@ -1003,12 +978,12 @@ ajint ensFeatureGetSeqregionStart(const EnsPFeature feature)
 {
     if(!feature)
         return 0;
-    
+
     if(!feature->Slice)
-	return 0;
-    
+        return 0;
+
     if(ensSliceGetStrand(feature->Slice) >= 0)
-	return ensSliceGetStart(feature->Slice) + feature->Start - 1;
+        return ensSliceGetStart(feature->Slice) + feature->Start - 1;
 
     return ensSliceGetEnd(feature->Slice) - feature->End + 1;
 }
@@ -1033,13 +1008,13 @@ ajint ensFeatureGetSeqregionEnd(const EnsPFeature feature)
 {
     if(!feature)
         return 0;
-    
+
     if(!feature->Slice)
-	return 0;
-    
+        return 0;
+
     if(ensSliceGetStrand(feature->Slice) >= 0)
-	return ensSliceGetStart(feature->Slice) + feature->End - 1;
-    
+        return ensSliceGetStart(feature->Slice) + feature->End - 1;
+
     return ensSliceGetStart(feature->Slice) - feature->Start + 1;
 }
 
@@ -1063,10 +1038,10 @@ ajint ensFeatureGetSeqregionStrand(const EnsPFeature feature)
 {
     if(!feature)
         return 0;
-    
+
     if(!feature->Slice)
-	return 0;
-    
+        return 0;
+
     return ensSliceGetStrand(feature->Slice) * feature->Strand;
 }
 
@@ -1089,10 +1064,10 @@ ajuint ensFeatureGetSeqregionLength(const EnsPFeature feature)
 {
     if(!feature)
         return 0;
-    
+
     if(!feature->Slice)
-	return 0;
-    
+        return 0;
+
     return ensSliceGetSeqregionLength(feature->Slice);
 }
 
@@ -1121,26 +1096,26 @@ AjBool ensFeatureMove(EnsPFeature feature,
 {
     if(!feature)
         return ajFalse;
-    
+
     if(start && end && (end < start))
     {
         ajDebug("ensFeatureMove start (%u) must be less than or equal to the "
                 "end coordinate (%u).\n", start, end);
-	
+
         return ajFalse;
     }
-    
+
     if((strand < -1) || (strand > 1))
     {
         ajDebug("ensFeatureMove strand (%d) must be +1, 0 or -1.\n", strand);
-	
+
         return ajFalse;
     }
-    
+
     feature->Start  = start;
     feature->End    = end;
     feature->Strand = strand;
-    
+
     return ajTrue;
 }
 
@@ -1154,8 +1129,8 @@ AjBool ensFeatureMove(EnsPFeature feature,
 ** @cc Bio::EnsEMBL::Feature::project
 ** @param [r] feature [const EnsPFeature] Ensembl Feature
 ** @param [r] csname [const AjPStr] Ensembl Coordinate System name
-** @param [r] csversion [const AjPStr] Ensembl Coordinate System version
-** @param [u] pslist [AjPList] AJAX List of Ensembl Projection Segments
+** @param [rN] csversion [const AjPStr] Ensembl Coordinate System version
+** @param [u] pss [AjPList] AJAX List of Ensembl Projection Segments
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
@@ -1175,61 +1150,69 @@ AjBool ensFeatureMove(EnsPFeature feature,
 AjBool ensFeatureProject(const EnsPFeature feature,
                          const AjPStr csname,
                          const AjPStr csversion,
-                         AjPList pslist)
+                         AjPList pss)
 {
     ajint strand = 0;
-    
+
     EnsPSlice fslice    = NULL;
     EnsPSlice nslice    = NULL;
     EnsPSliceadaptor sa = NULL;
-    
+
     if(!feature)
     {
-	ajDebug("ensFeatureProject requires an Ensembl Feature.\n");
-	
-	return ajFalse;
+        ajDebug("ensFeatureProject requires an Ensembl Feature.\n");
+
+        return ajFalse;
     }
-    
-    /* A Coordinate System name and version is not mandatory. */
-    
-    if(!pslist)
+
+    if(!csname)
     {
-	ajDebug("ensFeatureProject requires an AJAX List.\n");
-	
-	return ajFalse;
+        ajDebug("ensFeatureProject requires an "
+                "Ensembl Coordinate System name.\n");
+
+        return ajFalse;
     }
-    
+
+    /* A Coordinate System version is not strictly required. */
+
+    if(!pss)
+    {
+        ajDebug("ensFeatureProject requires an AJAX List.\n");
+
+        return ajFalse;
+    }
+
     if(!feature->Slice)
     {
-	ajWarn("ensFeatureProject requires an Ensembl Feature with "
-	       "an Ensembl Slice attached to it.\n");
-	
-	return ajFalse;
+        ajWarn("ensFeatureProject requires an Ensembl Feature with "
+               "an Ensembl Slice attached to it.\n");
+
+        return ajFalse;
     }
-    
+
     /*
     ** Use the Ensembl Database Adaptor of the Slice as this Feature may not
     ** yet be stored in the database and may not have its own Adaptor.
     */
-    
+
     sa = ensSliceGetAdaptor(feature->Slice);
-    
+
     if(!sa)
     {
-	ajWarn("ensFeatureProject requires an Ensembl Feature with "
-	       "an Ensembl Slice Adaptor element attached to the "
-	       "Ensembl Slice element.\n");
-	
-	return ajFalse;
+        ajWarn("ensFeatureProject requires an Ensembl Feature with "
+               "an Ensembl Slice Adaptor element attached to the "
+               "Ensembl Slice element.\n");
+
+        return ajFalse;
     }
-    
+
     strand = feature->Strand * ensSliceGetStrand(feature->Slice);
-    
+
     /*
     ** The ensSliceadaptorFetchByFeature function always returns a
     ** forward-strand Slice.
     */
-    
+
     /*
     ** FIXME: So far this is the only instance of ensSliceFetchInvertedSlice.
     ** Wouldn't ensSliceadaptorFetchByFeature be better if it allowed the
@@ -1238,20 +1221,20 @@ AjBool ensFeatureProject(const EnsPFeature feature,
     ** ensSliceadaptorFetchByFeatureFlank and
     ** ensSliceadaptorFetchByFeaturePercentage.
     */
-    
+
     ensSliceadaptorFetchByFeature(sa, feature, 0, &fslice);
-    
+
     if(strand < 0)
-	ensSliceFetchInvertedSlice(fslice, &nslice);
+        ensSliceFetchInvertedSlice(fslice, &nslice);
     else
-	nslice = ensSliceNewRef(fslice);
-    
+        nslice = ensSliceNewRef(fslice);
+
     ensSliceDel(&fslice);
-    
-    ensSliceProject(nslice, csname, csversion, pslist);
-    
+
+    ensSliceProject(nslice, csname, csversion, pss);
+
     ensSliceDel(&nslice);
-    
+
     return ajTrue;
 }
 
@@ -1291,99 +1274,91 @@ EnsPFeature ensFeatureTransform(EnsPFeature feature,
                                 const AjPStr csname,
                                 const AjPStr csversion)
 {
-    AjPList pslist = NULL;
-    
+    AjPList pss = NULL;
+
     const AjPStr pcsname    = NULL;
     const AjPStr pcsversion = NULL;
     const AjPStr psrname    = NULL;
-    
+
     EnsPCoordsystem cs         = NULL;
     const EnsPCoordsystem pcs  = NULL;
     EnsPCoordsystemadaptor csa = NULL;
-    
+
     EnsPDatabaseadaptor dba = NULL;
-    
+
     EnsPFeature nfeature = NULL;
-    
+
     EnsPProjectionsegment ps = NULL;
-    
+
     EnsPSlice nslice       = NULL;
     const EnsPSlice pslice = NULL;
     EnsPSliceadaptor sa    = NULL;
-    
+
     if(!feature)
     {
-	ajDebug("ensFeatureTransform requires an Ensembl Feature.\n");
-	
-	return NULL;
-    }
-    
-    if(!csname)
-    {
-	ajDebug("ensFeatureTransform requires a Coordinate System name.\n");
-	
-	return NULL;
-    }
-    
-    /* FIXME: A Coordinate System version is not strictly required??? */
-#if AJFALSE
-    if (! csversion)
-    {
-        ajDebug("ensFeatureTransform requires a Coordinate System version.\n");
-        
+        ajDebug("ensFeatureTransform requires an Ensembl Feature.\n");
+
         return NULL;
     }
-#endif
-    
+
+    if(!csname)
+    {
+        ajDebug("ensFeatureTransform requires a Coordinate System name.\n");
+
+        return NULL;
+    }
+
+    /* A Coordinate System version is not strictly required. */
+
     if(!feature->Slice)
     {
-	ajWarn("ensFeatureTransform requires an Ensembl Feature with "
-	       "an Ensembl Slice attached to it.\n");
-	
-	return NULL;
+        ajWarn("ensFeatureTransform requires an Ensembl Feature with "
+               "an Ensembl Slice attached to it.\n");
+
+        return NULL;
     }
-    
+
     /*
     ** Use the Ensembl Database Adaptor of the Slice as this Feature may not
     ** yet be stored in the database and may not have its own Adaptor.
     */
-    
+
     sa = ensSliceGetAdaptor(feature->Slice);
-    
+
     if(!sa)
     {
-	ajWarn("ensFeatureTransform requires an Ensembl Feature with "
-	       "an Ensembl Slice Adaptor element attached to the "
-	       "Ensembl Slice element.\n");
-	
-	return NULL;
+        ajWarn("ensFeatureTransform requires an Ensembl Feature with "
+               "an Ensembl Slice Adaptor element attached to the "
+               "Ensembl Slice element.\n");
+
+        return NULL;
     }
-    
+
     if(!ensSliceGetCoordsystem(feature->Slice))
     {
-	ajWarn("ensFeatureTransform requires an Ensembl Feature with "
-	       "an Ensembl Coordinate System element attached to the "
-	       "Ensembl Slice element.\n");
-	
-	return NULL;
+        ajWarn("ensFeatureTransform requires an Ensembl Feature with "
+               "an Ensembl Coordinate System element attached to the "
+               "Ensembl Slice element.\n");
+
+        return NULL;
     }
-    
+
     dba = ensSliceadaptorGetDatabaseadaptor(sa);
-    
+
     csa = ensRegistryGetCoordsystemadaptor(dba);
-    
+
     ensCoordsystemadaptorFetchByName(csa, csname, csversion, &cs);
-    
+
     if(!cs)
-	ajFatal("ensFeatureTransform cannot transform to an unknown "
-		"Ensembl Coordinate System '%S:%S'.", csname, csversion);
-    
+        ajFatal("ensFeatureTransform cannot transform to an unknown "
+                "Ensembl Coordinate System '%S:%S'.", csname, csversion);
+
     /*
     ** If the Ensembl Feature is already in the requested Coordinate System,
     ** and on a regular Sequence Region Slice, we can simply return a copy
     ** of this Feature.
     */
-    
+
     /*
     ** FIXME: Shouldn't this test also check for the correct Sequence Region
     ** length as the end point of the Slice? Although coordinates would not be
@@ -1392,80 +1367,80 @@ EnsPFeature ensFeatureTransform(EnsPFeature feature,
     ** ensSliceadaptorFetchByRegion below would return a Slice covering the
     ** full Sequence Region.
     */
-    
+
     if(ensCoordsystemMatch(cs, ensSliceGetCoordsystem(feature->Slice)) &&
        (ensSliceGetStart(feature->Slice) == 1) &&
        (ensSliceGetStrand(feature->Slice) >= 0))
     {
-	nfeature = ensFeatureNewRef(feature);
-	
-	ensCoordsystemDel(&cs);
-	
-	return nfeature;
+        nfeature = ensFeatureNewRef(feature);
+
+        ensCoordsystemDel(&cs);
+
+        return nfeature;
     }
-    
+
     /*
     ** If a Coordinate System different from the Feature Coordinate System was
     ** requested, project the Feature into this other Coordinate System, but
     ** place the Feature only, if it projects in one piece i.e does not span
     ** Sequence Region boundaries.
     */
-    
-    pslist = ajListNew();
-    
-    ensFeatureProject(feature, csname, csversion, pslist);
-    
-    if(ajListGetLength(pslist) == 1)
+
+    pss = ajListNew();
+
+    ensFeatureProject(feature, csname, csversion, pss);
+
+    if(ajListGetLength(pss) == 1)
     {
-	pslice = ensProjectionsegmentGetTrgSlice(ps);
-	
-	pcs = ensSliceGetCoordsystem(pslice);
-	
-	pcsname = ensCoordsystemGetName(pcs);
-	
-	pcsversion = ensCoordsystemGetVersion(pcs);
-	
-	psrname = ensSliceGetSeqregionName(pslice);
-	
-	/*
-	** TODO: This could all be simpler if we had an
-	** ensSliceadaptorFetchBySeqregion function.
-	** We could create the Slice directly from the Sequence Region, but
-	** going through the Adaptor has the big advantage that the Slice
-	** would be inserted into the Adaptor-internal cache, which would
+        pslice = ensProjectionsegmentGetTrgSlice(ps);
+
+        pcs = ensSliceGetCoordsystem(pslice);
+
+        pcsname = ensCoordsystemGetName(pcs);
+
+        pcsversion = ensCoordsystemGetVersion(pcs);
+
+        psrname = ensSliceGetSeqregionName(pslice);
+
+        /*
+        ** TODO: This could all be simpler if we had an
+        ** ensSliceadaptorFetchBySeqregion function.
+        ** We could create the Slice directly from the Sequence Region, but
+        ** going through the Adaptor has the big advantage that the Slice
+        ** would be inserted into the Adaptor-internal cache, which would
         ** reduce the overall memory footprint.
         */
-	
-	ensSliceadaptorFetchByRegion(sa,
-				     pcsname,
-				     pcsversion,
-				     psrname,
-				     0,
-				     0,
-				     1,
-				     &nslice);
-	
-	nfeature = ensFeatureNewObj(feature);
-	
-	nfeature->Start = ensSliceGetStart(pslice);
-	
-	nfeature->End = ensSliceGetEnd(pslice);
-	
-	nfeature->Strand =
-	    (feature->Strand == 0) ? 0 : ensSliceGetStrand(pslice);
-	
-	ensFeatureSetSlice(nfeature, nslice);
-	
-	ensSliceDel(&nslice);
+
+        ensSliceadaptorFetchByRegion(sa,
+                                     pcsname,
+                                     pcsversion,
+                                     psrname,
+                                     0,
+                                     0,
+                                     1,
+                                     &nslice);
+
+        nfeature = ensFeatureNewObj(feature);
+
+        nfeature->Start = ensSliceGetStart(pslice);
+
+        nfeature->End = ensSliceGetEnd(pslice);
+
+        nfeature->Strand = (feature->Strand == 0) ?
+            0 : ensSliceGetStrand(pslice);
+
+        ensFeatureSetSlice(nfeature, nslice);
+
+        ensSliceDel(&nslice);
     }
-    
-    while(ajListPop(pslist, (void **) &ps))
-	ensProjectionsegmentDel(&ps);
-    
-    ajListFree(&pslist);
-    
+
+    while(ajListPop(pss, (void **) &ps))
+        ensProjectionsegmentDel(&ps);
+
+    ajListFree(&pss);
+
     ensCoordsystemDel(&cs);
-    
+
     return nfeature;
 }
 
@@ -1497,62 +1472,61 @@ EnsPFeature ensFeatureTransform(EnsPFeature feature,
 EnsPFeature ensFeatureTransfer(EnsPFeature feature, EnsPSlice slice)
 {
     ajint nfstart = 0;
-    ajint nfend = 0;
-    
+    ajint nfend   = 0;
+
     const EnsPCoordsystem srccs = NULL;
     const EnsPCoordsystem trgcs = NULL;
-    
+
     EnsPFeature nf = NULL;
-    
+
     if(!feature)
     {
-	ajDebug("ensFeatureTransfer requires an Ensembl Feature.\n");
-	
-	return NULL;
+        ajDebug("ensFeatureTransfer requires an Ensembl Feature.\n");
+
+        return NULL;
     }
-    
-    if(!feature->Slice)
-    {
-	ajDebug("ensFeatureTransfer requires an Ensembl Feature with "
-		"an Ensembl Slice attached.");
-	
-	return NULL;
-    }
-    
+
     if(!slice)
     {
-	ajDebug("ensFeatureTransfer requires an Ensembl Slice.\n");
-	
-	return NULL;
+        ajDebug("ensFeatureTransfer requires an Ensembl Slice.\n");
+
+        return NULL;
     }
-    
+
+    if(!feature->Slice)
+    {
+        ajDebug("ensFeatureTransfer requires an Ensembl Feature with "
+                "an Ensembl Slice attached.");
+
+        return NULL;
+    }
+
     srccs = ensSliceGetCoordsystem(feature->Slice);
-    
     trgcs = ensSliceGetCoordsystem(slice);
-    
+
     /*
     ** If the Coordinate Systems of the Feature and the Slice are identical,
     ** adjust only coordinates. In case they are not, the Feature needs
     ** transforming into the target Cordinate System first.
     */
-    
+
     if(ensCoordsystemMatch(srccs, trgcs))
-	nf = ensFeatureNewObj(feature);
+        nf = ensFeatureNewObj(feature);
     else
     {
-	nf = ensFeatureTransform(feature,
-				 ensCoordsystemGetName(trgcs),
-				 ensCoordsystemGetVersion(trgcs));
-	
-	if(!nf)
-	{
-	    ajDebug("ensFeatureTransfer got no Feature from "
-		    "ensFeatureTransform.\n");
-	    
-	    return NULL;
-	}
+        nf = ensFeatureTransform(feature,
+                                 ensCoordsystemGetName(trgcs),
+                                 ensCoordsystemGetVersion(trgcs));
+
+        if(!nf)
+        {
+            ajDebug("ensFeatureTransfer got no Feature from "
+                    "ensFeatureTransform.\n");
+
+            return NULL;
+        }
     }
-    
+
     /*
     ** Discard Features that were placed on an entirely different
     ** Sequence Region.
@@ -1578,71 +1552,63 @@ EnsPFeature ensFeatureTransfer(EnsPFeature feature, EnsPSlice slice)
     ** shorter, we would end up with Features with negative coordinates.
     ** Test this!
     */
-    
+
     if(!ajStrMatchCaseS(ensSliceGetSeqregionName(nf->Slice),
                         ensSliceGetSeqregionName(slice)))
     {
-	ajDebug("ensFeatureTransfer got a Feature on a different "
-		"Sequence Region '%S' vs '%S'.\n",
-		ensSliceGetSeqregionName(nf->Slice),
-		ensSliceGetSeqregionName(slice));
-	
-	ensFeatureDel(&nf);
-	
-	return NULL;
+        ajDebug("ensFeatureTransfer got a Feature on a different "
+                "Sequence Region '%S' vs '%S'.\n",
+                ensSliceGetSeqregionName(nf->Slice),
+                ensSliceGetSeqregionName(slice));
+
+        ensFeatureDel(&nf);
+
+        return NULL;
     }
-    
+
     /*
     ** If the current Feature positions are not relative to the start of the
     ** Sequence Region, convert them so that they are.
     */
-    
+
     if((ensSliceGetStart(nf->Slice) != 1) ||
        (ensSliceGetStrand(nf->Slice) < 0))
     {
-	nfstart = nf->Start;
-	
-	nfend = nf->End;
-	
-	if(ensSliceGetStrand(nf->Slice) >= 0)
-	{
-	    nf->Start = nfstart + ensSliceGetStart(nf->Slice) - 1;
-	    
-	    nf->End = nfend + ensSliceGetStart(nf->Slice) - 1;
-	}
-	else
-	{
-	    nf->Start = ensSliceGetEnd(nf->Slice) - nfend + 1;
-	    
-	    nf->End = ensSliceGetEnd(nf->Slice) - nfstart + 1;
-	    
-	    nf->Strand *= -1;
-	}
+        nfstart = nf->Start;
+        nfend   = nf->End;
+
+        if(ensSliceGetStrand(nf->Slice) >= 0)
+        {
+            nf->Start = nfstart + ensSliceGetStart(nf->Slice) - 1;
+            nf->End   = nfend   + ensSliceGetStart(nf->Slice) - 1;
+        }
+        else
+        {
+            nf->Start   = ensSliceGetEnd(nf->Slice) - nfend   + 1;
+            nf->End     = ensSliceGetEnd(nf->Slice) - nfstart + 1;
+            nf->Strand *= -1;
+        }
     }
-    
+
     /* Convert to target Slice coordinates. */
-    
+
     nfstart = nf->Start;
-    
-    nfend = nf->End;
-    
+    nfend   = nf->End;
+
     if(ensSliceGetStrand(slice) >= 0)
     {
-	nf->Start = nfstart - ensSliceGetStart(slice) + 1;
-	
-	nf->End = nfend - ensSliceGetStart(slice) + 1;
+        nf->Start = nfstart - ensSliceGetStart(slice) + 1;
+        nf->End   = nfend   - ensSliceGetStart(slice) + 1;
     }
     else
     {
-	nf->Start = ensSliceGetEnd(slice) - nfend + 1;
-	
-	nf->End = ensSliceGetEnd(slice) - nfstart + 1;
-	
-	nf->Strand *= -1;
+        nf->Start   = ensSliceGetEnd(slice) - nfend   + 1;
+        nf->End     = ensSliceGetEnd(slice) - nfstart + 1;
+        nf->Strand *= -1;
     }
-    
+
     ensFeatureSetSlice(nf, slice);
-    
+
     return nf;
 }
 
@@ -1666,296 +1632,643 @@ EnsPFeature ensFeatureTransfer(EnsPFeature feature, EnsPSlice slice)
 ** @@
 ******************************************************************************/
 
+AjBool ensFeatureFetchAllAlternativeLocations(EnsPFeature feature,
+                                              AjBool all,
+                                              AjPList features)
+{
 /*
 ** TODO: The Perl API requires a second parameter $return_all,
 ** which is not documented!
 */
 
-AjBool ensFeatureFetchAllAlternativeLocations(EnsPFeature feature,
-                                              AjBool all,
-                                              AjPList features)
-{
     ajint alength = 0;
     ajint rlength = 0;
-    
+
     ajuint srid = 0;
-    
+
     AjPList aefs = NULL;
     AjPList haps = NULL;
     AjPList alts = NULL;
-    
+
     EnsPAssemblyexceptionfeature aef         = NULL;
     EnsPAssemblyexceptionfeature naef        = NULL;
     EnsPAssemblyexceptionfeatureadaptor aefa = NULL;
-    
+
     EnsPDatabaseadaptor dba = NULL;
-    
+
     EnsPFeature afeature = NULL;
     EnsPFeature nfeature = NULL;
-    
+
     EnsPSlice fslice    = NULL;
     EnsPSlice rslice    = NULL;
     EnsPSlice aslice    = NULL;
     EnsPSlice nslice    = NULL;
     EnsPSliceadaptor sa = NULL;
-    
+
     if(!feature)
-	return ajFalse;
-    
+        return ajFalse;
+
     fslice = feature->Slice;
-    
+
     if(!fslice)
-	return ajTrue;
-    
+        return ajTrue;
+
     sa = ensSliceGetAdaptor(fslice);
-    
+
     if(!sa)
-	return ajTrue;
-    
+        return ajTrue;
+
     /*
     ** Fetch all Ensembl Assembly Exception Features for the full-length Slice
     ** of the Ensembl Sequence Region element.
     */
-    
+
     dba = ensSliceadaptorGetDatabaseadaptor(sa);
-    
+
     aefa = ensRegistryGetAssemblyexceptionfeatureadaptor(dba);
-    
+
     srid = ensSliceGetSeqregionIdentifier(fslice);
-    
+
     ensSliceadaptorFetchBySeqregionIdentifier(sa, srid, 0, 0, 0, &rslice);
-    
+
     aefs = ajListNew();
-    
+
     ensAssemblyexceptionfeatureadaptorFetchAllBySlice(aefa, rslice, aefs);
-    
+
     /*
     ** Group Ensembl Assembly Exception Features based on their type element
     ** into haplotypes (HAPs) and pseudo-autosomal regions (PARs) initially.
     */
-    
+
     haps = ajListNew();
-    
     alts = ajListNew();
-    
+
     while(ajListPop(aefs, (void **) &aef))
     {
-	switch(ensAssemblyexceptionfeatureGetType(aef))
-	{
-	    case ensEAssemblyexceptionTypeHAP:
-		
-		ajListPushAppend(haps, (void *) aef);
-		
-		break;
-		
-	    case ensEAssemblyexceptionTypePAR:
-		
-		ajListPushAppend(alts, (void *) aef);
-		
-		break;
-		
-	    case ensEAssemblyexceptionTypeHAPREF:
-		
-		if(all)
-		    ajListPushAppend(haps, (void *) aef);
-		
-		break;
-		
-	    default:
-		
-		ajDebug("ensFeatureFetchAllAlternativeLocations got unknown "
-			"EnsEAssemblyexceptionType (%d).\n",
-			ensAssemblyexceptionfeatureGetType(aef));
-	}
+        switch(ensAssemblyexceptionfeatureGetType(aef))
+        {
+            case ensEAssemblyexceptionTypeHAP:
+
+                ajListPushAppend(haps, (void *) aef);
+
+                break;
+
+            case ensEAssemblyexceptionTypePAR:
+
+                ajListPushAppend(alts, (void *) aef);
+
+                break;
+
+            case ensEAssemblyexceptionTypeHAPREF:
+
+                if(all)
+                    ajListPushAppend(haps, (void *) aef);
+
+                break;
+
+            default:
+
+                ajDebug("ensFeatureFetchAllAlternativeLocations got unknown "
+                        "EnsEAssemblyexceptionType (%d).\n",
+                        ensAssemblyexceptionfeatureGetType(aef));
+        }
     }
-    
+
     ajListFree(&aefs);
-    
+
     /*
     ** Regions surrounding haplotypes are those of interest, not the haplotype
     ** itself. Convert haplotype Assembly Exception Features to regions
     ** around haplotypes instead.
     */
-    
-    while (ajListPop(haps, (void **) &aef))
+
+    while(ajListPop(haps, (void **) &aef))
     {
-	afeature = ensAssemblyexceptionfeatureGetFeature(aef);
-	
-	aslice = ensAssemblyexceptionfeatureGetAlternateSlice(aef);
-	
-	if((ensFeatureGetStart(afeature) > 1) &&
+        afeature = ensAssemblyexceptionfeatureGetFeature(aef);
+
+        aslice = ensAssemblyexceptionfeatureGetAlternateSlice(aef);
+
+        if((ensFeatureGetStart(afeature) > 1) &&
            (ensSliceGetStart(aslice) > 1))
-	{
-	    /*
+        {
+            /*
             ** TODO: Rewrite this, as it could be much simpler using
-	    ** ensAssemblyexceptionfeatureNewObj and then
-	    ** ensAssemblyexceptionfeatureGetFeature
-	    ** ensFeatureNewObj
-	    ** ensFeatureSetStart
-	    ** ensFeatureSetEnd
-	    ** ensAssemblyexceptionfeatureGetAlternateSlice
-	    ** ensSliceNewObj
-	    ** ensSliceSetStart
-	    ** ensSliceSetEnd
-	    ** ensAssemblyexceptionfeatureSetFeature
-	    ** ensAssemblyexceptionfeatureSetAlternateSlice
-	    ** ensFeatureDel
-	    ** ensSliceDel
-	    **
-	    ** TODO: There could be an ensSliceadaptorFetchBySlice function,
-	    ** which maintains the Sequence Region and the Coordinate System
-	    ** and just allows for altering the start end and strand.
-	    ** The benefit would be that this function could inset the Slice
-	    ** into the Adaptor-internal cache. This function could also be
-	    ** used internally by ensSliceFetchInvertedSlice and other
-	    ** Slice functions.
-	    */
-	    
-	    /* Copy the Feature and re-set the start and end cordinates. */
-	    
-	    nfeature = ensFeatureNewObj(afeature);
-	    
-	    ensFeatureSetStart(nfeature, 1);
-	    
-	    ensFeatureSetEnd(nfeature, ensFeatureGetStart(afeature) - 1);
-	    
-	    ensSliceadaptorFetchByRegion(sa,
-					 ensSliceGetCoordsystemName(aslice),
-					 ensSliceGetCoordsystemVersion(aslice),
-					 ensSliceGetSeqregionName(aslice),
-					 1,
-					 ensSliceGetStart(aslice) - 1,
-					 ensSliceGetStrand(aslice),
-					 &nslice);
-	    
-	    naef = ensAssemblyexceptionfeatureNew(
+            ** ensAssemblyexceptionfeatureNewObj and then
+            ** ensAssemblyexceptionfeatureGetFeature
+            ** ensFeatureNewObj
+            ** ensFeatureSetStart
+            ** ensFeatureSetEnd
+            ** ensAssemblyexceptionfeatureGetAlternateSlice
+            ** ensSliceNewObj
+            ** ensSliceSetStart
+            ** ensSliceSetEnd
+            ** ensAssemblyexceptionfeatureSetFeature
+            ** ensAssemblyexceptionfeatureSetAlternateSlice
+            ** ensFeatureDel
+            ** ensSliceDel
+            **
+            ** TODO: There could be an ensSliceadaptorFetchBySlice function,
+            ** which maintains the Sequence Region and the Coordinate System
+            ** and just allows for altering the start end and strand.
+            ** The benefit would be that this function could inset the Slice
+            ** into the Adaptor-internal cache. This function could also be
+            ** used internally by ensSliceFetchInvertedSlice and other
+            ** Slice functions.
+            */
+
+            /* Copy the Feature and re-set the start and end cordinates. */
+
+            nfeature = ensFeatureNewObj(afeature);
+
+            ensFeatureSetStart(nfeature, 1);
+
+            ensFeatureSetEnd(nfeature, ensFeatureGetStart(afeature) - 1);
+
+            ensSliceadaptorFetchByRegion(sa,
+                                         ensSliceGetCoordsystemName(aslice),
+                                         ensSliceGetCoordsystemVersion(aslice),
+                                         ensSliceGetSeqregionName(aslice),
+                                         1,
+                                         ensSliceGetStart(aslice) - 1,
+                                         ensSliceGetStrand(aslice),
+                                         &nslice);
+
+            naef = ensAssemblyexceptionfeatureNew(
                 aefa,
                 0,
                 nfeature,
                 nslice,
                 ensAssemblyexceptionfeatureGetType(aef));
-	    
-	    ajListPushAppend(alts, (void *) naef);
-	    
-	    ensSliceDel(&nslice);
-	    
-	    ensFeatureDel(&nfeature);
-	}
-	
-	/* Check that Slice lengths are within range. */
-	
-	if(ensSliceGetSeqregionLength(rslice) <= INT_MAX)
-	    rlength = ensSliceGetSeqregionLength(rslice);
-	else
-	    ajFatal("ensFeatureFetchAllAlternativeLocations got "
-		    "Sequence Region length (%u) exceeding MAX_INT (%d).\n",
-		    ensSliceGetSeqregionLength(rslice),
-		    INT_MAX);
-	
-	if(ensSliceGetSeqregionLength(aslice) <= INT_MAX)
-	    alength = ensSliceGetSeqregionLength(aslice);
-	else
-	    ajFatal("ensFeatureFetchAllAlternativeLocations got "
-		    "Sequence Region length (%u) exceeding MAX_INT (%d).\n",
-		    ensSliceGetSeqregionLength(aslice),
-		    INT_MAX);
-	
-	if((ensFeatureGetEnd(afeature) < rlength) &&
-	   (ensSliceGetEnd(aslice) < alength))
-	{
-	    /* Copy the Feature and re-set the start and end cordinates. */
-	    
-	    nfeature = ensFeatureNewObj(afeature);
-	    
-	    ensFeatureSetStart(nfeature, ensFeatureGetEnd(afeature) + 1);
-	    
-	    ensFeatureSetEnd(nfeature, ensFeatureGetSeqregionLength(afeature));
-	    
-	    ensSliceadaptorFetchByRegion(sa,
-					 ensSliceGetCoordsystemName(aslice),
-					 ensSliceGetCoordsystemVersion(aslice),
-					 ensSliceGetSeqregionName(aslice),
-					 ensSliceGetEnd(aslice) + 1,
-					 ensSliceGetSeqregionLength(aslice),
-					 ensSliceGetStrand(aslice),
-					 &nslice);
-	    
-	    naef = ensAssemblyexceptionfeatureNew(
+
+            ajListPushAppend(alts, (void *) naef);
+
+            ensSliceDel(&nslice);
+
+            ensFeatureDel(&nfeature);
+        }
+
+        /* Check that Slice lengths are within range. */
+
+        if(ensSliceGetSeqregionLength(rslice) <= INT_MAX)
+            rlength = ensSliceGetSeqregionLength(rslice);
+        else
+            ajFatal("ensFeatureFetchAllAlternativeLocations got "
+                    "Sequence Region length (%u) exceeding MAX_INT (%d).\n",
+                    ensSliceGetSeqregionLength(rslice),
+                    INT_MAX);
+
+        if(ensSliceGetSeqregionLength(aslice) <= INT_MAX)
+            alength = ensSliceGetSeqregionLength(aslice);
+        else
+            ajFatal("ensFeatureFetchAllAlternativeLocations got "
+                    "Sequence Region length (%u) exceeding MAX_INT (%d).\n",
+                    ensSliceGetSeqregionLength(aslice),
+                    INT_MAX);
+
+        if((ensFeatureGetEnd(afeature) < rlength) &&
+           (ensSliceGetEnd(aslice) < alength))
+        {
+            /* Copy the Feature and re-set the start and end cordinates. */
+
+            nfeature = ensFeatureNewObj(afeature);
+
+            ensFeatureSetStart(nfeature, ensFeatureGetEnd(afeature) + 1);
+
+            ensFeatureSetEnd(nfeature, ensFeatureGetSeqregionLength(afeature));
+
+            ensSliceadaptorFetchByRegion(sa,
+                                         ensSliceGetCoordsystemName(aslice),
+                                         ensSliceGetCoordsystemVersion(aslice),
+                                         ensSliceGetSeqregionName(aslice),
+                                         ensSliceGetEnd(aslice) + 1,
+                                         ensSliceGetSeqregionLength(aslice),
+                                         ensSliceGetStrand(aslice),
+                                         &nslice);
+
+            naef = ensAssemblyexceptionfeatureNew(
                 aefa,
                 0,
                 nfeature,
                 nslice,
                 ensAssemblyexceptionfeatureGetType(aef));
-	    
-	    ajListPushAppend(alts, (void *) naef);
-	    
-	    ensSliceDel(&nslice);
-	}
-	
-	ensAssemblyexceptionfeatureDel(&aef);
+
+            ajListPushAppend(alts, (void *) naef);
+
+            ensSliceDel(&nslice);
+        }
+
+        ensAssemblyexceptionfeatureDel(&aef);
     }
-    
+
     ajListFree(&haps);
-    
+
     /* Check if exception regions contain our Feature. */
-    
+
     while(ajListPop(alts, (void **) &aef))
     {
-	afeature = ensAssemblyexceptionfeatureGetFeature(aef);
-	
-	aslice = ensAssemblyexceptionfeatureGetAlternateSlice(aef);
-	
-	/* Ignore the other region if the Feature is not entirely on it. */
-	
-	if((ensFeatureGetSeqregionStart(feature) <
-	    ensFeatureGetStart(afeature)) ||
-	   (ensFeatureGetSeqregionEnd(feature) > ensFeatureGetEnd(afeature)))
-	{
-	    ensAssemblyexceptionfeatureDel(&aef);
-	    
-	    continue;
-	}
-	
-	nfeature = ensFeatureNewObj(feature);
-	
-	/* Position the Feature on the entire Slice of the other region. */
-	
-	nfeature->Start =
-	    ensFeatureGetSeqregionStart(nfeature) -
-	    ensFeatureGetStart(afeature) +
-	    ensSliceGetStart(aslice);
-	
-	nfeature->End =
-	    ensFeatureGetSeqregionEnd(nfeature) -
-	    ensFeatureGetStart(afeature) +
-	    ensSliceGetStart(aslice);
-	
-	nfeature->Strand *= ensSliceGetStrand(aslice);
-	
-	/*
-	** Place the new Features on the full-length Slice of the
-	** Ensembl Sequence Region element.
-	*/
-	
-	ensSliceadaptorFetchBySeqregionIdentifier(
+        afeature = ensAssemblyexceptionfeatureGetFeature(aef);
+
+        aslice = ensAssemblyexceptionfeatureGetAlternateSlice(aef);
+
+        /* Ignore the other region if the Feature is not entirely on it. */
+
+        if((ensFeatureGetSeqregionStart(feature) <
+            ensFeatureGetStart(afeature)) ||
+           (ensFeatureGetSeqregionEnd(feature) > ensFeatureGetEnd(afeature)))
+        {
+            ensAssemblyexceptionfeatureDel(&aef);
+
+            continue;
+        }
+
+        nfeature = ensFeatureNewObj(feature);
+
+        /* Position the Feature on the entire Slice of the other region. */
+
+        nfeature->Start = ensFeatureGetSeqregionStart(nfeature) -
+            ensFeatureGetStart(afeature) +
+            ensSliceGetStart(aslice);
+
+        nfeature->End = ensFeatureGetSeqregionEnd(nfeature) -
+            ensFeatureGetStart(afeature) +
+            ensSliceGetStart(aslice);
+
+        nfeature->Strand *= ensSliceGetStrand(aslice);
+
+        /*
+        ** Place the new Features on the full-length Slice of the
+        ** Ensembl Sequence Region element.
+        */
+
+        ensSliceadaptorFetchBySeqregionIdentifier(
             sa,
             ensSliceGetSeqregionIdentifier(aslice),
             0,
             0,
             0,
             &nslice);
-	
-	ensFeatureSetSlice(nfeature, nslice);
-	
-	ajListPushAppend(features, (void *) nfeature);
-	
-	ensSliceDel(&nslice);
+
+        ensFeatureSetSlice(nfeature, nslice);
+
+        ajListPushAppend(features, (void *) nfeature);
+
+        ensSliceDel(&nslice);
     }
-    
+
     ajListFree(&alts);
-    
+
     ensSliceDel(&fslice);
-    
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensFeatureCompareStartAscending **************************************
+**
+** Comparison function to sort Ensembl Features by their start coordinate
+** in ascending order.
+**
+** Ensembl Features based on Ensembl Slices sort before Ensembl Features
+** based on sequence names. Ensembl Features without Ensembl Slices or
+** sequence names sort towards the end of the AJAX List.
+**
+** @param [r] feature1 [const EnsPFeature] Ensembl Feature 1
+** @param [r] feature2 [const EnsPFeature] Ensembl Feature 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+** @@
+******************************************************************************/
+
+int ensFeatureCompareStartAscending(const EnsPFeature feature1,
+                                    const EnsPFeature feature2)
+{
+    int value = 0;
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if(feature1 && (!feature2))
+        return -1;
+
+    if((!feature1) && (!feature2))
+        return 0;
+
+    if((!feature1) && feature2)
+        return +1;
+
+    /*
+    ** Ensembl Features based on Ensembl Slices sort before Ensembl Features
+    ** based on sequence names. For Features based on identical Slices or
+    ** sequence names evaluate start coordinates.
+    */
+
+    if(feature1->Slice && feature2->SequenceName)
+        return -1;
+
+    if(feature1->Slice && feature2->Slice)
+        value = ensSliceCompareIdentifierAscending(feature1->Slice,
+                                                   feature2->Slice);
+
+    if(feature1->SequenceName && feature2->SequenceName)
+        value = ajStrCmpS(feature1->SequenceName,
+                          feature2->SequenceName);
+
+    if(feature1->SequenceName && feature2->Slice)
+        return +1;
+
+    if(value)
+        return value;
+
+    /* Evaluate Feature start coordinates. */
+
+    if(feature1->Start < feature2->Start)
+        value = -1;
+
+    if(feature1->Start > feature2->Start)
+        value = +1;
+
+    return value;
+}
+
+
+
+
+/* @func ensFeatureCompareStartDescending *************************************
+**
+** Comparison function to sort Ensembl Features by their start coordinate
+** in descending order.
+**
+** Ensembl Features based on Ensembl Slices sort before Ensembl Features
+** based on sequence names. Ensembl Features without Ensembl Slices or
+** sequence names sort towards the end of the AJAX List.
+**
+** @param [r] feature1 [const EnsPFeature] Ensembl Feature 1
+** @param [r] feature2 [const EnsPFeature] Ensembl Feature 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+** @@
+******************************************************************************/
+
+int ensFeatureCompareStartDescending(const EnsPFeature feature1,
+                                     const EnsPFeature feature2)
+{
+    int value = 0;
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if(feature1 && (!feature2))
+        return -1;
+
+    if((!feature1) && (!feature2))
+        return 0;
+
+    if((!feature1) && feature2)
+        return +1;
+
+    /*
+    ** Ensembl Features based on Ensembl Slices sort before Ensembl Features
+    ** based on sequence names. For Features based on identical Slices or
+    ** sequence names evaluate start coordinates.
+    */
+
+    if(feature1->Slice && feature2->SequenceName)
+        return -1;
+
+    if(feature1->Slice && feature2->Slice)
+        value = ensSliceCompareIdentifierAscending(feature1->Slice,
+                                                   feature2->Slice);
+
+    if(feature1->SequenceName && feature2->SequenceName)
+        value = ajStrCmpS(feature1->SequenceName,
+                          feature2->SequenceName);
+
+    if(feature1->SequenceName && feature2->Slice)
+        return +1;
+
+    if(value)
+        return value;
+
+    /* Evaluate Feature start coordinates. */
+
+    if(feature1->Start < feature2->Start)
+        value = +1;
+
+    if(feature1->Start > feature2->Start)
+        value = -1;
+
+    return value;
+}
+
+
+
+
+/* @funcstatic featureCompareStartAscending ***********************************
+**
+** Comparison function to sort Ensembl Features by their
+** start coordinate in ascending order.
+**
+** @param [r] P1 [const void*] Ensembl Feature address 1
+** @param [r] P2 [const void*] Ensembl Feature address 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+** @@
+******************************************************************************/
+
+static int featureCompareStartAscending(const void* P1, const void* P2)
+{
+    EnsPFeature feature1 = NULL;
+    EnsPFeature feature2 = NULL;
+
+    feature1 = *(EnsPFeature const *) P1;
+    feature2 = *(EnsPFeature const *) P2;
+
+    if(ajDebugTest("featureCompareStartAscending"))
+    {
+        ajDebug("featureCompareStartAscending\n"
+                "  feature1 %p\n"
+                "  feature2 %p\n",
+                feature1,
+                feature2);
+
+        ensFeatureTrace(feature1, 1);
+        ensFeatureTrace(feature2, 1);
+    }
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if(feature1 && (!feature2))
+        return -1;
+
+    if((!feature1) && (!feature2))
+        return 0;
+
+    if((!feature1) && feature2)
+        return +1;
+
+    return ensFeatureCompareStartAscending(feature1, feature2);
+}
+
+
+
+
+/* @func ensFeatureSortByStartAscending ***************************************
+**
+** Sort Ensembl Features by their start coordinate in ascending order.
+**
+** @param [u] features [AjPList] AJAX List of Ensembl Features
+** @see ensFeatureCompareStartAscending
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensFeatureSortByStartAscending(AjPList features)
+{
+    if(!features)
+        return ajFalse;
+
+    ajListSort(features, featureCompareStartAscending);
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic featureCompareStartDescending **********************************
+**
+** Comparison function to sort Ensembl Features by their
+** start coordinate in descending order.
+**
+** @param [r] P1 [const void*] Ensembl Feature address 1
+** @param [r] P2 [const void*] Ensembl Feature address 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+** @@
+******************************************************************************/
+
+static int featureCompareStartDescending(const void* P1, const void* P2)
+{
+    EnsPFeature feature1 = NULL;
+    EnsPFeature feature2 = NULL;
+
+    feature1 = *(EnsPFeature const *) P1;
+    feature2 = *(EnsPFeature const *) P2;
+
+    if(ajDebugTest("featureCompareStartDescending"))
+    {
+        ajDebug("featureCompareStartDescending\n"
+                "  feature1 %p\n"
+                "  feature2 %p\n",
+                feature1,
+                feature2);
+
+        ensFeatureTrace(feature1, 1);
+        ensFeatureTrace(feature2, 1);
+    }
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if(feature1 && (!feature2))
+        return -1;
+
+    if((!feature1) && (!feature2))
+        return 0;
+
+    if((!feature1) && feature2)
+        return +1;
+
+    return ensFeatureCompareStartDescending(feature1, feature2);
+}
+
+
+
+
+/* @func ensFeatureSortByStartDescending **************************************
+**
+** Sort Ensembl Features by their start coordinate in descending order.
+**
+** @param [u] features [AjPList] AJAX List of Ensembl Features
+** @see ensFeatureCompareStartDescending
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensFeatureSortByStartDescending(AjPList features)
+{
+    if(!features)
+        return ajFalse;
+
+    ajListSort(features, featureCompareStartDescending);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensFeatureMatch ******************************************************
+**
+** Test for matching two Ensembl Features.
+**
+** @param [r] feature1 [const EnsPFeature] First Ensembl Feature
+** @param [r] feature2 [const EnsPFeature] Second Ensembl Feature
+**
+** @return [AjBool] ajTrue if the Ensembl Features are equal
+** @@
+** The comparison is based on an initial pointer equality test and if that
+** fails, a case-sensitive string comparison of the sequence name and
+** comparisons of other elements are performed.
+******************************************************************************/
+
+AjBool ensFeatureMatch(const EnsPFeature feature1,
+                       const EnsPFeature feature2)
+{
+    if(!feature1)
+        return ajFalse;
+
+    if(!feature2)
+        return ajFalse;
+
+    if(feature1 == feature2)
+        return ajTrue;
+
+    if(!ensAnalysisMatch(feature1->Analysis, feature2->Analysis))
+        return ajFalse;
+
+    if(!ensSliceMatch(feature1->Slice, feature2->Slice))
+        return ajFalse;
+
+    if(!ajStrMatchS(feature1->SequenceName, feature2->SequenceName))
+        return ajFalse;
+
+    if(feature1->Start != feature2->Start)
+        return ajFalse;
+
+    if(feature1->End != feature2->End)
+        return ajFalse;
+
+    if(feature1->Strand != feature2->Strand)
+        return ajFalse;
+
     return ajTrue;
 }
 
@@ -1980,35 +2293,35 @@ AjBool ensFeatureOverlap(const EnsPFeature feature1,
 {
     AjPStr name1 = NULL;
     AjPStr name2 = NULL;
-    
+
     if(!feature1)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!feature2)
-	return ajFalse;
-    
+        return ajFalse;
+
     name1 = ajStrNew();
     name2 = ajStrNew();
-    
+
     ensFeatureFetchSeqregionName(feature1, &name1);
     ensFeatureFetchSeqregionName(feature2, &name2);
-    
-    if((name1 && name2) && (! ajStrMatchCaseS(name1, name2)))
+
+    if((name1 && name2) && (!ajStrMatchCaseS(name1, name2)))
     {
-	ajDebug("ensFeatureOverlap got Features on different "
-	        "Ensembl Sequence Regions.\n");
-	
-	ajStrDel(&name1);
-	ajStrDel(&name2);
-	
-	return ajFalse;
+        ajDebug("ensFeatureOverlap got Features on different "
+                "Ensembl Sequence Regions.\n");
+
+        ajStrDel(&name1);
+        ajStrDel(&name2);
+
+        return ajFalse;
     }
-    
+
     ajStrDel(&name1);
     ajStrDel(&name2);
-    
+
     return ((feature1->End >= feature2->Start) &&
-	    (feature1->Start <= feature2->End));
+            (feature1->Start <= feature2->End));
 }
 
 
@@ -2032,15 +2345,15 @@ AjBool ensFeatureFetchSeqregionName(const EnsPFeature feature, AjPStr* Pname)
 {
     if(!feature)
         return ajFalse;
-    
+
     if(!Pname)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(feature->SequenceName && ajStrGetLen(feature->SequenceName))
-	ajStrAssignS(Pname, feature->SequenceName);
+        ajStrAssignS(Pname, feature->SequenceName);
     else if(feature->Slice)
-	ensSliceFetchName(feature->Slice, Pname);
-    
+        ensSliceFetchName(feature->Slice, Pname);
+
     return ajTrue;
 }
 
@@ -2058,12 +2371,12 @@ AjBool ensFeatureFetchSeqregionName(const EnsPFeature feature, AjPStr* Pname)
 ******************************************************************************/
 
 /* 1 << 26 = 64 Mi */
-static ajuint featureAdaptorCacheMaxBytes = 1 << 26;
+static ajuint featureadaptorCacheMaxBytes = 1 << 26;
 
 /* 1 << 16 = 64 ki */
-static ajuint featureAdaptorCacheMaxCount = 1 << 16;
+static ajuint featureadaptorCacheMaxCount = 1 << 16;
 
-static ajuint featureAdaptorCacheMaxSize = 0;
+static ajuint featureadaptorCacheMaxSize = 0;
 
 
 
@@ -2079,12 +2392,8 @@ static ajuint featureAdaptorCacheMaxSize = 0;
 ** @fnote None
 **
 ** @nam3rule New Constructor
-** @nam4rule NewObj Constructor with existing object
-** @nam4rule NewRef Constructor by incrementing the reference counter
 **
 ** @argrule New dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
-** @argrule Obj object [EnsPFeatureadaptor] Ensembl Feature Adaptor
-** @argrule Ref object [EnsPFeatureadaptor] Ensembl Feature Adaptor
 **
 ** @valrule * [EnsPFeatureadaptor] Ensembl Feature Adaptor
 **
@@ -2109,10 +2418,10 @@ static ajuint featureAdaptorCacheMaxSize = 0;
 ** @param [r] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 ** @param [r] Ptables [const char**] Table names
 ** @param [r] Pcolumns [const char**] Column names
-** @param [r] left_join [EnsOBaseadaptorLeftJoin*] Ensembl Base Adaptor
-**                                                 Left Join Statements
-** @param [r] condition [const char *] Default SQL condition
-** @param [r] final [const char *] Final SQL condition
+** @param [r] leftjoin [EnsOBaseadaptorLeftJoin*] Ensembl Base Adaptor
+**                                                Left Join Statements
+** @param [r] condition [const char*] Default SQL condition
+** @param [r] final [const char*] Final SQL condition
 ** @param [f] Fquery [AjBool function] Function address to handle the
 **                              Ensembl Object-specific SQL statement
 ** @param [f] Fread [void* function] Function address to read further value
@@ -2123,7 +2432,7 @@ static ajuint featureAdaptorCacheMaxSize = 0;
 ** @param [f] Fwrite [AjBool function] Function address to write back modified
 **                                     cache entries
 ** @param [f] Fdelete [void function] Function address to delete objects
-** @param [f] Fsize [ajuint function] Function address to determine the
+** @param [f] Fsize [ajulong function] Function address to determine the
 **                             value data (or object) memory size
 ** @param [f] Fgetfeature [EnsPFeature function] Pointer to an Ensembl Object
 **                                               specific function to get an
@@ -2148,56 +2457,56 @@ EnsPFeatureadaptor ensFeatureadaptorNew(
     EnsPDatabaseadaptor dba,
     const char **Ptables,
     const char **Pcolumns,
-    EnsOBaseadaptorLeftJoin *left_join,
+    EnsOBaseadaptorLeftJoin *leftjoin,
     const char *condition,
     const char *final,
     AjBool Fquery(EnsPDatabaseadaptor dba,
                   const AjPStr statement,
-                  EnsPAssemblymapper mapper,
+                  EnsPAssemblymapper am,
                   EnsPSlice slice,
                   AjPList objects),
     void* Fread(const void* key),
     void* Freference(void* value),
     AjBool Fwrite(const void* value),
     void Fdelete(void** value),
-    ajuint Fsize(const void* value),
+    ajulong Fsize(const void* value),
     EnsPFeature Fgetfeature(const void *object),
     const char *label)
 {
     register ajuint i = 0;
-    
+
     EnsPFeatureadaptor fa = NULL;
-    
+
     if(!dba)
-	return NULL;
-    
+        return NULL;
+
     AJNEW0(fa);
-    
+
     if(ensDatabaseadaptorGetMultiSpecies(dba))
     {
-	/* Extend the array of table names. */
-	
-	AJCNEW0(fa->Tables, sizeof (Ptables) + 2);
-	
-	for(i = 0; Ptables[i]; i++)
-	    fa->Tables[i] = ajCharNewC(Ptables[i]);
-	
-	fa->Tables[i] = ajCharNewC("seq_region");
-	
-	i++;
-	
-	fa->Tables[i] = ajCharNewC("coord_system");
-	
-	i++;
-	
-	fa->Tables[i] = (char *) NULL;
-	
-	Ptables = (const char **) fa->Tables;
-	
-	/* Extend the default SQL condition. */
-	
-	if(condition)
-	    fa->Condition = ajFmtString(
+        /* Extend the array of table names. */
+
+        AJCNEW0(fa->Tables, sizeof (Ptables) + 2 * sizeof (char *));
+
+        for(i = 0; Ptables[i]; i++)
+            fa->Tables[i] = ajCharNewC(Ptables[i]);
+
+        fa->Tables[i] = ajCharNewC("seq_region");
+
+        i++;
+
+        fa->Tables[i] = ajCharNewC("coord_system");
+
+        i++;
+
+        fa->Tables[i] = (char *) NULL;
+
+        Ptables = (const char **) fa->Tables;
+
+        /* Extend the default SQL condition. */
+
+        if(condition)
+            fa->Condition = ajFmtString(
                 "%s "
                 "AND "
                 "%s.seq_region_id = seq_region.seq_region_id "
@@ -2208,8 +2517,8 @@ EnsPFeatureadaptor ensFeatureadaptorNew(
                 condition,
                 Ptables[0],
                 ensDatabaseadaptorGetIdentifier(dba));
-	else
-	    fa->Condition = ajFmtString(
+        else
+            fa->Condition = ajFmtString(
                 "%s.seq_region_id = "
                 "seq_region.seq_region_id "
                 "AND "
@@ -2218,38 +2527,40 @@ EnsPFeatureadaptor ensFeatureadaptorNew(
                 "coord_system.species_id = %u",
                 Ptables[0],
                 ensDatabaseadaptorGetIdentifier(dba));
-			     
-	condition = fa->Condition;
+
+        condition = fa->Condition;
     }
-    
-    fa->Adaptor = ensBaseadaptorNew(dba,
-				    Ptables,
-				    Pcolumns,
-				    left_join,
-				    condition,
-				    final,
-				    Fquery);
-    
-    fa->Cache = ensCacheNew(ensECacheTypeNumeric,
-			    featureAdaptorCacheMaxBytes,
-			    featureAdaptorCacheMaxCount,
-			    featureAdaptorCacheMaxSize,
-			    Freference,
-			    Fdelete,
-			    Fsize,
-			    Fread,
-			    Fwrite,
-			    ajFalse,
-			    label);
-    
+
+    fa->Adaptor = ensBaseadaptorNew(
+        dba,
+        Ptables,
+        Pcolumns,
+        leftjoin,
+        condition,
+        final,
+        Fquery);
+
+    fa->Cache = ensCacheNew(
+        ensECacheTypeNumeric,
+        featureadaptorCacheMaxBytes,
+        featureadaptorCacheMaxCount,
+        featureadaptorCacheMaxSize,
+        Freference,
+        Fdelete,
+        Fsize,
+        Fread,
+        Fwrite,
+        ajFalse,
+        label);
+
     fa->MaxFeatureLength = 0;
-    
+
     fa->GetFeature = Fgetfeature;
-    
+
     fa->Reference = Freference;
-    
+
     fa->Delete = Fdelete;
-    
+
     return fa;
 }
 
@@ -2266,8 +2577,7 @@ EnsPFeatureadaptor ensFeatureadaptorNew(
 **
 ** @nam3rule Del Destroy (free) an Ensembl Feature Adaptor object
 **
-** @argrule * Padaptor [EnsPFeatureadaptor*] Ensembl Feature Adaptor
-**                                           object address
+** @argrule * Pfa [EnsPFeatureadaptor*] Ensembl Feature Adaptor object address
 **
 ** @valrule * [void]
 **
@@ -2281,50 +2591,50 @@ EnsPFeatureadaptor ensFeatureadaptorNew(
 **
 ** Default destructor for an Ensembl Feature Adaptor.
 **
-** @param [d] Padaptor [EnsPFeatureadaptor*] Ensembl Feature Adaptor address
+** @param [d] Pfa [EnsPFeatureadaptor*] Ensembl Feature Adaptor address
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ensFeatureadaptorDel(EnsPFeatureadaptor *Padaptor)
+void ensFeatureadaptorDel(EnsPFeatureadaptor *Pfa)
 {
     register ajuint i = 0;
     EnsPFeatureadaptor pthis = NULL;
-    
-    if(!Padaptor)
-	return;
-    
-    if(!*Padaptor)
-	return;
 
-    pthis = *Padaptor;
-    
+    if(!Pfa)
+        return;
+
+    if(!*Pfa)
+        return;
+
+    pthis = *Pfa;
+
     ensBaseadaptorDel(&pthis->Adaptor);
-    
+
     ensCacheDel(&pthis->Cache);
-    
+
     /* Clear the array of table names. */
-    
+
     if(pthis->Tables)
     {
-	for(i = 0; (*Padaptor)->Tables[i]; i++)
-	    ajCharDel(&((*Padaptor)->Tables[i]));
-	
-	AJFREE((*Padaptor)->Tables);
+        for(i = 0; pthis->Tables[i]; i++)
+            ajCharDel(&pthis->Tables[i]);
+
+        AJFREE(pthis->Tables);
     }
-    
+
     /* Clear the default SQL condition. */
-    
+
     if(pthis->Condition)
     {
-	ajCharDel(&pthis->Condition);
+        ajCharDel(&pthis->Condition);
     }
-    
+
     AJFREE(pthis);
 
-    *Padaptor = NULL;
-    
+    *Pfa = NULL;
+
     return;
 }
 
@@ -2344,7 +2654,7 @@ void ensFeatureadaptorDel(EnsPFeatureadaptor *Padaptor)
 ** @nam4rule GetMaxFeatureLength Return the maximum Feature length
 ** @nam4rule GetDatabaseadaptor Return the Ensembl Database Adaptor
 **
-** @argrule * adaptor [const EnsPFeatureadaptor] Ensembl Feature Adaptor
+** @argrule * fa [const EnsPFeatureadaptor] Ensembl Feature Adaptor
 **
 ** @valrule Baseadaptor [EnsPBaseadaptor] Ensembl Base Adaptor
 ** @valrule Cache [EnsPCache] Ensembl Cache
@@ -2360,19 +2670,18 @@ void ensFeatureadaptorDel(EnsPFeatureadaptor *Padaptor)
 **
 ** Get the Ensembl Base Adaptor element of an Ensembl Feature Adaptor.
 **
-** @param [r] adaptor [const EnsPFeatureadaptor] Ensembl Feature Adaptor
+** @param [r] fa [const EnsPFeatureadaptor] Ensembl Feature Adaptor
 **
 ** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
 ** @@
 ******************************************************************************/
 
-EnsPBaseadaptor ensFeatureadaptorGetBaseadaptor(
-    const EnsPFeatureadaptor adaptor)
+EnsPBaseadaptor ensFeatureadaptorGetBaseadaptor(const EnsPFeatureadaptor fa)
 {
-    if(!adaptor)
-	return NULL;
-    
-    return adaptor->Adaptor;
+    if(!fa)
+        return NULL;
+
+    return fa->Adaptor;
 }
 
 
@@ -2382,18 +2691,18 @@ EnsPBaseadaptor ensFeatureadaptorGetBaseadaptor(
 **
 ** Get the Ensembl Cache element of an Ensembl Feature Adaptor.
 **
-** @param [r] adaptor [const EnsPFeatureadaptor] Ensembl Feature Adaptor
+** @param [r] fa [const EnsPFeatureadaptor] Ensembl Feature Adaptor
 **
 ** @return [EnsPCache] Ensembl Cache or NULL
 ** @@
 ******************************************************************************/
 
-EnsPCache ensFeatureadaptorGetCache(const EnsPFeatureadaptor adaptor)
+EnsPCache ensFeatureadaptorGetCache(const EnsPFeatureadaptor fa)
 {
-    if(!adaptor)
-	return NULL;
-    
-    return adaptor->Cache;
+    if(!fa)
+        return NULL;
+
+    return fa->Cache;
 }
 
 
@@ -2403,18 +2712,18 @@ EnsPCache ensFeatureadaptorGetCache(const EnsPFeatureadaptor adaptor)
 **
 ** Get the maximum Feature length element of an Ensembl Feature Adaptor.
 **
-** @param [r] adaptor [const EnsPFeatureadaptor] Ensembl Feature Adaptor
+** @param [r] fa [const EnsPFeatureadaptor] Ensembl Feature Adaptor
 **
 ** @return [ajuint] Maximum Feature length or 0
 ** @@
 ******************************************************************************/
 
-ajuint ensFeatureadaptorGetMaxFeatureLength(const EnsPFeatureadaptor adaptor)
+ajuint ensFeatureadaptorGetMaxFeatureLength(const EnsPFeatureadaptor fa)
 {
-    if(!adaptor)
-	return 0;
-    
-    return adaptor->MaxFeatureLength;
+    if(!fa)
+        return 0;
+
+    return fa->MaxFeatureLength;
 }
 
 
@@ -2425,19 +2734,19 @@ ajuint ensFeatureadaptorGetMaxFeatureLength(const EnsPFeatureadaptor adaptor)
 ** Get the Ensembl Database Adaptor element of the
 ** Ensembl Base Adaptor element of an Ensembl Feature Adaptor.
 **
-** @param [r] adaptor [const EnsPFeatureadaptor] Ensembl Feature Adaptor
+** @param [r] fa [const EnsPFeatureadaptor] Ensembl Feature Adaptor
 **
 ** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
 ** @@
 ******************************************************************************/
 
 EnsPDatabaseadaptor ensFeatureadaptorGetDatabaseadaptor(
-    const EnsPFeatureadaptor adaptor)
+    const EnsPFeatureadaptor fa)
 {
-    if(!adaptor)
-	return NULL;
-    
-    return ensBaseadaptorGetDatabaseadaptor(adaptor->Adaptor);
+    if(!fa)
+        return NULL;
+
+    return ensBaseadaptorGetDatabaseadaptor(fa->Adaptor);
 }
 
 
@@ -2457,7 +2766,7 @@ EnsPDatabaseadaptor ensFeatureadaptorGetDatabaseadaptor(
 ** @nam4rule SetDefaultCondition Set the default SQL condition
 ** @nam4rule SetFinalCondition Set the final SQL condition
 **
-** @argrule * adaptor [EnsPFeatureadaptor] Ensembl Feature Adaptor object
+** @argrule * fa [EnsPFeatureadaptor] Ensembl Feature Adaptor object
 **
 ** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -2471,21 +2780,21 @@ EnsPDatabaseadaptor ensFeatureadaptorGetDatabaseadaptor(
 **
 ** Set the maximum Feature length element of an Ensembl Feature Adaptor.
 **
-** @param [r] adaptor [EnsPFeatureadaptor] Ensembl Feature Adaptor
+** @param [u] fa [EnsPFeatureadaptor] Ensembl Feature Adaptor
 ** @param [r] length [ajuint] Maximum Feature length
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensFeatureadaptorSetMaximumFeatureLength(EnsPFeatureadaptor adaptor,
+AjBool ensFeatureadaptorSetMaximumFeatureLength(EnsPFeatureadaptor fa,
                                                 ajuint length)
 {
-    if(!adaptor)
-	return ajFalse;
-    
-    adaptor->MaxFeatureLength = length;
-    
+    if(!fa)
+        return ajFalse;
+
+    fa->MaxFeatureLength = length;
+
     return ajTrue;
 }
 
@@ -2504,61 +2813,61 @@ AjBool ensFeatureadaptorSetMaximumFeatureLength(EnsPFeatureadaptor adaptor,
 ** 'seq_region' and the 'coord_system' table, which contains the
 ** 'coord_system.species_id' field to the default SQL condition.
 **
-** @param [r] adaptor [EnsPFeatureadaptor] Ensembl Feature Adaptor
+** @param [u] fa [EnsPFeatureadaptor] Ensembl Feature Adaptor
 ** @param [r] Ptables [const char**] Table names
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensFeatureadaptorSetTables(EnsPFeatureadaptor adaptor,
+AjBool ensFeatureadaptorSetTables(EnsPFeatureadaptor fa,
                                   const char **Ptables)
 {
     register ajuint i = 0;
-    
+
     EnsPDatabaseadaptor dba = NULL;
-    
-    if(!adaptor)
-	return ajFalse;
-    
+
+    if(!fa)
+        return ajFalse;
+
     if(!Ptables)
-	return ajFalse;
-    
-    dba = ensFeatureadaptorGetDatabaseadaptor(adaptor);
-    
+        return ajFalse;
+
+    dba = ensFeatureadaptorGetDatabaseadaptor(fa);
+
     if(ensDatabaseadaptorGetMultiSpecies(dba))
     {
-	/* Clear the array of table names. */
-	
-	if(adaptor->Tables)
-	{
-	    for(i = 0; adaptor->Tables[i]; i++)
-		ajCharDel(&(adaptor->Tables[i]));
-	    
-	    AJFREE(adaptor->Tables);
-	}
-	
-	/* Extend the array of table names. */
-	
-	AJCNEW0(adaptor->Tables, sizeof (Ptables) + 2);
-	
-	for(i = 0; Ptables[i]; i++)
-	    adaptor->Tables[i] = ajCharNewC(Ptables[i]);
-	
-	adaptor->Tables[i] = ajCharNewC("seq_region");
-	
-	i++;
-	
-	adaptor->Tables[i] = ajCharNewC("coord_system");
-	
-	i++;
-	
-	adaptor->Tables[i] = (char *) NULL;
-	
-	Ptables = (const char **) adaptor->Tables;
+        /* Clear the array of table names. */
+
+        if(fa->Tables)
+        {
+            for(i = 0; fa->Tables[i]; i++)
+                ajCharDel(&fa->Tables[i]);
+
+            AJFREE(fa->Tables);
+        }
+
+        /* Extend the array of table names. */
+
+        AJCNEW0(fa->Tables, sizeof (Ptables) + 2);
+
+        for(i = 0; Ptables[i]; i++)
+            fa->Tables[i] = ajCharNewC(Ptables[i]);
+
+        fa->Tables[i] = ajCharNewC("seq_region");
+
+        i++;
+
+        fa->Tables[i] = ajCharNewC("coord_system");
+
+        i++;
+
+        fa->Tables[i] = (char *) NULL;
+
+        Ptables = (const char **) fa->Tables;
     }
-    
-    return ensBaseadaptorSetTables(adaptor->Adaptor, Ptables);
+
+    return ensBaseadaptorSetTables(fa->Adaptor, Ptables);
 }
 
 
@@ -2569,23 +2878,23 @@ AjBool ensFeatureadaptorSetTables(EnsPFeatureadaptor adaptor,
 ** Set the columns element of the Ensembl Base Adaptor element of an
 ** Ensembl Feature Adaptor.
 **
-** @param [r] adaptor [EnsPFeatureadaptor] Ensembl Feature Adaptor
+** @param [u] fa [EnsPFeatureadaptor] Ensembl Feature Adaptor
 ** @param [r] Pcolumns [const char**] Column names
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensFeatureadaptorSetColumns(EnsPFeatureadaptor adaptor,
+AjBool ensFeatureadaptorSetColumns(EnsPFeatureadaptor fa,
                                    const char **Pcolumns)
 {
-    if(!adaptor)
-	return ajFalse;
-    
+    if(!fa)
+        return ajFalse;
+
     if(!Pcolumns)
-	return ajFalse;
-    
-    return ensBaseadaptorSetColumns(adaptor->Adaptor, Pcolumns);
+        return ajFalse;
+
+    return ensBaseadaptorSetColumns(fa->Adaptor, Pcolumns);
 }
 
 
@@ -2603,32 +2912,32 @@ AjBool ensFeatureadaptorSetColumns(EnsPFeatureadaptor adaptor,
 ** 'seq_region' and the 'coord_system' table, which contains the
 ** 'coord_system.species_id' field to the default SQL condition.
 **
-** @param [r] adaptor [EnsPFeatureadaptor] Ensembl Feature Adaptor
-** @param [r] condition [const char *] Default SQL condition
+** @param [r] fa [EnsPFeatureadaptor] Ensembl Feature Adaptor
+** @param [r] condition [const char*] Default SQL condition
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensFeatureadaptorSetDefaultCondition(EnsPFeatureadaptor adaptor,
+AjBool ensFeatureadaptorSetDefaultCondition(EnsPFeatureadaptor fa,
                                             const char *condition)
 {
     EnsPDatabaseadaptor dba = NULL;
-    
-    if(!adaptor)
-	return ajFalse;
-    
+
+    if(!fa)
+        return ajFalse;
+
     if(ensDatabaseadaptorGetMultiSpecies(dba))
     {
-	/* Clear the default SQL condition. */
-	
-	if(adaptor->Condition)
-	    ajCharDel(&(adaptor->Condition));
-	
-	/* Extend the default SQL condition. */
-	
-	if(condition)
-	    adaptor->Condition = ajFmtString(
+        /* Clear the default SQL condition. */
+
+        if(fa->Condition)
+            ajCharDel(&fa->Condition);
+
+        /* Extend the default SQL condition. */
+
+        if(condition)
+            fa->Condition = ajFmtString(
                 "%s "
                 "AND "
                 "%s.seq_region_id = seq_region.seq_region_id "
@@ -2637,22 +2946,22 @@ AjBool ensFeatureadaptorSetDefaultCondition(EnsPFeatureadaptor adaptor,
                 "AND "
                 "coord_system.species_id = %u",
                 condition,
-                ensBaseadaptorGetPrimaryTable(adaptor->Adaptor),
+                ensBaseadaptorGetPrimaryTable(fa->Adaptor),
                 ensDatabaseadaptorGetIdentifier(dba));
-	else
-	    adaptor->Condition = ajFmtString(
+        else
+            fa->Condition = ajFmtString(
                 "%s.seq_region_id = seq_region.seq_region_id "
                 "AND "
                 "seq_region.coord_system_id = coord_system.coord_system_id "
                 "AND "
                 "coord_system.species_id = %u",
-                ensBaseadaptorGetPrimaryTable(adaptor->Adaptor),
+                ensBaseadaptorGetPrimaryTable(fa->Adaptor),
                 ensDatabaseadaptorGetIdentifier(dba));
-	
-	condition = adaptor->Condition;
+
+        condition = fa->Condition;
     }
-    
-    return ensBaseadaptorSetDefaultCondition(adaptor->Adaptor, condition);
+
+    return ensBaseadaptorSetDefaultCondition(fa->Adaptor, condition);
 }
 
 
@@ -2663,20 +2972,20 @@ AjBool ensFeatureadaptorSetDefaultCondition(EnsPFeatureadaptor adaptor,
 ** Set the final SQL condition element of the
 ** Ensembl Base Adaptor element of an Ensembl Base Adaptor.
 **
-** @param [r] adaptor [EnsPFeatureadaptor] Ensembl Feature Adaptor
-** @param [r] final [const char *] Final SQL condition
+** @param [r] fa [EnsPFeatureadaptor] Ensembl Feature Adaptor
+** @param [r] final [const char*] Final SQL condition
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensFeatureadaptorSetFinalCondition(EnsPFeatureadaptor adaptor,
+AjBool ensFeatureadaptorSetFinalCondition(EnsPFeatureadaptor fa,
                                           const char *final)
 {
-    if(!adaptor)
-	return ajFalse;
-    
-    return ensBaseadaptorSetFinalCondition(adaptor->Adaptor, final);
+    if(!fa)
+        return ajFalse;
+
+    return ensBaseadaptorSetFinalCondition(fa->Adaptor, final);
 }
 
 
@@ -2687,7 +2996,7 @@ AjBool ensFeatureadaptorSetFinalCondition(EnsPFeatureadaptor adaptor,
 ** Escape an AJAX String based on an AJAX SQL Connection.
 ** The caller is responsible for deleting the C-type character string.
 **
-** @param [u] adaptor [EnsPFeatureadaptor] Ensembl Feature Adaptor
+** @param [u] fa [EnsPFeatureadaptor] Ensembl Feature Adaptor
 ** @param [wP] Ptxt [char**] Address of the (new) SQL-escaped C string
 ** @param [r] str [const AjPStr] AJAX String to be escaped
 **
@@ -2695,29 +3004,26 @@ AjBool ensFeatureadaptorSetFinalCondition(EnsPFeatureadaptor adaptor,
 ** @@
 ******************************************************************************/
 
-AjBool ensFeatureadaptorEscapeC(EnsPFeatureadaptor adaptor,
+AjBool ensFeatureadaptorEscapeC(EnsPFeatureadaptor fa,
                                 char **Ptxt,
                                 const AjPStr str)
 {
-    if(!adaptor)
+    if(!fa)
         return ajFalse;
-    
+
     if(!str)
-	return ajFalse;
-    
-#if AJFALSE
-    ajDebug("ensFeatureadaptorEscapeC\n"
-            "  adaptor %p\n"
-            "  Ptxt %p\n"
-            "  str '%S'\n",
-            adaptor,
-            Ptxt,
-            str);
-    
-    ensFeatureadaptorTrace(adaptor, 1);
-#endif
-    
-    return ensBaseadaptorEscapeC(adaptor->Adaptor, Ptxt, str);
+        return ajFalse;
+
+    if(ajDebugTest("ensFeatureadaptorEscapeC"))
+        ajDebug("ensFeatureadaptorEscapeC\n"
+                "  fa %p\n"
+                "  Ptxt %p\n"
+                "  str '%S'\n",
+                fa,
+                Ptxt,
+                str);
+
+    return ensBaseadaptorEscapeC(fa->Adaptor, Ptxt, str);
 }
 
 
@@ -2728,7 +3034,7 @@ AjBool ensFeatureadaptorEscapeC(EnsPFeatureadaptor adaptor,
 ** Escape an AJAX String based on an AJAX SQL Connection.
 ** The caller is responsible for deleting the AJAX String.
 **
-** @param [u] adaptor [EnsPFeatureadaptor] Ensembl Feature Adaptor
+** @param [u] fa [EnsPFeatureadaptor] Ensembl Feature Adaptor
 ** @param [wP] Pstr [AjPStr*] Address of the (new) SQL-escaped AJAX String
 ** @param [r] str [const AjPStr] AJAX String to be escaped
 **
@@ -2736,40 +3042,37 @@ AjBool ensFeatureadaptorEscapeC(EnsPFeatureadaptor adaptor,
 ** @@
 ******************************************************************************/
 
-AjBool ensFeatureadaptorEscapeS(EnsPFeatureadaptor adaptor,
+AjBool ensFeatureadaptorEscapeS(EnsPFeatureadaptor fa,
                                 AjPStr *Pstr,
                                 const AjPStr str)
 {
-    if(!adaptor)
+    if(!fa)
         return ajFalse;
-    
+
     if(!str)
-	return ajFalse;
-    
-#if AJFALSE
-    ajDebug("ensFeatureadaptorEscapeS\n"
-            "  adaptor %p\n"
-            "  Pstr %p\n"
-            "  str '%S'\n",
-            adaptor,
-            Pstr,
-            str);
-    
-    ensFeatureadaptorTrace(adaptor, 1);
-#endif
-    
-    return ensBaseadaptorEscapeS(adaptor->Adaptor, Pstr, str);
+        return ajFalse;
+
+    if(ajDebugTest("ensFeatureadaptorEscapeS"))
+        ajDebug("ensFeatureadaptorEscapeS\n"
+                "  fa %p\n"
+                "  Pstr %p\n"
+                "  str '%S'\n",
+                fa,
+                Pstr,
+                str);
+
+    return ensBaseadaptorEscapeS(fa->Adaptor, Pstr, str);
 }
 
 
 
 
-/* @funcstatic featureAdaptorAnalysisNameToConstraint *************************
+/* @funcstatic featureadaptorAnalysisNameToConstraint *************************
 **
 ** Build an SQL statement constraint from an Ensembl Analysis name.
 **
 ** @cc Bio::EnsEMBL::DBSQL::BaseFeatureAdaptor::_logic_name_to_constraint
-** @param [r] adaptor [EnsPFeatureadaptor] Ensembl Feature Adaptor
+** @param [r] fa [const EnsPFeatureadaptor] Ensembl Feature Adaptor
 ** @param [u] Pconstraint [AjPStr*] Address of an AJAX String constraint that
 **                                  will be enhanced by Analysis-specific
 **                                  conditions
@@ -2783,116 +3086,112 @@ AjBool ensFeatureadaptorEscapeS(EnsPFeatureadaptor adaptor,
 ** constraint is added at all.
 ******************************************************************************/
 
-static AjBool featureAdaptorAnalysisNameToConstraint(
-    const EnsPFeatureadaptor adaptor,
+static AjBool featureadaptorAnalysisNameToConstraint(
+    const EnsPFeatureadaptor fa,
     AjPStr* Pconstraint,
     const AjPStr anname)
 {
     const char **columns = NULL;
     const char *table    = NULL;
-    
+
     register ajuint i = 0;
-    
+
     AjBool match = AJFALSE;
-    
-    EnsPAnalysis analysis = NULL;
+
+    EnsPAnalysis analysis  = NULL;
     EnsPAnalysisadaptor aa = NULL;
-    
+
     EnsPDatabaseadaptor dba = NULL;
-    
-#if AJFALSE
-    ajDebug("featureAdaptorAnalysisNameToConstraint\n"
-            "  adaptor %p\n"
-            "  *Pconstraint '%S'\n"
-            "  anname '%S'\n",
-            adaptor,
-            *Pconstraint,
-            anname);
-#endif
-    
-    if(!adaptor)
-	return ajFalse;
-    
+
+    if(!fa)
+        return ajFalse;
+
     if(!Pconstraint)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!anname)
-	return ajTrue;
-    
+        return ajTrue;
+
+    if(ajDebugTest("featureadaptorAnalysisNameToConstraint"))
+        ajDebug("featureadaptorAnalysisNameToConstraint\n"
+                "  fa %p\n"
+                "  *Pconstraint '%S'\n"
+                "  anname '%S'\n",
+                fa,
+                *Pconstraint,
+                anname);
+
     /*
     ** Check that the primary table, which is the first one in the list of
     ** tables (fa->Adaptor->Tables[0]), actually contains an 'analysis_id'
     ** column.
     */
-    
-    columns = ensBaseadaptorGetColumns(adaptor->Adaptor);
-    
-    table = ensBaseadaptorGetPrimaryTable(adaptor->Adaptor);
-    
+
+    columns = ensBaseadaptorGetColumns(fa->Adaptor);
+
+    table = ensBaseadaptorGetPrimaryTable(fa->Adaptor);
+
     while(columns[i])
     {
-	if(ajCharPrefixC(columns[i], table) &&
-	   ajCharSuffixC(columns[i], ".analysis_id"))
-	    match = ajTrue;
-	
-	i++;
+        if(ajCharPrefixC(columns[i], table) &&
+           ajCharSuffixC(columns[i], ".analysis_id"))
+            match = ajTrue;
+
+        i++;
     }
-    
+
     if(!match)
     {
-	ajWarn("featureAdaptorAnalysisNameToConstraint this Ensembl Feature "
-	       "is not associated with an Ensembl Analysis. "
-	       "Ignoring Analysis name argument '%S'.\n", anname);
-	
-	return ajFalse;
+        ajWarn("featureadaptorAnalysisNameToConstraint this Ensembl Feature "
+               "is not associated with an Ensembl Analysis. "
+               "Ignoring Analysis name argument '%S'.\n", anname);
+
+        return ajFalse;
     }
-    
-    dba = ensFeatureadaptorGetDatabaseadaptor(adaptor);
-    
+
+    dba = ensFeatureadaptorGetDatabaseadaptor(fa);
+
     aa = ensRegistryGetAnalysisadaptor(dba);
-    
+
     ensAnalysisadaptorFetchByName(aa, anname, &analysis);
-    
+
     if(!analysis)
-	return ajFalse;
-    
-    if(*Pconstraint)
-    {
-	if(ajStrGetLen(*Pconstraint))
-            ajStrAppendC(Pconstraint, " AND ");
-    }
+        return ajFalse;
+
+    if(*Pconstraint && ajStrGetLen(*Pconstraint))
+        ajStrAppendC(Pconstraint, " AND ");
     else
-	*Pconstraint = ajStrNew();
-    
+        *Pconstraint = ajStrNew();
+
     ajFmtPrintAppS(Pconstraint,
-		   "%s.analysis_id = %u",
-		   table,
-		   ensAnalysisGetIdentifier(analysis));
-    
+                   "%s.analysis_id = %u",
+                   table,
+                   ensAnalysisGetIdentifier(analysis));
+
     ensAnalysisDel(&analysis);
-    
+
     return ajTrue;
 }
 
 
 
 
-/* @funcstatic featureAdaptorRemap ********************************************
+/* @funcstatic featureadaptorRemap ********************************************
 **
 ** Remap Ensembl Objects based on Ensembl Features onto an Ensembl Slice.
 **
 ** @cc Bio::EnsEMBL::DBSQL::BaseFeatureAdaptor::_remap
-** @param [r] adaptor [EnsPFeatureadaptor] Ensembl Feature Adaptor
+** @param [u] fa [EnsPFeatureadaptor] Ensembl Feature Adaptor
 ** @param [u] objects [AjPList] AJAX List of Ensembl Objects based on
 **                              Ensembl Features
-** @param [rN] am [EnsPAssemblymapper] Ensembl Assembly Mapper
-** @param [r] slice [EnsPSlice] Ensembl Slice
+** @param [uN] am [EnsPAssemblymapper] Ensembl Assembly Mapper
+** @param [u] slice [EnsPSlice] Ensembl Slice
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-static AjBool featureAdaptorRemap(EnsPFeatureadaptor adaptor,
+static AjBool featureadaptorRemap(EnsPFeatureadaptor fa,
                                   AjPList objects,
                                   EnsPAssemblymapper am,
                                   EnsPSlice slice)
@@ -2900,206 +3199,215 @@ static AjBool featureAdaptorRemap(EnsPFeatureadaptor adaptor,
     ajint start  = 0;
     ajint end    = 0;
     ajint strand = 0;
-    
-    ajuint srcsrid = 0;
-    ajuint trgsrid = 0;
-    
+
+    ajuint srid = 0;
+
     void *Pobject = NULL;
-    
+
+    AjBool debug = AJFALSE;
+
     AjIList iter = NULL;
     AjPList mrs  = NULL;
-    
+
     EnsPFeature feature = NULL;
+
     EnsPMapperresult mr = NULL;
-    
-#if AJFALSE
-    ajDebug("featureAdaptorRemap\n"
-            "  adaptor %p\n"
-            "  objects %p\n"
-            "  am %p\n"
-            "  slice %p\n",
-            adaptor,
-            objects,
-            am,
-            slice);
-#endif
-    
-    if(!adaptor)
-	return ajFalse;
-    
-    if(!objects)
-	return ajFalse;
-    
-    /* FIXME: An Ensembl Assembly Mapper is not strictly required??? */
-#if AJFALSE
-    if (! am)
+
+    debug = ajDebugTest("featureadaptorRemap");
+
+    if(debug)
+        ajDebug("featureadaptorRemap\n"
+                "  fa %p\n"
+                "  objects %p\n"
+                "  am %p\n"
+                "  slice %p\n",
+                fa,
+                objects,
+                am,
+                slice);
+
+    if(!fa)
         return ajFalse;
-#endif
-    
+
+    if(!objects)
+        return ajFalse;
+
     if(!slice)
-	return ajFalse;
-    
-    /* If the List contains no Features remapping is not required. */
-    
-    if(!ajListGetLength(objects))
-	return ajTrue;
-    
+        return ajFalse;
+
     /*
-    ** If the Slice attached to the first Feature is identical to the Slice
-    ** the Features should be mapped to, remapping is not required.
+    ** Remapping is not required, if the AJAX List is empty or the Slice
+    ** attached to the first Feature is already identical to the Slice
+    ** the Features should be mapped to.
     */
-    
+
+    if(!ajListGetLength(objects))
+        return ajTrue;
+
     ajListPeekFirst(objects, (void **) &Pobject);
-    
-    feature = (*adaptor->GetFeature)(Pobject);
-    
-#if AJFALSE
-    ajDebug("featureAdaptorRemap got Ensembl Feature (%p)\n", feature);
-     
-    ensFeatureTrace(feature, 1);
-#endif
-    
+
+    feature = (*fa->GetFeature)(Pobject);
+
     if(ensSliceMatch(ensFeatureGetSlice(feature), slice))
-	return ajTrue;
-    
+        return ajTrue;
+
     /* Remapping has not been done, we have to do our own conversion. */
-    
-    trgsrid = ensSliceGetSeqregionIdentifier(slice);
-    
+
+    mrs = ajListNew();
+
     iter = ajListIterNew(objects);
-    
+
     while(!ajListIterDone(iter))
     {
-	Pobject = ajListIterGet(iter);
-	
-	feature = (*adaptor->GetFeature)(Pobject);
-	
-	/*
+        Pobject = ajListIterGet(iter);
+
+        feature = (*fa->GetFeature)(Pobject);
+
+        /*
         ** Since Features were obtained in contig coordinates, the attached
         ** Sequence Region is a contig.
         */
-	
-	if(!feature->Slice)
-	    ajFatal("featureAdaptorRemap Feature (%p) does not have a "
-		    "Slice attached.\n", feature);
-	
-	if(ensCoordsystemMatch(ensSliceGetCoordsystem(slice),
+
+        if(!feature->Slice)
+            ajFatal("featureadaptorRemap got an Ensembl Feature (%p) "
+                    "without an Ensembl Slice.\n", feature);
+
+        if(ensCoordsystemMatch(ensSliceGetCoordsystem(slice),
                                ensSliceGetCoordsystem(feature->Slice)))
-	{
-	    /*
-	    ** The Slice attached to the Feature is in the same
-	    ** Coordinate System as the target Slice, therefore remapping and
-	    ** an Ensembl Assembly Mapper are not required. Nevertheless,
-	    ** coordinates need still adjusting to the Slice.
-	    */
-	    
-	    start = feature->Start;
-	    
-	    end = feature->End;
-	    
-	    strand = feature->Strand;
-	    
-	    srcsrid = ensSliceGetSeqregionIdentifier(feature->Slice);
-	}
-	else
-	{
-	    /*
+        {
+            /*
+            ** The Slice attached to the Feature is in the same
+            ** Coordinate System as the target Slice, therefore remapping and
+            ** an Ensembl Assembly Mapper are not required. Nevertheless,
+            ** coordinates need still adjusting to the Slice.
+            */
+
+            srid   = ensSliceGetSeqregionIdentifier(feature->Slice);
+            start  = feature->Start;
+            end    = feature->End;
+            strand = feature->Strand;
+        }
+        else
+        {
+            /*
             ** The Slice attached to the Feature is in a different
-	    ** Coordinate System, therefore remapping is required.
-	    */
-	    
-	    if(!am)
-		ajFatal("featureAdaptorRemap requires an "
-			"Ensembl Assembly Mapper, when "
-			"Coordinate Systems of Features and Slice differ.\n");
-	    
-	    mrs = ajListNew();
-	    
-	    ensAssemblymapperFastMap(am,
-				     ensSliceGetSeqregion(feature->Slice),
-				     feature->Start,
-				     feature->End,
-				     feature->Strand,
-				     mrs);
-	    
-	    /*
-	    ** For successful mapping, the ensMapperFastMap function returns
-	    ** at maximum one Mapper Result List element.
-	    ** An empty List means a Gap so remove the Ensembl Object from
-	    ** the List and de-reference (delete) it.
-	    */
-	    
-	    if(ajListGetLength(mrs))
-		ajListPop(mrs, (void **) &mr);
-	    else
-	    {
-		ajListIterRemove(iter);
-		
-		(*adaptor->Delete)(&Pobject);
-		
-		continue;
-	    }
-	    
-	    start = ensMapperresultGetStart(mr);
-	    
-	    end = ensMapperresultGetEnd(mr);
-	    
-	    strand = ensMapperresultGetStrand(mr);
-	    
-	    srcsrid = ensMapperresultGetObjectIdentifier(mr);
-	    
-	    ensMapperresultDel(&mr);
-	    
-	    ajListFree(&mrs);
-	}
-	
-	if((srcsrid != trgsrid) ||
+            ** Coordinate System, therefore remapping is required.
+            */
+
+            if(!am)
+                ajFatal("featureadaptorRemap requires an "
+                        "Ensembl Assembly Mapper, when "
+                        "Coordinate Systems of Features and Slice differ.\n");
+
+            ensAssemblymapperFastMap(am,
+                                     ensSliceGetSeqregion(feature->Slice),
+                                     feature->Start,
+                                     feature->End,
+                                     feature->Strand,
+                                     mrs);
+
+            /*
+            ** The ensMapperFastMap function returns at maximum one Ensembl
+            ** Mapper Result. An empty AJAX List of Ensembl Mapper Results
+            ** means a gap, so remove the Ensembl Object from the AJAX List
+            ** of Ensembl Objects and delete it.
+            */
+
+            if(ajListGetLength(mrs))
+            {
+                ajListPeekFirst(mrs, (void **) &mr);
+
+                srid   = ensMapperresultGetObjectIdentifier(mr);
+                start  = ensMapperresultGetStart(mr);
+                end    = ensMapperresultGetEnd(mr);
+                strand = ensMapperresultGetStrand(mr);
+
+                while(ajListPop(mrs, (void **) &mr))
+                    ensMapperresultDel(&mr);
+            }
+            else
+            {
+                if(debug)
+                {
+                    ajDebug("featureadaptorRemap deleted Ensembl Object (%p), "
+                            "which associated Ensembl Feature (%p) maps into "
+                            "a gap.\n", Pobject, feature);
+
+                    ensFeatureTrace(feature, 1);
+                }
+
+                ajListIterRemove(iter);
+
+                (*fa->Delete)(&Pobject);
+
+                continue;
+            }
+        }
+
+        /*
+        ** If the Ensembl Feature maps to a region outside the desired area,
+        ** remove the Ensembl Object from the AJAX List of Ensembl Objects
+        ** and delete it.
+        */
+
+        if((srid != ensSliceGetSeqregionIdentifier(slice)) ||
            (start > ensSliceGetEnd(slice)) ||
-           (end < ensSliceGetStart(slice)))
-	{
-	    /*
-	    ** Since the Feature maps to a region outside the desired area,
-	    ** remove the Ensembl Object from the AJAX List and delete it.
-	    */
-	    
-	    ajListIterRemove(iter);
-	    
-	    (*adaptor->Delete)(&Pobject);
-	    
-	    continue;
-	}
-	
-	/* Shift the Feature start, end and strand in one call. */
-	
-	if(ensSliceGetStrand(slice) > 0)
-	    ensFeatureMove(feature,
-			   start - ensSliceGetStart(slice) + 1,
-			   end - ensSliceGetStart(slice) + 1,
-			   strand);
-	else
-	    ensFeatureMove(feature,
-			   ensSliceGetEnd(slice) - end + 1,
-			   ensSliceGetEnd(slice) - start + 1,
-			   strand * -1);
-	
-	ensFeatureSetSlice(feature, slice);
+           (end   < ensSliceGetStart(slice)))
+        {
+            if(debug)
+            {
+                ajDebug("featureadaptorRemap deleted Ensembl Object (%p), "
+                        "which associated Ensembl Feature (%p:%u:%d:%d:%d) "
+                        "maps outside the requested region %u:%d:%d:%d.\n",
+                        Pobject, feature, srid, start, end, strand,
+                        ensSliceGetSeqregionIdentifier(slice),
+                        ensSliceGetStart(slice),
+                        ensSliceGetEnd(slice),
+                        ensSliceGetStrand(slice));
+
+                ensFeatureTrace(feature, 1);
+            }
+
+            ajListIterRemove(iter);
+
+            (*fa->Delete)(&Pobject);
+
+            continue;
+        }
+
+        /* Shift the Feature start, end and strand in one call. */
+
+        if(ensSliceGetStrand(slice) > 0)
+            ensFeatureMove(feature,
+                           start - ensSliceGetStart(slice) + 1,
+                           end   - ensSliceGetStart(slice) + 1,
+                           +strand);
+        else
+            ensFeatureMove(feature,
+                           ensSliceGetEnd(slice) - end   + 1,
+                           ensSliceGetEnd(slice) - start + 1,
+                           -strand);
+
+        ensFeatureSetSlice(feature, slice);
     }
-    
+
     ajListIterDel(&iter);
-    
+
+    ajListFree(&mrs);
+
     return ajTrue;
 }
 
 
 
 
-/* @funcstatic featureAdaptorSliceFetch ***************************************
+/* @funcstatic featureadaptorSliceFetch ***************************************
 **
 ** Helper function used by ensFeatureadaptorFetchAllBySliceConstraint.
 **
 ** @cc Bio::EnsEMBL::DBSQL::BaseFeatureAdaptor::_slice_fetch
-** @param [u] adaptor [EnsPFeatureadaptor] Ensembl Feature Adaptor
-** @param [r] slice [EnsPSlice] Ensembl Slice
+** @param [u] fa [EnsPFeatureadaptor] Ensembl Feature Adaptor
+** @param [u] slice [EnsPSlice] Ensembl Slice
 ** @param [r] constraint [AjPStr] SQL statement constraint
 ** @param [r] objects [AjPList] AJAX List of Ensembl Objects
 **
@@ -3107,400 +3415,411 @@ static AjBool featureAdaptorRemap(EnsPFeatureadaptor adaptor,
 ** @@
 ******************************************************************************/
 
-static AjBool featureAdaptorSliceFetch(EnsPFeatureadaptor adaptor,
+static AjBool featureadaptorSliceFetch(EnsPFeatureadaptor fa,
                                        EnsPSlice slice,
                                        AjPStr constraint,
                                        AjPList objects)
 {
     const char *table = NULL;
-    
+
     ajuint mrslength = 0;
     ajuint srid = 0;
-    
+
+    AjBool toplevel = AJFALSE;
+
     AjIList iter = NULL;
-    
-    AjPList cslist = NULL;
-    AjPList mis    = NULL; /* Meta-Informations */
-    AjPList mrs    = NULL; /* Mapper Results */
-    AjPList pos    = NULL; /* Primary Objects */
-    
+
+    AjPList css = NULL; /* Coordinate Systems */
+    AjPList mis = NULL; /* Meta-Informations */
+    AjPList mrs = NULL; /* Mapper Results */
+    AjPList pos = NULL; /* Primary Objects */
+
     AjPStr key       = NULL;
     AjPStr tmpconstr = NULL;
     AjPStr tmpstr    = NULL;
-    
+
     EnsPAssemblymapper am         = NULL;
     EnsPAssemblymapperadaptor ama = NULL;
-    
-    EnsPCoordsystem ftcs       = NULL;
+
+    EnsPCoordsystem cs         = NULL;
     EnsPCoordsystemadaptor csa = NULL;
-    
+
     EnsPDatabaseadaptor dba = NULL;
-    
+
     EnsPMapperresult mr = NULL;
-    
+
     EnsPMetainformation mi         = NULL;
     EnsPMetainformationadaptor mia = NULL;
-    
+
     EnsPMetacoordinateadaptor mca = NULL;
-    
-#if AJFALSE
-    ajDebug("featureAdaptorSliceFetch\n"
-            "  adaptor %p\n"
-            "  slice %p\n"
-            "  constraint '%S'\n"
-            "  objects %p\n",
-            adaptor,
-            slice,
-            constraint,
-            objects);
-#endif
-    
-    if(!adaptor)
-	return ajFalse;
-    
+
+    if(ajDebugTest("featureadaptorSliceFetch"))
+        ajDebug("featureadaptorSliceFetch\n"
+                "  fa %p\n"
+                "  slice %p\n"
+                "  constraint '%S'\n"
+                "  objects %p\n",
+                fa,
+                slice,
+                constraint,
+                objects);
+
+    if(!fa)
+        return ajFalse;
+
     if(!slice)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!constraint)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!objects)
-	return ajFalse;
-    
-    if(!adaptor->Adaptor)
+        return ajFalse;
+
+    if(!fa->Adaptor)
     {
-	ajDebug("featureAdaptorSliceFetch got Ensembl Feature Adaptor "
-		"without an Ensembl Base Adaptor.\n");
-	
-	return ajFalse;
+        ajDebug("featureadaptorSliceFetch got Ensembl Feature Adaptor "
+                "without an Ensembl Base Adaptor.\n");
+
+        return ajFalse;
     }
-    
-    dba = ensFeatureadaptorGetDatabaseadaptor(adaptor);
-    
+
+    dba = ensFeatureadaptorGetDatabaseadaptor(fa);
+
     if(!dba)
     {
-	ajDebug("featureAdaptorSliceFetch got Ensembl Feature Adaptor "
-		"without an Ensembl Database Adaptor.\n");
-	
-	return ajFalse;
+        ajDebug("featureadaptorSliceFetch got Ensembl Feature Adaptor "
+                "without an Ensembl Database Adaptor.\n");
+
+        return ajFalse;
     }
-    
+
+    if(!ensSliceIsTopLevel(slice, &toplevel))
+    {
+        ajDebug("featureadaptorSliceFetch could not call ensSliceIsTopLevel "
+                "successfully.\n");
+
+        ensSliceTrace(slice, 1);
+
+        return ajFalse;
+    }
+
     ama = ensRegistryGetAssemblymapperadaptor(dba);
-    
+
     csa = ensRegistryGetCoordsystemadaptor(dba);
-    
+
     mia = ensRegistryGetMetainformationadaptor(dba);
-    
+
     mca = ensRegistryGetMetacoordinateadaptor(dba);
-    
+
     /*
     ** Fetch the *build.level Ensembl Meta-Information entry, which specifies
     ** in which Coordinate System this particular Feature has been annotated.
     */
-    
-    table = ensBaseadaptorGetPrimaryTable(adaptor->Adaptor);
-    
+
+    table = ensBaseadaptorGetPrimaryTable(fa->Adaptor);
+
     key = ajFmtStr("%sbuild.level", table);
-    
+
     mis = ajListNew();
-    
+
     ensMetainformationadaptorFetchAllByKey(mia, key, mis);
-    
+
     ajStrAssignC(&key, table);
-    
-    cslist = ajListNew();
-    
-    if(ajListGetLength(mis) && ensSliceIsTopLevel(slice))
-	ajListPushAppend(cslist, (void *)
-			 ensCoordsystemNewRef(ensSliceGetCoordsystem(slice)));
+
+    css = ajListNew();
+
+    if(ajListGetLength(mis) && toplevel)
+        ajListPushAppend(css, (void *)
+                         ensCoordsystemNewRef(ensSliceGetCoordsystem(slice)));
     else
-	ensMetacoordinateadaptorFetchAllCoordsystems(mca, key, cslist);
-    
+        ensMetacoordinateadaptorFetchAllCoordsystems(mca, key, css);
+
     while(ajListPop(mis, (void **) &mi))
-	ensMetainformationDel(&mi);
-    
+        ensMetainformationDel(&mi);
+
     ajListFree(&mis);
-    
+
     ajStrDel(&key);
-    
+
     /*
     ** Fetch the Features for each Coordinate System they are stored in.
     ** This may require projecting the Slice for which the Features have been
     ** requested into the Coordinate System they have been annotated in.
     */
-    
-    while(ajListPop(cslist, (void **) &ftcs))
+
+    while(ajListPop(css, (void **) &cs))
     {
-	if(ensCoordsystemMatch(ftcs, ensSliceGetCoordsystem(slice)))
-	{
-	    /*
-	    ** No mapping is required as the Coordinate Systems of Feature
-	    ** and Slice are identical.
-	    */
-	    
-	    if(! adaptor->MaxFeatureLength)
-	    {
-		key = ajStrNewC(table);
-		
-		adaptor->MaxFeatureLength =
-		    ensMetacoordinateadaptorGetMaximumLength(mca, ftcs, key);
-		
-		ajStrDel(&key);
-	    }
-	    
-	    /* Use external Ensembl Sequence Region identifiers if present. */
-	    
-	    srid = ensSliceGetSeqregionIdentifier(slice);
-	    
-	    srid = ensCoordsystemadaptorGetExternalSeqregionIdentifier(csa,
-								       srid);
-	    
-	    tmpconstr = ajStrNewS(constraint);
-	    
-	    if(ajStrGetLen(tmpconstr))
-		ajStrAppendC(&tmpconstr, " AND ");
-	    
-	    ajFmtPrintAppS(&tmpconstr,
-			   "%s.seq_region_id = %u "
-			   "AND "
-			   "%s.seq_region_start <= %d "
-			   "AND "
-			   "%s.seq_region_end >= %d",
-			   table, srid,
-			   table, ensSliceGetEnd(slice),
-			   table, ensSliceGetStart(slice));
-	    
-	    if(adaptor->MaxFeatureLength)
-		ajFmtPrintAppS(&tmpconstr,
-			       " AND "
-			       "%s.seq_region_start >= %d",
-			       table,
-			       ensSliceGetStart(slice) -
-			       (ajint) adaptor->MaxFeatureLength);
-	    
-	    /* FIXME: (ajint) adaptor->MaxFeatureLength remains a problem! */
-	    
-	    pos = ajListNew();
-	    
-	    ensBaseadaptorGenericFetch(adaptor->Adaptor,
-				       tmpconstr,
-				       (EnsPAssemblymapper) NULL,
-				       slice,
-				       pos);
-	    
-	    /*
-	    ** Features may still have to have coordinates made relative to
-	    ** the Slice start.
-	    */
-	    
-	    /*
-	    ** FIXME: The following mapper does not seem to be defined in the
-	    ** Perl API, when no mapping is needed. Why is there no error?
-	    ** _remap tests whether Coordinate Systems are not equal and only
-	    ** executes the mapper code when the Coordinate Systems are not
-	    ** equal, but that is exactly not the case when no mapping is
-	    ** required.
-	    */
-	    
-	    featureAdaptorRemap(adaptor,
-				pos,
-				(EnsPAssemblymapper) NULL,
-				slice);
-	    
-	    ajListPushlist(objects, &pos);
-	    
-	    ajStrDel(&tmpconstr);
-	}
-	else
-	{
-	    /*
-	    ** Mapping is required as the Coordinate Systems of Feature and
-	    ** Slice Coordinate Systems differ.
-	    */
-	    
-	    am = ensAssemblymapperadaptorFetchByCoordsystems(
+        if(ensCoordsystemMatch(cs, ensSliceGetCoordsystem(slice)))
+        {
+            /*
+            ** No mapping is required as the Coordinate Systems of Feature
+            ** and Slice are identical.
+            */
+
+            if(!fa->MaxFeatureLength)
+            {
+                key = ajStrNewC(table);
+
+                fa->MaxFeatureLength =
+                    ensMetacoordinateadaptorGetMaximumlength(mca, cs, key);
+
+                ajStrDel(&key);
+            }
+
+            /* Use external Ensembl Sequence Region identifiers if present. */
+
+            srid = ensSliceGetSeqregionIdentifier(slice);
+
+            srid = ensCoordsystemadaptorGetExternalSeqregionIdentifier(csa,
+                                                                       srid);
+
+            tmpconstr = ajStrNewS(constraint);
+
+            if(ajStrGetLen(tmpconstr))
+                ajStrAppendC(&tmpconstr, " AND ");
+
+            ajFmtPrintAppS(&tmpconstr,
+                           "%s.seq_region_id = %u "
+                           "AND "
+                           "%s.seq_region_start <= %d "
+                           "AND "
+                           "%s.seq_region_end >= %d",
+                           table, srid,
+                           table, ensSliceGetEnd(slice),
+                           table, ensSliceGetStart(slice));
+
+            if(fa->MaxFeatureLength)
+                ajFmtPrintAppS(&tmpconstr,
+                               " AND "
+                               "%s.seq_region_start >= %d",
+                               table,
+                               ensSliceGetStart(slice) -
+                               (ajint) fa->MaxFeatureLength);
+
+            /* FIXME: (ajint) adaptor->MaxFeatureLength remains a problem! */
+
+            pos = ajListNew();
+
+            ensBaseadaptorGenericFetch(fa->Adaptor,
+                                       tmpconstr,
+                                       (EnsPAssemblymapper) NULL,
+                                       slice,
+                                       pos);
+
+            /*
+            ** Features may still have to have coordinates made relative to
+            ** the Slice start.
+            */
+
+            /*
+            ** FIXME: The following mapper does not seem to be defined in the
+            ** Perl API, when no mapping is needed. Why is there no error?
+            ** _remap tests whether Coordinate Systems are not equal and only
+            ** executes the mapper code when the Coordinate Systems are not
+            ** equal, but that is exactly not the case when no mapping is
+            ** required.
+            */
+
+            featureadaptorRemap(fa,
+                                pos,
+                                (EnsPAssemblymapper) NULL,
+                                slice);
+
+            ajListPushlist(objects, &pos);
+
+            ajStrDel(&tmpconstr);
+        }
+        else
+        {
+            /*
+            ** Mapping is required as the Coordinate Systems of Feature and
+            ** Slice Coordinate Systems differ.
+            */
+
+            am = ensAssemblymapperadaptorFetchByCoordsystems(
                 ama,
-                ftcs,
+                cs,
                 ensSliceGetCoordsystem(slice));
-	    
-	    if(!am)
-	    {
-		ensCoordsystemDel(&ftcs);
-		
-		continue;
-	    }
-	    
-	    mrs = ajListNew();
-	    
-	    /*
-	    ** Get the list of coordinates and corresponding internal
-	    ** identifiers for the regions the Slice spans.
-	    */
-	    
-	    ensAssemblymapperMap(am,
-				 ensSliceGetSeqregion(slice),
-				 ensSliceGetStart(slice),
-				 ensSliceGetEnd(slice),
-				 ensSliceGetStrand(slice),
-				 mrs);
-	    
-	    iter = ajListIterNew(mrs);
-	    
-	    while(!ajListIterDone(iter))
-	    {
-		mr = (EnsPMapperresult) ajListIterGet(iter);
-		
-		/* Remove all Ensembl Mapper Results that represent gaps. */
-		
-		if(ensMapperresultGetType(mr) == ensEMapperresultGap)
-		{
-		    ajListIterRemove(iter);
-		    
-		    ensMapperresultDel(&mr);
-		}
-	    }
-	    
-	    ajListIterDel(&iter);
-	    
-	    mrslength = ajListGetLength(mrs);
-	    
-	    if(!mrslength)
-	    {
-		ensCoordsystemDel(&ftcs);
-		
-		continue;
-	    }
-	    
-	    /*
-	    ** When regions are large and only partially spanned by a Slice
-	    ** it is faster to limit the query with start and end constraints.
-	    ** Take a simple approach and use regional constraints if there
-	    ** are less than a specific number of regions covered.
-	    */
-	    
-	    if(mrslength > ensFeatureadaptorMaxSplitQuerySeqregions)
-	    {
-		tmpconstr = ajStrNewS(constraint);
-		
-		if(ajStrGetLen(tmpconstr))
-		    ajStrAppendC(&tmpconstr, " AND ");
-		
-		tmpstr = ajStrNew();
-		
-		while(ajListPop(mrs, (void **) &mr))
-		{
-		    ajFmtPrintAppS(&tmpstr,
-				   "%u, ",
-				   ensMapperresultGetObjectIdentifier(mr));
-		    
-		    ensMapperresultDel(&mr);
-		}
-		
-		/* Remove last comma and space. */
-		
-		ajStrCutEnd(&tmpstr, 2);
-		
-		ajFmtPrintAppS(&tmpconstr,
-			       "%s.seq_region_id IN (%S)",
-			       table,
-			       tmpstr);
-		
-		ajStrDel(&tmpstr);
-		
-		pos = ajListNew();
-		
-		ensBaseadaptorGenericFetch(adaptor->Adaptor,
-					   tmpconstr,
-					   am,
-					   slice,
-					   pos);
-		
-		featureAdaptorRemap(adaptor, pos, am, slice);
-		
-		ajListPushlist(objects, &pos);
-		
-		ajStrDel(&tmpconstr);
-	    }
-	    else
-	    {
-		/*
-		** Run multiple split queries using
-		** start and end constraints.
-		*/
-		
-		if(!adaptor->MaxFeatureLength)
-		{
-		    key = ajStrNewC(table);
-		    
-		    adaptor->MaxFeatureLength =
-			ensMetacoordinateadaptorGetMaximumLength(mca,
-								 ftcs,
-								 key);
-		    
-		    ajStrDel(&key);
-		}
-		
-		while(ajListPop(mrs, (void **) &mr))
-		{
-		    tmpconstr = ajStrNewS(constraint);
-		    
-		    if(ajStrGetLen(tmpconstr))
-			ajStrAppendC(&tmpconstr, " AND ");
-		    
-		    ajFmtPrintAppS(&tmpconstr,
-				   "%s.seq_region_id = %u "
-				   "AND "
-				   "%s.seq_region_start <= %d "
-				   "AND "
-				   "%s.seq_region_end >= %d",
-				   table,
-				   ensMapperresultGetObjectIdentifier(mr),
-				   table,
-				   ensMapperresultGetStart(mr),
-				   table,
-				   ensMapperresultGetEnd(mr));
-		    
-		    if(adaptor->MaxFeatureLength)
-			ajFmtPrintAppS(&tmpconstr,
-				       " AND "
-				       "%s.seq_region_start >= %d",
-				       table,
-				       ensMapperresultGetStart(mr) -
-				       (ajint) adaptor->MaxFeatureLength);
-		    
-		    /*
-                    ** FIXME: (ajint) adaptor->MaxFeatureLength remains
+
+            if(!am)
+            {
+                ensCoordsystemDel(&cs);
+
+                continue;
+            }
+
+            mrs = ajListNew();
+
+            /*
+            ** Get the list of coordinates and corresponding internal
+            ** identifiers for the regions the Slice spans.
+            */
+
+            ensAssemblymapperMap(am,
+                                 ensSliceGetSeqregion(slice),
+                                 ensSliceGetStart(slice),
+                                 ensSliceGetEnd(slice),
+                                 ensSliceGetStrand(slice),
+                                 mrs);
+
+            iter = ajListIterNew(mrs);
+
+            while(!ajListIterDone(iter))
+            {
+                mr = (EnsPMapperresult) ajListIterGet(iter);
+
+                /* Remove all Ensembl Mapper Results that represent gaps. */
+
+                if(ensMapperresultGetType(mr) == ensEMapperresultGap)
+                {
+                    ajListIterRemove(iter);
+
+                    ensMapperresultDel(&mr);
+                }
+            }
+
+            ajListIterDel(&iter);
+
+            mrslength = ajListGetLength(mrs);
+
+            if(!mrslength)
+            {
+                ensCoordsystemDel(&cs);
+
+                continue;
+            }
+
+            /*
+            ** When regions are large and only partially spanned by a Slice
+            ** it is faster to limit the query with start and end constraints.
+            ** Take a simple approach and use regional constraints if there
+            ** are less than a specific number of regions covered.
+            */
+
+            if(mrslength > featureadaptorMaxSplitQuerySeqregions)
+            {
+                tmpconstr = ajStrNewS(constraint);
+
+                if(ajStrGetLen(tmpconstr))
+                    ajStrAppendC(&tmpconstr, " AND ");
+
+                tmpstr = ajStrNew();
+
+                while(ajListPop(mrs, (void **) &mr))
+                {
+                    ajFmtPrintAppS(&tmpstr,
+                                   "%u, ",
+                                   ensMapperresultGetObjectIdentifier(mr));
+
+                    ensMapperresultDel(&mr);
+                }
+
+                /* Remove last comma and space. */
+
+                ajStrCutEnd(&tmpstr, 2);
+
+                ajFmtPrintAppS(&tmpconstr,
+                               "%s.seq_region_id IN (%S)",
+                               table,
+                               tmpstr);
+
+                ajStrDel(&tmpstr);
+
+                pos = ajListNew();
+
+                ensBaseadaptorGenericFetch(fa->Adaptor,
+                                           tmpconstr,
+                                           am,
+                                           slice,
+                                           pos);
+
+                featureadaptorRemap(fa, pos, am, slice);
+
+                ajListPushlist(objects, &pos);
+
+                ajStrDel(&tmpconstr);
+            }
+            else
+            {
+                /*
+                ** Run multiple split queries using
+                ** start and end constraints.
+                */
+
+                if(!fa->MaxFeatureLength)
+                {
+                    key = ajStrNewC(table);
+
+                    fa->MaxFeatureLength =
+                        ensMetacoordinateadaptorGetMaximumlength(mca,
+                                                                 cs,
+                                                                 key);
+
+                    ajStrDel(&key);
+                }
+
+                while(ajListPop(mrs, (void **) &mr))
+                {
+                    tmpconstr = ajStrNewS(constraint);
+
+                    if(ajStrGetLen(tmpconstr))
+                        ajStrAppendC(&tmpconstr, " AND ");
+
+                    ajFmtPrintAppS(&tmpconstr,
+                                   "%s.seq_region_id = %u "
+                                   "AND "
+                                   "%s.seq_region_start <= %d "
+                                   "AND "
+                                   "%s.seq_region_end >= %d",
+                                   table,
+                                   ensMapperresultGetObjectIdentifier(mr),
+                                   table,
+                                   ensMapperresultGetStart(mr),
+                                   table,
+                                   ensMapperresultGetEnd(mr));
+
+                    if(fa->MaxFeatureLength)
+                        ajFmtPrintAppS(&tmpconstr,
+                                       " AND "
+                                       "%s.seq_region_start >= %d",
+                                       table,
+                                       ensMapperresultGetStart(mr) -
+                                       (ajint) fa->MaxFeatureLength);
+
+                    /*
+                    ** FIXME: (ajint) fa->MaxFeatureLength remains
                     ** a problem!
                     */
-		    
-		    pos = ajListNew();
-		    
-		    ensBaseadaptorGenericFetch(adaptor->Adaptor,
-					       tmpconstr,
-					       am,
-					       slice,
-					       pos);
-		    
-		    ajStrDel(&tmpconstr);
-		    
-		    featureAdaptorRemap(adaptor, pos, am, slice);
-		    
-		    ajListPushlist(objects, &pos);
-		    
-		    ensMapperresultDel(&mr);
-		}
-	    }
-	    
-	    ajListFree(&mrs);
-	    
-	    ensAssemblymapperDel(&am);
-	}
-	
-	ensCoordsystemDel(&ftcs);
+
+                    pos = ajListNew();
+
+                    ensBaseadaptorGenericFetch(fa->Adaptor,
+                                               tmpconstr,
+                                               am,
+                                               slice,
+                                               pos);
+
+                    ajStrDel(&tmpconstr);
+
+                    featureadaptorRemap(fa, pos, am, slice);
+
+                    ajListPushlist(objects, &pos);
+
+                    ensMapperresultDel(&mr);
+                }
+            }
+
+            ajListFree(&mrs);
+
+            ensAssemblymapperDel(&am);
+        }
+
+        ensCoordsystemDel(&cs);
     }
-    
-    ajListFree(&cslist);
-    
+
+    ajListFree(&css);
+
     return ajTrue;
 }
 
@@ -3522,7 +3841,7 @@ static AjBool featureAdaptorSliceFetch(EnsPFeatureadaptor adaptor,
 ** @nam4rule FetchBy Retrieve one Ensembl Feature object
 **                   matching a criterion
 **
-** @argrule * adaptor [const EnsPFeatureadaptor] Ensembl Feature Adaptor
+** @argrule * fa [const EnsPFeatureadaptor] Ensembl Feature Adaptor
 ** @argrule FetchAll [AjPList] AJAX List of Ensembl Objects based on
 **                             Ensembl Features
 **
@@ -3540,209 +3859,181 @@ static AjBool featureAdaptorSliceFetch(EnsPFeatureadaptor adaptor,
 ** SQL constraint on an Ensembl Slice.
 **
 ** @cc Bio::EnsEMBL::DBSQL::BaseFeatureAdaptor::fetch_all_by_Slice_constraint
-** @param [u] adaptor [EnsPFeatureadaptor] Ensembl Feature Adaptor
-** @param [r] slice [EnsPSlice] Ensembl Slice
-** @param [r] constraint [const AjPStr] SQL constraint
-** @param [r] anname [const AjPStr] Ensembl Analysis name
+** @param [u] fa [EnsPFeatureadaptor] Ensembl Feature Adaptor
+** @param [u] slice [EnsPSlice] Ensembl Slice
+** @param [rN] constraint [const AjPStr] SQL constraint
+** @param [rN] anname [const AjPStr] Ensembl Analysis name
 ** @param [u] objects [AjPList] AJAX List of Ensembl Objects based on
 **                              Ensembl Features
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
+** NOTE: This implementation of the Ensembl Base Feature Adaptor does not
+** cache Ensembl Features indexed by complete SQL queries in their Slice
+** context. The class polymorhism required to do this is difficult to
+** implement in ANSI C. Additionally, SQL queries are cached by the RDBMS
+** instance.
 ******************************************************************************/
 
-AjBool ensFeatureadaptorFetchAllBySliceConstraint(EnsPFeatureadaptor adaptor,
+AjBool ensFeatureadaptorFetchAllBySliceConstraint(EnsPFeatureadaptor fa,
                                                   EnsPSlice slice,
                                                   const AjPStr constraint,
                                                   const AjPStr anname,
                                                   AjPList objects)
 {
+    ajint boundary = 0;
+
     ajuint srid    = 0;
     ajuint pssrid = 0;
-    
-    ajint *Pboundary = NULL;
-    
+
     void *Pobject = NULL;
-    
-    /* AjIList iter = NULL; */
-    AjIList bditer = NULL;
+
+    AjBool debug = AJFALSE;
+
     AjIList ftiter = NULL;
     AjIList psiter = NULL;
-    
-    AjPList list       = NULL;
-    AjPList pslist     = NULL;
-    AjPList srpslist   = NULL;
-    AjPList boundaries = NULL;
-    
+
+    AjPList slpss = NULL; /* Slice Projection Segments */
+    AjPList srpss = NULL; /* Sequence Region Projection Segments */
+
     AjPStr constr = NULL;
-    AjPStr key    = NULL;
-    
+
     EnsPDatabaseadaptor dba = NULL;
-    
-    EnsPFeature ft = NULL;
-    
-    EnsPProjectionsegment ps = NULL;
-    
+
+    EnsPFeature feature = NULL;
+
+    EnsPProjectionsegment slps = NULL; /* Slice Projection Segment */
+    EnsPProjectionsegment srps = NULL; /* Sequence Region Projection Segment */
+
     EnsPSlice psslice   = NULL;
     EnsPSlice srslice   = NULL;
     EnsPSliceadaptor sa = NULL;
-    
-#if AJFALSE
-    ajDebug("ensFeatureadaptorFetchAllBySliceConstraint\n"
-            "  adaptor %p\n"
-            "  slice %p\n"
-            "  constraint '%S'\n"
-            "  anname '%S'\n"
-            "  objects %p\n",
-            adaptor,
-            slice,
-            constraint,
-            anname,
-            objects);
-     
-    ensSliceTrace(slice, 1);
-#endif
-    
-    if(!adaptor)
-	return ajFalse;
-    
-    if(!slice)
-	return ajFalse;
-    
-    if(!adaptor->Adaptor)
+
+    debug = ajDebugTest("ensFeatureadaptorFetchAllBySliceConstraint");
+
+    if(debug)
     {
-	ajDebug("ensFeatureadaptorFetchAllBySliceConstraint got "
-		"Ensembl Feature Adaptor without an Ensembl Base Adaptor.\n");
-	
-	return ajFalse;
+        ajDebug("ensFeatureadaptorFetchAllBySliceConstraint\n"
+                "  fa %p\n"
+                "  slice %p\n"
+                "  constraint '%S'\n"
+                "  anname '%S'\n"
+                "  objects %p\n",
+                fa,
+                slice,
+                constraint,
+                anname,
+                objects);
+
+        ensSliceTrace(slice, 1);
     }
-    
-    dba = ensFeatureadaptorGetDatabaseadaptor(adaptor);
-    
+
+    if(!fa)
+        return ajFalse;
+
+    if(!slice)
+        return ajFalse;
+
+    if(!fa->Adaptor)
+    {
+        ajDebug("ensFeatureadaptorFetchAllBySliceConstraint got "
+                "Ensembl Feature Adaptor without an Ensembl Base Adaptor.\n");
+
+        return ajFalse;
+    }
+
+    dba = ensFeatureadaptorGetDatabaseadaptor(fa);
+
     if(!dba)
     {
-	ajDebug("ensFeatureadaptorFetchAllBySliceConstraint got "
-		"Ensembl Feature Adaptor without an "
-		"Ensembl Database Adaptor.\n");
-	
-	return ajFalse;
+        ajDebug("ensFeatureadaptorFetchAllBySliceConstraint got "
+                "Ensembl Feature Adaptor without an "
+                "Ensembl Database Adaptor.\n");
+
+        return ajFalse;
     }
-    
-    constr = ajStrNew();
-    
-    if(constraint)
-	ajStrAssignS(&constr, constraint);
-    
-    if(!featureAdaptorAnalysisNameToConstraint(adaptor, &constr, anname))
+
+    if(constraint && ajStrGetLen(constraint))
+        constr = ajStrNewS(constraint);
+    else
+        constr = ajStrNew();
+
+    if(!featureadaptorAnalysisNameToConstraint(fa, &constr, anname))
     {
-	ajStrDel(&constr);
-	
-	return ajFalse;
+        ajStrDel(&constr);
+
+        return ajFalse;
     }
-    
-    /* Check the cache if this query has been run before. */
-    
-    key = ajStrNew();
-    
-    ensSliceFetchName(slice, &key);
-    
-    ajFmtPrintAppS(&key, ":%S", constr);
-    
+
     /*
-    ** FIXME: The Cache must have a List as value???
-    **
-    ** FIXME: This very crude cache should possibly be removed and the code
-    ** could possibly just rely on the SQL server to have queries that have
-    ** been run previously cached.
-    ** Does that make sense?
+    ** Retrieve normalised, non-symlinked Slices to support pseudo-automsomal
+    ** regions (PARs) and haplotypes (HAPs).
     */
-    
-    list = (AjPList) ensCacheFetch(adaptor->Cache, (void *) key);
-    
-    /*
-    ** TODO: Copy Features from one List to the other, but increase the
-    ** reference count. This will be a bit tricky to solve for a generic case.
-    ** We have already a pointer to an object-specific referencing function
-    ** in the Feature Adaptor.
-    */
-    
+
     sa = ensRegistryGetSliceadaptor(dba);
-    
-    pslist = ajListNew();
-    
-    /* HAP and PAR support. Retrieve normalised, non-symlinked Slices. */
-    
-    ensSliceadaptorFetchNormalisedSliceProjection(sa, slice, pslist);
-    
-    if(!ajListGetLength(pslist))
-	ajFatal("ensFeatureadaptorFetchAllBySlice could not get normalised "
-		"Slices. Ensembl Core database contains incorrect information "
-		"in the 'assembly_exception' table.\n");
-    
+
+    slpss = ajListNew();
+
+    ensSliceadaptorFetchNormalisedSliceProjection(sa, slice, slpss);
+
+    if(!ajListGetLength(slpss))
+        ajFatal("ensFeatureadaptorFetchAllBySlice could not get normalised "
+                "Slices. Ensembl Core database contains incorrect information "
+                "in the 'assembly_exception' table.\n");
+
     /*
     ** Get Features on the full original Slice, as well as any sym-linked
     ** Slices. Filter out partial Slices from Projection Segments that are
     ** based on the same Sequence Region as the original Slice.
     ** A Projection Segment representing the original Slice is added later on.
     */
-    
+
     srid = ensSliceGetSeqregionIdentifier(slice);
-    
-    psiter = ajListIterNew(pslist);
-    
+
+    psiter = ajListIterNew(slpss);
+
     while(!ajListIterDone(psiter))
     {
-	ps = (EnsPProjectionsegment) ajListIterGet(psiter);
-	
-	psslice = ensProjectionsegmentGetTrgSlice(ps);
-	
-	pssrid = ensSliceGetSeqregionIdentifier(psslice);
-	
-	if(pssrid == srid)
-	{
-	    ajListIterRemove(psiter);
-	    
-	    ensProjectionsegmentDel(&ps);
-	}
+        slps = (EnsPProjectionsegment) ajListIterGet(psiter);
+
+        psslice = ensProjectionsegmentGetTrgSlice(slps);
+
+        pssrid = ensSliceGetSeqregionIdentifier(psslice);
+
+        if(pssrid == srid)
+        {
+            ajListIterRemove(psiter);
+
+            ensProjectionsegmentDel(&slps);
+        }
     }
-    
+
     ajListIterDel(&psiter);
-    
+
     /* Add back a Projection Segment representing the original Slice. */
-    
-    ps = ensProjectionsegmentNew(1, ensSliceGetLength(slice), slice);
-    
-    ajListPushAppend(pslist, (void *) ps);
-    
+
+    slps = ensProjectionsegmentNew(1, ensSliceGetLength(slice), slice);
+
+    ajListPushAppend(slpss, (void *) slps);
+
     /*
-    ** Construct a list of HAP/PAR boundaries for a Slice spanning the entire
-    ** Sequence Region.
+    ** Construct an AJAX List of HAP and PAR boundaries for a Slice spanning
+    ** the entire Sequence Region.
     */
-    
-    /*
-    ** FIXME: The question is, do we need to move the boundaries to a separate
-    ** List, or could we just keep the Projection Segment List and use them as
-    ** they are?
-    ** Alternatively, this could be solved with a simple array.
-    */
-    
-    ensSliceadaptorFetchBySeqregionIdentifier(sa, srid, 0, 0, 0, &srslice);
-    
-    if(ensSliceGetStrand(slice) >= 0)
-	psslice = ensSliceNewRef(srslice);
-    else
-	ensSliceFetchInvertedSlice(srslice, &psslice);
-    
+
+    ensSliceadaptorFetchBySeqregionIdentifier(sa,
+                                              srid,
+                                              0,
+                                              0,
+                                              ensSliceGetStrand(slice),
+                                              &srslice);
+
+    srpss = ajListNew();
+
+    ensSliceadaptorFetchNormalisedSliceProjection(sa, srslice, srpss);
+
     ensSliceDel(&srslice);
-    
-    srpslist = ajListNew();
-    
-    ensSliceadaptorFetchNormalisedSliceProjection(sa, psslice, srpslist);
-    
-    ensSliceDel(&psslice);
-    
-    boundaries = ajListNew();
-    
+
     /*
     ** Exclude the first Projection Segment, since it indicates just the
     ** Slice start coordinate.
@@ -3754,111 +4045,102 @@ AjBool ensFeatureadaptorFetchAllBySliceConstraint(EnsPFeatureadaptor adaptor,
     ** 40992946:41056606 'chromosome:NCBI36:c22_H2:40992946:41056606:1'
     ** 41056607:49691432 'chromosome:NCBI36:22:41056607:49691432:1'
     */
-    
-    ajListPop(srpslist, (void **) &ps);
-    
-    ensProjectionsegmentDel(&ps);
-    
-    while(ajListPop(srpslist, (void **) &ps))
-    {
-	AJNEW0(Pboundary);
-	
-	*Pboundary =
-	    ensProjectionsegmentGetSrcStart(ps) - ensSliceGetStart(slice) + 1;
-	
-	ajListPushAppend(boundaries, (void *) Pboundary);
-	
-	ensProjectionsegmentDel(&ps);
-    }
-    
-    ajListFree(&srpslist);
-    
+
+    ajListPop(srpss, (void **) &srps);
+
+    ensProjectionsegmentDel(&srps);
+
     /* Fetch Features for the primary Slice and all symlinked Slices. */
-    
-    while(ajListPop(pslist, (void **) &ps))
+
+    while(ajListPop(slpss, (void **) &slps))
     {
-	featureAdaptorSliceFetch(adaptor,
-				 ensProjectionsegmentGetTrgSlice(ps),
-				 constr,
-				 objects);
-	
-	if(!ensSliceMatch(slice, ensProjectionsegmentGetTrgSlice(ps)))
-	{
-	    /*
+        featureadaptorSliceFetch(fa,
+                                 ensProjectionsegmentGetTrgSlice(slps),
+                                 constr,
+                                 objects);
+
+        if(!ensSliceMatch(slice, ensProjectionsegmentGetTrgSlice(slps)))
+        {
+            /*
             ** Features returned on symlinked Slices need checking that they
             ** do not cross Slice boundaries.
             */
-	    
-	    ftiter = ajListIterNew(objects);
-	    
-	    while(!ajListIterDone(ftiter))
-	    {
-		Pobject = ajListIterGet(ftiter);
-		
-		ft = (*adaptor->GetFeature)(Pobject);
-		
-		if(ensProjectionsegmentGetSrcStart(ps) != 1)
-		{
-		    ft->Start += ensProjectionsegmentGetSrcStart(ps) - 1;
-		    
-		    ft->End += ensProjectionsegmentGetSrcStart(ps) - 1;
-		}
-		
-		/*
-                ** Discard boundary crossing Features from symlinked regions.
-                */
-		
-		bditer = ajListIterNew(boundaries);
-		
-		while(!ajListIterDone(bditer))
-		{
-		    Pboundary = (ajint *) ajListIterGet(bditer);
-		    
-		    if((ft->Start < *Pboundary) && (ft->End >= *Pboundary))
-		    {
-			ajListIterRemove(ftiter);
-			
-			ajDebug("ensFeatureadaptorFetchAllBySliceConstraint "
-				"got Object (%p) crossing normalised Slice "
-				"boundaries.\n", Pobject);
-			
-			(*adaptor->Delete)(&Pobject);
-			
-			ft = NULL;
-			
-			break;
-		    }
-		}
-		
-		ajListIterDel(&bditer);
-		
-		if(ft)
-		    ensFeatureSetSlice(ft, slice);
-	    }
-	    
-	    ajListIterDel(&ftiter);
-	}
-	
-	ensProjectionsegmentDel(&ps);
+
+            /*
+            ** FIXME: All Objects are pushed onto the same AJAX List and their
+            ** Features are rechecked further below. Should a separate List
+            ** be used to fetch Objects for all Projection Segment Slices, then
+            ** checked and pushed onto a separate List?
+            */
+
+            ftiter = ajListIterNew(objects);
+
+            while(!ajListIterDone(ftiter))
+            {
+                Pobject = ajListIterGet(ftiter);
+
+                feature = (*fa->GetFeature)(Pobject);
+
+                feature->Start += ensProjectionsegmentGetSrcStart(slps) - 1;
+                feature->End   += ensProjectionsegmentGetSrcStart(slps) - 1;
+
+                psiter = ajListIterNewread(srpss);
+
+                while(!ajListIterDone(psiter))
+                {
+                    srps = (EnsPProjectionsegment) ajListIterGet(psiter);
+
+                    boundary = ensProjectionsegmentGetSrcStart(srps) -
+                        ensSliceGetStart(slice) + 1;
+
+                    if((feature->Start < boundary) &&
+                       (feature->End >= boundary))
+                    {
+                        ajListIterRemove(ftiter);
+
+                        if(debug)
+                        {
+                            ajDebug(
+                                "ensFeatureadaptorFetchAllBySliceConstraint "
+                                "got an Ensembl Object (%p), which Feature (%p) "
+                                "crosses the normalised Slice "
+                                "boundary at %d.\n",
+                                Pobject,
+                                feature,
+                                boundary);
+
+                            ensFeatureTrace(feature, 1);
+                        }
+
+                        (*fa->Delete)(&Pobject);
+
+                        feature = (EnsPFeature) NULL;
+
+                        break;
+                    }
+                }
+
+                ajListIterDel(&psiter);
+
+                if(feature)
+                    ensFeatureSetSlice(feature, slice);
+            }
+
+            ajListIterDel(&ftiter);
+        }
+
+        ensProjectionsegmentDel(&slps);
     }
-    
-    /*
-    ** TODO: Push all Objects into the cache, which again may be tricky for
-    ** a general case.
-    */
-    
-    ajListFree(&pslist);
-    
-    /* Delete the boundaries from the List and the AJAX List. */
-    
-    while(ajListPop(boundaries, (void **) &Pboundary))
-	AJFREE(Pboundary);
-    
-    ajListFree(&boundaries);
-    
+
+    ajListFree(&slpss);
+
+    while(ajListPop(srpss, (void **) &srps))
+        ensProjectionsegmentDel(&srps);
+
+    ajListFree(&srpss);
+
     ajStrDel(&constr);
-    ajStrDel(&key);
-    
+
     return ajTrue;
 }
 
@@ -3870,7 +4152,7 @@ AjBool ensFeatureadaptorFetchAllBySliceConstraint(EnsPFeatureadaptor adaptor,
 ** Fetch all Ensembl Objects based on Ensembl Features on an Ensembl Slice.
 **
 ** @cc Bio::EnsEMBL::DBSQL::BaseFeatureAdaptor::fetch_all_by_Slice
-** @param [r] adaptor [EnsPFeatureadaptor] Ensembl Feature Adaptor
+** @param [u] fa [EnsPFeatureadaptor] Ensembl Feature Adaptor
 ** @param [r] slice [EnsPSlice] Ensembl Slice
 ** @param [r] anname [const AjPStr] Ensembl Analysis name
 ** @param [u] objects [AjPList] AJAX List of Ensembl Objects based on
@@ -3880,22 +4162,22 @@ AjBool ensFeatureadaptorFetchAllBySliceConstraint(EnsPFeatureadaptor adaptor,
 ** @@
 ******************************************************************************/
 
-AjBool ensFeatureadaptorFetchAllBySlice(EnsPFeatureadaptor adaptor,
+AjBool ensFeatureadaptorFetchAllBySlice(EnsPFeatureadaptor fa,
                                         EnsPSlice slice,
                                         const AjPStr anname,
                                         AjPList objects)
 {
-    if(!adaptor)
-	return ajFalse;
-    
+    if(!fa)
+        return ajFalse;
+
     if(!slice)
-	return ajFalse;
-    
-    return ensFeatureadaptorFetchAllBySliceConstraint(adaptor,
-						      slice,
-						      (const AjPStr) NULL,
-						      anname,
-						      objects);
+        return ajFalse;
+
+    return ensFeatureadaptorFetchAllBySliceConstraint(fa,
+                                                      slice,
+                                                      (const AjPStr) NULL,
+                                                      anname,
+                                                      objects);
 }
 
 
@@ -3907,8 +4189,8 @@ AjBool ensFeatureadaptorFetchAllBySlice(EnsPFeatureadaptor adaptor,
 ** Ensembl Slice above a threshold score.
 **
 ** @cc Bio::EnsEMBL::DBSQL::BaseFeatureAdaptor::fetch_all_by_Slice
-** @param [r] adaptor [EnsPFeatureadaptor] Ensembl Feature Adaptor
-** @param [r] slice [EnsPSlice] Ensembl Slice
+** @param [u] fa [EnsPFeatureadaptor] Ensembl Feature Adaptor
+** @param [u] slice [EnsPSlice] Ensembl Slice
 ** @param [r] score [double] Score
 ** @param [r] anname [const AjPStr] Ensembl Analysis name
 ** @param [u] objects [AjPList] AJAX List of Ensembl Objects based on
@@ -3918,36 +4200,36 @@ AjBool ensFeatureadaptorFetchAllBySlice(EnsPFeatureadaptor adaptor,
 ** @@
 ******************************************************************************/
 
-AjBool ensFeatureadaptorFetchAllBySliceScore(EnsPFeatureadaptor adaptor,
+AjBool ensFeatureadaptorFetchAllBySliceScore(EnsPFeatureadaptor fa,
                                              EnsPSlice slice,
                                              double score,
                                              const AjPStr anname,
                                              AjPList objects)
 {
     const char *table = NULL;
-    
+
     AjBool value = AJFALSE;
-    
+
     AjPStr constraint = NULL;
-    
-    if(!adaptor)
-	return ajFalse;
-    
-    if (! slice)
-	return ajFalse;
-    
-    table = ensBaseadaptorGetPrimaryTable(adaptor->Adaptor);
-    
+
+    if(!fa)
+        return ajFalse;
+
+    if(!slice)
+        return ajFalse;
+
+    table = ensBaseadaptorGetPrimaryTable(fa->Adaptor);
+
     constraint = ajFmtStr("%s.score > %lf", table, score);
-    
-    value = ensFeatureadaptorFetchAllBySliceConstraint(adaptor,
-						       slice,
-						       constraint,
-						       anname,
-						       objects);
-    
+
+    value = ensFeatureadaptorFetchAllBySliceConstraint(fa,
+                                                       slice,
+                                                       constraint,
+                                                       anname,
+                                                       objects);
+
     ajStrDel(&constraint);
-    
+
     return value;
 }
 
@@ -3960,7 +4242,7 @@ AjBool ensFeatureadaptorFetchAllBySliceScore(EnsPFeatureadaptor adaptor,
 ** Ensembl Analysis name.
 **
 ** @cc Bio::EnsEMBL::DBSQL::BaseFeatureAdaptor::fetch_all_by_logic_name
-** @param [r] adaptor [EnsPFeatureadaptor] Ensembl Feature Adaptor
+** @param [u] fa [EnsPFeatureadaptor] Ensembl Feature Adaptor
 ** @param [r] anname [const AjPStr] Ensembl Analysis name
 ** @param [u] objects [AjPList] AJAX List of Ensembl Objects based on
 **                              Ensembl Features
@@ -3969,37 +4251,37 @@ AjBool ensFeatureadaptorFetchAllBySliceScore(EnsPFeatureadaptor adaptor,
 ** @@
 ******************************************************************************/
 
-AjBool ensFeatureadaptorFetchAllByAnalysisName(EnsPFeatureadaptor adaptor,
+AjBool ensFeatureadaptorFetchAllByAnalysisName(EnsPFeatureadaptor fa,
                                                const AjPStr anname,
                                                AjPList objects)
 {
     AjBool value = AJFALSE;
-    
+
     AjPStr constraint = NULL;
-    
-    if(!adaptor)
-	return ajFalse;
-    
+
+    if(!fa)
+        return ajFalse;
+
     if(!anname)
-	return ajFalse;
-    
+        return ajFalse;
+
     constraint = ajStrNew();
-    
-    if(!featureAdaptorAnalysisNameToConstraint(adaptor, &constraint, anname))
+
+    if(!featureadaptorAnalysisNameToConstraint(fa, &constraint, anname))
     {
-	ajStrDel(&constraint);
-	
-	return ajFalse;
+        ajStrDel(&constraint);
+
+        return ajFalse;
     }
-    
-    value = ensBaseadaptorGenericFetch(adaptor->Adaptor,
-				       constraint,
-				       (EnsPAssemblymapper) NULL,
-				       (EnsPSlice) NULL,
-				       objects);
-    
+
+    value = ensBaseadaptorGenericFetch(fa->Adaptor,
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       objects);
+
     ajStrDel(&constraint);
-    
+
     return value;
 }
 
@@ -4083,46 +4365,46 @@ EnsPFeaturepair ensFeaturepairNew(EnsPFeature srcfeature,
                                   float identity)
 {
     EnsPFeaturepair fp = NULL;
-    
+
     if(!srcfeature)
-	return NULL;
-    
+        return NULL;
+
     if(!trgfeature)
-	return NULL;
-    
+        return NULL;
+
     AJNEW0(fp);
-    
+
     fp->SourceFeature = ensFeatureNewRef(srcfeature);
-    
+
     fp->TargetFeature = ensFeatureNewRef(trgfeature);
-    
+
     fp->Externaldatabase = ensExternaldatabaseNewRef(edb);
-    
+
     if(extra)
-	fp->ExtraData = ajStrNewRef(extra);
-    
+        fp->ExtraData = ajStrNewRef(extra);
+
     if(srcspecies)
-	fp->SourceSpecies = ajStrNewRef(srcspecies);
-    
+        fp->SourceSpecies = ajStrNewRef(srcspecies);
+
     if(trgspecies)
-	fp->TargetSpecies = ajStrNewRef(trgspecies);
-    
+        fp->TargetSpecies = ajStrNewRef(trgspecies);
+
     fp->Use = 1;
-    
+
     fp->Evalue = evalue;
-    
+
     fp->Score = score;
-    
+
     fp->GroupIdentifier = groupid;
-    
+
     fp->LevelIdentifier = levelid;
-    
+
     fp->SourceCoverage = srccoverage;
-    
+
     fp->TargetCoverage = trgcoverage;
-    
+
     fp->SequenceIdentity = identity;
-    
+
     return fp;
 }
 
@@ -4142,32 +4424,32 @@ EnsPFeaturepair ensFeaturepairNew(EnsPFeature srcfeature,
 EnsPFeaturepair ensFeaturepairNewObj(const EnsPFeaturepair object)
 {
     EnsPFeaturepair fp = NULL;
-    
+
     AJNEW0(fp);
-    
+
     fp->SourceFeature    = ensFeatureNewRef(object->SourceFeature);
     fp->TargetFeature    = ensFeatureNewRef(object->TargetFeature);
     fp->Externaldatabase = ensExternaldatabaseNewRef(object->Externaldatabase);
-    
+
     if(object->ExtraData)
-	fp->ExtraData = ajStrNewRef(object->ExtraData);
-    
+        fp->ExtraData = ajStrNewRef(object->ExtraData);
+
     if(object->SourceSpecies)
-	fp->SourceSpecies = ajStrNewRef(object->SourceSpecies);
-    
+        fp->SourceSpecies = ajStrNewRef(object->SourceSpecies);
+
     if(object->TargetSpecies)
-	fp->TargetSpecies = ajStrNewRef(object->TargetSpecies);
-    
+        fp->TargetSpecies = ajStrNewRef(object->TargetSpecies);
+
     fp->GroupIdentifier = object->GroupIdentifier;
     fp->LevelIdentifier = object->LevelIdentifier;
-    
+
     fp->Use = 1;
-    
+
     fp->Evalue         = object->Evalue;
     fp->Score          = object->Score;
     fp->SourceCoverage = object->SourceCoverage;
     fp->TargetCoverage = object->TargetCoverage;
-    
+
     return fp;
 }
 
@@ -4188,10 +4470,10 @@ EnsPFeaturepair ensFeaturepairNewObj(const EnsPFeaturepair object)
 EnsPFeaturepair ensFeaturepairNewRef(EnsPFeaturepair fp)
 {
     if(!fp)
-	return NULL;
-    
+        return NULL;
+
     fp->Use++;
-    
+
     return fp;
 }
 
@@ -4231,37 +4513,37 @@ EnsPFeaturepair ensFeaturepairNewRef(EnsPFeaturepair fp)
 void ensFeaturepairDel(EnsPFeaturepair *Pfp)
 {
     EnsPFeaturepair pthis = NULL;
-    
+
     if(!Pfp)
-	return;
-    
+        return;
+
     if(!*Pfp)
-	return;
+        return;
 
     pthis = *Pfp;
-    
+
     pthis->Use--;
-    
+
     if(pthis->Use)
     {
-	*Pfp = NULL;
-	
-	return;
+        *Pfp = NULL;
+
+        return;
     }
-    
+
     ensFeatureDel(&pthis->SourceFeature);
     ensFeatureDel(&pthis->TargetFeature);
-    
+
     ensExternaldatabaseDel(&pthis->Externaldatabase);
-    
+
     ajStrDel(&pthis->ExtraData);
     ajStrDel(&pthis->SourceSpecies);
     ajStrDel(&pthis->TargetSpecies);
-    
+
     AJFREE(pthis);
 
     *Pfp = NULL;
-    
+
     return;
 }
 
@@ -4325,8 +4607,8 @@ void ensFeaturepairDel(EnsPFeaturepair *Pfp)
 EnsPFeature ensFeaturepairGetSourceFeature(const EnsPFeaturepair fp)
 {
     if(!fp)
-	return NULL;
-    
+        return NULL;
+
     return fp->SourceFeature;
 }
 
@@ -4351,8 +4633,8 @@ EnsPFeature ensFeaturepairGetSourceFeature(const EnsPFeaturepair fp)
 EnsPFeature ensFeaturepairGetTargetFeature(const EnsPFeaturepair fp)
 {
     if(!fp)
-	return NULL;
-    
+        return NULL;
+
     return fp->TargetFeature;
 }
 
@@ -4373,8 +4655,8 @@ EnsPExternaldatabase ensFeaturepairGetExternaldatabase(
     const EnsPFeaturepair fp)
 {
     if(!fp)
-	return NULL;
-    
+        return NULL;
+
     return fp->Externaldatabase;
 }
 
@@ -4395,8 +4677,8 @@ EnsPExternaldatabase ensFeaturepairGetExternaldatabase(
 AjPStr ensFeaturepairGetExtraData(const EnsPFeaturepair fp)
 {
     if(!fp)
-	return NULL;
-    
+        return NULL;
+
     return fp->ExtraData;
 }
 
@@ -4417,8 +4699,8 @@ AjPStr ensFeaturepairGetExtraData(const EnsPFeaturepair fp)
 AjPStr ensFeaturepairGetSourceSpecies(const EnsPFeaturepair fp)
 {
     if(!fp)
-	return NULL;
-    
+        return NULL;
+
     return fp->SourceSpecies;
 }
 
@@ -4439,8 +4721,8 @@ AjPStr ensFeaturepairGetSourceSpecies(const EnsPFeaturepair fp)
 AjPStr ensFeaturepairGetTargetSpecies(const EnsPFeaturepair fp)
 {
     if(!fp)
-	return NULL;
-    
+        return NULL;
+
     return fp->TargetSpecies;
 }
 
@@ -4461,8 +4743,8 @@ AjPStr ensFeaturepairGetTargetSpecies(const EnsPFeaturepair fp)
 ajuint ensFeaturepairGetGroupIdentifier(const EnsPFeaturepair fp)
 {
     if(!fp)
-	return 0;
-    
+        return 0;
+
     return fp->GroupIdentifier;
 }
 
@@ -4483,8 +4765,8 @@ ajuint ensFeaturepairGetGroupIdentifier(const EnsPFeaturepair fp)
 ajuint ensFeaturepairGetLevelIdentifier(const EnsPFeaturepair fp)
 {
     if(!fp)
-	return 0;
-    
+        return 0;
+
     return fp->LevelIdentifier;
 }
 
@@ -4505,8 +4787,8 @@ ajuint ensFeaturepairGetLevelIdentifier(const EnsPFeaturepair fp)
 double ensFeaturepairGetEvalue(const EnsPFeaturepair fp)
 {
     if(!fp)
-	return 0;
-    
+        return 0;
+
     return fp->Evalue;
 }
 
@@ -4527,8 +4809,8 @@ double ensFeaturepairGetEvalue(const EnsPFeaturepair fp)
 double ensFeaturepairGetScore(const EnsPFeaturepair fp)
 {
     if(!fp)
-	return 0;
-    
+        return 0;
+
     return fp->Evalue;
 }
 
@@ -4549,8 +4831,8 @@ double ensFeaturepairGetScore(const EnsPFeaturepair fp)
 float ensFeaturepairGetSourceCoverage(const EnsPFeaturepair fp)
 {
     if(!fp)
-	return 0;
-    
+        return 0;
+
     return fp->SourceCoverage;
 }
 
@@ -4571,8 +4853,8 @@ float ensFeaturepairGetSourceCoverage(const EnsPFeaturepair fp)
 float ensFeaturepairGetTargetCoverage(const EnsPFeaturepair fp)
 {
     if(!fp)
-	return 0;
-    
+        return 0;
+
     return fp->TargetCoverage;
 }
 
@@ -4593,8 +4875,8 @@ float ensFeaturepairGetTargetCoverage(const EnsPFeaturepair fp)
 float ensFeaturepairGetSequenceIdentity(const EnsPFeaturepair fp)
 {
     if(!fp)
-	return 0;
-    
+        return 0;
+
     return fp->SequenceIdentity;
 }
 
@@ -4646,27 +4928,28 @@ float ensFeaturepairGetSequenceIdentity(const EnsPFeaturepair fp)
 
 AjBool ensFeaturepairSetSourceFeature(EnsPFeaturepair fp, EnsPFeature feature)
 {
-#if AJFALSE
-    ajDebug("ensFeaturepairSetSourceFeature\n"
-	    "  fp %p\n"
-	    "  feature %p\n",
-	    fp,
-	    feature);
-    
-    ensFeaturepairTrace(fp, 1);
-    
-    ensFeatureTrace(feature, 1);
-#endif
-    
+    if(ajDebugTest("ensFeaturepairSetSourceFeature"))
+    {
+        ajDebug("ensFeaturepairSetSourceFeature\n"
+                "  fp %p\n"
+                "  feature %p\n",
+                fp,
+                feature);
+
+        ensFeaturepairTrace(fp, 1);
+
+        ensFeatureTrace(feature, 1);
+    }
+
     if(!fp)
-	return ajFalse;
-    
+        return ajFalse;
+
     /* Replace the current Feature. */
-    
+
     ensFeatureDel(&fp->SourceFeature);
-    
+
     fp->SourceFeature = ensFeatureNewRef(feature);
-    
+
     return ajTrue;
 }
 
@@ -4691,27 +4974,28 @@ AjBool ensFeaturepairSetSourceFeature(EnsPFeaturepair fp, EnsPFeature feature)
 
 AjBool ensFeaturepairSetTargetFeature(EnsPFeaturepair fp, EnsPFeature feature)
 {
-#if AJFALSE
-    ajDebug("ensFeaturepairSetTargetFeature\n"
-	    "  fp %p\n"
-	    "  feature %p\n",
-	    fp,
-	    feature);
-    
-    ensFeaturepairTrace(fp, 1);
-    
-    ensFeatureTrace(feature, 1);
-#endif
-    
+    if(ajDebugTest("ensFeaturepairSetTargetFeature"))
+    {
+        ajDebug("ensFeaturepairSetTargetFeature\n"
+                "  fp %p\n"
+                "  feature %p\n",
+                fp,
+                feature);
+
+        ensFeaturepairTrace(fp, 1);
+
+        ensFeatureTrace(feature, 1);
+    }
+
     if(!fp)
-	return ajFalse;
-    
+        return ajFalse;
+
     /* Replace the current Feature. */
-    
+
     ensFeatureDel(&fp->TargetFeature);
-    
+
     fp->TargetFeature = ensFeatureNewRef(feature);
-    
+
     return ajTrue;
 }
 
@@ -4734,12 +5018,12 @@ AjBool ensFeaturepairSetExternaldatabase(EnsPFeaturepair fp,
                                          EnsPExternaldatabase edb)
 {
     if(!fp)
-	return ajFalse;
-    
+        return ajFalse;
+
     ensExternaldatabaseDel(&fp->Externaldatabase);
-    
+
     fp->Externaldatabase = ensExternaldatabaseNewRef(edb);
-    
+
     return ajTrue;
 }
 
@@ -4761,13 +5045,13 @@ AjBool ensFeaturepairSetExternaldatabase(EnsPFeaturepair fp,
 AjBool ensFeaturepairSetExtraData(EnsPFeaturepair fp, AjPStr extra)
 {
     if(!fp)
-	return ajFalse;
-    
+        return ajFalse;
+
     ajStrDel(&fp->ExtraData);
-    
+
     if(extra)
-	fp->ExtraData = ajStrNewRef(extra);
-    
+        fp->ExtraData = ajStrNewRef(extra);
+
     return ajTrue;
 }
 
@@ -4789,13 +5073,13 @@ AjBool ensFeaturepairSetExtraData(EnsPFeaturepair fp, AjPStr extra)
 AjBool ensFeaturepairSetSourceSpecies(EnsPFeaturepair fp, AjPStr species)
 {
     if(!fp)
-	return ajFalse;
-    
+        return ajFalse;
+
     ajStrDel(&fp->SourceSpecies);
-    
+
     if(species)
-	fp->SourceSpecies = ajStrNewRef(species);
-    
+        fp->SourceSpecies = ajStrNewRef(species);
+
     return ajTrue;
 }
 
@@ -4817,13 +5101,13 @@ AjBool ensFeaturepairSetSourceSpecies(EnsPFeaturepair fp, AjPStr species)
 AjBool ensFeaturepairSetTargetSpecies(EnsPFeaturepair fp, AjPStr tspecies)
 {
     if(!fp)
-	return ajFalse;
-    
+        return ajFalse;
+
     ajStrDel(&fp->TargetSpecies);
-    
+
     if(tspecies)
-	fp->TargetSpecies = ajStrNewRef(tspecies);
-    
+        fp->TargetSpecies = ajStrNewRef(tspecies);
+
     return ajTrue;
 }
 
@@ -4845,10 +5129,10 @@ AjBool ensFeaturepairSetTargetSpecies(EnsPFeaturepair fp, AjPStr tspecies)
 AjBool ensFeaturepairSetGroupIdentifier(EnsPFeaturepair fp, ajuint groupid)
 {
     if(!fp)
-	return ajFalse;
-    
+        return ajFalse;
+
     fp->GroupIdentifier = groupid;
-    
+
     return ajTrue;
 }
 
@@ -4870,10 +5154,10 @@ AjBool ensFeaturepairSetGroupIdentifier(EnsPFeaturepair fp, ajuint groupid)
 AjBool ensFeaturepairSetLevelIdentifier(EnsPFeaturepair fp, ajuint levelid)
 {
     if(!fp)
-	return ajFalse;
-    
+        return ajFalse;
+
     fp->LevelIdentifier = levelid;
-    
+
     return ajTrue;
 }
 
@@ -4895,10 +5179,10 @@ AjBool ensFeaturepairSetLevelIdentifier(EnsPFeaturepair fp, ajuint levelid)
 AjBool ensFeaturepairSetEvalue(EnsPFeaturepair fp, double evalue)
 {
     if(!fp)
-	return ajFalse;
-    
+        return ajFalse;
+
     fp->Evalue = evalue;
-    
+
     return ajTrue;
 }
 
@@ -4920,10 +5204,10 @@ AjBool ensFeaturepairSetEvalue(EnsPFeaturepair fp, double evalue)
 AjBool ensFeaturepairSetScore(EnsPFeaturepair fp, double score)
 {
     if(!fp)
-	return ajFalse;
-    
+        return ajFalse;
+
     fp->Score = score;
-    
+
     return ajTrue;
 }
 
@@ -4945,10 +5229,10 @@ AjBool ensFeaturepairSetScore(EnsPFeaturepair fp, double score)
 AjBool ensFeaturepairSetSourceCoverage(EnsPFeaturepair fp, float coverage)
 {
     if(!fp)
-	return ajFalse;
-    
+        return ajFalse;
+
     fp->SourceCoverage = coverage;
-    
+
     return ajTrue;
 }
 
@@ -4970,10 +5254,10 @@ AjBool ensFeaturepairSetSourceCoverage(EnsPFeaturepair fp, float coverage)
 AjBool ensFeaturepairSetTargetCoverage(EnsPFeaturepair fp, float coverage)
 {
     if(!fp)
-	return ajFalse;
-    
+        return ajFalse;
+
     fp->TargetCoverage = coverage;
-    
+
     return ajTrue;
 }
 
@@ -4995,10 +5279,10 @@ AjBool ensFeaturepairSetTargetCoverage(EnsPFeaturepair fp, float coverage)
 AjBool ensFeaturepairSetSequenceIdentity(EnsPFeaturepair fp, float identity)
 {
     if(!fp)
-	return ajFalse;
-    
+        return ajFalse;
+
     fp->SequenceIdentity = identity;
-    
+
     return ajTrue;
 }
 
@@ -5037,103 +5321,103 @@ AjBool ensFeaturepairSetSequenceIdentity(EnsPFeaturepair fp, float identity)
 AjBool ensFeaturepairTrace(const EnsPFeaturepair fp, ajuint level)
 {
     AjPStr indent = NULL;
-    
+
     if(!fp)
-	return ajFalse;
-    
+        return ajFalse;
+
     indent = ajStrNew();
-    
+
     ajStrAppendCountK(&indent, ' ', level * 2);
-    
+
     ajDebug("ensFeaturepairTrace %p\n"
-	    "%S  SourceFeature %p\n"
-	    "%S  TargetFeature %p\n"
-	    "%S  Externaldatabase %p\n"
-	    "%S  ExtraData %p\n"
-	    "%S  SourceSpecies '%S'\n"
-	    "%S  TargetSpecies '%S'\n"
-	    "%S  GroupIdentifier %d\n"
-	    "%S  LevelIdentifier %d\n"
-	    "%S  Use %u\n"
-	    "%S  Evalue %f\n"
-	    "%S  Score %f\n"
-	    "%S  SourceCoverage %f\n"
-	    "%S  TargetCoverage %f\n"
-	    "%S  SequenceIdentity %f\n",
-	    indent, fp,
-	    indent, fp->SourceFeature,
-	    indent, fp->TargetFeature,
-	    indent, fp->Externaldatabase,
-	    indent, fp->ExtraData,
-	    indent, fp->SourceSpecies,
-	    indent, fp->TargetSpecies,
-	    indent, fp->GroupIdentifier,
-	    indent, fp->LevelIdentifier,
-	    indent, fp->Use,
-	    indent, fp->Evalue,
-	    indent, fp->Score,
-	    indent, fp->SourceCoverage,
-	    indent, fp->TargetCoverage,
-	    indent, fp->SequenceIdentity);
-    
+            "%S  SourceFeature %p\n"
+            "%S  TargetFeature %p\n"
+            "%S  Externaldatabase %p\n"
+            "%S  ExtraData %p\n"
+            "%S  SourceSpecies '%S'\n"
+            "%S  TargetSpecies '%S'\n"
+            "%S  GroupIdentifier %d\n"
+            "%S  LevelIdentifier %d\n"
+            "%S  Use %u\n"
+            "%S  Evalue %f\n"
+            "%S  Score %f\n"
+            "%S  SourceCoverage %f\n"
+            "%S  TargetCoverage %f\n"
+            "%S  SequenceIdentity %f\n",
+            indent, fp,
+            indent, fp->SourceFeature,
+            indent, fp->TargetFeature,
+            indent, fp->Externaldatabase,
+            indent, fp->ExtraData,
+            indent, fp->SourceSpecies,
+            indent, fp->TargetSpecies,
+            indent, fp->GroupIdentifier,
+            indent, fp->LevelIdentifier,
+            indent, fp->Use,
+            indent, fp->Evalue,
+            indent, fp->Score,
+            indent, fp->SourceCoverage,
+            indent, fp->TargetCoverage,
+            indent, fp->SequenceIdentity);
+
     ensFeatureTrace(fp->SourceFeature, level + 1);
-    
+
     ensFeatureTrace(fp->TargetFeature, level + 1);
-    
+
     ensExternaldatabaseTrace(fp->Externaldatabase, level + 1);
-    
+
     ajStrDel(&indent);
-    
+
     return ajTrue;
 }
 
 
 
 
-/* @func ensFeaturepairGetMemSize *********************************************
+/* @func ensFeaturepairGetMemsize *********************************************
 **
 ** Get the memory size in bytes of an Ensembl Feature Pair.
 **
-** @param [r] baf [const EnsPFeaturepair] Ensembl Feature Pair
+** @param [r] fp [const EnsPFeaturepair] Ensembl Feature Pair
 **
-** @return [ajuint] Memory size
+** @return [ajulong] Memory size
 ** @@
 ******************************************************************************/
 
-ajuint ensFeaturepairGetMemSize(const EnsPFeaturepair fp)
+ajulong ensFeaturepairGetMemsize(const EnsPFeaturepair fp)
 {
-    ajuint size = 0;
-    
+    ajulong size = 0;
+
     if(!fp)
-	return 0;
-    
-    size += (ajuint) sizeof (EnsOFeaturepair);
-    
-    size += ensFeatureGetMemSize(fp->SourceFeature);
-    
-    size += ensFeatureGetMemSize(fp->TargetFeature);
-    
+        return 0;
+
+    size += sizeof (EnsOFeaturepair);
+
+    size += ensFeatureGetMemsize(fp->SourceFeature);
+
+    size += ensFeatureGetMemsize(fp->TargetFeature);
+
     if(fp->ExtraData)
     {
-	size += (ajuint) sizeof (AjOStr);
-	
-	size += ajStrGetRes(fp->ExtraData);
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(fp->ExtraData);
     }
-    
+
     if(fp->SourceSpecies)
     {
-	size += (ajuint) sizeof (AjOStr);
-	
-	size += ajStrGetRes(fp->SourceSpecies);
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(fp->SourceSpecies);
     }
-    
+
     if(fp->TargetSpecies)
     {
-	size += (ajuint) sizeof (AjOStr);
-	
-	size += ajStrGetRes(fp->TargetSpecies);
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(fp->TargetSpecies);
     }
-    
+
     return size;
 }
 
@@ -5160,27 +5444,27 @@ EnsPFeaturepair ensFeaturepairTransform(const EnsPFeaturepair fp,
 {
     EnsPFeature nfeature = NULL;
     EnsPFeaturepair nfp  = NULL;
-    
+
     if(!fp)
-	return NULL;
-    
+        return NULL;
+
     if(!csname)
-	return NULL;
-    
+        return NULL;
+
     if(!csversion)
-	return NULL;
-    
+        return NULL;
+
     nfeature = ensFeatureTransform(fp->SourceFeature, csname, csversion);
-    
+
     if(!nfeature)
-	return NULL;
-    
+        return NULL;
+
     nfp = ensFeaturepairNewObj(fp);
-    
+
     ensFeaturepairSetSourceFeature(nfp, nfeature);
-    
+
     ensFeatureDel(&nfeature);
-    
+
     return nfp;
 }
 
@@ -5204,25 +5488,191 @@ EnsPFeaturepair ensFeaturepairTransfer(EnsPFeaturepair fp, EnsPSlice slice)
 {
     EnsPFeature newfeature = NULL;
     EnsPFeaturepair newfp  = NULL;
-    
+
     if(!fp)
-	return NULL;
-    
+        return NULL;
+
     if(!slice)
-	return NULL;
-    
+        return NULL;
+
     newfeature = ensFeatureTransfer(fp->SourceFeature, slice);
-    
+
     if(!newfeature)
-	return NULL;
-    
+        return NULL;
+
     newfp = ensFeaturepairNewObj(fp);
-    
+
     ensFeaturepairSetSourceFeature(newfp, newfeature);
-    
+
     ensFeatureDel(&newfeature);
-    
+
     return newfp;
+}
+
+
+
+
+/* @func ensFeaturepairCompareSourceFeatureStartAscending *********************
+**
+** Comparison function to sort Ensembl Feature Pairs by the start coordinate
+** of their source Ensembl Feature elements in ascending order.
+**
+** Ensembl Feature Pairs without a source Feature sort towards the end of the
+** AJAX List.
+**
+** @param [r] P1 [const void*] Ensembl Feature Pair address 1
+** @param [r] P2 [const void*] Ensembl Feature Pair address 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+** @@
+******************************************************************************/
+
+int ensFeaturepairCompareSourceFeatureStartAscending(const void* P1,
+                                                     const void* P2)
+{
+    EnsPFeaturepair fp1 = NULL;
+    EnsPFeaturepair fp2 = NULL;
+
+    fp1 = *(EnsPFeaturepair const *) P1;
+    fp2 = *(EnsPFeaturepair const *) P2;
+
+    if(ajDebugTest("ensFeaturepairCompareSourceFeatureStartAscending"))
+    {
+        ajDebug("ensFeaturepairCompareSourceFeatureStartAscending\n"
+                "  fp1 %p\n"
+                "  fp2 %p\n",
+                fp1,
+                fp2);
+
+        ensFeaturepairTrace(fp1, 1);
+        ensFeaturepairTrace(fp2, 1);
+    }
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if(fp1 && (!fp2))
+        return -1;
+
+    if((!fp1) && (!fp2))
+        return 0;
+
+    if((!fp1) && fp2)
+        return +1;
+
+    return ensFeatureCompareStartAscending(fp1->SourceFeature,
+                                           fp2->SourceFeature);
+}
+
+
+
+
+/* @func ensFeaturepairCompareSourceFeatureStartDescending ********************
+**
+** Comparison function to sort Ensembl Feature Pairs by the start coordinate
+** of their source Ensembl Feature elements in descending order.
+**
+** Ensembl Feature Pairs without a source Feature sort towards the end of the
+** AJAX List.
+**
+** @param [r] P1 [const void*] Ensembl Feature Pair address 1
+** @param [r] P2 [const void*] Ensembl Feature Pair address 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+** @@
+******************************************************************************/
+
+int ensFeaturepairCompareSourceFeatureStartDescending(const void* P1,
+                                                      const void* P2)
+{
+    EnsPFeaturepair fp1 = NULL;
+    EnsPFeaturepair fp2 = NULL;
+
+    fp1 = *(EnsPFeaturepair const *) P1;
+    fp2 = *(EnsPFeaturepair const *) P2;
+
+    if(ajDebugTest("ensFeaturepairCompareSourceFeatureStartDescending"))
+    {
+        ajDebug("ensFeaturepairCompareSourceFeatureStartDescending\n"
+                "  fp1 %p\n"
+                "  fp2 %p\n",
+                fp1,
+                fp2);
+
+        ensFeaturepairTrace(fp1, 1);
+        ensFeaturepairTrace(fp2, 1);
+    }
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if(fp1 && (!fp2))
+        return -1;
+
+    if((!fp1) && (!fp2))
+        return 0;
+
+    if((!fp1) && fp2)
+        return +1;
+
+    return ensFeatureCompareStartDescending(fp1->SourceFeature,
+                                            fp2->SourceFeature);
+}
+
+
+
+
+/* @func ensFeaturepairSortBySourceFeatureStartAscending **********************
+**
+** Sort Ensembl Feature Pairs by their source Ensembl Feature start coordinate
+** in ascending order.
+**
+** @param [u] fps [AjPList] AJAX List of Ensembl Feature Pairs
+** @see ensFeaturepairCompareSourceFeatureStartAscending
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensFeaturepairSortBySourceFeatureStartAscending(AjPList fps)
+{
+    if(!fps)
+        return ajFalse;
+
+    ajListSort(fps, ensFeaturepairCompareSourceFeatureStartAscending);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensFeaturepairSortBySourceFeatureStartDescending *********************
+**
+** Sort Ensembl Feature Pairs by their source Ensembl Feature start coordinate
+** in descending order.
+**
+** @param [u] fps [AjPList] AJAX List of Ensembl Feature Pairs
+** @see ensFeaturepairCompareSourceFeatureStartDescending
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensFeaturepairSortBySourceFeatureStartDescending(AjPList fps)
+{
+    if(!fps)
+        return ajFalse;
+
+    ajListSort(fps, ensFeaturepairCompareSourceFeatureStartDescending);
+
+    return ajTrue;
 }
 
 
@@ -5232,10 +5682,10 @@ EnsPFeaturepair ensFeaturepairTransfer(EnsPFeaturepair fp, EnsPSlice slice)
 **
 ** Functions for manipulating Ensembl Base Align Feature objects
 **
-** @cc Bio::EnsEMBL::BaseAlignFeature CVS Revision: 1.58
-** @cc Bio::EnsEMBL::DnaDnaAlignFeature CVS Revision: 1.22
-** @cc Bio::EnsEMBL::DnaPepAlignFeature CVS Revision: 1.12
-** @cc Bio::EnsEMBL::PepDnaAlignFeature CVS Revision: 1.9
+** @cc Bio::EnsEMBL::BaseAlignFeature CVS Revision: 1.60
+** @cc Bio::EnsEMBL::DnaDnaAlignFeature CVS Revision: 1.23
+** @cc Bio::EnsEMBL::DnaPepAlignFeature CVS Revision: 1.13
+** @cc Bio::EnsEMBL::PepDnaAlignFeature CVS Revision: 1.10
 **
 ** @nam2rule Basealignfeature
 **
@@ -5244,101 +5694,7 @@ EnsPFeaturepair ensFeaturepairTransfer(EnsPFeaturepair fp, EnsPSlice slice)
 
 
 
-/* @funcstatic baseAlignFeatureCompareSourceFeatureStart **********************
-**
-** Comparison function to sort Ensembl Feature Pairs by the start ccordinate of
-** their source Ensembl Feature elements in ascending order on the forward
-** strand and descending order on the reverse strand.
-**
-** @param [r] P1 [const void*] Ensembl Base Align Feature address 1
-** @param [r] P2 [const void*] Ensembl Base Align Feature address 2
-**
-** @return [int] The comparison function returns an integer less than,
-**               equal to, or greater than zero if the first argument is
-**               considered to be respectively less than, equal to, or
-**               greater than the second.
-** @@
-******************************************************************************/
-
-static int baseAlignFeatureCompareSourceFeatureStart(const void* P1,
-                                                     const void* P2)
-{
-    int value = 0;
-    
-    EnsPFeaturepair fp1 = NULL;
-    EnsPFeaturepair fp2 = NULL;
-    
-    fp1 = *(EnsPFeaturepair const *) P1;
-    
-    fp2 = *(EnsPFeaturepair const *) P2;
-    
-#if AJFALSE
-    ajDebug("baseAlignFeatureCompareSourceFeatureStart\n"
-            "  fp1 %p\n"
-            "  fp2 %p\n",
-            fp1,
-            fp2);
-    
-    ensFeaturepairTrace(fp1, 1);
-    ensFeaturepairTrace(fp2, 1);
-#endif
-    
-    if(!fp1)
-    {
-	ajDebug("baseAlignFeatureCompareSourceFeatureStart got empty "
-		"Feature Pair 1.\n");
-	
-	return 0;
-    }
-    
-    if(!fp2)
-    {
-	ajDebug("baseAlignFeatureCompareSourceFeatureStart got empty "
-		"Feature Pair 2.\n");
-	
-	return 0;
-    }
-    
-    if(!fp1->SourceFeature)
-    {
-	ajDebug("baseAlignFeatureCompareSourceFeatureStart got a "
-		"Feature Pair 1 without a source Feature.\n");
-	
-	return 0;
-    }
-    
-    if(!fp2->SourceFeature)
-    {
-	ajDebug("baseAlignFeatureCompareSourceFeatureStart got a "
-		"Feature Pair 2 without a source Feature.\n");
-	
-	return 0;
-    }
-    
-    if(fp1->SourceFeature->Start < fp2->SourceFeature->Start)
-        value = -1;
-    
-    if(fp1->SourceFeature->Start == fp2->SourceFeature->Start)
-        value = 0;
-    
-    if(fp1->SourceFeature->Start > fp2->SourceFeature->Start)
-        value = +1;
-    
-    /*
-    ** For Feature Pairs with a Feature on the reverse strand,
-    ** reverse also the sorting order.
-    */
-    
-    if(fp1->SourceFeature->Strand < 0)
-	value *= -1;
-    
-    return value;
-}
-
-
-
-
-/* @funcstatic baseAlignFeatureParseFeatures **********************************
+/* @funcstatic basealignfeatureParseFeatures **********************************
 **
 ** Parse Ensembl Base Align Features from an AJAX List of Ensembl Objects based
 ** upon Ensembl Feature Pairs. This creates an internal CIGAR string and sets
@@ -5352,176 +5708,182 @@ static int baseAlignFeatureCompareSourceFeatureStart(const void* P1,
 ** @@
 ******************************************************************************/
 
+static AjBool basealignfeatureParseFeatures(EnsPBasealignfeature baf,
+                                            AjPList objects)
+{
+
 /*
 ** FIXME: The Perl API assigns to $start1 $start2 and $ori but never uses
 ** these values.
 */
 
-static AjBool baseAlignFeatureParseFeatures(EnsPBasealignfeature baf,
-                                            AjPList objects)
-{
     void *Pobject = NULL;
-    
+
     ajint srcstart = 0;
     ajint trgstart = 0;
-    
+
     ajint srcend = 0;
     ajint trgend = 0;
-    
+
     ajint srcgap = 0;
     ajint trggap = 0;
-    
+
     ajint srclength = 0;
     ajint trglength = 0;
-    
+
     ajint srcpos = 0; /* where last feature q part ended */
     ajint trgpos = 0; /* where last feature s part ended */
-    
+
     ajint match = 0;
-    
+
     ajuint srcunit = 0;
     ajuint trgunit = 0;
-    
+
     AjBool insertion = AJFALSE;
     AjBool warning = AJFALSE;
-    
+
     AjIList iter = NULL;
     AjPList fps  = NULL;
-    
+
     EnsPFeature srcfeature = NULL;
     EnsPFeature trgfeature = NULL;
-    
+
     EnsPFeaturepair firstfp = NULL;
     EnsPFeaturepair lastfp  = NULL;
     EnsPFeaturepair fp      = NULL;
-    
+
     if(!baf)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!objects)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!ajListGetLength(objects))
-	return ajTrue;
-    
+        return ajTrue;
+
     srcunit = ensBasealignfeatureGetSourceUnit(baf);
-    
     trgunit = ensBasealignfeatureGetTargetUnit(baf);
-    
+
     if(baf->Cigar)
-	ajStrAssignClear(&baf->Cigar);
+        ajStrAssignClear(&baf->Cigar);
     else
-	baf->Cigar = ajStrNew();
-    
+        baf->Cigar = ajStrNew();
+
     /* Extract Ensembl Feature Pair objects from Ensembl Objects. */
-    
+
     iter = ajListIterNew(objects);
-    
+
     while(!ajListIterDone(iter))
     {
-	Pobject = ajListIterGet(iter);
-	
-	ajListPushAppend(fps, (void *) baf->GetFeaturepair(Pobject));
+        Pobject = ajListIterGet(iter);
+
+        ajListPushAppend(fps, (void *) baf->GetFeaturepair(Pobject));
     }
-    
+
     ajListIterDel(&iter);
-    
+
     /*
-    ** Sort the Ensembl Feature Pairs on their Feature start position in
-    ** ascending order on positive strand, descending on negative strand.
+    ** Sort the AJAX List of Ensembl Feature Pairs on their source Feature
+    ** start coordinate in ascending order on the positive strand and
+    ** descending order on the negative strand.
     */
-    
-    ajListSort(fps, baseAlignFeatureCompareSourceFeatureStart);
-    
+
     ajListPeekFirst(fps, (void **) &firstfp);
-    
+
+    if(firstfp->SourceFeature->Strand >= 0)
+        ensFeaturepairSortBySourceFeatureStartAscending(fps);
+    else
+        ensFeaturepairSortBySourceFeatureStartDescending(fps);
+
+    ajListPeekFirst(fps, (void **) &firstfp);
+
     ajListPeekLast(fps, (void **) &lastfp);
-    
+
     /*
     ** Use strandedness info of source and target to make sure both sets of
     ** start and end coordinates are oriented the right way around.
     */
-    
+
     if(firstfp->SourceFeature->Strand >= 0)
     {
-	srcstart = firstfp->SourceFeature->Start;
-	
-	srcend = lastfp->SourceFeature->End;
+        srcstart = firstfp->SourceFeature->Start;
+
+        srcend = lastfp->SourceFeature->End;
     }
     else
     {
-	srcstart = lastfp->SourceFeature->Start;
-	
-	srcend = firstfp->SourceFeature->End;
+        srcstart = lastfp->SourceFeature->Start;
+
+        srcend = firstfp->SourceFeature->End;
     }
-    
+
     if(firstfp->TargetFeature->Strand >= 0)
     {
-	trgstart = firstfp->TargetFeature->Start;
-	
-	trgend = lastfp->TargetFeature->End;
+        trgstart = firstfp->TargetFeature->Start;
+
+        trgend = lastfp->TargetFeature->End;
     }
     else
     {
-	trgstart = lastfp->TargetFeature->Start;
-	
-	trgend = firstfp->TargetFeature->End;
+        trgstart = lastfp->TargetFeature->Start;
+
+        trgend = firstfp->TargetFeature->End;
     }
-    
+
     /* Loop through each portion of alignment and construct cigar string */
-    
+
     iter = ajListIterNew(fps);
-    
+
     while(!ajListIterDone(iter))
     {
-	fp = (EnsPFeaturepair) ajListIterGet(iter);
-	
-	/* Sanity checks */
-	
-	if(fp->SourceFeature->Strand != firstfp->SourceFeature->Strand)
-	    ajFatal("Inconsistencies in the source Feature Strand element of "
-		    "Ensembl Feature Pair list.\n");
-	
-	if(!ensSliceMatch(fp->SourceFeature->Slice,
+        fp = (EnsPFeaturepair) ajListIterGet(iter);
+
+        /* Sanity checks */
+
+        if(fp->SourceFeature->Strand != firstfp->SourceFeature->Strand)
+            ajFatal("Inconsistencies in the source Feature Strand element of "
+                    "Ensembl Feature Pair list.\n");
+
+        if(!ensSliceMatch(fp->SourceFeature->Slice,
                           firstfp->SourceFeature->Slice))
-	    ajFatal("Inconsistencies in source Feature Slice element of "
-		    "Ensembl Feature Pair list.\n");
-	
-	if(fp->SourceSpecies &&
-	   firstfp->SourceSpecies &&
-           (! ajStrMatchS(fp->SourceSpecies, firstfp->SourceSpecies)))
-	    ajFatal("Inconsistencies in Feature Pair source species element "
-		    "of Ensembl Feature Pair list.\n");
-	
-	if(fp->TargetSpecies &&
+            ajFatal("Inconsistencies in source Feature Slice element of "
+                    "Ensembl Feature Pair list.\n");
+
+        if(fp->SourceSpecies &&
+           firstfp->SourceSpecies &&
+           (!ajStrMatchS(fp->SourceSpecies, firstfp->SourceSpecies)))
+            ajFatal("Inconsistencies in Feature Pair source species element "
+                    "of Ensembl Feature Pair list.\n");
+
+        if(fp->TargetSpecies &&
            firstfp->TargetSpecies &&
-           (! ajStrMatchS(fp->TargetSpecies, firstfp->TargetSpecies)))
-	    ajFatal("Inconsistencies in Feature Pair target species element "
-		    "of Ensembl Feature Pair list.\n");
-	
-	if(fp->TargetFeature->Strand != firstfp->TargetFeature->Strand)
-	    ajFatal("Inconsistencies in the target Feature strand element of "
-		    "Ensembl Feature Pair list.\n");
-	
-	/*
-	** FIXME: This currently only takes Features based on SequenceNames
-	** into account. Should test Slice and seqeunce name based Features.
-	*/
-	
-	if(!ajStrMatchCaseS(fp->TargetFeature->SequenceName,
+           (!ajStrMatchS(fp->TargetSpecies, firstfp->TargetSpecies)))
+            ajFatal("Inconsistencies in Feature Pair target species element "
+                    "of Ensembl Feature Pair list.\n");
+
+        if(fp->TargetFeature->Strand != firstfp->TargetFeature->Strand)
+            ajFatal("Inconsistencies in the target Feature strand element of "
+                    "Ensembl Feature Pair list.\n");
+
+        /*
+        ** FIXME: This currently only takes Features based on SequenceNames
+        ** into account. Should test Slice and sequence name based Features.
+        */
+
+        if(!ajStrMatchCaseS(fp->TargetFeature->SequenceName,
                             firstfp->TargetFeature->SequenceName))
-	    ajFatal("Inconsistencies in the target Feature sequence name "
-		    "element of Ensembl Feature Pair list.\n");
-	
-	/*
-	** FIXME: To test simple equality for floats and doubles is a bit
+            ajFatal("Inconsistencies in the target Feature sequence name "
+                    "element of Ensembl Feature Pair list.\n");
+
+        /*
+        ** FIXME: To test simple equality for floats and doubles is a bit
         ** dangerous.
-	 
-        if (defined($score) && $score ne $f->score) {
+
+        if(defined($score) && $score ne $f->score) {
         throw("Inconsisent scores in feature array [$score - " .
         $f->score . "]");
         }
-        if (defined($f->percent_id) && $percent ne $f->percent_id) {
+        if(defined($f->percent_id) && $percent ne $f->percent_id) {
         throw("Inconsistent pids in feature array [$percent - " .
         $f->percent_id . "]");
         }
@@ -5530,261 +5892,259 @@ static AjBool baseAlignFeatureParseFeatures(EnsPBasealignfeature baf,
         $f->p_value() . "]");
         }
         */
-	
-	if(fp->SourceFeature->SequenceName &&
+
+        if(fp->SourceFeature->SequenceName &&
            firstfp->SourceFeature->SequenceName &&
-           (! ajStrMatchS(fp->SourceFeature->SequenceName,
-                          firstfp->SourceFeature->SequenceName)))
-	    ajFatal("Inconsistencies in source Feature sequence name element "
-		    "of Ensembl Feature Pair list.\n");
-	
-	/* More sanity checking */
-	
-	if(srcpos)
-	{
-	    if(fp->SourceFeature->Strand >= 0)
-	    {
-		if(fp->SourceFeature->Start < srcpos)
-		    ajFatal("Inconsistent coodinates in "
-			    "Ensembl Feature Pair List (forward strand).\n"
-			    "Start (%d) of current Feature Pair should be "
-			    "greater than previous Feature Pair end (%d).\n",
-			    fp->SourceFeature->Start, srcpos);
-	    }
-	    else
-	    {
-		if(fp->SourceFeature->End > srcpos)
-		    ajFatal("Inconsistent coodinates in "
-			    "Ensembl Feature Pair List (reverse strand).\n"
-			    "End (%d) of current Feature Pair should be "
-			    "less than previous Feature Pair start (%d).\n",
-			    fp->SourceFeature->End, srcpos);
-	    }
-	}
-	
-	srclength = fp->SourceFeature->End - fp->SourceFeature->Start + 1;
-	
-	trglength = fp->TargetFeature->End - fp->TargetFeature->Start + 1;
-	
-	/*
-	** using multiplication to avoid rounding errors, hence the
-	** switch from source to target for the ratios
-	*/
-	
-	/*
-	** Yet more sanity checking
-	*/
-	
-	if(srcunit > trgunit)
-	{
-	    /*
-	    ** I am going to make the assumption here that this situation
-	    ** will only occur with DnaPepAlignFeatures, this may not be true
-	    */
-	    
-	    if((srclength / srcunit) != (trglength * trgunit))
-		ajFatal("Feature Pair lengths not comparable "
-			"Lengths: %d %d "
-			"Ratios: %d %d.\n",
-			srclength, trglength,
-			srcunit, trgunit);
-	}
-	else
-	{
-	    if((srclength * trgunit) != (trglength * srcunit))
-		ajFatal("Feature Pair lengths not comparable "
-			"Lengths: %d %d "
-			"Ratios: %d %d.\n",
-			srclength, trglength,
-			srcunit, trgunit);
-	}
-	
-	/*
-	** Check to see if there is an I type (insertion) gap:
-	** If there is a space between the end of the last source sequence
-	** alignment and the start of this one, then this is an insertion
-	*/
-	
-	insertion = ajFalse;
-	
-	if(firstfp->SourceFeature->Strand >= 0)
-	{
-	    if(srcpos && (fp->SourceFeature->Start > (srcpos + 1)))
-	    {
-		/* there is an insertion */
-		
-		insertion = ajTrue;
-		
-		srcgap = fp->SourceFeature->Start - srcpos - 1;
-		
-		/* no need for a number if gap length is 1 */
-		
-		if(srcgap == 1)
-		    ajStrAppendK(&(baf->Cigar), 'I');
-		else
-		    ajFmtPrintAppS(&(baf->Cigar), "%dI", srcgap);
-	    }
-	    
-	    /* shift our position in the source sequence alignment */
-	    
-	    srcpos = fp->SourceFeature->End;
-	}
-	else
-	{
-	    if(srcpos && ((fp->SourceFeature->End + 1) < srcpos))
-	    {
-		/* there is an insertion */
-		
-		insertion = ajTrue;
-		
-		srcgap = srcpos - fp->SourceFeature->End - 1;
-		
-		/* no need for a number if gap length is 1 */
-		
-		if(srcgap == 1)
-		    ajStrAppendK(&(baf->Cigar), 'I');
-		else
-		    ajFmtPrintAppS(&(baf->Cigar), "%dI", srcgap);
-	    }
-	    
-	    /* shift our position in the source sequence alignment */
-	    
-	    srcpos = fp->SourceFeature->Start;
-	}
-	
-	/*
-	** Check to see if there is a D type (deletion) gap
-	** There is a deletion gap if there is a space between the end of the
-	** last portion of the hit sequence alignment and this one
-	*/
-	
-	if(fp->TargetFeature->Strand >= 0)
-	{
-	    if(trgpos && (fp->TargetFeature->Start > (trgpos + 1)))
-	    {
-		/* there is a deletion */
-		
-		srcgap = fp->TargetFeature->Start - trgpos - 1;
-		
-		trggap = (ajint) (srcgap * srcunit / trgunit + 0.5);
-		
-		/* no need for a number if gap length is 1 */
-		
-		if(trggap == 1)
-		    ajStrAppendK(&(baf->Cigar), 'D');
-		else
-		    ajFmtPrintAppS(&(baf->Cigar), "%dD", trggap);
-		
-		/* sanity check,  should not be an insertion and deletion */
-		
-		if(insertion)
-		{
-		    if(!warning)
-		    {
-			ajWarn("Should not be an deletion and insertion on "
-			       "the same alignment region. "
-			       "CIGAR line '%S'\n", baf->Cigar);
-			
-			warning = ajTrue;
-		    }
-		}
-	    }
-	    
-	    /* shift our position in the target sequence alignment */
-	    
-	    trgpos = fp->TargetFeature->End;
-	}
-	else
-	{
-	    if(trgpos && ((fp->TargetFeature->End + 1) < trgpos))
-	    {
-		/* there is a deletion */
-		
-		srcgap = trgpos - fp->TargetFeature->End - 1;
-		
-		trggap = (ajint) (srcgap * srcunit / trgunit + 0.5);
-		
-		/* no need for a number if gap length is 1 */
-		
-		if(trggap == 1)
-		    ajStrAppendK(&(baf->Cigar), 'D');
-		else
-		    ajFmtPrintAppS(&(baf->Cigar), "%dD", trggap);
-		
-		/* sanity check,  should not be an insertion and deletion */
-		
-		if(insertion)
-		{
-		    if(!warning)
-		    {
-			ajWarn("Should not be an deletion and insertion on "
-			       "the same alignment region. "
-			       "target position %d "
-			       "target end %d "
-			       "CIGAR line '%S'\n",
-			       trgpos,
-			       fp->TargetFeature->End,
-			       baf->Cigar);
-			
-			warning = ajTrue;
-		    }
-		}
-	    }
-	    
-	    /* shift our position in the target sequence alignment */
-	    
-	    trgpos = fp->TargetFeature->Start;
-	}
-	
-	match = fp->SourceFeature->End - fp->SourceFeature->Start + 1;
-	
-	if(match == 1)
-	    ajStrAppendK(&(baf->Cigar), 'M');
-	else
-	    ajFmtPrintAppS(&(baf->Cigar), "%dM", match);
+           (!ajStrMatchS(fp->SourceFeature->SequenceName,
+                         firstfp->SourceFeature->SequenceName)))
+            ajFatal("Inconsistencies in source Feature sequence name element "
+                    "of Ensembl Feature Pair list.\n");
+
+        /* More sanity checking */
+
+        if(srcpos)
+        {
+            if(fp->SourceFeature->Strand >= 0)
+            {
+                if(fp->SourceFeature->Start < srcpos)
+                    ajFatal("Inconsistent coodinates in "
+                            "Ensembl Feature Pair List (forward strand).\n"
+                            "Start (%d) of current Feature Pair should be "
+                            "greater than previous Feature Pair end (%d).\n",
+                            fp->SourceFeature->Start, srcpos);
+            }
+            else
+            {
+                if(fp->SourceFeature->End > srcpos)
+                    ajFatal("Inconsistent coodinates in "
+                            "Ensembl Feature Pair List (reverse strand).\n"
+                            "End (%d) of current Feature Pair should be "
+                            "less than previous Feature Pair start (%d).\n",
+                            fp->SourceFeature->End, srcpos);
+            }
+        }
+
+        srclength = fp->SourceFeature->End - fp->SourceFeature->Start + 1;
+
+        trglength = fp->TargetFeature->End - fp->TargetFeature->Start + 1;
+
+        /*
+        ** using multiplication to avoid rounding errors, hence the
+        ** switch from source to target for the ratios
+        */
+
+        /*
+        ** Yet more sanity checking
+        */
+
+        if(srcunit > trgunit)
+        {
+            /*
+            ** I am going to make the assumption here that this situation
+            ** will only occur with DnaPepAlignFeatures, this may not be true
+            */
+
+            if((srclength / srcunit) != (trglength * trgunit))
+                ajFatal("Feature Pair lengths not comparable "
+                        "Lengths: %d %d "
+                        "Ratios: %d %d.\n",
+                        srclength, trglength,
+                        srcunit, trgunit);
+        }
+        else
+        {
+            if((srclength * trgunit) != (trglength * srcunit))
+                ajFatal("Feature Pair lengths not comparable "
+                        "Lengths: %d %d "
+                        "Ratios: %d %d.\n",
+                        srclength, trglength,
+                        srcunit, trgunit);
+        }
+
+        /*
+        ** Check to see if there is an I type (insertion) gap:
+        ** If there is a space between the end of the last source sequence
+        ** alignment and the start of this one, then this is an insertion
+        */
+
+        insertion = ajFalse;
+
+        if(firstfp->SourceFeature->Strand >= 0)
+        {
+            if(srcpos && (fp->SourceFeature->Start > (srcpos + 1)))
+            {
+                /* there is an insertion */
+
+                insertion = ajTrue;
+
+                srcgap = fp->SourceFeature->Start - srcpos - 1;
+
+                /* no need for a number if gap length is 1 */
+
+                if(srcgap == 1)
+                    ajStrAppendK(&baf->Cigar, 'I');
+                else
+                    ajFmtPrintAppS(&baf->Cigar, "%dI", srcgap);
+            }
+
+            /* shift our position in the source sequence alignment */
+
+            srcpos = fp->SourceFeature->End;
+        }
+        else
+        {
+            if(srcpos && ((fp->SourceFeature->End + 1) < srcpos))
+            {
+                /* there is an insertion */
+
+                insertion = ajTrue;
+
+                srcgap = srcpos - fp->SourceFeature->End - 1;
+
+                /* no need for a number if gap length is 1 */
+
+                if(srcgap == 1)
+                    ajStrAppendK(&baf->Cigar, 'I');
+                else
+                    ajFmtPrintAppS(&baf->Cigar, "%dI", srcgap);
+            }
+
+            /* shift our position in the source sequence alignment */
+
+            srcpos = fp->SourceFeature->Start;
+        }
+
+        /*
+        ** Check to see if there is a D type (deletion) gap
+        ** There is a deletion gap if there is a space between the end of the
+        ** last portion of the hit sequence alignment and this one
+        */
+
+        if(fp->TargetFeature->Strand >= 0)
+        {
+            if(trgpos && (fp->TargetFeature->Start > (trgpos + 1)))
+            {
+                /* there is a deletion */
+
+                srcgap = fp->TargetFeature->Start - trgpos - 1;
+
+                trggap = (ajint) (srcgap * srcunit / trgunit + 0.5);
+
+                /* no need for a number if gap length is 1 */
+
+                if(trggap == 1)
+                    ajStrAppendK(&baf->Cigar, 'D');
+                else
+                    ajFmtPrintAppS(&baf->Cigar, "%dD", trggap);
+
+                /* sanity check, should not be an insertion and deletion */
+
+                if(insertion)
+                {
+                    if(!warning)
+                    {
+                        ajWarn("Should not be an deletion and insertion on "
+                               "the same alignment region. "
+                               "CIGAR line '%S'\n", baf->Cigar);
+
+                        warning = ajTrue;
+                    }
+                }
+            }
+
+            /* shift our position in the target sequence alignment */
+
+            trgpos = fp->TargetFeature->End;
+        }
+        else
+        {
+            if(trgpos && ((fp->TargetFeature->End + 1) < trgpos))
+            {
+                /* there is a deletion */
+
+                srcgap = trgpos - fp->TargetFeature->End - 1;
+
+                trggap = (ajint) (srcgap * srcunit / trgunit + 0.5);
+
+                /* no need for a number if gap length is 1 */
+
+                if(trggap == 1)
+                    ajStrAppendK(&baf->Cigar, 'D');
+                else
+                    ajFmtPrintAppS(&baf->Cigar, "%dD", trggap);
+
+                /* sanity check,  should not be an insertion and deletion */
+
+                if(insertion)
+                {
+                    if(!warning)
+                    {
+                        ajWarn("Should not be an deletion and insertion on "
+                               "the same alignment region. "
+                               "target position %d "
+                               "target end %d "
+                               "CIGAR line '%S'\n",
+                               trgpos,
+                               fp->TargetFeature->End,
+                               baf->Cigar);
+
+                        warning = ajTrue;
+                    }
+                }
+            }
+
+            /* shift our position in the target sequence alignment */
+
+            trgpos = fp->TargetFeature->Start;
+        }
+
+        match = fp->SourceFeature->End - fp->SourceFeature->Start + 1;
+
+        if(match == 1)
+            ajStrAppendK(&baf->Cigar, 'M');
+        else
+            ajFmtPrintAppS(&baf->Cigar, "%dM", match);
     }
-    
+
     /* Replace the Feature Pair in the Base Align Feature. */
-    
-    ensFeaturepairDel(&(baf->Featurepair));
-    
+
+    ensFeaturepairDel(&baf->Featurepair);
+
     /* Clone the source Feature and set the new coordinates. */
-    
+
     srcfeature = ensFeatureNewObj(firstfp->SourceFeature);
-    
+
     ensFeatureSetStart(srcfeature, srcstart);
-    
+
     ensFeatureSetEnd(srcfeature, srcend);
-    
+
     /* Clone the target Feature and set the new coordinates. */
-    
+
     trgfeature = ensFeatureNewObj(firstfp->TargetFeature);
-    
+
     ensFeatureSetStart(trgfeature, trgstart);
-    
+
     ensFeatureSetEnd(trgfeature, trgend);
-    
+
     /* Clone the Feature Pair and set the new source and target Features. */
-    
+
     baf->Featurepair = ensFeaturepairNewObj(firstfp);
-    
+
     ensFeaturepairSetSourceFeature(baf->Featurepair, srcfeature);
-    
     ensFeaturepairSetTargetFeature(baf->Featurepair, trgfeature);
-    
-    /* Delete the source and target Features. */
-    
+
+    /* Delete the cloned source and target Features. */
+
     ensFeatureDel(&srcfeature);
-    
     ensFeatureDel(&trgfeature);
-    
+
     return ajTrue;
 }
 
 
 
 
-/* @funcstatic baseAlignFeatureParseCigar *************************************
+/* @funcstatic basealignfeatureParseCigar *************************************
 **
 ** Convert an Ensembl Base Align Feature CIGAR line into a
 ** List of Ensembl Feature Pairs.
@@ -5796,179 +6156,179 @@ static AjBool baseAlignFeatureParseFeatures(EnsPBasealignfeature baf,
 ** @@
 ******************************************************************************/
 
-static AjBool baseAlignFeatureParseCigar(const EnsPBasealignfeature baf,
+static AjBool basealignfeatureParseCigar(const EnsPBasealignfeature baf,
                                          AjPList fps)
 {
     ajint fpsrcstart = 0;
     ajint fptrgstart = 0;
-    
+
     ajint srcstart = 0;
     ajint trgstart = 0;
-    
+
     ajint srcend = 0;
     ajint trgend = 0;
-    
+
     ajint tlength = 0;
     ajint mlength = 0;
-    
+
     ajuint srcunit = 0;
     ajuint trgunit = 0;
-    
+
     const AjPStr token = NULL;
-    
+
     EnsPFeature srcfeature = NULL;
     EnsPFeature trgfeature = NULL;
-    
+
     EnsPFeaturepair fp = NULL;
-    
+
     if(!baf)
-	return ajFalse;
-    
-    if((! baf->Cigar) && (! ajStrGetLen(baf->Cigar)))
-	ajFatal("baseAlignFeatureParseCigar no CIGAR string defined!\n");
-    
-    if(! baf->Featurepair)
-	ajFatal("baseAlignFeatureParseCigar no Feature Pair defined in the "
-		"Base Align Feature!\n");
-    
+        return ajFalse;
+
+    if((!baf->Cigar) && (!ajStrGetLen(baf->Cigar)))
+        ajFatal("basealignfeatureParseCigar no CIGAR string defined!\n");
+
+    if(!baf->Featurepair)
+        ajFatal("basealignfeatureParseCigar no Feature Pair defined in the "
+                "Base Align Feature!\n");
+
     if(!baf->Featurepair->SourceFeature)
-	ajFatal("baseAlignFeatureParseCigar no Feature defined in the "
-		"Feature Pair of the Base Align Feature!\n");
-    
+        ajFatal("basealignfeatureParseCigar no Feature defined in the "
+                "Feature Pair of the Base Align Feature!\n");
+
     srcunit = ensBasealignfeatureGetSourceUnit(baf);
-    
+
     trgunit = ensBasealignfeatureGetTargetUnit(baf);
-    
+
     if(baf->Featurepair->SourceFeature->Strand > 0)
-	fpsrcstart = baf->Featurepair->SourceFeature->Start;
+        fpsrcstart = baf->Featurepair->SourceFeature->Start;
     else
-	fpsrcstart = baf->Featurepair->SourceFeature->End;
-    
+        fpsrcstart = baf->Featurepair->SourceFeature->End;
+
     if(baf->Featurepair->TargetFeature->Strand > 0)
-	fptrgstart = baf->Featurepair->TargetFeature->Start;
+        fptrgstart = baf->Featurepair->TargetFeature->Start;
     else
-	fptrgstart = baf->Featurepair->TargetFeature->End;
-    
+        fptrgstart = baf->Featurepair->TargetFeature->End;
+
     /* Construct ungapped blocks as Feature Pair objects for each MATCH. */
-    
+
     while((token = ajStrParseC(baf->Cigar, "MDI")))
     {
-	ajStrToInt(token, &tlength);
-	
-	tlength = tlength ? tlength : 1;
-	
-	if((srcunit == 1) && (trgunit == 3))
-	    mlength = tlength * 3;
-	else if((srcunit == 3) && (trgunit == 1))
-	    mlength = tlength / 3;
-	else if((srcunit == 1) && (trgunit == 1))
-	    mlength = tlength;
-	else
-	    ajFatal("baseAlignFeatureParseCigar got "
-		    "Base Align Feature source unit %d "
-		    "Base Align Feature target unit %d, "
-		    "but currently only 1 or 3 are allowed.\n",
-		    srcunit,
-		    trgunit);
-	
-	if(ajStrMatchC(token, "M"))
-	{
-	    /* MATCH */
-	    
-	    if(baf->Featurepair->SourceFeature->Strand > 0)
-	    {
-		srcstart = fpsrcstart;
-		
-		srcend = fpsrcstart + tlength - 1;
-		
-		fpsrcstart = srcend + 1;
-	    }
-	    else
-	    {
-		srcend = fpsrcstart;
-		
-		srcstart = fpsrcstart - tlength + 1;
-		
-		fpsrcstart = srcstart - 1;
-	    }
-	    
-	    if(baf->Featurepair->TargetFeature->Strand > 0)
-	    {
-		trgstart = fptrgstart;
-		
-		trgend = fptrgstart + mlength - 1;
-		
-		fptrgstart = trgend + 1;
-	    }
-	    else
-	    {
-		trgend = fptrgstart;
-		
-		trgstart = fptrgstart - mlength + 1;
-		
-		fptrgstart = trgstart - 1;
-	    }
-	    
-	    /* Clone the source Feature and set the new coordinates. */
-	    
-	    srcfeature = ensFeatureNewObj(baf->Featurepair->SourceFeature);
-	    
-	    ensFeatureSetStart(srcfeature, srcstart);
-	    
-	    ensFeatureSetEnd(srcfeature, srcend);
-	    
-	    /* Clone the target Feature and set the new coordinates. */
-	    
-	    trgfeature = ensFeatureNewObj(baf->Featurepair->TargetFeature);
-	    
-	    ensFeatureSetStart(trgfeature, trgstart);
-	    
-	    ensFeatureSetEnd(trgfeature, trgend);
-	    
-	    /*
-	    ** Clone the Feature Pair and set the new source and target
-	    ** Features.
-	    */
-	    
-	    fp = ensFeaturepairNewObj(baf->Featurepair);
-	    
-	    ensFeaturepairSetSourceFeature(baf->Featurepair, srcfeature);
-	    
-	    ensFeaturepairSetTargetFeature(baf->Featurepair, trgfeature);
-	    
-	    /* Delete the source and target Features. */
-	    
-	    ensFeatureDel(&srcfeature);
-	    
-	    ensFeatureDel(&trgfeature);
-	    
-	    ajListPushAppend(fps, (void *) fp);
-	}
-	else if(ajStrMatchC(token, "I"))
-	{
-	    /* INSERT */
-	    
-	    if(baf->Featurepair->SourceFeature->Strand > 0)
-		fpsrcstart += tlength;
-	    else
-		fpsrcstart -= tlength;
-	}
-	
-	else if (ajStrMatchC(token, "D"))
-	{
-	    /* DELETION */
-	    
-	    if(baf->Featurepair->TargetFeature->Strand > 0)
-		fptrgstart += mlength;
-	    else
-		fptrgstart -= mlength;
-	}
-	else
-	    ajFatal("baseAlignFeatureParseCigar "
-		    "illegal CIGAR line token '%S'\n",
-		    token);
+        ajStrToInt(token, &tlength);
+
+        tlength = tlength ? tlength : 1;
+
+        if((srcunit == 1) && (trgunit == 3))
+            mlength = tlength * 3;
+        else if((srcunit == 3) && (trgunit == 1))
+            mlength = tlength / 3;
+        else if((srcunit == 1) && (trgunit == 1))
+            mlength = tlength;
+        else
+            ajFatal("basealignfeatureParseCigar got "
+                    "Base Align Feature source unit %d "
+                    "Base Align Feature target unit %d, "
+                    "but currently only 1 or 3 are allowed.\n",
+                    srcunit,
+                    trgunit);
+
+        if(ajStrMatchC(token, "M"))
+        {
+            /* MATCH */
+
+            if(baf->Featurepair->SourceFeature->Strand > 0)
+            {
+                srcstart = fpsrcstart;
+
+                srcend = fpsrcstart + tlength - 1;
+
+                fpsrcstart = srcend + 1;
+            }
+            else
+            {
+                srcend = fpsrcstart;
+
+                srcstart = fpsrcstart - tlength + 1;
+
+                fpsrcstart = srcstart - 1;
+            }
+
+            if(baf->Featurepair->TargetFeature->Strand > 0)
+            {
+                trgstart = fptrgstart;
+
+                trgend = fptrgstart + mlength - 1;
+
+                fptrgstart = trgend + 1;
+            }
+            else
+            {
+                trgend = fptrgstart;
+
+                trgstart = fptrgstart - mlength + 1;
+
+                fptrgstart = trgstart - 1;
+            }
+
+            /* Clone the source Feature and set the new coordinates. */
+
+            srcfeature = ensFeatureNewObj(baf->Featurepair->SourceFeature);
+
+            ensFeatureSetStart(srcfeature, srcstart);
+
+            ensFeatureSetEnd(srcfeature, srcend);
+
+            /* Clone the target Feature and set the new coordinates. */
+
+            trgfeature = ensFeatureNewObj(baf->Featurepair->TargetFeature);
+
+            ensFeatureSetStart(trgfeature, trgstart);
+
+            ensFeatureSetEnd(trgfeature, trgend);
+
+            /*
+            ** Clone the Feature Pair and set the new source and target
+            ** Features.
+            */
+
+            fp = ensFeaturepairNewObj(baf->Featurepair);
+
+            ensFeaturepairSetSourceFeature(baf->Featurepair, srcfeature);
+
+            ensFeaturepairSetTargetFeature(baf->Featurepair, trgfeature);
+
+            /* Delete the source and target Features. */
+
+            ensFeatureDel(&srcfeature);
+
+            ensFeatureDel(&trgfeature);
+
+            ajListPushAppend(fps, (void *) fp);
+        }
+        else if(ajStrMatchC(token, "I"))
+        {
+            /* INSERT */
+
+            if(baf->Featurepair->SourceFeature->Strand > 0)
+                fpsrcstart += tlength;
+            else
+                fpsrcstart -= tlength;
+        }
+
+        else if(ajStrMatchC(token, "D"))
+        {
+            /* DELETION */
+
+            if(baf->Featurepair->TargetFeature->Strand > 0)
+                fptrgstart += mlength;
+            else
+                fptrgstart -= mlength;
+        }
+        else
+            ajFatal("basealignfeatureParseCigar "
+                    "illegal CIGAR line token '%S'\n",
+                    token);
     }
-    
+
     return ajTrue;
 }
 
@@ -6008,8 +6368,8 @@ static AjBool baseAlignFeatureParseCigar(const EnsPBasealignfeature baf,
 ** Ensembl Base Align Feature constructor for type 'DNA'.
 **
 ** @cc Bio::EnsEMBL::Storable::new
-** @param [r] adaptor [EnsPDNAAlignFeatureadaptor] Ensembl DNA Align
-**                                                 Feature Adaptor
+** @param [r] dafa [EnsPDNAAlignFeatureadaptor] Ensembl DNA Align
+**                                              Feature Adaptor
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 ** @cc Bio::EnsEMBL::FeaturePair
 ** @param [u] fp [EnsPFeaturepair] Ensembl Feature Pair
@@ -6022,37 +6382,37 @@ static AjBool baseAlignFeatureParseCigar(const EnsPBasealignfeature baf,
 ******************************************************************************/
 
 EnsPBasealignfeature ensBasealignfeatureNewD(
-    EnsPDNAAlignFeatureadaptor adaptor,
+    EnsPDNAAlignFeatureadaptor dafa,
     ajuint identifier,
     EnsPFeaturepair fp,
     AjPStr cigar,
     ajuint pair)
 {
     EnsPBasealignfeature baf = NULL;
-    
+
     if(!fp)
-	return NULL;
-    
+        return NULL;
+
     if(!cigar)
-	return NULL;
-    
+        return NULL;
+
     AJNEW0(baf);
-    
+
     baf->Use = 1;
-    
+
     baf->Identifier = identifier;
-    
-    baf->DNAAlignFeatureadaptor = adaptor;
-    
+
+    baf->DNAAlignFeatureadaptor = dafa;
+
     baf->Featurepair = ensFeaturepairNewRef(fp);
-    
+
     if(cigar)
-	baf->Cigar = ajStrNewRef(cigar);
-    
+        baf->Cigar = ajStrNewRef(cigar);
+
     baf->Type = ensEBasealignfeatureTypeDNA;
-    
+
     baf->PairDNAAlignFeatureIdentifier = pair;
-    
+
     return baf;
 }
 
@@ -6064,8 +6424,8 @@ EnsPBasealignfeature ensBasealignfeatureNewD(
 ** Ensembl Base Align Feature constructor for type 'Protein'.
 **
 ** @cc Bio::EnsEMBL::Storable::new
-** @param [r] adaptor [EnsPProteinalignfeatureadaptor] Ensembl Protein Align
-**                                                     Feature Adaptor
+** @param [u] pafa [EnsPProteinalignfeatureadaptor] Ensembl Protein Align
+**                                                  Feature Adaptor
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 ** @cc Bio::EnsEMBL::FeaturePair
 ** @param [u] fp [EnsPFeaturepair] Ensembl Feature Pair
@@ -6077,36 +6437,36 @@ EnsPBasealignfeature ensBasealignfeatureNewD(
 ******************************************************************************/
 
 EnsPBasealignfeature ensBasealignfeatureNewP(
-    EnsPProteinalignfeatureadaptor adaptor,
+    EnsPProteinalignfeatureadaptor pafa,
     ajuint identifier,
     EnsPFeaturepair fp,
     AjPStr cigar)
 {
     EnsPBasealignfeature baf = NULL;
-    
+
     if(!fp)
-	return NULL;
-    
+        return NULL;
+
     if(!cigar)
-	return NULL;
-    
+        return NULL;
+
     AJNEW0(baf);
-    
+
     baf->Use = 1;
-    
+
     baf->Identifier = identifier;
-    
-    baf->Proteinalignfeatureadaptor = adaptor;
-    
+
+    baf->Proteinalignfeatureadaptor = pafa;
+
     baf->Featurepair = ensFeaturepairNewRef(fp);
-    
+
     if(cigar)
-	baf->Cigar = ajStrNewRef(cigar);
-    
+        baf->Cigar = ajStrNewRef(cigar);
+
     baf->Type = ensEBasealignfeatureTypeProtein;
-    
+
     baf->PairDNAAlignFeatureIdentifier = 0;
-    
+
     return baf;
 }
 
@@ -6119,6 +6479,9 @@ EnsPBasealignfeature ensBasealignfeatureNewP(
 ** ensBasealignfeatureNewF (feature pairs).
 */
 
+
+
+
 /* @func ensBasealignfeatureNew ***********************************************
 **
 ** Default Ensembl Base Align Feature constructor.
@@ -6128,7 +6491,7 @@ EnsPBasealignfeature ensBasealignfeatureNewP(
 ** @cc Bio::EnsEMBL::BaseAlignFeature
 ** @param [u] cigar [AjPStr] CIGAR line
 ** @param [r] fps [AjPList] AJAX List of Ensembl Feature Pairs
-** @param [r] type [AjEnum] Ensembl Base Align Feature type
+** @param [r] type [EnsEBasealignfeatureType] Ensembl Base Align Feature type
 ** @param [r] pair [ajuint] Pair DNA Align Feature identifier
 **
 ** @return [EnsPBasealignfeature] Ensembl Base Align Feature or NULL
@@ -6138,53 +6501,53 @@ EnsPBasealignfeature ensBasealignfeatureNewP(
 EnsPBasealignfeature ensBasealignfeatureNew(EnsPFeaturepair fp,
                                             AjPStr cigar,
                                             AjPList fps,
-                                            AjEnum type,
+                                            EnsEBasealignfeatureType type,
                                             ajuint pair)
 {
     EnsPBasealignfeature baf = NULL;
-    
+
     if(!fp)
-	return NULL;
-    
+        return NULL;
+
     if((type < ensEBasealignfeatureTypeDNA) ||
        (type > ensEBasealignfeatureTypeProtein))
     {
-	ajDebug("ensBasealignfeatureNew got illegal type (%d).\n", type);
-	
-	return NULL;
+        ajDebug("ensBasealignfeatureNew got illegal type (%d).\n", type);
+
+        return NULL;
     }
-    
+
     AJNEW0(baf);
-    
+
     baf->Use = 1;
-    
+
     baf->Featurepair = ensFeaturepairNewRef(fp);
-    
+
     if(cigar && ajStrGetLen(cigar) && fps && ajListGetLength(fps))
     {
-	ajDebug("ensBasealignfeatureNew requires a CIGAR String or a "
-		"List of Ensembl Feature Pairs, not both.\n");
-	
-	AJFREE(baf);
-	
-	return NULL;
+        ajDebug("ensBasealignfeatureNew requires a CIGAR String or a "
+                "List of Ensembl Feature Pairs, not both.\n");
+
+        AJFREE(baf);
+
+        return NULL;
     }
-    else if (cigar && ajStrGetLen(cigar))
-	baf->Cigar = ajStrNewRef(cigar);
-    else if (fps && ajListGetLength(fps))
+    else if(cigar && ajStrGetLen(cigar))
+        baf->Cigar = ajStrNewRef(cigar);
+    else if(fps && ajListGetLength(fps))
     {
-	fps = ajListNew();
-	
-	baseAlignFeatureParseFeatures(baf, fps);
+        fps = ajListNew();
+
+        basealignfeatureParseFeatures(baf, fps);
     }
     else
-	ajDebug("ensBasealignfeatureNew requirs either a CIGAR String or a "
-		"List of Ensembl Feature Pairs.\n");
-    
+        ajDebug("ensBasealignfeatureNew requirs either a CIGAR String or a "
+                "List of Ensembl Feature Pairs.\n");
+
     baf->Type = type;
-    
+
     baf->PairDNAAlignFeatureIdentifier = pair;
-    
+
     return baf;
 }
 
@@ -6205,26 +6568,26 @@ EnsPBasealignfeature ensBasealignfeatureNewObj(
     const EnsPBasealignfeature object)
 {
     EnsPBasealignfeature baf = NULL;
-    
+
     AJNEW0(baf);
-    
+
     baf->Use = 1;
-    
+
     baf->Identifier                 = object->Identifier;
     baf->DNAAlignFeatureadaptor     = object->DNAAlignFeatureadaptor;
     baf->Proteinalignfeatureadaptor = object->Proteinalignfeatureadaptor;
-    
+
     baf->Featurepair = ensFeaturepairNewRef(object->Featurepair);
-    
+
     if(object->Cigar)
-	baf->Cigar = ajStrNewRef(object->Cigar);
-    
+        baf->Cigar = ajStrNewRef(object->Cigar);
+
     baf->Type = object->Type;
-    
+
     baf->AlignmentLength = object->AlignmentLength;
-    
+
     baf->PairDNAAlignFeatureIdentifier = object->PairDNAAlignFeatureIdentifier;
-    
+
     return baf;
 }
 
@@ -6245,10 +6608,10 @@ EnsPBasealignfeature ensBasealignfeatureNewObj(
 EnsPBasealignfeature ensBasealignfeatureNewRef(EnsPBasealignfeature baf)
 {
     if(!baf)
-	return NULL;
-    
+        return NULL;
+
     baf->Use++;
-    
+
     return baf;
 }
 
@@ -6289,30 +6652,30 @@ EnsPBasealignfeature ensBasealignfeatureNewRef(EnsPBasealignfeature baf)
 void ensBasealignfeatureDel(EnsPBasealignfeature *Pbaf)
 {
     EnsPBasealignfeature pthis = NULL;
-    
+
     if(!Pbaf)
-	return;
-    
+        return;
+
     if(!*Pbaf)
-	return;
+        return;
 
     pthis = *Pbaf;
-    
+
     pthis->Use--;
-    
+
     if(pthis->Use)
     {
-	*Pbaf = NULL;
-	
-	return;
+        *Pbaf = NULL;
+
+        return;
     }
-    
+
     ensFeaturepairDel(&pthis->Featurepair);
-    
+
     AJFREE(pthis);
 
     *Pbaf = NULL;
-    
+
     return;
 }
 
@@ -6348,7 +6711,7 @@ void ensBasealignfeatureDel(EnsPBasealignfeature *Pbaf)
 ** @valrule Identifier [ajuint] SQL database-internal identifier
 ** @valrule Featurepair [EnsPFeaturepair] Ensembl Feature Pair
 ** @valrule Cigar [AjPStr] CIGAR line
-** @valrule Type [AjEnum] Type
+** @valrule Type [EnsEBasealignfeatureType] Type
 ** @valrule AlignmentLength [ajuint] Alignment length
 ** @valrule PairDNAAlignFeatureIdentifier [ajuint] Pair DNA Align Feature
 **                                                 identifier
@@ -6376,7 +6739,7 @@ EnsPDNAAlignFeatureadaptor ensBasealignfeatureGetDNAAlignFeatureadaptor(
 {
     if(!baf)
         return NULL;
-    
+
     return baf->DNAAlignFeatureadaptor;
 }
 
@@ -6401,7 +6764,7 @@ EnsPProteinalignfeatureadaptor ensBasealignfeatureGetProteinalignfeatureadaptor(
 {
     if(!baf)
         return NULL;
-    
+
     return baf->Proteinalignfeatureadaptor;
 }
 
@@ -6424,7 +6787,7 @@ ajuint ensBasealignfeatureGetIdentifier(const EnsPBasealignfeature baf)
 {
     if(!baf)
         return 0;
-    
+
     return baf->Identifier;
 }
 
@@ -6445,8 +6808,8 @@ EnsPFeaturepair ensBasealignfeatureGetFeaturepair(
     const EnsPBasealignfeature baf)
 {
     if(!baf)
-	return NULL;
-    
+        return NULL;
+
     return baf->Featurepair;
 }
 
@@ -6455,31 +6818,31 @@ EnsPFeaturepair ensBasealignfeatureGetFeaturepair(
 
 /*
 ** FIXME: The alignment length could already be calculated when the CIGAR line
-** is parsed the first time in baseAlignFeatureParseCigar.
+** is parsed the first time in basealignfeatureParseCigar.
 */
 
 ajuint ensBasealignfeatureGetAlignmentLength(EnsPBasealignfeature baf)
 {
     ajint tlength = 0;
-    
+
     const AjPStr token = NULL;
-    
+
     if(!baf)
-	return 0;
-    
+        return 0;
+
     if(!baf->AlignmentLength && baf->Cigar)
     {
-	
-	while((token = ajStrParseC(baf->Cigar, "MDI")))
-	{
-	    ajStrToInt(token, &tlength);
-	    
-	    tlength = tlength ? tlength : 1;
-	    
-	    baf->AlignmentLength += tlength;
-	}
+
+        while((token = ajStrParseC(baf->Cigar, "MDI")))
+        {
+            ajStrToInt(token, &tlength);
+
+            tlength = tlength ? tlength : 1;
+
+            baf->AlignmentLength += tlength;
+        }
     }
-    
+
     return baf->AlignmentLength;
 }
 
@@ -6520,31 +6883,32 @@ ajuint ensBasealignfeatureGetAlignmentLength(EnsPBasealignfeature baf)
 AjBool ensBasealignfeatureSetFeaturepair(EnsPBasealignfeature baf,
                                          EnsPFeaturepair fp)
 {
-#if AJFALSE
-    ajDebug("ensBasealignfeatureSetFeaturepair\n"
-	    "  baf %p\n"
-	    "  fp %p\n",
-	    baf,
-	    fp);
-    
-    ensBasealignfeatureTrace(baf, 1);
-    
-    ensFeaturepairTrace(fp, 1);
-#endif
-    
+    if(ajDebugTest("ensBasealignfeatureSetFeaturepair"))
+    {
+        ajDebug("ensBasealignfeatureSetFeaturepair\n"
+                "  baf %p\n"
+                "  fp %p\n",
+                baf,
+                fp);
+
+        ensBasealignfeatureTrace(baf, 1);
+
+        ensFeaturepairTrace(fp, 1);
+    }
+
     if(!baf)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!fp)
-	return ajFalse;
-    
+        return ajFalse;
+
     /* Replace the current Feature Pair. */
-    
+
     if(baf->Featurepair)
-	ensFeaturepairDel(&(baf->Featurepair));
-    
+        ensFeaturepairDel(&baf->Featurepair);
+
     baf->Featurepair = ensFeaturepairNewRef(fp);
-    
+
     return ajTrue;
 }
 
@@ -6565,8 +6929,8 @@ AjBool ensBasealignfeatureSetFeaturepair(EnsPBasealignfeature baf,
 EnsPFeature ensBasealignfeatureGetFeature(const EnsPBasealignfeature baf)
 {
     if(!baf)
-	return NULL;
-    
+        return NULL;
+
     return ensFeaturepairGetSourceFeature(baf->Featurepair);
 }
 
@@ -6582,25 +6946,25 @@ EnsPFeature ensBasealignfeatureGetFeature(const EnsPBasealignfeature baf)
 ** @cc Bio::EnsEMBL::Storable::adaptor
 ** @param [r] baf [const EnsPBasealignfeature] Ensembl Base Align Feature
 **
-** @return [void *] Ensembl DNA or Protein Align Feature Adaptor
+** @return [void*] Ensembl DNA or Protein Align Feature Adaptor
 ** @@
 ******************************************************************************/
 
-void *ensBasealignfeatureGetAdaptor(const EnsPBasealignfeature baf)
+void* ensBasealignfeatureGetAdaptor(const EnsPBasealignfeature baf)
 {
     void *Padaptor = NULL;
-    
+
     if(!baf)
         return NULL;
 
     switch(baf->Type)
     {
         case ensEBasealignfeatureTypeDNA:
-          
+
             Padaptor = (void *) baf->DNAAlignFeatureadaptor;
 
             break;
-          
+
         case ensEBasealignfeatureTypeProtein:
 
             Padaptor = (void *) baf->Proteinalignfeatureadaptor;
@@ -6608,12 +6972,12 @@ void *ensBasealignfeatureGetAdaptor(const EnsPBasealignfeature baf)
             break;
 
         default:
-            
+
             ajWarn("ensBasealignfeatureGetAdaptor got an "
                    "Ensembl Base Align Feature with unexpected type %d.",
                    baf->Type);
     }
-    
+
     return Padaptor;
 }
 
@@ -6633,9 +6997,9 @@ void *ensBasealignfeatureGetAdaptor(const EnsPBasealignfeature baf)
 ajuint ensBasealignfeatureGetSourceUnit(const EnsPBasealignfeature baf)
 {
     ajuint unit = 0;
-    
+
     if(!baf)
-	return 0;
+        return 0;
 
     switch(baf->Type)
     {
@@ -6650,14 +7014,14 @@ ajuint ensBasealignfeatureGetSourceUnit(const EnsPBasealignfeature baf)
             unit = 3;
 
             break;
-            
+
         default:
-            
+
             ajWarn("ensBasealignfeatureGetSourceUnit got an "
                    "Ensembl Base Align Feature with unexpected type %d.",
                    baf->Type);
     }
-    
+
     return unit;
 }
 
@@ -6677,10 +7041,10 @@ ajuint ensBasealignfeatureGetSourceUnit(const EnsPBasealignfeature baf)
 ajuint ensBasealignfeatureGetTargetUnit(const EnsPBasealignfeature baf)
 {
     ajuint unit = 0;
-    
+
     if(!baf)
-	return 0;
-    
+        return 0;
+
     switch(baf->Type)
     {
         case ensEBasealignfeatureTypeDNA:
@@ -6694,48 +7058,48 @@ ajuint ensBasealignfeatureGetTargetUnit(const EnsPBasealignfeature baf)
             unit = 1;
 
             break;
-            
+
         default:
-            
+
             ajWarn("ensBasealignfeatureGetTargetUnit got an "
                    "Ensembl Base Align Feature with unexpected type %d.",
                    baf->Type);
     }
-    
+
     return unit;
 }
 
 
 
 
-/* @func ensBasealignfeatureGetMemSize ****************************************
+/* @func ensBasealignfeatureGetMemsize ****************************************
 **
 ** Get the memory size in bytes of an Ensembl Base Align Feature.
 **
 ** @param [r] baf [const EnsPBasealignfeature] Ensembl Base Align Feature
 **
-** @return [ajuint] Memory size
+** @return [ajulong] Memory size
 ** @@
 ******************************************************************************/
 
-ajuint ensBasealignfeatureGetMemSize(const EnsPBasealignfeature baf)
+ajulong ensBasealignfeatureGetMemsize(const EnsPBasealignfeature baf)
 {
-    ajuint size = 0;
-    
+    ajulong size = 0;
+
     if(!baf)
-	return 0;
-    
-    size += (ajuint) sizeof (EnsOBasealignfeature);
-    
-    size += ensFeaturepairGetMemSize(baf->Featurepair);
-    
+        return 0;
+
+    size += sizeof (EnsOBasealignfeature);
+
+    size += ensFeaturepairGetMemsize(baf->Featurepair);
+
     if(baf->Cigar)
     {
-	size += (ajuint) sizeof (AjOStr);
-	
-	size += ajStrGetRes(baf->Cigar);
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(baf->Cigar);
     }
-    
+
     return size;
 }
 
@@ -6763,29 +7127,29 @@ EnsPBasealignfeature ensBasealignfeatureTransform(
     const AjPStr csversion)
 {
     EnsPFeaturepair nfp = NULL;
-    
+
     EnsPBasealignfeature nbaf = NULL;
-    
+
     if(!baf)
-	return NULL;
-    
+        return NULL;
+
     if(!csname)
-	return NULL;
-    
+        return NULL;
+
     if(!csversion)
-	return NULL;
-    
+        return NULL;
+
     nfp = ensFeaturepairTransform(baf->Featurepair, csname, csversion);
-    
+
     if(!nfp)
-	return NULL;
-    
+        return NULL;
+
     nbaf = ensBasealignfeatureNewObj(baf);
-    
+
     ensBasealignfeatureSetFeaturepair(nbaf, nfp);
-    
+
     ensFeaturepairDel(&nfp);
-    
+
     return nbaf;
 }
 
@@ -6809,26 +7173,26 @@ EnsPBasealignfeature ensBasealignfeatureTransfer(EnsPBasealignfeature baf,
                                                  EnsPSlice slice)
 {
     EnsPBasealignfeature newbaf = NULL;
-    
+
     EnsPFeaturepair newfp = NULL;
-    
+
     if(!baf)
-	return NULL;
-    
+        return NULL;
+
     if(!slice)
-	return NULL;
-    
+        return NULL;
+
     newfp = ensFeaturepairTransfer(baf->Featurepair, slice);
-    
+
     if(!newfp)
-	return NULL;
-    
+        return NULL;
+
     newbaf = ensBasealignfeatureNewObj(baf);
-    
+
     ensBasealignfeatureSetFeaturepair(newbaf, newfp);
-    
+
     ensFeaturepairDel(&newfp);
-    
+
     return newbaf;
 }
 
@@ -6867,41 +7231,41 @@ EnsPBasealignfeature ensBasealignfeatureTransfer(EnsPBasealignfeature baf,
 AjBool ensBasealignfeatureTrace(const EnsPBasealignfeature baf, ajuint level)
 {
     AjPStr indent = NULL;
-    
+
     if(!baf)
-	return ajFalse;
-    
+        return ajFalse;
+
     indent = ajStrNew();
-    
+
     ajStrAppendCountK(&indent, ' ', level * 2);
-    
+
     ajDebug("ensBasealignfeatureTrace %p\n"
-	    "%S  DNAAlignFeatureadaptor %p\n"
-	    "%S  Proteinalignfeatureadaptor %p\n"
-	    "%S  Identifier %u\n"
-	    "%S  Featurepair %p\n"
-	    "%S  Cigar '%S'\n"
-	    "%S  (*GetFeaturepair) %p\n"
-	    "%S  Type %d\n"
-	    "%S  AlignmentLength %u\n"
-	    "%S  PairDNAAlignFeatureIdentifier %u\n"
-	    "%S  Use %u\n",
-	    indent, baf,
-	    indent, baf->DNAAlignFeatureadaptor,
-	    indent, baf->Proteinalignfeatureadaptor,
-	    indent, baf->Identifier,
-	    indent, baf->Featurepair,
-	    indent, baf->Cigar,
-	    indent, baf->GetFeaturepair,
-	    indent, baf->Type,
-	    indent, baf->AlignmentLength,
-	    indent, baf->PairDNAAlignFeatureIdentifier,
-	    indent, baf->Use);
-    
+            "%S  DNAAlignFeatureadaptor %p\n"
+            "%S  Proteinalignfeatureadaptor %p\n"
+            "%S  Identifier %u\n"
+            "%S  Featurepair %p\n"
+            "%S  Cigar '%S'\n"
+            "%S  (*GetFeaturepair) %p\n"
+            "%S  Type %d\n"
+            "%S  AlignmentLength %u\n"
+            "%S  PairDNAAlignFeatureIdentifier %u\n"
+            "%S  Use %u\n",
+            indent, baf,
+            indent, baf->DNAAlignFeatureadaptor,
+            indent, baf->Proteinalignfeatureadaptor,
+            indent, baf->Identifier,
+            indent, baf->Featurepair,
+            indent, baf->Cigar,
+            indent, baf->GetFeaturepair,
+            indent, baf->Type,
+            indent, baf->AlignmentLength,
+            indent, baf->PairDNAAlignFeatureIdentifier,
+            indent, baf->Use);
+
     ensFeaturepairTrace(baf->Featurepair, level + 1);
-    
+
     ajStrDel(&indent);
-    
+
     return ajTrue;
 }
 
@@ -6927,40 +7291,202 @@ AjBool ensBasealignfeatureFetchAllFeaturepairs(const EnsPBasealignfeature baf,
                                                AjPList fps)
 {
     if(!baf)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!fps)
-	return ajFalse;
-    
-    return baseAlignFeatureParseCigar(baf, fps);
+        return ajFalse;
+
+    return basealignfeatureParseCigar(baf, fps);
 }
 
 
 
 
-/* @funcstatic baseAlignFeatureadaptorCacheReference **************************
+/* @funcstatic basealignfeatureCompareSourceFeatureStartAscending *************
+**
+** Comparison function to sort Ensembl Base Align Features by the start
+** cooridnate of their source Ensembl Feature of the Ensembl Feature Pair in
+** ascending order.
+**
+** @param [r] P1 [const void*] Ensembl Base Align Feature address 1
+** @param [r] P2 [const void*] Ensembl Base Align Feature address 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+** @@
+******************************************************************************/
+
+static int basealignfeatureCompareSourceFeatureStartAscending(const void* P1,
+                                                              const void* P2)
+{
+    EnsPBasealignfeature baf1 = NULL;
+    EnsPBasealignfeature baf2 = NULL;
+
+    baf1 = *(EnsPBasealignfeature const *) P1;
+    baf2 = *(EnsPBasealignfeature const *) P2;
+
+    if(ajDebugTest("basealignfeatureCompareSourceFeatureStartAscending"))
+    {
+        ajDebug("basealignfeatureCompareSourceFeatureStartAscending\n"
+                "  baf1 %p\n"
+                "  baf2 %p\n",
+                baf1,
+                baf2);
+
+        ensBasealignfeatureTrace(baf1, 1);
+        ensBasealignfeatureTrace(baf2, 1);
+    }
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if(baf1 && (!baf2))
+        return -1;
+
+    if((!baf1) && (!baf2))
+        return 0;
+
+    if((!baf1) && baf2)
+        return +1;
+
+    return ensFeaturepairCompareSourceFeatureStartAscending(
+        baf1->Featurepair,
+        baf2->Featurepair);
+}
+
+
+
+
+/* @funcstatic basealignfeatureCompareSourceFeatureStartDescending ************
+**
+** Comparison function to sort Ensembl Base Align Features by the start
+** cooridnate of their source Ensembl Feature of the Ensembl Feature Pair in
+** descending order.
+**
+** @param [r] P1 [const void*] Ensembl Base Align Feature address 1
+** @param [r] P2 [const void*] Ensembl Base Align Feature address 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+** @@
+******************************************************************************/
+
+static int basealignfeatureCompareSourceFeatureStartDescending(const void* P1,
+                                                               const void* P2)
+{
+    EnsPBasealignfeature baf1 = NULL;
+    EnsPBasealignfeature baf2 = NULL;
+
+    baf1 = *(EnsPBasealignfeature const *) P1;
+    baf2 = *(EnsPBasealignfeature const *) P2;
+
+    if(ajDebugTest("basealignfeatureCompareSourceFeatureStartDescending"))
+    {
+        ajDebug("basealignfeatureCompareSourceFeatureStartDescending\n"
+                "  baf1 %p\n"
+                "  baf2 %p\n",
+                baf1,
+                baf2);
+
+        ensBasealignfeatureTrace(baf1, 1);
+        ensBasealignfeatureTrace(baf2, 1);
+    }
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if(baf1 && (!baf2))
+        return -1;
+
+    if((!baf1) && (!baf2))
+        return 0;
+
+    if((!baf1) && baf2)
+        return +1;
+
+    return ensFeaturepairCompareSourceFeatureStartDescending(
+        baf1->Featurepair,
+        baf2->Featurepair);
+}
+
+
+
+
+/* @func ensBasealignfeatureSortBySourceFeatureStartAscending *****************
+**
+** Sort Ensembl Base Align Features by the start cooridnate of their
+** source Ensembl Feature of the Ensembl Feature Pair in ascending order.
+**
+** @param [u] bafs [AjPList] AJAX List of Ensembl Base Align Features
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensBasealignfeatureSortBySourceFeatureStartAscending(AjPList bafs)
+{
+    if(!bafs)
+        return ajFalse;
+
+    ajListSort(bafs, basealignfeatureCompareSourceFeatureStartAscending);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensBasealignfeatureSortBySourceFeatureStartDescending ****************
+**
+** Sort Ensembl Base Align Features by the start cooridnate of their
+** source Ensembl Feature of the Ensembl Feature Pair in descending order.
+**
+** @param [u] bafs [AjPList] AJAX List of Ensembl Base Align Features
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensBasealignfeatureSortBySourceFeatureStartDescending(AjPList bafs)
+{
+    if(!bafs)
+        return ajFalse;
+
+    ajListSort(bafs, basealignfeatureCompareSourceFeatureStartDescending);
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic basealignfeatureadaptorCacheReference **************************
 **
 ** Wrapper function to reference an Ensembl Base Align Feature
 ** from an Ensembl Cache.
 **
-** @param [r] value [void *] Ensembl Base Align Feature
+** @param [r] value [void*] Ensembl Base Align Feature
 **
-** @return [void *] Ensembl Base Align Feature or NULL
+** @return [void*] Ensembl Base Align Feature or NULL
 ** @@
 ******************************************************************************/
 
-static void *baseAlignFeatureadaptorCacheReference(void *value)
+static void* basealignfeatureadaptorCacheReference(void *value)
 {
     if(!value)
-	return NULL;
-    
+        return NULL;
+
     return (void *) ensBasealignfeatureNewRef((EnsPBasealignfeature) value);
 }
 
 
 
 
-/* @funcstatic baseAlignFeatureadaptorCacheDelete *****************************
+/* @funcstatic basealignfeatureadaptorCacheDelete *****************************
 **
 ** Wrapper function to delete an Ensembl Base Align Feature
 ** from an Ensembl Cache.
@@ -6971,42 +7497,42 @@ static void *baseAlignFeatureadaptorCacheReference(void *value)
 ** @@
 ******************************************************************************/
 
-static void baseAlignFeatureadaptorCacheDelete(void **value)
+static void basealignfeatureadaptorCacheDelete(void **value)
 {
     if(!value)
-	return;
-    
+        return;
+
     ensBasealignfeatureDel((EnsPBasealignfeature *) value);
-    
+
     return;
 }
 
 
 
 
-/* @funcstatic baseAlignFeatureadaptorCacheSize *******************************
+/* @funcstatic basealignfeatureadaptorCacheSize *******************************
 **
 ** Wrapper function to determine the memory size of an
 ** Ensembl Base Align Feature from an Ensembl Cache.
 **
 ** @param [r] value [const void*] Ensembl Base Align Feature
 **
-** @return [ajuint] Memory size
+** @return [ajulong] Memory size
 ** @@
 ******************************************************************************/
 
-static ajuint baseAlignFeatureadaptorCacheSize(const void *value)
+static ajulong basealignfeatureadaptorCacheSize(const void *value)
 {
-    if (!value)
-	return 0;
-    
-    return ensBasealignfeatureGetMemSize((const EnsPBasealignfeature) value);
+    if(!value)
+        return 0;
+
+    return ensBasealignfeatureGetMemsize((const EnsPBasealignfeature) value);
 }
 
 
 
 
-/* @funcstatic baseAlignFeatureadaptorGetFeature ******************************
+/* @funcstatic basealignfeatureadaptorGetFeature ******************************
 **
 ** Wrapper function to get the Ensembl Feature of an
 ** Ensembl Base Align Feature from an Ensembl Feature Adaptor.
@@ -7017,11 +7543,11 @@ static ajuint baseAlignFeatureadaptorCacheSize(const void *value)
 ** @@
 ******************************************************************************/
 
-static EnsPFeature baseAlignFeatureadaptorGetFeature(const void *value)
+static EnsPFeature basealignfeatureadaptorGetFeature(const void *value)
 {
     if(!value)
-	return NULL;
-    
+        return NULL;
+
     return ensBasealignfeatureGetFeature((const EnsPBasealignfeature) value);
 }
 
@@ -7039,7 +7565,7 @@ static EnsPFeature baseAlignFeatureadaptorGetFeature(const void *value)
 **
 ******************************************************************************/
 
-static const char *dnaAlignFeatureadaptorTables[] =
+static const char *dnaalignfeatureadaptorTables[] =
 {
     "dna_align_feature",
     /* FIXME: The External Database Adaptor has an internal cache.
@@ -7051,7 +7577,7 @@ static const char *dnaAlignFeatureadaptorTables[] =
 
 
 
-static const char *dnaAlignFeatureadaptorColumns[] =
+static const char *dnaalignfeatureadaptorColumns[] =
 {
     "dna_align_feature.dna_align_feature_id",
     "dna_align_feature.seq_region_id",
@@ -7081,7 +7607,7 @@ static const char *dnaAlignFeatureadaptorColumns[] =
 
 
 
-static EnsOBaseadaptorLeftJoin dnaAlignFeatureadaptorLeftJoin[] =
+static EnsOBaseadaptorLeftJoin dnaalignfeatureadaptorLeftJoin[] =
 {
     /* FIXME: The Ensembl External Database Adaptor has an internal cache.
        {
@@ -7093,14 +7619,14 @@ static EnsOBaseadaptorLeftJoin dnaAlignFeatureadaptorLeftJoin[] =
     {NULL, NULL}
 };
 
-static const char *dnaAlignFeatureadaptorDefaultCondition = NULL;
+static const char *dnaalignfeatureadaptorDefaultCondition = NULL;
 
-static const char *dnaAlignFeatureadaptorFinalCondition = NULL;
-
-
+static const char *dnaalignfeatureadaptorFinalCondition = NULL;
 
 
-/* @funcstatic dnaAlignFeatureadaptorFetchAllBySQL ****************************
+
+
+/* @funcstatic dnaalignfeatureadaptorFetchAllBySQL ****************************
 **
 ** Run a SQL statement against an Ensembl Database Adaptor and consolidate the
 ** results into an AJAX List of Ensembl Base Align Features.
@@ -7110,413 +7636,408 @@ static const char *dnaAlignFeatureadaptorFinalCondition = NULL;
 **
 ** @param [r] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 ** @param [r] statement [const AjPStr] SQL statement
-** @param [r] mapper [EnsPAssemblymapper] Ensembl Assembly Mapper
-** @param [r] slice [EnsPSlice] Ensembl Slice
+** @param [uN] am [EnsPAssemblymapper] Ensembl Assembly Mapper
+** @param [uN] slice [EnsPSlice] Ensembl Slice
 ** @param [u] bafs [AjPList] AJAX List of Ensembl Base Align Features
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-static AjBool dnaAlignFeatureadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
+static AjBool dnaalignfeatureadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
                                                   const AjPStr statement,
-                                                  EnsPAssemblymapper mapper,
+                                                  EnsPAssemblymapper am,
                                                   EnsPSlice slice,
                                                   AjPList bafs)
 {
     double evalue = 0;
     double score  = 0;
-    
+
     float identity    = 0;
     float hitcoverage = 0;
-    
+
     ajuint identifier = 0;
     ajuint analysisid = 0;
     ajuint edbid      = 0;
     ajuint pair       = 0;
-    
+
     ajuint srid    = 0;
     ajuint srstart = 0;
     ajuint srend   = 0;
     ajint srstrand = 0;
-    
+
     ajint slstart  = 0;
     ajint slend    = 0;
     ajint slstrand = 0;
     ajint sllength = 0;
-    
+
     ajuint hitstart = 0;
     ajuint hitend   = 0;
     ajint hitstrand = 0;
-    
+
     AjPList mrs = NULL;
-    
+
     AjPSqlstatement sqls = NULL;
     AjISqlrow sqli       = NULL;
     AjPSqlrow sqlr       = NULL;
-    
+
     AjPStr hitname = NULL;
     AjPStr cigar   = NULL;
     AjPStr extra   = NULL;
-    
+
     EnsPAnalysis analysis  = NULL;
     EnsPAnalysisadaptor aa = NULL;
-    
-    EnsPAssemblymapper am         = NULL;
+
     EnsPAssemblymapperadaptor ama = NULL;
-    
+
     EnsPBasealignfeature baf = NULL;
-    
+
     EnsPDNAAlignFeatureadaptor dafa = NULL;
-    
+
     EnsPExternaldatabase edb         = NULL;
     EnsPExternaldatabaseadaptor edba = NULL;
-    
+
     EnsPFeature srcfeature = NULL;
     EnsPFeature trgfeature = NULL;
-    
+
     EnsPFeaturepair fp = NULL;
-    
+
     EnsPMapperresult mr = NULL;
-    
+
     EnsPSlice srslice   = NULL;
     EnsPSliceadaptor sa = NULL;
 
-#if AJFALSE
-    ajDebug("dnaAlignFeatureadaptorFetchAllBySQL\n"
-	    "  dba %p\n"
-	    "  statement %p\n"
-	    "  mapper %p\n"
-	    "  slice %p\n"
-	    "  bafs %p\n",
-	    dba,
-	    statement,
-	    mapper,
-	    slice,
-	    bafs);
-#endif
-    
+    if(ajDebugTest("dnaalignfeatureadaptorFetchAllBySQL"))
+        ajDebug("dnaalignfeatureadaptorFetchAllBySQL\n"
+                "  dba %p\n"
+                "  statement %p\n"
+                "  am %p\n"
+                "  slice %p\n"
+                "  bafs %p\n",
+                dba,
+                statement,
+                am,
+                slice,
+                bafs);
+
     if(!dba)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!statement)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!bafs)
-	return ajFalse;
-    
+        return ajFalse;
+
     aa = ensRegistryGetAnalysisadaptor(dba);
-    
+
     dafa = ensRegistryGetDNAAlignFeatureadaptor(dba);
-    
+
     edba = ensRegistryGetExternaldatabaseadaptor(dba);
-    
+
     sa = (slice) ? ensSliceGetAdaptor(slice) : ensRegistryGetSliceadaptor(dba);
-    
+
+    if(slice)
+        ama = ensRegistryGetAssemblymapperadaptor(dba);
+
     mrs = ajListNew();
-    
+
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
-    
+
     sqli = ajSqlrowiterNew(sqls);
-    
+
     while(!ajSqlrowiterDone(sqli))
     {
-	identifier  = 0;
-	srid        = 0;
-	srstart     = 0;
-	srend       = 0;
-	srstrand    = 0;
-	hitstart    = 0;
-	hitend      = 0;
-	hitstrand   = 0;
-	hitname     = ajStrNew();
-	analysisid  = 0;
-	cigar       = ajStrNew();
-	score       = 0;
-	evalue      = 0;
-	identity    = 0;
-	edbid       = 0;
-	hitcoverage = 0;
-	extra       = ajStrNew();
-	pair        = 0;
-	
-	sqlr = ajSqlrowiterGet(sqli);
-	
-	ajSqlcolumnToUint(sqlr, &identifier);
-	ajSqlcolumnToUint(sqlr, &srid);
-	ajSqlcolumnToUint(sqlr, &srstart);
-	ajSqlcolumnToUint(sqlr, &srend);
-	ajSqlcolumnToInt(sqlr, &srstrand);
-	ajSqlcolumnToUint(sqlr, &hitstart);
-	ajSqlcolumnToUint(sqlr, &hitend);
-	ajSqlcolumnToInt(sqlr, &hitstrand);
-	ajSqlcolumnToStr(sqlr, &hitname);
-	ajSqlcolumnToUint(sqlr, &analysisid);
-	ajSqlcolumnToStr(sqlr, &cigar);
-	ajSqlcolumnToDouble(sqlr, &score);
-	ajSqlcolumnToDouble(sqlr, &evalue);
-	ajSqlcolumnToFloat(sqlr, &identity);
-	ajSqlcolumnToUint(sqlr, &edbid);
-	ajSqlcolumnToFloat(sqlr, &hitcoverage);
-	ajSqlcolumnToStr(sqlr, &extra);
-	ajSqlcolumnToUint(sqlr, &pair);
-	
-	/*
-	** Since the Ensembl SQL schema defines Sequence Region start and end
-	** coordinates as unsigned integers for all Features, the range needs
-	** checking.
-	*/
-	
-	if(srstart <= INT_MAX)
-	    slstart = (ajint) srstart;
-	else
-	    ajFatal("dnaAlignFeatureadaptorFetchAllBySQL got a "
-		    "Sequence Region start coordinate (%u) outside the "
-		    "maximum integer limit (%d).",
-		    srstart, INT_MAX);
-	
-	if(srend <= INT_MAX)
-	    slend = (ajint) srend;
-	else
-	    ajFatal("dnaAlignFeatureadaptorFetchAllBySQL got a "
-		    "Sequence Region end coordinate (%u) outside the "
-		    "maximum integer limit (%d).",
-		    srend, INT_MAX);
-	
-	slstrand = srstrand;
-	
-	/* Fetch a Slice spanning the entire Sequence Region. */
-	
-	ensSliceadaptorFetchBySeqregionIdentifier(sa, srid, 0, 0, 0, &srslice);
-	
-	/*
-	** Obtain an Ensembl Assembly Mapper if none was defined, but a
-	** destination Slice was.
-	*/
-	
-	if(mapper)
-	    am = ensAssemblymapperNewRef(mapper);
-	
-	if((! mapper) &&
-	   slice &&
-	   (! ensCoordsystemMatch(ensSliceGetCoordsystem(slice),
-                                  ensSliceGetCoordsystem(srslice))))
-	    am =
-		ensAssemblymapperadaptorFetchByCoordsystems(
-                    ama,
-		    ensSliceGetCoordsystem(slice),
-		    ensSliceGetCoordsystem(srslice));
-	
-	/*
-	** Remap the Feature coordinates to another Ensembl Coordinate System
-	** if an Ensembl Mapper was provided.
-	*/
-	
-	if(am)
-	{
-	    ensAssemblymapperFastMap(am,
-				     ensSliceGetSeqregion(srslice),
-				     slstart,
-				     slend,
-				     slstrand,
-				     mrs);
-	    
-	    /*
-	    ** The ensAssemblymapperFastMap function returns at best one
-	    ** Ensembl Mapper Result.
-	    */
-	    
-	    ajListPop(mrs, (void **) &mr);
-	    
-	    /*
-	    ** Skip Features that map to gaps or
-	    ** Coordinate System boundaries.
-	    */
-	    
-	    if(ensMapperresultGetType(mr) != ensEMapperresultCoordinate)
-	    {
-		/* Load the next Feature but destroy first! */
-		
-		ajStrDel(&hitname);
-		
-		ajStrDel(&cigar);
-		
-		ensSliceDel(&srslice);
-		
-		ensAssemblymapperDel(&am);
-		
-		ensMapperresultDel(&mr);
-		
-		continue;
-	    }
-	    
-	    srid = ensMapperresultGetObjectIdentifier(mr);
-	    
-	    slstart = ensMapperresultGetStart(mr);
-	    
-	    slend = ensMapperresultGetEnd(mr);
-	    
-	    slstrand = ensMapperresultGetStrand(mr);
-	    
-	    /*
-	    ** FIXME: In contrast to the Bio::EnsEMBL::DBSQL::ExonAdaptor
-	    ** code, a construct to get a Slice from the cache is not
-	    ** commented out from the
-	    ** Bio::EnsEMBL::DBSQL::DnaAlignFeatureAdaptor of the Perl API.
-	    ** See CVS versions 1.49 and 1.49.14.1 for details.
-	    */
-	    
-	    /*
-	    ** Delete the Sequence Region Slice and fetch a Slice in the
-	    ** Coordinate System we just mapped to.
-	    */
-	    
-	    ensSliceDel(&srslice);
-	    
-	    ensSliceadaptorFetchBySeqregionIdentifier(sa,
-						      srid,
-						      0,
-						      0,
-						      0,
-						      &srslice);
-	    
-	    ensMapperresultDel(&mr);
-	}
-	
-	/*
-	** Convert Sequence Region Slice coordinates to destination Slice
-	** coordinates, if a destination Slice has been provided.
-	*/
-	
-	if(slice)
-	{
-	    /* Check that the length of the Slice is within range. */
-	    
-	    if(ensSliceGetLength(slice) <= INT_MAX)
-		sllength = (ajint) ensSliceGetLength(slice);
-	    else
-		ajFatal("dnaAlignFeatureadaptorFetchAllBySQL got a Slice, "
-			"which length (%u) exceeds the "
-			"maximum integer limit (%d).",
-			ensSliceGetLength(slice), INT_MAX);
-	    
-	    /*
-	    ** Nothing needs to be done if the destination Slice starts at 1
-	    ** and is on the forward strand.
-	    */
-	    
-	    if((ensSliceGetStart(slice) != 1) ||
+        identifier  = 0;
+        srid        = 0;
+        srstart     = 0;
+        srend       = 0;
+        srstrand    = 0;
+        hitstart    = 0;
+        hitend      = 0;
+        hitstrand   = 0;
+        hitname     = ajStrNew();
+        analysisid  = 0;
+        cigar       = ajStrNew();
+        score       = 0;
+        evalue      = 0;
+        identity    = 0;
+        edbid       = 0;
+        hitcoverage = 0;
+        extra       = ajStrNew();
+        pair        = 0;
+
+        sqlr = ajSqlrowiterGet(sqli);
+
+        ajSqlcolumnToUint(sqlr, &identifier);
+        ajSqlcolumnToUint(sqlr, &srid);
+        ajSqlcolumnToUint(sqlr, &srstart);
+        ajSqlcolumnToUint(sqlr, &srend);
+        ajSqlcolumnToInt(sqlr, &srstrand);
+        ajSqlcolumnToUint(sqlr, &hitstart);
+        ajSqlcolumnToUint(sqlr, &hitend);
+        ajSqlcolumnToInt(sqlr, &hitstrand);
+        ajSqlcolumnToStr(sqlr, &hitname);
+        ajSqlcolumnToUint(sqlr, &analysisid);
+        ajSqlcolumnToStr(sqlr, &cigar);
+        ajSqlcolumnToDouble(sqlr, &score);
+        ajSqlcolumnToDouble(sqlr, &evalue);
+        ajSqlcolumnToFloat(sqlr, &identity);
+        ajSqlcolumnToUint(sqlr, &edbid);
+        ajSqlcolumnToFloat(sqlr, &hitcoverage);
+        ajSqlcolumnToStr(sqlr, &extra);
+        ajSqlcolumnToUint(sqlr, &pair);
+
+        /*
+        ** Since the Ensembl SQL schema defines Sequence Region start and end
+        ** coordinates as unsigned integers for all Features, the range needs
+        ** checking.
+        */
+
+        if(srstart <= INT_MAX)
+            slstart = (ajint) srstart;
+        else
+            ajFatal("dnaalignfeatureadaptorFetchAllBySQL got a "
+                    "Sequence Region start coordinate (%u) outside the "
+                    "maximum integer limit (%d).",
+                    srstart, INT_MAX);
+
+        if(srend <= INT_MAX)
+            slend = (ajint) srend;
+        else
+            ajFatal("dnaalignfeatureadaptorFetchAllBySQL got a "
+                    "Sequence Region end coordinate (%u) outside the "
+                    "maximum integer limit (%d).",
+                    srend, INT_MAX);
+
+        slstrand = srstrand;
+
+        /* Fetch a Slice spanning the entire Sequence Region. */
+
+        ensSliceadaptorFetchBySeqregionIdentifier(sa, srid, 0, 0, 0, &srslice);
+
+        /*
+        ** Obtain an Ensembl Assembly Mapper if none was defined, but a
+        ** destination Slice was.
+        */
+
+        if(am)
+            am = ensAssemblymapperNewRef(am);
+        else if(slice && (!ensCoordsystemMatch(
+                              ensSliceGetCoordsystem(slice),
+                              ensSliceGetCoordsystem(srslice))))
+            am = ensAssemblymapperadaptorFetchBySlices(ama, slice, srslice);
+
+        /*
+        ** Remap the Feature coordinates to another Ensembl Coordinate System
+        ** if an Ensembl Mapper was provided.
+        */
+
+        if(am)
+        {
+            ensAssemblymapperFastMap(am,
+                                     ensSliceGetSeqregion(srslice),
+                                     slstart,
+                                     slend,
+                                     slstrand,
+                                     mrs);
+
+            /*
+            ** The ensAssemblymapperFastMap function returns at best one
+            ** Ensembl Mapper Result.
+            */
+
+            ajListPop(mrs, (void **) &mr);
+
+            /*
+            ** Skip Features that map to gaps or
+            ** Coordinate System boundaries.
+            */
+
+            if(ensMapperresultGetType(mr) != ensEMapperresultCoordinate)
+            {
+                /* Load the next Feature but destroy first! */
+
+                ajStrDel(&hitname);
+
+                ajStrDel(&cigar);
+
+                ensSliceDel(&srslice);
+
+                ensAssemblymapperDel(&am);
+
+                ensMapperresultDel(&mr);
+
+                continue;
+            }
+
+            srid = ensMapperresultGetObjectIdentifier(mr);
+
+            slstart = ensMapperresultGetStart(mr);
+
+            slend = ensMapperresultGetEnd(mr);
+
+            slstrand = ensMapperresultGetStrand(mr);
+
+            /*
+            ** FIXME: In contrast to the Bio::EnsEMBL::DBSQL::ExonAdaptor
+            ** code, a construct to get a Slice from the cache is not
+            ** commented out from the
+            ** Bio::EnsEMBL::DBSQL::DnaAlignFeatureAdaptor of the Perl API.
+            ** See CVS versions 1.49 and 1.49.14.1 for details.
+            */
+
+            /*
+            ** Delete the Sequence Region Slice and fetch a Slice in the
+            ** Coordinate System we just mapped to.
+            */
+
+            ensSliceDel(&srslice);
+
+            ensSliceadaptorFetchBySeqregionIdentifier(sa,
+                                                      srid,
+                                                      0,
+                                                      0,
+                                                      0,
+                                                      &srslice);
+
+            ensMapperresultDel(&mr);
+        }
+
+        /*
+        ** Convert Sequence Region Slice coordinates to destination Slice
+        ** coordinates, if a destination Slice has been provided.
+        */
+
+        if(slice)
+        {
+            /* Check that the length of the Slice is within range. */
+
+            if(ensSliceGetLength(slice) <= INT_MAX)
+                sllength = (ajint) ensSliceGetLength(slice);
+            else
+                ajFatal("dnaalignfeatureadaptorFetchAllBySQL got a Slice, "
+                        "which length (%u) exceeds the "
+                        "maximum integer limit (%d).",
+                        ensSliceGetLength(slice), INT_MAX);
+
+            /*
+            ** Nothing needs to be done if the destination Slice starts at 1
+            ** and is on the forward strand.
+            */
+
+            if((ensSliceGetStart(slice) != 1) ||
                (ensSliceGetStrand(slice) < 0))
-	    {
-		if(ensSliceGetStrand(slice) >= 0)
-		{
-		    slstart = slstart - ensSliceGetStart(slice) + 1;
-		    
-		    slend = slend - ensSliceGetStart(slice) + 1;
-		}
-		else
-		{
-		    slend = ensSliceGetEnd(slice) - slstart + 1;
-		    
-		    slstart = ensSliceGetEnd(slice) - slend + 1;
-		    
-		    slstrand *= -1;
-		}
-	    }
-	    
-	    /*
-	    ** Throw away Features off the end of the requested Slice or on
-	    ** any other than the requested Slice.
-	    */
-	    
-	    if((slend < 1) ||
+            {
+                if(ensSliceGetStrand(slice) >= 0)
+                {
+                    slstart = slstart - ensSliceGetStart(slice) + 1;
+
+                    slend = slend - ensSliceGetStart(slice) + 1;
+                }
+                else
+                {
+                    slend = ensSliceGetEnd(slice) - slstart + 1;
+
+                    slstart = ensSliceGetEnd(slice) - slend + 1;
+
+                    slstrand *= -1;
+                }
+            }
+
+            /*
+            ** Throw away Features off the end of the requested Slice or on
+            ** any other than the requested Slice.
+            */
+
+            if((slend < 1) ||
                (slstart > sllength) ||
-	       (srid =! ensSliceGetSeqregionIdentifier(slice)))
-	    {
-		/* Next feature but destroy first! */
-		
-		ajStrDel(&hitname);
-		
-		ajStrDel(&cigar);
-		
-		ensSliceDel(&srslice);
-		
-		ensAssemblymapperDel(&am);
-		
-		continue;
-	    }
-	    
-	    /* Delete the Sequence Region Slice and set the requested Slice. */
-	    
-	    ensSliceDel(&srslice);
-	    
-	    srslice = ensSliceNewRef(slice);
-	}
-	
-	ensAnalysisadaptorFetchByIdentifier(aa, analysisid, &analysis);
-	
-	ensExternaldatabaseadaptorFetchByIdentifier(edba, edbid, &edb);
-	
-	srcfeature = ensFeatureNewS(analysis,
-				    srslice,
-				    slstart,
-				    slend,
-				    slstrand);
-	
-	trgfeature = ensFeatureNewN((EnsPAnalysis) NULL,
-				    hitname,
-				    hitstart,
-				    hitend,
-				    hitstrand);
-	
-	fp = ensFeaturepairNew(srcfeature,
-			       trgfeature,
-			       edb,
-			       extra,
-			       (AjPStr) NULL, /* srcspecies */
-			       (AjPStr) NULL, /* trgspecies */
-			       0, /* groupid */
-			       0, /* levelid */
-			       evalue,
-			       score,
-			       0, /* srccoverage */
-			       hitcoverage,
-			       identity);
-	
-	/*
-	** Finally, create a Base Align Feature object of type
-	** ensEBasealignfeatureTypeDNA.
-	*/
-	
-	baf = ensBasealignfeatureNewD(dafa, identifier, fp, cigar, pair);
-	
-	ajListPushAppend(bafs, (void *) baf);	
-	
-	ensFeaturepairDel(&fp);
-	
-	ensFeatureDel(&srcfeature);
-	
-	ensFeatureDel(&trgfeature);
-	
-	ensExternaldatabaseDel(&edb);
-	
-	ensAnalysisDel(&analysis);
-	
-	ajStrDel(&hitname);
-	
-	ajStrDel(&cigar);
-	
-	ensSliceDel(&srslice);
-	
-	ensAssemblymapperDel(&am);
+               (srid != ensSliceGetSeqregionIdentifier(slice)))
+            {
+                /* Next feature but destroy first! */
+
+                ajStrDel(&hitname);
+
+                ajStrDel(&cigar);
+
+                ensSliceDel(&srslice);
+
+                ensAssemblymapperDel(&am);
+
+                continue;
+            }
+
+            /* Delete the Sequence Region Slice and set the requested Slice. */
+
+            ensSliceDel(&srslice);
+
+            srslice = ensSliceNewRef(slice);
+        }
+
+        ensAnalysisadaptorFetchByIdentifier(aa, analysisid, &analysis);
+
+        ensExternaldatabaseadaptorFetchByIdentifier(edba, edbid, &edb);
+
+        srcfeature = ensFeatureNewS(analysis,
+                                    srslice,
+                                    slstart,
+                                    slend,
+                                    slstrand);
+
+        trgfeature = ensFeatureNewN((EnsPAnalysis) NULL,
+                                    hitname,
+                                    hitstart,
+                                    hitend,
+                                    hitstrand);
+
+        fp = ensFeaturepairNew(srcfeature,
+                               trgfeature,
+                               edb,
+                               extra,
+                               (AjPStr) NULL, /* srcspecies */
+                               (AjPStr) NULL, /* trgspecies */
+                               0, /* groupid */
+                               0, /* levelid */
+                               evalue,
+                               score,
+                               0, /* srccoverage */
+                               hitcoverage,
+                               identity);
+
+        /*
+        ** Finally, create a Base Align Feature object of type
+        ** ensEBasealignfeatureTypeDNA.
+        */
+
+        baf = ensBasealignfeatureNewD(dafa, identifier, fp, cigar, pair);
+
+        ajListPushAppend(bafs, (void *) baf);
+
+        ensFeaturepairDel(&fp);
+
+        ensFeatureDel(&srcfeature);
+
+        ensFeatureDel(&trgfeature);
+
+        ensExternaldatabaseDel(&edb);
+
+        ensAnalysisDel(&analysis);
+
+        ajStrDel(&hitname);
+
+        ajStrDel(&cigar);
+
+        ensSliceDel(&srslice);
+
+        ensAssemblymapperDel(&am);
     }
-    
+
     ajSqlrowiterDel(&sqli);
-    
-    ajSqlstatementDel(&sqls);
-    
+
+    ensDatabaseadaptorSqlstatementDel(dba, &sqls);
+
     ajListFree(&mrs);
-    
+
     return ajTrue;
 }
 
@@ -7534,14 +8055,8 @@ static AjBool dnaAlignFeatureadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 ** @fnote None
 **
 ** @nam3rule New Constructor
-** @nam4rule NewObj Constructor with existing object
-** @nam4rule NewRef Constructor by incrementing the reference counter
 **
 ** @argrule New dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
-** @argrule Obj object [EnsPDNAAlignFeatureadaptor] Ensembl DNA Align
-**                                                  Feature Adaptor
-** @argrule Ref object [EnsPDNAAlignFeatureadaptor] Ensembl DNA Align
-**                                                  Feature Adaptor
 **
 ** @valrule * [EnsPDNAAlignFeatureadaptor] Ensembl DNA Align Feature Adaptor
 **
@@ -7555,6 +8070,17 @@ static AjBool dnaAlignFeatureadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 **
 ** Default Ensembl DNA Align Feature Adaptor constructor.
 **
+** Ensembl Object Adaptors are singleton objects in the sense that a single
+** instance of an Ensembl Object Adaptor connected to a particular database is
+** sufficient to instantiate any number of Ensembl Objects from the database.
+** Each Ensembl Object will have a weak reference to the Object Adaptor that
+** instantiated it. Therefore, Ensembl Object Adaptors should not be
+** instantiated directly, but rather obtained from the Ensembl Registry,
+** which will in turn call this function if neccessary.
+**
+** @see ensRegistryGetDatabaseadaptor
+** @see ensRegistryGetDNAAlignFeatureadaptor
+**
 ** @param [r] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
 ** @return [EnsPDNAAlignFeatureadaptor] Ensembl DNA Align Feature Adaptor
@@ -7566,28 +8092,28 @@ EnsPDNAAlignFeatureadaptor ensDNAAlignFeatureadaptorNew(
     EnsPDatabaseadaptor dba)
 {
     EnsPDNAAlignFeatureadaptor dafa = NULL;
-    
+
     if(!dba)
-	return NULL;
-    
+        return NULL;
+
     AJNEW0(dafa);
-    
+
     dafa->Adaptor = ensFeatureadaptorNew(
         dba,
-        dnaAlignFeatureadaptorTables,
-        dnaAlignFeatureadaptorColumns,
-        dnaAlignFeatureadaptorLeftJoin,
-        dnaAlignFeatureadaptorDefaultCondition,
-        dnaAlignFeatureadaptorFinalCondition,
-        dnaAlignFeatureadaptorFetchAllBySQL,
-        (void* (*)(const void* key)) NULL, /* Fread */
-        baseAlignFeatureadaptorCacheReference,
-        (AjBool (*)(const void* value)) NULL, /* Fwrite */
-        baseAlignFeatureadaptorCacheDelete,
-        baseAlignFeatureadaptorCacheSize,
-        baseAlignFeatureadaptorGetFeature,
+        dnaalignfeatureadaptorTables,
+        dnaalignfeatureadaptorColumns,
+        dnaalignfeatureadaptorLeftJoin,
+        dnaalignfeatureadaptorDefaultCondition,
+        dnaalignfeatureadaptorFinalCondition,
+        dnaalignfeatureadaptorFetchAllBySQL,
+        (void* (*)(const void* key)) NULL,
+        basealignfeatureadaptorCacheReference,
+        (AjBool (*)(const void* value)) NULL,
+        basealignfeatureadaptorCacheDelete,
+        basealignfeatureadaptorCacheSize,
+        basealignfeatureadaptorGetFeature,
         "DNA Align Feature");
-    
+
     return dafa;
 }
 
@@ -7604,9 +8130,8 @@ EnsPDNAAlignFeatureadaptor ensDNAAlignFeatureadaptorNew(
 **
 ** @nam3rule Del Destroy (free) an Ensembl DNA Align Feature Adaptor object
 **
-** @argrule * Padaptor [EnsPDNAAlignFeatureadaptor*] Ensembl DNA Align
-**                                                   Feature Adaptor
-**                                                   object address
+** @argrule * Pdafa [EnsPDNAAlignFeatureadaptor*] Ensembl DNA Align Feature
+**                                                Adaptor object address
 **
 ** @valrule * [void]
 **
@@ -7620,31 +8145,37 @@ EnsPDNAAlignFeatureadaptor ensDNAAlignFeatureadaptorNew(
 **
 ** Default destructor for an Ensembl DNA Align Feature Adaptor.
 **
-** @param [d] Padaptor [EnsPDNAAlignFeatureadaptor*] Ensembl DNA Align Feature
-**                                                   Adaptor address
+** Ensembl Object Adaptors are singleton objects that are registered in the
+** Ensembl Registry and weakly referenced by Ensembl Objects that have been
+** instantiated by it. Therefore, Ensembl Object Adaptors should never be
+** destroyed directly. Upon exit, the Ensembl Registry will call this function
+** if required.
+**
+** @param [d] Pdafa [EnsPDNAAlignFeatureadaptor*] Ensembl DNA Align Feature
+**                                                Adaptor address
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ensDNAAlignFeatureadaptorDel(EnsPDNAAlignFeatureadaptor *Padaptor)
+void ensDNAAlignFeatureadaptorDel(EnsPDNAAlignFeatureadaptor *Pdafa)
 {
     EnsPDNAAlignFeatureadaptor pthis = NULL;
-    
-    if(!Padaptor)
-	return;
-    
-    if (! *Padaptor)
-	return;
 
-    pthis = *Padaptor;
-    
+    if(!Pdafa)
+        return;
+
+    if(!*Pdafa)
+        return;
+
+    pthis = *Pdafa;
+
     ensFeatureadaptorDel(&pthis->Adaptor);
-    
+
     AJFREE(pthis);
 
-    *Padaptor = NULL;
-    
+    *Pdafa = NULL;
+
     return;
 }
 
@@ -7666,8 +8197,8 @@ void ensDNAAlignFeatureadaptorDel(EnsPDNAAlignFeatureadaptor *Padaptor)
 ** @nam4rule FetchBy Retrieve one Ensembl Base Align Feature object
 **                   matching a criterion
 **
-** @argrule * adaptor [const EnsPDNAAlignFeatureadaptor] Ensembl Base Align
-**                                                       Feature Adaptor
+** @argrule * dafa [const EnsPDNAAlignFeatureadaptor] Ensembl DNA Align
+**                                                    Feature Adaptor
 ** @argrule FetchAll [AjPList] AJAX List of Ensembl Base Align Feature objects
 **
 ** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
@@ -7682,8 +8213,8 @@ void ensDNAAlignFeatureadaptorDel(EnsPDNAAlignFeatureadaptor *Padaptor)
 **
 ** Fetch an Ensembl DNA Align Feature via its SQL database-internal identifier.
 **
-** @param [u] adaptor [EnsPDNAAlignFeatureadaptor] Ensembl DNA Align
-**                                                 Feature Adaptor
+** @param [u] dafa [EnsPDNAAlignFeatureadaptor] Ensembl DNA Align
+**                                              Feature Adaptor
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 ** @param [wP] Pbaf [EnsPBasealignfeature*] Ensembl Base Align Feature address
 **
@@ -7692,26 +8223,26 @@ void ensDNAAlignFeatureadaptorDel(EnsPDNAAlignFeatureadaptor *Padaptor)
 ******************************************************************************/
 
 AjBool ensDNAAlignFeatureadaptorFetchByIdentifier(
-    EnsPDNAAlignFeatureadaptor adaptor,
+    EnsPDNAAlignFeatureadaptor dafa,
     ajuint identifier,
     EnsPBasealignfeature *Pbaf)
 {
     EnsPBaseadaptor ba = NULL;
-    
-    if(!adaptor)
-	return ajFalse;
-    
+
+    if(!dafa)
+        return ajFalse;
+
     if(!identifier)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!Pbaf)
-	return ajFalse;
-    
-    ba = ensFeatureadaptorGetBaseadaptor(adaptor->Adaptor);
-    
+        return ajFalse;
+
+    ba = ensFeatureadaptorGetBaseadaptor(dafa->Adaptor);
+
     *Pbaf = (EnsPBasealignfeature)
-	ensBaseadaptorFetchByIdentifier(ba, identifier);
-    
+        ensBaseadaptorFetchByIdentifier(ba, identifier);
+
     return ajTrue;
 }
 
@@ -7723,9 +8254,9 @@ AjBool ensDNAAlignFeatureadaptorFetchByIdentifier(
 ** Fetch Ensembl DNA Align Features via an Ensembl Slice and
 ** an alignment identity threshold.
 **
-** @param [u] adaptor [EnsPDNAAlignFeatureadaptor] Ensembl DNA Align
-**                                                 Feature Adaptor
-** @param [r] slice [EnsPSlice] Ensembl Slice
+** @param [u] dafa [EnsPDNAAlignFeatureadaptor] Ensembl DNA Align
+**                                              Feature Adaptor
+** @param [u] slice [EnsPSlice] Ensembl Slice
 ** @param [r] identity [float] Alignment identity threshold
 ** @param [r] anname [const AjPStr] Ensembl Analysis name
 ** @param [u] bafs [AjPList] AJAX List of Ensembl Base Align Features
@@ -7735,36 +8266,36 @@ AjBool ensDNAAlignFeatureadaptorFetchByIdentifier(
 ******************************************************************************/
 
 AjBool ensDNAAlignFeatureadaptorFetchAllBySliceIdentity(
-    EnsPDNAAlignFeatureadaptor adaptor,
+    EnsPDNAAlignFeatureadaptor dafa,
     EnsPSlice slice,
     float identity,
     const AjPStr anname,
     AjPList bafs)
 {
     AjBool value = AJFALSE;
-    
+
     AjPStr constraint = NULL;
-    
-    if(!adaptor)
-	return ajFalse;
-    
+
+    if(!dafa)
+        return ajFalse;
+
     if(!slice)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!bafs)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(identity > 0)
-	constraint = ajFmtStr("dna_align_feature.perc_ident > %f", identity);
-    
-    value = ensFeatureadaptorFetchAllBySliceConstraint(adaptor->Adaptor,
-						       slice,
-						       constraint,
-						       anname,
-						       bafs);
-    
+        constraint = ajFmtStr("dna_align_feature.perc_ident > %f", identity);
+
+    value = ensFeatureadaptorFetchAllBySliceConstraint(dafa->Adaptor,
+                                                       slice,
+                                                       constraint,
+                                                       anname,
+                                                       bafs);
+
     ajStrDel(&constraint);
-    
+
     return value;
 }
 
@@ -7776,9 +8307,9 @@ AjBool ensDNAAlignFeatureadaptorFetchAllBySliceIdentity(
 ** Fetch Ensembl DNA Align Features via an Ensembl Slice and
 ** an alignment target coverage.
 **
-** @param [u] adaptor [EnsPDNAAlignFeatureadaptor] Ensembl DNA Align
-**                                                 Feature Adaptor
-** @param [r] slice [EnsPSlice] Ensembl Slice
+** @param [u] dafa [EnsPDNAAlignFeatureadaptor] Ensembl DNA Align
+**                                              Feature Adaptor
+** @param [u] slice [EnsPSlice] Ensembl Slice
 ** @param [r] coverage [float] Alignment coverage threshold
 ** @param [r] anname [const AjPStr] Ensembl Analysis name
 ** @param [u] bafs [AjPList] AJAX List of Ensembl Base Align Features
@@ -7788,36 +8319,36 @@ AjBool ensDNAAlignFeatureadaptorFetchAllBySliceIdentity(
 ******************************************************************************/
 
 AjBool ensDNAAlignFeatureadaptorFetchAllBySliceCoverage(
-    EnsPDNAAlignFeatureadaptor adaptor,
+    EnsPDNAAlignFeatureadaptor dafa,
     EnsPSlice slice,
     float coverage,
     const AjPStr anname,
     AjPList bafs)
 {
     AjBool value = AJFALSE;
-    
+
     AjPStr constraint = NULL;
-    
-    if(!adaptor)
-	return ajFalse;
-    
+
+    if(!dafa)
+        return ajFalse;
+
     if(!slice)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!bafs)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(coverage > 0)
-	constraint = ajFmtStr("dna_align_feature.hcoverage > %f", coverage);
-    
-    value = ensFeatureadaptorFetchAllBySliceConstraint(adaptor->Adaptor,
-						       slice,
-						       constraint,
-						       anname,
-						       bafs);
-    
+        constraint = ajFmtStr("dna_align_feature.hcoverage > %f", coverage);
+
+    value = ensFeatureadaptorFetchAllBySliceConstraint(dafa->Adaptor,
+                                                       slice,
+                                                       constraint,
+                                                       anname,
+                                                       bafs);
+
     ajStrDel(&constraint);
-    
+
     return value;
 }
 
@@ -7829,9 +8360,9 @@ AjBool ensDNAAlignFeatureadaptorFetchAllBySliceCoverage(
 ** Fetch Ensembl DNA Align Features via an Ensembl Slice and
 ** an Ensembl External Database name.
 **
-** @param [u] adaptor [EnsPDNAAlignFeatureadaptor] Ensembl DNA Align
-**                                                 Feature Adaptor
-** @param [r] slice [EnsPSlice] Ensembl Slice
+** @param [u] dafa [EnsPDNAAlignFeatureadaptor] Ensembl DNA Align
+**                                              Feature Adaptor
+** @param [u] slice [EnsPSlice] Ensembl Slice
 ** @param [r] edbname [const AjPStr] Ensembl External Database name
 ** @param [r] anname [const AjPStr] Ensembl Analysis name
 ** @param [u] bafs [AjPList] AJAX List of Ensembl Base Align Features
@@ -7841,44 +8372,44 @@ AjBool ensDNAAlignFeatureadaptorFetchAllBySliceCoverage(
 ******************************************************************************/
 
 AjBool ensDNAAlignFeatureadaptorFetchAllBySliceExternaldatabase(
-    EnsPDNAAlignFeatureadaptor adaptor,
+    EnsPDNAAlignFeatureadaptor dafa,
     EnsPSlice slice,
     const AjPStr edbname,
     const AjPStr anname,
     AjPList bafs)
 {
     char *txtname = NULL;
-    
+
     AjBool value = AJFALSE;
-    
+
     AjPStr constraint = NULL;
-    
-    if(!adaptor)
-	return ajFalse;
-    
+
+    if(!dafa)
+        return ajFalse;
+
     if(!slice)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!edbname)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!bafs)
-	return ajFalse;
-    
-    ensFeatureadaptorEscapeC(adaptor->Adaptor, &txtname, edbname);
-    
+        return ajFalse;
+
+    ensFeatureadaptorEscapeC(dafa->Adaptor, &txtname, edbname);
+
     constraint = ajFmtStr("external_db.db_name = %s", txtname);
-    
+
     ajCharDel(&txtname);
-    
-    value = ensFeatureadaptorFetchAllBySliceConstraint(adaptor->Adaptor,
-						       slice,
-						       constraint,
-						       anname,
-						       bafs);
-    
+
+    value = ensFeatureadaptorFetchAllBySliceConstraint(dafa->Adaptor,
+                                                       slice,
+                                                       constraint,
+                                                       anname,
+                                                       bafs);
+
     ajStrDel(&constraint);
-    
+
     return value;
 }
 
@@ -7889,8 +8420,8 @@ AjBool ensDNAAlignFeatureadaptorFetchAllBySliceExternaldatabase(
 **
 ** Fetch Ensembl DNA Align Features via a hit name.
 **
-** @param [u] adaptor [EnsPDNAAlignFeatureadaptor] Ensembl DNA Align
-**                                                 Feature Adaptor
+** @param [u] dafa [EnsPDNAAlignFeatureadaptor] Ensembl DNA Align
+**                                              Feature Adaptor
 ** @param [r] hitname [const AjPStr] Hit (Target) sequence name
 ** @param [r] anname [const AjPStr] Ensembl Analysis name
 ** @param [u] bafs [AjPList] AJAX List of Ensembl Base Align Features
@@ -7900,52 +8431,52 @@ AjBool ensDNAAlignFeatureadaptorFetchAllBySliceExternaldatabase(
 ******************************************************************************/
 
 AjBool ensDNAAlignFeatureadaptorFetchAllByHitName(
-    EnsPDNAAlignFeatureadaptor adaptor,
+    EnsPDNAAlignFeatureadaptor dafa,
     const AjPStr hitname,
     const AjPStr anname,
     AjPList bafs)
 {
     char *txthitname = NULL;
-    
+
     AjBool value = AJFALSE;
-    
+
     AjPStr constraint = NULL;
-    
+
     EnsPBaseadaptor ba = NULL;
-    
-    if(!adaptor)
-	return ajFalse;
-    
+
+    if(!dafa)
+        return ajFalse;
+
     if(!hitname)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!bafs)
-	return ajFalse;
-    
-    ba = ensFeatureadaptorGetBaseadaptor(adaptor->Adaptor);
-    
+        return ajFalse;
+
+    ba = ensFeatureadaptorGetBaseadaptor(dafa->Adaptor);
+
     ensBaseadaptorEscapeC(ba, &txthitname, hitname);
-    
+
     constraint = ajFmtStr("dna_align_feature.hit_name = '%s'", txthitname);
-    
+
     ajCharDel(&txthitname);
-    
+
     /* Add the Ensembl Analysis name constraint. */
-    
+
     if(anname && ajStrGetLen(anname))
-	featureAdaptorAnalysisNameToConstraint(adaptor->Adaptor,
-					       &constraint,
-					       anname);
-    
+        featureadaptorAnalysisNameToConstraint(dafa->Adaptor,
+                                               &constraint,
+                                               anname);
+
     value = ensBaseadaptorGenericFetch(ba,
-				       constraint,
-				       (EnsPAssemblymapper) NULL,
-				       (EnsPSlice) NULL,
-				       bafs);
-    
-    
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       bafs);
+
+
     ajStrDel(&constraint);
-    
+
     return value;
 }
 
@@ -7956,8 +8487,8 @@ AjBool ensDNAAlignFeatureadaptorFetchAllByHitName(
 **
 ** Fetch Ensembl DNA Align Features via an unversioned hit name.
 **
-** @param [u] adaptor [EnsPDNAAlignFeatureadaptor] Ensembl DNA Align
-**                                                 Feature Adaptor
+** @param [u] dafa [EnsPDNAAlignFeatureadaptor] Ensembl DNA Align
+**                                              Feature Adaptor
 ** @param [r] hitname [const AjPStr] Hit (Target) sequence name
 ** @param [r] anname [const AjPStr] Ensembl Analysis name
 ** @param [u] bafs [AjPList] AJAX List of Ensembl Base Align Features
@@ -7967,52 +8498,52 @@ AjBool ensDNAAlignFeatureadaptorFetchAllByHitName(
 ******************************************************************************/
 
 AjBool ensDNAAlignFeatureadaptorFetchAllByHitUnversioned(
-    EnsPDNAAlignFeatureadaptor adaptor,
+    EnsPDNAAlignFeatureadaptor dafa,
     const AjPStr hitname,
     const AjPStr anname,
     AjPList bafs)
 {
     char *txthitname = NULL;
-    
+
     AjBool value = AJFALSE;
-    
+
     AjPStr constraint = NULL;
-    
+
     EnsPBaseadaptor ba = NULL;
-    
-    if(!adaptor)
-	return ajFalse;
-    
+
+    if(!dafa)
+        return ajFalse;
+
     if(!hitname)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!bafs)
-	return ajFalse;
-    
-    ba = ensFeatureadaptorGetBaseadaptor(adaptor->Adaptor);
-    
+        return ajFalse;
+
+    ba = ensFeatureadaptorGetBaseadaptor(dafa->Adaptor);
+
     ensBaseadaptorEscapeC(ba, &txthitname, hitname);
-    
+
     constraint = ajFmtStr("dna_align_feature.hit_name LIKE '%s.%'",
                           txthitname);
-    
+
     ajCharDel(&txthitname);
-    
+
     /* Add the Ensembl Analysis name constraint. */
-    
+
     if(anname && ajStrGetLen(anname))
-	featureAdaptorAnalysisNameToConstraint(adaptor->Adaptor,
-					       &constraint,
-					       anname);
-    
+        featureadaptorAnalysisNameToConstraint(dafa->Adaptor,
+                                               &constraint,
+                                               anname);
+
     value = ensBaseadaptorGenericFetch(ba,
-				       constraint,
-				       (EnsPAssemblymapper) NULL,
-				       (EnsPSlice) NULL,
-				       bafs);
-    
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       bafs);
+
     ajStrDel(&constraint);
-    
+
     return value;
 }
 
@@ -8023,8 +8554,8 @@ AjBool ensDNAAlignFeatureadaptorFetchAllByHitUnversioned(
 **
 ** Fetch all SQL database-internal identifiers of Ensembl DNA Align Features.
 **
-** @param [u] adaptor [EnsPDNAAlignFeatureadaptor] Ensembl DNA Align
-**                                                 Feature Adaptor
+** @param [u] dafa [EnsPDNAAlignFeatureadaptor] Ensembl DNA Align
+**                                              Feature Adaptor
 ** @param [u] idlist [AjPList] AJAX List of ajuint identifiers
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
@@ -8032,32 +8563,32 @@ AjBool ensDNAAlignFeatureadaptorFetchAllByHitUnversioned(
 ******************************************************************************/
 
 AjBool ensDNAAlignFeatureadaptorFetchAllIdentifiers(
-    EnsPDNAAlignFeatureadaptor adaptor,
+    EnsPDNAAlignFeatureadaptor dafa,
     AjPList idlist)
 {
     AjBool value = AJFALSE;
-    
+
     AjPStr table = NULL;
-    
+
     EnsPBaseadaptor ba = NULL;
-    
-    if(!adaptor)
-	return ajFalse;
-    
+
+    if(!dafa)
+        return ajFalse;
+
     if(!idlist)
-	return ajFalse;
-    
-    ba = ensFeatureadaptorGetBaseadaptor(adaptor->Adaptor);
-    
+        return ajFalse;
+
+    ba = ensFeatureadaptorGetBaseadaptor(dafa->Adaptor);
+
     table = ajStrNewC("dna_align_feature");
-    
+
     value = ensBaseadaptorFetchAllIdentifiers(ba,
-					      table,
-					      (AjPStr) NULL,
-					      idlist);
-    
+                                              table,
+                                              (AjPStr) NULL,
+                                              idlist);
+
     ajStrDel(&table);
-    
+
     return value;
 }
 
@@ -8075,7 +8606,7 @@ AjBool ensDNAAlignFeatureadaptorFetchAllIdentifiers(
 **
 ******************************************************************************/
 
-static const char *proteinAlignFeatureadaptorTables[] =
+static const char *proteinalignfeatureadaptorTables[] =
 {
     "protein_align_feature",
     /* FIXME: The External Database Adaptor has an internal cache.
@@ -8087,7 +8618,7 @@ static const char *proteinAlignFeatureadaptorTables[] =
 
 
 
-static const char *proteinAlignFeatureadaptorColumns[] =
+static const char *proteinalignfeatureadaptorColumns[] =
 {
     "protein_align_feature.protein_align_feature_id",
     "protein_align_feature.seq_region_id",
@@ -8118,7 +8649,7 @@ static const char *proteinAlignFeatureadaptorColumns[] =
 
 
 
-static EnsOBaseadaptorLeftJoin proteinAlignFeatureadaptorLeftJoin[] =
+static EnsOBaseadaptorLeftJoin proteinalignfeatureadaptorLeftJoin[] =
 {
     /* FIXME: The External Database Adaptor has an internal cache.
        {
@@ -8133,416 +8664,411 @@ static EnsOBaseadaptorLeftJoin proteinAlignFeatureadaptorLeftJoin[] =
 
 
 
-static const char *proteinAlignFeatureadaptorDefaultCondition = NULL;
+static const char *proteinalignfeatureadaptorDefaultCondition = NULL;
 
-static const char *proteinAlignFeatureadaptorFinalCondition = NULL;
-
-
+static const char *proteinalignfeatureadaptorFinalCondition = NULL;
 
 
-/* @funcstatic proteinAlignFeatureadaptorFetchAllBySQL ************************
+
+
+/* @funcstatic proteinalignfeatureadaptorFetchAllBySQL ************************
 **
 ** Run a SQL statement against an Ensembl Database Adaptor and consolidate the
 ** results into an AJAX List of Ensembl Protein Align Features.
 **
 ** @param [r] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 ** @param [r] statement [const AjPStr] SQL statement
-** @param [r] mapper [EnsPAssemblymapper] Ensembl Assembly Mapper
-** @param [r] slice [EnsPSlice] Ensembl Slice
+** @param [uN] am [EnsPAssemblymapper] Ensembl Assembly Mapper
+** @param [uN] slice [EnsPSlice] Ensembl Slice
 ** @param [u] bafs [AjPList] AJAX List of Ensembl Base Align Features
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-static AjBool proteinAlignFeatureadaptorFetchAllBySQL(
+static AjBool proteinalignfeatureadaptorFetchAllBySQL(
     EnsPDatabaseadaptor dba,
     const AjPStr statement,
-    EnsPAssemblymapper mapper,
+    EnsPAssemblymapper am,
     EnsPSlice slice,
     AjPList bafs)
 {
     double evalue = 0;
     double score  = 0;
-    
+
     float identity    = 0;
     float hitcoverage = 0;
-    
+
     ajuint identifier = 0;
     ajuint analysisid = 0;
     ajuint edbid      = 0;
-    
+
     ajuint srid    = 0;
     ajuint srstart = 0;
     ajuint srend   = 0;
-    
+
     ajint slstart  = 0;
     ajint slend    = 0;
     ajint slstrand = 0;
     ajint sllength = 0;
-    
+
     ajuint hitstart = 0;
     ajuint hitend   = 0;
     ajint srstrand  = 0;
-    
+
     AjPList mrs = NULL;
-    
+
     AjPSqlstatement sqls = NULL;
     AjISqlrow sqli       = NULL;
     AjPSqlrow sqlr       = NULL;
-    
+
     AjPStr hitname = NULL;
     AjPStr cigar   = NULL;
-    
+
     EnsPAnalysis analysis  = NULL;
     EnsPAnalysisadaptor aa = NULL;
-    
-    EnsPAssemblymapper am         = NULL;
+
     EnsPAssemblymapperadaptor ama = NULL;
-    
+
     EnsPBasealignfeature baf = NULL;
-    
+
     EnsPExternaldatabase edb         = NULL;
     EnsPExternaldatabaseadaptor edba = NULL;
-    
+
     EnsPFeature srcfeature = NULL;
     EnsPFeature trgfeature = NULL;
-    
+
     EnsPFeaturepair fp = NULL;
-    
+
     EnsPMapperresult mr = NULL;
-    
+
     EnsPProteinalignfeatureadaptor pafa = NULL;
-    
+
     EnsPSlice srslice   = NULL;
     EnsPSliceadaptor sa = NULL;
 
-#if AJFALSE
-    ajDebug("proteinAlignFeatureadaptorFetchAllBySQL\n"
-	    "  dba %p\n"
-	    "  statement %p\n"
-	    "  mapper %p\n"
-	    "  slice %p\n"
-	    "  bafs %p\n",
-	    dba,
-	    statement,
-	    mapper,
-	    slice,
-	    bafs);
-#endif
-    
+    if(ajDebugTest("proteinalignfeatureadaptorFetchAllBySQL"))
+        ajDebug("proteinalignfeatureadaptorFetchAllBySQL\n"
+                "  dba %p\n"
+                "  statement %p\n"
+                "  am %p\n"
+                "  slice %p\n"
+                "  bafs %p\n",
+                dba,
+                statement,
+                am,
+                slice,
+                bafs);
+
     if(!dba)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!statement)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!bafs)
-	return ajFalse;
-    
+        return ajFalse;
+
     aa = ensRegistryGetAnalysisadaptor(dba);
-    
+
     edba = ensRegistryGetExternaldatabaseadaptor(dba);
-    
+
     pafa = ensRegistryGetProteinalignfeatureadaptor(dba);
-    
+
     sa = ensRegistryGetSliceadaptor(dba);
-    
+
+    if(slice)
+        ama = ensRegistryGetAssemblymapperadaptor(dba);
+
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
-    
+
     sqli = ajSqlrowiterNew(sqls);
-    
+
     while(!ajSqlrowiterDone(sqli))
     {
-	identifier  = 0;
-	srid        = 0;
-	srstart     = 0;
-	srend       = 0;
-	srstrand    = 0;
-	hitstart    = 0;
-	hitend      = 0;
-	hitname     = ajStrNew();
-	analysisid  = 0;
-	cigar       = ajStrNew();
-	score       = 0;
-	evalue      = 0;
-	identity    = 0;
-	edbid       = 0;
-	hitcoverage = 0;
-	
-	sqlr = ajSqlrowiterGet(sqli);
-	
-	ajSqlcolumnToUint(sqlr, &identifier);
-	ajSqlcolumnToUint(sqlr, &srid);
-	ajSqlcolumnToUint(sqlr, &srstart);
-	ajSqlcolumnToUint(sqlr, &srend);
-	ajSqlcolumnToInt(sqlr, &srstrand);
-	ajSqlcolumnToUint(sqlr, &hitstart);
-	ajSqlcolumnToUint(sqlr, &hitend);
-	ajSqlcolumnToStr(sqlr, &hitname);
-	ajSqlcolumnToUint(sqlr, &analysisid);
-	ajSqlcolumnToStr(sqlr, &cigar);
-	ajSqlcolumnToDouble(sqlr, &score);
-	ajSqlcolumnToDouble(sqlr, &evalue);
-	ajSqlcolumnToFloat(sqlr, &identity);
-	ajSqlcolumnToUint(sqlr, &edbid);
-	ajSqlcolumnToFloat(sqlr, &hitcoverage);
-	
-	/*
-	** Since the Ensembl SQL schema defines Sequence Region start and end
-	** coordinates as unsigned integers for all Features, the range needs
-	** checking.
-	*/
-	
-	if(srstart <= INT_MAX)
-	    slstart = (ajint) srstart;
-	else
-	    ajFatal("proteinAlignFeatureadaptorFetchAllBySQL got a "
-		    "Sequence Region start coordinate (%u) outside the "
-		    "maximum integer limit (%d).",
-		    srstart, INT_MAX);
-	
-	if(srend <= INT_MAX)
-	    slend = (ajint) srend;
-	else
-	    ajFatal("proteinAlignFeatureadaptorFetchAllBySQL got a "
-		    "Sequence Region end coordinate (%u) outside the "
-		    "maximum integer limit (%d).",
-		    srend, INT_MAX);
-	
-	slstrand = srstrand;
-	
-	/* Fetch a Slice spanning the entire Sequence Region. */
-	
-	ensSliceadaptorFetchBySeqregionIdentifier(sa, srid, 0, 0, 0, &srslice);
-	
-	/*
-	** Obtain an Ensembl Assembly Mapper if none was defined, but a
-	** destination Slice was.
-	*/
-	
-	if(mapper)
-	    am = ensAssemblymapperNewRef(mapper);
-	
-	if((! mapper) &&
-	   slice &&
-	   (! ensCoordsystemMatch(ensSliceGetCoordsystem(slice),
-                                  ensSliceGetCoordsystem(srslice))))
-	    am = ensAssemblymapperadaptorFetchByCoordsystems(
-                ama,
-                ensSliceGetCoordsystem(slice),
-                ensSliceGetCoordsystem(srslice));
-	
-	/*
-	** Remap the Feature coordinates to another Ensembl Coordinate System
-	** if an Ensembl Mapper was provided.
-	*/
-	
-	if(am)
-	{
-	    ensAssemblymapperFastMap(am,
-				     ensSliceGetSeqregion(srslice),
-				     slstart,
-				     slend,
-				     slstrand,
-				     mrs);
-	    
-	    /*
-	    ** The ensAssemblymapperFastMap function returns at best one
-	    ** Ensembl Mapper Result.
-	    */
-	    
-	    ajListPop(mrs, (void **) &mr);
-	    
-	    /*
-	    ** Skip Features that map to gaps or
-	    ** Coordinate System boundaries.
-	    */
-	    
-	    if(ensMapperresultGetType(mr) != ensEMapperresultCoordinate)
-	    {
-		/* Load the next Feature but destroy first! */
-		
-		ajStrDel(&hitname);
-		
-		ajStrDel(&cigar);
-		
-		ensSliceDel(&srslice);
-		
-		ensAssemblymapperDel(&am);
-		
-		ensMapperresultDel(&mr);
-		
-		continue;
-	    }
-	    
-	    srid = ensMapperresultGetObjectIdentifier(mr);
-	    
-	    slstart = ensMapperresultGetStart(mr);
-	    
-	    slend = ensMapperresultGetEnd(mr);
-	    
-	    slstrand = ensMapperresultGetStrand(mr);
-	    
-	    /*
-	    ** FIXME: Like in the Bio::EnsEMBL::DBSQL::ExonAdaptor
-	    ** code, a construct to get a Slice from the cache is
-	    ** commented out from the
-	    ** Bio::EnsEMBL::DBSQL::ProteinAlignFeatureAdaptor of the Perl API.
-	    ** See CVS versions 1.39 and 1.39.14.1 for details.
-	    */
-	    
-	    /*
-	    ** Delete the Sequence Region Slice and fetch a Slice in the
-	    ** Coordinate System we just mapped to.
-	    */
-	    
-	    ensSliceDel(&srslice);
-	    
-	    ensSliceadaptorFetchBySeqregionIdentifier(sa,
-						      srid,
-						      0,
-						      0,
-						      0,
-						      &srslice);
-	    
-	    ensMapperresultDel(&mr);
-	}
-	
-	/*
-	** Convert Sequence Region Slice coordinates to destination Slice
-	** coordinates, if a destination Slice has been provided.
-	*/
-	
-	if(slice)
-	{
-	    /* Check that the length of the Slice is within range. */
-	    
-	    if(ensSliceGetLength(slice) <= INT_MAX)
-		sllength = (ajint) ensSliceGetLength(slice);
-	    else
-		ajFatal("proteinAlignFeatureadaptorFetchAllBySQL got a Slice, "
-			"which length (%u) exceeds the "
-			"maximum integer limit (%d).",
-			ensSliceGetLength(slice), INT_MAX);
-	    
-	    /*
-	    ** Nothing needs to be done if the destination Slice starts at 1
-	    ** and is on the forward strand.
-	    */
-	    
-	    if((ensSliceGetStart(slice) != 1) ||
+        identifier  = 0;
+        srid        = 0;
+        srstart     = 0;
+        srend       = 0;
+        srstrand    = 0;
+        hitstart    = 0;
+        hitend      = 0;
+        hitname     = ajStrNew();
+        analysisid  = 0;
+        cigar       = ajStrNew();
+        score       = 0;
+        evalue      = 0;
+        identity    = 0;
+        edbid       = 0;
+        hitcoverage = 0;
+
+        sqlr = ajSqlrowiterGet(sqli);
+
+        ajSqlcolumnToUint(sqlr, &identifier);
+        ajSqlcolumnToUint(sqlr, &srid);
+        ajSqlcolumnToUint(sqlr, &srstart);
+        ajSqlcolumnToUint(sqlr, &srend);
+        ajSqlcolumnToInt(sqlr, &srstrand);
+        ajSqlcolumnToUint(sqlr, &hitstart);
+        ajSqlcolumnToUint(sqlr, &hitend);
+        ajSqlcolumnToStr(sqlr, &hitname);
+        ajSqlcolumnToUint(sqlr, &analysisid);
+        ajSqlcolumnToStr(sqlr, &cigar);
+        ajSqlcolumnToDouble(sqlr, &score);
+        ajSqlcolumnToDouble(sqlr, &evalue);
+        ajSqlcolumnToFloat(sqlr, &identity);
+        ajSqlcolumnToUint(sqlr, &edbid);
+        ajSqlcolumnToFloat(sqlr, &hitcoverage);
+
+        /*
+        ** Since the Ensembl SQL schema defines Sequence Region start and end
+        ** coordinates as unsigned integers for all Features, the range needs
+        ** checking.
+        */
+
+        if(srstart <= INT_MAX)
+            slstart = (ajint) srstart;
+        else
+            ajFatal("proteinalignfeatureadaptorFetchAllBySQL got a "
+                    "Sequence Region start coordinate (%u) outside the "
+                    "maximum integer limit (%d).",
+                    srstart, INT_MAX);
+
+        if(srend <= INT_MAX)
+            slend = (ajint) srend;
+        else
+            ajFatal("proteinalignfeatureadaptorFetchAllBySQL got a "
+                    "Sequence Region end coordinate (%u) outside the "
+                    "maximum integer limit (%d).",
+                    srend, INT_MAX);
+
+        slstrand = srstrand;
+
+        /* Fetch a Slice spanning the entire Sequence Region. */
+
+        ensSliceadaptorFetchBySeqregionIdentifier(sa, srid, 0, 0, 0, &srslice);
+
+        /*
+        ** Obtain an Ensembl Assembly Mapper if none was defined, but a
+        ** destination Slice was.
+        */
+
+        if(am)
+            am = ensAssemblymapperNewRef(am);
+        else if(slice && (!ensCoordsystemMatch(
+                              ensSliceGetCoordsystem(slice),
+                              ensSliceGetCoordsystem(srslice))))
+            am = ensAssemblymapperadaptorFetchBySlices(ama, slice, srslice);
+
+        /*
+        ** Remap the Feature coordinates to another Ensembl Coordinate System
+        ** if an Ensembl Mapper was provided.
+        */
+
+        if(am)
+        {
+            ensAssemblymapperFastMap(am,
+                                     ensSliceGetSeqregion(srslice),
+                                     slstart,
+                                     slend,
+                                     slstrand,
+                                     mrs);
+
+            /*
+            ** The ensAssemblymapperFastMap function returns at best one
+            ** Ensembl Mapper Result.
+            */
+
+            ajListPop(mrs, (void **) &mr);
+
+            /*
+            ** Skip Features that map to gaps or
+            ** Coordinate System boundaries.
+            */
+
+            if(ensMapperresultGetType(mr) != ensEMapperresultCoordinate)
+            {
+                /* Load the next Feature but destroy first! */
+
+                ajStrDel(&hitname);
+
+                ajStrDel(&cigar);
+
+                ensSliceDel(&srslice);
+
+                ensAssemblymapperDel(&am);
+
+                ensMapperresultDel(&mr);
+
+                continue;
+            }
+
+            srid = ensMapperresultGetObjectIdentifier(mr);
+
+            slstart = ensMapperresultGetStart(mr);
+
+            slend = ensMapperresultGetEnd(mr);
+
+            slstrand = ensMapperresultGetStrand(mr);
+
+            /*
+            ** FIXME: Like in the Bio::EnsEMBL::DBSQL::ExonAdaptor
+            ** code, a construct to get a Slice from the cache is
+            ** commented out from the
+            ** Bio::EnsEMBL::DBSQL::ProteinAlignFeatureAdaptor of the Perl API.
+            ** See CVS versions 1.39 and 1.39.14.1 for details.
+            */
+
+            /*
+            ** Delete the Sequence Region Slice and fetch a Slice in the
+            ** Coordinate System we just mapped to.
+            */
+
+            ensSliceDel(&srslice);
+
+            ensSliceadaptorFetchBySeqregionIdentifier(sa,
+                                                      srid,
+                                                      0,
+                                                      0,
+                                                      0,
+                                                      &srslice);
+
+            ensMapperresultDel(&mr);
+        }
+
+        /*
+        ** Convert Sequence Region Slice coordinates to destination Slice
+        ** coordinates, if a destination Slice has been provided.
+        */
+
+        if(slice)
+        {
+            /* Check that the length of the Slice is within range. */
+
+            if(ensSliceGetLength(slice) <= INT_MAX)
+                sllength = (ajint) ensSliceGetLength(slice);
+            else
+                ajFatal("proteinalignfeatureadaptorFetchAllBySQL got a Slice, "
+                        "which length (%u) exceeds the "
+                        "maximum integer limit (%d).",
+                        ensSliceGetLength(slice), INT_MAX);
+
+            /*
+            ** Nothing needs to be done if the destination Slice starts at 1
+            ** and is on the forward strand.
+            */
+
+            if((ensSliceGetStart(slice) != 1) ||
                (ensSliceGetStrand(slice) < 0))
-	    {
-		if(ensSliceGetStrand(slice) >= 0)
-		{
-		    slstart = slstart - ensSliceGetStart(slice) + 1;
-		    
-		    slend = slend - ensSliceGetStart(slice) + 1;
-		}
-		else
-		{
-		    slend = ensSliceGetEnd(slice) - slstart + 1;
-		    
-		    slstart = ensSliceGetEnd(slice) - slend + 1;
-		    
-		    slstrand *= -1;
-		}
-	    }
-	    
-	    /*
-	    ** Throw away Features off the end of the requested Slice or on
-	    ** any other than the requested Slice.
-	    */
-	    
-	    if((slend < 1) ||
+            {
+                if(ensSliceGetStrand(slice) >= 0)
+                {
+                    slstart = slstart - ensSliceGetStart(slice) + 1;
+
+                    slend = slend - ensSliceGetStart(slice) + 1;
+                }
+                else
+                {
+                    slend = ensSliceGetEnd(slice) - slstart + 1;
+
+                    slstart = ensSliceGetEnd(slice) - slend + 1;
+
+                    slstrand *= -1;
+                }
+            }
+
+            /*
+            ** Throw away Features off the end of the requested Slice or on
+            ** any other than the requested Slice.
+            */
+
+            if((slend < 1) ||
                (slstart > sllength) ||
-	       (srid =! ensSliceGetSeqregionIdentifier(slice)))
-	    {
-		/* Next feature but destroy first! */
-		
-		ajStrDel(&hitname);
-		
-		ajStrDel(&cigar);
-		
-		ensSliceDel(&srslice);
-		
-		ensAssemblymapperDel(&am);
-		
-		continue;
-	    }
-	    
-	    /* Delete the Sequence Region Slice and set the requested Slice. */
-	    
-	    ensSliceDel(&srslice);
-	    
-	    srslice = ensSliceNewRef(slice);
-	}
-	
-	ensAnalysisadaptorFetchByIdentifier(aa, analysisid, &analysis);
-	
-	ensExternaldatabaseadaptorFetchByIdentifier(edba, edbid, &edb);
-	
-	srcfeature = ensFeatureNewS(analysis,
-				    srslice,
-				    slstart,
-				    slend,
-				    slstrand);
-	
-	trgfeature = ensFeatureNewN((EnsPAnalysis) NULL,
-				    hitname,
-				    hitstart,
-				    hitend,
-				    1);
-	
-	fp = ensFeaturepairNew(srcfeature,
-			       trgfeature,
-			       edb,
-			       (AjPStr) NULL, /* extra data */
-			       (AjPStr) NULL, /* srcspecies */
-			       (AjPStr) NULL, /* trgspecies */
-			       0, /* groupid */
-			       0, /* levelid */
-			       evalue,
-			       score,
-			       0, /* srccoverage */
-			       0, /* trgcoverage */
-			       identity);
-	
-	/*
-	** Finally, create a Base Align Feature object of type
-	** ensEBasealignfeatureTypeProtein.
-	*/
-	
-	baf = ensBasealignfeatureNewP(pafa, identifier, fp, cigar);
-	
-	ajListPushAppend(bafs, (void *) baf);	
-	
-	ensFeaturepairDel(&fp);
-	
-	ensFeatureDel(&srcfeature);
-	
-	ensFeatureDel(&trgfeature);
-	
-	ensExternaldatabaseDel(&edb);
-	
-	ensAnalysisDel(&analysis);
-	
-	ajStrDel(&hitname);
-	
-	ajStrDel(&cigar);
-	
-	ensSliceDel(&srslice);
-	
-	ensAssemblymapperDel(&am);
+               (srid != ensSliceGetSeqregionIdentifier(slice)))
+            {
+                /* Next feature but destroy first! */
+
+                ajStrDel(&hitname);
+
+                ajStrDel(&cigar);
+
+                ensSliceDel(&srslice);
+
+                ensAssemblymapperDel(&am);
+
+                continue;
+            }
+
+            /* Delete the Sequence Region Slice and set the requested Slice. */
+
+            ensSliceDel(&srslice);
+
+            srslice = ensSliceNewRef(slice);
+        }
+
+        ensAnalysisadaptorFetchByIdentifier(aa, analysisid, &analysis);
+
+        ensExternaldatabaseadaptorFetchByIdentifier(edba, edbid, &edb);
+
+        srcfeature = ensFeatureNewS(analysis,
+                                    srslice,
+                                    slstart,
+                                    slend,
+                                    slstrand);
+
+        trgfeature = ensFeatureNewN((EnsPAnalysis) NULL,
+                                    hitname,
+                                    hitstart,
+                                    hitend,
+                                    1);
+
+        fp = ensFeaturepairNew(srcfeature,
+                               trgfeature,
+                               edb,
+                               (AjPStr) NULL, /* extra data */
+                               (AjPStr) NULL, /* srcspecies */
+                               (AjPStr) NULL, /* trgspecies */
+                               0, /* groupid */
+                               0, /* levelid */
+                               evalue,
+                               score,
+                               0, /* srccoverage */
+                               0, /* trgcoverage */
+                               identity);
+
+        /*
+        ** Finally, create a Base Align Feature object of type
+        ** ensEBasealignfeatureTypeProtein.
+        */
+
+        baf = ensBasealignfeatureNewP(pafa, identifier, fp, cigar);
+
+        ajListPushAppend(bafs, (void *) baf);
+
+        ensFeaturepairDel(&fp);
+
+        ensFeatureDel(&srcfeature);
+        ensFeatureDel(&trgfeature);
+
+        ensExternaldatabaseDel(&edb);
+
+        ensAnalysisDel(&analysis);
+
+        ajStrDel(&hitname);
+
+        ajStrDel(&cigar);
+
+        ensSliceDel(&srslice);
+
+        ensAssemblymapperDel(&am);
     }
-    
+
     ajSqlrowiterDel(&sqli);
-    
-    ajSqlstatementDel(&sqls);
-    
+
+    ensDatabaseadaptorSqlstatementDel(dba, &sqls);
+
     ajListFree(&mrs);
-    
+
     return ajTrue;
 }
 
@@ -8561,14 +9087,8 @@ static AjBool proteinAlignFeatureadaptorFetchAllBySQL(
 ** @fnote None
 **
 ** @nam3rule New Constructor
-** @nam4rule NewObj Constructor with existing object
-** @nam4rule NewRef Constructor by incrementing the reference counter
 **
 ** @argrule New dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
-** @argrule Obj object [EnsPProteinalignfeatureadaptor] Ensembl Protein Align
-**                                                      Feature Adaptor
-** @argrule Ref object [EnsPProteinalignfeatureadaptor] Ensembl Protein Align
-**                                                      Feature Adaptor
 **
 ** @valrule * [EnsPProteinalignfeatureadaptor] Ensembl Protein Align
 **                                             Feature Adaptor
@@ -8583,6 +9103,17 @@ static AjBool proteinAlignFeatureadaptorFetchAllBySQL(
 **
 ** Default Ensembl Protein Align Feature Adaptor constructor.
 **
+** Ensembl Object Adaptors are singleton objects in the sense that a single
+** instance of an Ensembl Object Adaptor connected to a particular database is
+** sufficient to instantiate any number of Ensembl Objects from the database.
+** Each Ensembl Object will have a weak reference to the Object Adaptor that
+** instantiated it. Therefore, Ensembl Object Adaptors should not be
+** instantiated directly, but rather obtained from the Ensembl Registry,
+** which will in turn call this function if neccessary.
+**
+** @see ensRegistryGetDatabaseadaptor
+** @see ensRegistryGetProteinalignfeatureadaptor
+**
 ** @param [r] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
 ** @return [EnsPProteinalignfeatureadaptor] Ensembl Protein Align Feature
@@ -8594,28 +9125,28 @@ EnsPProteinalignfeatureadaptor ensProteinalignfeatureadaptorNew(
     EnsPDatabaseadaptor dba)
 {
     EnsPProteinalignfeatureadaptor pafa = NULL;
-    
+
     if(!dba)
-	return NULL;
-    
+        return NULL;
+
     AJNEW0(pafa);
-    
+
     pafa->Adaptor = ensFeatureadaptorNew(
         dba,
-        proteinAlignFeatureadaptorTables,
-        proteinAlignFeatureadaptorColumns,
-        proteinAlignFeatureadaptorLeftJoin,
-        proteinAlignFeatureadaptorDefaultCondition,
-        proteinAlignFeatureadaptorFinalCondition,
-        proteinAlignFeatureadaptorFetchAllBySQL,
-        (void* (*)(const void* key)) NULL, /* Fread */
-        baseAlignFeatureadaptorCacheReference,
-        (AjBool (*)(const void* value)) NULL, /* Fwrite */
-        baseAlignFeatureadaptorCacheDelete,
-        baseAlignFeatureadaptorCacheSize,
-        baseAlignFeatureadaptorGetFeature,
+        proteinalignfeatureadaptorTables,
+        proteinalignfeatureadaptorColumns,
+        proteinalignfeatureadaptorLeftJoin,
+        proteinalignfeatureadaptorDefaultCondition,
+        proteinalignfeatureadaptorFinalCondition,
+        proteinalignfeatureadaptorFetchAllBySQL,
+        (void* (*)(const void* key)) NULL,
+        basealignfeatureadaptorCacheReference,
+        (AjBool (*)(const void* value)) NULL,
+        basealignfeatureadaptorCacheDelete,
+        basealignfeatureadaptorCacheSize,
+        basealignfeatureadaptorGetFeature,
         "Protein Align Feature");
-    
+
     return pafa;
 }
 
@@ -8632,9 +9163,9 @@ EnsPProteinalignfeatureadaptor ensProteinalignfeatureadaptorNew(
 **
 ** @nam3rule Del Destroy (free) an Ensembl Protein Align Feature Adaptor object
 **
-** @argrule * Padaptor [EnsPProteinalignfeatureadaptor*] Ensembl Protein Align
-**                                                       Feature Adaptor
-**                                                       object address
+** @argrule * Ppafa [EnsPProteinalignfeatureadaptor*] Ensembl Protein Align
+**                                                    Feature Adaptor
+**                                                    object address
 **
 ** @valrule * [void]
 **
@@ -8648,32 +9179,37 @@ EnsPProteinalignfeatureadaptor ensProteinalignfeatureadaptorNew(
 **
 ** Default destructor for an Ensembl Protein Align Feature Adaptor.
 **
-** @param [d] Padaptor [EnsPProteinalignfeatureadaptor*] Ensembl Protein Align
-**                                                       Feature Adaptor
-**                                                       address
+** Ensembl Object Adaptors are singleton objects that are registered in the
+** Ensembl Registry and weakly referenced by Ensembl Objects that have been
+** instantiated by it. Therefore, Ensembl Object Adaptors should never be
+** destroyed directly. Upon exit, the Ensembl Registry will call this function
+** if required.
+**
+** @param [d] Ppafa [EnsPProteinalignfeatureadaptor*] Ensembl Protein Align
+**                                                    Feature Adaptor address
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ensProteinalignfeatureadaptorDel(EnsPProteinalignfeatureadaptor *Padaptor)
+void ensProteinalignfeatureadaptorDel(EnsPProteinalignfeatureadaptor *Ppafa)
 {
     EnsPProteinalignfeatureadaptor pthis = NULL;
-    
-    if(!Padaptor)
-	return;
-    
-    if(!*Padaptor)
-	return;
 
-    pthis = *Padaptor;
-    
+    if(!Ppafa)
+        return;
+
+    if(!*Ppafa)
+        return;
+
+    pthis = *Ppafa;
+
     ensFeatureadaptorDel(&pthis->Adaptor);
-    
+
     AJFREE(pthis);
 
-    *Padaptor = NULL;
-    
+    *Ppafa = NULL;
+
     return;
 }
 
@@ -8685,8 +9221,8 @@ void ensProteinalignfeatureadaptorDel(EnsPProteinalignfeatureadaptor *Padaptor)
 ** Fetch an Ensembl Protein Align Feature via its SQL database-internal
 ** identifier.
 **
-** @param [u] adaptor [EnsPProteinalignfeatureadaptor] Ensembl Protein Align
-**                                                     Feature Adaptor
+** @param [u] pafa [EnsPProteinalignfeatureadaptor] Ensembl Protein Align
+**                                                  Feature Adaptor
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 ** @param [wP] Pbaf [EnsPBasealignfeature*] Ensembl Base Align Feature address
 **
@@ -8695,26 +9231,26 @@ void ensProteinalignfeatureadaptorDel(EnsPProteinalignfeatureadaptor *Padaptor)
 ******************************************************************************/
 
 AjBool ensProteinalignfeatureadaptorFetchByIdentifier(
-    EnsPProteinalignfeatureadaptor adaptor,
+    EnsPProteinalignfeatureadaptor pafa,
     ajuint identifier,
     EnsPBasealignfeature *Pbaf)
 {
     EnsPBaseadaptor ba = NULL;
-    
-    if(!adaptor)
-	return ajFalse;
-    
+
+    if(!pafa)
+        return ajFalse;
+
     if(!identifier)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!Pbaf)
-	return ajFalse;
-    
-    ba = ensFeatureadaptorGetBaseadaptor(adaptor->Adaptor);
-    
+        return ajFalse;
+
+    ba = ensFeatureadaptorGetBaseadaptor(pafa->Adaptor);
+
     *Pbaf = (EnsPBasealignfeature)
-	ensBaseadaptorFetchByIdentifier(ba, identifier);
-    
+        ensBaseadaptorFetchByIdentifier(ba, identifier);
+
     return ajTrue;
 }
 
@@ -8726,8 +9262,8 @@ AjBool ensProteinalignfeatureadaptorFetchByIdentifier(
 ** Fetch Ensembl Protein Align Features via an Ensembl Slice and
 ** an alignment identity threshold.
 **
-** @param [u] adaptor [EnsPProteinalignfeatureadaptor] Ensembl Protein Align
-**                                                     Feature Adaptor
+** @param [u] pafa [EnsPProteinalignfeatureadaptor] Ensembl Protein Align
+**                                                  Feature Adaptor
 ** @param [r] slice [EnsPSlice] Ensembl Slice
 ** @param [r] identity [float] Alignment identity threshold
 ** @param [r] anname [const AjPStr] Ensembl Analysis name
@@ -8738,37 +9274,37 @@ AjBool ensProteinalignfeatureadaptorFetchByIdentifier(
 ******************************************************************************/
 
 AjBool ensProteinalignfeatureadaptorFetchAllBySliceIdentity(
-    EnsPProteinalignfeatureadaptor adaptor,
+    EnsPProteinalignfeatureadaptor pafa,
     EnsPSlice slice,
     float identity,
     const AjPStr anname,
     AjPList bafs)
 {
     AjBool value = AJFALSE;
-    
+
     AjPStr constraint = NULL;
-    
-    if(!adaptor)
-	return ajFalse;
-    
+
+    if(!pafa)
+        return ajFalse;
+
     if(!slice)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!bafs)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(identity > 0)
-	constraint = ajFmtStr("protein_align_feature.perc_ident > %f",
+        constraint = ajFmtStr("protein_align_feature.perc_ident > %f",
                               identity);
-    
-    value = ensFeatureadaptorFetchAllBySliceConstraint(adaptor->Adaptor,
-						       slice,
-						       constraint,
-						       anname,
-						       bafs);
-    
+
+    value = ensFeatureadaptorFetchAllBySliceConstraint(pafa->Adaptor,
+                                                       slice,
+                                                       constraint,
+                                                       anname,
+                                                       bafs);
+
     ajStrDel(&constraint);
-    
+
     return value;
 }
 
@@ -8780,8 +9316,8 @@ AjBool ensProteinalignfeatureadaptorFetchAllBySliceIdentity(
 ** Fetch Ensembl Protein Align Features via an Ensembl Slice and
 ** an alignment target coverage.
 **
-** @param [u] adaptor [EnsPProteinalignfeatureadaptor] Ensembl Protein Align
-**                                                     Feature Adaptor
+** @param [u] pafa [EnsPProteinalignfeatureadaptor] Ensembl Protein Align
+**                                                  Feature Adaptor
 ** @param [r] slice [EnsPSlice] Ensembl Slice
 ** @param [r] coverage [float] Alignment target coverage threshold
 ** @param [r] anname [const AjPStr] Ensembl Analysis name
@@ -8792,37 +9328,37 @@ AjBool ensProteinalignfeatureadaptorFetchAllBySliceIdentity(
 ******************************************************************************/
 
 AjBool ensProteinalignfeatureadaptorFetchAllBySliceCoverage(
-    EnsPProteinalignfeatureadaptor adaptor,
+    EnsPProteinalignfeatureadaptor pafa,
     EnsPSlice slice,
     float coverage,
     const AjPStr anname,
     AjPList bafs)
 {
     AjBool value = AJFALSE;
-    
+
     AjPStr constraint = NULL;
-    
-    if(!adaptor)
-	return ajFalse;
-    
+
+    if(!pafa)
+        return ajFalse;
+
     if(!slice)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!bafs)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(coverage > 0)
-	constraint = ajFmtStr("protein_align_feature.hcoverage > %f",
+        constraint = ajFmtStr("protein_align_feature.hcoverage > %f",
                               coverage);
-    
-    value = ensFeatureadaptorFetchAllBySliceConstraint(adaptor->Adaptor,
-						       slice,
-						       constraint,
-						       anname,
-						       bafs);
-    
+
+    value = ensFeatureadaptorFetchAllBySliceConstraint(pafa->Adaptor,
+                                                       slice,
+                                                       constraint,
+                                                       anname,
+                                                       bafs);
+
     ajStrDel(&constraint);
-    
+
     return value;
 }
 
@@ -8834,8 +9370,8 @@ AjBool ensProteinalignfeatureadaptorFetchAllBySliceCoverage(
 ** Fetch Ensembl Protein Align Features via an Ensembl Slice and
 ** an Ensembl External Database name.
 **
-** @param [u] adaptor [EnsPProteinalignfeatureadaptor] Ensembl Protein Align
-**                                                     Feature Adaptor
+** @param [u] pafa [EnsPProteinalignfeatureadaptor] Ensembl Protein Align
+**                                                  Feature Adaptor
 ** @param [r] slice [EnsPSlice] Ensembl Slice
 ** @param [r] edbname [const AjPStr] Ensembl External Database name
 ** @param [r] anname [const AjPStr] Ensembl Analysis name
@@ -8846,44 +9382,44 @@ AjBool ensProteinalignfeatureadaptorFetchAllBySliceCoverage(
 ******************************************************************************/
 
 AjBool ensProteinalignfeatureadaptorFetchAllBySliceExternaldatabase(
-    EnsPProteinalignfeatureadaptor adaptor,
+    EnsPProteinalignfeatureadaptor pafa,
     EnsPSlice slice,
     const AjPStr edbname,
     const AjPStr anname,
     AjPList bafs)
 {
     char *txtname = NULL;
-    
+
     AjBool value = AJFALSE;
-    
+
     AjPStr constraint = NULL;
-    
-    if(!adaptor)
-	return ajFalse;
-    
+
+    if(!pafa)
+        return ajFalse;
+
     if(!slice)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!edbname)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!bafs)
-	return ajFalse;
-    
-    ensFeatureadaptorEscapeC(adaptor->Adaptor, &txtname, edbname);
-    
+        return ajFalse;
+
+    ensFeatureadaptorEscapeC(pafa->Adaptor, &txtname, edbname);
+
     constraint = ajFmtStr("external_db.db_name = %s", txtname);
-    
+
     ajCharDel(&txtname);
-    
-    value = ensFeatureadaptorFetchAllBySliceConstraint(adaptor->Adaptor,
-						       slice,
-						       constraint,
-						       anname,
-						       bafs);
-    
+
+    value = ensFeatureadaptorFetchAllBySliceConstraint(pafa->Adaptor,
+                                                       slice,
+                                                       constraint,
+                                                       anname,
+                                                       bafs);
+
     ajStrDel(&constraint);
-    
+
     return value;
 }
 
@@ -8894,8 +9430,8 @@ AjBool ensProteinalignfeatureadaptorFetchAllBySliceExternaldatabase(
 **
 ** Fetch Ensembl Protein Align Features via a hit name.
 **
-** @param [u] adaptor [EnsPProteinalignfeatureadaptor] Ensembl Protein Align
-**                                                     Feature Adaptor
+** @param [u] pafa [EnsPProteinalignfeatureadaptor] Ensembl Protein Align
+**                                                  Feature Adaptor
 ** @param [r] hitname [const AjPStr] Hit (Target) sequence name
 ** @param [r] anname [const AjPStr] Ensembl Analysis name
 ** @param [u] bafs [AjPList] AJAX List of Ensembl Base Align Features
@@ -8905,52 +9441,52 @@ AjBool ensProteinalignfeatureadaptorFetchAllBySliceExternaldatabase(
 ******************************************************************************/
 
 AjBool ensProteinalignfeatureadaptorFetchAllByHitName(
-    EnsPProteinalignfeatureadaptor adaptor,
+    EnsPProteinalignfeatureadaptor pafa,
     const AjPStr hitname,
     const AjPStr anname,
     AjPList bafs)
 {
     char *txthitname = NULL;
-    
+
     AjBool value = AJFALSE;
-    
+
     AjPStr constraint = NULL;
-    
+
     EnsPBaseadaptor ba = NULL;
-    
-    if(!adaptor)
-	return ajFalse;
-    
+
+    if(!pafa)
+        return ajFalse;
+
     if(!hitname)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!bafs)
-	return ajFalse;
-    
-    ba = ensFeatureadaptorGetBaseadaptor(adaptor->Adaptor);
-    
+        return ajFalse;
+
+    ba = ensFeatureadaptorGetBaseadaptor(pafa->Adaptor);
+
     ensBaseadaptorEscapeC(ba, &txthitname, hitname);
-    
+
     constraint = ajFmtStr("protein_align_feature.hit_name = '%s'", txthitname);
-    
+
     ajCharDel(&txthitname);
-    
+
     /* Add the Ensembl Analysis name constraint. */
-    
+
     if(anname && ajStrGetLen(anname))
-	featureAdaptorAnalysisNameToConstraint(adaptor->Adaptor,
-					       &constraint,
-					       anname);
-    
+        featureadaptorAnalysisNameToConstraint(pafa->Adaptor,
+                                               &constraint,
+                                               anname);
+
     value = ensBaseadaptorGenericFetch(ba,
-				       constraint,
-				       (EnsPAssemblymapper) NULL,
-				       (EnsPSlice) NULL,
-				       bafs);
-    
-    
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       bafs);
+
+
     ajStrDel(&constraint);
-    
+
     return value;
 }
 
@@ -8961,8 +9497,8 @@ AjBool ensProteinalignfeatureadaptorFetchAllByHitName(
 **
 ** Fetch Ensembl Protein Align Features via an unversioned hit name.
 **
-** @param [u] adaptor [EnsPProteinalignfeatureadaptor] Ensembl Protein Align
-**                                                     Feature Adaptor
+** @param [u] pafa [EnsPProteinalignfeatureadaptor] Ensembl Protein Align
+**                                                  Feature Adaptor
 ** @param [r] hitname [const AjPStr] Hit (Target) sequence name
 ** @param [r] anname [const AjPStr] Ensembl Analysis name
 ** @param [u] bafs [AjPList] AJAX List of Ensembl Base Align Features
@@ -8972,52 +9508,52 @@ AjBool ensProteinalignfeatureadaptorFetchAllByHitName(
 ******************************************************************************/
 
 AjBool ensProteinalignfeatureadaptorFetchAllByHitUnversioned(
-    EnsPProteinalignfeatureadaptor adaptor,
+    EnsPProteinalignfeatureadaptor pafa,
     const AjPStr hitname,
     const AjPStr anname,
     AjPList bafs)
 {
     char *txthitname = NULL;
-    
+
     AjBool value = AJFALSE;
-    
+
     AjPStr constraint = NULL;
-    
+
     EnsPBaseadaptor ba = NULL;
-    
-    if(!adaptor)
-	return ajFalse;
-    
+
+    if(!pafa)
+        return ajFalse;
+
     if(!hitname)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!bafs)
-	return ajFalse;
-    
-    ba = ensFeatureadaptorGetBaseadaptor(adaptor->Adaptor);
-    
+        return ajFalse;
+
+    ba = ensFeatureadaptorGetBaseadaptor(pafa->Adaptor);
+
     ensBaseadaptorEscapeC(ba, &txthitname, hitname);
-    
+
     constraint = ajFmtStr("protein_align_feature.hit_name LIKE '%s.%'",
                           txthitname);
-    
+
     ajCharDel(&txthitname);
-    
+
     /* Add the Ensembl Analysis name constraint. */
-    
+
     if(anname && ajStrGetLen(anname))
-	featureAdaptorAnalysisNameToConstraint(adaptor->Adaptor,
-					       &constraint,
-					       anname);
-    
+        featureadaptorAnalysisNameToConstraint(pafa->Adaptor,
+                                               &constraint,
+                                               anname);
+
     value = ensBaseadaptorGenericFetch(ba,
-				       constraint,
-				       (EnsPAssemblymapper) NULL,
-				       (EnsPSlice) NULL,
-				       bafs);
-    
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       bafs);
+
     ajStrDel(&constraint);
-    
+
     return value;
 }
 
@@ -9029,8 +9565,8 @@ AjBool ensProteinalignfeatureadaptorFetchAllByHitUnversioned(
 ** Fetch all SQL database-internal identifiers of
 ** Ensembl Protein Align Features.
 **
-** @param [u] adaptor [EnsPProteinalignfeatureadaptor] Ensembl Protein Align
-**                                                     Feature Adaptor
+** @param [u] pafa [EnsPProteinalignfeatureadaptor] Ensembl Protein Align
+**                                                  Feature Adaptor
 ** @param [u] idlist [AjPList] AJAX List of ajuint identifiers
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
@@ -9038,32 +9574,32 @@ AjBool ensProteinalignfeatureadaptorFetchAllByHitUnversioned(
 ******************************************************************************/
 
 AjBool ensProteinalignfeatureadaptorFetchAllIdentifiers(
-    EnsPProteinalignfeatureadaptor adaptor,
+    EnsPProteinalignfeatureadaptor pafa,
     AjPList idlist)
 {
     AjBool value = AJFALSE;
-    
+
     AjPStr table = NULL;
-    
+
     EnsPBaseadaptor ba = NULL;
-    
-    if(!adaptor)
-	return ajFalse;
-    
+
+    if(!pafa)
+        return ajFalse;
+
     if(!idlist)
-	return ajFalse;
-    
-    ba = ensFeatureadaptorGetBaseadaptor(adaptor->Adaptor);
-    
+        return ajFalse;
+
+    ba = ensFeatureadaptorGetBaseadaptor(pafa->Adaptor);
+
     table = ajStrNewC("protein_align_feature");
-    
+
     value = ensBaseadaptorFetchAllIdentifiers(ba,
-					      table,
-					      (AjPStr) NULL,
-					      idlist);
-    
+                                              table,
+                                              (AjPStr) NULL,
+                                              idlist);
+
     ajStrDel(&table);
-    
+
     return value;
 }
 
@@ -9074,7 +9610,7 @@ AjBool ensProteinalignfeatureadaptorFetchAllIdentifiers(
 **
 ** Functions for manipulating Ensembl Protein Feature objects
 **
-** @cc Bio::EnsEMBL::ProteinFeature CVS Revision: 1.12
+** @cc Bio::EnsEMBL::ProteinFeature CVS Revision: 1.13
 **
 ** @nam2rule Proteinfeature
 **
@@ -9114,8 +9650,7 @@ AjBool ensProteinalignfeatureadaptorFetchAllIdentifiers(
 ** Default Ensembl Protein Feature constructor.
 **
 ** @cc Bio::EnsEMBL::Storable
-** @param [r] adaptor [EnsPProteinfeatureadaptor] Ensembl Protein
-**                                                Feature Adaptor
+** @param [r] pfa [EnsPProteinfeatureadaptor] Ensembl Protein Feature Adaptor
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 ** @cc Bio::EnsEMBL::FeaturePair
 ** @param [r] fp [EnsPFeaturepair] Ensembl Feature Pair
@@ -9127,36 +9662,36 @@ AjBool ensProteinalignfeatureadaptorFetchAllIdentifiers(
 ** @@
 ******************************************************************************/
 
+EnsPProteinfeature ensProteinfeatureNew(EnsPProteinfeatureadaptor pfa,
+                                        ajuint identifier,
+                                        EnsPFeaturepair fp,
+                                        AjPStr accession,
+                                        AjPStr description)
+{
 /*
 ** FIXME: CVS Revision 1.11 introduces a translation_id method, but the
 ** POD is a copy of the idesc.
 ** TODO: Report to the Ensembl Core team.
 */
 
-EnsPProteinfeature ensProteinfeatureNew(EnsPProteinfeatureadaptor adaptor,
-                                        ajuint identifier,
-                                        EnsPFeaturepair fp,
-                                        AjPStr accession,
-                                        AjPStr description)
-{
     EnsPProteinfeature pf = NULL;
-    
+
     AJNEW0(pf);
-    
+
     pf->Use = 1;
-    
+
     pf->Identifier = identifier;
-    
-    pf->Adaptor = adaptor;
-    
+
+    pf->Adaptor = pfa;
+
     pf->Featurepair = ensFeaturepairNewRef(fp);
-    
+
     if(accession)
-	pf->Accession = ajStrNewRef(accession);
-    
+        pf->Accession = ajStrNewRef(accession);
+
     if(description)
-	pf->Description = ajStrNewRef(description);
-    
+        pf->Description = ajStrNewRef(description);
+
     return pf;
 }
 
@@ -9176,21 +9711,21 @@ EnsPProteinfeature ensProteinfeatureNew(EnsPProteinfeatureadaptor adaptor,
 EnsPProteinfeature ensProteinfeatureNewObj(const EnsPProteinfeature object)
 {
     EnsPProteinfeature pf = NULL;
-    
+
     AJNEW0(pf);
-    
+
     pf->Use = 1;
-    
+
     pf->Adaptor = object->Adaptor;
-    
+
     pf->Featurepair = ensFeaturepairNewRef(object->Featurepair);
-    
+
     if(object->Accession)
         pf->Accession = ajStrNewRef(object->Accession);
-    
+
     if(object->Description)
         pf->Description = ajStrNewRef(object->Description);
-    
+
     return pf;
 }
 
@@ -9202,7 +9737,7 @@ EnsPProteinfeature ensProteinfeatureNewObj(const EnsPProteinfeature object)
 ** Ensembl Object referencing function, which returns a pointer to the
 ** Ensembl Object passed in and increases its reference count.
 **
-** @param [u] baf [EnsPProteinfeature] Ensembl Protein Feature
+** @param [u] pf [EnsPProteinfeature] Ensembl Protein Feature
 **
 ** @return [EnsPProteinfeature] Ensembl Protein Feature or NULL
 ** @@
@@ -9211,10 +9746,10 @@ EnsPProteinfeature ensProteinfeatureNewObj(const EnsPProteinfeature object)
 EnsPProteinfeature ensProteinfeatureNewRef(EnsPProteinfeature pf)
 {
     if(!pf)
-	return NULL;
-    
+        return NULL;
+
     pf->Use++;
-    
+
     return pf;
 }
 
@@ -9254,33 +9789,33 @@ EnsPProteinfeature ensProteinfeatureNewRef(EnsPProteinfeature pf)
 void ensProteinfeatureDel(EnsPProteinfeature *Ppf)
 {
     EnsPProteinfeature pthis = NULL;
-    
+
     if(!Ppf)
-	return;
-    
+        return;
+
     if(!*Ppf)
-	return;
+        return;
 
     pthis = *Ppf;
-    
+
     pthis->Use--;
-    
+
     if(pthis->Use)
     {
-	*Ppf = NULL;
-	
-	return;
+        *Ppf = NULL;
+
+        return;
     }
-    
+
     ensFeaturepairDel(&pthis->Featurepair);
-    
+
     ajStrDel(&pthis->Accession);
     ajStrDel(&pthis->Description);
-    
+
     AJFREE(pthis);
 
     *Ppf = NULL;
-    
+
     return;
 }
 
@@ -9331,7 +9866,7 @@ EnsPProteinfeatureadaptor ensProteinfeatureGetAdaptor(
 {
     if(!pf)
         return NULL;
-    
+
     return pf->Adaptor;
 }
 
@@ -9353,7 +9888,7 @@ ajuint ensProteinfeatureGetIdentifier(const EnsPProteinfeature pf)
 {
     if(!pf)
         return 0;
-    
+
     return pf->Identifier;
 }
 
@@ -9373,8 +9908,8 @@ ajuint ensProteinfeatureGetIdentifier(const EnsPProteinfeature pf)
 EnsPFeaturepair ensProteinfeatureGetFeaturepair(const EnsPProteinfeature pf)
 {
     if(!pf)
-	return NULL;
-    
+        return NULL;
+
     return pf->Featurepair;
 }
 
@@ -9394,8 +9929,8 @@ EnsPFeaturepair ensProteinfeatureGetFeaturepair(const EnsPProteinfeature pf)
 AjPStr ensProteinfeatureGetAccession(const EnsPProteinfeature pf)
 {
     if(!pf)
-	return NULL;
-    
+        return NULL;
+
     return pf->Accession;
 }
 
@@ -9415,8 +9950,8 @@ AjPStr ensProteinfeatureGetAccession(const EnsPProteinfeature pf)
 AjPStr ensProteinfeatureGetDescription(const EnsPProteinfeature pf)
 {
     if(!pf)
-	return NULL;
-    
+        return NULL;
+
     return pf->Description;
 }
 
@@ -9453,21 +9988,20 @@ AjPStr ensProteinfeatureGetDescription(const EnsPProteinfeature pf)
 ** Ensembl Protein Feature.
 **
 ** @param [u] pf [EnsPProteinfeature] Ensembl Protein Feature
-** @param [r] adaptor [EnsPProteinfeatureadaptor] Ensembl Protein Feature
-**                                                Adaptor
+** @param [r] pfa [EnsPProteinfeatureadaptor] Ensembl Protein Feature Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
 AjBool ensProteinfeatureSetAdaptor(EnsPProteinfeature pf,
-                                   EnsPProteinfeatureadaptor adaptor)
+                                   EnsPProteinfeatureadaptor pfa)
 {
     if(!pf)
         return ajFalse;
-    
-    pf->Adaptor = adaptor;
-    
+
+    pf->Adaptor = pfa;
+
     return ajTrue;
 }
 
@@ -9490,9 +10024,9 @@ AjBool ensProteinfeatureSetIdentifier(EnsPProteinfeature pf, ajuint identifier)
 {
     if(!pf)
         return ajFalse;
-    
+
     pf->Identifier = identifier;
-    
+
     return ajTrue;
 }
 
@@ -9515,11 +10049,11 @@ AjBool ensProteinfeatureSetFeaturepair(EnsPProteinfeature pf,
 {
     if(!pf)
         return ajFalse;
-    
+
     ensFeaturepairDel(&pf->Featurepair);
-    
+
     pf->Featurepair = ensFeaturepairNewRef(fp);
-    
+
     return ajTrue;
 }
 
@@ -9541,11 +10075,11 @@ AjBool ensProteinfeatureSetAccession(EnsPProteinfeature pf, AjPStr accession)
 {
     if(!pf)
         return ajFalse;
-    
+
     ajStrDel(&pf->Accession);
-    
+
     pf->Accession = ajStrNewRef(accession);
-    
+
     return ajTrue;
 }
 
@@ -9568,11 +10102,11 @@ AjBool ensProteinfeatureSetDescription(EnsPProteinfeature pf,
 {
     if(!pf)
         return ajFalse;
-    
+
     ajStrDel(&pf->Description);
-    
+
     pf->Description = ajStrNewRef(description);
-    
+
     return ajTrue;
 }
 
@@ -9611,74 +10145,74 @@ AjBool ensProteinfeatureSetDescription(EnsPProteinfeature pf,
 AjBool ensProteinfeatureTrace(const EnsPProteinfeature pf, ajuint level)
 {
     AjPStr indent = NULL;
-    
+
     if(!pf)
-	return ajFalse;
-    
+        return ajFalse;
+
     indent = ajStrNew();
-    
+
     ajStrAppendCountK(&indent, ' ', level * 2);
-    
+
     ajDebug("%SensProteinfeatureTrace %p\n"
-	    "%S  Use %u\n"
-	    "%S  Identifier %u\n"
-	    "%S  Adaptor %p\n"
-	    "%S  Featurepair %p\n"
-	    "%S  Accession '%S'\n"
-	    "%S  Description '%S'\n",
-	    indent, pf,
-	    indent, pf->Use,
-	    indent, pf->Identifier,
-	    indent, pf->Adaptor,
-	    indent, pf->Featurepair,
-	    indent, pf->Accession,
-	    indent, pf->Description);
-    
+            "%S  Use %u\n"
+            "%S  Identifier %u\n"
+            "%S  Adaptor %p\n"
+            "%S  Featurepair %p\n"
+            "%S  Accession '%S'\n"
+            "%S  Description '%S'\n",
+            indent, pf,
+            indent, pf->Use,
+            indent, pf->Identifier,
+            indent, pf->Adaptor,
+            indent, pf->Featurepair,
+            indent, pf->Accession,
+            indent, pf->Description);
+
     ensFeaturepairTrace(pf->Featurepair, level + 1);
-    
+
     ajStrDel(&indent);
-    
+
     return ajTrue;
 }
 
 
 
 
-/* @func ensProteinfeatureGetMemSize ******************************************
+/* @func ensProteinfeatureGetMemsize ******************************************
 **
 ** Get the memory size in bytes of an Ensembl Protein Feature.
 **
 ** @param [r] pf [const EnsPProteinfeature] Ensembl Protein Feature
 **
-** @return [ajuint] Memory size
+** @return [ajulong] Memory size
 ** @@
 ******************************************************************************/
 
-ajuint ensProteinfeatureGetMemSize(const EnsPProteinfeature pf)
+ajulong ensProteinfeatureGetMemsize(const EnsPProteinfeature pf)
 {
-    ajuint size = 0;
-    
+    ajulong size = 0;
+
     if(!pf)
-	return 0;
-    
-    size += (ajuint) sizeof (EnsOProteinfeature);
-    
-    size += ensFeaturepairGetMemSize(pf->Featurepair);
-    
+        return 0;
+
+    size += sizeof (EnsOProteinfeature);
+
+    size += ensFeaturepairGetMemsize(pf->Featurepair);
+
     if(pf->Accession)
     {
-	size += (ajuint) sizeof (AjOStr);
-	
-	size += ajStrGetRes(pf->Accession);
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(pf->Accession);
     }
-    
+
     if(pf->Description)
     {
-	size += (ajuint) sizeof (AjOStr);
-	
-	size += ajStrGetRes(pf->Description);
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(pf->Description);
     }
-    
+
     return size;
 }
 
@@ -9689,13 +10223,13 @@ ajuint ensProteinfeatureGetMemSize(const EnsPProteinfeature pf)
 **
 ** Functions for manipulating Ensembl Protein Feature Adaptor objects
 **
-** @cc Bio::EnsEMBL::DBSQL::ProteinFeatureAdaptor CVS Revision: 1.29
+** @cc Bio::EnsEMBL::DBSQL::ProteinFeatureAdaptor CVS Revision: 1.31
 **
 ** @nam2rule Proteinfeatureadaptor
 **
 ******************************************************************************/
 
-static const char *proteinFeatureadaptorTables[] =
+static const char *proteinfeatureadaptorTables[] =
 {
     "protein_feature",
     NULL
@@ -9704,7 +10238,7 @@ static const char *proteinFeatureadaptorTables[] =
 
 
 
-static const char *proteinFeatureadaptorColumns[] =
+static const char *proteinfeatureadaptorColumns[] =
 {
     "protein_feature.protein_feature_id",
     "protein_feature.translation_id",
@@ -9725,7 +10259,7 @@ static const char *proteinFeatureadaptorColumns[] =
 
 
 
-static EnsOBaseadaptorLeftJoin proteinFeatureadaptorLeftJoin[] =
+static EnsOBaseadaptorLeftJoin proteinfeatureadaptorLeftJoin[] =
 {
     {"interpro", "protein_feature.hit_name = interpro.id"},
     {"xref", "interpro.interpro_ac = xref.dbprimary_acc"},
@@ -9735,179 +10269,179 @@ static EnsOBaseadaptorLeftJoin proteinFeatureadaptorLeftJoin[] =
 
 
 
-static const char *proteinFeatureadaptorDefaultCondition = NULL;
+static const char *proteinfeatureadaptorDefaultCondition = NULL;
 
-static const char *proteinFeatureadaptorFinalCondition = NULL;
-
-
+static const char *proteinfeatureadaptorFinalCondition = NULL;
 
 
-/* @funcstatic proteinFeatureadaptorFetchAllBySQL *****************************
+
+
+/* @funcstatic proteinfeatureadaptorFetchAllBySQL *****************************
 **
 ** Run a SQL statement against an Ensembl Database Adaptor and consolidate the
 ** results into an AJAX List of Ensembl Protein Features.
 **
 ** @param [r] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 ** @param [r] statement [const AjPStr] SQL statement
-** @param [r] mapper [EnsPAssemblymapper] Ensembl Assembly Mapper
-** @param [r] slice [EnsPSlice] Ensembl Slice
+** @param [uN] am [EnsPAssemblymapper] Ensembl Assembly Mapper
+** @param [uN] slice [EnsPSlice] Ensembl Slice
 ** @param [u] pfs [AjPList] AJAX List of Ensembl Protein Features
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-static AjBool proteinFeatureadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
+static AjBool proteinfeatureadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
                                                  const AjPStr statement,
-                                                 EnsPAssemblymapper mapper,
+                                                 EnsPAssemblymapper am,
                                                  EnsPSlice slice,
                                                  AjPList pfs)
 {
     double evalue  = 0;
     double score   = 0;
     float identity = 0;
-    
+
     ajuint identifier = 0;
     ajuint tlstart    = 0;
     ajuint tlend      = 0;
     ajuint analysisid = 0;
     ajuint hitstart   = 0;
     ajuint hitend     = 0;
-    
+
     AjPSqlstatement sqls = NULL;
     AjISqlrow sqli       = NULL;
     AjPSqlrow sqlr       = NULL;
-    
+
     AjPStr tlid        = NULL;
     AjPStr hitname     = NULL;
     AjPStr accession   = NULL;
     AjPStr description = NULL;
-    
+
     EnsPAnalysis analysis  = NULL;
     EnsPAnalysisadaptor aa = NULL;
-    
+
     EnsPFeature srcfeature = NULL;
     EnsPFeature trgfeature = NULL;
-    
+
     EnsPFeaturepair fp = NULL;
-    
+
     EnsPProteinfeature pf         = NULL;
     EnsPProteinfeatureadaptor pfa = NULL;
-    
-    ajDebug("proteinFeatureadaptorFetchAllBySQL\n"
-	    "  dba %p\n"
-	    "  statement %p\n"
-	    "  mapper %p\n"
-	    "  slice %p\n"
-	    "  pfs %p\n",
-	    dba,
-	    statement,
-	    mapper,
-	    slice,
-	    pfs);
-    
+
+    if(ajDebugTest("proteinfeatureadaptorFetchAllBySQL"))
+        ajDebug("proteinfeatureadaptorFetchAllBySQL\n"
+                "  dba %p\n"
+                "  statement %p\n"
+                "  am %p\n"
+                "  slice %p\n"
+                "  pfs %p\n",
+                dba,
+                statement,
+                am,
+                slice,
+                pfs);
+
     if(!dba)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!statement)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!pfs)
-	return ajFalse;
-    
+        return ajFalse;
+
     aa = ensRegistryGetAnalysisadaptor(dba);
-    
+
     pfa = ensRegistryGetProteinfeatureadaptor(dba);
-    
+
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
-    
+
     sqli = ajSqlrowiterNew(sqls);
-    
+
     while(!ajSqlrowiterDone(sqli))
     {
-	identifier  = 0;
-	tlid        = ajStrNew();
-	tlstart     = 0;
-	tlend       = 0;
-	hitname     = ajStrNew();
-	hitstart    = 0;
-	hitend      = 0;
-	analysisid  = 0;
-	score       = 0;
-	evalue      = 0;
-	identity    = 0;
-	accession   = ajStrNew();
-	description = ajStrNew();
-	
-	sqlr = ajSqlrowiterGet(sqli);
-	
-	ajSqlcolumnToUint(sqlr, &identifier);
-	ajSqlcolumnToStr(sqlr, &tlid);
-	ajSqlcolumnToUint(sqlr, &tlstart);
-	ajSqlcolumnToUint(sqlr, &tlend);
-	ajSqlcolumnToStr(sqlr, &hitname);
-	ajSqlcolumnToUint(sqlr, &hitstart);
-	ajSqlcolumnToUint(sqlr, &hitend);
-	ajSqlcolumnToUint(sqlr, &analysisid);
-	ajSqlcolumnToDouble(sqlr, &score);
-	ajSqlcolumnToDouble(sqlr, &evalue);
-	ajSqlcolumnToFloat(sqlr, &identity);
-	ajSqlcolumnToStr(sqlr, &accession);
-	ajSqlcolumnToStr(sqlr, &description);
-	
-	ensAnalysisadaptorFetchByIdentifier(aa, analysisid, &analysis);
-	
-	/*
-	** FIXME: The translation_id is currently handled as an AJAX String
-	** to fit into the seqname element of an Ensembl Feature. Let's see
-	** how this goes.
-	*/
-	
-	srcfeature = ensFeatureNewN(analysis, tlid, tlstart, tlend, 1);
-	
-	trgfeature = ensFeatureNewN((EnsPAnalysis) NULL,
-				    hitname,
-				    hitstart,
-				    hitend,
-				    1);
-	
-	fp = ensFeaturepairNew(srcfeature,
-			       trgfeature,
-			       (EnsPExternaldatabase) NULL, /* edb */
-			       (AjPStr) NULL, /* extra data */
-			       (AjPStr) NULL, /* srcspecies */
-			       (AjPStr) NULL, /* trgspecies */
-			       0, /* groupid */
-			       0, /* levelid */
-			       evalue,
-			       score,
-			       0, /* srccoverage */
-			       0, /* trgcoverage */
-			       identity);
-	
-	/* Create a Protein Feature object. */
-	
-	pf = ensProteinfeatureNew(pfa, identifier, fp, accession, description);
-	
-	ajListPushAppend(pfs, (void *) pf);	
-	
-	ensFeaturepairDel(&fp);
-	
-	ensFeatureDel(&srcfeature);
-	ensFeatureDel(&trgfeature);
-	
-	ajStrDel(&tlid);
-	ajStrDel(&hitname);
-	ajStrDel(&accession);
-	ajStrDel(&description);
-	
-	ensAnalysisDel(&analysis);
+        identifier  = 0;
+        tlid        = ajStrNew();
+        tlstart     = 0;
+        tlend       = 0;
+        hitname     = ajStrNew();
+        hitstart    = 0;
+        hitend      = 0;
+        analysisid  = 0;
+        score       = 0;
+        evalue      = 0;
+        identity    = 0;
+        accession   = ajStrNew();
+        description = ajStrNew();
+
+        sqlr = ajSqlrowiterGet(sqli);
+
+        ajSqlcolumnToUint(sqlr, &identifier);
+        ajSqlcolumnToStr(sqlr, &tlid);
+        ajSqlcolumnToUint(sqlr, &tlstart);
+        ajSqlcolumnToUint(sqlr, &tlend);
+        ajSqlcolumnToStr(sqlr, &hitname);
+        ajSqlcolumnToUint(sqlr, &hitstart);
+        ajSqlcolumnToUint(sqlr, &hitend);
+        ajSqlcolumnToUint(sqlr, &analysisid);
+        ajSqlcolumnToDouble(sqlr, &score);
+        ajSqlcolumnToDouble(sqlr, &evalue);
+        ajSqlcolumnToFloat(sqlr, &identity);
+        ajSqlcolumnToStr(sqlr, &accession);
+        ajSqlcolumnToStr(sqlr, &description);
+
+        ensAnalysisadaptorFetchByIdentifier(aa, analysisid, &analysis);
+
+        /*
+        ** NOTE: The translation_id is currently handled as an AJAX String
+        ** to fit into the seqname element of an Ensembl Feature.
+        */
+
+        srcfeature = ensFeatureNewN(analysis, tlid, tlstart, tlend, 1);
+
+        trgfeature = ensFeatureNewN((EnsPAnalysis) NULL,
+                                    hitname,
+                                    hitstart,
+                                    hitend,
+                                    1);
+
+        fp = ensFeaturepairNew(srcfeature,
+                               trgfeature,
+                               (EnsPExternaldatabase) NULL, /* edb */
+                               (AjPStr) NULL, /* extra data */
+                               (AjPStr) NULL, /* srcspecies */
+                               (AjPStr) NULL, /* trgspecies */
+                               0, /* groupid */
+                               0, /* levelid */
+                               evalue,
+                               score,
+                               0, /* srccoverage */
+                               0, /* trgcoverage */
+                               identity);
+
+        /* Create a Protein Feature object. */
+
+        pf = ensProteinfeatureNew(pfa, identifier, fp, accession, description);
+
+        ajListPushAppend(pfs, (void *) pf);
+
+        ensFeaturepairDel(&fp);
+
+        ensFeatureDel(&srcfeature);
+        ensFeatureDel(&trgfeature);
+
+        ajStrDel(&tlid);
+        ajStrDel(&hitname);
+        ajStrDel(&accession);
+        ajStrDel(&description);
+
+        ensAnalysisDel(&analysis);
     }
-    
+
     ajSqlrowiterDel(&sqli);
-    
-    ajSqlstatementDel(&sqls);
-    
+
+    ensDatabaseadaptorSqlstatementDel(dba, &sqls);
+
     return ajTrue;
 }
 
@@ -9925,14 +10459,8 @@ static AjBool proteinFeatureadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 ** @fnote None
 **
 ** @nam3rule New Constructor
-** @nam4rule NewObj Constructor with existing object
-** @nam4rule NewRef Constructor by incrementing the reference counter
 **
 ** @argrule New dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
-** @argrule Obj object [EnsPProteinfeatureadaptor] Ensembl Protein
-**                                                 Feature Adaptor
-** @argrule Ref object [EnsPProteinfeatureadaptor] Ensembl Protein
-**                                                 Feature Adaptor
 **
 ** @valrule * [EnsPProteinfeatureadaptor] Ensembl Protein Feature Adaptor
 **
@@ -9946,30 +10474,42 @@ static AjBool proteinFeatureadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 **
 ** Default Ensembl Protein Feature Adaptor constructor.
 **
+** Ensembl Object Adaptors are singleton objects in the sense that a single
+** instance of an Ensembl Object Adaptor connected to a particular database is
+** sufficient to instantiate any number of Ensembl Objects from the database.
+** Each Ensembl Object will have a weak reference to the Object Adaptor that
+** instantiated it. Therefore, Ensembl Object Adaptors should not be
+** instantiated directly, but rather obtained from the Ensembl Registry,
+** which will in turn call this function if neccessary.
+**
+** @see ensRegistryGetDatabaseadaptor
+** @see ensRegistryGetProteinfeatureadaptor
+**
 ** @param [r] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
 ** @return [EnsPProteinfeatureadaptor] Ensembl Protein Feature Adaptor or NULL
 ** @@
 ******************************************************************************/
 
-EnsPProteinfeatureadaptor ensProteinfeatureadaptorNew(EnsPDatabaseadaptor dba)
+EnsPProteinfeatureadaptor ensProteinfeatureadaptorNew(
+    EnsPDatabaseadaptor dba)
 {
     EnsPProteinfeatureadaptor pfa = NULL;
-    
+
     if(!dba)
-	return NULL;
-    
+        return NULL;
+
     AJNEW0(pfa);
-    
+
     pfa->Adaptor = ensBaseadaptorNew(
         dba,
-        proteinFeatureadaptorTables,
-        proteinFeatureadaptorColumns,
-        proteinFeatureadaptorLeftJoin,
-        proteinFeatureadaptorDefaultCondition,
-        proteinFeatureadaptorFinalCondition,
-        proteinFeatureadaptorFetchAllBySQL);
-    
+        proteinfeatureadaptorTables,
+        proteinfeatureadaptorColumns,
+        proteinfeatureadaptorLeftJoin,
+        proteinfeatureadaptorDefaultCondition,
+        proteinfeatureadaptorFinalCondition,
+        proteinfeatureadaptorFetchAllBySQL);
+
     return pfa;
 }
 
@@ -9986,8 +10526,8 @@ EnsPProteinfeatureadaptor ensProteinfeatureadaptorNew(EnsPDatabaseadaptor dba)
 **
 ** @nam3rule Del Destroy (free) an Ensembl Protein Feature Adaptor object
 **
-** @argrule * Padaptor [EnsPProteinfeatureadaptor*] Ensembl Protein Feature
-**                                                  Adaptor object address
+** @argrule * Ppfa [EnsPProteinfeatureadaptor*] Ensembl Protein Feature Adaptor
+**                                              object address
 **
 ** @valrule * [void]
 **
@@ -10001,31 +10541,37 @@ EnsPProteinfeatureadaptor ensProteinfeatureadaptorNew(EnsPDatabaseadaptor dba)
 **
 ** Default destructor for an Ensembl Protein Feature Adaptor.
 **
-** @param [d] Padaptor [EnsPProteinfeatureadaptor*] Ensembl Protein Feature
-**                                                  Adaptor address
+** Ensembl Object Adaptors are singleton objects that are registered in the
+** Ensembl Registry and weakly referenced by Ensembl Objects that have been
+** instantiated by it. Therefore, Ensembl Object Adaptors should never be
+** destroyed directly. Upon exit, the Ensembl Registry will call this function
+** if required.
+**
+** @param [d] Ppfa [EnsPProteinfeatureadaptor*] Ensembl Protein Feature Adaptor
+**                                              address
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ensProteinfeatureadaptorDel(EnsPProteinfeatureadaptor *Padaptor)
+void ensProteinfeatureadaptorDel(EnsPProteinfeatureadaptor *Ppfa)
 {
     EnsPProteinfeatureadaptor pthis = NULL;
 
-    if(!Padaptor)
-	return;
-    
-    if(!*Padaptor)
-	return;
+    if(!Ppfa)
+        return;
 
-    pthis = *Padaptor;
-    
+    if(!*Ppfa)
+        return;
+
+    pthis = *Ppfa;
+
     ensBaseadaptorDel(&pthis->Adaptor);
-    
+
     AJFREE(pthis);
 
-    *Padaptor = NULL;
-    
+    *Ppfa = NULL;
+
     return;
 }
 
@@ -10047,8 +10593,7 @@ void ensProteinfeatureadaptorDel(EnsPProteinfeatureadaptor *Padaptor)
 ** @nam4rule FetchBy Retrieve one Ensembl Protein Feature object
 **                   matching a criterion
 **
-** @argrule * adaptor [const EnsPProteinfeatureadaptor] Ensembl Protein Feature
-**                                                      Adaptor
+** @argrule * pfa [EnsPProteinfeatureadaptor] Ensembl Protein Feature Adaptor
 ** @argrule FetchAll [AjPList] AJAX List of Ensembl Protein Feature objects
 **
 ** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
@@ -10064,8 +10609,7 @@ void ensProteinfeatureadaptorDel(EnsPProteinfeatureadaptor *Padaptor)
 ** Fetch an Ensembl Protein Feature via an Ensembl Translation identifier.
 ** The caller is responsible for deleting the Ensembl Protein Feature.
 **
-** @param [r] adaptor [EnsPProteinfeatureadaptor] Ensembl Protein Feature
-*                                                 Adaptor
+** @param [u] pfa [EnsPProteinfeatureadaptor] Ensembl Protein Feature Adaptor
 ** @param [r] tlid [ajuint] Ensembl Translation identifier
 ** @param [u] pfs [AjPList] AJAX List of Ensembl Protein Features
 **
@@ -10074,31 +10618,31 @@ void ensProteinfeatureadaptorDel(EnsPProteinfeatureadaptor *Padaptor)
 ******************************************************************************/
 
 AjBool ensProteinfeatureadaptorFetchAllByTranslationIdentifier(
-    EnsPProteinfeatureadaptor adaptor,
+    EnsPProteinfeatureadaptor pfa,
     ajuint tlid,
     AjPList pfs)
 {
     AjPStr constraint = NULL;
-    
-    if(!adaptor)
-	return ajFalse;
-    
+
+    if(!pfa)
+        return ajFalse;
+
     if(!tlid)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!pfs)
-	return ajFalse;
-    
+        return ajFalse;
+
     constraint = ajFmtStr("protein_feature.translation_id = %u", tlid);
-    
-    ensBaseadaptorGenericFetch(adaptor->Adaptor,
-			       constraint,
-			       (EnsPAssemblymapper) NULL,
-			       (EnsPSlice) NULL,
-			       pfs);
-    
+
+    ensBaseadaptorGenericFetch(pfa->Adaptor,
+                               constraint,
+                               (EnsPAssemblymapper) NULL,
+                               (EnsPSlice) NULL,
+                               pfs);
+
     ajStrDel(&constraint);
-    
+
     return ajTrue;
 }
 
@@ -10109,8 +10653,7 @@ AjBool ensProteinfeatureadaptorFetchAllByTranslationIdentifier(
 **
 ** Fetch an Ensembl Protein Feature by its SQL database-internal identifier.
 **
-** @param [r] adaptor [EnsPProteinfeatureadaptor] Ensembl Protein Feature
-**                                                Adaptor
+** @param [r] pfa [EnsPProteinfeatureadaptor] Ensembl Protein Feature Adaptor
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 ** @param [wP] Ppf [EnsPProteinfeature*] Ensembl Protein Feature address
 **
@@ -10120,22 +10663,22 @@ AjBool ensProteinfeatureadaptorFetchAllByTranslationIdentifier(
 
 
 AjBool ensProteinfeatureadaptorFetchByIdentifier(
-    EnsPProteinfeatureadaptor adaptor,
+    EnsPProteinfeatureadaptor pfa,
     ajuint identifier,
     EnsPProteinfeature *Ppf)
 {
-    if(!adaptor)
-	return ajFalse;
-    
+    if(!pfa)
+        return ajFalse;
+
     if(!identifier)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!Ppf)
-	return ajFalse;
-    
+        return ajFalse;
+
     *Ppf = (EnsPProteinfeature)
-	ensBaseadaptorFetchByIdentifier(adaptor->Adaptor, identifier);
-    
+        ensBaseadaptorFetchByIdentifier(pfa->Adaptor, identifier);
+
     return ajTrue;
 }
 
@@ -10146,7 +10689,7 @@ AjBool ensProteinfeatureadaptorFetchByIdentifier(
 **
 ** Functions for manipulating Ensembl Simple Feature objects
 **
-** @cc Bio::EnsEMBL::SimpleFeature CVS Revision: 1.9
+** @cc Bio::EnsEMBL::SimpleFeature CVS Revision: 1.10
 **
 ** @nam2rule Simplefeature
 **
@@ -10185,7 +10728,7 @@ AjBool ensProteinfeatureadaptorFetchByIdentifier(
 ** Default Ensembl Simple Feature constructor.
 **
 ** @cc Bio::EnsEMBL::Storable::new
-** @param [r] adaptor [EnsPSimplefeatureadaptor] Ensembl Simple Feature Adaptor
+** @param [u] sfa [EnsPSimplefeatureadaptor] Ensembl Simple Feature Adaptor
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 ** @cc Bio::EnsEMBL::Feature::new
 ** @param [u] feature [EnsPFeature] Ensembl Feature
@@ -10197,30 +10740,30 @@ AjBool ensProteinfeatureadaptorFetchByIdentifier(
 ** @@
 ******************************************************************************/
 
-EnsPSimplefeature ensSimplefeatureNew(EnsPSimplefeatureadaptor adaptor,
+EnsPSimplefeature ensSimplefeatureNew(EnsPSimplefeatureadaptor sfa,
                                       ajuint identifier,
                                       EnsPFeature feature,
                                       AjPStr label,
                                       double score)
 {
     EnsPSimplefeature sf = NULL;
-    
+
     if(!feature)
         return NULL;
-    
+
     AJNEW0(sf);
-    
+
     sf->Use = 1;
-    
+
     sf->Identifier = identifier;
-    sf->Adaptor    = adaptor;
+    sf->Adaptor    = sfa;
     sf->Feature    = ensFeatureNewRef(feature);
-    
+
     if(label)
-	sf->DisplayLabel = ajStrNewRef(label);
-    
+        sf->DisplayLabel = ajStrNewRef(label);
+
     sf->Score = score;
-    
+
     return sf;
 }
 
@@ -10240,20 +10783,20 @@ EnsPSimplefeature ensSimplefeatureNew(EnsPSimplefeatureadaptor adaptor,
 EnsPSimplefeature ensSimplefeatureNewObj(const EnsPSimplefeature object)
 {
     EnsPSimplefeature sf = NULL;
-    
+
     AJNEW0(sf);
-    
+
     sf->Use = 1;
-    
+
     sf->Identifier = object->Identifier;
     sf->Adaptor    = object->Adaptor;
     sf->Feature    = ensFeatureNewRef(object->Feature);
-    
+
     if(object->DisplayLabel)
-	sf->DisplayLabel = ajStrNewRef(object->DisplayLabel);
-    
+        sf->DisplayLabel = ajStrNewRef(object->DisplayLabel);
+
     sf->Score = object->Score;
-    
+
     return sf;
 }
 
@@ -10274,10 +10817,10 @@ EnsPSimplefeature ensSimplefeatureNewObj(const EnsPSimplefeature object)
 EnsPSimplefeature ensSimplefeatureNewRef(EnsPSimplefeature sf)
 {
     if(!sf)
-	return NULL;
-    
+        return NULL;
+
     sf->Use++;
-    
+
     return sf;
 }
 
@@ -10317,32 +10860,32 @@ EnsPSimplefeature ensSimplefeatureNewRef(EnsPSimplefeature sf)
 void ensSimplefeatureDel(EnsPSimplefeature *Psf)
 {
     EnsPSimplefeature pthis = NULL;
-    
+
     if(!Psf)
         return;
-    
+
     if(!*Psf)
         return;
 
     pthis = *Psf;
-    
+
     pthis->Use--;
-    
+
     if(pthis->Use)
     {
-	*Psf = NULL;
-	
-	return;
+        *Psf = NULL;
+
+        return;
     }
-    
+
     ensFeatureDel(&pthis->Feature);
-    
+
     ajStrDel(&pthis->DisplayLabel);
-    
+
     AJFREE(pthis);
 
     *Psf = NULL;
-    
+
     return;
 }
 
@@ -10392,7 +10935,7 @@ EnsPSimplefeatureadaptor ensSimplefeatureGetAdaptor(const EnsPSimplefeature sf)
 {
     if(!sf)
         return NULL;
-    
+
     return sf->Adaptor;
 }
 
@@ -10415,7 +10958,7 @@ ajuint ensSimplefeatureGetIdentifier(const EnsPSimplefeature sf)
 {
     if(!sf)
         return 0;
-    
+
     return sf->Identifier;
 }
 
@@ -10436,7 +10979,7 @@ EnsPFeature ensSimplefeatureGetFeature(const EnsPSimplefeature sf)
 {
     if(!sf)
         return NULL;
-    
+
     return sf->Feature;
 }
 
@@ -10458,7 +11001,7 @@ AjPStr ensSimplefeatureGetDisplayLabel(const EnsPSimplefeature sf)
 {
     if(!sf)
         return NULL;
-    
+
     return sf->DisplayLabel;
 }
 
@@ -10480,7 +11023,7 @@ double ensSimplefeatureGetScore(const EnsPSimplefeature sf)
 {
     if(!sf)
         return 0;
-    
+
     return sf->Score;
 }
 
@@ -10517,21 +11060,20 @@ double ensSimplefeatureGetScore(const EnsPSimplefeature sf)
 **
 ** @cc Bio::EnsEMBL::Storable::adaptor
 ** @param [u] sf [EnsPSimplefeature] Ensembl Simple Feature
-** @param [r] adaptor [EnsPSimplefeatureadaptor] Ensembl Simple
-**                                               Feature Adaptor
+** @param [r] sfa [EnsPSimplefeatureadaptor] Ensembl Simple Feature Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
 AjBool ensSimplefeatureSetAdaptor(EnsPSimplefeature sf,
-                                  EnsPSimplefeatureadaptor adaptor)
+                                  EnsPSimplefeatureadaptor sfa)
 {
     if(!sf)
         return ajFalse;
-    
-    sf->Adaptor = adaptor;
-    
+
+    sf->Adaptor = sfa;
+
     return ajTrue;
 }
 
@@ -10555,9 +11097,9 @@ AjBool ensSimplefeatureSetIdentifier(EnsPSimplefeature sf, ajuint identifier)
 {
     if(!sf)
         return ajFalse;
-    
+
     sf->Identifier = identifier;
-    
+
     return ajTrue;
 }
 
@@ -10579,11 +11121,11 @@ AjBool ensSimplefeatureSetFeature(EnsPSimplefeature sf, EnsPFeature feature)
 {
     if(!sf)
         return ajFalse;
-    
+
     ensFeatureDel(&sf->Feature);
-    
+
     sf->Feature = ensFeatureNewRef(feature);
-    
+
     return ajTrue;
 }
 
@@ -10606,11 +11148,11 @@ AjBool ensSimplefeatureSetDisplayLabel(EnsPSimplefeature sf, AjPStr label)
 {
     if(!sf)
         return ajFalse;
-    
+
     ajStrDel(&sf->DisplayLabel);
-    
+
     sf->DisplayLabel = ajStrNewRef(label);
-    
+
     return ajTrue;
 }
 
@@ -10633,9 +11175,9 @@ AjBool ensSimplefeatureSetScore(EnsPSimplefeature sf, double score)
 {
     if(!sf)
         return ajFalse;
-    
+
     sf->Score = score;
-    
+
     return ajTrue;
 }
 
@@ -10674,68 +11216,217 @@ AjBool ensSimplefeatureSetScore(EnsPSimplefeature sf, double score)
 AjBool ensSimplefeatureTrace(const EnsPSimplefeature sf, ajuint level)
 {
     AjPStr indent = NULL;
-    
+
     if(!sf)
-	return ajFalse;
-    
+        return ajFalse;
+
     indent = ajStrNew();
-    
+
     ajStrAppendCountK(&indent, ' ', level * 2);
-    
+
     ajDebug("%SensSimplefeatureTrace %p\n"
-	    "%S  Use %u\n"
-	    "%S  Identifier %u\n"
-	    "%S  Adaptor %p\n"
-	    "%S  Feature %p\n"
-	    "%S  DisplayLabel '%S'\n"
-	    "%S  Score %f\n",
-	    indent, sf,
-	    indent, sf->Use,
-	    indent, sf->Identifier,
-	    indent, sf->Adaptor,
-	    indent, sf->Feature,
-	    indent, sf->DisplayLabel,
-	    indent, sf->Score);
-    
+            "%S  Use %u\n"
+            "%S  Identifier %u\n"
+            "%S  Adaptor %p\n"
+            "%S  Feature %p\n"
+            "%S  DisplayLabel '%S'\n"
+            "%S  Score %f\n",
+            indent, sf,
+            indent, sf->Use,
+            indent, sf->Identifier,
+            indent, sf->Adaptor,
+            indent, sf->Feature,
+            indent, sf->DisplayLabel,
+            indent, sf->Score);
+
     ensFeatureTrace(sf->Feature, level + 1);
-    
+
     ajStrDel(&indent);
-    
+
     return ajTrue;
 }
 
 
 
 
-/* @func ensSimplefeatureGetMemSize *******************************************
+/* @func ensSimplefeatureGetMemsize *******************************************
 **
 ** Get the memory size in bytes of an Ensembl Simple Feature.
 **
 ** @param [r] sf [const EnsPSimplefeature] Ensembl Simple Feature
 **
-** @return [ajuint] Memory size
+** @return [ajulong] Memory size
 ** @@
 ******************************************************************************/
 
-ajuint ensSimplefeatureGetMemSize(const EnsPSimplefeature sf)
+ajulong ensSimplefeatureGetMemsize(const EnsPSimplefeature sf)
 {
-    ajuint size = 0;
-    
+    ajulong size = 0;
+
     if(!sf)
-	return 0;
-    
-    size += (ajuint) sizeof (EnsOSimplefeature);
-    
-    size += ensFeatureGetMemSize(sf->Feature);
-    
+        return 0;
+
+    size += sizeof (EnsOSimplefeature);
+
+    size += ensFeatureGetMemsize(sf->Feature);
+
     if(sf->DisplayLabel)
     {
-	size += (ajuint) sizeof (AjOStr);
-	
-	size += ajStrGetRes(sf->DisplayLabel);
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(sf->DisplayLabel);
     }
-    
+
     return size;
+}
+
+
+
+
+/* @funcstatic simplefeatureCompareStartAscending *****************************
+**
+** Comparison function to sort Ensembl Simple Features by their
+** start coordinate in ascending order.
+**
+** @param [r] P1 [const void*] Ensembl Simple Feature address 1
+** @param [r] P2 [const void*] Ensembl Simple Feature address 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+** @@
+******************************************************************************/
+
+static int simplefeatureCompareStartAscending(const void* P1, const void* P2)
+{
+    EnsPSimplefeature sf1 = NULL;
+    EnsPSimplefeature sf2 = NULL;
+
+    sf1 = *(EnsPSimplefeature const *) P1;
+    sf2 = *(EnsPSimplefeature const *) P2;
+
+    if(ajDebugTest("simplefeatureCompareStartAscending"))
+    {
+        ajDebug("simplefeatureCompareStartAscending\n"
+                "  sf1 %p\n"
+                "  sf2 %p\n",
+                sf1,
+                sf2);
+
+        ensSimplefeatureTrace(sf1, 1);
+        ensSimplefeatureTrace(sf2, 1);
+    }
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if(sf1 && (!sf2))
+        return -1;
+
+    if((!sf1) && (!sf2))
+        return 0;
+
+    if((!sf1) && sf2)
+        return +1;
+
+    return ensFeatureCompareStartAscending(sf1->Feature, sf2->Feature);
+}
+
+
+
+
+/* @func ensSimplefeatureSortByStartAscending *********************************
+**
+** Sort Ensembl Simple Features by their Ensembl Feature start coordinate
+** in ascending order.
+**
+** @param [u] sfs [AjPList] AJAX List of Ensembl Simple Features
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensSimplefeatureSortByStartAscending(AjPList sfs)
+{
+    if(!sfs)
+        return ajFalse;
+
+    ajListSort(sfs, simplefeatureCompareStartAscending);
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic simplefeatureCompareStartDescending ****************************
+**
+** Comparison function to sort Ensembl Simple Features by their
+** Ensembl Feature start coordinate in descending order.
+**
+** @param [r] P1 [const void*] Ensembl Simple Feature address 1
+** @param [r] P2 [const void*] Ensembl Simple Feature address 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+** @@
+******************************************************************************/
+
+static int simplefeatureCompareStartDescending(const void* P1, const void* P2)
+{
+    const EnsPSimplefeature sf1 = NULL;
+    const EnsPSimplefeature sf2 = NULL;
+
+    sf1 = *(EnsPSimplefeature const *) P1;
+    sf2 = *(EnsPSimplefeature const *) P2;
+
+    if(ajDebugTest("simplefeatureCompareStartDescending"))
+        ajDebug("simplefeatureCompareStartDescending\n"
+                "  sf1 %p\n"
+                "  sf2 %p\n",
+                sf1,
+                sf2);
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if(sf1 && (!sf2))
+        return -1;
+
+    if((!sf1) && (!sf2))
+        return 0;
+
+    if((!sf1) && sf2)
+        return +1;
+
+    return ensFeatureCompareStartDescending(sf1->Feature, sf2->Feature);
+}
+
+
+
+
+/* @func ensSimplefeatureSortByStartDescending ********************************
+**
+** Sort Ensembl Simple Features by their Ensembl Feature start coordinate
+** in descending order.
+**
+** @param [u] sfs [AjPList] AJAX List of Ensembl Simple Features
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensSimplefeatureSortByStartDescending(AjPList sfs)
+{
+    if(!sfs)
+        return ajFalse;
+
+    ajListSort(sfs, simplefeatureCompareStartDescending);
+
+    return ajTrue;
 }
 
 
@@ -10745,13 +11436,13 @@ ajuint ensSimplefeatureGetMemSize(const EnsPSimplefeature sf)
 **
 ** Functions for manipulating Ensembl Simple Feature Adaptor objects
 **
-** @cc Bio::EnsEMBL::DBSQL::SimpleFeatureAdaptor CVS Revision: 1.33
+** @cc Bio::EnsEMBL::DBSQL::SimpleFeatureAdaptor CVS Revision: 1.34
 **
 ** @nam2rule Simplefeatureadaptor
 **
 ******************************************************************************/
 
-static const char *simpleFeatureadaptorTables[] =
+static const char *simplefeatureadaptorTables[] =
 {
     "simple_feature",
     NULL
@@ -10760,7 +11451,7 @@ static const char *simpleFeatureadaptorTables[] =
 
 
 
-static const char *simpleFeatureadaptorColumns[] =
+static const char *simplefeatureadaptorColumns[] =
 {
     "simple_feature.simple_feature_id",
     "simple_feature.seq_region_id",
@@ -10777,7 +11468,7 @@ static const char *simpleFeatureadaptorColumns[] =
 
 
 
-static EnsOBaseadaptorLeftJoin simpleFeatureadaptorLeftJoin[] =
+static EnsOBaseadaptorLeftJoin simplefeatureadaptorLeftJoin[] =
 {
     {NULL, NULL}
 };
@@ -10786,381 +11477,373 @@ static EnsOBaseadaptorLeftJoin simpleFeatureadaptorLeftJoin[] =
 
 
 
-static const char *simpleFeatureadaptorDefaultCondition = NULL;
+static const char *simplefeatureadaptorDefaultCondition = NULL;
 
-static const char *simpleFeatureadaptorFinalCondition = NULL;
-
-
+static const char *simplefeatureadaptorFinalCondition = NULL;
 
 
-/* @funcstatic simpleFeatureadaptorFetchAllBySQL ******************************
+
+
+/* @funcstatic simplefeatureadaptorFetchAllBySQL ******************************
 **
 ** Fetch all Ensembl Simple Feature objects via an SQL statement.
 **
 ** @cc Bio::EnsEMBL::DBSQL::SimpleFeatureAdaptor::_objs_from_sth
 ** @param [r] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 ** @param [r] statement [const AjPStr] SQL statement
-** @param [r] mapper [EnsPAssemblymapper] Ensembl Assembly Mapper
-** @param [r] slice [EnsPSlice] Ensembl Slice
+** @param [uN] am [EnsPAssemblymapper] Ensembl Assembly Mapper
+** @param [uN] slice [EnsPSlice] Ensembl Slice
 ** @param [u] sfs [AjPList] AJAX List of Ensembl Simple Features
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-static AjBool simpleFeatureadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
+static AjBool simplefeatureadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
                                                 const AjPStr statement,
-                                                EnsPAssemblymapper mapper,
+                                                EnsPAssemblymapper am,
                                                 EnsPSlice slice,
                                                 AjPList sfs)
 {
     double score = 0;
-    
+
     ajint srstrand = 0;
-    
+
     ajuint identifier = 0;
     ajuint analysisid = 0;
-    
+
     ajuint srid    = 0;
     ajuint srstart = 0;
     ajuint srend   = 0;
-    
+
     ajint slstart  = 0;
     ajint slend    = 0;
     ajint slstrand = 0;
     ajint sllength = 0;
-    
+
     AjPList mrs = NULL;
-    
+
     AjPSqlstatement sqls = NULL;
     AjISqlrow sqli       = NULL;
     AjPSqlrow sqlr       = NULL;
-    
+
     AjPStr label = NULL;
-    
+
     EnsPAnalysis analysis  = NULL;
     EnsPAnalysisadaptor aa = NULL;
-    
-    EnsPAssemblymapper am         = NULL;
+
     EnsPAssemblymapperadaptor ama = NULL;
-    
+
     EnsPCoordsystemadaptor csa = NULL;
-    
+
     EnsPFeature feature = NULL;
-    
+
     EnsPSimplefeature sf         = NULL;
     EnsPSimplefeatureadaptor sfa = NULL;
-    
+
     EnsPMapperresult mr = NULL;
-    
+
     EnsPSlice srslice   = NULL;
     EnsPSliceadaptor sa = NULL;
 
-#if AJFALSE
-    ajDebug("simpleFeatureadaptorFetchAllBySQL\n"
-	    "  dba %p\n"
-	    "  statement %p\n"
-	    "  mapper %p\n"
-	    "  slice %p\n"
-	    "  sfs %p\n",
-	    dba,
-	    statement,
-	    mapper,
-	    slice,
-	    sfs);
-#endif
-    
+    if(ajDebugTest("simplefeatureadaptorFetchAllBySQL"))
+        ajDebug("simplefeatureadaptorFetchAllBySQL\n"
+                "  dba %p\n"
+                "  statement %p\n"
+                "  am %p\n"
+                "  slice %p\n"
+                "  sfs %p\n",
+                dba,
+                statement,
+                am,
+                slice,
+                sfs);
+
     if(!dba)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!statement)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!sfs)
-	return ajFalse;
-    
+        return ajFalse;
+
     aa = ensRegistryGetAnalysisadaptor(dba);
-    
+
     csa = ensRegistryGetCoordsystemadaptor(dba);
-    
+
     sfa = ensRegistryGetSimplefeatureadaptor(dba);
-    
+
     sa = ensRegistryGetSliceadaptor(dba);
-    
+
     if(slice)
-	ama = ensRegistryGetAssemblymapperadaptor(dba);
-    
+        ama = ensRegistryGetAssemblymapperadaptor(dba);
+
     mrs = ajListNew();
-    
+
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
-    
+
     sqli = ajSqlrowiterNew(sqls);
-    
+
     while(!ajSqlrowiterDone(sqli))
     {
-	identifier = 0;
-	srid       = 0;
-	srstart    = 0;
-	srend      = 0;
-	srstrand   = 0;
-	label      = ajStrNew();
-	score      = 0;
-	
-	sqlr = ajSqlrowiterGet(sqli);
-	
-	ajSqlcolumnToUint(sqlr, &identifier);
-	ajSqlcolumnToUint(sqlr, &srid);
-	ajSqlcolumnToUint(sqlr, &srstart);
-	ajSqlcolumnToUint(sqlr, &srend);
-	ajSqlcolumnToInt(sqlr, &srstrand);
-	ajSqlcolumnToUint(sqlr, &analysisid);
-	ajSqlcolumnToStr(sqlr, &label);
+        identifier = 0;
+        srid       = 0;
+        srstart    = 0;
+        srend      = 0;
+        srstrand   = 0;
+        label      = ajStrNew();
+        score      = 0;
+
+        sqlr = ajSqlrowiterGet(sqli);
+
+        ajSqlcolumnToUint(sqlr, &identifier);
+        ajSqlcolumnToUint(sqlr, &srid);
+        ajSqlcolumnToUint(sqlr, &srstart);
+        ajSqlcolumnToUint(sqlr, &srend);
+        ajSqlcolumnToInt(sqlr, &srstrand);
+        ajSqlcolumnToUint(sqlr, &analysisid);
+        ajSqlcolumnToStr(sqlr, &label);
         ajSqlcolumnToDouble(sqlr, &score);
-	
-	/* Need to get the internal Ensembl Sequence Region identifier. */
-	
-	srid = ensCoordsystemadaptorGetInternalSeqregionIdentifier(csa, srid);
-	
-	/*
-	** Since the Ensembl SQL schema defines Sequence Region start and end
-	** coordinates as unsigned integers for all Features, the range needs
-	** checking.
-	*/
-	
-	if(srstart <= INT_MAX)
-	    slstart = (ajint) srstart;
-	else
-	    ajFatal("simpleFeatureadaptorFetchAllBySQL got a "
-		    "Sequence Region start coordinate (%u) outside the "
-		    "maximum integer limit (%d).",
-		    srstart, INT_MAX);
-	
-	if(srend <= INT_MAX)
-	    slend = (ajint) srend;
-	else
-	    ajFatal("simpleFeatureadaptorFetchAllBySQL got a "
-		    "Sequence Region end coordinate (%u) outside the "
-		    "maximum integer limit (%d).",
-		    srend, INT_MAX);
-	
-	slstrand = srstrand;
-	
-	/* Fetch a Slice spanning the entire Sequence Region. */
-	
-	ensSliceadaptorFetchBySeqregionIdentifier(sa, srid, 0, 0, 0, &srslice);
-	
-	/*
-	** Obtain an Ensembl Assembly Mapper if none was defined, but a
-	** destination Slice was.
-	*/
-	
-	if(mapper)
-	    am = ensAssemblymapperNewRef(mapper);
-	
-	if((! mapper) &&
-	   slice &&
-	   (! ensCoordsystemMatch(ensSliceGetCoordsystem(slice),
-                                  ensSliceGetCoordsystem(srslice))))
-	    am =
-		ensAssemblymapperadaptorFetchByCoordsystems(
-                    ama,
-		    ensSliceGetCoordsystem(slice),
-		    ensSliceGetCoordsystem(srslice));
-	
-	/*
-	** Remap the Feature coordinates to another Ensembl Coordinate System
-	** if an Ensembl Assembly Mapper was provided.
-	*/
-	
-	if(am)
-	{
-	    ensAssemblymapperFastMap(am,
-				     ensSliceGetSeqregion(srslice),
-				     slstart,
-				     slend,
-				     slstrand,
-				     mrs);
-	    
-	    /*
-	    ** The ensAssemblymapperFastMap function returns at best one
-	    ** Ensembl Mapper Result.
-	    */
-	    
-	    ajListPop(mrs, (void **) &mr);
-	    
-	    /*
-	    ** Skip Features that map to gaps or
-	    ** Coordinate System boundaries.
-	    */
-	    
-	    if(ensMapperresultGetType(mr) != ensEMapperresultCoordinate)
-	    {
-		/* Load the next Feature but destroy first! */
-		
-		ajStrDel(&label);
-		
-		ensSliceDel(&srslice);
-		
-		ensAssemblymapperDel(&am);
-		
-		ensMapperresultDel(&mr);
-		
-		continue;
-	    }
-	    
-	    srid = ensMapperresultGetObjectIdentifier(mr);
-	    
-	    slstart = ensMapperresultGetStart(mr);
-	    
-	    slend = ensMapperresultGetEnd(mr);
-	    
-	    slstrand = ensMapperresultGetStrand(mr);
-	    
-	    /*
-	    ** Delete the Sequence Region Slice and fetch a Slice in the
-	    ** Coordinate System we just mapped to.
-	    */
-	    
-	    ensSliceDel(&srslice);
-	    
-	    ensSliceadaptorFetchBySeqregionIdentifier(sa,
-						      srid,
-						      0,
-						      0,
-						      0,
-						      &srslice);
-	    
-	    ensMapperresultDel(&mr);
-	}
-	
-	/*
-	** Convert Sequence Region Slice coordinates to destination Slice
-	** coordinates, if a destination Slice has been provided.
-	*/
-	
-	if(slice)
-	{
-	    /* Check that the length of the Slice is within range. */
-	    
-	    if(ensSliceGetLength(slice) <= INT_MAX)
-		sllength = (ajint) ensSliceGetLength(slice);
-	    else
-		ajFatal("simpleFeatureadaptorFetchAllBySQL got a Slice, "
-			"which length (%u) exceeds the "
-			"maximum integer limit (%d).",
-			ensSliceGetLength(slice), INT_MAX);
-	    
-	    /*
-	    ** Nothing needs to be done if the destination Slice starts at 1
-	    ** and is on the forward strand.
-	    */
-	    
-	    if((ensSliceGetStart(slice) != 1) ||
+
+        /* Need to get the internal Ensembl Sequence Region identifier. */
+
+        srid = ensCoordsystemadaptorGetInternalSeqregionIdentifier(csa, srid);
+
+        /*
+        ** Since the Ensembl SQL schema defines Sequence Region start and end
+        ** coordinates as unsigned integers for all Features, the range needs
+        ** checking.
+        */
+
+        if(srstart <= INT_MAX)
+            slstart = (ajint) srstart;
+        else
+            ajFatal("simplefeatureadaptorFetchAllBySQL got a "
+                    "Sequence Region start coordinate (%u) outside the "
+                    "maximum integer limit (%d).",
+                    srstart, INT_MAX);
+
+        if(srend <= INT_MAX)
+            slend = (ajint) srend;
+        else
+            ajFatal("simplefeatureadaptorFetchAllBySQL got a "
+                    "Sequence Region end coordinate (%u) outside the "
+                    "maximum integer limit (%d).",
+                    srend, INT_MAX);
+
+        slstrand = srstrand;
+
+        /* Fetch a Slice spanning the entire Sequence Region. */
+
+        ensSliceadaptorFetchBySeqregionIdentifier(sa, srid, 0, 0, 0, &srslice);
+
+        /*
+        ** Obtain an Ensembl Assembly Mapper if none was defined, but a
+        ** destination Slice was.
+        */
+
+        if(am)
+            am = ensAssemblymapperNewRef(am);
+        else if(slice && (!ensCoordsystemMatch(
+                              ensSliceGetCoordsystem(slice),
+                              ensSliceGetCoordsystem(srslice))))
+            am = ensAssemblymapperadaptorFetchBySlices(ama, slice, srslice);
+
+        /*
+        ** Remap the Feature coordinates to another Ensembl Coordinate System
+        ** if an Ensembl Assembly Mapper was provided.
+        */
+
+        if(am)
+        {
+            ensAssemblymapperFastMap(am,
+                                     ensSliceGetSeqregion(srslice),
+                                     slstart,
+                                     slend,
+                                     slstrand,
+                                     mrs);
+
+            /*
+            ** The ensAssemblymapperFastMap function returns at best one
+            ** Ensembl Mapper Result.
+            */
+
+            ajListPop(mrs, (void **) &mr);
+
+            /*
+            ** Skip Features that map to gaps or
+            ** Coordinate System boundaries.
+            */
+
+            if(ensMapperresultGetType(mr) != ensEMapperresultCoordinate)
+            {
+                /* Load the next Feature but destroy first! */
+
+                ajStrDel(&label);
+
+                ensSliceDel(&srslice);
+
+                ensAssemblymapperDel(&am);
+
+                ensMapperresultDel(&mr);
+
+                continue;
+            }
+
+            srid = ensMapperresultGetObjectIdentifier(mr);
+
+            slstart = ensMapperresultGetStart(mr);
+
+            slend = ensMapperresultGetEnd(mr);
+
+            slstrand = ensMapperresultGetStrand(mr);
+
+            /*
+            ** Delete the Sequence Region Slice and fetch a Slice in the
+            ** Coordinate System we just mapped to.
+            */
+
+            ensSliceDel(&srslice);
+
+            ensSliceadaptorFetchBySeqregionIdentifier(sa,
+                                                      srid,
+                                                      0,
+                                                      0,
+                                                      0,
+                                                      &srslice);
+
+            ensMapperresultDel(&mr);
+        }
+
+        /*
+        ** Convert Sequence Region Slice coordinates to destination Slice
+        ** coordinates, if a destination Slice has been provided.
+        */
+
+        if(slice)
+        {
+            /* Check that the length of the Slice is within range. */
+
+            if(ensSliceGetLength(slice) <= INT_MAX)
+                sllength = (ajint) ensSliceGetLength(slice);
+            else
+                ajFatal("simplefeatureadaptorFetchAllBySQL got a Slice, "
+                        "which length (%u) exceeds the "
+                        "maximum integer limit (%d).",
+                        ensSliceGetLength(slice), INT_MAX);
+
+            /*
+            ** Nothing needs to be done if the destination Slice starts at 1
+            ** and is on the forward strand.
+            */
+
+            if((ensSliceGetStart(slice) != 1) ||
                (ensSliceGetStrand(slice) < 0))
-	    {
-		if(ensSliceGetStrand(slice) >= 0)
-		{
-		    slstart = slstart - ensSliceGetStart(slice) + 1;
-		    
-		    slend = slend - ensSliceGetStart(slice) + 1;
-		}
-		else
-		{
-		    slend = ensSliceGetEnd(slice) - slstart + 1;
-		    
-		    slstart = ensSliceGetEnd(slice) - slend + 1;
-		    
-		    slstrand *= -1;
-		}
-	    }
-	    
-	    /*
-	    ** Throw away Features off the end of the requested Slice or on
-	    ** any other than the requested Slice.
-	    */
-	    
-	    if((slend < 1) ||
-	       (slstart > sllength) ||
-	       (srid != ensSliceGetSeqregionIdentifier(slice)))
-	    {
-		/* Load the next Feature but destroy first! */
-		
-		ajStrDel(&label);
-		
-		ensSliceDel(&srslice);
-		
-		ensAssemblymapperDel(&am);
-		
-		continue;
-	    }
-	    
-	    /* Delete the Sequence Region Slice and set the requested Slice. */
-	    
-	    ensSliceDel(&srslice);
-	    
-	    srslice = ensSliceNewRef(slice);
-	}
-	
-	ensAnalysisadaptorFetchByIdentifier(aa, analysisid, &analysis);
-	
-	/* Finally, create a new Ensembl Simple Feature. */
-	
-	feature = ensFeatureNewS(analysis,
-				 srslice,
-				 slstart,
-				 slend,
-				 slstrand);
-	
-	sf = ensSimplefeatureNew(sfa, identifier, feature, label, score);
-	
-	ajListPushAppend(sfs, (void *) sf);
-	
-	ensFeatureDel(&feature);
-	
-	ensAnalysisDel(&analysis);
-	
-	ensAssemblymapperDel(&am);
-	
-	ensSliceDel(&srslice);
-	
-	ajStrDel(&label);
+            {
+                if(ensSliceGetStrand(slice) >= 0)
+                {
+                    slstart = slstart - ensSliceGetStart(slice) + 1;
+
+                    slend = slend - ensSliceGetStart(slice) + 1;
+                }
+                else
+                {
+                    slend = ensSliceGetEnd(slice) - slstart + 1;
+
+                    slstart = ensSliceGetEnd(slice) - slend + 1;
+
+                    slstrand *= -1;
+                }
+            }
+
+            /*
+            ** Throw away Features off the end of the requested Slice or on
+            ** any other than the requested Slice.
+            */
+
+            if((slend < 1) ||
+               (slstart > sllength) ||
+               (srid != ensSliceGetSeqregionIdentifier(slice)))
+            {
+                /* Load the next Feature but destroy first! */
+
+                ajStrDel(&label);
+
+                ensSliceDel(&srslice);
+
+                ensAssemblymapperDel(&am);
+
+                continue;
+            }
+
+            /* Delete the Sequence Region Slice and set the requested Slice. */
+
+            ensSliceDel(&srslice);
+
+            srslice = ensSliceNewRef(slice);
+        }
+
+        ensAnalysisadaptorFetchByIdentifier(aa, analysisid, &analysis);
+
+        /* Finally, create a new Ensembl Simple Feature. */
+
+        feature = ensFeatureNewS(analysis,
+                                 srslice,
+                                 slstart,
+                                 slend,
+                                 slstrand);
+
+        sf = ensSimplefeatureNew(sfa, identifier, feature, label, score);
+
+        ajListPushAppend(sfs, (void *) sf);
+
+        ensFeatureDel(&feature);
+
+        ensAnalysisDel(&analysis);
+
+        ensAssemblymapperDel(&am);
+
+        ensSliceDel(&srslice);
+
+        ajStrDel(&label);
     }
-    
+
     ajSqlrowiterDel(&sqli);
-    
-    ajSqlstatementDel(&sqls);
-    
+
+    ensDatabaseadaptorSqlstatementDel(dba, &sqls);
+
     ajListFree(&mrs);
-    
+
     return ajTrue;
 }
 
 
 
 
-/* @funcstatic simpleFeatureadaptorCacheReference *****************************
+/* @funcstatic simplefeatureadaptorCacheReference *****************************
 **
 ** Wrapper function to reference an Ensembl Simple Feature
 ** from an Ensembl Cache.
 **
-** @param [r] value [void *] Ensembl Simple Feature
+** @param [r] value [void*] Ensembl Simple Feature
 **
-** @return [void *] Ensembl Simple Feature or NULL
+** @return [void*] Ensembl Simple Feature or NULL
 ** @@
 ******************************************************************************/
 
-static void *simpleFeatureadaptorCacheReference(void *value)
+static void* simplefeatureadaptorCacheReference(void *value)
 {
     if(!value)
-	return NULL;
-    
+        return NULL;
+
     return (void *) ensSimplefeatureNewRef((EnsPSimplefeature) value);
 }
 
 
 
 
-/* @funcstatic simpleFeatureadaptorCacheDelete ********************************
+/* @funcstatic simplefeatureadaptorCacheDelete ********************************
 **
 ** Wrapper function to delete an Ensembl Simple Feature
 ** from an Ensembl Cache.
@@ -11171,42 +11854,42 @@ static void *simpleFeatureadaptorCacheReference(void *value)
 ** @@
 ******************************************************************************/
 
-static void simpleFeatureadaptorCacheDelete(void **value)
+static void simplefeatureadaptorCacheDelete(void **value)
 {
     if(!value)
-	return;
-    
+        return;
+
     ensSimplefeatureDel((EnsPSimplefeature *) value);
-    
+
     return;
 }
 
 
 
 
-/* @funcstatic simpleFeatureadaptorCacheSize **********************************
+/* @funcstatic simplefeatureadaptorCacheSize **********************************
 **
 ** Wrapper function to determine the memory size of an Ensembl Simple Feature
 ** from an Ensembl Cache.
 **
 ** @param [r] value [const void*] Ensembl Simple Feature
 **
-** @return [ajuint] Memory size
+** @return [ajulong] Memory size
 ** @@
 ******************************************************************************/
 
-static ajuint simpleFeatureadaptorCacheSize(const void *value)
+static ajulong simplefeatureadaptorCacheSize(const void *value)
 {
     if(!value)
-	return 0;
-    
-    return ensSimplefeatureGetMemSize((const EnsPSimplefeature) value);
+        return 0;
+
+    return ensSimplefeatureGetMemsize((const EnsPSimplefeature) value);
 }
 
 
 
 
-/* @funcstatic simpleFeatureadaptorGetFeature *********************************
+/* @funcstatic simplefeatureadaptorGetFeature *********************************
 **
 ** Wrapper function to get the Ensembl Feature of an Ensembl Simple Feature
 ** from an Ensembl Feature Adaptor.
@@ -11217,11 +11900,11 @@ static ajuint simpleFeatureadaptorCacheSize(const void *value)
 ** @@
 ******************************************************************************/
 
-static EnsPFeature simpleFeatureadaptorGetFeature(const void *value)
+static EnsPFeature simplefeatureadaptorGetFeature(const void *value)
 {
     if(!value)
-	return NULL;
-    
+        return NULL;
+
     return ensSimplefeatureGetFeature((const EnsPSimplefeature) value);
 }
 
@@ -11239,14 +11922,8 @@ static EnsPFeature simpleFeatureadaptorGetFeature(const void *value)
 ** @fnote None
 **
 ** @nam3rule New Constructor
-** @nam4rule NewObj Constructor with existing object
-** @nam4rule NewRef Constructor by incrementing the reference counter
 **
 ** @argrule New dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
-** @argrule Obj object [EnsPSimplefeatureadaptor] Ensembl Simple
-**                                                Feature Adaptor
-** @argrule Ref object [EnsPSimplefeatureadaptor] Ensembl Simple
-**                                                Feature Adaptor
 **
 ** @valrule * [EnsPSimplefeatureadaptor] Ensembl Simple Feature Adaptor
 **
@@ -11260,6 +11937,17 @@ static EnsPFeature simpleFeatureadaptorGetFeature(const void *value)
 **
 ** Default Ensembl Simple Feature Adaptor constructor.
 **
+** Ensembl Object Adaptors are singleton objects in the sense that a single
+** instance of an Ensembl Object Adaptor connected to a particular database is
+** sufficient to instantiate any number of Ensembl Objects from the database.
+** Each Ensembl Object will have a weak reference to the Object Adaptor that
+** instantiated it. Therefore, Ensembl Object Adaptors should not be
+** instantiated directly, but rather obtained from the Ensembl Registry,
+** which will in turn call this function if neccessary.
+**
+** @see ensRegistryGetDatabaseadaptor
+** @see ensRegistryGetSimplefeatureadaptor
+**
 ** @cc Bio::EnsEMBL::DBSQL::SimpleFeatureAdaptor::new
 ** @param [r] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
@@ -11267,31 +11955,32 @@ static EnsPFeature simpleFeatureadaptorGetFeature(const void *value)
 ** @@
 ******************************************************************************/
 
-EnsPSimplefeatureadaptor ensSimplefeatureadaptorNew(EnsPDatabaseadaptor dba)
+EnsPSimplefeatureadaptor ensSimplefeatureadaptorNew(
+    EnsPDatabaseadaptor dba)
 {
     EnsPSimplefeatureadaptor sfa = NULL;
-    
+
     if(!dba)
-	return NULL;
-    
+        return NULL;
+
     AJNEW0(sfa);
-    
+
     sfa->Adaptor = ensFeatureadaptorNew(
         dba,
-        simpleFeatureadaptorTables,
-        simpleFeatureadaptorColumns,
-        simpleFeatureadaptorLeftJoin,
-        simpleFeatureadaptorDefaultCondition,
-        simpleFeatureadaptorFinalCondition,
-        simpleFeatureadaptorFetchAllBySQL,
-        (void* (*)(const void* key)) NULL, /* Fread */
-        simpleFeatureadaptorCacheReference,
-        (AjBool (*)(const void* value)) NULL, /* Fwrite */
-        simpleFeatureadaptorCacheDelete,
-        simpleFeatureadaptorCacheSize,
-        simpleFeatureadaptorGetFeature,
+        simplefeatureadaptorTables,
+        simplefeatureadaptorColumns,
+        simplefeatureadaptorLeftJoin,
+        simplefeatureadaptorDefaultCondition,
+        simplefeatureadaptorFinalCondition,
+        simplefeatureadaptorFetchAllBySQL,
+        (void* (*)(const void* key)) NULL,
+        simplefeatureadaptorCacheReference,
+        (AjBool (*)(const void* value)) NULL,
+        simplefeatureadaptorCacheDelete,
+        simplefeatureadaptorCacheSize,
+        simplefeatureadaptorGetFeature,
         "Simple Feature");
-    
+
     return sfa;
 }
 
@@ -11308,8 +11997,8 @@ EnsPSimplefeatureadaptor ensSimplefeatureadaptorNew(EnsPDatabaseadaptor dba)
 **
 ** @nam3rule Del Destroy (free) an Ensembl Simple Feature Adaptor object
 **
-** @argrule * Padaptor [EnsPSimplefeatureadaptor*] Ensembl Simple Feature
-**                                                 Adaptor object address
+** @argrule * Psfa [EnsPSimplefeatureadaptor*] Ensembl Simple Feature Adaptor
+**                                             object address
 **
 ** @valrule * [void]
 **
@@ -11323,31 +12012,37 @@ EnsPSimplefeatureadaptor ensSimplefeatureadaptorNew(EnsPDatabaseadaptor dba)
 **
 ** Default destructor for an Ensembl Simple Feature Adaptor.
 **
-** @param [d] Padaptor [EnsPSimplefeatureadaptor*] Ensembl Simple Feature
-**                                                 Adaptor address
+** Ensembl Object Adaptors are singleton objects that are registered in the
+** Ensembl Registry and weakly referenced by Ensembl Objects that have been
+** instantiated by it. Therefore, Ensembl Object Adaptors should never be
+** destroyed directly. Upon exit, the Ensembl Registry will call this function
+** if required.
+**
+** @param [d] Psfa [EnsPSimplefeatureadaptor*] Ensembl Simple Feature Adaptor
+**                                             address
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ensSimplefeatureadaptorDel(EnsPSimplefeatureadaptor *Padaptor)
+void ensSimplefeatureadaptorDel(EnsPSimplefeatureadaptor *Psfa)
 {
     EnsPSimplefeatureadaptor pthis = NULL;
-    
-    if(!Padaptor)
-	return;
-    
-    if(!*Padaptor)
-	return;
 
-    pthis = *Padaptor;
-    
+    if(!Psfa)
+        return;
+
+    if(!*Psfa)
+        return;
+
+    pthis = *Psfa;
+
     ensFeatureadaptorDel(&pthis->Adaptor);
-    
+
     AJFREE(pthis);
 
-    *Padaptor = NULL;
-    
+    *Psfa = NULL;
+
     return;
 }
 
@@ -11359,9 +12054,8 @@ void ensSimplefeatureadaptorDel(EnsPSimplefeatureadaptor *Padaptor)
 ** Fetch all Ensembl Simple Features on an Ensembl Slice.
 **
 ** @cc Bio::EnsEMBL::DBSQL::BaseFeatureAdaptor::fetch_all_by_Slice
-** @param [r] adaptor [EnsPSimplefeatureadaptor] Ensembl Simple Feature
-**                                               Adaptor
-** @param [r] slice [EnsPSlice] Ensembl Slice
+** @param [u] sfa [EnsPSimplefeatureadaptor] Ensembl Simple Feature Adaptor
+** @param [u] slice [EnsPSlice] Ensembl Slice
 ** @param [r] anname [const AjPStr] Ensembl Analysis name
 ** @param [r] sfs [AjPList] AJAX List of Ensembl Simple Features
 **
@@ -11369,24 +12063,24 @@ void ensSimplefeatureadaptorDel(EnsPSimplefeatureadaptor *Padaptor)
 ** @@
 ******************************************************************************/
 
-AjBool ensSimplefeatureadaptorFetchAllBySlice(EnsPSimplefeatureadaptor adaptor,
+AjBool ensSimplefeatureadaptorFetchAllBySlice(EnsPSimplefeatureadaptor sfa,
                                               EnsPSlice slice,
                                               const AjPStr anname,
                                               AjPList sfs)
 {
-    if(!adaptor)
-	return ajFalse;
-    
+    if(!sfa)
+        return ajFalse;
+
     if(!slice)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!sfs)
-	return ajFalse;
-    
-    return ensFeatureadaptorFetchAllBySlice(adaptor->Adaptor,
-					    slice,
-					    anname,
-					    sfs);
+        return ajFalse;
+
+    return ensFeatureadaptorFetchAllBySlice(sfa->Adaptor,
+                                            slice,
+                                            anname,
+                                            sfs);
 }
 
 
@@ -11398,9 +12092,8 @@ AjBool ensSimplefeatureadaptorFetchAllBySlice(EnsPSimplefeatureadaptor adaptor,
 ** above a threshold score.
 **
 ** @cc Bio::EnsEMBL::DBSQL::BaseFeatureAdaptor::fetch_all_by_Slice
-** @param [r] adaptor [EnsPSimplefeatureadaptor] Ensembl Simple Feature
-**                                               Adaptor
-** @param [r] slice [EnsPSlice] Ensembl Slice
+** @param [u] sfa [EnsPSimplefeatureadaptor] Ensembl Simple Feature Adaptor
+** @param [u] slice [EnsPSlice] Ensembl Slice
 ** @param [r] score [double] Score
 ** @param [r] anname [const AjPStr] Ensembl Analysis name
 ** @param [r] sfs [AjPList] AJAX List of Ensembl Simple Features
@@ -11410,26 +12103,26 @@ AjBool ensSimplefeatureadaptorFetchAllBySlice(EnsPSimplefeatureadaptor adaptor,
 ******************************************************************************/
 
 AjBool ensSimplefeatureadaptorFetchAllBySliceScore(
-    EnsPSimplefeatureadaptor adaptor,
+    EnsPSimplefeatureadaptor sfa,
     EnsPSlice slice,
     double score,
     const AjPStr anname,
     AjPList sfs)
 {
-    if(!adaptor)
-	return ajFalse;
-    
+    if(!sfa)
+        return ajFalse;
+
     if(!slice)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!sfs)
-	return ajFalse;
-    
-    return ensFeatureadaptorFetchAllBySliceScore(adaptor->Adaptor,
-						 slice,
-						 score,
-						 anname,
-						 sfs);
+        return ajFalse;
+
+    return ensFeatureadaptorFetchAllBySliceScore(sfa->Adaptor,
+                                                 slice,
+                                                 score,
+                                                 anname,
+                                                 sfs);
 }
 
 
@@ -11440,8 +12133,7 @@ AjBool ensSimplefeatureadaptorFetchAllBySliceScore(
 ** Fetch all Ensembl Simple Features via an Ensembl Analysis name.
 **
 ** @cc Bio::EnsEMBL::DBSQL::BaseFeatureAdaptor::fetch_all_by_logic_name
-** @param [r] adaptor [EnsPSimplefeatureadaptor] Ensembl Simple Feature
-**                                               Adaptor
+** @param [u] sfa [EnsPSimplefeatureadaptor] Ensembl Simple Feature Adaptor
 ** @param [r] anname [const AjPStr] Ensembl Analysis name
 ** @param [r] sfs [AjPList] AJAX List of Ensembl Simple Features
 **
@@ -11450,22 +12142,22 @@ AjBool ensSimplefeatureadaptorFetchAllBySliceScore(
 ******************************************************************************/
 
 AjBool ensSimplefeatureadaptorFetchAllByAnalysisName(
-    EnsPSimplefeatureadaptor adaptor,
+    EnsPSimplefeatureadaptor sfa,
     const AjPStr anname,
     AjPList sfs)
 {
-    if(!adaptor)
-	return ajFalse;
-    
+    if(!sfa)
+        return ajFalse;
+
     if(!anname)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!sfs)
-	return ajFalse;
-    
-    return ensFeatureadaptorFetchAllByAnalysisName(adaptor->Adaptor,
-						   anname,
-						   sfs);
+        return ajFalse;
+
+    return ensFeatureadaptorFetchAllByAnalysisName(sfa->Adaptor,
+                                                   anname,
+                                                   sfs);
 }
 
 
@@ -11516,15 +12208,15 @@ AjBool ensSimplefeatureadaptorFetchAllByAnalysisName(
 ** Default Ensembl Assembly Exception Feature constructor.
 **
 ** @cc Bio::EnsEMBL::Storable::new
-** @param [r] adaptor [EnsPAssemblyexceptionfeatureadaptor] Ensembl Assembly
-**                                                          Exception Feature
-**                                                          Adaptor
+** @param [u] aefa [EnsPAssemblyexceptionfeatureadaptor] Ensembl Assembly
+**                                                       Exception Feature
+**                                                       Adaptor
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 ** @cc Bio::EnsEMBL::Feature::new
 ** @param [u] feature [EnsPFeature] Ensembl Feature
 ** @cc Bio::EnsEMBL::AssemblyExceptionFeature::new
 ** @param [u] slice [EnsPSlice] Alternative Slice
-** @param [r] type [AjEnum] Assembly Exception Feature type
+** @param [r] type [EnsEAssemblyexceptionType] Assembly Exception type
 **
 ** @return [EnsPAssemblyexceptionfeature] Ensembl Assembly Exception Feature
 **                                        or NULL
@@ -11532,30 +12224,30 @@ AjBool ensSimplefeatureadaptorFetchAllByAnalysisName(
 ******************************************************************************/
 
 EnsPAssemblyexceptionfeature ensAssemblyexceptionfeatureNew(
-    EnsPAssemblyexceptionfeatureadaptor adaptor,
+    EnsPAssemblyexceptionfeatureadaptor aefa,
     ajuint identifier,
     EnsPFeature feature,
     EnsPSlice slice,
-    AjEnum type)
+    EnsEAssemblyexceptionType type)
 {
     EnsPAssemblyexceptionfeature aef = NULL;
-    
+
     if(!slice)
-	return NULL;
-    
+        return NULL;
+
     if(!type)
-	return NULL;
-    
+        return NULL;
+
     AJNEW0(aef);
-    
+
     aef->Use = 1;
-    
+
     aef->Identifier     = identifier;
-    aef->Adaptor        = adaptor;
+    aef->Adaptor        = aefa;
     aef->Feature        = feature;
     aef->AlternateSlice = ensSliceNewRef(slice);
     aef->Type           = type;
-    
+
     return aef;
 }
 
@@ -11578,16 +12270,16 @@ EnsPAssemblyexceptionfeature ensAssemblyexceptionfeatureNewObj(
     const EnsPAssemblyexceptionfeature object)
 {
     EnsPAssemblyexceptionfeature aef = NULL;
-    
+
     AJNEW0(aef);
-    
+
     aef->Use            = 1;
     aef->Identifier     = object->Identifier;
     aef->Adaptor        = object->Adaptor;
     aef->Feature        = ensFeatureNewRef(object->Feature);
     aef->AlternateSlice = ensSliceNewRef(object->AlternateSlice);
     aef->Type           = object->Type;
-    
+
     return aef;
 }
 
@@ -11611,10 +12303,10 @@ EnsPAssemblyexceptionfeature ensAssemblyexceptionfeatureNewRef(
     EnsPAssemblyexceptionfeature aef)
 {
     if(!aef)
-	return NULL;
-    
+        return NULL;
+
     aef->Use++;
-    
+
     return aef;
 }
 
@@ -11656,32 +12348,32 @@ EnsPAssemblyexceptionfeature ensAssemblyexceptionfeatureNewRef(
 void ensAssemblyexceptionfeatureDel(EnsPAssemblyexceptionfeature *Paef)
 {
     EnsPAssemblyexceptionfeature pthis = NULL;
-    
+
     if(!Paef)
-	return;
-    
+        return;
+
     if(!*Paef)
-	return;
+        return;
 
     pthis = *Paef;
-    
+
     pthis->Use--;
-    
+
     if(pthis->Use)
     {
-	*Paef = NULL;
-	
-	return;
+        *Paef = NULL;
+
+        return;
     }
-    
+
     ensFeatureDel(&pthis->Feature);
-    
+
     ensSliceDel(&pthis->AlternateSlice);
-    
+
     AJFREE(pthis);
 
     *Paef = NULL;
-    
+
     return;
 }
 
@@ -11711,7 +12403,7 @@ void ensAssemblyexceptionfeatureDel(EnsPAssemblyexceptionfeature *Paef)
 **                                                        Adaptor
 ** @valrule Feature [EnsPFeature] Ensembl Feature
 ** @valrule AlternatSlice [EnsPSlice] Alternative Ensembl Slice
-** @valrule Type [AjEnum] Assembly Exception Feature type
+** @valrule Type [EnsEAssemblyexceptionType] Assembly Exception type
 **
 ** @fcategory use
 ******************************************************************************/
@@ -11737,8 +12429,8 @@ EnsPAssemblyexceptionfeatureadaptor ensAssemblyexceptionfeatureGetAdaptor(
     const EnsPAssemblyexceptionfeature aef)
 {
     if(!aef)
-	return NULL;
-    
+        return NULL;
+
     return aef->Adaptor;
 }
 
@@ -11762,8 +12454,8 @@ ajuint ensAssemblyexceptionfeatureGetIdentifier(
     const EnsPAssemblyexceptionfeature aef)
 {
     if(!aef)
-	return 0;
-    
+        return 0;
+
     return aef->Identifier;
 }
 
@@ -11785,8 +12477,8 @@ EnsPFeature ensAssemblyexceptionfeatureGetFeature(
     const EnsPAssemblyexceptionfeature aef)
 {
     if(!aef)
-	return NULL;
-    
+        return NULL;
+
     return aef->Feature;
 }
 
@@ -11810,8 +12502,8 @@ EnsPSlice ensAssemblyexceptionfeatureGetAlternateSlice(
     const EnsPAssemblyexceptionfeature aef)
 {
     if(!aef)
-	return NULL;
-    
+        return NULL;
+
     return aef->AlternateSlice;
 }
 
@@ -11820,23 +12512,23 @@ EnsPSlice ensAssemblyexceptionfeatureGetAlternateSlice(
 
 /* @func ensAssemblyexceptionfeatureGetType ***********************************
 **
-** Get the Ensembl Assembly Exception Feature type element of an
+** Get the Ensembl Assembly Exception type element of an
 ** Ensembl Assembly Exception Feature.
 **
 ** @cc Bio::EnsEMBL::AssemblyExceptionFeature::type
 ** @param [r] aef [const EnsPAssemblyexceptionfeature] Ensembl Assembly
 **                                                     Exception Feature
 **
-** @return [AjEnum] Ensembl Assembly Exception Feature type
+** @return [EnsEAssemblyexceptionType] Ensembl Assembly Exception type
 ** @@
 ******************************************************************************/
 
-AjEnum ensAssemblyexceptionfeatureGetType(
+EnsEAssemblyexceptionType ensAssemblyexceptionfeatureGetType(
     const EnsPAssemblyexceptionfeature aef)
 {
     if(!aef)
-	return 0;
-    
+        return ensEAssemblyexceptionTypeNULL;
+
     return aef->Type;
 }
 
@@ -11877,9 +12569,9 @@ AjEnum ensAssemblyexceptionfeatureGetType(
 ** @cc Bio::EnsEMBL::Storable::adaptor
 ** @param [u] aef [EnsPAssemblyexceptionfeature] Ensembl Assembly
 **                                               Exception Feature
-** @param [u] adaptor [EnsPAssemblyexceptionfeatureadaptor] Ensembl Assembly
-**                                                          Exception Feature
-**                                                          Adaptor
+** @param [u] aefa [EnsPAssemblyexceptionfeatureadaptor] Ensembl Assembly
+**                                                       Exception Feature
+**                                                       Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
@@ -11887,13 +12579,13 @@ AjEnum ensAssemblyexceptionfeatureGetType(
 
 AjBool ensAssemblyexceptionfeatureSetAdaptor(
     EnsPAssemblyexceptionfeature aef,
-    EnsPAssemblyexceptionfeatureadaptor adaptor)
+    EnsPAssemblyexceptionfeatureadaptor aefa)
 {
     if(!aef)
-	return ajFalse;
-    
-    aef->Adaptor = adaptor;
-    
+        return ajFalse;
+
+    aef->Adaptor = aefa;
+
     return ajTrue;
 }
 
@@ -11919,10 +12611,10 @@ AjBool ensAssemblyexceptionfeatureSetIdentifier(
     ajuint identifier)
 {
     if(!aef)
-	return ajFalse;
-    
+        return ajFalse;
+
     aef->Identifier = identifier;
-    
+
     return ajTrue;
 }
 
@@ -11946,12 +12638,12 @@ AjBool ensAssemblyexceptionfeatureSetFeature(
     EnsPFeature feature)
 {
     if(!aef)
-	return ajFalse;
-    
+        return ajFalse;
+
     ensFeatureDel(&aef->Feature);
-    
+
     aef->Feature = ensFeatureNewRef(feature);
-    
+
     return ajTrue;
 }
 
@@ -11976,12 +12668,12 @@ AjBool ensAssemblyexceptionfeatureSetAlternateSlice(
     EnsPSlice altslice)
 {
     if(!aef)
-	return ajFalse;
-    
+        return ajFalse;
+
     ensSliceDel(&aef->AlternateSlice);
-    
+
     aef->AlternateSlice = ensSliceNewRef(altslice);
-    
+
     return ajTrue;
 }
 
@@ -11990,25 +12682,25 @@ AjBool ensAssemblyexceptionfeatureSetAlternateSlice(
 
 /* @func ensAssemblyexceptionfeatureSetType ***********************************
 **
-** Set the Ensembl Assembly Exception Feature type element of an
+** Set the Ensembl Assembly Exception type element of an
 ** Ensembl Assembly Exception Feature.
 **
 ** @param [u] aef [EnsPAssemblyexceptionfeature] Ensembl Assembly
 **                                               Exception Feature
-** @param [r] type [AjEnum] Ensembl Assembly Exception Feature type
+** @param [r] type [EnsEAssemblyexceptionType] Ensembl Assembly Exception type
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
 AjBool ensAssemblyexceptionfeatureSetType(EnsPAssemblyexceptionfeature aef,
-                                          AjEnum type)
+                                          EnsEAssemblyexceptionType type)
 {
     if(!aef)
-	return ajFalse;
-    
+        return ajFalse;
+
     aef->Type = type;
-    
+
     return ajTrue;
 }
 
@@ -12051,35 +12743,35 @@ AjBool ensAssemblyexceptionfeatureTrace(const EnsPAssemblyexceptionfeature aef,
                                         ajuint level)
 {
     AjPStr indent = NULL;
-    
+
     if(!aef)
-	return ajFalse;
-    
+        return ajFalse;
+
     indent = ajStrNew();
-    
+
     ajStrAppendCountK(&indent, ' ', level * 2);
-    
+
     ajDebug("ensAssemblyexceptionfeatureTrace %p\n"
-	    "%S  Use %u\n"
-	    "%S  Identifier %u\n"
-	    "%S  EnsPAssemblyexceptionfeatureadaptor %p\n"
-	    "%S  Feature %p\n"
-	    "%S  AlternateSlice %p\n"
-	    "%S  Type %d\n",
-	    indent, aef,
-	    indent, aef->Use,
-	    indent, aef->Identifier,
-	    indent, aef->Adaptor,
-	    indent, aef->Feature,
-	    indent, aef->AlternateSlice,
-	    indent, aef->Type);
-    
+            "%S  Use %u\n"
+            "%S  Identifier %u\n"
+            "%S  EnsPAssemblyexceptionfeatureadaptor %p\n"
+            "%S  Feature %p\n"
+            "%S  AlternateSlice %p\n"
+            "%S  Type %d\n",
+            indent, aef,
+            indent, aef->Use,
+            indent, aef->Identifier,
+            indent, aef->Adaptor,
+            indent, aef->Feature,
+            indent, aef->AlternateSlice,
+            indent, aef->Type);
+
     ensFeatureTrace(aef->Feature, level + 1);
-    
+
     ensSliceTrace(aef->AlternateSlice, level + 1);
-    
+
     ajStrDel(&indent);
-    
+
     return ajTrue;
 }
 
@@ -12103,16 +12795,16 @@ AjBool ensAssemblyexceptionfeatureFetchDisplayIdentifier(
     AjPStr *Pidentifier)
 {
     if(!aef)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!Pidentifier)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!aef->AlternateSlice)
-	return ajFalse;
-    
+        return ajFalse;
+
     ajStrAssignS(Pidentifier, ensSliceGetSeqregionName(aef->AlternateSlice));
-    
+
     return ajTrue;
 }
 
@@ -12130,16 +12822,16 @@ AjBool ensAssemblyexceptionfeatureFetchDisplayIdentifier(
 **
 ******************************************************************************/
 
-static ajuint assemblyExceptionFeatureadaptorCacheMaxBytes = 1 << 26;
+static ajulong assemblyexceptionfeatureadaptorCacheMaxBytes = 1 << 26;
 
-static ajuint assemblyExceptionFeatureadaptorCacheMaxCount = 1 << 16;
+static ajuint assemblyexceptionfeatureadaptorCacheMaxCount = 1 << 16;
 
-static ajuint assemblyExceptionFeatureadaptorCacheMaxSize = 0;
-
-
+static ajulong assemblyexceptionfeatureadaptorCacheMaxSize = 0;
 
 
-/* @funcstatic assemblyExceptionFeatureadaptorCacheInit ***********************
+
+
+/* @funcstatic assemblyexceptionfeatureadaptorCacheInit ***********************
 **
 ** Initialise an Ensembl Assembly Exception Feature Adaptor-internal
 ** Ensembl Assembly Exception Feature cache.
@@ -12152,7 +12844,7 @@ static ajuint assemblyExceptionFeatureadaptorCacheMaxSize = 0;
 ** @@
 ******************************************************************************/
 
-static AjBool assemblyExceptionFeatureadaptorCacheInit(
+static AjBool assemblyexceptionfeatureadaptorCacheInit(
     EnsPAssemblyexceptionfeatureadaptor aefa)
 {
     ajuint erid    = 0;
@@ -12161,156 +12853,156 @@ static AjBool assemblyExceptionFeatureadaptorCacheInit(
     ajuint srstart = 0;
     ajuint erend   = 0;
     ajuint srend   = 0;
-    
+
     ajuint *Pidentifier = NULL;
-    
+
     AjPList aes = NULL;
-    
+
     EnsPAssemblyexception ae         = NULL;
     EnsPAssemblyexceptionadaptor aea = NULL;
-    
+
     EnsPAssemblyexceptionfeature refaef = NULL;
     EnsPAssemblyexceptionfeature excaef = NULL;
-    
+
     EnsPFeature feature = NULL;
-    
+
     EnsPSlice excslice  = NULL;
     EnsPSlice refslice  = NULL;
     EnsPSliceadaptor sa = NULL;
-    
+
     if(!aefa)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!aefa->CacheByIdentifier)
     {
-	ajDebug("assemblyExceptionFeatureadaptorCacheInit CacheByIdentifier "
-		"not initialised!\n");
-	
-	return ajFalse;
+        ajDebug("assemblyexceptionfeatureadaptorCacheInit CacheByIdentifier "
+                "not initialised!\n");
+
+        return ajFalse;
     }
-    
+
     aea = ensRegistryGetAssemblyexceptionadaptor(aefa->Adaptor);
-    
+
     sa = ensRegistryGetSliceadaptor(aefa->Adaptor);
-    
+
     aes = ajListNew();
-    
+
     ensAssemblyexceptionadaptorFetchAll(aea, aes);
-    
+
     while(ajListPop(aes, (void **) &ae))
     {
-	srid = ensAssemblyexceptionGetSeqregionIdentifier(ae);
-	
-	srstart = ensAssemblyexceptionGetSeqregionStart(ae);
-	
-	srend = ensAssemblyexceptionGetSeqregionEnd(ae);
-	
-	erid = ensAssemblyexceptionGetExcRegionIdentifier(ae);
-	
-	erstart = ensAssemblyexceptionGetExcRegionStart(ae);
-	
-	erend = ensAssemblyexceptionGetExcRegionEnd(ae);
-	
-	/*
-	** Each Ensembl Assembly Exception creates two
-	** Ensembl Assembly Exception Features, each of which has
-	** an alternative Slice pointing to the "other" one. Thereby, the
-	** Feature is annotated on the Slice spanning the entire
-	** Ensembl Sequence Region. The alternate Slice spans only the
-	** exception region.
-	*/
-	
-	/* For the reference Slice ... */
-	
-	ensSliceadaptorFetchBySeqregionIdentifier(sa,
-						  srid,
-						  0,
-						  0,
-						  0,
-						  &refslice);
-	
-	ensSliceadaptorFetchBySeqregionIdentifier(sa,
-						  erid,
-						  erstart,
-						  erend,
-						  0,
-						  &excslice);
-	
-	feature = ensFeatureNewS((EnsPAnalysis) NULL,
-				 refslice,
-				 srstart,
-				 srend,
-				 1);
-	
-	refaef = ensAssemblyexceptionfeatureNew(
+        srid = ensAssemblyexceptionGetSeqregionIdentifier(ae);
+
+        srstart = ensAssemblyexceptionGetSeqregionStart(ae);
+
+        srend = ensAssemblyexceptionGetSeqregionEnd(ae);
+
+        erid = ensAssemblyexceptionGetExcRegionIdentifier(ae);
+
+        erstart = ensAssemblyexceptionGetExcRegionStart(ae);
+
+        erend = ensAssemblyexceptionGetExcRegionEnd(ae);
+
+        /*
+        ** Each Ensembl Assembly Exception creates two
+        ** Ensembl Assembly Exception Features, each of which has
+        ** an alternative Slice pointing to the "other" one. Thereby, the
+        ** Feature is annotated on the Slice spanning the entire
+        ** Ensembl Sequence Region. The alternate Slice spans only the
+        ** exception region.
+        */
+
+        /* For the reference Slice ... */
+
+        ensSliceadaptorFetchBySeqregionIdentifier(sa,
+                                                  srid,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  &refslice);
+
+        ensSliceadaptorFetchBySeqregionIdentifier(sa,
+                                                  erid,
+                                                  erstart,
+                                                  erend,
+                                                  0,
+                                                  &excslice);
+
+        feature = ensFeatureNewS((EnsPAnalysis) NULL,
+                                 refslice,
+                                 srstart,
+                                 srend,
+                                 1);
+
+        refaef = ensAssemblyexceptionfeatureNew(
             aefa,
             ensAssemblyexceptionGetIdentifier(ae),
             feature,
             excslice,
             ensAssemblyexceptionGetType(ae));
-	
-	ensFeatureDel(&feature);
-	
-	ensSliceDel(&excslice);
-	
-	ensSliceDel(&refslice);
-	
-	/* Insert the (reference) Assembly Exception Feature into the cache. */
-	
-	ajListPushAppend(aefa->Cache, (void *) refaef);
-	
-	AJNEW0(Pidentifier);
-	
-	*Pidentifier = refaef->Identifier;
-	
-	ajTablePut(aefa->CacheByIdentifier,
-		   (void *) Pidentifier,
-		   (void *) ensAssemblyexceptionfeatureNewRef(refaef));
-	
-	/* For the exception Slice ... */
-	
-	ensSliceadaptorFetchBySeqregionIdentifier(sa,
-						  erid,
-						  0,
-						  0,
-						  0,
-						  &excslice);
-	
-	ensSliceadaptorFetchBySeqregionIdentifier(sa,
-						  srid,
-						  srstart,
-						  srend,
-						  0,
-						  &refslice);
-	
-	feature = ensFeatureNewS((EnsPAnalysis) NULL,
-				 excslice,
-				 erstart,
-				 erend,
-				 1);
-	
-	excaef = ensAssemblyexceptionfeatureNew(
+
+        ensFeatureDel(&feature);
+
+        ensSliceDel(&excslice);
+
+        ensSliceDel(&refslice);
+
+        /* Insert the (reference) Assembly Exception Feature into the cache. */
+
+        ajListPushAppend(aefa->Cache, (void *) refaef);
+
+        AJNEW0(Pidentifier);
+
+        *Pidentifier = refaef->Identifier;
+
+        ajTablePut(aefa->CacheByIdentifier,
+                   (void *) Pidentifier,
+                   (void *) ensAssemblyexceptionfeatureNewRef(refaef));
+
+        /* For the exception Slice ... */
+
+        ensSliceadaptorFetchBySeqregionIdentifier(sa,
+                                                  erid,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  &excslice);
+
+        ensSliceadaptorFetchBySeqregionIdentifier(sa,
+                                                  srid,
+                                                  srstart,
+                                                  srend,
+                                                  0,
+                                                  &refslice);
+
+        feature = ensFeatureNewS((EnsPAnalysis) NULL,
+                                 excslice,
+                                 erstart,
+                                 erend,
+                                 1);
+
+        excaef = ensAssemblyexceptionfeatureNew(
             aefa,
             ensAssemblyexceptionGetIdentifier(ae),
             feature,
             refslice,
             ensAssemblyexceptionGetType(ae));
-	
-	ensFeatureDel(&feature);
-	
-	ensSliceDel(&excslice);
-	
-	ensSliceDel(&refslice);
-	
-	/* Insert the (exception) Assembly Exception Feature into the cache. */
-	
-	ajListPushAppend(aefa->Cache, (void *) excaef);
-	
-	ensAssemblyexceptionDel(&ae);
+
+        ensFeatureDel(&feature);
+
+        ensSliceDel(&excslice);
+
+        ensSliceDel(&refslice);
+
+        /* Insert the (exception) Assembly Exception Feature into the cache. */
+
+        ajListPushAppend(aefa->Cache, (void *) excaef);
+
+        ensAssemblyexceptionDel(&ae);
     }
-    
+
     ajListFree(&aes);
-    
+
     return ajTrue;
 }
 
@@ -12350,6 +13042,17 @@ static AjBool assemblyExceptionFeatureadaptorCacheInit(
 **
 ** Default Ensembl Assembly Exception Feature Adaptor constructor.
 **
+** Ensembl Object Adaptors are singleton objects in the sense that a single
+** instance of an Ensembl Object Adaptor connected to a particular database is
+** sufficient to instantiate any number of Ensembl Objects from the database.
+** Each Ensembl Object will have a weak reference to the Object Adaptor that
+** instantiated it. Therefore, Ensembl Object Adaptors should not be
+** instantiated directly, but rather obtained from the Ensembl Registry,
+** which will in turn call this function if neccessary.
+**
+** @see ensRegistryGetDatabaseadaptor
+** @see ensRegistryGetAssemblyexceptionfeatureadaptor
+**
 ** @cc Bio::EnsEMBL::DBSQL::AssemblyExceptionFeatureAdaptor::new
 ** @param [r] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
@@ -12362,88 +13065,88 @@ EnsPAssemblyexceptionfeatureadaptor ensAssemblyexceptionfeatureadaptorNew(
     EnsPDatabaseadaptor dba)
 {
     EnsPAssemblyexceptionfeatureadaptor aefa = NULL;
-    
+
     if(!dba)
-	return NULL;
-    
+        return NULL;
+
     AJNEW0(aefa);
-    
+
     aefa->Adaptor = dba;
-    
+
     aefa->Cache = ajListNew();
-    
+
     aefa->CacheByIdentifier =
-	ajTableNewFunctionLen(0, ensTableCmpUint, ensTableHashUint);
-    
+        ajTableNewFunctionLen(0, ensTableCmpUint, ensTableHashUint);
+
     aefa->CacheBySlice = ensCacheNew(
         ensECacheTypeAlphaNumeric,
-        assemblyExceptionFeatureadaptorCacheMaxBytes,
-        assemblyExceptionFeatureadaptorCacheMaxCount,
-        assemblyExceptionFeatureadaptorCacheMaxSize,
-        (void* (*)(void* value)) NULL, /* Freference */
-        (void (*)(void** value)) NULL, /* Fdelete */
-        (ajuint (*)(const void* value)) NULL, /* Fsize */
-        (void* (*)(const void* key)) NULL, /* Fread */
-        (AjBool (*)(const void* value)) NULL, /* Fwrite */
+        assemblyexceptionfeatureadaptorCacheMaxBytes,
+        assemblyexceptionfeatureadaptorCacheMaxCount,
+        assemblyexceptionfeatureadaptorCacheMaxSize,
+        (void* (*)(void* value)) NULL,
+        (void (*)(void** value)) NULL,
+        (ajulong (*)(const void* value)) NULL,
+        (void* (*)(const void* key)) NULL,
+        (AjBool (*)(const void* value)) NULL,
         ajFalse,
         "Assembly Exception Feature");
-    
-    assemblyExceptionFeatureadaptorCacheInit(aefa);
-    
+
+    assemblyexceptionfeatureadaptorCacheInit(aefa);
+
     return aefa;
 }
 
 
 
 
-/* @funcstatic assemblyExceptionFeatureadaptorCacheClear **********************
+/* @funcstatic assemblyexceptionfeatureadaptorCacheClear **********************
 **
 ** Clear an Ensembl Assembly Exception Feature Adaptor-internal
 ** Ensembl Assembly Exception Feature cache.
 **
-** @param [u] adaptor [EnsPAssemblyexceptionfeatureadaptor] Ensembl Assembly
-**                                                          Exception Feature
-**                                                          Adaptor
+** @param [u] aefa [EnsPAssemblyexceptionfeatureadaptor] Ensembl Assembly
+**                                                       Exception Feature
+**                                                       Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-static AjBool assemblyExceptionFeatureadaptorCacheClear(
-    EnsPAssemblyexceptionfeatureadaptor adaptor)
+static AjBool assemblyexceptionfeatureadaptorCacheClear(
+    EnsPAssemblyexceptionfeatureadaptor aefa)
 {
     void **keyarray = NULL;
     void **valarray = NULL;
-    
+
     register ajuint i = 0;
-    
+
     EnsPAssemblyexceptionfeature aef = NULL;
-    
-    if(!adaptor)
-	return ajFalse;
-    
-    while(ajListPop(adaptor->Cache, (void **) &aef))
-	ensAssemblyexceptionfeatureDel(&aef);
-    
-    ajTableToarrayKeysValues(adaptor->CacheByIdentifier, &keyarray, &valarray);
-    
+
+    if(!aefa)
+        return ajFalse;
+
+    while(ajListPop(aefa->Cache, (void **) &aef))
+        ensAssemblyexceptionfeatureDel(&aef);
+
+    ajTableToarrayKeysValues(aefa->CacheByIdentifier, &keyarray, &valarray);
+
     for(i = 0; keyarray[i]; i++)
     {
-	ajTableRemove(adaptor->CacheByIdentifier, (const void *) keyarray[i]);
-	
-	/* Delete unsigned integer key data. */
-	
-	AJFREE(keyarray[i]);
-	
-	/* Delete the Ensembl Assembly Exception Feature. */
-	
-	ensAssemblyexceptionfeatureDel((EnsPAssemblyexceptionfeature *)
-				       &valarray[i]);
+        ajTableRemove(aefa->CacheByIdentifier, (const void *) keyarray[i]);
+
+        /* Delete unsigned integer key data. */
+
+        AJFREE(keyarray[i]);
+
+        /* Delete the Ensembl Assembly Exception Feature. */
+
+        ensAssemblyexceptionfeatureDel((EnsPAssemblyexceptionfeature *)
+                                       &valarray[i]);
     }
-    
+
     AJFREE(keyarray);
     AJFREE(valarray);
-    
+
     return ajTrue;
 }
 
@@ -12460,9 +13163,9 @@ static AjBool assemblyExceptionFeatureadaptorCacheClear(
 **
 ** @nam3rule Del Destroy (free) a Feature object
 **
-** @argrule * Padaptor [EnsPAssemblyexceptionfeatureadaptor*] Assembly Exception
-**                                                            Feature Adaptor
-**                                                            object address
+** @argrule * Paefa [EnsPAssemblyexceptionfeatureadaptor*] Assembly Exception
+**                                                         Feature Adaptor
+**                                                         object address
 **
 ** @valrule * [void]
 **
@@ -12476,33 +13179,39 @@ static AjBool assemblyExceptionFeatureadaptorCacheClear(
 **
 ** Default destructor for an Ensembl Assembly Exception Feature Adaptor.
 **
-** @param [d] Padaptor [EnsPAssemblyexceptionfeatureadaptor*] Ensembl Assembly
-**                                                            Exception Feature
-**                                                            Adaptor address
+** Ensembl Object Adaptors are singleton objects that are registered in the
+** Ensembl Registry and weakly referenced by Ensembl Objects that have been
+** instantiated by it. Therefore, Ensembl Object Adaptors should never be
+** destroyed directly. Upon exit, the Ensembl Registry will call this function
+** if required.
+**
+** @param [d] Paefa [EnsPAssemblyexceptionfeatureadaptor*] Ensembl Assembly
+**                                                         Exception Feature
+**                                                         Adaptor address
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 void ensAssemblyexceptionfeatureadaptorDel(
-    EnsPAssemblyexceptionfeatureadaptor *Padaptor)
+    EnsPAssemblyexceptionfeatureadaptor *Paefa)
 {
     EnsPAssemblyexceptionfeatureadaptor pthis = NULL;
-    
-    if(!Padaptor)
-	return;
-    
-    if(!*Padaptor)
-	return;
 
-    pthis = *Padaptor;
-    
-    assemblyExceptionFeatureadaptorCacheClear(pthis);
-    
+    if(!Paefa)
+        return;
+
+    if(!*Paefa)
+        return;
+
+    pthis = *Paefa;
+
+    assemblyexceptionfeatureadaptorCacheClear(pthis);
+
     AJFREE(pthis);
 
-    *Padaptor = NULL;
-    
+    *Paefa = NULL;
+
     return;
 }
 
@@ -12524,8 +13233,8 @@ void ensAssemblyexceptionfeatureadaptorDel(
 ** @nam4rule FetchBy Retrieve one Ensembl Assembly Exception Feature object
 **                   matching a criterion
 **
-** @argrule * adaptor [const EnsPAssemblyexceptionfeatureadaptor] Ensembl
-**                     Assembly Exception Feature Adaptor
+** @argrule * aefa [const EnsPAssemblyexceptionfeatureadaptor]
+**                  Ensembl Assembly Exception Feature Adaptor
 ** @argrule FetchAll [AjPList] AJAX List of Ensembl Assembly Exception Feature
 **                             objects
 **
@@ -12541,9 +13250,9 @@ void ensAssemblyexceptionfeatureadaptorDel(
 **
 ** Fetch all Ensembl Assembly Exception Features.
 **
-** @param [r] adaptor [EnsPAssemblyexceptionfeatureadaptor] Ensembl Assembly
-**                                                          Exception Feature
-**                                                          Adaptor
+** @param [r] aefa [EnsPAssemblyexceptionfeatureadaptor] Ensembl Assembly
+**                                                       Exception Feature
+**                                                       Adaptor
 ** @param [u] aefs [AjPList] AJAX List of Ensembl Assembly Exception Features
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
@@ -12551,31 +13260,31 @@ void ensAssemblyexceptionfeatureadaptorDel(
 ******************************************************************************/
 
 AjBool ensAssemblyexceptionfeatureadaptorFetchAll(
-    EnsPAssemblyexceptionfeatureadaptor adaptor,
+    EnsPAssemblyexceptionfeatureadaptor aefa,
     AjPList aefs)
 {
     AjIList iter = NULL;
-    
+
     EnsPAssemblyexceptionfeature aef = NULL;
-    
-    if(!adaptor)
-	return ajFalse;
-    
+
+    if(!aefa)
+        return ajFalse;
+
     if(!aefs)
-	return ajFalse;
-    
-    iter = ajListIterNewread(adaptor->Cache);
-    
+        return ajFalse;
+
+    iter = ajListIterNewread(aefa->Cache);
+
     while(!ajListIterDone(iter))
     {
-	aef = (EnsPAssemblyexceptionfeature) ajListIterGet(iter);
-	
-	ajListPushAppend(aefs,
-			 (void *) ensAssemblyexceptionfeatureNewRef(aef));
+        aef = (EnsPAssemblyexceptionfeature) ajListIterGet(iter);
+
+        ajListPushAppend(aefs,
+                         (void *) ensAssemblyexceptionfeatureNewRef(aef));
     }
-    
+
     ajListIterDel(&iter);
-    
+
     return ajTrue;
 }
 
@@ -12586,9 +13295,9 @@ AjBool ensAssemblyexceptionfeatureadaptorFetchAll(
 **
 ** Fetch all Ensembl Assembly Exception Features.
 **
-** @param [r] adaptor [EnsPAssemblyexceptionfeatureadaptor] Ensembl Assembly
-**                                                          Exception Feature
-**                                                          Adaptor
+** @param [r] aefa [EnsPAssemblyexceptionfeatureadaptor] Ensembl Assembly
+**                                                       Exception Feature
+**                                                       Adaptor
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 ** @param [wP] Paef [EnsPAssemblyexceptionfeature*] Ensembl Assembly Exception
 **                                                  Feature address
@@ -12598,42 +13307,42 @@ AjBool ensAssemblyexceptionfeatureadaptorFetchAll(
 ******************************************************************************/
 
 AjBool ensAssemblyexceptionfeatureadaptorFetchByIdentifier(
-    EnsPAssemblyexceptionfeatureadaptor adaptor,
+    EnsPAssemblyexceptionfeatureadaptor aefa,
     ajuint identifier,
     EnsPAssemblyexceptionfeature* Paef)
 {
-    if(!adaptor)
-	return ajFalse;
-    
+    if(!aefa)
+        return ajFalse;
+
     *Paef = (EnsPAssemblyexceptionfeature)
-	ajTableFetch(adaptor->CacheByIdentifier, (const void *) &identifier);
-    
+        ajTableFetch(aefa->CacheByIdentifier, (const void *) &identifier);
+
     ensAssemblyexceptionfeatureNewRef(*Paef);
-    
+
     return ajTrue;
 }
 
 
 
 
-/* @funcstatic assemblyExceptionFeatureadaptorRemap ***************************
+/* @funcstatic assemblyexceptionfeatureadaptorRemap ***************************
 **
 ** Remap Ensembl Assembly Exception Features onto an Ensembl Slice.
 **
 ** @cc Bio::EnsEMBL::DBSQL::AssemblyExceptionFeatureAdaptor::_remap
-** @param [r] adaptor [EnsPAssemblyexceptionfeatureadaptor] Ensembl Assembly
-**                                                          Exception Feature
-**                                                          Adaptor
-** @param [r] aefs [AjPList] AJAX List of Ensembl Assembly Exception Features
-** @param [r] am [EnsPAssemblymapper] Ensembl Assembly Mapper
-** @param [r] slice [EnsPSlice] Ensembl Slice
+** @param [u] aefa [EnsPAssemblyexceptionfeatureadaptor] Ensembl Assembly
+**                                                       Exception Feature
+**                                                       Adaptor
+** @param [u] aefs [AjPList] AJAX List of Ensembl Assembly Exception Features
+** @param [uN] am [EnsPAssemblymapper] Ensembl Assembly Mapper
+** @param [u] slice [EnsPSlice] Ensembl Slice
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-static AjBool assemblyExceptionFeatureadaptorRemap(
-    EnsPAssemblyexceptionfeatureadaptor adaptor,
+static AjBool assemblyexceptionfeatureadaptorRemap(
+    EnsPAssemblyexceptionfeatureadaptor aefa,
     AjPList aefs,
     EnsPAssemblymapper am,
     EnsPSlice slice)
@@ -12641,191 +13350,175 @@ static AjBool assemblyExceptionFeatureadaptorRemap(
     ajint start  = 0;
     ajint end    = 0;
     ajint strand = 0;
-    
-    ajuint srcsrid = 0;
-    ajuint trgsrid = 0;
-    
+
+    ajuint srid = 0;
+
     AjIList iter = NULL;
     AjPList mrs  = NULL;
-    
+
     EnsPAssemblyexceptionfeature aef = NULL;
-    
+
     EnsPFeature feature = NULL;
-    
+
     EnsPMapperresult mr = NULL;
-    
-    if(!adaptor)
-	return ajFalse;
-    
+
+    if(!aefa)
+        return ajFalse;
+
     if(!aefs)
-	return ajFalse;
-    
-    /*
-      if (! am)
-      return ajFalse;
-    */
-    
+        return ajFalse;
+
     if(!slice)
-	return ajFalse;
-    
-    /* Check if remapping is actually required. */
-    
+        return ajFalse;
+
     /*
-    ** If the List contains no Assembly Exception Features, remapping is
-    ** not required.
+    ** Remapping is not required, if the AJAX List is empty or the Slice
+    ** attached to the first Feature is already identical to the Slice
+    ** the Features should be mapped to.
     */
-    
+
     if(!ajListGetLength(aefs))
-	return ajTrue;
-    
-    /*
-    ** If the Slice attached to the first Feature is identical to the Slice
-    ** the Features should be mapped to, remapping is not required.
-    */
-    
+        return ajTrue;
+
     ajListPeekFirst(aefs, (void **) &aef);
-    
+
     feature = aef->Feature;
-    
+
     if(ensSliceMatch(ensFeatureGetSlice(feature), slice))
-	return ajTrue;
-    
+        return ajTrue;
+
     /* Remapping has not been done, we have to do our own conversion. */
-    
-    trgsrid = ensSliceGetSeqregionIdentifier(slice);
-    
+
+    mrs = ajListNew();
+
     iter = ajListIterNew(aefs);
-    
+
     while(!ajListIterDone(iter))
     {
-	aef = (EnsPAssemblyexceptionfeature) ajListIterGet(iter);
-	
-	feature = aef->Feature;
-	
-	/*
-	** Since Features were obtained in contig coordinates, the attached
-	** Sequence Region is a contig.
-	*/
-	
-	if(!feature->Slice)
-	    ajFatal("assemblyExceptionFeatureadaptorRemap Feature (%p) "
-		    "does not have a Slice attached.\n", feature);
-	
-	if(ensCoordsystemMatch(ensSliceGetCoordsystem(slice),
+        aef = (EnsPAssemblyexceptionfeature) ajListIterGet(iter);
+
+        feature = aef->Feature;
+
+        /*
+        ** Since Features were obtained in contig coordinates, the attached
+        ** Sequence Region is a contig.
+        */
+
+        if(!feature->Slice)
+            ajFatal("assemblyexceptionfeatureadaptorRemap got an "
+                    "Ensembl Feature (%p) without an Ensembl Slice.\n",
+                    feature);
+
+        if(ensCoordsystemMatch(ensSliceGetCoordsystem(slice),
                                ensSliceGetCoordsystem(feature->Slice)))
-	{
-	    /*
-	    ** The Slice attached to the Feature is in the same
-	    ** Coordinate System as the target Slice, therefore remapping and
-	    ** an Ensembl Assembly Mapper are not required. Nevertheless,
-	    ** coordinates need still adjusting to the Slice.
-	    */
-	    
-	    start = feature->Start;
-	    
-	    end = feature->End;
-	    
-	    strand = feature->Strand;
-	    
-	    srcsrid = ensSliceGetSeqregionIdentifier(feature->Slice);
-	}
-	else
-	{
-	    /*
-	    ** The Slice attached to the Feature is in a different
-	    ** Coordinate System, therefore remapping is required.
-	    */
-	    
-	    if(!am)
-		ajFatal("featureAdaptorRemap requires an "
-			"Ensembl Assembly Mapper, when "
-			"Coordinate Systems of Features and Slice differ.\n");
-	    
-	    mrs = ajListNew();
-	    
-	    ensAssemblymapperFastMap(am,
-				     ensSliceGetSeqregion(feature->Slice),
-				     feature->Start,
-				     feature->End,
-				     feature->Strand,
-				     mrs);
-	    
-	    /*
-	    ** For successful mapping, the ensMapperFastMap function returns
-	    ** at maximum one Mapper Result List element.
-	    ** An empty List means a Gap so remove the Ensembl Object from
-	    ** the List and de-reference (delete) it.
-	    */
-	    
-	    if(ajListGetLength(mrs))
-		ajListPop(mrs, (void **) &mr);
-	    else
-	    {
-		ajListIterRemove(iter);
-		
-		ensAssemblyexceptionfeatureDel(&aef);
-		
-		continue;
-	    }
-	    
-	    start = ensMapperresultGetStart(mr);
-	    
-	    end = ensMapperresultGetEnd(mr);
-	    
-	    strand = ensMapperresultGetStrand(mr);
-	    
-	    srcsrid = ensMapperresultGetObjectIdentifier(mr);
-	    
-	    ensMapperresultDel(&mr);
-	    
-	    ajListFree(&mrs);
-	}
-	
-	if((srcsrid != trgsrid) ||
-	   (start > ensSliceGetEnd(slice)) ||
-	   (end < ensSliceGetStart(slice)))
-	{
-	    /*
-	    ** Since the Feature maps to a region outside the desired area,
-	    ** remove the Ensembl Object from the AJAX List and delete it.
-	    */
-	    
-	    ajListIterRemove(iter);
-	    
-	    ensAssemblyexceptionfeatureDel(&aef);
-	    
-	    continue;
-	}
-	
-	/*
-	** FIXME: In constrast to the Perl API the Assembly Exception Feature
-	** Adaptor does currently not use a Slice cache. While the Perl API
-	** keeps Features on Slices spanning the entire Sequence Region, a new
-	** copy of the Feature needs to be placed on the requested Slice.
-	** Since we are currently not using a Slice cache, the Feature can be
-	** remapped in place.
-	** This means in fact that this function is now again identical to the
-	** ensFeatureadaptorRemap function.
-	*/
-	
-	/* Shift the Feature start, end and strand in one call. */
-	
-	if(ensSliceGetStrand(slice) > 0)
-	    ensFeatureMove(feature,
-			   start - ensSliceGetStart(slice) + 1,
-			   end - ensSliceGetStart(slice) + 1,
-			   strand);
-	else
-	    ensFeatureMove(feature,
-			   ensSliceGetEnd(slice) - end + 1,
-			   ensSliceGetEnd(slice) - start + 1,
-			   strand * -1);
-	
-	ensFeatureSetSlice(feature, slice);
+        {
+            /*
+            ** The Slice attached to the Feature is in the same
+            ** Coordinate System as the target Slice, therefore remapping and
+            ** an Ensembl Assembly Mapper are not required. Nevertheless,
+            ** coordinates need still adjusting to the Slice.
+            */
+
+            srid   = ensSliceGetSeqregionIdentifier(feature->Slice);
+            start  = feature->Start;
+            end    = feature->End;
+            strand = feature->Strand;
+        }
+        else
+        {
+            /*
+            ** The Slice attached to the Feature is in a different
+            ** Coordinate System, therefore remapping is required.
+            */
+
+            if(!am)
+                ajFatal("assemblyexceptionfeatureadaptorRemap requires an "
+                        "Ensembl Assembly Mapper, when "
+                        "Coordinate Systems of Features and Slice differ.\n");
+
+            ensAssemblymapperFastMap(am,
+                                     ensSliceGetSeqregion(feature->Slice),
+                                     feature->Start,
+                                     feature->End,
+                                     feature->Strand,
+                                     mrs);
+
+            /*
+            ** The ensMapperFastMap function returns at maximum one Ensembl
+            ** Mapper Result. An empty AJAX List of Ensembl Mapper Results
+            ** means a gap, so remove the Ensembl Object from the AJAX List
+            ** of Ensembl Objects and delete it.
+            */
+
+            if(ajListGetLength(mrs))
+            {
+                ajListPeekFirst(mrs, (void **) &mr);
+
+                srid   = ensMapperresultGetObjectIdentifier(mr);
+                start  = ensMapperresultGetStart(mr);
+                end    = ensMapperresultGetEnd(mr);
+                strand = ensMapperresultGetStrand(mr);
+
+                while(ajListPop(mrs, (void **) &mr))
+                    ensMapperresultDel(&mr);
+            }
+            else
+            {
+                ajListIterRemove(iter);
+
+                ensAssemblyexceptionfeatureDel(&aef);
+
+                continue;
+            }
+        }
+
+        if((srid != ensSliceGetSeqregionIdentifier(slice)) ||
+           (start > ensSliceGetEnd(slice)) ||
+           (end   < ensSliceGetStart(slice)))
+        {
+            /*
+            ** Since the Feature maps to a region outside the desired area,
+            ** remove the Ensembl Object from the AJAX List and delete it.
+            */
+
+            ajListIterRemove(iter);
+
+            ensAssemblyexceptionfeatureDel(&aef);
+
+            continue;
+        }
+
+        /*
+        ** FIXME: In constrast to the Perl API the Assembly Exception Feature
+        ** Adaptor does currently not use a Slice cache. While the Perl API
+        ** keeps Features on Slices spanning the entire Sequence Region, a new
+        ** copy of the Feature needs to be placed on the requested Slice.
+        ** Since we are currently not using a Slice cache, the Feature can be
+        ** remapped in place.
+        ** FIXME: This means in fact that this function is now again
+        ** completely identical to the ensFeatureadaptorRemap function.
+        */
+
+        /* Shift the Feature start, end and strand in one call. */
+
+        if(ensSliceGetStrand(slice) > 0)
+            ensFeatureMove(feature,
+                           start - ensSliceGetStart(slice) + 1,
+                           end   - ensSliceGetStart(slice) + 1,
+                           +strand);
+        else
+            ensFeatureMove(feature,
+                           ensSliceGetEnd(slice) - end   + 1,
+                           ensSliceGetEnd(slice) - start + 1,
+                           -strand);
+
+        ensFeatureSetSlice(feature, slice);
     }
-    
+
     ajListIterDel(&iter);
-    
+
+    ajListFree(&mrs);
+
     return ajTrue;
 }
 
@@ -12836,9 +13529,9 @@ static AjBool assemblyExceptionFeatureadaptorRemap(
 **
 ** Fetch all Ensembl Assembly Exception Features via an Ensembl Slice.
 **
-** @param [r] adaptor [EnsPAssemblyexceptionfeatureadaptor] Ensembl Assembly
-**                                                          Exception Feature
-**                                                          Adaptor
+** @param [u] aefa [EnsPAssemblyexceptionfeatureadaptor] Ensembl Assembly
+**                                                       Exception Feature
+**                                                       Adaptor
 ** @param [u] slice [EnsPSlice] Ensembl Slice
 ** @param [u] aefs [AjPList] AJAX List of Ensembl Assembly Exception Features
 **
@@ -12847,33 +13540,33 @@ static AjBool assemblyExceptionFeatureadaptorRemap(
 ******************************************************************************/
 
 AjBool ensAssemblyexceptionfeatureadaptorFetchAllBySlice(
-    EnsPAssemblyexceptionfeatureadaptor adaptor,
+    EnsPAssemblyexceptionfeatureadaptor aefa,
     EnsPSlice slice,
     AjPList aefs)
 {
-    AjPList cslist = NULL;
-    
+    AjPList css = NULL;
+
     AjPStr name = NULL;
-    
+
     EnsPAssemblymapper am         = NULL;
     EnsPAssemblymapperadaptor ama = NULL;
-    
+
     EnsPCoordsystem mcs = NULL;
     EnsPCoordsystem scs = NULL;
-    
+
     EnsPMetacoordinateadaptor mca = NULL;
-    
-    if(!adaptor)
-	return ajFalse;
-    
+
+    if(!aefa)
+        return ajFalse;
+
     if(!slice)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!aefs)
-	return ajFalse;
-    
+        return ajFalse;
+
     /* Return Features from the Slice cache if present. */
-    
+
     /*
     ** FIXME: The Perl API cache uses the Slice name as the key.
     ** If Features are requested for a Slice that is based on the same
@@ -12884,50 +13577,54 @@ AjBool ensAssemblyexceptionfeatureadaptorFetchAllBySlice(
     ** Wouldn't it be better to use the Sequence Region identifier as the
     ** cache key and do the re-mapping from there?
     */
-    
+
     /* TODO: Implement Slice cache.
        my $key= uc($slice->name());
     */
-    
+
     /* TODO: Implement Slice cache.
        if(exists($self->{'_aexc_slice_cache'}->{$key})) {
        return $self->{'_aexc_slice_cache'}->{$key};
        }
     */
-    
-    ensAssemblyexceptionfeatureadaptorFetchAll(adaptor, aefs);
-    
-    mca = ensRegistryGetMetacoordinateadaptor(adaptor->Adaptor);
-    
+
+    ensAssemblyexceptionfeatureadaptorFetchAll(aefa, aefs);
+
+    mca = ensRegistryGetMetacoordinateadaptor(aefa->Adaptor);
+
     name = ajStrNewC("assembly_exception");
-    
-    cslist = ajListNew();
-    
-    ensMetacoordinateadaptorFetchAllCoordsystems(mca, name, cslist);
-    
-    ama = ensRegistryGetAssemblymapperadaptor(adaptor->Adaptor);
-    
+
+    css = ajListNew();
+
+    ensMetacoordinateadaptorFetchAllCoordsystems(mca, name, css);
+
+    ama = ensRegistryGetAssemblymapperadaptor(aefa->Adaptor);
+
     scs = ensSliceGetCoordsystem(slice);
-    
-    while(ajListPop(cslist, (void **) &mcs))
+
+    while(ajListPop(css, (void **) &mcs))
     {
-	if(ensCoordsystemMatch(mcs, scs))
-	    am = NULL;
-	else
-	    am = ensAssemblymapperadaptorFetchByCoordsystems(ama, mcs, scs);
-	
-	assemblyExceptionFeatureadaptorRemap(adaptor, aefs, am, slice);
-	
-	ensCoordsystemDel(&mcs);
+        if(ensCoordsystemMatch(mcs, scs))
+            am = NULL;
+        else
+            am = ensAssemblymapperadaptorFetchByCoordsystems(ama, mcs, scs);
+
+        /*
+        ** FIXME: assemblyexceptionfeatureadaptorRemap is completely identical
+        ** to featureadaptorRemap.
+        */
+        assemblyexceptionfeatureadaptorRemap(aefa, aefs, am, slice);
+
+        ensCoordsystemDel(&mcs);
     }
-    
+
     /* TODO: Implement Slice cache.
        $self->{'_aexc_slice_cache'}->{$key} =\@ features;
     */
-    
-    ajListFree(&cslist);
-    
+
+    ajListFree(&css);
+
     ajStrDel(&name);
-    
+
     return ajTrue;
 }

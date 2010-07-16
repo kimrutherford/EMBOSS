@@ -1,7 +1,8 @@
 application: equicktandem [
   documentation: "Finds tandem repeats in nucleotide sequences"
   groups: "Nucleic:Repeats"
-  relations: "EDAM: Repeat sequence finding"
+  relations: "/edam/topic/0000157 Sequence composition"
+  relations: "/edam/operation/0000379 Repeat sequence identification"
 ]
 
 section: input [
@@ -12,7 +13,8 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "dna"
-    relations: "EDAM: Pure DNA sequence"                                   
+    relations: "/edam/data/0001215 Pure DNA sequence"        
+    relations: "/edam/data/0000849 Sequence record"                            
   ]
 
 endsection: input
@@ -26,14 +28,14 @@ section: required [
     standard: "Y"
     default: "600"
     information: "Maximum repeat size"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001249 Sequence length"                                     
   ]
 
   integer: threshold [
     standard: "Y"
     default: "20"
     information: "Threshold score"
-    relations: "EDAM: Generic integer"                                     
+relations: "/edam/data/0002146 Threshold"
   ]
 
 endsection: required
@@ -49,7 +51,7 @@ section: output [
     taglist: "int:rpt_size=Size int:rpt_count=Count"
     rextension: "qtan"
     precision: "0"
-    relations: "EDAM: EMBOSS report"                                       
+    relations: "/edam/data/0001299 Repeat sequence report"                                       
   ]
 
   outfile: origfile [
@@ -58,7 +60,7 @@ section: output [
     knowntype: "quicktandem output"
     information: "Sanger Centre program quicktandem output file
                   (optional)"
-    relations:  "EDAM: quicktandem repeat sequence map report"         
+    relations:  "/edam/data/0001282 Repeat sequence map"         
   ]
 
 endsection: output

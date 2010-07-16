@@ -17,6 +17,9 @@ extern "C"
 ** Table Classes  *************************************************************
 ******************************************************************************/
 
+
+
+
 /* @data AjPFeattabIn *********************************************************
 **
 ** Ajax class for feature table input
@@ -54,6 +57,9 @@ typedef struct AjSFeattabIn {
 }  AjOFeattabIn;
 
 #define AjPFeattabIn AjOFeattabIn*
+
+
+
 
 /* @data AjPFeattabOut ********************************************************
 **
@@ -105,6 +111,8 @@ typedef struct AjSFeattabOut
 #define AjPFeattabOut AjOFeattabOut*
 
 
+
+
 /* @data AjPFeattable *********************************************************
 **
 ** Ajax data type for collecting AjPFeatures in a 'feature table'.
@@ -149,6 +157,8 @@ typedef struct AjSFeattable
 /******************************************************************************
 ** Feature Classes  ***********************************************************
 ******************************************************************************/
+
+
 
 
 /* @data AjPFeature ***********************************************************

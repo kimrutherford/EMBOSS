@@ -1,7 +1,8 @@
 application: pasteseq [
   documentation: "Insert one sequence into another"
   groups: "Edit"
-  relations: "EDAM: Sequence merging"
+  relations: "/edam/topic/0000156 Sequence editing"
+  relations: "/edam/operation/0000232 Sequence merging"
 ]
 
 section: input [
@@ -12,14 +13,16 @@ section: input [
   sequence: asequence [
     parameter: "Y"
     type: "gapany"
-    relations: "EDAM: Sequence"                                            
+    relations: "/edam/data/0000848 Sequence"                                            
+    relations: "/edam/data/0000849 Sequence record" 
   ]
 
   sequence: bsequence [
     parameter: "Y"
     information: "Sequence to insert"
     type: "@($(acdprotein) ? gapstopprotein : gapnucleotide)"
-    relations: "EDAM: Sequence"                                            
+    relations: "/edam/data/0000848 Sequence"                                            
+    relations: "/edam/data/0000849 Sequence record" 
   ]
 
 endsection: input
@@ -34,10 +37,12 @@ section: required [
     default: "$(asequence.end)"
     maximum: "$(asequence.end)"
     minimum: "0"
+    failrange: "N"
+    trueminimum: "Y"
     information: "Position to insert after"
     help: "The position in the main input sequence to insert after. \
            To insert before the start use the position 0."
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001016 Sequence position"                                     
   ]
 
 endsection: required
@@ -49,7 +54,8 @@ section: output [
 
   seqout: outseq [
     parameter: "Y"
-    relations: "EDAM: Sequence"                                            
+    relations: "/edam/data/0000848 Sequence"                                            
+    relations: "/edam/data/0000849 Sequence record" 
   ]
 
 endsection: output

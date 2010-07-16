@@ -1,5 +1,5 @@
 Index a flat file database using b+tree indices
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     Basename for index files (Any string from 2
@@ -10,7 +10,8 @@ Version: EMBOSS:6.2.0
                                   /[A-z][A-z0-9_]+/)
    -idformat           menu       [SWISS] Entry format (Values: EMBL (EMBL);
                                   SWISS (Swiss-Prot, SpTrEMBL, TrEMBLnew); GB
-                                  (Genbank, DDBJ); REFSEQ (Refseq))
+                                  (Genbank, DDBJ); REFSEQ (Refseq); FASTQ
+                                  (Fastq files))
    -filenames          string     [*.dat] Wildcard database filename (Any
                                   string)
    -directory          directory  [.] Database directory
@@ -29,6 +30,12 @@ Version: EMBOSS:6.2.0
    -indexoutdir        outdir     [.] Index file output directory
 
    Associated qualifiers:
+
+   "-directory" associated qualifiers
+   -extension          string     Default file extension
+
+   "-indexoutdir" associated qualifiers
+   -extension          string     Default file extension
 
    "-outfile" associated qualifiers
    -odirectory         string     Output directory

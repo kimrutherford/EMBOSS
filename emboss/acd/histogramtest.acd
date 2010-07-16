@@ -1,7 +1,8 @@
 application: histogramtest [
   documentation: "Test of graphics"
   groups: "Test"
-  relations: "EDAM: File debugging"
+  relations: "/edam/topic/0000220 File handling"
+  relations: "/edam/operation/0000336 File debugging"
 ]
 
 section: input [
@@ -15,7 +16,7 @@ section: input [
     minimum: "1"
     maximum: "10"
     information: "Number of sets of data"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0002152 Rendering parameter"
   ]
 
   integer: points [
@@ -24,7 +25,7 @@ section: input [
     minimum: "1"
     maximum: "200"
     information: "Number of data points per set"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0002152 Rendering parameter"
   ]
 
   integer: bins [
@@ -32,24 +33,28 @@ section: input [
     default: "$(points)"
     minimum: "1"
     maximum: "$(points)"
+    failrange: "N"
+    trueminimum: "Y"
     information: "Number of bars"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0002152 Rendering parameter"
   ]
 
   integer: xstart [
     additional: "y"
     default: "0"
     information: "Start value for x axis"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0002152 Rendering parameter"
   ]
 
   integer: xend [
     additional: "y"
     default: "@($(xstart)+$(points))"
     minimum: "@($(xstart)+1)"
+    failrange: "N"
+    trueminimum: "Y"
     information: "End value for x axis"
     expected: "Start value plus number of data points"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0002152 Rendering parameter"
   ]
 
 endsection: input
@@ -61,7 +66,7 @@ section: output [
 
   xygraph: graph [
     standard: "Y"
-    relations: "EDAM: EMBOSS graph file"                                   
+    relations: "/edam/data/0002142 EMBOSS graph"                                   
   ]
 
 endsection: output

@@ -35,7 +35,7 @@
 <td>-type</td>
 <td>string</td>
 <td>By default any feature in the feature table with a type starting 'repeat' is masked. You can set this to be any feature type you wish to mask.
-See http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www.expasy.ch/txt/userman.txt for a list of the Swissprot feature types.
+See http://www.ebi.ac.uk/embl/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www.expasy.org/sprot/userman.html for a list of the Swissprot feature types.
 The type may be wildcarded by using '*'.
 If you wish to mask more than one type, separate their names with spaces or commas, eg:
 *UTR repeat*</td>

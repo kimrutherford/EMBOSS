@@ -21,6 +21,9 @@
 
 #include "emboss.h"
 
+
+
+
 /* @prog nospace **************************************************************
 **
 ** Remove all whitespace from an ASCII text file
@@ -34,20 +37,35 @@ int main(int argc, char **argv)
     AjPFile   outf    = NULL; 
 
     AjPStr    line    = NULL;  /* Line from inf     */
-
+    AjPStr    option  = NULL;
+    AjBool    doall   = AJFALSE;
+    AjBool    doend   = AJFALSE;
+    AjBool    doexcess = AJFALSE;
 
     /* ACD File Processing */
     embInit("nospace", argc, argv);
     inf  = ajAcdGetInfile("infile");
     outf = ajAcdGetOutfile("outfile");
+    option = ajAcdGetListSingle("menu");
 
+    if(ajStrMatchC(option, "all"))
+        doall = ajTrue;
+    else if(ajStrMatchC(option, "end"))
+        doend = ajTrue;
+    else if(ajStrMatchC(option, "excess"))
+        doexcess = ajTrue;
 
     /* Application logic */
     line    = ajStrNew();
 
     while(ajReadline(inf,&line))
       {
-	ajStrRemoveWhite(&line);
+          if(doall)
+              ajStrRemoveWhite(&line);
+          else if(doend)
+              ajStrTrimWhiteEnd(&line);
+          else if(doexcess)
+              ajStrRemoveWhiteExcess(&line);
 	ajFmtPrintF(outf, "%S\n", line);
       }
 
@@ -56,6 +74,7 @@ int main(int argc, char **argv)
     ajFileClose(&outf);
 
     ajStrDel(&line);
+    ajStrDel(&option);
 
     embExit();
 

@@ -234,6 +234,9 @@ int main(int argc, char **argv)
 
 /* "constructors" */
 
+
+
+
 /* @funcstatic primersearch_initialise_pguts **********************************
 **
 ** Initialise primer guts
@@ -270,6 +273,9 @@ static void primersearch_initialise_pguts(PGuts* primer)
 
 
 /* "destructors" */
+
+
+
 
 /* @funcstatic primersearch_free_pguts ****************************************
 **
@@ -384,6 +390,9 @@ static void primersearch_clean_hitlist(AjPList* hlist)
 
 
 /* utilities */
+
+
+
 
 /* @funcstatic primersearch_read_primers **************************************
 **

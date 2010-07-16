@@ -42,7 +42,7 @@ Output alignment [j01636.supermatcher]:
 Command line arguments
 
 Calculate approximate local pair-wise alignments of larger sequences
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         seqall     Sequence(s) filename and optional format, or
@@ -63,6 +63,8 @@ Version: EMBOSS:6.2.0
                                   'EDNAFULL' (for nucleic sequences). These
                                   files are found in the 'data' directory of
                                   the EMBOSS installation.
+   -minscore           float      [0] Minimum alignment score to report an
+                                  alignment. (Number 0.000 or more)
    -width              integer    [16] Alignment width (Integer 1 or more)
    -wordlen            integer    [6] Word length for initial matching
                                   (Integer 3 or more)
@@ -514,9 +516,12 @@ See also
 
 Author(s)
 
-   Ian              Longden (il (c) sanger.ac.uk)
+   Ian              Longden formerly at:
    Sanger           Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
                     CB10 1SA, UK.
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

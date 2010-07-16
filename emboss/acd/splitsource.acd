@@ -1,7 +1,8 @@
 application: splitsource [
   documentation: "Split sequence(s) into original source sequences"
   groups: "Edit"
-  relations: "EDAM: Sequence cutting"
+  relations: "/edam/topic/0000156 Sequence editing"
+  relations: "/edam/operation/0000369 Sequence cutting"
 ]
 
 section: input [
@@ -12,14 +13,16 @@ section: input [
   boolean: feature [
     default: "N"
     information: "Retain feature information"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   seqall: sequence [
     parameter: "Y"
     type: "any"
     features: "Y"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0000848 Sequence" 
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more" 
   ]
 
 endsection: input
@@ -46,7 +49,9 @@ section: output [
   seqoutall: outseq [
     parameter: "Y"
     features: "$(feature)"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0000848 Sequence" 
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more"
   ]
 
 endsection: output

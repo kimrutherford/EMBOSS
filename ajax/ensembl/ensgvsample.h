@@ -21,7 +21,7 @@ EnsPGvsample ensGvsampleNew(EnsPGvsampleadaptor gvsa,
                             ajuint identifier,
                             AjPStr name,
                             AjPStr description,
-                            AjEnum display,
+                            EnsEGvsampleDisplay display,
                             ajuint size);
 
 EnsPGvsample ensGvsampleNewObj(const EnsPGvsample object);
@@ -38,7 +38,7 @@ AjPStr ensGvsampleGetName(const EnsPGvsample gvs);
 
 AjPStr ensGvsampleGetDescription(const EnsPGvsample gvs);
 
-AjEnum ensGvsampleGetDisplay(const EnsPGvsample gvs);
+EnsEGvsampleDisplay ensGvsampleGetDisplay(const EnsPGvsample gvs);
 
 ajuint ensGvsampleGetSize(const EnsPGvsample gvs);
 
@@ -50,28 +50,32 @@ AjBool ensGvsampleSetName(EnsPGvsample gvs, AjPStr name);
 
 AjBool ensGvsampleSetDescription(EnsPGvsample gvs, AjPStr description);
 
-AjBool ensGvsampleSetDisplay(EnsPGvsample gvs, AjEnum display);
+AjBool ensGvsampleSetDisplay(EnsPGvsample gvs, EnsEGvsampleDisplay display);
 
 AjBool ensGvsampleSetSize(EnsPGvsample gvs, ajuint size);
 
-ajuint ensGvsampleGetMemSize(const EnsPGvsample gvs);
+ajulong ensGvsampleGetMemsize(const EnsPGvsample gvs);
 
 AjBool ensGvsampleTrace(const EnsPGvsample gvs, ajuint level);
 
-AjEnum ensGvsampleDisplayFromStr(const AjPStr display);
+EnsEGvsampleDisplay ensGvsampleDisplayFromStr(const AjPStr display);
 
-const char* ensGvsampleDisplayToChar(const AjEnum display);
+const char* ensGvsampleDisplayToChar(EnsEGvsampleDisplay display);
 
 /* Ensembl Genetic Variation Sample Adaptor */
 
-EnsPGvsampleadaptor ensGvsampleadaptorNew(EnsPDatabaseadaptor dba);
+EnsPGvsampleadaptor ensRegistryGetGvsampleadaptor(
+    EnsPDatabaseadaptor dba);
+
+EnsPGvsampleadaptor ensGvsampleadaptorNew(
+    EnsPDatabaseadaptor dba);
 
 void ensGvsampleadaptorDel(EnsPGvsampleadaptor *Pgvsa);
 
 EnsPBaseadaptor ensGvsampleadaptorGetAdaptor(EnsPGvsampleadaptor gvsa);
 
 AjBool ensGvsampleadaptorFetchAllByDisplay(EnsPGvsampleadaptor gvsa,
-                                           AjEnum display,
+                                           EnsEGvsampleDisplay display,
                                            AjPList gvss);
 
 AjBool ensGvsampleadaptorFetchAllSynonymsByIdentifier(
@@ -79,7 +83,7 @@ AjBool ensGvsampleadaptorFetchAllSynonymsByIdentifier(
     ajuint identifier,
     const AjPStr source,
     AjPList synonyms);
-    
+
 AjBool ensGvsampleadaptorFetchAllIdentifiersBySynonym(
     const EnsPGvsampleadaptor gvsa,
     const AjPStr synonym,
@@ -97,7 +101,7 @@ AjBool ensGvsampleadaptorFetchByIdentifier(EnsPGvsampleadaptor gvsa,
 
 
 
-#endif
+#endif /* ensgvsample_h */
 
 #ifdef __cplusplus
 }

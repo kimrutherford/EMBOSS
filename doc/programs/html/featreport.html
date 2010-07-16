@@ -92,7 +92,7 @@ Output report [x13776.featreport]: <b>test.out</b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Reads and writes a feature table
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Sequence filename and optional format, or
@@ -710,14 +710,14 @@ outputs a report format file.
 ##sequence-region PAAMIR 1 2167
 #!Date 2010-01-15
 #!Type DNA
-#!Source-version EMBOSS 6.2.0
+#!Source-version EMBOSS 6.3.0
 PAAMIR	EMBL	databank_entry	1	2167	0.000	+	.	ID="PAAMIR.1";db_xref="taxon:287";organism="Pseudomonas aeruginosa";strain="PAC";isolate="PAC 1";map="38 min"
 PAAMIR	EMBL	CDS	1289	1879	0.000	+	0	ID="PAAMIR.2";db_xref="SWISS-PROT:P10932";note="aliphatic amidase regulator, positive regulator of amiE";transl_table=11;gene="amiR";protein_id="CAA32023.1";translation="MSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWPPPEAFDVPVDVVFTSIFQNGHHDEIAALLAAGTPRTTLVALVEYESPAVLSQIIELECHGVITQPLDAHRVLPVLVSARRISEEMAKLKQKTEQLQDRIAGQARINQAKVLLMQRHGWDEREAHQHLSREAMKRREPILKIAQELLGNEPSA"
 PAAMIR	EMBL	CDS	135	1292	0.000	+	0	ID="PAAMIR.3";db_xref="SWISS-PROT:P27017";note="negative regulator of amiR";transl_table=11;gene="amiC";protein_id="CAA32024.1";translation="MGSHQERPLIGLLFSETGVTADIERSHAYGALLAVEQLNREGGVGGRPIETLSQDPGGDPDRYRLCAEDFIRNRGVRFLVGCYMSHTRKAVMPVVERADALLCYPTPYEGFEYSPNIVYGGPAPNQNSAPLAAYLIRHYGERVVFIGSDYIYPRESNHVMRHLYRQHGGTVLEEIYIPLYPSDDDLQRAVERIYQARADVVFSTVVGTGTAELYRAIARRYGDGRRPPIASLTTSEAEVAKMESDVAEGQVVVAPYFSSIDTPASRAFVQACHGFFPENATITAWAEAAYWQTLLLGRAAQAAGNWRVEDVQRHLYDIDIDAPQGPVRVERQNNHSRLSSRIAEIDARGVFQVRWQSPEPIRPDPYVVVHNLDDWSASMGGGPLP"
 PAAMIR	EMBL	promoter	8	24	0.000	+	.	ID="PAAMIR.4";note="proposed rpoN-dependent promoter"
 PAAMIR	EMBL	promoter	65	81	0.000	+	.	ID="PAAMIR.5";note="proposed rpoN-dependent promoter"
 PAAMIR	EMBL	ribosome_entry_site	121	126	0.000	+	.	ID="PAAMIR.6";note="proposed Shine-Dalgarno sequence"
-PAAMIR	EMBL	sequence_variant	912	1167	0.000	+	.	ID="PAAMIR.7";note="ClaI fragment deleted in pSW36, constitutive phenotype";replace="";gene="amiC"
+PAAMIR	EMBL	sequence_feature	912	1167	0.000	+	.	ID="PAAMIR.7";note="ClaI fragment deleted in pSW36, constitutive phenotype";replace="";gene="amiC"
 PAAMIR	EMBL	sequence_feature	1	1	0.000	+	.	ID="PAAMIR.8";featflags="0x40";note="last base of an XhoI site"
 PAAMIR	EMBL	sequence_feature	648	653	0.000	+	.	ID="PAAMIR.9";note="end of 658bp XhoI fragment, deletion in pSW3 causes constitutive expression of amiE"
 PAAMIR	EMBL	sequence_conflict	1281	1281	0.000	+	.	ID="PAAMIR.10";featflags="0x40";replace="g";citation=[3]
@@ -964,7 +964,7 @@ None.
 
 <tr>
 <td><a href="nospace.html">nospace</a></td>
-<td>Remove all whitespace from an ASCII text file</td>
+<td>Remove whitespace from an ASCII text file</td>
 </tr>
 
 <tr>
@@ -1086,10 +1086,12 @@ None.
     Author(s)
 </H2>
 
-Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
+Peter Rice
 <br>
 European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
 
 
 <H2>

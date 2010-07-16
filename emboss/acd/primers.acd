@@ -5,7 +5,10 @@ application: primers [
   external: "primer3_core Part of the 'primer3' package, version 3.0,
 		      available from the Whitehead Institute.
 		      See: http://primer3.sourceforge.net/"
-  relations: "EDAM: Sequence database search by primer"
+  relations: "/edam/topic/0000195 Polymerase chain reaction"
+  relations: "/edam/topic/0000090 Database search and retrieval"
+  relations: "/edam/operation/0000354 Sequence database search by sequence (primer sequences)"
+  relations: "/edam/operation/0000308 PCR primer design"
 ]
 
 section: input [
@@ -18,7 +21,9 @@ section: input [
     type: "dna"
     help: "The sequence from which to choose primers. The sequence
            must be presented 5' -> 3'"
-    relations: "EDAM: DNA sequence record"                                 
+    relations: "/edam/data/0001215 Pure DNA sequence"
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more" 
   ]
 
 endsection: input
@@ -42,30 +47,33 @@ section: additional [
            and <end> is the last \
            E.g. 50,51 requires primers to surround the 2 bases at positions
            50 and 51."
-    relations: "EDAM: Generic integer range"                               
+    relations: "/edam/data/0001017 Sequence range"
   ]
 
   integer: minsize [
     additional: "Y"
     default: "18"
     minimum: "1"
+    maximum: "35"
     information: "Primer minimum size"
     help: "Minimum acceptable length of a primer. Must be greater than
            0 and less than or equal to MAX-SIZE."
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001249 Sequence length"
   ]
 
   integer: maxsize [
     additional: "Y"
     default: "27"
-    minimum: "$(MinSize)"
+    minimum: "$(minsize)"
     maximum: "35"
+    failrange: "N"
+    trueminimum: "N"
     information: "Primer maximum size"
     help: "Maximum acceptable length (in bases) of a primer. Currently
            this parameter cannot be larger than 35. This limit is governed
            by the maximum oligo size for which Primer3's melting-temperature
            is valid."
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001249 Sequence length"
   ]
 
   float: maxdifftm [
@@ -74,7 +82,7 @@ section: additional [
     information: "Maximum difference in Tm of primers"
     help: "Maximum acceptable (unsigned) difference between the
            melting temperatures of the forward and reverse primers."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0002139 Melting temperature"
   ]
 
 endsection: additional
@@ -92,7 +100,7 @@ section: output [
            RIGHT-EXPLAIN, output, which are intended to provide information
            on the number of primer pairs that Primer3 examined, and
            statistics on the number discarded for various reasons."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   integer: numreturn [
@@ -105,14 +113,14 @@ section: output [
            value of the objective function (where a lower number indicates a
            better primer pair). Caution: setting this parameter to a large
            value will increase running time."
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001694 Number of output entities"
   ]
 
   outfile: outfile [
     parameter: "Y"
     knowntype: "primer3 output"
     information: "Whitehead primer3_core program output file"
-    relations:  "EDAM: Primer3 primer report"                                 
+    relations:  "/edam/data/0000922 Primer report"                                 
   ]
 
 endsection: output

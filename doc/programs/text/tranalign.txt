@@ -48,7 +48,7 @@ Generate an alignment of nucleic coding regions from aligned proteins
 Command line arguments
 
 Generate an alignment of nucleic coding regions from aligned proteins
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         seqall     Nucleotide sequence(s) filename and optional
@@ -363,9 +363,12 @@ Author(s)
                     (wrp@virginia.edu)
 
                     tranalign was written in EMBOSS code using the description of mrtrans
-                    as a guide by Gary Williams (gwilliam (c) rfcgr.mrc.ac.uk)
+                    as a guide by Gary Williams formerly at:
    MRC              Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome           Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 
