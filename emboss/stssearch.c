@@ -159,6 +159,8 @@ int main(int argc, char **argv)
 }
 
 
+
+
 /* @funcstatic stssearch_primDel **********************************************
 **
 ** Undocumented.
@@ -187,6 +189,8 @@ static void stssearch_primDel(void **x,  void *cl)
     ajStrDel(&primdata->Oligob);
     AJFREE(*p);
 }
+
+
 
 
 /* @funcstatic stssearch_primTest *********************************************

@@ -119,7 +119,7 @@ Output report [x65923.twofeat]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Finds neighbouring pairs of features in sequence(s)
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -127,11 +127,11 @@ Version: EMBOSS:6.2.0
    -atype              string     [*] By default every feature in the feature
                                   table is allowed. You can set this to be any
                                   feature type you wish to allow.
-                                  See http://www3.ebi.ac.uk/Services/WebFeat/
-                                  for a list of the EMBL feature types and see
+                                  See http://www.ebi.ac.uk/embl/WebFeat/ for a
+                                  list of the EMBL feature types and see
                                   Appendix A of the Swissprot user manual in
-                                  http://www.expasy.ch/txt/userman.txt for a
-                                  list of the Swissprot feature types.
+                                  http://www.expasy.org/sprot/userman.html for
+                                  a list of the Swissprot feature types.
                                   The type may be wildcarded by using '*'.
                                   If you wish to allow more than one type,
                                   separate their names with the character '|',
@@ -140,11 +140,11 @@ Version: EMBOSS:6.2.0
    -btype              string     [*] By default every feature in the feature
                                   table is allowed. You can set this to be any
                                   feature type you wish to allow.
-                                  See http://www3.ebi.ac.uk/Services/WebFeat/
-                                  for a list of the EMBL feature types and see
+                                  See http://www.ebi.ac.uk/embl/WebFeat/ for a
+                                  list of the EMBL feature types and see
                                   Appendix A of the Swissprot user manual in
-                                  http://www.expasy.ch/txt/userman.txt for a
-                                  list of the Swissprot feature types.
+                                  http://www.expasy.org/sprot/userman.html for
+                                  a list of the Swissprot feature types.
                                   The type may be wildcarded by using '*'.
                                   If you wish to allow more than one type,
                                   separate their names with the character '|',
@@ -334,14 +334,14 @@ Version: EMBOSS:6.2.0
                                   then you can specify the 'type' name of the
                                   new feature here. By default every feature
                                   in the feature table is allowed. See
-                                  http://www3.ebi.ac.uk/Services/WebFeat/ for
-                                  a list of the EMBL feature types and see
+                                  http://www.ebi.ac.uk/embl/WebFeat/ for a
+                                  list of the EMBL feature types and see
                                   Appendix A of the Swissprot user manual in
-                                  http://www.expasy.ch/txt/userman.txt for a
-                                  list of the Swissprot feature types. If you
-                                  specify an invalid feature type name, then
-                                  the default name 'misc_feature' is used.
-                                  (Any string)
+                                  http://www.expasy.org/sprot/userman.html for
+                                  a list of the Swissprot feature types. If
+                                  you specify an invalid feature type name,
+                                  then the default name 'misc_feature' is
+                                  used. (Any string)
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
@@ -420,7 +420,7 @@ Version: EMBOSS:6.2.0
 <td>-atype</td>
 <td>string</td>
 <td>By default every feature in the feature table is allowed. You can set this to be any feature type you wish to allow.
-See http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www.expasy.ch/txt/userman.txt for a list of the Swissprot feature types.
+See http://www.ebi.ac.uk/embl/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www.expasy.org/sprot/userman.html for a list of the Swissprot feature types.
 The type may be wildcarded by using '*'.
 If you wish to allow more than one type, separate their names with the character '|', eg:
 *UTR | intron</td>
@@ -432,7 +432,7 @@ If you wish to allow more than one type, separate their names with the character
 <td>-btype</td>
 <td>string</td>
 <td>By default every feature in the feature table is allowed. You can set this to be any feature type you wish to allow.
-See http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www.expasy.ch/txt/userman.txt for a list of the Swissprot feature types.
+See http://www.ebi.ac.uk/embl/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www.expasy.org/sprot/userman.html for a list of the Swissprot feature types.
 The type may be wildcarded by using '*'.
 If you wish to allow more than one type, separate their names with the character '|', eg:
 *UTR | intron</td>
@@ -630,7 +630,7 @@ You can allow any or no overlaps, specify that they must or must not overlap, th
 <tr bgcolor="#FFFFCC">
 <td>-typeout</td>
 <td>string</td>
-<td>If you have specified that the pairs of features that are found should be reported as one feature in the ouput, then you can specify the 'type' name of the new feature here. By default every feature in the feature table is allowed. See http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www.expasy.ch/txt/userman.txt for a list of the Swissprot feature types. If you specify an invalid feature type name, then the default name 'misc_feature' is used.</td>
+<td>If you have specified that the pairs of features that are found should be reported as one feature in the ouput, then you can specify the 'type' name of the new feature here. By default every feature in the feature table is allowed. See http://www.ebi.ac.uk/embl/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www.expasy.org/sprot/userman.html for a list of the Swissprot feature types. If you specify an invalid feature type name, then the default name 'misc_feature' is used.</td>
 <td>Any string</td>
 <td>misc_feature</td>
 </tr>
@@ -1026,11 +1026,16 @@ FT                   /note="ubiquitin like part"
 FT   CDS             57..458
 FT                   /gene="fau"
 FT                   /db_xref="GDB:135476"
+FT                   /db_xref="GOA:P35544"
 FT                   /db_xref="GOA:P62861"
 FT                   /db_xref="HGNC:3597"
-FT                   /db_xref="HSSP:1GJZ"
+FT                   /db_xref="InterPro:IPR000626"
 FT                   /db_xref="InterPro:IPR006846"
+FT                   /db_xref="InterPro:IPR019954"
+FT                   /db_xref="InterPro:IPR019955"
+FT                   /db_xref="InterPro:IPR019956"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P62861"
 FT                   /protein_id="CAA46716.1"
 FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
 FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
@@ -1069,7 +1074,7 @@ The output is a standard EMBOSS report file.
 The results can be output in one of several styles by using the
 command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
 the name of the required format.  The available format names are: embl,
-genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+genbank, gff, pir, swiss, debug, listfile, dbmotif, diffseq, excel,
 feattable, motif, regions, seqtable, simple, srs, table, tagseq
 
 <p>
@@ -1136,7 +1141,7 @@ outputs a report format file. The default format is <b>table</b>
 ##sequence-region X65923 1 518
 #!Date 2010-01-15
 #!Type DNA
-#!Source-version EMBOSS 6.2.0
+#!Source-version EMBOSS 6.3.0
 X65923	EMBL	polyA_signal_sequence	484	489	0.000	+	.	ID="X65923.6"
 X65923	EMBL	polyA_site	509	509	0.000	+	.	ID="X65923.7";featflags="0x40"
 </pre>
@@ -1217,11 +1222,13 @@ This does no affect the results.
 <H2>
     Author(s)
 </H2>
-Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+Gary Williams formerly at:
 <br>
 MRC Rosalind Franklin Centre for Genomics Research
 Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
 
 <H2>
     History

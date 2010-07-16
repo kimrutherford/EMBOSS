@@ -70,10 +70,10 @@ Lactose operon repressor
 
 <a name="output.4"></a>
 <h3>Output files for usage example 4</h3>
-<p><h3>File: rs24_fugru.showpep</h3>
+<p><h3>File: rs24_takru.showpep</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-RS24_FUGRU
+RS24_TAKRU
 40S ribosomal protein S24
 
                    10        20        30        40        50        60        

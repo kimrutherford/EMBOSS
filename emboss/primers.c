@@ -57,6 +57,9 @@ static void primers_write_primer(AjPFile outfile,
 				 const AjPStr tm, const AjPStr gc,
 				 const AjPStr seq);
 
+
+
+
 /* @prog primers **************************************************************
 **
 ** EMBOSS wrapper for the Whitehead's primer3 program
@@ -541,6 +544,8 @@ int main(int argc, char **argv)
 }
 
 
+
+
 /* @funcstatic primers_read ***************************************************
 **
 ** Reads the output from primer3_core into a returned AjPStr until EOF
@@ -571,6 +576,8 @@ static AjPStr primers_read(int fd)
 }
 
 
+
+
 /* @funcstatic primers_send_end ***********************************************
 **
 ** Writes the end-of-input flag '=' to the input stream of primer3_core
@@ -585,6 +592,9 @@ static void primers_send_end(FILE * stream)
 }
 
 /* display ranges as 'start,length start2,length2' */
+
+
+
 
 /* @funcstatic primers_send_range *********************************************
 **
@@ -660,6 +670,9 @@ static void primers_send_range(FILE * stream,
 //}
 */
 
+
+
+
 /* @funcstatic primers_send_int ***********************************************
 **
 ** Write integer to primer3_core
@@ -680,6 +693,9 @@ static void primers_send_int(FILE * stream, const char * tag, ajint value)
 
   ajStrDel(&str);
 }
+
+
+
 
 /* @funcstatic primers_send_float *********************************************
 **
@@ -702,6 +718,9 @@ static void primers_send_float(FILE * stream, const char * tag, float value)
   ajStrDel(&str);
 }
 
+
+
+
 /* @funcstatic primers_send_bool **********************************************
 **
 ** Write boolean to primer3_core
@@ -722,6 +741,9 @@ static void primers_send_bool(FILE * stream, const char * tag, AjBool value)
 
   ajStrDel(&str);
 }
+
+
+
 
 /* @funcstatic primers_send_string ********************************************
 **
@@ -774,6 +796,9 @@ static void primers_send_string(FILE * stream,
 //}
 */
 
+
+
+
 /* @funcstatic primers_start_write ********************************************
 **
 ** Open a file descriptor as a stream to pipe to primer3_core
@@ -792,6 +817,10 @@ static FILE* primers_start_write(int fd)
 
   return stream;
 }
+
+
+
+
 /* @funcstatic primers_write **************************************************
 **
 ** Write a tag=value AjPStr to the primer3_core input stream
@@ -807,6 +836,10 @@ static void primers_write(const AjPStr str, FILE *stream)
   fputs( ajStrGetPtr(str), stream );
 
 }
+
+
+
+
 /* @funcstatic primers_end_write **********************************************
 **
 ** Close the stream piping in to primer3_core
@@ -821,6 +854,9 @@ static void primers_end_write(FILE *stream)
   fclose( stream );
 
 }
+
+
+
 
 /* @funcstatic primers_report *************************************************
 **
@@ -908,6 +944,9 @@ resulting primer are interleaved */
 
   return;
 }
+
+
+
 
 /* @funcstatic primers_output_report ******************************************
 **
@@ -1060,6 +1099,8 @@ PRIMER_PRODUCT_SIZE=137
 }
 
 
+
+
 /* @funcstatic primers_tableget ***********************************************
 **
 ** Read the results out of the tag/value table
@@ -1100,6 +1141,10 @@ static AjPStr primers_tableget(const char *key1, ajint number,
   return value;
 
 }
+
+
+
+
 /* @funcstatic primers_write_primer *******************************************
 **
 ** Write out one primer or oligo line to the output file

@@ -12,6 +12,7 @@ Resource name: <b>emblresource</b>
      SWISS : Swiss-Prot, SpTrEMBL, TrEMBLnew
         GB : Genbank, DDBJ
     REFSEQ : Refseq
+     FASTQ : Fastq files
 Entry format [SWISS]: <b>embl</b>
 Wildcard database filename [*.dat]: <b>rod.dat</b>
 Database directory [.]: <b>embl</b>

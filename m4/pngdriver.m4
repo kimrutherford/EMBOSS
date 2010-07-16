@@ -25,9 +25,11 @@ AC_DEFUN([CHECK_PNGDRIVER],
 # Handle user hints
 #
 [AC_MSG_CHECKING(if png driver is wanted)
-AC_ARG_WITH(pngdriver,
-[  --with-pngdriver=DIR    root directory path of png/gd/zlib installation [defaults to /usr]
-  --without-pngdriver     to disable pngdriver usage completely],
+AC_ARG_WITH([pngdriver],
+    [AS_HELP_STRING([--with-pngdriver=@<:@DIR@:>@],
+        [root directory path of png/gd/zlib installation (defaults to /usr)])]
+    [AS_HELP_STRING([--without-pngdriver],
+        [to disable pngdriver usage completely])],
 [if test "$withval" != no ; then
   AC_MSG_RESULT(yes)
   ALT_HOME="$withval"

@@ -35,6 +35,7 @@ static void coderet_put_rest(const AjPSeq seq, const AjPStr copyseq,
 
 
 
+
 /* @prog coderet **************************************************************
 **
 ** Extract CDS, mRNA and translations from feature tables
@@ -121,68 +122,73 @@ int main(int argc, char **argv)
         imrna = 0;
         itran = 0;
         irest = 0;
+
         feat = ajSeqGetFeat(seq);
-        if(seqoutrest)
-        {
-            copyseq = ajSeqGetSeqCopyS(seq);
-            ajStrFmtUpper(&copyseq);
-        }
-        
-        iter = ajListIterNewread(feat->Features);
-        while(!ajListIterDone(iter))
-        {
-            gf = ajListIterGet(iter);
-            if(ajFeatIsChild(gf))
-                continue;
-            if(seqoutcds && ajFeatTypeMatchC(gf, "CDS"))
-            {
-                icds++;
-                ret = ajFeatGetSeqJoin(gf, feat, seq, &cds);
-		if(!ret)
-		{
-		    ajWarn("Cannot extract %S\n",ajSeqGetNameS(seq));
-		    continue;
-		}
-		coderet_put_seq(seq,cds,icds,"cds",0,seqoutcds);
-	    }
 
-            if(seqoutmrna && ajFeatTypeMatchC(gf, "mRNA"))
+        if(feat)
+        {
+            if(seqoutrest)
             {
-                imrna++;
-                ret = ajFeatGetSeqJoin(gf, feat, seq, &mrna);
-                if(!ret)
-                {
-                    ajWarn("Cannot extract %s",ajSeqGetNameC(seq));
+                copyseq = ajSeqGetSeqCopyS(seq);
+                ajStrFmtUpper(&copyseq);
+            }
+        
+            iter = ajListIterNewread(feat->Features);
+            while(!ajListIterDone(iter))
+            {
+                gf = ajListIterGet(iter);
+                if(ajFeatIsChild(gf))
                     continue;
-                }
-		coderet_put_seq(seq,mrna,imrna,"mrna",0,seqoutmrna);
-	    }
-
-
-            if(seqoutrest)          /* set feature to lowercase */
-            {
-
-                if(ajFeatTypeMatchC(gf, "CDS") ||
-                   ajFeatTypeMatchC(gf, "mRNA") ||
-                   ajFeatTypeMatchC(gf, "exon"))
-                    ajFeatLocMark(gf, feat, &copyseq);
-                else
-                    irest++;
-            }
-
-            if(seqoutprot && ajFeatTypeMatchC(gf, "CDS"))
-            {
-                if(ajFeatGetTranslation(gf, &trnseq))
+                if(seqoutcds && ajFeatTypeMatchC(gf, "CDS"))
                 {
-                    itran++;
-                    coderet_put_seq(seq, trnseq, itran,"pro",1,seqoutprot);
+                    icds++;
+                    ret = ajFeatGetSeqJoin(gf, feat, seq, &cds);
+                    if(!ret)
+                    {
+                        ajWarn("Cannot extract %S\n",ajSeqGetNameS(seq));
+                        continue;
+                    }
+                    coderet_put_seq(seq,cds,icds,"cds",0,seqoutcds);
+                }
+
+                if(seqoutmrna && ajFeatTypeMatchC(gf, "mRNA"))
+                {
+                    imrna++;
+                    ret = ajFeatGetSeqJoin(gf, feat, seq, &mrna);
+                    if(!ret)
+                    {
+                        ajWarn("Cannot extract %s",ajSeqGetNameC(seq));
+                        continue;
+                    }
+                    coderet_put_seq(seq,mrna,imrna,"mrna",0,seqoutmrna);
+                }
+
+
+                if(seqoutrest)          /* set feature to lowercase */
+                {
+
+                    if(ajFeatTypeMatchC(gf, "CDS") ||
+                       ajFeatTypeMatchC(gf, "mRNA") ||
+                       ajFeatTypeMatchC(gf, "exon"))
+                        ajFeatLocMark(gf, feat, &copyseq);
+                    else
+                        irest++;
+                }
+
+                if(seqoutprot && ajFeatTypeMatchC(gf, "CDS"))
+                {
+                    if(ajFeatGetTranslation(gf, &trnseq))
+                    {
+                        itran++;
+                        coderet_put_seq(seq, trnseq, itran,"pro",1,seqoutprot);
+                    }
                 }
             }
+            ajListIterDel(&iter);
+
+            if(seqoutrest)
+                coderet_put_rest(seq,copyseq,"noncoding",seqoutrest);
         }
-        ajListIterDel(&iter);
-        
-        if(seqoutrest)
-            coderet_put_rest(seq,copyseq,"noncoding",seqoutrest);
 
         if(seqoutcds)
             ajFmtPrintF(logf, "%6d", icds);

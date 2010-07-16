@@ -58,7 +58,7 @@ protein output sequence(s) [x13776.fasta]:
 Command line arguments
 
 Display a DNA sequence with 6-frame translation and ORFs
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Nucleotide sequence filename and optional
@@ -716,9 +716,12 @@ See also
 
 Author(s)
 
-   Thomas Laurent (thomas.laurent (c) uk.lionbioscience.com)
+   Thomas Laurent formerly at:
    Lion Bioscience Ltd, Compass House, 80-82 Newmarket Road, Cambridge,
    CB5 8DZ, UK
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

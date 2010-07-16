@@ -189,12 +189,10 @@ int main(int argc, char **argv)
     AjPStr taskstr  = NULL;
     const AjPStr program = NULL;
 
-    /* fork/pipe variables */
-#ifndef WIN32
-    pid_t nPid;
-#endif
-    int pipeto[2];	  /* pipe to feed the exec'ed program input */
-    int pipefrom[2];	  /* pipe to get the exec'ed program output */
+    /* pipe variables */
+
+    int *pipeto;	  /* pipe to feed the exec'ed program input */
+    int *pipefrom;	  /* pipe to get the exec'ed program output */
 
     embInit("eprimer3", argc, argv);
 
@@ -238,6 +236,9 @@ int main(int argc, char **argv)
     self_end            = ajAcdGetFloat("selfend");
     max_poly_x          = ajAcdGetInt("maxpolyx");
 
+    AJCNEW0(pipeto,2);
+    AJCNEW0(pipefrom,2);
+    
     /* Sequence Quality */
     /* these are not (yet) implemented */
     /*
@@ -310,345 +311,194 @@ int main(int argc, char **argv)
 
     while(ajSeqallNext(sequence, &seq))
     {
-#ifndef WIN32
-        /* open the pipes to connect to primer3 */
-        if( pipe( pipeto ) != 0 )
-            ajFatal( "Couldn't open pipe() to" );
+        program = ajAcdGetpathC("primer3_core");
 
-        if( pipe( pipefrom ) != 0 )
-            ajFatal( "Couldn't open pipe() from" );
-    
-    
-        /* fork off the child to run the primer3 executable */
-        nPid = fork();
-        if( nPid < 0 )
-            ajFatal( "Failure of fork()" );
-        else if( nPid == 0 )
+        if(!ajSysExecRedirectC(ajStrGetPtr(program),&pipeto,&pipefrom))
+            ajFatal("eprimer3: Could not exec primer3_core");
+        
+        stream = eprimer3_start_write(pipeto[1]);
+        
+        /* send primer3 Primer "Global" parameters */
+        eprimer3_send_bool(stream, "PRIMER_EXPLAIN_FLAG", explain_flag);
+        eprimer3_send_bool(stream, "PRIMER_FILE_FLAG", file_flag);
+        
+        if(do_hybrid)
         {
-            /*
-            ** CHILD PROCESS
-            ** dup pipe read/write to stdin/stdout
-	    */
-            dup2(pipeto[0],  fileno(stdin));
-            dup2(pipefrom[1], fileno(stdout));
-
-            /* close unnecessary pipe descriptors */
-            close(pipeto[0]);
-            close(pipeto[1]);
-            close(pipefrom[0]);
-            close(pipefrom[1]);
-    
-            program = ajAcdGetpathC("primer3_core");
-    
-            if(program)
-                execlp(ajStrGetPtr(program), "primer3_core", NULL);
-
-            ajDie("There was a problem while executing primer3");
+            if(!ajStrCmpC(task[0], "1"))
+                ajStrAssignC(&taskstr, "pick_pcr_primers_and_hyb_probe");
+            else if(!ajStrCmpC(task[0], "2"))
+                ajStrAssignC(&taskstr, "pick_left_only");
+            else if(!ajStrCmpC(task[0], "3"))
+                ajStrAssignC(&taskstr, "pick_right_only");
+            else if(!ajStrCmpC(task[0], "4"))
+                ajStrAssignC(&taskstr, "pick_hyb_probe_only");
+        
+            if (!do_primer)
+                ajStrAssignC(&taskstr, "pick_hyb_probe_only");
         }
         else
         {
-            /*
-            ** PARENT PROCESS
-            ** Close unused pipe ends. This is especially important for the
-            ** pipefrom[1] write descriptor, otherwise eprimer3_read will never
-            ** get an EOF.
-            */
-            ajDebug("In PARENT process\n");
-
-            close(pipeto[0]);
-            close(pipefrom[1]);
-
-#else	// WIN32
-	    {
-		HANDLE hChildStdinRd, hChildStdinWr, 
-		hChildStdoutRd, hChildStdoutWr, 
-		hSaveStdin, hSaveStdout;
-		BOOL fSuccess;
-		SECURITY_ATTRIBUTES saAttr;
-		HANDLE hChildStdinWrDup, hChildStdoutRdDup;
-
-		saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
-		saAttr.bInheritHandle = TRUE;
-		saAttr.lpSecurityDescriptor = NULL;
-		
-	  // The steps for redirecting child process STDOUT:
-	  //     1. Save current STDOUT, to be restored later. 
-	  //     2. Create anonymous pipe to be STDOUT for child process. 
-	  //     3. Set STDOUT of the parent process to be write handle to 
-	  //        the pipe, so it is inherited by the child process. 
-	  //     4. Create a noninheritable duplicate of the read handle and
-	  //        close the inheritable read handle.
-
-		 hSaveStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-		 if (!CreatePipe(&hChildStdoutRd, &hChildStdoutWr, &saAttr, 0))
-		     ajFatal ( "Couldn't open pipe() from" );
-
-		 SetHandleInformation(hChildStdoutRd,HANDLE_FLAG_INHERIT,0);
-
-		 if (!SetStdHandle(STD_OUTPUT_HANDLE, hChildStdoutWr)) 
-		     ajFatal("Redirecting STDOUT failed");
-		 fSuccess = DuplicateHandle(GetCurrentProcess(),
-                                            hChildStdoutRd,
-					    GetCurrentProcess(),
-                                            &hChildStdoutRdDup , 0,
-					    FALSE,
-					    DUPLICATE_SAME_ACCESS);
-		 if(!fSuccess)
-		     ajFatal("DuplicateHandle failed");
-		 CloseHandle(hChildStdoutRd);
-
-	    // The steps for redirecting child process STDIN: 
-	    //     1.  Save current STDIN, to be restored later. 
-	    //     2.  Create anonymous pipe to be STDIN for child process. 
-	    //     3.  Set STDIN of the parent to be the read handle to the 
-	    //         pipe, so it is inherited by the child process. 
-	    //     4.  Create a noninheritable duplicate of the write handle, 
-	    //         and close the inheritable write handle.
-
-		 hSaveStdin = GetStdHandle(STD_INPUT_HANDLE);
-		 if (!CreatePipe(&hChildStdinRd, &hChildStdinWr, &saAttr, 0)) 
-		     ajFatal ( "Couldn't open pipe() to" );
-		 if (!SetStdHandle(STD_INPUT_HANDLE, hChildStdinRd)) 
-		     ajFatal("Redirecting Stdin failed");
-		 fSuccess = DuplicateHandle(GetCurrentProcess(),
-                                            hChildStdinWr, 
-					    GetCurrentProcess(),
-                                            &hChildStdinWrDup, 0, 
-					    FALSE,         // not inherited 
-					    DUPLICATE_SAME_ACCESS); 
-		  if (!fSuccess) 
-		      ajFatal("DuplicateHandle failed");
-		  CloseHandle(hChildStdinWr);
-
-		  {	// Create the child process
-			PROCESS_INFORMATION piProcInfo;
-			STARTUPINFO siStartInfo;
-			BOOL bFuncRetn = FALSE;
-			char* primer3_core_Dir = getenv("EMBOSS_ROOT");
-			char cmd[MAX_PATH];
-
-			ZeroMemory(&piProcInfo, sizeof(PROCESS_INFORMATION));
-			ZeroMemory(&siStartInfo, sizeof(STARTUPINFO));
-			siStartInfo.cb = sizeof(STARTUPINFO);
-
-			if (primer3_core_Dir == NULL)
-			    ajFatal("Cannot find primer3_core.exe");
-					
-			sprintf(cmd, "%s\\primer3_core.exe", primer3_core_Dir);
-
-			bFuncRetn = CreateProcess(NULL,
-				   cmd,	 // command line 
-				   NULL, // process security attributes 
-				   NULL, // primary thread security attributes 
-				   TRUE, // handles are inherited 
-				   0,    // creation flags 
-				   NULL, // use parent's environment 
-				   NULL, // use parent's current directory 
-				   &siStartInfo,  // STARTUPINFO pointer 
-				   &piProcInfo);  // receives PROCESS_INFORMATION
-			 if (bFuncRetn == 0)
-			     ajFatal("There was a problem executing primer3");
-			 CloseHandle(piProcInfo.hProcess);
-			 CloseHandle(piProcInfo.hThread);
-		  }
-
-	      if (!SetStdHandle(STD_INPUT_HANDLE, hSaveStdin))
-		  ajFatal("Re-redirecting Stdin failed\n");
-	      if (!SetStdHandle(STD_OUTPUT_HANDLE, hSaveStdout))
-		  ajFatal("Re-redirecting Stdout failed\n");
-
-	      CloseHandle(hChildStdoutWr);
-	      pipeto[1] = _open_osfhandle((intptr_t) hChildStdinWrDup,
-					  _O_APPEND);
-	      pipefrom[0] = _open_osfhandle((intptr_t) hChildStdoutRdDup,
-					    _O_RDONLY);
-#endif	// WIN32
-
-            stream = eprimer3_start_write(pipeto[1]);
-    
-            /* send primer3 Primer "Global" parameters */
-            eprimer3_send_bool(stream, "PRIMER_EXPLAIN_FLAG", explain_flag);
-            eprimer3_send_bool(stream, "PRIMER_FILE_FLAG", file_flag);
-    
-            if(do_hybrid)
-            {
-                if(!ajStrCmpC(task[0], "1"))
-                ajStrAssignC(&taskstr, "pick_pcr_primers_and_hyb_probe");
-                else if(!ajStrCmpC(task[0], "2"))
-                ajStrAssignC(&taskstr, "pick_left_only");
-                else if(!ajStrCmpC(task[0], "3"))
-                ajStrAssignC(&taskstr, "pick_right_only");
-                else if(!ajStrCmpC(task[0], "4"))
-                ajStrAssignC(&taskstr, "pick_hyb_probe_only");
-        
-                if (!do_primer)
-                ajStrAssignC(&taskstr, "pick_hyb_probe_only");
-            }
-            else
-            {
-                if(!ajStrCmpC(task[0], "1"))
+            if(!ajStrCmpC(task[0], "1"))
                 ajStrAssignC(&taskstr, "pick_pcr_primers");
-                else if(!ajStrCmpC(task[0], "2"))
+            else if(!ajStrCmpC(task[0], "2"))
                 ajStrAssignC(&taskstr, "pick_left_only");
-                else if(!ajStrCmpC(task[0], "3"))
+            else if(!ajStrCmpC(task[0], "3"))
                 ajStrAssignC(&taskstr, "pick_right_only");
-                else if(!ajStrCmpC(task[0], "4"))
+            else if(!ajStrCmpC(task[0], "4"))
                 ajStrAssignC(&taskstr, "pick_hyb_probe_only");
-            }
+        }
         
-            eprimer3_send_string(stream, "PRIMER_TASK", taskstr);
-            eprimer3_send_int(stream, "PRIMER_NUM_RETURN", num_return);
-            eprimer3_send_int(stream, "PRIMER_FIRST_BASE_INDEX", 
-                              first_base_index);
-            eprimer3_send_bool(stream, "PRIMER_PICK_ANYWAY", pick_anyway);
+        eprimer3_send_string(stream, "PRIMER_TASK", taskstr);
+        eprimer3_send_int(stream, "PRIMER_NUM_RETURN", num_return);
+        eprimer3_send_int(stream, "PRIMER_FIRST_BASE_INDEX", 
+                          first_base_index);
+        eprimer3_send_bool(stream, "PRIMER_PICK_ANYWAY", pick_anyway);
         
-            /* mispriming library may not have been specified */
-            if(mispriming_library)
+        /* mispriming library may not have been specified */
+        if(mispriming_library)
             eprimer3_send_stringC(stream, "PRIMER_MISPRIMING_LIBRARY",
                                   ajFileGetNameC(mispriming_library));
     
-            eprimer3_send_float(stream, "PRIMER_MAX_MISPRIMING", 
-                                max_mispriming);
-            eprimer3_send_float(stream, "PRIMER_PAIR_MAX_MISPRIMING",
-                                pair_max_mispriming);
-            eprimer3_send_int(stream, "PRIMER_GC_CLAMP", gc_clamp);
-            eprimer3_send_int(stream, "PRIMER_OPT_SIZE", opt_size);
-            eprimer3_send_int(stream, "PRIMER_MIN_SIZE", min_size);
-            eprimer3_send_int(stream, "PRIMER_MAX_SIZE", max_size);
-            eprimer3_send_float(stream, "PRIMER_OPT_TM", opt_tm);
-            eprimer3_send_float(stream, "PRIMER_MIN_TM", min_tm);
-            eprimer3_send_float(stream, "PRIMER_MAX_TM", max_tm);
-            eprimer3_send_float(stream, "PRIMER_MAX_DIFF_TM", max_diff_tm);
-            eprimer3_send_float(stream, "PRIMER_OPT_GC_PERCENT", 
-                                opt_gc_percent);
-            eprimer3_send_float(stream, "PRIMER_MIN_GC", min_gc);
-            eprimer3_send_float(stream, "PRIMER_MAX_GC", max_gc);
-            eprimer3_send_float(stream, "PRIMER_SALT_CONC", salt_conc);
-            eprimer3_send_float(stream, "PRIMER_DNA_CONC", dna_conc);
-            eprimer3_send_int(stream, "PRIMER_NUM_NS_ACCEPTED", 
-                              num_ns_accepted);
-            eprimer3_send_float(stream, "PRIMER_SELF_ANY", self_any);
-            eprimer3_send_float(stream, "PRIMER_SELF_END", self_end);
-            eprimer3_send_int(stream, "PRIMER_MAX_POLY_X", max_poly_x);
-            eprimer3_send_int(stream, "PRIMER_PRODUCT_OPT_SIZE", 
-                              product_opt_size);
-            eprimer3_send_range2(stream, "PRIMER_PRODUCT_SIZE_RANGE",
-                                 product_size_range);
-            eprimer3_send_float(stream, "PRIMER_PRODUCT_OPT_TM", 
-                                product_opt_tm);
-            eprimer3_send_float(stream, "PRIMER_PRODUCT_MIN_TM", 
-                                product_min_tm);
-            eprimer3_send_float(stream, "PRIMER_PRODUCT_MAX_TM", 
-                                product_max_tm);
-            eprimer3_send_float(stream, "PRIMER_MAX_END_STABILITY",
-                                max_end_stability);
+        eprimer3_send_float(stream, "PRIMER_MAX_MISPRIMING", 
+                            max_mispriming);
+        eprimer3_send_float(stream, "PRIMER_PAIR_MAX_MISPRIMING",
+                            pair_max_mispriming);
+        eprimer3_send_int(stream, "PRIMER_GC_CLAMP", gc_clamp);
+        eprimer3_send_int(stream, "PRIMER_OPT_SIZE", opt_size);
+        eprimer3_send_int(stream, "PRIMER_MIN_SIZE", min_size);
+        eprimer3_send_int(stream, "PRIMER_MAX_SIZE", max_size);
+        eprimer3_send_float(stream, "PRIMER_OPT_TM", opt_tm);
+        eprimer3_send_float(stream, "PRIMER_MIN_TM", min_tm);
+        eprimer3_send_float(stream, "PRIMER_MAX_TM", max_tm);
+        eprimer3_send_float(stream, "PRIMER_MAX_DIFF_TM", max_diff_tm);
+        eprimer3_send_float(stream, "PRIMER_OPT_GC_PERCENT", 
+                            opt_gc_percent);
+        eprimer3_send_float(stream, "PRIMER_MIN_GC", min_gc);
+        eprimer3_send_float(stream, "PRIMER_MAX_GC", max_gc);
+        eprimer3_send_float(stream, "PRIMER_SALT_CONC", salt_conc);
+        eprimer3_send_float(stream, "PRIMER_DNA_CONC", dna_conc);
+        eprimer3_send_int(stream, "PRIMER_NUM_NS_ACCEPTED", 
+                          num_ns_accepted);
+        eprimer3_send_float(stream, "PRIMER_SELF_ANY", self_any);
+        eprimer3_send_float(stream, "PRIMER_SELF_END", self_end);
+        eprimer3_send_int(stream, "PRIMER_MAX_POLY_X", max_poly_x);
+        eprimer3_send_int(stream, "PRIMER_PRODUCT_OPT_SIZE", 
+                          product_opt_size);
+        eprimer3_send_range2(stream, "PRIMER_PRODUCT_SIZE_RANGE",
+                             product_size_range);
+        eprimer3_send_float(stream, "PRIMER_PRODUCT_OPT_TM", 
+                            product_opt_tm);
+        eprimer3_send_float(stream, "PRIMER_PRODUCT_MIN_TM", 
+                            product_min_tm);
+        eprimer3_send_float(stream, "PRIMER_PRODUCT_MAX_TM", 
+                            product_max_tm);
+        eprimer3_send_float(stream, "PRIMER_MAX_END_STABILITY",
+                            max_end_stability);
     
-            /* send primer3 Internal Oligo "Global" parameters */
-            eprimer3_send_int(stream, "PRIMER_INTERNAL_OLIGO_OPT_SIZE",
-                    internal_oligo_opt_size);
-            eprimer3_send_int(stream, "PRIMER_INTERNAL_OLIGO_MIN_SIZE",
-                    internal_oligo_min_size);
-            eprimer3_send_int(stream, "PRIMER_INTERNAL_OLIGO_MAX_SIZE",
-                    internal_oligo_max_size);
-            eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_OPT_TM",
-                    internal_oligo_opt_tm);
-            eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_MIN_TM",
-                    internal_oligo_min_tm);
-            eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_MAX_TM",
-                    internal_oligo_max_tm);
-            eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_OPT_GC_PERCENT",
-                    internal_oligo_opt_gc_percent);
-            eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_MIN_GC",
-                    internal_oligo_min_gc);
-            eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_MAX_GC",
-                    internal_oligo_max_gc);
-            eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_SALT_CONC",
-                    internal_oligo_salt_conc);
-            eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_DNA_CONC",
-                    internal_oligo_dna_conc);
-            eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_SELF_ANY",
-                    internal_oligo_self_any);
-            eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_SELF_END",
-                    internal_oligo_self_end);
-            eprimer3_send_int(stream, "PRIMER_INTERNAL_OLIGO_MAX_POLY_X",
-                    internal_oligo_max_poly_x);
+        /* send primer3 Internal Oligo "Global" parameters */
+        eprimer3_send_int(stream, "PRIMER_INTERNAL_OLIGO_OPT_SIZE",
+                          internal_oligo_opt_size);
+        eprimer3_send_int(stream, "PRIMER_INTERNAL_OLIGO_MIN_SIZE",
+                          internal_oligo_min_size);
+        eprimer3_send_int(stream, "PRIMER_INTERNAL_OLIGO_MAX_SIZE",
+                          internal_oligo_max_size);
+        eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_OPT_TM",
+                            internal_oligo_opt_tm);
+        eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_MIN_TM",
+                            internal_oligo_min_tm);
+        eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_MAX_TM",
+                            internal_oligo_max_tm);
+        eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_OPT_GC_PERCENT",
+                            internal_oligo_opt_gc_percent);
+        eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_MIN_GC",
+                            internal_oligo_min_gc);
+        eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_MAX_GC",
+                            internal_oligo_max_gc);
+        eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_SALT_CONC",
+                            internal_oligo_salt_conc);
+        eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_DNA_CONC",
+                            internal_oligo_dna_conc);
+        eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_SELF_ANY",
+                            internal_oligo_self_any);
+        eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_SELF_END",
+                            internal_oligo_self_end);
+        eprimer3_send_int(stream, "PRIMER_INTERNAL_OLIGO_MAX_POLY_X",
+                          internal_oligo_max_poly_x);
 
-            /* 
-            ** internal oligo mishybridising library may not have been
-            ** specified 
-            */
-            if(internal_oligo_mishyb_library)
-                eprimer3_send_stringC(stream,
-                    "PRIMER_INTERNAL_OLIGO_MISHYB_LIBRARY",
-                    ajFileGetNameC(internal_oligo_mishyb_library));
+        /* 
+        ** internal oligo mishybridising library may not have been
+        ** specified 
+        */
+        if(internal_oligo_mishyb_library)
+            eprimer3_send_stringC(stream,
+                            "PRIMER_INTERNAL_OLIGO_MISHYB_LIBRARY",
+                            ajFileGetNameC(internal_oligo_mishyb_library));
 
-            eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_MAX_MISHYB",
-                    internal_oligo_max_mishyb);
+        eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_MAX_MISHYB",
+                            internal_oligo_max_mishyb);
         
         
-            /* 
-            ** Start sequence-specific stuff 
-            */
+        /* 
+        ** Start sequence-specific stuff 
+        */
 
-            begin = ajSeqallGetseqBegin(sequence) - 1;
-            end   = ajSeqallGetseqEnd(sequence) - 1;
+        begin = ajSeqallGetseqBegin(sequence) - 1;
+        end   = ajSeqallGetseqEnd(sequence) - 1;
 
-            strand = ajSeqGetSeqCopyS(seq);
+        strand = ajSeqGetSeqCopyS(seq);
 
-            ajStrFmtUpper(&strand);
-            ajStrAssignSubC(&substr,ajStrGetPtr(strand), begin, end);
+        ajStrFmtUpper(&strand);
+        ajStrAssignSubC(&substr,ajStrGetPtr(strand), begin, end);
 
-            /* send flags to turn on using optimal product size */
-            eprimer3_send_float(stream, "PRIMER_PAIR_WT_PRODUCT_SIZE_GT",
-                                (float)0.05);
-            eprimer3_send_float(stream, "PRIMER_PAIR_WT_PRODUCT_SIZE_LT",
-                                (float)0.05);
+        /* send flags to turn on using optimal product size */
+        eprimer3_send_float(stream, "PRIMER_PAIR_WT_PRODUCT_SIZE_GT",
+                            (float)0.05);
+        eprimer3_send_float(stream, "PRIMER_PAIR_WT_PRODUCT_SIZE_LT",
+                            (float)0.05);
 
-            /* send primer3 Primer "Sequence" parameters */
-            eprimer3_send_string(stream, "SEQUENCE", substr);
+        /* send primer3 Primer "Sequence" parameters */
+        eprimer3_send_string(stream, "SEQUENCE", substr);
 
-            /* if no ID name, use the USA */
-            if(ajStrMatchC(ajSeqGetNameS(seq),""))
-                eprimer3_send_string(stream, "PRIMER_SEQUENCE_ID",
-                                     ajSeqGetUsaS(seq));
-            else
-                eprimer3_send_string(stream, "PRIMER_SEQUENCE_ID",
-                                     ajSeqGetNameS(seq));
+        /* if no ID name, use the USA */
+        if(ajStrMatchC(ajSeqGetNameS(seq),""))
+            eprimer3_send_string(stream, "PRIMER_SEQUENCE_ID",
+                                 ajSeqGetUsaS(seq));
+        else
+            eprimer3_send_string(stream, "PRIMER_SEQUENCE_ID",
+                                 ajSeqGetNameS(seq));
 
-            eprimer3_send_range(stream, "INCLUDED_REGION", included_region,
-                                begin);
-            eprimer3_send_range(stream, "TARGET", target, begin);
-            eprimer3_send_range(stream, "EXCLUDED_REGION", excluded_region,
-                                begin);
-            eprimer3_send_string(stream, "PRIMER_LEFT_INPUT", left_input);
-            eprimer3_send_string(stream, "PRIMER_RIGHT_INPUT", right_input);
+        eprimer3_send_range(stream, "INCLUDED_REGION", included_region,
+                            begin);
+        eprimer3_send_range(stream, "TARGET", target, begin);
+        eprimer3_send_range(stream, "EXCLUDED_REGION", excluded_region,
+                            begin);
+        eprimer3_send_string(stream, "PRIMER_LEFT_INPUT", left_input);
+        eprimer3_send_string(stream, "PRIMER_RIGHT_INPUT", right_input);
 
-            /* send primer3 Internal Oligo "Sequence" parameters */
-            eprimer3_send_range(stream,
-                                "PRIMER_INTERNAL_OLIGO_EXCLUDED_REGION",
-                                internal_oligo_excluded_region, begin);
-            eprimer3_send_string(stream, "PRIMER_INTERNAL_OLIGO_INPUT",
-                                 internal_oligo_input);
+        /* send primer3 Internal Oligo "Sequence" parameters */
+        eprimer3_send_range(stream,
+                            "PRIMER_INTERNAL_OLIGO_EXCLUDED_REGION",
+                            internal_oligo_excluded_region, begin);
+        eprimer3_send_string(stream, "PRIMER_INTERNAL_OLIGO_INPUT",
+                             internal_oligo_input);
 
 
-            /* end the primer3 input sequence record with a '=' */
-            eprimer3_send_end(stream);
-            /* and close the ouput pipe stream */
-            eprimer3_end_write(stream);
+        /* end the primer3 input sequence record with a '=' */
+        eprimer3_send_end(stream);
+        /* and close the ouput pipe stream */
+        eprimer3_end_write(stream);
     
-            /* read the primer3 output */
-            eprimer3_read(pipefrom[0], &result);
+        /* read the primer3 output */
+        eprimer3_read(pipefrom[0], &result);
             
-            eprimer3_report(outfile, result, num_return, begin);
+        eprimer3_report(outfile, result, num_return, begin);
     
-            ajStrSetClear(&result);
+        ajStrSetClear(&result);
 
 #ifndef WIN32
-            close(pipeto[1]);
-            close(pipefrom[0]);
+        close(pipeto[1]);
+        close(pipefrom[0]);
 #endif            
-        }	/* end of parent/child fork */
-
     }	/* end of sequence loop */
 
 
@@ -673,6 +523,9 @@ int main(int argc, char **argv)
     ajStrDel(&right_input);
     ajStrDel(&internal_oligo_input);
 
+    AJFREE(pipeto);
+    AJFREE(pipefrom);
+    
     ajFileClose(&mispriming_library);
 
     embExit();

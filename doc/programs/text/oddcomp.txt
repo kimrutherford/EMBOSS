@@ -60,7 +60,7 @@ Output file [12s1_arath.oddcomp]: out.odd
 Command line arguments
 
 Identify proteins with specified sequence word composition
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -194,10 +194,10 @@ Output file format
 # The Expected frequencies are taken from the file: ../../data/oddcomp.comp
 #
 #       Word size: 2
-        CNR1B_FUGRU
-        CO9_FUGRU
-        FOS_FUGRU
-        RS7_FUGRU
+        CNR1B_TAKRU
+        CO9_TAKRU
+        FOS_TAKRU
+        RS7_TAKRU
 
 #       END     #
 
@@ -261,7 +261,10 @@ See also
 
 Author(s)
 
-   David Martin (dmartin (c) rfcgr.mrc.ac.uk)
+   David Martin
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

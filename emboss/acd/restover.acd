@@ -1,7 +1,8 @@
 application: restover [
   documentation: "Find restriction enzymes producing a specific overhang"
   groups: "Nucleic:Restriction"
-  relations: "EDAM: Restriction site identification"
+  relations: "/edam/topic/0000100 Nucleic acid restriction"
+  relations: "/edam/operation/0000431 Restriction site identification"
 ]
 
 section: input [
@@ -12,7 +13,9 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "DNA"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0001215 Pure DNA sequence"
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more" 
   ]
 
   datafile: datafile [
@@ -20,14 +23,14 @@ section: input [
     information: "Restriction enzyme data file (optional)"
     knowntype: "restriction enzyme data"
     nullok: "Y"
-    relations:  "EDAM: Restriction enzyme pattern data"                
+    relations:  "/edam/data/0001518 Restriction enzyme pattern data"                
   ]
 
   datafile: mfile [
     default: "Emethylsites.dat"
     information: "Restriction enzyme methylation data file"
     knowntype: "restriction enzyme methylation data"
-    relations:  "EDAM: Restriction enzyme reference data"        
+    relations:  "/edam/data/0001517 Restriction enzyme information"        
   ]
 
 endsection: input
@@ -41,7 +44,7 @@ section: required [
     parameter: "Y"
     information: "Overlap sequence"
     knowntype: "nucleotide sequence"
-    relations:  "EDAM: Nucleotide sequence"                            
+    relations:  "/edam/data/0001210 Pure nucleotide sequence"
   ]
 
 endsection: required
@@ -56,52 +59,51 @@ section: advanced [
     maximum: "1000"
     default: "1"
     information: "Minimum cuts per RE"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001773 Tool-specific parameter"
   ]
 
   integer: max [
     minimum: "$(min)"
-    maximum: "2000000000"
     default: "2000000000"
     information: "Maximum cuts per RE"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001773 Tool-specific parameter"
   ]
 
   boolean: single [
     default: "N"
     information: "Force single site only cuts"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: threeprime [
     default: "N"
     information: "Use 3' overhang e.g. BamHI has CTAG as a 5'
                   overhang, and ApaI has CCGG as 3' overhang."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: blunt [
     default: "Y"
     information: "Allow blunt end cutters"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: sticky [
     default: "Y"
     information: "Allow sticky end cutters"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: ambiguity [
     default: "Y"
     information: "Allow ambiguous matches"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: plasmid [
     default: "N"
     information: "Allow circular DNA"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: methylation [
@@ -109,13 +111,13 @@ section: advanced [
     information: "Use methylation data"
     help: "If this is set then RE recognition sites will not match
            methylated bases."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: commercial [
     default: "Y"
     information: "Only enzymes with suppliers"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
 endsection: advanced
@@ -129,31 +131,31 @@ section: output [
     default: "N"
     information: "Create HTML output"
     outputmodifier: "Y"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: limit [
     default: "Y"
     information: "Limits reports to one isoschizomer"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: alphabetic [
     default: "N"
     information: "Sort output alphabetically"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: fragments [
     default: "N"
     information: "Show fragment lengths"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   outfile: outfile [
     parameter: "Y"
     knowntype: "restover output"
-    relations:  "EDAM:EMBOSS restover recognition site report"             
+    relations:  "/edam/data/0001305 Restriction site report" 
   ]
 
 endsection: output

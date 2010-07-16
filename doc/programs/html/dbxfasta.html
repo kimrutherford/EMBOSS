@@ -108,7 +108,7 @@ General log output file [outfile.dbxfasta]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Index a fasta file database using b+tree indices
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     Basename for index files (Any string from 2
@@ -138,6 +138,12 @@ Version: EMBOSS:6.2.0
    -indexoutdir        outdir     [.] Index file output directory
 
    Associated qualifiers:
+
+   "-directory" associated qualifiers
+   -extension          string     Default file extension
+
+   "-indexoutdir" associated qualifiers
+   -extension          string     Default file extension
 
    "-outfile" associated qualifiers
    -odirectory         string     Output directory
@@ -277,6 +283,32 @@ Version: EMBOSS:6.2.0
 
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-directory" associated directory qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -extension</td>
+<td>string</td>
+<td>Default file extension</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-indexoutdir" associated outdir qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -extension</td>
+<td>string</td>
+<td>Default file extension</td>
+<td>Any string</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -780,10 +812,12 @@ None.
     Author(s)
 </H2>
 
-Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
+Alan Bleasby 
 <br>
 European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
 
 
 

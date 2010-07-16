@@ -29,7 +29,7 @@
    "Sequence set '\\S+' has no 'aligned'" => "Seqset aligned undefined",
 #   "" => "",
    "^Multiple definition of parameter/standard/additional" => "Multiple definition of parameter/standard/additional",
-   "Information string for '\\S+' not standard" => "Nonstandard info",
+   "Information string for '\\S+' '[^']+' not standard" => "Nonstandard info",
    "Missing standard information '\\S+' expected" => "Missing standard info",
    "Dummy message" => "dummy"
 	     );

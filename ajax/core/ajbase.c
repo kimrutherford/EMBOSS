@@ -28,6 +28,9 @@
 #define IUBFILE "Ebases.iub"
 #define IUBPFILE "Eresidues.iub"
 
+
+
+
 /* @datastatic BasePIub *******************************************************
 **
 ** Base codes
@@ -84,6 +87,9 @@ static AjBool aj_residue_I = AJFALSE;
 static AjBool baseInit(void);
 static AjBool residueInit(void);
 
+
+
+
 /* @filesection ajbase ********************************************************
 **
 ** @nam1rule aj Function belongs to the AJAX library.
@@ -100,6 +106,8 @@ static AjBool residueInit(void);
 ** @nam2rule Base 
 **
 */
+
+
 
 
 /* @section character conversion
@@ -121,6 +129,7 @@ static AjBool residueInit(void);
 **
 ** @fcategory cast
 */
+
 
 
 
@@ -160,6 +169,8 @@ float  ajBaseAlphaCompare(ajint base, ajint base2)
 
     return aj_base_prob[b1][b2];
 }
+
+
 
 
 /* @obsolete ajBaseProb
@@ -227,6 +238,7 @@ __deprecated ajint ajAZToBin(ajint c)
 **
 ** @fcategory cast
 */
+
 
 
 
@@ -341,6 +353,9 @@ __deprecated char ajAZToBinC(char c)
 **
 ** @fcategory use
 */
+
+
+
 
 /* @func ajBaseAlphacharComp ***************************************************
 **
@@ -474,6 +489,9 @@ __deprecated char ajBinToAZ(ajint c)
 **
 ******************************************************************************/
 
+
+
+
 /* @func ajBaseExistsBin ******************************************************
 **
 ** Tests whether a base code exists
@@ -546,6 +564,7 @@ AjBool ajBaseExistsChar(char c)
 **
 ** @fcategory use
 */
+
 
 
 
@@ -761,10 +780,12 @@ static AjBool baseInit(void)
 ** @argrule To c [char] Base character code
 ** @argrule ToDoublet Pnuc2 [AjPStr*] Doublet base name
 **
-** @valrule * [AjBool] True if code was recognized.
+** @valrule * [AjBool] True if code was recognised.
 **
 ** @fcategory cast
 */
+
+
 
 
 /* @func ajBaseFromDoublet ************************************************
@@ -775,7 +796,7 @@ static AjBool baseInit(void)
 ** @param [r] nuc2 [const AjPStr]   AjPStr object (2 letter code)
 ** @param [w] Pc [char *] Resulting residue code
 **
-** @return [AjBool] True on success, false if doublet is not recognized
+** @return [AjBool] True on success, false if doublet is not recognised
 ** @@
 ******************************************************************************/
 
@@ -818,6 +839,8 @@ AjBool ajBaseFromDoublet(const AjPStr nuc2, char* Pc)
 **
 ** @fcategory misc
 */
+
+
 
 
 /* @func ajBaseExit ***********************************************************
@@ -863,6 +886,8 @@ void ajBaseExit(void)
 */
 
 
+
+
 /* @section character conversion
 **
 ** Functions converting binary forms of amino acid residue codes
@@ -902,6 +927,8 @@ ajint ajResidueAlphaToBin(ajint base)
 }
 
 
+
+
 /* @section binary conversion
 **
 ** Functions converting binary forms of base codes
@@ -918,6 +945,7 @@ ajint ajResidueAlphaToBin(ajint base)
 **
 ** @fcategory cast
 */
+
 
 
 
@@ -950,7 +978,6 @@ char ajResidueBinToAlpha(ajint c)
 
 
 
-
 /* @section query *************************************************************
 **
 ** Functions
@@ -971,6 +998,9 @@ char ajResidueBinToAlpha(ajint c)
 **
 ******************************************************************************/
 
+
+
+
 /* @func ajResidueExistsBin **************************************************
 **
 ** Tests whether a residue code exists
@@ -990,6 +1020,8 @@ AjBool ajResidueExistsBin(ajint base)
     
     return ajFalse;
 }
+
+
 
 
 /* @func ajResidueExistsChar ***************************************************
@@ -1022,6 +1054,8 @@ AjBool ajResidueExistsChar(char c)
 }
 
 
+
+
 /* @section retrieval
 **
 ** Functions
@@ -1039,6 +1073,7 @@ AjBool ajResidueExistsChar(char c)
 **
 ** @fcategory use
 */
+
 
 
 
@@ -1237,7 +1272,7 @@ static AjBool residueInit(void)
 ** @argrule To c [char] Residue character code
 ** @argrule ToTriplet Paa3 [AjPStr*] Triplet residue name
 **
-** @valrule * [AjBool] True if code was recognized.
+** @valrule * [AjBool] True if code was recognised.
 **
 ** @fcategory cast
 */
@@ -1253,7 +1288,7 @@ static AjBool residueInit(void)
 ** @param [r] aa3 [const AjPStr]   AjPStr object (3 letter code)
 ** @param [w] Pc [char *] Resulting residue code
 **
-** @return [AjBool] True on success, false if triplet is not recognized
+** @return [AjBool] True on success, false if triplet is not recognised
 ** @@
 ****************************************************************************/
 
@@ -1303,7 +1338,7 @@ __deprecated AjBool  ajBaseAa3ToAa1(char *Paa1, const AjPStr aa3)
 ** @param [r] c [char] Single letter identifier of amino acid
 ** @param [w] Paa3  [AjPStr *] AjPStr object
 **
-** @return [AjBool] True on succcess
+** @return [AjBool] True on success
 ** @@
 ******************************************************************************/
 
@@ -1344,6 +1379,7 @@ __deprecated AjBool  ajBaseAa1ToAa3(char aa1, AjPStr *Paa3)
 
 
 
+
 /* @datasection [none] Basecode *******************************************
 **
 ** Function is for coding the letters used for nucleotide bases and
@@ -1352,6 +1388,8 @@ __deprecated AjBool  ajBaseAa1ToAa3(char aa1, AjPStr *Paa3)
 ** @nam2rule Basecode  
 **
 */
+
+
 
 
 /* @section Conversion
@@ -1370,6 +1408,9 @@ __deprecated AjBool  ajBaseAa1ToAa3(char aa1, AjPStr *Paa3)
 **
 ** @fcategory cast
 */
+
+
+
 
 /* @func ajBasecodeFromInt **************************************************
 **

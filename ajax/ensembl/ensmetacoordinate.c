@@ -4,7 +4,7 @@
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @version $Revision: 1.3 $
+** @version $Revision: 1.8 $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -43,18 +43,18 @@
 /* ======================== private functions ========================= */
 /* ==================================================================== */
 
-extern EnsPCoordsystemadaptor
-ensRegistryGetCoordsystemadaptor(EnsPDatabaseadaptor dba);
+static AjBool metacoordinateadaptorCacheInit(EnsPMetacoordinateadaptor mca);
 
-static AjBool metaCoordinateadaptorCacheInit(EnsPMetacoordinateadaptor adaptor);
+static void metacoordinateadaptorClearNameCache(void **key,
+                                                void **value,
+                                                void *cl);
 
-static void metaCoordinateadaptorClearNameCache(void **key,
-                                                void **value, void *cl);
-
-static void metaCoordinateadaptorClearLengthCacheL2(void **key, void **value,
+static void metacoordinateadaptorClearLengthCacheL2(void **key,
+                                                    void **value,
                                                     void *cl);
 
-static void metaCoordinateadaptorClearLengthCacheL1(void **key, void **value,
+static void metacoordinateadaptorClearLengthCacheL1(void **key,
+                                                    void **value,
                                                     void *cl);
 
 
@@ -73,7 +73,7 @@ static void metaCoordinateadaptorClearLengthCacheL1(void **key, void **value,
 **
 ** Functions for manipulating Ensembl Meta-Coordinate Adaptor objects
 **
-** @cc Bio::EnsEMBL::DBSQL::MetaCoordContainer CVS Revision: 1.7
+** @cc Bio::EnsEMBL::DBSQL::MetaCoordContainer CVS Revision: 1.12
 **
 ** @nam2rule Metacoordinateadaptor
 **
@@ -82,116 +82,150 @@ static void metaCoordinateadaptorClearLengthCacheL1(void **key, void **value,
 
 
 
-/* @funcstatic metaCoordinateadaptorCacheInit *********************************
+/* @funcstatic metacoordinateadaptorCacheInit *********************************
 **
 ** Initialise the internal Meta-Coordinate cache of an
 ** Ensembl Meta-Coordinate Adaptor.
 **
-** @param [u] adaptor [EnsPMetacoordinateadaptor] Ensembl Meta-Coordinate
-**                                                Adaptor
+** @param [u] mca [EnsPMetacoordinateadaptor] Ensembl Meta-Coordinate Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-static AjBool metaCoordinateadaptorCacheInit(EnsPMetacoordinateadaptor adaptor)
+static AjBool metacoordinateadaptorCacheInit(EnsPMetacoordinateadaptor mca)
 {
     ajuint csid   = 0;
     ajuint length = 0;
-    
+
     ajuint *Pcsid   = NULL;
     ajuint *Plength = NULL;
-    
+
+    AjPList css  = NULL;
     AjPList list = NULL;
-    
+
     AjPTable table = NULL;
-    
+
     AjPSqlstatement sqls = NULL;
     AjISqlrow sqli       = NULL;
     AjPSqlrow sqlr       = NULL;
-    
+
+    AjPStr csv       = NULL;
     AjPStr name      = NULL;
     AjPStr statement = NULL;
-    
-    if(!adaptor)
-	return ajFalse;
-    
-    statement = ajStrNewC("SELECT "
-			  "meta_coord.table_name, "
-			  "meta_coord.coord_system_id, "
-			  "meta_coord.max_length "
-			  "FROM "
-			  "meta_coord");
-    
-    sqls = ensDatabaseadaptorSqlstatementNew(adaptor->Adaptor, statement);
-    
+
+    EnsPCoordsystem cs         = NULL;
+    EnsPCoordsystemadaptor csa = NULL;
+
+    if(!mca)
+        return ajFalse;
+
+    /* Fetch all Ensembl Coordinate Systems for this species. */
+
+    csa = ensRegistryGetCoordsystemadaptor(mca->Adaptor);
+
+    css = ajListNew();
+
+    ensCoordsystemadaptorFetchAll(csa, css);
+
+    csv = ajStrNew();
+
+    while(ajListPop(css, (void **) &cs))
+    {
+        ajFmtPrintAppS(&csv, "%u, ", ensCoordsystemGetIdentifier(cs));
+
+        ensCoordsystemDel(&cs);
+    }
+
+    ajListFree(&css);
+
+    /* Remove the last comma and space from the comma-separated values. */
+
+    ajStrCutEnd(&csv, 2);
+
+    statement = ajFmtStr(
+        "SELECT "
+        "meta_coord.table_name, "
+        "meta_coord.coord_system_id, "
+        "meta_coord.max_length "
+        "FROM "
+        "meta_coord "
+        "WHERE "
+        "meta_coord.coord_system_id IN (%S)",
+        csv);
+
+    ajStrDel(&csv);
+
+    sqls = ensDatabaseadaptorSqlstatementNew(mca->Adaptor, statement);
+
     sqli = ajSqlrowiterNew(sqls);
-    
+
     while(!ajSqlrowiterDone(sqli))
     {
-	name = ajStrNew();
-	
-	csid = 0;
-	
-	length = 0;
-	
+        name = ajStrNew();
+
+        csid = 0;
+
+        length = 0;
+
         sqlr = ajSqlrowiterGet(sqli);
-	
+
         ajSqlcolumnToStr(sqlr, &name);
         ajSqlcolumnToUint(sqlr, &csid);
         ajSqlcolumnToUint(sqlr, &length);
-	
-	/* Add to the Feature Type Cache. */
-	
-	list = (AjPList)
-	    ajTableFetch(adaptor->CacheByName, (const void *) name);
-	
-	if(!list)
-	{
-	    list = ajListNew();
-	    
-	    ajTablePut(adaptor->CacheByName,
-		       (void *) ajStrNewS(name),
-		       (void *) list);
-	}
-	
-	AJNEW0(Pcsid);
-	
-	*Pcsid = csid;
-	
-	ajListPushAppend(list, (void *) Pcsid);
-	
-	/* Add to the Length Cache. */
-	
-	table = (AjPTable)
-	    ajTableFetch(adaptor->CacheByLength, (const void *) &csid);
-	
-	if(!table)
-	{
-	    AJNEW0(Pcsid);
-	    
-	    *Pcsid = csid;
-	    
-	    table = ajTablestrNewCaseLen(0);
-	    
-	    ajTablePut(adaptor->CacheByLength, (void *) Pcsid, (void *) table);
-	}
-	
-	AJNEW0(Plength);
-	
-	*Plength = length;
-	
-	ajTablePut(table, (void *) ajStrNewS(name), (void *) Plength);
-	
-	ajStrDel(&name);
+
+        ajStrFmtLower(&name);
+
+        /* Add to the Feature Type Cache. */
+
+        list = (AjPList) ajTableFetch(mca->CacheByName, (const void *) name);
+
+        if(!list)
+        {
+            list = ajListNew();
+
+            ajTablePut(mca->CacheByName,
+                       (void *) ajStrNewS(name),
+                       (void *) list);
+        }
+
+        AJNEW0(Pcsid);
+
+        *Pcsid = csid;
+
+        ajListPushAppend(list, (void *) Pcsid);
+
+        /* Add to the Length Cache. */
+
+        table = (AjPTable) ajTableFetch(mca->CacheByLength,
+                                        (const void *) &csid);
+
+        if(!table)
+        {
+            AJNEW0(Pcsid);
+
+            *Pcsid = csid;
+
+            table = ajTablestrNewCaseLen(0);
+
+            ajTablePut(mca->CacheByLength, (void *) Pcsid, (void *) table);
+        }
+
+        AJNEW0(Plength);
+
+        *Plength = length;
+
+        ajTablePut(table, (void *) ajStrNewS(name), (void *) Plength);
+
+        ajStrDel(&name);
     }
-    
+
     ajSqlrowiterDel(&sqli);
-    
-    ajSqlstatementDel(&sqls);
-    
+
+    ensDatabaseadaptorSqlstatementDel(mca->Adaptor, &sqls);
+
     ajStrDel(&statement);
-    
+
     return ajTrue;
 }
 
@@ -209,14 +243,8 @@ static AjBool metaCoordinateadaptorCacheInit(EnsPMetacoordinateadaptor adaptor)
 ** @fnote None
 **
 ** @nam3rule New Constructor
-** @nam4rule NewObj Constructor with existing object
-** @nam4rule NewRef Constructor by incrementing the reference counter
 **
 ** @argrule New dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
-** @argrule Obj object [EnsPMetacoordinateadaptor] Ensembl Meta-Coordinate
-**                                                 Adaptor
-** @argrule Ref object [EnsPMetacoordinateadaptor] Ensembl Meta-Coordinate
-**                                                 Adaptor
 **
 ** @valrule * [EnsPMetacoordinateadaptor] Ensembl Meta-Coordinate Adaptor
 **
@@ -230,37 +258,49 @@ static AjBool metaCoordinateadaptorCacheInit(EnsPMetacoordinateadaptor adaptor)
 **
 ** Default constructor for an Ensembl Meta-Coordinate Adaptor.
 **
+** Ensembl Object Adaptors are singleton objects in the sense that a single
+** instance of an Ensembl Object Adaptor connected to a particular database is
+** sufficient to instantiate any number of Ensembl Objects from the database.
+** Each Ensembl Object will have a weak reference to the Object Adaptor that
+** instantiated it. Therefore, Ensembl Object Adaptors should not be
+** instantiated directly, but rather obtained from the Ensembl Registry,
+** which will in turn call this function if neccessary.
+**
+** @see ensRegistryGetDatabaseadaptor
+** @see ensRegistryGetMetacoordinateadaptor
+**
 ** @cc Bio::EnsEMBL::DBSQL::MetaCoordContainer::new
-** @param [r] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
 ** @return [EnsPMetacoordinateadaptor] Ensembl Meta-Coordinate Adaptor or NULL
 ** @@
 ******************************************************************************/
 
-EnsPMetacoordinateadaptor ensMetacoordinateadaptorNew(EnsPDatabaseadaptor dba)
+EnsPMetacoordinateadaptor ensMetacoordinateadaptorNew(
+    EnsPDatabaseadaptor dba)
 {
     EnsPMetacoordinateadaptor mca = NULL;
-    
+
     if(!dba)
-	return NULL;
-    
+        return NULL;
+
     AJNEW0(mca);
-    
+
     mca->Adaptor = dba;
-    
+
     mca->CacheByName = ajTablestrNewCaseLen(0);
-    
+
     mca->CacheByLength = MENSTABLEUINTNEW(0);
-    
-    metaCoordinateadaptorCacheInit(mca);
-    
+
+    metacoordinateadaptorCacheInit(mca);
+
     return mca;
 }
 
 
 
 
-/* @funcstatic metaCoordinateadaptorClearNameCache ****************************
+/* @funcstatic metacoordinateadaptorClearNameCache ****************************
 **
 ** An ajTableMapDel 'apply' function to clear the Ensembl Meta-Coordinate
 ** Adaptor-internal cache. This function deletes the AJAX String Feature name
@@ -276,39 +316,40 @@ EnsPMetacoordinateadaptor ensMetacoordinateadaptorNew(EnsPDatabaseadaptor dba)
 ** @@
 ******************************************************************************/
 
-static void metaCoordinateadaptorClearNameCache(void **key,
-                                                void **value, void *cl)
+static void metacoordinateadaptorClearNameCache(void **key,
+                                                void **value,
+                                                void *cl)
 {
     void *Pcsid = NULL;
-    
+
     if(!key)
-	return;
-    
+        return;
+
     if(!*key)
-	return;
-    
+        return;
+
     if(!value)
-	return;
-    
+        return;
+
     if(!*value)
-	return;
-    
+        return;
+
     (void) cl;
-    
+
     ajStrDel((AjPStr *) key);
-    
+
     while(ajListPop(*((AjPList *) value), &Pcsid))
-	AJFREE(Pcsid);
-    
+        AJFREE(Pcsid);
+
     ajListFree((AjPList *) value);
-    
+
     return;
 }
 
 
 
 
-/* @funcstatic metaCoordinateadaptorClearLengthCacheL2 ************************
+/* @funcstatic metacoordinateadaptorClearLengthCacheL2 ************************
 **
 ** An ajTableMapDel 'apply' function to clear the Ensembl Meta-Coordinate
 ** Adaptor-internal maximum length cache. This function clears the
@@ -324,34 +365,35 @@ static void metaCoordinateadaptorClearNameCache(void **key,
 ** @@
 ******************************************************************************/
 
-static void metaCoordinateadaptorClearLengthCacheL2(void **key, void **value,
+static void metacoordinateadaptorClearLengthCacheL2(void **key,
+                                                    void **value,
                                                     void *cl)
 {
     if(!key)
-	return;
-    
+        return;
+
     if(!*key)
-	return;
-    
+        return;
+
     if(!value)
-	return;
-    
+        return;
+
     if(!*value)
-	return;
-    
+        return;
+
     (void) cl;
-    
+
     ajStrDel((AjPStr *) key);
-    
+
     AJFREE(*value);
-    
+
     return;
 }
 
 
 
 
-/* @funcstatic metaCoordinateadaptorClearLengthCacheL1 ************************
+/* @funcstatic metacoordinateadaptorClearLengthCacheL1 ************************
 **
 ** An ajTableMapDel 'apply' function to clear the Ensembl Meta-Coordinate
 ** Adaptor-internal maximum length cache. This function clears the
@@ -367,31 +409,32 @@ static void metaCoordinateadaptorClearLengthCacheL2(void **key, void **value,
 ** @@
 ******************************************************************************/
 
-static void metaCoordinateadaptorClearLengthCacheL1(void **key, void **value,
+static void metacoordinateadaptorClearLengthCacheL1(void **key,
+                                                    void **value,
                                                     void *cl)
 {
     if(!key)
-	return;
-    
+        return;
+
     if(!*key)
-	return;
-    
+        return;
+
     if(!value)
-	return;
-    
+        return;
+
     if(!*value)
-	return;
-    
+        return;
+
     (void) cl;
-    
+
     AJFREE(*key);
-    
+
     ajTableMapDel(*((AjPTable *) value),
-		  metaCoordinateadaptorClearLengthCacheL2,
-		  NULL);
-    
+                  metacoordinateadaptorClearLengthCacheL2,
+                  NULL);
+
     ajTableFree((AjPTable *) value);
-    
+
     return;
 }
 
@@ -408,8 +451,8 @@ static void metaCoordinateadaptorClearLengthCacheL1(void **key, void **value,
 **
 ** @nam3rule Del Destroy (free) an Ensembl Meta-Coordinate Adaptor object
 **
-** @argrule * Padaptor [EnsPMetacoordinateadaptor*] Ensembl Meta-Coordinate
-**                                                  Adaptor object address
+** @argrule * Pmca [EnsPMetacoordinateadaptor*] Ensembl Meta-Coordinate
+**                                              Adaptor object address
 **
 ** @valrule * [void]
 **
@@ -425,43 +468,78 @@ static void metaCoordinateadaptorClearLengthCacheL1(void **key, void **value,
 ** This function also clears the internal cordinate system identifer and
 ** maximum length caches.
 **
-** @param [d] Padaptor [EnsPMetacoordinateadaptor*] Ensembl Meta-Coordinate
-**                                                  Adaptor address
+** Ensembl Object Adaptors are singleton objects that are registered in the
+** Ensembl Registry and weakly referenced by Ensembl Objects that have been
+** instantiated by it. Therefore, Ensembl Object Adaptors should never be
+** destroyed directly. Upon exit, the Ensembl Registry will call this function
+** if required.
+**
+** @param [d] Pmca [EnsPMetacoordinateadaptor*] Ensembl Meta-Coordinate
+**                                              Adaptor address
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ensMetacoordinateadaptorDel(EnsPMetacoordinateadaptor *Padaptor)
+void ensMetacoordinateadaptorDel(EnsPMetacoordinateadaptor *Pmca)
 {
     EnsPMetacoordinateadaptor pthis = NULL;
-    
-    if(!Padaptor)
-	return;
-    
-    if(!*Padaptor)
-	return;
 
-    pthis = *Padaptor;
-    
+    if(!Pmca)
+        return;
+
+    if(!*Pmca)
+        return;
+
+    pthis = *Pmca;
+
     ajTableMapDel(pthis->CacheByName,
-		  metaCoordinateadaptorClearNameCache,
-		  NULL);
-    
+                  metacoordinateadaptorClearNameCache,
+                  NULL);
+
     ajTableFree(&pthis->CacheByName);
-    
+
     ajTableMapDel(pthis->CacheByLength,
-		  metaCoordinateadaptorClearLengthCacheL1,
-		  NULL);
-    
+                  metacoordinateadaptorClearLengthCacheL1,
+                  NULL);
+
     ajTableFree(&pthis->CacheByLength);
-    
+
     AJFREE(pthis);
 
-    *Padaptor = NULL;
-    
+    *Pmca = NULL;
+
     return;
 }
+
+
+
+
+/* @section element retrieval *************************************************
+**
+** Functions for returning Ensembl Coordinate Systems.
+**
+** @fdata [EnsPMetacoordinateadaptor]
+** @fnote None
+**
+** @nam3rule Fetch Fetch Fetch data
+** @nam4rule FetchAll Fetch all data
+** @nam5rule FetchAllCoordsystems Fetch coordinate systems
+** @nam3rule Get   Return an attribute
+** @nam4rule GetMaximumlength   Return maximum length
+**
+** @argrule * mca [const EnsPMetacoordinateadaptor] Ensembl Meta-Coordinate
+**                                                Adaptor
+** @argrule Fetch name [const AjPStr] Ensembl Feature (i.e. SQL table) name
+** @argrule Fetch css [AjPList] AJAX List of Ensembl Coordinate Systems
+** @argrule Get cs [const EnsPCoordsystem] Ensembl Coordinate System
+** @argrule Get name [const AjPStr] Ensembl Feature (i.e. SQL table) name
+**
+** @valrule * [AjBool] True on success
+** @valrule *Maximumlength [ajuint] Maximum length
+**
+** @fcategory use
+******************************************************************************/
 
 
 
@@ -473,89 +551,88 @@ void ensMetacoordinateadaptorDel(EnsPMetacoordinateadaptor *Padaptor)
 **
 ** @cc Bio::EnsEMBL::DBSQL::MetaCoordContainer::
 **     fetch_all_Coordsystems_by_feature_type
-** @param [r] adaptor [EnsPMetacoordinateadaptor] Ensembl Meta-Coordinate
-**                                                Adaptor
+** @param [r] mca [const EnsPMetacoordinateadaptor] Ensembl Meta-Coordinate
+**                                                 Adaptor
 ** @param [r] name [const AjPStr] Ensembl Feature (i.e. SQL table) name
-** @param [u] cslist [AjPList] AJAX List of Ensembl Coordinate Systems
+** @param [u] css [AjPList] AJAX List of Ensembl Coordinate Systems
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
 AjBool ensMetacoordinateadaptorFetchAllCoordsystems(
-    EnsPMetacoordinateadaptor adaptor,
+    const EnsPMetacoordinateadaptor mca,
     const AjPStr name,
-    AjPList cslist)
+    AjPList css)
 {
     ajuint *Pcsid = NULL;
-    
+
     AjIList iter = NULL;
     AjPList list = NULL;
-    
-    EnsPCoordsystem cs = NULL;
+
+    EnsPCoordsystem cs         = NULL;
     EnsPCoordsystemadaptor csa = NULL;
-    
-    /*
-     ajDebug("ensMetacoordinateadaptorFetchAllCoordsystems\n"
-	     "  adaptor %p\n"
-	     "  name '%S'\n"
-	     "  cslist %p\n",
-	     adaptor,
-	     name,
-	     cslist);
-     */
-    
-    if(!adaptor)
-	return ajFalse;
-    
+
+    if(ajDebugTest("ensMetacoordinateadaptorFetchAllCoordsystems"))
+        ajDebug("ensMetacoordinateadaptorFetchAllCoordsystems\n"
+                "  mca %p\n"
+                "  name '%S'\n"
+                "  css %p\n",
+                mca,
+                name,
+                css);
+
+    if(!mca)
+        return ajFalse;
+
     if(!name)
-	return ajFalse;
-    
-    list = (AjPList) ajTableFetch(adaptor->CacheByName, (const void *) name);
-    
+        return ajFalse;
+
+    list = (AjPList) ajTableFetch(mca->CacheByName, (const void *) name);
+
     if(!list)
     {
-	ajDebug("ensMetacoordinateadaptorFetchAllCoordsystems "
-		"got no Coordinate System List for name '%S'\n", name);
-	
-	return ajTrue;
+        ajDebug("ensMetacoordinateadaptorFetchAllCoordsystems "
+                "got no Coordinate System List for name '%S'\n", name);
+
+        return ajTrue;
     }
-    
-    csa = ensRegistryGetCoordsystemadaptor(adaptor->Adaptor);
-    
+
+    csa = ensRegistryGetCoordsystemadaptor(mca->Adaptor);
+
     iter = ajListIterNew(list);
-    
+
     while(!ajListIterDone(iter))
     {
-	Pcsid = (ajuint *) ajListIterGet(iter);
-	
-	ensCoordsystemadaptorFetchByIdentifier(csa, *Pcsid, &cs);
-	
-	if(cs)
-	    ajListPush(cslist, (void *) cs);
-	else
-	    ajFatal("ensMetacoordinateadaptorFetchAllCoordsystems "
-		    "Ensembl Core 'meta_coord' table refers to non-existing "
-		    "Ensembl Coordinate System with identifier %u\n", *Pcsid);
+        Pcsid = (ajuint *) ajListIterGet(iter);
+
+        ensCoordsystemadaptorFetchByIdentifier(csa, *Pcsid, &cs);
+
+        if(cs)
+            ajListPush(css, (void *) cs);
+        else
+            ajFatal("ensMetacoordinateadaptorFetchAllCoordsystems "
+                    "Ensembl Core 'meta_coord' table refers to non-existing "
+                    "Ensembl Coordinate System with identifier %u\n", *Pcsid);
     }
-    
+
     ajListIterDel(&iter);
-    
+
     return ajTrue;
 }
 
 
 
 
-/* @func ensMetacoordinateadaptorGetMaximumLength *****************************
+/* @func ensMetacoordinateadaptorGetMaximumlength *****************************
 **
 ** Get the maximum length of a particular Ensembl Feature type in an
 ** Ensembl Coordinate System.
 **
 ** @cc Bio::EnsEMBL::DBSQL::MetaCoordContainer::
 **     fetch_max_length_by_Coordsystem_feature_type
-** @param [r] adaptor [EnsPMetacoordinateadaptor] Ensembl Meta-Coordinate
-**                                                Adaptor
+** @param [r] mca [const EnsPMetacoordinateadaptor] Ensembl Meta-Coordinate
+**                                                  Adaptor
 ** @param [r] cs [const EnsPCoordsystem] Ensembl Coordinate System
 ** @param [r] name [const AjPStr] Ensembl Feature (i.e. SQL table) name
 **
@@ -563,29 +640,29 @@ AjBool ensMetacoordinateadaptorFetchAllCoordsystems(
 ** @@
 ******************************************************************************/
 
-ajuint ensMetacoordinateadaptorGetMaximumLength(
-    EnsPMetacoordinateadaptor adaptor,
+ajuint ensMetacoordinateadaptorGetMaximumlength(
+    const EnsPMetacoordinateadaptor mca,
     const EnsPCoordsystem cs,
     const AjPStr name)
 {
     ajuint *Pcsid = NULL;
     ajuint *Plength = NULL;
-    
+
     AjPTable table = NULL;
-    
+
     AJNEW0(Pcsid);
-    
+
     *Pcsid = ensCoordsystemGetIdentifier(cs);
-    
+
     table = (AjPTable)
-	ajTableFetch(adaptor->CacheByLength, (const void *) Pcsid);
-    
+        ajTableFetch(mca->CacheByLength, (const void *) Pcsid);
+
     AJFREE(Pcsid);
-    
+
     if(table)
-	Plength = (ajuint *) ajTableFetch(table, (const void *) name);
+        Plength = (ajuint *) ajTableFetch(table, (const void *) name);
     else
-	return 0;
-    
+        return 0;
+
     return *Plength;
 }

@@ -771,6 +771,8 @@ static void nexusCodonsDel(AjPNexusCodons* pthys)
 }
 
 
+
+
 /* @funcstatic nexusTreesDel **************************************************
 **
 ** Destructor for AjPNexusTrees
@@ -909,7 +911,7 @@ static AjBool nexusBlockSave(AjPNexus thys, AjPList list,
 **
 ** @param [u] list [AjPList] List of block records
 ** @param [w] command [AjPStr*] Command name
-** @param [w] cmdstr [AjPStr*] Command kstring
+** @param [w] cmdstr [AjPStr*] Command string
 ** @return [AjBool] ajTrue on success
 ******************************************************************************/
 
@@ -1917,6 +1919,8 @@ static AjBool nexusVocab(const char* title, const AjPStr src,
 }
 
 
+
+
 /* @func ajNexusTrace *********************************************************
 **
 ** Reports the contents of a Nexus object to the debug file
@@ -2607,7 +2611,7 @@ static AjBool nexusSetSequences(AjPNexus thys)
 
 	if (!taxlabel || thys->Characters->Interleave ||
 	    (ajStrGetLen(seqstr) >= thys->Characters->Nchar))
-	{				/* next taxlabel */
+	{				/* next tax label */
 	    if (!ajRegExec(word, rdline))
 		continue;
 

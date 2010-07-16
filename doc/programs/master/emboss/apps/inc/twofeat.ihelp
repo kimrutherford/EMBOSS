@@ -1,5 +1,5 @@
 Finds neighbouring pairs of features in sequence(s)
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -7,11 +7,11 @@ Version: EMBOSS:6.2.0
    -atype              string     [*] By default every feature in the feature
                                   table is allowed. You can set this to be any
                                   feature type you wish to allow.
-                                  See http://www3.ebi.ac.uk/Services/WebFeat/
-                                  for a list of the EMBL feature types and see
+                                  See http://www.ebi.ac.uk/embl/WebFeat/ for a
+                                  list of the EMBL feature types and see
                                   Appendix A of the Swissprot user manual in
-                                  http://www.expasy.ch/txt/userman.txt for a
-                                  list of the Swissprot feature types.
+                                  http://www.expasy.org/sprot/userman.html for
+                                  a list of the Swissprot feature types.
                                   The type may be wildcarded by using '*'.
                                   If you wish to allow more than one type,
                                   separate their names with the character '|',
@@ -20,11 +20,11 @@ Version: EMBOSS:6.2.0
    -btype              string     [*] By default every feature in the feature
                                   table is allowed. You can set this to be any
                                   feature type you wish to allow.
-                                  See http://www3.ebi.ac.uk/Services/WebFeat/
-                                  for a list of the EMBL feature types and see
+                                  See http://www.ebi.ac.uk/embl/WebFeat/ for a
+                                  list of the EMBL feature types and see
                                   Appendix A of the Swissprot user manual in
-                                  http://www.expasy.ch/txt/userman.txt for a
-                                  list of the Swissprot feature types.
+                                  http://www.expasy.org/sprot/userman.html for
+                                  a list of the Swissprot feature types.
                                   The type may be wildcarded by using '*'.
                                   If you wish to allow more than one type,
                                   separate their names with the character '|',
@@ -214,14 +214,14 @@ Version: EMBOSS:6.2.0
                                   then you can specify the 'type' name of the
                                   new feature here. By default every feature
                                   in the feature table is allowed. See
-                                  http://www3.ebi.ac.uk/Services/WebFeat/ for
-                                  a list of the EMBL feature types and see
+                                  http://www.ebi.ac.uk/embl/WebFeat/ for a
+                                  list of the EMBL feature types and see
                                   Appendix A of the Swissprot user manual in
-                                  http://www.expasy.ch/txt/userman.txt for a
-                                  list of the Swissprot feature types. If you
-                                  specify an invalid feature type name, then
-                                  the default name 'misc_feature' is used.
-                                  (Any string)
+                                  http://www.expasy.org/sprot/userman.html for
+                                  a list of the Swissprot feature types. If
+                                  you specify an invalid feature type name,
+                                  then the default name 'misc_feature' is
+                                  used. (Any string)
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:

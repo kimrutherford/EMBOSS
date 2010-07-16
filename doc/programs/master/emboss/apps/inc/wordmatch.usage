@@ -8,7 +8,7 @@
 Finds regions of identity (exact matches) of two sequences
 Word size [4]: <b></b>
 Output alignment [hba_human.wordmatch]: <b></b>
-Features output [hba_human.gff]: <b></b>
+Features output [HBA_HUMAN.gff]: <b></b>
 Second features output [HBB_HUMAN.gff]: <b></b>
 
 </pre></td></tr></table><p>

@@ -45,7 +45,7 @@ extern "C"
 /* ======================================================================= */
 AjPPdb ajPdbReadRawNew(AjPFile inf, const AjPStr pdbid, ajint min_chain_size, 
 		       ajint max_mismatch, ajint max_trim, AjBool camask, 
-		       AjBool camask1, AjBool atommask, AjPFile logf);
+		       AjBool camask1, AjBool atommask, AjPFile flog);
 
 AjBool  ajPdbWriteAllRaw(ajint mode, const AjPPdb pdb, AjPFile outf, 
 			  AjPFile errf);

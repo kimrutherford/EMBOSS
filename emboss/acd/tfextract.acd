@@ -5,7 +5,9 @@ application: tfextract [
   gui: "no"
   batch: "no"
   cpu: "low"
-  relations: "EDAM: Database processing"
+  relations: "/edam/topic/0000110 Transcription regulatory sequence analysis"
+  relations: "/edam/topic/0000091 Database and file management"
+  relations: "/edam/operation/0001812 File loading"
 ]
 
 section: input [
@@ -17,7 +19,7 @@ section: input [
     parameter: "Y"
     information: "Transfac database sites file"
     knowntype: "transfac site"
-    relations:  "EDAM: TRANSFAC database"                              
+    relations:  "/edam/data/0002147 Transcription factor binding sites"                              
   ]
 
 endsection: input

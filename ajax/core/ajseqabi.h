@@ -18,6 +18,7 @@ void       ajSeqABIGetBasePosition(AjPFile fp,ajlong numBases,
 				   AjPShort* basePositions);
 ajint      ajSeqABIGetBasePosOffset(AjPFile fp);
 float      ajSeqABIGetBaseSpace(AjPFile fp);
+ajint      ajSeqABIGetConfidOffset(AjPFile fp);
 void       ajSeqABIGetData(AjPFile fp,const ajlong *Offset,ajlong numPoints,
 			   AjPInt2d trace);
 ajint      ajSeqABIGetFWO(AjPFile fp);
@@ -30,6 +31,8 @@ void       ajSeqABIGetSignal(AjPFile fp,ajlong fwo_,
 			     ajshort *sigG,ajshort *sigT);
 AjBool     ajSeqABIGetTraceOffset(AjPFile fp, ajlong *Offset);
 AjBool     ajSeqABIMachineName(AjPFile fp,AjPStr *machine);
+AjBool     ajSeqABIReadConfid(AjPFile fp,ajlong pconO,ajlong numBases,
+                              float *Pqual);
 AjBool     ajSeqABIReadSeq(AjPFile fp,ajlong baseO,ajlong numBases,
 			   AjPStr* nseq);
 AjBool     ajSeqABISampleName(AjPFile fp, AjPStr *sample);

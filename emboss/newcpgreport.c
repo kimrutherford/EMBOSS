@@ -37,7 +37,7 @@
 static void newcpgreport_findbases(const AjPStr substr, ajint len,
 				   ajint window, ajint shift, float *obsexp,
 				   float *xypc, const AjPStr bases,
-				   float *obsexpmax, ajint *plstart,
+				   float *obsexpmax, ajint *plotstart,
 				   ajint *plotend);
 static void newcpgreport_countbases(const char *seq, const char *bases,
 				    ajint window,

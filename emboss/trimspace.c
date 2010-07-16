@@ -21,6 +21,9 @@
 
 #include "emboss.h"
 
+
+
+
 /* @prog trimspace ************************************************************
 **
 ** Remove extra whitespace from an ASCII text file

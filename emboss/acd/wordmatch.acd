@@ -1,7 +1,8 @@
 application: wordmatch [
   documentation: "Finds regions of identity (exact matches) of two sequences"
   groups: "Alignment:Local"
-  relations: "EDAM: Sequence word comparison"
+  relations: "/edam/topic/0000159 Sequence comparison"
+  relations: "/edam/operation/0000288 Sequence word comparison"
 ]
 
 section: input [
@@ -11,15 +12,19 @@ section: input [
 
   seqset: asequence [
     parameter: "Y"
-    relations: "EDAM: Sequence" 
     aligned: "N"  
     type: "any"                                         
+    relations: "/edam/data/0000848 Sequence" 
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more" 
   ]
 
   seqall: bsequence [
     parameter: "Y"
-    relations: "EDAM: Sequence"                                            
     type: "@($(acdprotein) ? stopprotein : nucleotide)"
+    relations: "/edam/data/0000848 Sequence"                                            
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more" 
   ]
 
 endsection: input
@@ -34,7 +39,7 @@ section: required [
     default: "4"
     minimum: "2"
     information: "Word size"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001250 Word size"
   ]
 
 endsection: required
@@ -47,50 +52,48 @@ section: output [
   toggle: dumpalign [
     default: "Y"
     additional: "Y"
-    information: "Dump all matches as alignments"
-    relations: "EDAM: Generic boolean"                                     
+    information: "Dump matches as alignments"
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
   
   align: outfile [
-    standard: "$(dumpalign)"
+    parameter: "Y"
     nullok: "@(!$(dumpalign))"
-    nulldefault: "@(!$(dumpalign))"
     aformat: "match"
     minseqs: "2"
-    relations: "EDAM: Pairwise sequence alignment data"                    
+    relations: "/edam/data/0001381 Pairwise sequence alignment"                    
   ]
-  
+ 
   outfile: logfile [
     additional: "Y"
     default: "wordmatch.log"
     knowntype: "wordmatch log"
     information: "Wordmatch log output file"
-    help: "Log file reports statistics on kmer frequency
-                  distribution and number of matches in the seqall sequences
-                  for each sequence in the seqset"
-    relations:  "EDAM: EMBOSS wordmatch log file"                 
+    help: "Statistics on distribution of kmers and matches"
+    relations:  "/edam/data/0001678 Tool log"
   ]
   
   toggle: dumpfeat [
     default: "Y"
     additional: "Y"
-    information: "Dump all matches as feature files"
-    relations: "EDAM: Generic boolean"                                     
+    information: "Dump matches as feature files"
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   featout: aoutfeat [
-    standard: "$(dumpfeat)"
+    parameter: "Y"
     nullok: "@(!$(dumpfeat))"
+    ofname: "$(asequence.name)"
     offormat: "gff"
-    relations: "EDAM: Sequence feature table"                              
+    relations: "/edam/data/0001270 Sequence feature table"                              
   ]
 
   featout: boutfeat [
-    standard: "$(dumpfeat)"
-    nullok: "@(!$(dumpfeat))"
+    parameter: "Y"
     ofname: "$(bsequence.name)"
     offormat: "gff"
-    relations: "EDAM: Sequence feature table"                              
+    nullok: "@(!$(dumpfeat))"
+    relations: "/edam/data/0001270 Sequence feature table"                              
   ]
-
+ 
 endsection: output

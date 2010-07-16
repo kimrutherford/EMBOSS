@@ -130,7 +130,11 @@ int main(int argc, char **argv)
 	    ajStrAssignC(&tmpstr, "(default)");
 	ajFmtPrintF(outfile, "Emboss_Stdout: %S\n", tmpstr);
 	    
-	if (!ajNamGetValueC("warnrange", &tmpstr))
+	if (!ajNamGetValueC("debug", &tmpstr))
+	    ajStrAssignC(&tmpstr, "(default)");
+	ajFmtPrintF(outfile, "Emboss_Debug: %S\n", tmpstr);
+	    
+	if (!ajNamGetValueC("acdwarnrange", &tmpstr))
 	    ajStrAssignC(&tmpstr, "(default)");
 	ajFmtPrintF(outfile, "Emboss_WarnRange: %S\n", tmpstr);
 	    

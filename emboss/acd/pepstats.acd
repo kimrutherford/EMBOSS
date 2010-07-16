@@ -1,7 +1,8 @@
 application: pepstats [
   documentation: "Calculates statistics of protein properties"
   groups: "Protein:Composition"
-  relations: "EDAM: General protein properties calculation"
+  relations: "/edam/topic/0000123 Protein physicochemical properties"
+  relations: "/edam/operation/0000250 Protein physicochemical property calculation"
 ]
 
 section: input [
@@ -12,7 +13,9 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "protein"
-    relations: "EDAM: Protein sequence record"                             
+    relations: "/edam/data/0001219 Pure protein sequence"
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more" 
   ]
 
   datafile: aadata [
@@ -20,7 +23,7 @@ section: input [
     help: "Amino acid properties"
     default: "Eamino.dat"
     knowntype: "amino acid properties"
-    relations:  "EDAM: Amino acid chemical classes data"               
+    relations:  "/edam/data/0001502 Amino acid chemical classes data"               
   ]
 
   datafile: mwdata [
@@ -28,7 +31,7 @@ section: input [
     help: "Molecular weight data for amino acids"
     default: "Emolwt.dat"
     knowntype: "molecular weights"
-    relations:  "EDAM: Amino acid molecular weight data"               
+    relations:  "/edam/data/0001505 Amino acid molecular weight data"               
   ]
 
 endsection: input
@@ -41,13 +44,13 @@ section: advanced [
   boolean: termini [
     default: "Y"
     information: "Include charge at N and C terminus"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: mono [
     default: "N"
     information: "Use monoisotopic weights"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
 endsection: advanced
@@ -61,7 +64,7 @@ section: output [
     parameter: "Y"
     knowntype: "pepstats output"
     information: "Pepstats program output file"
-    relations:  "EDAM: Protein physicochemical profile"                
+    relations:  "/edam/data/0000897 Protein physicochemical property"                
   ]
 
 endsection: output

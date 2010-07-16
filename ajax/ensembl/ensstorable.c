@@ -4,10 +4,8 @@
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @version $Revision: 1.3 $
+** @version $Revision: 1.6 $
 ** @@
-**
-** Bio::EnsEMBL::Storable CVS Revision: 1.8
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -32,19 +30,29 @@
 #include "ensstorable.h"
 
 
+
+
 /* @filesection ensstorable ***************************************************
 **
 ** @nam1rule ens Function belongs to the AJAX Ensembl library
+**
+******************************************************************************/
+
+
+
+
+/* @datasection [EnsPStorable] Ensembl Storable *******************************
+**
+** Functions for Ensembl Storables
+**
+** @cc Bio::EnsEMBL::Storable CVS Revision: 1.19
+**
 ** @nam2rule Storable Ensembl Storable objects
 **
 ******************************************************************************/
 
-/* @datasection [EnsPStorable] Ensembl Storable ********************************
-**
-** Functions for Ensembl Storables
-**
-**
-******************************************************************************/
+
+
 
 /* @section functions *********************************************************
 **
@@ -60,7 +68,7 @@
 **
 ** Default Ensembl Storable constructor.
 **
-** @param [r] type [AjEnum] Ensembl Storable Object Type
+** @param [r] type [EnsEStorableType] Ensembl Storable Object Type
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 ** @param [r] adaptor [void*] Corresponding Ensembl Object Adaptor
 **
@@ -68,20 +76,22 @@
 ** @@
 ******************************************************************************/
 
-EnsPStorable ensStorableNew(AjEnum type, ajuint identifier, void* adaptor)
+EnsPStorable ensStorableNew(EnsEStorableType type,
+                            ajuint identifier,
+                            void* adaptor)
 {
     EnsPStorable storable = NULL;
-    
+
     AJNEW0(storable);
-    
+
     storable->Type = type;
-    
+
     storable->Identifier = identifier;
-    
+
     storable->Adaptor = adaptor;
-    
+
     storable->Use = 1;
-    
+
     return storable;
 }
 
@@ -101,17 +111,17 @@ EnsPStorable ensStorableNew(AjEnum type, ajuint identifier, void* adaptor)
 EnsPStorable ensStorableNewObj(const EnsPStorable object)
 {
     EnsPStorable storable = NULL;
-    
+
     AJNEW0(storable);
-    
+
     storable->Type = object->Type;
-    
+
     storable->Adaptor = object->Adaptor;
-    
+
     storable->Identifier = object->Identifier;
-    
+
     storable->Use = 1;
-    
+
     return storable;
 }
 
@@ -132,10 +142,10 @@ EnsPStorable ensStorableNewObj(const EnsPStorable object)
 EnsPStorable ensStorableNewRef(EnsPStorable storable)
 {
     if(!storable)
-	return NULL;
-    
+        return NULL;
+
     storable->Use++;
-    
+
     return storable;
 }
 
@@ -155,28 +165,28 @@ EnsPStorable ensStorableNewRef(EnsPStorable storable)
 void ensStorableDel(EnsPStorable *Pstorable)
 {
     EnsPStorable pthis = NULL;
-    
+
     if(!Pstorable)
         return;
-    
+
     if(!*Pstorable)
         return;
 
     pthis = *Pstorable;
-    
+
     pthis->Use--;
-    
+
     if(pthis->Use)
     {
-	*Pstorable = NULL;
-	
-	return;
+        *Pstorable = NULL;
+
+        return;
     }
-    
+
     AJFREE(pthis);
 
     *Pstorable = NULL;
-    
+
     return;
 }
 
@@ -189,15 +199,15 @@ void ensStorableDel(EnsPStorable *Pstorable)
 **
 ** @param [r] storable [const EnsPStorable] Ensembl Storable
 **
-** @return [AjEnum] Ensembl Storable Object type
+** @return [EnsEStorableType] Ensembl Storable Object type
 ** @@
 ******************************************************************************/
 
-AjEnum ensStorableGetType(const EnsPStorable storable)
+EnsEStorableType ensStorableGetType(const EnsPStorable storable)
 {
     if(!storable)
         return ensEStorableTypeNULL;
-    
+
     return storable->Type;
 }
 
@@ -218,7 +228,7 @@ void* ensStorableGetAdaptor(const EnsPStorable storable)
 {
     if(!storable)
         return NULL;
-    
+
     return storable->Adaptor;
 }
 
@@ -239,7 +249,7 @@ ajuint ensStorableGetIdentifier(const EnsPStorable storable)
 {
     if(!storable)
         return 0;
-    
+
     return storable->Identifier;
 }
 
@@ -261,12 +271,12 @@ AjBool ensStorableSetAdaptor(EnsPStorable storable, void* adaptor)
 {
     if(!storable)
         return ajFalse;
-    
+
     if(!adaptor)
         return ajFalse;
-    
+
     storable->Adaptor = adaptor;
-    
+
     return ajTrue;
 }
 
@@ -288,12 +298,12 @@ AjBool ensStorableSetIdentifier(EnsPStorable storable, ajuint identifier)
 {
     if(!storable)
         return ajFalse;
-    
+
     if(!identifier)
         return ajFalse;
-    
+
     storable->Identifier = identifier;
-    
+
     return ajTrue;
 }
 
@@ -317,19 +327,19 @@ AjBool ensStorableIsStored(const EnsPStorable storable,
 {
     if(!storable)
         return ajFalse;
-    
+
     if(!dbc)
         return ajFalse;
-    
+
     if(storable->Identifier && (!storable->Adaptor))
         return ajFalse;
-    
+
     if(storable->Adaptor && (!storable->Identifier))
         return ajFalse;
-    
-    if((!storable->Identifier) && (! storable->Adaptor))
+
+    if((!storable->Identifier) && (!storable->Adaptor))
         return ajFalse;
-    
+
     /*
     ** TODO: Compare host, port and dbname of the Database Connection.
     ** How to get at the Database Connection?
@@ -337,6 +347,6 @@ AjBool ensStorableIsStored(const EnsPStorable storable,
     ** object adaptor, or we use direct object access.
     ** Objectadaptor->Databaseadaptor->Databaseconnection
     */
-    
+
     return ajFalse;
 }

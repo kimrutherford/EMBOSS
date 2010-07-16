@@ -1,5 +1,5 @@
 Remove poly-A tails from nucleotide sequences
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -49,7 +49,7 @@ Version: EMBOSS:6.2.0
 
    Advanced (Unprompted) qualifiers:
    -[no]fiveprime      boolean    [Y] If this is set true, then the 5' end of
-                                  teh sequence is inspected for poly-T tails.
+                                  the sequence is inspected for poly-T tails.
                                   These will be removed if they are longer
                                   than any 3' poly-A tails. If this is false,
                                   then the 5' end is ignored.

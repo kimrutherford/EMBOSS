@@ -5,13 +5,5 @@ http://www.cbs.dtu.dk/index.shtml
 The original CBS group application must be licensed and installed to
 use this wrapper.
 
-
 <p>
-Although we take every care to ensure that the results of the EMBOSS
-version are identical to those from the original package, we recommend
-that you check your inputs give the same results in both versions
-before publication.
-
-<p>
-Please report all bugs in the EMBOSS version to the EMBOSS bug team,
-not to the original author.
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.

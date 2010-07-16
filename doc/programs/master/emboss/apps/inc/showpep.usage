@@ -72,9 +72,9 @@ Protein sequence can be displayed in three-letter codes. (The codes are displaye
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>showpep tsw:rs24_fugru -three -format 2 </b>
+% <b>showpep tsw:rs24_takru -three -format 2 </b>
 Displays protein sequences with features in pretty format
-Output file [rs24_fugru.showpep]: <b></b>
+Output file [rs24_takru.showpep]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

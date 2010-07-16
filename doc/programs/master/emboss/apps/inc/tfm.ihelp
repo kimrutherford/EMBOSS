@@ -1,5 +1,5 @@
 Displays full documentation for an application
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-program]           string     Enter the name of an EMBOSS program (Any

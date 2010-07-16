@@ -91,6 +91,9 @@ static AjPStr dbifastaTmpFd  = NULL;
 static AjPStr id = NULL;
 static AjPList* fdl = NULL;
 
+
+
+
 /* @prog dbifasta *************************************************************
 **
 ** Index a fasta database

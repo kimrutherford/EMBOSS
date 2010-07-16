@@ -80,6 +80,9 @@ __deprecated void *ajMemCalloc0(size_t count, size_t nbytes,
 	__FILE__, __LINE__, AJFALSE))
 #define AJCRESIZETRY(ptr, nbytes) 	((ptr) = ajMemResize((ptr), \
 	(nbytes)*sizeof *(ptr), __FILE__, __LINE__, AJTRUE))
+#define AJCRESIZETRY0(ptr, oldbytes, nbytes) ((ptr) = ajMemResizeZero((ptr), \
+        (oldbytes)*sizeof *(ptr), (nbytes)*sizeof *(ptr), \
+        __FILE__, __LINE__, AJTRUE))
 #define AJMPROBE(ptr) \
 	ajMemProbe(ptr, __FILE__, __LINE__)
 

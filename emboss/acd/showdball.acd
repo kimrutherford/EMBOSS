@@ -2,7 +2,8 @@ application: showdball
 [
   documentation: "Display information on biological databases"
   groups: "Display, Information"
-  relations: "EDAM: Database information"
+  relations: "/edam/topic/0000088 Literature and documentation"
+  relations: "/edam/operation/0000516 Database information retrieval"
 ]
 
 
@@ -20,9 +21,9 @@ section: input
       default: ""
       additional: "Y"
       information: "Name(s) of one or more databases or database categories to display information on"
-      help: "Standard names of databases are given in the EMBOSS datafile 'dbref.dat'.
+      help: "Standard names of databases are given in the EMBOSS datafile 'dbref.dat'."
       knowntype: "emboss database name"
-    relations:  "EDAM: Generic database name"                          
+    relations:  "/edam/data/0001056 Database name"                          
   ]
 
   datafile: dbref
@@ -31,7 +32,7 @@ section: input
     help: "File of database information including identifier, description, type, URL etc."
     default: "dbref.dat"
     knowntype: "database info"
-    relations:  "EDAM: Database bibliographic information"             
+    relations:  "/edam/data/0000957 Database metadata "             
   ]
 
 endsection: input
@@ -57,7 +58,7 @@ section: required
     information: "Select one or more categories"
     help:        "This specifies the SwissProt categories of database to display in the output file"
     button:      "Y"
-    relations: "EDAM: Generic string array"                                
+    relations: "/edam/data/0000581 Database"
   ]
 
   selection: edam
@@ -71,7 +72,7 @@ section: required
     information: "Select one or more categories"
     help:        "This specifies the SwissProt categories of database to display in the output file"
     button:      "Y"
-    relations: "EDAM: Generic string array"                                
+    relations: "/edam/data/0000581 Database"
   ]
 
 
@@ -91,7 +92,7 @@ section: required
     information: "Select one or more categories"
     help: "This specifies the SwissProt categories of database to display in the output file"
     button: "Y"
-    relations: "EDAM: Generic string array"                                
+    relations: "/edam/data/0002149 Database category"                                
   ]
 
   selection: display
@@ -101,7 +102,7 @@ section: required
     values: "database;category;edam;all"
     information: "Output display option"
     help: "The output can include named database(s) only ('database' option), databases in one or more categories from SwissProt ('category') or the EDAM ontology ('edam'), or all known databases ('all')."
-    relations: "EDAM: Generic string array"                                
+    relations: "/edam/data/0002152 Rendering parameter"
   ]
 
 endsection: required
@@ -122,7 +123,7 @@ section: additional
     default: "N"
     information: "Format output as an HTML table"
     outputmodifier: "Y"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
 
@@ -132,7 +133,7 @@ section: additional
       additional: "Y"
       information: "Category of database to give information on"
       knowntype: "database category name"
-    relations: "EDAM: Generic string"                                      
+    relations: "/edam/data/0002149 Database category"                                      
   ]
 
 #
@@ -145,7 +146,7 @@ section: additional
     default: "N"
     information: "Display all columns"
     help: "This will display all available columns.  It can be combined with -noCOLNMAE to display all but the named columns e.g. '-full -nodesc'."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: name 
@@ -154,7 +155,7 @@ section: additional
     default: "Y"
     information: "Display 'name' column"
     help: "This displays the column of database names"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: server  
@@ -163,7 +164,7 @@ section: additional
     default: "Y"
     information: "Display 'server' column"
     help: "This displays the column of URLs of database servers"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: desc 
@@ -172,7 +173,7 @@ section: additional
     default: "Y"
     information: "Display 'description' column"
     help: "This displays the column of database short descriptions"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
 endsection: additional
@@ -191,14 +192,14 @@ section: advanced
   [
     default: "$(full)"
     information: "Display column of database type (parent node) from EDAM ontology"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: type 
   [
     default: "$(full)"
     information: "Display column of database type (from SwissProt or EMBL definition)"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
 #
@@ -222,7 +223,7 @@ section: output
     additional: "Y"
     default: "stdout"
     knowntype: "showdball output"
-    relations:  "EDAM:Database information report"                         
+    relations:  "/edam/data/0000957 Database metadata"                         
   ]
 
 endsection: output

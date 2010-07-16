@@ -11,7 +11,6 @@ extern "C"
 #define ensembl_h
 
 #include "ajax.h"
-#include "ajgraph.h"
 
 #include "ensdatabaseconnection.h"
 #include "ensdatabaseadaptor.h"
@@ -26,24 +25,38 @@ extern "C"
 #include "enscache.h"
 #include "enscoordsystem.h"
 #include "ensdata.h"
+#include "ensdatabaseentry.h"
 #include "ensdensity.h"
 #include "ensditag.h"
 #include "ensexon.h"
 #include "ensexternaldatabase.h"
 #include "ensfeature.h"
+#include "ensgene.h"
+#include "ensgvdata.h"
+#include "ensgvindividual.h"
+#include "ensgvpopulation.h"
+#include "ensgvsample.h"
 #include "ensintron.h"
+#include "enskaryotype.h"
 #include "ensmapper.h"
 #include "ensmarker.h"
-#include "ensmetainformation.h"
 #include "ensmetacoordinate.h"
+#include "ensmetainformation.h"
+#include "ensmiscellaneous.h"
+#include "ensprediction.h"
 #include "ensprojectionsegment.h"
 #include "ensrepeat.h"
 #include "ensseqregion.h"
+#include "enssequence.h"
+#include "enssequenceedit.h"
 #include "ensslice.h"
 #include "enstable.h"
+#include "enstranscript.h"
+#include "enstranslation.h"
 #include "ensutility.h"
+#include "ensvariation.h"
 
-#endif
+#endif /* ensembl_h */
 
 #ifdef __cplusplus
 }

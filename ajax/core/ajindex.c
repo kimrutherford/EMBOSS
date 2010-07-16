@@ -632,7 +632,7 @@ static AjPBtpage btreeCacheLruUnlink(AjPBtcache cache)
 ** Destage a cache page
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [u] cpage [AjPBtpage] cache papge 
+** @param [u] cpage [AjPBtpage] cache page
 **
 ** @return [void]
 ** @@
@@ -934,7 +934,7 @@ void ajBtreeCreateRootNode(AjPBtcache cache, ajlong rootpage)
     prev        = 0L;
     overflow    = 0L;
 
-    /* Don't reuse the variables. Endianness may be changed */ 
+    /* Don't reuse the variables. Endian-ness may be changed */
     SBT_NODETYPE(p,nodetype);
     SBT_BLOCKNUMBER(p,blocknumber);
     SBT_NKEYS(p,nkeys);
@@ -1214,7 +1214,7 @@ static AjPBtpage btreeSecPageFromKey(AjPBtcache cache, unsigned char *buf,
 
 /* @func ajBtreeIdNew *********************************************
 **
-** Constructor for index bucket ID informationn
+** Constructor for index bucket ID information
 **
 **
 ** @return [AjPBtId] Index ID object
@@ -3632,7 +3632,7 @@ static AjPBtpage btreeSplitLeaf(AjPBtcache cache, AjPBtpage spage)
 ** @param [u] retpage [AjPBtpage*] page
 ** @param [r] key [const char *] key
 **
-** @return [ajlong] bucket block or 0L if shift not posible 
+** @return [ajlong] bucket block or 0L if shift not possible
 ** @@
 ******************************************************************************/
 
@@ -5593,6 +5593,7 @@ AjPList ajBtreeDupFromKey(AjPBtcache cache, const char *key)
 
     return list;
 }
+
 
 
 
@@ -8555,6 +8556,7 @@ static AjBool btreeReorderSecBuckets(AjPBtcache cache, AjPBtpage leaf)
 
 
 
+
 #if 0
 /* @funcstatic btreeInsertIdOnly *****************************************
 **
@@ -9071,7 +9073,7 @@ static void btreeInsertKeySec(AjPBtcache cache, AjPBtpage page,
 ** @param [u] retpage [AjPBtpage*] page
 ** @param [r] key [const char *] key
 **
-** @return [ajlong] bucket block or 0L if shift not posible 
+** @return [ajlong] bucket block or 0L if shift not possible
 ** @@
 ******************************************************************************/
 
@@ -10584,7 +10586,7 @@ static void btreeReadPriLeaf(AjPBtcache cache, AjPBtpage page, AjPList list)
 
 /* @funcstatic btreeSecLeftLeaf ***********************************************
 **
-** Read all secondary index leaf IDs into a list from the lefthandmost
+** Read all secondary index leaf IDs into a list from the lefthand-most
 ** leaf or the root node if the level is 0.
 **
 ** @param [u] cache [AjPBtcache] cache
@@ -11036,13 +11038,9 @@ static ajint btreeDbnoCompare(const void *a, const void *b)
 
 
 
-
-
-
-
 /* @func ajBtreeHybNew *********************************************
 **
-** Constructor for index bucket ID informationn
+** Constructor for index bucket ID information
 **
 **
 ** @return [AjPBtHybrid] Index ID object
@@ -11218,7 +11216,6 @@ static void btreeDeallocPriArray(AjPBtcache cache, AjPBtMem node)
 
     return;
 }
-
 
 
 
@@ -11542,7 +11539,7 @@ static AjPBtpage btreeHybPageFromKey(AjPBtcache cache, unsigned char *buf,
 ** @param [u] retpage [AjPBtpage*] page
 ** @param [r] key [const char *] key
 **
-** @return [ajlong] bucket block or 0L if shift not posible 
+** @return [ajlong] bucket block or 0L if shift not possible
 ** @@
 ******************************************************************************/
 
@@ -14767,7 +14764,7 @@ static void btreeNumKeyShift(AjPBtcache cache, AjPBtpage tpage)
 ** @param [u] retpage [AjPBtpage*] page
 ** @param [r] key [ajlong] key
 **
-** @return [ajlong] bucket block or 0L if shift not posible 
+** @return [ajlong] bucket block or 0L if shift not possible
 ** @@
 ******************************************************************************/
 
@@ -17333,7 +17330,7 @@ static ajlong btreeMergeHybOne(AjPBtcache cache, ajlong thisNode,
 	    ++nNkeys;
 	}
 
-	/* At this point the 'this' node could be added to a freelist */
+	/* At this point the 'this' node could be added to a free list */
     }
     else
     {
@@ -17375,7 +17372,7 @@ static ajlong btreeMergeHybOne(AjPBtcache cache, ajlong thisNode,
 	
 	}
 
-	/* At this point the 'this' node could be added to a freelist */
+	/* At this point the 'this' node could be added to a free list */
     }
     
     
@@ -17463,7 +17460,7 @@ static ajlong btreeCollapseRootHybOne(AjPBtcache cache, ajlong pageno)
 
     /*
     ** Swap pageno values to make root the child and child the root
-    ** Update nodetypes and mark the original root as a clean page
+    ** Update node types and mark the original root as a clean page
     */
 
     /* At this point page->pageno could be added to a free list */
@@ -18934,7 +18931,7 @@ static ajlong btreeMergeHybTwo(AjPBtcache cache, ajlong thisNode,
 	    ++nNkeys;
 	}
 
-	/* At this point the 'this' node could be added to a freelist */
+	/* At this point the 'this' node could be added to a free list */
     }
     else
     {
@@ -18976,7 +18973,7 @@ static ajlong btreeMergeHybTwo(AjPBtcache cache, ajlong thisNode,
 	
 	}
 
-	/* At this point the 'this' node could be added to a freelist */
+	/* At this point the 'this' node could be added to a free list */
     }
     
     
@@ -19064,7 +19061,7 @@ static ajlong btreeCollapseRootHybTwo(AjPBtcache cache, ajlong pageno)
 
     /*
     ** Swap pageno values to make root the child and child the root
-    ** Update nodetypes and mark the original root as a clean page
+    ** Update node types and mark the original root as a clean page
     */
 
     /* At this point page->pageno could be added to a free list */
@@ -19108,8 +19105,6 @@ static ajlong btreeCollapseRootHybTwo(AjPBtcache cache, ajlong pageno)
 
 
 
-
-/* AJB: Pri tree deletion */
 
 /* @func ajBtreeDeletePriId *********************************************
 **
@@ -19891,7 +19886,7 @@ static void btreeAdjustPriBucketsTwo(AjPBtcache cache, AjPBtpage leaf)
 	AJFREE(buckets[i]);
     }
 
-/* AJB: check this compares ajStr objs OK */
+/* AJB: check this compares ajStr objects OK */
     ajListSort(idlist,ajStrVcmp);
     AJFREE(buckets);
 
@@ -20582,7 +20577,7 @@ static ajlong btreeMergePriTwo(AjPBtcache cache, ajlong thisNode,
 	    ++nNkeys;
 	}
 
-	/* At this point the 'this' node could be added to a freelist */
+	/* At this point the 'this' node could be added to a free list */
     }
     else
     {
@@ -20623,7 +20618,7 @@ static ajlong btreeMergePriTwo(AjPBtcache cache, ajlong thisNode,
 	
 	}
 
-	/* At this point the 'this' node could be added to a freelist */
+	/* At this point the 'this' node could be added to a free list */
     }
     
     
@@ -20711,7 +20706,7 @@ static ajlong btreeCollapseRootPriTwo(AjPBtcache cache, ajlong pageno)
 
     /*
     ** Swap pageno values to make root the child and child the root
-    ** Update nodetypes and mark the original root as a clean page
+    ** Update node types and mark the original root as a clean page
     */
 
     /* At this point page->pageno could be added to a free list */
@@ -22029,7 +22024,7 @@ static ajlong btreeMergePriOne(AjPBtcache cache, ajlong thisNode,
 	    ++nNkeys;
 	}
 
-	/* At this point the 'this' node could be added to a freelist */
+	/* At this point the 'this' node could be added to a free list */
     }
     else
     {
@@ -22071,7 +22066,7 @@ static ajlong btreeMergePriOne(AjPBtcache cache, ajlong thisNode,
 	
 	}
 
-	/* At this point the 'this' node could be added to a freelist */
+	/* At this point the 'this' node could be added to a free list */
     }
     
     
@@ -22159,7 +22154,7 @@ static ajlong btreeCollapseRootPriOne(AjPBtcache cache, ajlong pageno)
 
     /*
     ** Swap pageno values to make root the child and child the root
-    ** Update nodetypes and mark the original root as a clean page
+    ** Update node types and mark the original root as a clean page
     */
 
     /* At this point page->pageno could be added to a free list */

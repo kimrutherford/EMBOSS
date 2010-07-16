@@ -3,8 +3,9 @@ AC_DEFUN([CHECK_SGI],
 # Handle SGI compiler flags
 #
 [AC_MSG_CHECKING(for sgiabi)
-AC_ARG_WITH(sgiabi,
-[  --with-sgiabi           SGI compiler flags [default=no]],
+AC_ARG_WITH([sgiabi],
+    [AS_HELP_STRING([--with-sgiabi=@<:@ARG@:>@],
+        [SGI compiler flags @<:@default=no@:>@])],
 [if test "$withval" != no ; then
   AC_MSG_RESULT(yes)
 

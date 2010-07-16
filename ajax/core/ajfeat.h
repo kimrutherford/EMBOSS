@@ -139,6 +139,7 @@ void          ajFeattableSetProt (AjPFeattable thys);
 void          ajFeattableSetRange  (AjPFeattable thys,
 				     ajint fbegin, ajint fend) ;
 void          ajFeattableTrace (const AjPFeattable thys);
+AjBool        ajFeattableTrim (AjPFeattable thys);
 AjBool        ajFeattableTrimOff (AjPFeattable thys,
 				  ajuint ioffset, ajuint ilen);
 AjBool        ajFeattableWriteDasgff(AjPFeattabOut ftout,

@@ -43,17 +43,21 @@ typedef struct EnsSMetacoordinateadaptor
 
 /* Ensembl Meta-Coordinate Adaptor */
 
-EnsPMetacoordinateadaptor ensMetacoordinateadaptorNew(EnsPDatabaseadaptor dba);
+EnsPMetacoordinateadaptor ensRegistryGetMetacoordinateadaptor(
+    EnsPDatabaseadaptor dba);
 
-void ensMetacoordinateadaptorDel(EnsPMetacoordinateadaptor *Padaptor);
+EnsPMetacoordinateadaptor ensMetacoordinateadaptorNew(
+    EnsPDatabaseadaptor dba);
+
+void ensMetacoordinateadaptorDel(EnsPMetacoordinateadaptor *Pmca);
 
 AjBool ensMetacoordinateadaptorFetchAllCoordsystems(
-    EnsPMetacoordinateadaptor adaptor,
+    const EnsPMetacoordinateadaptor mca,
     const AjPStr name,
-    AjPList cslist);
+    AjPList css);
 
-ajuint ensMetacoordinateadaptorGetMaximumLength(
-    EnsPMetacoordinateadaptor adaptor,
+ajuint ensMetacoordinateadaptorGetMaximumlength(
+    const EnsPMetacoordinateadaptor mca,
     const EnsPCoordsystem cs,
     const AjPStr name);
 
@@ -64,7 +68,7 @@ ajuint ensMetacoordinateadaptorGetMaximumLength(
 
 
 
-#endif
+#endif /* ensmetacoordinate_h */
 
 #ifdef __cplusplus
 }

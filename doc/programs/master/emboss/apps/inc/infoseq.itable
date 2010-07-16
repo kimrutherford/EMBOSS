@@ -151,6 +151,14 @@ to get only the length output, you can specify
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td>-organism</td>
+<td>boolean</td>
+<td>Display 'organism' column</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td>-description</td>
 <td>boolean</td>
 <td>Display 'description' column</td>

@@ -79,7 +79,11 @@ RL   Submitted (20-DEC-1994) to the EMBL/GenBank/DDBJ databases.
 RL   Huber A., Universitaet Karlsruhe, Zoologie I, Kornblumenstr. 13, 76128
 RL   Karlsruhe, Germany
 XX
-DR   ASTD; TRAN00000023010.
+DR   Ensembl-GO; ENSRNOESTG00000823692; Rattus_norvegicus.
+DR   Ensembl-Gn; ENSRNOG00000011144; Rattus_norvegicus.
+DR   Ensembl-TO; ENSRNOESTT00000823692; Rattus_norvegicus.
+DR   Ensembl-Tr; ENSRNOT00000015417; Rattus_norvegicus.
+DR   Ensembl-Tr; ENSRNOT00000064603; Rattus_norvegicus.
 XX
 FH   Key             Location/Qualifiers
 FH
@@ -98,8 +102,11 @@ FT   CDS             84..1130
 FT                   /product="rhodopsin"
 FT                   /function="phototransduction"
 FT                   /db_xref="GOA:P51489"
-FT                   /db_xref="HSSP:1EDS"
+FT                   /db_xref="InterPro:IPR000276"
+FT                   /db_xref="InterPro:IPR000732"
+FT                   /db_xref="InterPro:IPR001760"
 FT                   /db_xref="InterPro:IPR017452"
+FT                   /db_xref="InterPro:IPR019477"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P51489"
 FT                   /citation=[1]
 FT                   /protein_id="CAA87081.1"
@@ -169,9 +176,12 @@ RL   Submitted (26-AUG-1996) to the EMBL/GenBank/DDBJ databases.
 RL   Biochemistry & Molecular Biology, Merck Frosst Center for Therapeutic
 RL   Research, P. O. Box 1005, Pointe Claire - Dorval, Quebec H9R 4P8, Canada
 XX
-DR   ASTD; TRAN00000010928.
+DR   Ensembl-GO; ENSRNOESTG00000830631; Rattus_norvegicus.
 DR   Ensembl-Gn; ENSRNOG00000004094; Rattus_norvegicus.
+DR   Ensembl-Gn; ENSRNOG00000017743; Rattus_norvegicus.
+DR   Ensembl-TO; ENSRNOESTT00000830623; Rattus_norvegicus.
 DR   Ensembl-Tr; ENSRNOT00000005470; Rattus_norvegicus.
+DR   Ensembl-Tr; ENSRNOT00000023860; Rattus_norvegicus.
 XX
 FH   Key             Location/Qualifiers
 FH
@@ -185,6 +195,10 @@ FT                   /codon_start=1
 FT                   /product="EP1 prostanoid receptor"
 FT                   /note="family 1 G-protein coupled receptor"
 FT                   /db_xref="GOA:P70597"
+FT                   /db_xref="InterPro:IPR000276"
+FT                   /db_xref="InterPro:IPR000708"
+FT                   /db_xref="InterPro:IPR001244"
+FT                   /db_xref="InterPro:IPR008365"
 FT                   /db_xref="InterPro:IPR017452"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P70597"
 FT                   /protein_id="AAB07735.1"
@@ -247,8 +261,6 @@ RT   transcriptional start point and sequence comparison with six other
 RT   androgen-regulated genes";
 RL   Nucleic Acids Res. 13(3):659-672(1985).
 XX
-DR   EMBL-JOIN; M11904.
-DR   EMBL-JOIN; M11905.
 DR   EPD; EP14078; RN_SVS5.
 XX
 CC   On Sep 11, 2002 this sequence version replaced gi:57308.
@@ -357,8 +369,6 @@ RT   transcriptional start point and sequence comparison with six other
 RT   androgen-regulated genes";
 RL   Nucleic Acids Res. 13(3):659-672(1985).
 XX
-DR   EMBL-JOIN; M11905.
-XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..590
@@ -372,6 +382,7 @@ FT                   /gene="Svf"
 FT                   /product="androgen-responsive protein precursor"
 FT                   /note="seminal vesicle secretion"
 FT                   /db_xref="GOA:P04812"
+FT                   /db_xref="InterPro:IPR020187"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P04812"
 FT                   /protein_id="AAA42191.1"
 FT                   /translation="MSPTGFFLLTVLLVLVTEAASRGPREKFSQSAEDPYSENMNLKIL

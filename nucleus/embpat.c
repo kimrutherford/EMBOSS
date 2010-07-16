@@ -25,6 +25,8 @@
 #include <limits.h>
 
 
+
+
 /* @datastatic PatPTypes ***************************************************
 **
 ** Prosite pattern types
@@ -57,6 +59,8 @@ static PatOTypes patTypes[] =
   {"OUB",     "Brute force processing"},
   {NULL, NULL}
 };
+
+
 
 
 /* @datastatic MethPData ***************************************************
@@ -800,8 +804,8 @@ void embPatRestrictDel(EmbPPatRestrict *thys)
 
 AjBool embPatRestrictReadEntry(EmbPPatRestrict re, AjPFile inf)
 {
-    AjPStr line;
-    AjBool ret;
+    AjPStr line = NULL;
+    AjBool ret = AJFALSE;
     const char *p = NULL;
     char *q = NULL;
     ajuint i;
@@ -825,25 +829,58 @@ AjBool embPatRestrictReadEntry(EmbPPatRestrict re, AjPFile inf)
 
 
     p = ajSysFuncStrtok(p,"\t \n");
+    if(!p)
+      return ajFalse;
     ajStrAssignC(&re->cod,p);
+
     p = ajSysFuncStrtok(NULL,"\t \n");
+    if(!p)
+      return ajFalse;
     ajStrAssignC(&re->pat,p);
     ajStrAssignC(&re->bin,p);
 
     p = ajSysFuncStrtok(NULL,"\t \n");
-    sscanf(p,"%d",&re->len);
+    if(!p)
+      return ajFalse;
+    if(!sscanf(p,"%u",&re->len))
+      return ajFalse;
+
     p = ajSysFuncStrtok(NULL,"\t \n");
-    sscanf(p,"%d",&re->ncuts);
+    if(!p)
+      return ajFalse;
+    if(!sscanf(p,"%u",&re->ncuts))
+      return ajFalse;
+
     p = ajSysFuncStrtok(NULL,"\t \n");
-    sscanf(p,"%d",&re->blunt);
+    if(!p)
+      return ajFalse;
+    if(!sscanf(p,"%d",&re->blunt))
+      return ajFalse;
+
     p = ajSysFuncStrtok(NULL,"\t \n");
-    sscanf(p,"%d",&re->cut1);
+    if(!p)
+      return ajFalse;
+    if(!sscanf(p,"%d",&re->cut1))
+      return ajFalse;
+
     p = ajSysFuncStrtok(NULL,"\t \n");
-    sscanf(p,"%d",&re->cut2);
+    if(!p)
+      return ajFalse;
+    if(!sscanf(p,"%d",&re->cut2))
+      return ajFalse;
+
     p = ajSysFuncStrtok(NULL,"\t \n");
-    sscanf(p,"%d",&re->cut3);
+    if(!p)
+      return ajFalse;
+    if(!sscanf(p,"%d",&re->cut3))
+      return ajFalse;
+
     p = ajSysFuncStrtok(NULL,"\t \n");
-    sscanf(p,"%d",&re->cut4);
+    if(!p)
+      return ajFalse;
+    if(!sscanf(p,"%d",&re->cut4))
+      return ajFalse;
+
 
     for(i=0,q=ajStrGetuniquePtr(&re->bin);i<re->len;++i)
 	*(q+i)=(char)ajBaseAlphaToBin((int)*(q+i));
@@ -1770,7 +1807,7 @@ void embPatBYPInit(const AjPStr pat, ajuint len, EmbPPatBYPNode offset,
 
 /* @func embPatPushHit ********************************************************
 **
-** Put a matching BYP search hit on the heap
+** Put a matching string search hit on the heap
 ** as an EmbPMatMatch structure
 **
 ** @param [u] l [AjPList] list to push to
@@ -1799,6 +1836,8 @@ void embPatPushHit(AjPList l, const AjPStr name, ajuint pos, ajuint plen,
     hit->start = pos+begin;
     hit->mm = mm;
     hit->end = pos+begin+plen-1;
+    if(hit->start <= hit->end)
+        hit->forward = ajTrue;
     ajListPush(l,(void *) hit);
 
     return;
@@ -1972,7 +2011,7 @@ static AjBool patParenTest(const char *p, AjBool *repeat, AjBool *range)
     *repeat = ajTrue;
     p = p+2;
 
-    if(sscanf(p,"%d",&i)!=1)
+    if(sscanf(p,"%u",&i)!=1)
     {
 	ajWarn("Illegal pattern. Missing repeat number");
 
@@ -1997,7 +2036,7 @@ static AjBool patParenTest(const char *p, AjBool *repeat, AjBool *range)
 	    *range = ajTrue;
 	    ++p;
 
-	    if(sscanf(p,"%d",&i)!=1)
+	    if(sscanf(p,"%u",&i)!=1)
 	    {
 		ajWarn("Illegal pattern. Missing range number");
 
@@ -2055,7 +2094,7 @@ static AjBool patExpandRepeat(AjPStr *s)
 	    if(*(p+1)!='(')
 		count = 1;
 	    else
-		sscanf(p+2,"%d",&count);
+		sscanf(p+2,"%u",&count);
 
 	    if(count<=0)
 	    {
@@ -2087,7 +2126,7 @@ static AjBool patExpandRepeat(AjPStr *s)
 
 	if(*p=='(')
 	{
-	    sscanf(p+1,"%d",&count);
+	    sscanf(p+1,"%u",&count);
 
 	    if(count<=0)
 	    {
@@ -2936,8 +2975,17 @@ void embPatTUBInit(const AjPStr pat, ajuint **skipm, ajuint m, ajuint k,
     {
 	ready[i] = m;
 
+        /*
+        ** AJB: Note that if the mismatches are 1 less than the real
+        ** pattern length then the skip value can become 0 - hence
+        ** the use of AJMAX to ensure that the skip value is always
+        ** positive. This prevents a potential infinite loop in the
+        ** upcoming TUBSearch function. Need to check the original
+        ** algorithm to check that nothing is amiss here, then
+        ** delete this comment block.
+        */
 	for(j=m-k-1;j<(ajint)m;++j)
-	    skipm[j][i] = m-k-1;
+	    skipm[j][i] = AJMAX(m-k-1,1);
     }
 
     p += plen-1;
@@ -3232,9 +3280,9 @@ static AjBool patBruteIsRange(const char *t, ajuint *x, ajuint *y)
     {
 	if(*(t+1)=='(')
 	{
-	    if(sscanf(t+2,"%d,%d",x,y)!=2)
+	    if(sscanf(t+2,"%u,%u",x,y)!=2)
 	    {
-		sscanf(t+2,"%d",x);
+		sscanf(t+2,"%u",x);
 		*y=*x;
 	    }
 
@@ -3253,9 +3301,9 @@ static AjBool patBruteIsRange(const char *t, ajuint *x, ajuint *y)
 
 	if(*(u+1)=='(')
 	{
-	    if(sscanf(u+2,"%d,%d",x,y)!=2)
+	    if(sscanf(u+2,"%u,%u",x,y)!=2)
 	    {
-		sscanf(u+2,"%d",x);
+		sscanf(u+2,"%u",x);
 		*y = *x;
 	    }
 
@@ -3269,9 +3317,9 @@ static AjBool patBruteIsRange(const char *t, ajuint *x, ajuint *y)
 
     if(*(u+1)=='(')
     {
-	if(sscanf(u+2,"%d,%d",x,y)!=2)
+	if(sscanf(u+2,"%u,%u",x,y)!=2)
 	{
-	    sscanf(u+2,"%d",x);
+	    sscanf(u+2,"%u",x);
 	    *y = *x;
 	}
 
@@ -4272,8 +4320,11 @@ ajuint embPatRestrictMatch(const AjPSeq seq, ajuint begin, ajuint end,
 
     hits = 0;
 
-    while(embPatRestrictReadEntry(enz,enzfile))
+    while(!ajFileIsEof(enzfile))
     {
+        if(!embPatRestrictReadEntry(enz,enzfile))
+	    continue;
+
 	if(!enz->ncuts)
 	    continue;
 
@@ -4737,6 +4788,10 @@ void embPatCompileII (AjPPatComp thys, ajuint mismatch)
 
 	break;
     case 6:
+        if(thys->m && mismatch >= thys->m)
+            ajFatal("embPatCompileII: Mismatches (%d) must be less than the "
+                    "real pattern length (%d)",mismatch,thys->m);
+
 	if (!thys->skipm)
 	{
 	    AJCNEW(thys->skipm,thys->m);
@@ -4954,7 +5009,7 @@ ajuint embPatGetTypeII (AjPPatComp thys, const AjPStr pattern, ajuint mismatch,
 
     if(!range && !dontcare && !fclass && !compl && !mismatch && plen>AJWORD)
     {
-	/* Boyer Moore Horspool is the choice for ajlong exact patterns */
+	/* Boyer Moore Horspool is the choice for long exact patterns */
 	type = 1;
     }
     else if(mismatch && !dontcare && !range && !fclass && !compl &&

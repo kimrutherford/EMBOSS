@@ -1499,7 +1499,7 @@ void embBtreeGetRsInfo(EmbPBtreeEntry entry)
     ajStrDel(&value);
 
     return;
-} 
+}
 
 
 
@@ -1699,7 +1699,6 @@ AjBool embBtreeCloseCaches(EmbPBtreeEntry entry)
 
 
 #if 0
-
 /* @func embBtreeProbeCaches ***********************************************
 **
 ** Close index files

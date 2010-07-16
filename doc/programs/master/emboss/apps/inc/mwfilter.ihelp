@@ -1,5 +1,5 @@
 Filter noisy data from molecular weights file
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     Molecular weights file

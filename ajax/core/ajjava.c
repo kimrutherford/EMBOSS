@@ -1,5 +1,5 @@
 /******************************************************************************
-** @source AJAX Jave Native Interface (JNI) functions
+** @source AJAX Java Native Interface (JNI) functions
 **
 ** @author Copyright (C) 2001 Alan Bleasby
 ** @version 1.0
@@ -52,9 +52,7 @@
 #include <fcntl.h>
 #include <ctype.h>
 
-
 #ifdef HAVE_JAVA
-#include <jni.h>
 
 #ifdef __hpux
 #include <signal.h>
@@ -85,7 +83,7 @@
 #define AJ_OUTBUF 10000		/* pipe buffer size      */
 #define R_BUFFER  2048		/* Reentrant buffer size */
 
-#define TIMEOUT 30		/* Arbitrary timeout (secs) */
+#define TIMEOUT 30		/* Arbitrary timeout (seconds) */
 
 #if defined (__SVR4) && defined (__sun)
 #include <sys/filio.h>
@@ -215,7 +213,7 @@ static ajint java_seqset_attrib(int tchan,
 
 static void java_wait_for_term(int pid,AjPStr *outstd, AjPStr *errstd,
 			       int *outpipe, int *errpipe, char *buf);
-static void java_wait_for_file(int pid,AjPStr *outstd, AjPStr *errstd,
+static void java_wait_for_file(int pid, AjPStr *errstd,
 			       int *outpipe, int *errpipe, char *buf,
 			       unsigned char *fbuf,int size);
 
@@ -435,7 +433,6 @@ static AjBool ajJavaGetSeqsetFromUsa(const AjPStr thys, AjPSeqset *seq)
 
 
 #ifndef WIN32
-
 /* @func Ajax.userInfo ********************************************************
 **
 ** Return the uid, gid and home directory of a user
@@ -895,6 +892,8 @@ struct ad_user
     char *username;
     char *password;
 };
+
+
 
 
 /* @header PAM_conv **********************************************************
@@ -1392,11 +1391,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_fork
 	    exit(-1);
 	}
 
-	if(execve(ajStrGetPtr(prog),argp,envp) == -1)
-	{
-	    fprintf(stderr,"execve failure");
-	    exit(-1);
-	}
+        ajSysExecProgArgEnvNowaitC(ajStrGetPtr(prog),argp,envp);
     }
 
     *buf = '\0';
@@ -2519,7 +2514,6 @@ static void java_wait_for_term(int pid,AjPStr *outstd, AjPStr *errstd,
 ** Wait for jembossctl to terminate. Receive a file from stdout pipe
 **
 ** @param [r] pid [int] jembossctl pid
-** @param [w] outstd [AjPStr*] stdout from jembossctl
 ** @param [w] errstd [AjPStr*] stderr from jembossctl
 ** @param [w] outpipe [int*] stdout pipe
 ** @param [w] errpipe [int*] stderr pipe
@@ -2530,7 +2524,7 @@ static void java_wait_for_term(int pid,AjPStr *outstd, AjPStr *errstd,
 ** @return [void]
 ******************************************************************************/
 
-static void java_wait_for_file(int pid, AjPStr *outstd, AjPStr *errstd,
+static void java_wait_for_file(int pid, AjPStr *errstd,
 			       int *outpipe, int *errpipe, char *buf,
 			       unsigned char *fbuf, int size)
 {
@@ -2547,7 +2541,6 @@ static void java_wait_for_file(int pid, AjPStr *outstd, AjPStr *errstd,
     int retval = 0;
     unsigned char *ptr  = NULL;
     unsigned long block = 0;
-
 
     block = 1;
 
@@ -2915,16 +2908,12 @@ static int java_jembossctl(ajint command,
 	dup2(outpipe[1],1);
 	dup2(errpipe[1],2);
 
-	if(execve(ajStrGetPtr(prog),argp,envp) == -1)
-	{
-	    fprintf(stderr,"execve failure\n");
-	    exit(-1);
-	}
+        ajSysExecProgArgEnvNowaitC(ajStrGetPtr(prog),argp,envp);
     }
 
 
 
-    /* Don't need the env or commline for the parent */
+    /* Don't need the env or cmdline for the parent */
     i = 0;
 
     while(argp[i])
@@ -3026,7 +3015,7 @@ static int java_jembossctl(ajint command,
 	else
 	    *fsize = size;
 
-	java_wait_for_file(pid,outstd,errstd,outpipe,errpipe,buff,*fbuf,size);
+	java_wait_for_file(pid,errstd,outpipe,errpipe,buff,*fbuf,size);
 	break;
 
     case PUT_FILE:
@@ -4669,7 +4658,6 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_listDirs
 ** @@
 ******************************************************************************/
 
-
 JNIEXPORT jbyteArray JNICALL Java_org_emboss_jemboss_parser_Ajax_getFile
 (JNIEnv *env, jobject obj, jstring door, jbyteArray key,
  jstring environment, jstring filename)
@@ -5379,7 +5367,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_seqsetAttrib
 
 /* @funcstatic java_pipe_write ************************************************
 **
-** Write a byte stream down a file desriptor (unblocked)
+** Write a byte stream down a file descriptor (unblocked)
 **
 ** @param [r] tchan [int] file descriptor
 ** @param [r] buf [const char *] buffer to write
@@ -5442,7 +5430,7 @@ static int java_pipe_write(int tchan, const char *buf, int n, int seconds,
 	    return -1;
 	}
 
-	/* Check pipe is writeable */
+	/* Check pipe is writable */
 
 	ufds.fd = tchan;
 	ufds.events = POLLOUT;
@@ -5479,7 +5467,7 @@ static int java_pipe_write(int tchan, const char *buf, int n, int seconds,
 	    return -1;
 	}
 
-	/* Check pipe is writeable */
+	/* Check pipe is writable */
 	tfd.tv_sec  = 0;
 	tfd.tv_usec = 1000;
 	FD_ZERO(&fdw);
@@ -5524,7 +5512,7 @@ static int java_pipe_write(int tchan, const char *buf, int n, int seconds,
 
 /* @funcstatic java_pipe_read *************************************************
 **
-** Read a byte stream from a file desriptor (unblocked)
+** Read a byte stream from a file descriptor (unblocked)
 **
 ** @param [r] rchan [int] file descriptor
 ** @param [w] buf [char *] buffer for read

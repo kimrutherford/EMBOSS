@@ -32,6 +32,8 @@ tgenbank:x65921
 # Failed 'qanfasta:x65921'
 # Trying 'qanxflat:x65921'
 # Failed 'qanxflat:x65921'
+# Trying 'temblvrt:x65921'
+temblvrt:x65921
 # Trying 'qanxgcg:x65921'
 # Failed 'qanxgcg:x65921'
 # Trying 'qapflat:x65921'
@@ -52,11 +54,10 @@ qanxflatexc:x65921
 # Failed 'testdb:x65921'
 # Trying 'genbanksrs:x65921'
 # Failed 'genbanksrs:x65921'
-# Trying 'tpir:x65921'
-# Failed 'tpir:x65921'
-# Trying 'qasrswww:x65921'
-qasrswww:x65921
-# Trying 'qanxfasta:x65921'
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
 # Failed 'qanxfasta:x65921'
 # Trying 'qanxgcgall:x65921'
 # Failed 'qanxgcgall:x65921'
@@ -86,6 +87,8 @@ qasrswww:x65921
 # Failed 'tswnew:x65921'
 # Trying 'qaxpirall:x65921'
 # Failed 'qaxpirall:x65921'
+# Trying 'temblall:x65921'
+temblall:x65921
 # Trying 'qapxflat:x65921'
 # Failed 'qapxflat:x65921'
 # Trying 'qaxpirinc:x65921'
@@ -96,6 +99,8 @@ qasrswww:x65921
 tembl:x65921
 # Trying 'qaxpirexc:x65921'
 # Failed 'qaxpirexc:x65921'
+# Trying 'temblrest:x65921'
+# Failed 'temblrest:x65921'
 # Trying 'qapblastall:x65921'
 # Failed 'qapblastall:x65921'
 # Trying 'tgb:x65921'

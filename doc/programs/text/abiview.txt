@@ -40,7 +40,7 @@ Created abiview.ps
 Command line arguments
 
 Display the trace in an ABI sequencer file
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     ABI sequencing trace file
@@ -48,7 +48,8 @@ Version: EMBOSS:6.2.0
                                   filename and optional format (output USA)
    -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tek, tekt, none, data, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif, pdf,
+                                  svg, pdf, svg)
 
    Additional (Optional) qualifiers:
    -startbase          integer    [0] First base to report or display (Integer
@@ -218,9 +219,12 @@ See also
 
 Author(s)
 
-   Tim              Carver (tcarver (c) rfcgr.mrc.ac.uk)
+   Tim              Carver formerly at:
    MRC              Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome           Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

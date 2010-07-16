@@ -1,12 +1,13 @@
 Draw a nucleic acid density plot
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-seqall]            seqall     Nucleotide sequence(s) filename and optional
                                   format, or reference (input USA)
 *  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Density
                                   graph (ps, hpgl, hp7470, hp7580, meta, cps,
-                                  x11, tek, tekt, none, data, xterm, png, gif)
+                                  x11, tek, tekt, none, data, xterm, png, gif,
+                                  pdf, svg, pdf, svg)
 *  -outfile            report     [*.density] Output report file name
 
    Additional (Optional) qualifiers:

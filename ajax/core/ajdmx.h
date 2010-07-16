@@ -78,7 +78,7 @@ extern "C"
 ** @attr Eval [float] E-value of hit
 ** @attr Pval [float] p-value of hit
 ** @attr Alg [AjPStr] Alignment, e.g. of a signature to the sequence
-** @attr Target [AjBool] True if the Scophit is targetted for removal 
+** @attr Target [AjBool] True if the Scophit is targeted for removal
 **	 from a list of Scophit objects
 ** @attr Target2 [AjBool] Also used for garbage collection
 ** @attr Priority [AjBool] True if the Scop hit is high priority

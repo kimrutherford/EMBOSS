@@ -46,7 +46,11 @@ int main(int argc, char **argv)
     AjPStr bf;
     AjPStr pattern;
     AjPStr pfname;
-
+    AjPList sqlist  = NULL;
+    AjPStr  patline = NULL;
+    AjPStr  tmpseq  = NULL;
+    AjBool fullseq = ajFalse;
+    
     const char *p;
     char *q;
 
@@ -78,9 +82,12 @@ int main(int argc, char **argv)
     id      = ajStrNewC("");
     bf      = ajStrNew();
     acc     = ajStrNew();
-    pattern = ajStrNew();
 
-
+    patline = ajStrNew();
+    tmpseq =  ajStrNew();
+    
+    sqlist  = ajListNew();
+    
     while(ajReadlineTrim(inf,&line))
     {
 	p = ajStrGetPtr(line);
@@ -113,26 +120,47 @@ int main(int argc, char **argv)
 
 	if(ajStrPrefixC(line,"SQ") || ajStrPrefixC(line,"SE"))
 	{
-	    p = ajSysFuncStrtok(p," .\t\n");
-	    p = ajSysFuncStrtok(NULL," .\t\n");
-	    if(!p)
-		ajStrAssignC(&pattern,"");
-	    else
-		ajStrAssignC(&pattern,p);
-	    q = ajStrGetuniquePtr(&pattern);
+            if(ajStrSuffixC(line,".."))
+                continue;
+            
+            while(!ajStrPrefixC(line,"XX"))
+            {
+                fullseq = ajFalse;
+                ajFmtScanS(line,"%*S%S",&patline);
+                ajStrAppendS(&tmpseq,patline);
 
-	    while(*q)
-	    {
-		if(*q=='[')
-		    *q = '(';
+                if(ajStrSuffixC(line,"."))
+                {
+                    ajStrTrimEndC(&tmpseq,".");
+                    pattern = ajStrNew();
+                    ajStrAssignS(&pattern,tmpseq);
 
-		if(*q==':')
-		    *q = ',';
 
-		if(*q==']')
-		    *q = ')';
-		++q;
-	    }
+                    q = ajStrGetuniquePtr(&pattern);
+
+                    while(*q)
+                    {
+                        if(*q=='[')
+                            *q = '(';
+
+                        if(*q==':')
+                            *q = ',';
+                        
+                        if(*q==']')
+                            *q = ')';
+                        ++q;
+                    }
+
+                    ajListPush(sqlist,(void *)pattern);
+                    ajStrAssignC(&tmpseq,"");
+                    fullseq = ajTrue;
+                }
+
+                ajReadlineTrim(inf,&line);
+            }
+            
+            if(!fullseq)
+                ajErr("Unterminated sequence line for AC = %S",acc);
 	}
 
 	if(ajStrPrefixC(line,"OC") && !done)
@@ -161,13 +189,25 @@ int main(int argc, char **argv)
 		fp = pout;
 	}
 
-	if(ajStrPrefixC(line,"//") && ajStrGetLen(pattern) && gid)
+	if(ajStrPrefixC(line,"//") && ajListGetLength(sqlist) && gid)
 	{
 	    if(!ajStrGetLen(bf))
-		ajFmtPrintF(fp,"%-20s %S %S\n",ajStrGetPtr(id),pattern,acc);
+            {
+                while(ajListPop(sqlist,(void **) &pattern))
+                {
+                    ajFmtPrintF(fp,"%-20s %S %S\n",ajStrGetPtr(id),pattern,acc);
+                    ajStrDel(&pattern);
+                }
+            }
 	    else
 	    {
-		ajFmtPrintF(fp,"%-20s %S %S %S\n",ajStrGetPtr(id),pattern,acc,bf);
+                while(ajListPop(sqlist,(void **) &pattern))
+                {
+                    ajFmtPrintF(fp,"%-20s %S %S %S\n",ajStrGetPtr(id),pattern,
+                                acc,bf);
+                    ajStrDel(&pattern);
+                }
+                
 		ajStrAssignC(&bf,"");
 	    }
 	}
@@ -181,12 +221,15 @@ int main(int argc, char **argv)
     ajFileClose(&pout);
     ajFileClose(&oout);
 
+    ajListFree(&sqlist);
+    
     ajStrDel(&line);
     ajStrDel(&id);
     ajStrDel(&bf);
     ajStrDel(&acc);
     ajStrDel(&pattern);
-
+    ajStrDel(&patline);
+    ajStrDel(&tmpseq);
 
     embExit();
 

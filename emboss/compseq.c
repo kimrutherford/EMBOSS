@@ -564,6 +564,8 @@ static void compseq_readexpfreq(AjPTable *exptable, AjPFile infile,
 }
 
 
+
+
 /* @funcstatic compseq_getexpfreqnuc ******************************************
 **
 ** Using the observed counts of single bases in the sequence this
@@ -609,6 +611,8 @@ static double compseq_getexpfreqnuc(const AjPStr dispseq, ajint word,
     return result;
 
 }
+
+
 
 
 /* @funcstatic compseq_getexpfreqprot *****************************************

@@ -5,7 +5,7 @@
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @version $Revision: 1.5 $
+** @version $Revision: 1.15 $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@
 ** License along with this library; if not, write to the
 ** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ** Boston, MA  02111-1307, USA.
-*****************************************************************************/
+******************************************************************************/
 
 /* ==================================================================== */
 /* ========================== include files =========================== */
@@ -37,7 +37,16 @@
 /* ========================== private data ============================ */
 /* ==================================================================== */
 
-static const char *qcDatabaseClass[] =
+/* qcdatabaseClass ************************************************************
+**
+** The Ensembl Quality Check Database class element is enumerated in
+** both, the SQL table definition and the data structure. The following strings
+** are used for conversion in database operations and correspond to
+** EnsEQcdatabaseClass.
+**
+******************************************************************************/
+
+static const char *qcdatabaseClass[] =
 {
     (const char *) NULL,
     "unknown",
@@ -51,7 +60,16 @@ static const char *qcDatabaseClass[] =
 
 
 
-static const char *qcDatabaseType[] =
+/* qcdatabaseType *************************************************************
+**
+** The Ensembl Quality Check Database type element is enumerated in
+** both, the SQL table definition and the data structure. The following strings
+** are used for conversion in database operations and correspond to
+** EnsEQcdatabaseType.
+**
+******************************************************************************/
+
+static const char *qcdatabaseType[] =
 {
     (const char *) NULL,
     "unknown",
@@ -67,29 +85,26 @@ static const char *qcDatabaseType[] =
 /* ======================== private functions ========================= */
 /* ==================================================================== */
 
-extern EnsPAnalysisadaptor
-ensRegistryGetAnalysisadaptor(EnsPDatabaseadaptor dba);
-
-extern EnsPQcdatabaseadaptor
-ensRegistryGetQcdatabaseadaptor(EnsPDatabaseadaptor dba);
-
-static AjBool qcDatabaseadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
+static AjBool qcdatabaseadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
                                              const AjPStr statement,
                                              EnsPAssemblymapper am,
                                              EnsPSlice slice,
                                              AjPList qcdbs);
 
-static AjBool qcDatabaseadaptorCacheInsert(EnsPQcdatabaseadaptor qcdba,
+static AjBool qcdatabaseadaptorCacheInsert(EnsPQcdatabaseadaptor qcdba,
                                            EnsPQcdatabase *Pqcdb);
 
-static AjBool qcDatabaseadaptorCacheInit(EnsPQcdatabaseadaptor qcdba);
+static AjBool qcdatabaseadaptorCacheInit(EnsPQcdatabaseadaptor qcdba);
 
-static void qcDatabaseadaptorCacheClearIdentifier(void **key, void **value,
+static void qcdatabaseadaptorCacheClearIdentifier(void **key,
+                                                  void **value,
                                                   void *cl);
 
-static void qcDatabaseadaptorCacheClearName(void **key, void **value, void *cl);
+static void qcdatabaseadaptorCacheClearName(void **key,
+                                            void **value,
+                                            void *cl);
 
-static AjBool qcDatabaseadaptorCacheExit(EnsPQcdatabaseadaptor adaptor);
+static AjBool qcdatabaseadaptorCacheExit(EnsPQcdatabaseadaptor qcdba);
 
 
 
@@ -146,7 +161,7 @@ static AjBool qcDatabaseadaptorCacheExit(EnsPQcdatabaseadaptor adaptor);
 ** Default constructor for an Ensembl QC Database.
 **
 ** @cc Bio::EnsEMBL::Storable::new
-** @param [r] adaptor [EnsPQcdatabaseadaptor] Ensembl QC Database Adaptor
+** @param [u] qcdba [EnsPQcdatabaseadaptor] Ensembl QC Database Adaptor
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 ** @cc Bio::EnsEMBL::QC::SequenceDB::new
 ** @param [u] analysis [EnsPAnalysis] Ensembl Analysis
@@ -154,92 +169,91 @@ static AjBool qcDatabaseadaptorCacheExit(EnsPQcdatabaseadaptor adaptor);
 ** @param [u] release [AjPStr] Release
 ** @param [u] date [AjPStr] Date
 ** @param [u] format [AjPStr] Format
-** @param [r] class [AjEnum] Class
-** @param [r] type [AjEnum] Type
-** @param [u] species [AjPStr] Ensembl Database Adaptor species element
-** @param [r] group [AjEnum] Ensembl Database Adaptor group element
+** @param [r] class [EnsEQcdatabaseClass] Class
+** @param [r] type [EnsEQcdatabaseType] Type
+** @param [u] species [AjPStr] Ensembl Database Adaptor species
+** @param [r] group [EnsEDatabaseadaptorGroup] Ensembl Database Adaptor group
 ** @param [u] host [AjPStr] Host
 ** @param [u] directory [AjPStr] Directory
 ** @param [u] file [AjPStr] File
 ** @param [u] externalurl [AjPStr] External URL
-** @param [u] internalurl [AjPStr] Internal URL
 **
 ** @return [EnsPQcdatabase] Ensembl QC Database or NULL
 ** @@
 ******************************************************************************/
 
-EnsPQcdatabase ensQcdatabaseNew(EnsPQcdatabaseadaptor adaptor,
+EnsPQcdatabase ensQcdatabaseNew(EnsPQcdatabaseadaptor qcdba,
                                 ajuint identifier,
                                 EnsPAnalysis analysis,
                                 AjPStr name,
                                 AjPStr release,
                                 AjPStr date,
                                 AjPStr format,
-                                AjEnum class,
-                                AjEnum type,
+                                EnsEQcdatabaseClass class,
+                                EnsEQcdatabaseType type,
                                 AjPStr species,
-                                AjEnum group,
+                                EnsEDatabaseadaptorGroup group,
                                 AjPStr host,
                                 AjPStr directory,
                                 AjPStr file,
                                 AjPStr externalurl)
 {
     EnsPQcdatabase qcdb = NULL;
-    
+
     if(!analysis)
-	return NULL;
-    
+        return NULL;
+
     if(!name)
-	return NULL;
-    
+        return NULL;
+
     if(!release)
-	return NULL;
-    
+        return NULL;
+
     AJNEW0(qcdb);
-    
+
     qcdb->Use = 1;
-    
+
     qcdb->Identifier = identifier;
-    
-    qcdb->Adaptor = adaptor;
-    
+
+    qcdb->Adaptor = qcdba;
+
     qcdb->Analysis = ensAnalysisNewRef(analysis);
-    
+
     if(name)
-	qcdb->Name = ajStrNewRef(name);
-    
+        qcdb->Name = ajStrNewRef(name);
+
     if(release)
-	qcdb->Release = ajStrNewRef(release);
-    
+        qcdb->Release = ajStrNewRef(release);
+
     if(date)
-	qcdb->Date = ajStrNewRef(date);
-    
+        qcdb->Date = ajStrNewRef(date);
+
     if(format)
-	qcdb->Format = ajStrNewRef(format);
-    
+        qcdb->Format = ajStrNewRef(format);
+
     qcdb->Class = class;
-    
+
     qcdb->Type = type;
-    
+
     if(species)
-	qcdb->Species = ajStrNewRef(species);
-    
+        qcdb->Species = ajStrNewRef(species);
+
     qcdb->Group = group;
-    
+
     if(host)
-	qcdb->Host = ajStrNewRef(host);
-    
+        qcdb->Host = ajStrNewRef(host);
+
     if(directory)
-	qcdb->Directory = ajStrNewRef(directory);
-    
+        qcdb->Directory = ajStrNewRef(directory);
+
     if(file)
-	qcdb->File = ajStrNewRef(file);
-    
+        qcdb->File = ajStrNewRef(file);
+
     if(externalurl)
-	qcdb->ExternalURL = ajStrNewRef(externalurl);
-    
+        qcdb->ExternalURL = ajStrNewRef(externalurl);
+
     qcdb->InternalURL = NULL;
-    
+
     return qcdb;
 }
 
@@ -259,57 +273,57 @@ EnsPQcdatabase ensQcdatabaseNew(EnsPQcdatabaseadaptor adaptor,
 EnsPQcdatabase ensQcdatabaseNewObj(const EnsPQcdatabase object)
 {
     EnsPQcdatabase qcdb = NULL;
-    
+
     if(!object)
-	return NULL;
-    
+        return NULL;
+
     AJNEW0(qcdb);
-    
+
     qcdb->Use = 1;
-    
+
     qcdb->Identifier = object->Identifier;
-    
+
     qcdb->Adaptor = object->Adaptor;
-    
+
     if(object->Analysis)
-	qcdb->Analysis = ensAnalysisNewRef(object->Analysis);
-    
+        qcdb->Analysis = ensAnalysisNewRef(object->Analysis);
+
     if(object->Name)
-	qcdb->Name = ajStrNewRef(object->Name);
-    
+        qcdb->Name = ajStrNewRef(object->Name);
+
     if(object->Release)
-	qcdb->Release = ajStrNewRef(object->Release);
-    
+        qcdb->Release = ajStrNewRef(object->Release);
+
     if(object->Date)
-	qcdb->Date = ajStrNewRef(object->Date);
-    
+        qcdb->Date = ajStrNewRef(object->Date);
+
     if(object->Format)
-	qcdb->Format = ajStrNewRef(object->Format);
-    
+        qcdb->Format = ajStrNewRef(object->Format);
+
     qcdb->Class = object->Class;
-    
+
     qcdb->Type = object->Type;
-    
+
     if(object->Species)
-	qcdb->Species = ajStrNewRef(object->Species);
-    
+        qcdb->Species = ajStrNewRef(object->Species);
+
     qcdb->Group = object->Group;
-    
+
     if(object->Host)
-	qcdb->Host = ajStrNewRef(object->Host);
-    
+        qcdb->Host = ajStrNewRef(object->Host);
+
     if(object->Directory)
-	qcdb->Directory = ajStrNewRef(object->Directory);
-    
+        qcdb->Directory = ajStrNewRef(object->Directory);
+
     if(object->File)
-	qcdb->File = ajStrNewRef(object->File);
-    
+        qcdb->File = ajStrNewRef(object->File);
+
     if(object->ExternalURL)
-	qcdb->ExternalURL = ajStrNewRef(object->ExternalURL);
-    
+        qcdb->ExternalURL = ajStrNewRef(object->ExternalURL);
+
     if(object->InternalURL)
-	qcdb->InternalURL = ajStrNewRef(object->InternalURL);
-    
+        qcdb->InternalURL = ajStrNewRef(object->InternalURL);
+
     return qcdb;
 }
 
@@ -330,10 +344,10 @@ EnsPQcdatabase ensQcdatabaseNewObj(const EnsPQcdatabase object)
 EnsPQcdatabase ensQcdatabaseNewRef(EnsPQcdatabase qcdb)
 {
     if(!qcdb)
-	return NULL;
-    
+        return NULL;
+
     qcdb->Use++;
-    
+
     return qcdb;
 }
 
@@ -373,34 +387,35 @@ EnsPQcdatabase ensQcdatabaseNewRef(EnsPQcdatabase qcdb)
 void ensQcdatabaseDel(EnsPQcdatabase *Pqcdb)
 {
     EnsPQcdatabase pthis = NULL;
-    
-    /*
-     ajDebug("ensQcdatabaseDel\n"
-	     "  *Pqcdb %p\n",
-	     *Pqcdb);
-     
-     ensQcdatabaseTrace(*Pqcdb, 1);
-     */
-    
+
+    if(ajDebugTest("ensQcdatabaseDel"))
+    {
+        ajDebug("ensQcdatabaseDel\n"
+                "  *Pqcdb %p\n",
+                *Pqcdb);
+
+        ensQcdatabaseTrace(*Pqcdb, 1);
+    }
+
     if(!Pqcdb)
-	return;
-    
+        return;
+
     if(!*Pqcdb)
-	return;
+        return;
 
     pthis = *Pqcdb;
-    
+
     pthis->Use--;
-    
+
     if(pthis->Use)
     {
-	*Pqcdb = NULL;
-	
-	return;
+        *Pqcdb = NULL;
+
+        return;
     }
-    
+
     ensAnalysisDel(&pthis->Analysis);
-    
+
     ajStrDel(&pthis->Name);
     ajStrDel(&pthis->Release);
     ajStrDel(&pthis->Date);
@@ -411,13 +426,14 @@ void ensQcdatabaseDel(EnsPQcdatabase *Pqcdb)
     ajStrDel(&pthis->File);
     ajStrDel(&pthis->ExternalURL);
     ajStrDel(&pthis->InternalURL);
-    
+
     AJFREE(pthis);
 
     *Pqcdb = NULL;
-    
+
     return;
 }
+
 
 
 
@@ -441,10 +457,10 @@ void ensQcdatabaseDel(EnsPQcdatabase *Pqcdb)
 ** @valrule Release [AjPStr] Release
 ** @valrule Date [AjPStr] Date
 ** @valrule Format [AjPStr] Format
-** @valrule Class [AjEnum] Class
-** @valrule Type [AjEnum] Type
-** @valrule Species [AjPStr] Ensembl Database Adaptor species element
-** @valrule Group [AjEnum] Ensembl Database Adaptor group element
+** @valrule Class [EnsEQcdatabaseClass] Class
+** @valrule Type [EnsEQcdatabaseType] Type
+** @valrule Species [AjPStr] Ensembl Database Adaptor species
+** @valrule Group [EnsEDatabaseadaptorGroup] Ensembl Database Adaptor group
 ** @valrule Host [AjPStr] Host
 ** @valrule Directory [AjPStr] Directory
 ** @valrule File [AjPStr] File
@@ -470,8 +486,8 @@ void ensQcdatabaseDel(EnsPQcdatabase *Pqcdb)
 EnsPQcdatabaseadaptor ensQcdatabaseGetAdaptor(const EnsPQcdatabase qcdb)
 {
     if(!qcdb)
-	return NULL;
-    
+        return NULL;
+
     return qcdb->Adaptor;
 }
 
@@ -491,8 +507,8 @@ EnsPQcdatabaseadaptor ensQcdatabaseGetAdaptor(const EnsPQcdatabase qcdb)
 ajuint ensQcdatabaseGetIdentifier(const EnsPQcdatabase qcdb)
 {
     if(!qcdb)
-	return 0;
-    
+        return 0;
+
     return qcdb->Identifier;
 }
 
@@ -512,8 +528,8 @@ ajuint ensQcdatabaseGetIdentifier(const EnsPQcdatabase qcdb)
 const EnsPAnalysis ensQcdatabaseGetAnalysis(const EnsPQcdatabase qcdb)
 {
     if(!qcdb)
-	return NULL;
-    
+        return NULL;
+
     return qcdb->Analysis;
 }
 
@@ -533,8 +549,8 @@ const EnsPAnalysis ensQcdatabaseGetAnalysis(const EnsPQcdatabase qcdb)
 AjPStr ensQcdatabaseGetName(const EnsPQcdatabase qcdb)
 {
     if(!qcdb)
-	return NULL;
-    
+        return NULL;
+
     return qcdb->Name;
 }
 
@@ -554,8 +570,8 @@ AjPStr ensQcdatabaseGetName(const EnsPQcdatabase qcdb)
 AjPStr ensQcdatabaseGetRelease(const EnsPQcdatabase qcdb)
 {
     if(!qcdb)
-	return NULL;
-    
+        return NULL;
+
     return qcdb->Release;
 }
 
@@ -575,8 +591,8 @@ AjPStr ensQcdatabaseGetRelease(const EnsPQcdatabase qcdb)
 AjPStr ensQcdatabaseGetDate(const EnsPQcdatabase qcdb)
 {
     if(!qcdb)
-	return NULL;
-    
+        return NULL;
+
     return qcdb->Date;
 }
 
@@ -596,8 +612,8 @@ AjPStr ensQcdatabaseGetDate(const EnsPQcdatabase qcdb)
 AjPStr ensQcdatabaseGetFormat(const EnsPQcdatabase qcdb)
 {
     if(!qcdb)
-	return NULL;
-    
+        return NULL;
+
     return qcdb->Format;
 }
 
@@ -610,15 +626,15 @@ AjPStr ensQcdatabaseGetFormat(const EnsPQcdatabase qcdb)
 **
 ** @param [r] qcdb [const EnsPQcdatabase] Ensembl QC Database
 **
-** @return [AjEnum] Class
+** @return [EnsEQcdatabaseClass] Class or ensEQcdatabaseClassNULL
 ** @@
 ******************************************************************************/
 
-AjEnum ensQcdatabaseGetClass(const EnsPQcdatabase qcdb)
+EnsEQcdatabaseClass ensQcdatabaseGetClass(const EnsPQcdatabase qcdb)
 {
     if(!qcdb)
-	return ensEQcdatabaseClassNULL;
-    
+        return ensEQcdatabaseClassNULL;
+
     return qcdb->Class;
 }
 
@@ -631,15 +647,15 @@ AjEnum ensQcdatabaseGetClass(const EnsPQcdatabase qcdb)
 **
 ** @param [r] qcdb [const EnsPQcdatabase] Ensembl QC Database
 **
-** @return [AjEnum] Type
+** @return [EnsEQcdatabaseType] Type or ensEQcdasfeatureTypeNULL
 ** @@
 ******************************************************************************/
 
-AjEnum ensQcdatabaseGetType(const EnsPQcdatabase qcdb)
+EnsEQcdatabaseType ensQcdatabaseGetType(const EnsPQcdatabase qcdb)
 {
     if(!qcdb)
-	return ensEQcdatabaseTypeNULL;
-    
+        return ensEQcdatabaseTypeNULL;
+
     return qcdb->Type;
 }
 
@@ -659,8 +675,8 @@ AjEnum ensQcdatabaseGetType(const EnsPQcdatabase qcdb)
 AjPStr ensQcdatabaseGetSpecies(const EnsPQcdatabase qcdb)
 {
     if(!qcdb)
-	return NULL;
-    
+        return NULL;
+
     return qcdb->Species;
 }
 
@@ -673,15 +689,16 @@ AjPStr ensQcdatabaseGetSpecies(const EnsPQcdatabase qcdb)
 **
 ** @param [r] qcdb [const EnsPQcdatabase] Ensembl QC Database
 **
-** @return [AjEnum] Ensembl Database Adaptor group
+** @return [EnsEDatabaseadaptorGroup] Ensembl Database Adaptor group or
+**                                    ensEDatabaseadaptorGroupNULL
 ** @@
 ******************************************************************************/
 
-AjEnum ensQcdatabaseGetGroup(const EnsPQcdatabase qcdb)
+EnsEDatabaseadaptorGroup ensQcdatabaseGetGroup(const EnsPQcdatabase qcdb)
 {
     if(!qcdb)
-	return ensEDatabaseadaptorGroupNULL;
-    
+        return ensEDatabaseadaptorGroupNULL;
+
     return qcdb->Group;
 }
 
@@ -701,8 +718,8 @@ AjEnum ensQcdatabaseGetGroup(const EnsPQcdatabase qcdb)
 AjPStr ensQcdatabaseGetHost(const EnsPQcdatabase qcdb)
 {
     if(!qcdb)
-	return NULL;
-    
+        return NULL;
+
     return qcdb->Host;
 }
 
@@ -722,8 +739,8 @@ AjPStr ensQcdatabaseGetHost(const EnsPQcdatabase qcdb)
 AjPStr ensQcdatabaseGetDirectory(const EnsPQcdatabase qcdb)
 {
     if(!qcdb)
-	return NULL;
-    
+        return NULL;
+
     return qcdb->Directory;
 }
 
@@ -743,8 +760,8 @@ AjPStr ensQcdatabaseGetDirectory(const EnsPQcdatabase qcdb)
 AjPStr ensQcdatabaseGetFile(const EnsPQcdatabase qcdb)
 {
     if(!qcdb)
-	return NULL;
-    
+        return NULL;
+
     return qcdb->File;
 }
 
@@ -764,8 +781,8 @@ AjPStr ensQcdatabaseGetFile(const EnsPQcdatabase qcdb)
 AjPStr ensQcdatabaseGetExternalURL(const EnsPQcdatabase qcdb)
 {
     if(!qcdb)
-	return NULL;
-    
+        return NULL;
+
     return qcdb->ExternalURL;
 }
 
@@ -785,8 +802,8 @@ AjPStr ensQcdatabaseGetExternalURL(const EnsPQcdatabase qcdb)
 AjPStr ensQcdatabaseGetInternalURL(const EnsPQcdatabase qcdb)
 {
     if(!qcdb)
-	return NULL;
-    
+        return NULL;
+
     return qcdb->InternalURL;
 }
 
@@ -841,10 +858,10 @@ AjPStr ensQcdatabaseGetInternalURL(const EnsPQcdatabase qcdb)
 AjBool ensQcdatabaseSetAdaptor(EnsPQcdatabase qcdb, EnsPQcdatabaseadaptor qcdba)
 {
     if(!qcdb)
-	return ajFalse;
-    
+        return ajFalse;
+
     qcdb->Adaptor = qcdba;
-    
+
     return ajTrue;
 }
 
@@ -865,10 +882,10 @@ AjBool ensQcdatabaseSetAdaptor(EnsPQcdatabase qcdb, EnsPQcdatabaseadaptor qcdba)
 AjBool ensQcdatabaseSetIdentifier(EnsPQcdatabase qcdb, ajuint identifier)
 {
     if(!qcdb)
-	return ajFalse;
-    
+        return ajFalse;
+
     qcdb->Identifier = identifier;
-    
+
     return ajTrue;
 }
 
@@ -889,12 +906,12 @@ AjBool ensQcdatabaseSetIdentifier(EnsPQcdatabase qcdb, ajuint identifier)
 AjBool ensQcdatabaseSetAnalysis(EnsPQcdatabase qcdb, EnsPAnalysis analysis)
 {
     if(!qcdb)
-	return ajFalse;
-    
+        return ajFalse;
+
     ensAnalysisDel(&qcdb->Analysis);
-    
+
     qcdb->Analysis = ensAnalysisNewRef(analysis);
-    
+
     return ajTrue;
 }
 
@@ -915,12 +932,12 @@ AjBool ensQcdatabaseSetAnalysis(EnsPQcdatabase qcdb, EnsPAnalysis analysis)
 AjBool ensQcdatabaseSetName(EnsPQcdatabase qcdb, AjPStr name)
 {
     if(!qcdb)
-	return ajFalse;
-    
+        return ajFalse;
+
     ajStrDel(&qcdb->Name);
-    
+
     qcdb->Name = ajStrNewRef(name);
-    
+
     return ajTrue;
 }
 
@@ -941,12 +958,12 @@ AjBool ensQcdatabaseSetName(EnsPQcdatabase qcdb, AjPStr name)
 AjBool ensQcdatabaseSetRelease(EnsPQcdatabase qcdb, AjPStr release)
 {
     if(!qcdb)
-	return ajFalse;
-    
+        return ajFalse;
+
     ajStrDel(&qcdb->Release);
-    
+
     qcdb->Release = ajStrNewRef(release);
-    
+
     return ajTrue;
 }
 
@@ -967,12 +984,12 @@ AjBool ensQcdatabaseSetRelease(EnsPQcdatabase qcdb, AjPStr release)
 AjBool ensQcdatabaseSetDate(EnsPQcdatabase qcdb, AjPStr date)
 {
     if(!qcdb)
-	return ajFalse;
-    
+        return ajFalse;
+
     ajStrDel(&qcdb->Date);
-    
+
     qcdb->Date = ajStrNewRef(date);
-    
+
     return ajTrue;
 }
 
@@ -993,12 +1010,12 @@ AjBool ensQcdatabaseSetDate(EnsPQcdatabase qcdb, AjPStr date)
 AjBool ensQcdatabaseSetFormat(EnsPQcdatabase qcdb, AjPStr format)
 {
     if(!qcdb)
-	return ajFalse;
-    
+        return ajFalse;
+
     ajStrDel(&qcdb->Format);
-    
+
     qcdb->Format = ajStrNewRef(format);
-    
+
     return ajTrue;
 }
 
@@ -1010,19 +1027,19 @@ AjBool ensQcdatabaseSetFormat(EnsPQcdatabase qcdb, AjPStr format)
 ** Set the class element of an Ensembl QC Database.
 **
 ** @param [u] qcdb [EnsPQcdatabase] Ensembl QC Database
-** @param [r] class [AjEnum] Class
+** @param [r] class [EnsEQcdatabaseClass] Class
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensQcdatabaseSetClass(EnsPQcdatabase qcdb, AjEnum class)
+AjBool ensQcdatabaseSetClass(EnsPQcdatabase qcdb, EnsEQcdatabaseClass class)
 {
     if(!qcdb)
-	return ajFalse;
-    
+        return ajFalse;
+
     qcdb->Class = class;
-    
+
     return ajTrue;
 }
 
@@ -1034,19 +1051,19 @@ AjBool ensQcdatabaseSetClass(EnsPQcdatabase qcdb, AjEnum class)
 ** Set the type element of an Ensembl QC Database.
 **
 ** @param [u] qcdb [EnsPQcdatabase] Ensembl QC Database
-** @param [r] type [AjEnum] Type
+** @param [r] type [EnsEQcdatabaseType] Type
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensQcdatabaseSetType(EnsPQcdatabase qcdb, AjEnum type)
+AjBool ensQcdatabaseSetType(EnsPQcdatabase qcdb, EnsEQcdatabaseType type)
 {
     if(!qcdb)
-	return ajFalse;
-    
+        return ajFalse;
+
     qcdb->Type = type;
-    
+
     return ajTrue;
 }
 
@@ -1067,12 +1084,12 @@ AjBool ensQcdatabaseSetType(EnsPQcdatabase qcdb, AjEnum type)
 AjBool ensQcdatabaseSetSpecies(EnsPQcdatabase qcdb, AjPStr species)
 {
     if(!qcdb)
-	return ajFalse;
-    
+        return ajFalse;
+
     ajStrDel(&qcdb->Species);
-    
+
     qcdb->Species = ajStrNewRef(species);
-    
+
     return ajTrue;
 }
 
@@ -1084,19 +1101,20 @@ AjBool ensQcdatabaseSetSpecies(EnsPQcdatabase qcdb, AjPStr species)
 ** Set the Ensembl Database Adaptor group element of an Ensembl QC Database.
 **
 ** @param [u] qcdb [EnsPQcdatabase] Ensembl QC Database
-** @param [u] group [AjEnum] Ensembl Database Adaptor group element
+** @param [u] group [EnsEDatabaseadaptorGroup] Ensembl Database Adaptor group
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensQcdatabaseSetGroup(EnsPQcdatabase qcdb, AjEnum group)
+AjBool ensQcdatabaseSetGroup(EnsPQcdatabase qcdb,
+                             EnsEDatabaseadaptorGroup group)
 {
     if(!qcdb)
-	return ajFalse;
-    
+        return ajFalse;
+
     qcdb->Group = group;
-    
+
     return ajTrue;
 }
 
@@ -1117,12 +1135,12 @@ AjBool ensQcdatabaseSetGroup(EnsPQcdatabase qcdb, AjEnum group)
 AjBool ensQcdatabaseSetHost(EnsPQcdatabase qcdb, AjPStr host)
 {
     if(!qcdb)
-	return ajFalse;
-    
+        return ajFalse;
+
     ajStrDel(&qcdb->Host);
-    
+
     qcdb->Host = ajStrNewRef(host);
-    
+
     return ajTrue;
 }
 
@@ -1143,12 +1161,12 @@ AjBool ensQcdatabaseSetHost(EnsPQcdatabase qcdb, AjPStr host)
 AjBool ensQcdatabaseSetDirectory(EnsPQcdatabase qcdb, AjPStr directory)
 {
     if(!qcdb)
-	return ajFalse;
-    
+        return ajFalse;
+
     ajStrDel(&qcdb->Directory);
-    
+
     qcdb->Directory = ajStrNewRef(directory);
-    
+
     return ajTrue;
 }
 
@@ -1169,12 +1187,12 @@ AjBool ensQcdatabaseSetDirectory(EnsPQcdatabase qcdb, AjPStr directory)
 AjBool ensQcdatabaseSetFile(EnsPQcdatabase qcdb, AjPStr file)
 {
     if(!qcdb)
-	return ajFalse;
-    
+        return ajFalse;
+
     ajStrDel(&qcdb->File);
-    
+
     qcdb->File = ajStrNewRef(file);
-    
+
     return ajTrue;
 }
 
@@ -1195,12 +1213,12 @@ AjBool ensQcdatabaseSetFile(EnsPQcdatabase qcdb, AjPStr file)
 AjBool ensQcdatabaseSetExternalURL(EnsPQcdatabase qcdb, AjPStr url)
 {
     if(!qcdb)
-	return ajFalse;
-    
+        return ajFalse;
+
     ajStrDel(&qcdb->ExternalURL);
-    
+
     qcdb->ExternalURL = ajStrNewRef(url);
-    
+
     return ajTrue;
 }
 
@@ -1221,109 +1239,109 @@ AjBool ensQcdatabaseSetExternalURL(EnsPQcdatabase qcdb, AjPStr url)
 AjBool ensQcdatabaseSetInternalURL(EnsPQcdatabase qcdb, AjPStr url)
 {
     if(!qcdb)
-	return ajFalse;
-    
+        return ajFalse;
+
     ajStrDel(&qcdb->InternalURL);
-    
+
     qcdb->InternalURL = ajStrNewRef(url);
-    
+
     return ajTrue;
 }
 
 
 
 
-/* @func ensQcdatabaseGetMemSize **********************************************
+/* @func ensQcdatabaseGetMemsize **********************************************
 **
 ** Get the memory size in bytes of an Ensembl QC Database.
 **
 ** @param [r] qcdb [const EnsPQcdatabase] Ensembl QC Database
 **
-** @return [ajuint] Memory size
+** @return [ajulong] Memory size
 ** @@
 ******************************************************************************/
 
-ajuint ensQcdatabaseGetMemSize(const EnsPQcdatabase qcdb)
+ajulong ensQcdatabaseGetMemsize(const EnsPQcdatabase qcdb)
 {
-    ajuint size = 0;
-    
+    ajulong size = 0;
+
     if(!qcdb)
-	return 0;
-    
-    size += (ajuint) sizeof (EnsOQcdatabase);
-    
-    size += ensAnalysisGetMemSize(qcdb->Analysis);
-    
+        return 0;
+
+    size += sizeof (EnsOQcdatabase);
+
+    size += ensAnalysisGetMemsize(qcdb->Analysis);
+
     if(qcdb->Name)
     {
-	size += (ajuint) sizeof (AjOStr);
-	
-	size += ajStrGetRes(qcdb->Name);
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(qcdb->Name);
     }
-    
+
     if(qcdb->Release)
     {
-	size += (ajuint) sizeof (AjOStr);
-	
-	size += ajStrGetRes(qcdb->Release);
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(qcdb->Release);
     }
-    
+
     if(qcdb->Date)
     {
-	size += (ajuint) sizeof (AjOStr);
-	
-	size += ajStrGetRes(qcdb->Date);
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(qcdb->Date);
     }
-    
+
     if(qcdb->Format)
     {
-	size += (ajuint) sizeof (AjOStr);
-	
-	size += ajStrGetRes(qcdb->Format);
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(qcdb->Format);
     }
-    
+
     if(qcdb->Species)
     {
-	size += (ajuint) sizeof (AjOStr);
-	
-	size += ajStrGetRes(qcdb->Species);
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(qcdb->Species);
     }
-    
+
     if(qcdb->Host)
     {
-	size += (ajuint) sizeof (AjOStr);
-	
-	size += ajStrGetRes(qcdb->Host);
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(qcdb->Host);
     }
-    
+
     if(qcdb->Directory)
     {
-	size += (ajuint) sizeof (AjOStr);
-	
-	size += ajStrGetRes(qcdb->Directory);
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(qcdb->Directory);
     }
-    
+
     if(qcdb->File)
     {
-	size += (ajuint) sizeof (AjOStr);
-	
-	size += ajStrGetRes(qcdb->File);
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(qcdb->File);
     }
-    
+
     if(qcdb->ExternalURL)
     {
-	size += (ajuint) sizeof (AjOStr);
-	
-	size += ajStrGetRes(qcdb->ExternalURL);
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(qcdb->ExternalURL);
     }
-    
+
     if(qcdb->InternalURL)
     {
-	size += (ajuint) sizeof (AjOStr);
-	
-	size += ajStrGetRes(qcdb->InternalURL);
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(qcdb->InternalURL);
     }
-    
+
     return size;
 }
 
@@ -1362,55 +1380,55 @@ ajuint ensQcdatabaseGetMemSize(const EnsPQcdatabase qcdb)
 AjBool ensQcdatabaseTrace(const EnsPQcdatabase qcdb, ajuint level)
 {
     AjPStr indent = NULL;
-    
+
     if(!qcdb)
-	return ajFalse;
-    
+        return ajFalse;
+
     indent = ajStrNew();
-    
+
     ajStrAppendCountK(&indent, ' ', level * 2);
-    
+
     ajDebug("%SensQcdatabaseTrace %p\n"
-	    "%S  Use %u\n"
-	    "%S  Identifier %u\n"
-	    "%S  Adaptor %p\n"
-	    "%S  Analysis %p\n"
-	    "%S  Name '%S'\n"
-	    "%S  Release '%S'\n"
-	    "%S  Date '%S'\n"
-	    "%S  Format '%S'\n"
-	    "%S  Class %d\n"
-	    "%S  Type %d\n"
-	    "%S  Species '%S'\n"
-	    "%S  Group '%s'\n"
-	    "%S  Host '%S'\n"
-	    "%S  Directory '%S'\n"
-	    "%S  File '%S'\n"
-	    "%S  ExternalURL %p\n"
-	    "%S  InternalURL '%S'\n",
-	    indent, qcdb,
-	    indent, qcdb->Use,
-	    indent, qcdb->Identifier,
-	    indent, qcdb->Adaptor,
-	    indent, qcdb->Analysis,
-	    indent, qcdb->Name,
-	    indent, qcdb->Release,
-	    indent, qcdb->Date,
-	    indent, qcdb->Format,
-	    indent, qcdb->Class,
-	    indent, qcdb->Type,
-	    indent, qcdb->Species,
-	    indent, ensDatabaseadaptorGroupToChar(qcdb->Group),
-	    indent, qcdb->Host,
-	    indent, qcdb->Directory,
-	    indent, qcdb->File,
-	    indent, qcdb->ExternalURL,
-	    indent, qcdb->InternalURL);
-    
+            "%S  Use %u\n"
+            "%S  Identifier %u\n"
+            "%S  Adaptor %p\n"
+            "%S  Analysis %p\n"
+            "%S  Name '%S'\n"
+            "%S  Release '%S'\n"
+            "%S  Date '%S'\n"
+            "%S  Format '%S'\n"
+            "%S  Class %d\n"
+            "%S  Type %d\n"
+            "%S  Species '%S'\n"
+            "%S  Group '%s'\n"
+            "%S  Host '%S'\n"
+            "%S  Directory '%S'\n"
+            "%S  File '%S'\n"
+            "%S  ExternalURL %p\n"
+            "%S  InternalURL '%S'\n",
+            indent, qcdb,
+            indent, qcdb->Use,
+            indent, qcdb->Identifier,
+            indent, qcdb->Adaptor,
+            indent, qcdb->Analysis,
+            indent, qcdb->Name,
+            indent, qcdb->Release,
+            indent, qcdb->Date,
+            indent, qcdb->Format,
+            indent, qcdb->Class,
+            indent, qcdb->Type,
+            indent, qcdb->Species,
+            indent, ensDatabaseadaptorGroupToChar(qcdb->Group),
+            indent, qcdb->Host,
+            indent, qcdb->Directory,
+            indent, qcdb->File,
+            indent, qcdb->ExternalURL,
+            indent, qcdb->InternalURL);
+
     ensAnalysisTrace(qcdb->Analysis, 1);
-    
+
     ajStrDel(&indent);
-    
+
     return ajTrue;
 }
 
@@ -1423,25 +1441,25 @@ AjBool ensQcdatabaseTrace(const EnsPQcdatabase qcdb, ajuint level)
 **
 ** @param [r] class [const AjPStr] Class string
 **
-** @return [AjEnum] Ensembl QC Database class element or
-**                  ensEQcdatabaseClassNULL
+** @return [EnsEQcdatabaseClass] Ensembl QC Database class or
+**                               ensEQcdatabaseClassNULL
 ** @@
 ******************************************************************************/
 
-AjEnum ensQcdatabaseClassFromStr(const AjPStr class)
+EnsEQcdatabaseClass ensQcdatabaseClassFromStr(const AjPStr class)
 {
-    register ajuint i = 0;
-    
-    AjEnum eclass = ensEQcdatabaseClassNULL;
-    
-    for(i = 1; qcDatabaseClass[i]; i++)
-	if(ajStrMatchCaseC(class, qcDatabaseClass[i]))
-	    eclass = i;
-    
+    register EnsEQcdatabaseClass i = ensEQcdatabaseClassNULL;
+
+    EnsEQcdatabaseClass eclass = ensEQcdatabaseClassNULL;
+
+    for(i = ensEQcdatabaseClassUnknown; qcdatabaseClass[i]; i++)
+        if(ajStrMatchCaseC(class, qcdatabaseClass[i]))
+            eclass = i;
+
     if(!eclass)
-	ajDebug("ensQcdatabaseClassFromStr encountered "
-		"unexpected string '%S'.\n", class);
-    
+        ajDebug("ensQcdatabaseClassFromStr encountered "
+                "unexpected string '%S'.\n", class);
+
     return eclass;
 }
 
@@ -1454,25 +1472,25 @@ AjEnum ensQcdatabaseClassFromStr(const AjPStr class)
 **
 ** @param [r] type [const AjPStr] Type string
 **
-** @return [AjEnum] Ensembl QC Database type element or
-**                  ensEQcdatabaseTypeNULL
+** @return [EnsEQcdatabaseType] Ensembl QC Database type or
+**                              ensEQcdatabaseTypeNULL
 ** @@
 ******************************************************************************/
 
-AjEnum ensQcdatabaseTypeFromStr(const AjPStr type)
+EnsEQcdatabaseType ensQcdatabaseTypeFromStr(const AjPStr type)
 {
-    register ajuint i = 0;
-    
-    AjEnum etype = ensEQcdatabaseTypeNULL;
-    
-    for(i = 1; qcDatabaseType[i]; i++)
-	if(ajStrMatchCaseC(type, qcDatabaseType[i]))
-	    etype = i;
-    
+    register EnsEQcdatabaseType i = ensEQcdatabaseTypeNULL;
+
+    EnsEQcdatabaseType etype = ensEQcdatabaseTypeNULL;
+
+    for(i = ensEQcdatabaseTypeUnknown; qcdatabaseType[i]; i++)
+        if(ajStrMatchCaseC(type, qcdatabaseType[i]))
+            etype = i;
+
     if(!etype)
-	ajDebug("ensQcdatabaseTypeFromStr encountered "
-		"unexpected string '%S'.\n", type);
-    
+        ajDebug("ensQcdatabaseTypeFromStr encountered "
+                "unexpected string '%S'.\n", type);
+
     return etype;
 }
 
@@ -1483,26 +1501,28 @@ AjEnum ensQcdatabaseTypeFromStr(const AjPStr type)
 **
 ** Convert an Ensembl QC Database class element into a C-type (char*) string.
 **
-** @param [r] class [const AjEnum] Ensembl QC Database class enumerator
+** @param [r] class [EnsEQcdatabaseClass] Ensembl QC Database class
 **
 ** @return [const char*] Ensembl QC Database class C-type (char*) string
 ** @@
 ******************************************************************************/
 
-const char* ensQcdatabaseClassToChar(const AjEnum class)
+const char* ensQcdatabaseClassToChar(EnsEQcdatabaseClass class)
 {
-    register ajint i = 0;
-    
+    register EnsEQcdatabaseClass i = ensEQcdatabaseClassNULL;
+
     if(!class)
-	return NULL;
-    
-    for(i = 1; qcDatabaseClass[i] && (i < class); i++);
-    
-    if(!qcDatabaseClass[i])
-	ajDebug("ensQcdatabaseClassToChar encountered an "
-		"out of boundary error on group %d.\n", class);
-    
-    return qcDatabaseClass[i];
+        return NULL;
+
+    for(i = ensEQcdatabaseClassUnknown;
+        qcdatabaseClass[i] && (i < class);
+        i++);
+
+    if(!qcdatabaseClass[i])
+        ajDebug("ensQcdatabaseClassToChar encountered an "
+                "out of boundary error on group %d.\n", class);
+
+    return qcdatabaseClass[i];
 }
 
 
@@ -1512,26 +1532,28 @@ const char* ensQcdatabaseClassToChar(const AjEnum class)
 **
 ** Convert an Ensembl QC Database type element into a C-type (char*) string.
 **
-** @param [r] type [const AjEnum] Ensembl QC Database type enumerator
+** @param [r] type [EnsEQcdatabaseType] Ensembl QC Database type
 **
 ** @return [const char*] Ensembl QC Database type C-type (char*) string
 ** @@
 ******************************************************************************/
 
-const char* ensQcdatabaseTypeToChar(const AjEnum type)
+const char* ensQcdatabaseTypeToChar(EnsEQcdatabaseType type)
 {
-    register ajint i = 0;
-    
+    register EnsEQcdatabaseType i = ensEQcdatabaseTypeNULL;
+
     if(!type)
-	return NULL;
-    
-    for(i = 1; qcDatabaseType[i] && (i < type); i++);
-    
-    if(!qcDatabaseType[i])
-	ajDebug("ensQcdatabaseTypeToChar encountered an "
-		"out of boundary error on group %d.\n", type);
-    
-    return qcDatabaseType[i];
+        return NULL;
+
+    for(i = ensEQcdatabaseTypeUnknown;
+        qcdatabaseType[i] && (i < type);
+        i++);
+
+    if(!qcdatabaseType[i])
+        ajDebug("ensQcdatabaseTypeToChar encountered an "
+                "out of boundary error on group %d.\n", type);
+
+    return qcdatabaseType[i];
 }
 
 
@@ -1555,59 +1577,59 @@ AjBool ensQcdatabaseMatch(const EnsPQcdatabase qcdb1,
 {
     if(!qcdb1)
         return ajFalse;
-    
+
     if(!qcdb2)
         return ajFalse;
-    
+
     if(qcdb1 == qcdb2)
-	return ajTrue;
-    
+        return ajTrue;
+
     if(qcdb1->Identifier != qcdb2->Identifier)
-	return ajFalse;
-    
+        return ajFalse;
+
     if((qcdb1->Adaptor && qcdb2->Adaptor) &&
-	(qcdb1->Adaptor != qcdb2->Adaptor))
-	return ajFalse;
-    
+       (qcdb1->Adaptor != qcdb2->Adaptor))
+        return ajFalse;
+
     if(!ajStrMatchCaseS(qcdb1->Name, qcdb2->Name))
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!ajStrMatchCaseS(qcdb1->Release, qcdb2->Release))
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!ajStrMatchCaseS(qcdb1->Date, qcdb2->Date))
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!ajStrMatchCaseS(qcdb1->Format, qcdb2->Format))
-	return ajFalse;
-    
+        return ajFalse;
+
     if(qcdb1->Class != qcdb2->Class)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(qcdb1->Type != qcdb2->Type)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!ajStrMatchCaseS(qcdb1->Species, qcdb2->Species))
-	return ajFalse;
-    
+        return ajFalse;
+
     if(qcdb1->Group != qcdb2->Group)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!ajStrMatchCaseS(qcdb1->Host, qcdb2->Host))
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!ajStrMatchCaseS(qcdb1->Directory, qcdb2->Directory))
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!ajStrMatchCaseS(qcdb1->File, qcdb2->File))
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!ajStrMatchCaseS(qcdb1->ExternalURL, qcdb2->ExternalURL))
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!ajStrMatchCaseS(qcdb1->InternalURL, qcdb2->InternalURL))
-	return ajFalse;
-    
+        return ajFalse;
+
     return ajTrue;
 }
 
@@ -1624,7 +1646,7 @@ AjBool ensQcdatabaseMatch(const EnsPQcdatabase qcdb1,
 **
 ******************************************************************************/
 
-static const char *qcDatabaseadaptorTables[] =
+static const char *qcdatabaseadaptorTables[] =
 {
     "sequence_db",
     (const char *) NULL
@@ -1633,7 +1655,7 @@ static const char *qcDatabaseadaptorTables[] =
 
 
 
-static const char *qcDatabaseadaptorColumns[] =
+static const char *qcdatabaseadaptorColumns[] =
 {
     "sequence_db.sequence_db_id",
     "sequence_db.analysis_id",
@@ -1655,7 +1677,7 @@ static const char *qcDatabaseadaptorColumns[] =
 
 
 
-static EnsOBaseadaptorLeftJoin qcDatabaseadaptorLeftJoin[] =
+static EnsOBaseadaptorLeftJoin qcdatabaseadaptorLeftJoin[] =
 {
     {(const char*) NULL, (const char*) NULL}
 };
@@ -1663,34 +1685,34 @@ static EnsOBaseadaptorLeftJoin qcDatabaseadaptorLeftJoin[] =
 
 
 
-static const char *qcDatabaseadaptorDefaultCondition =
-(const char*) NULL;
+static const char *qcdatabaseadaptorDefaultCondition =
+    (const char*) NULL;
 
 
 
 
-static const char *qcDatabaseadaptorFinalCondition =
-(const char *) NULL;
+static const char *qcdatabaseadaptorFinalCondition =
+    (const char *) NULL;
 
 
 
 
-/* @funcstatic qcDatabaseadaptorFetchAllBySQL *********************************
+/* @funcstatic qcdatabaseadaptorFetchAllBySQL *********************************
 **
 ** Run a SQL statement against an Ensembl Database Adaptor and consolidate the
 ** results into an AJAX List of Ensembl QC Database objects.
 **
-** @param [r] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 ** @param [r] statement [const AjPStr] SQL statement
-** @param [u] am [EnsPAssemblymapper] Ensembl Assembly Mapper
-** @param [r] slice [EnsPSlice] Ensembl Slice
+** @param [uN] am [EnsPAssemblymapper] Ensembl Assembly Mapper
+** @param [uN] slice [EnsPSlice] Ensembl Slice
 ** @param [u] qcdbs [AjPList] AJAX List of Ensembl QC Databases
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-static AjBool qcDatabaseadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
+static AjBool qcdatabaseadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
                                              const AjPStr statement,
                                              EnsPAssemblymapper am,
                                              EnsPSlice slice,
@@ -1698,15 +1720,11 @@ static AjBool qcDatabaseadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 {
     ajuint identifier = 0;
     ajuint analysisid = 0;
-    
-    AjEnum egroup = ensEDatabaseadaptorGroupNULL;
-    AjEnum eclass = ensEQcdatabaseClassNULL;
-    AjEnum etype  = ensEQcdatabaseTypeNULL;
-    
+
     AjPSqlstatement sqls = NULL;
     AjISqlrow sqli       = NULL;
     AjPSqlrow sqlr       = NULL;
-    
+
     AjPStr name        = NULL;
     AjPStr release     = NULL;
     AjPStr date        = NULL;
@@ -1719,53 +1737,66 @@ static AjBool qcDatabaseadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
     AjPStr directory   = NULL;
     AjPStr file        = NULL;
     AjPStr externalurl = NULL;
-    
+
+    EnsEDatabaseadaptorGroup egroup = ensEDatabaseadaptorGroupNULL;
+    EnsEQcdatabaseClass eclass      = ensEQcdatabaseClassNULL;
+    EnsEQcdatabaseType etype        = ensEQcdatabaseTypeNULL;
+
     EnsPAnalysis analysis  = NULL;
     EnsPAnalysisadaptor aa = NULL;
-    
+
     EnsPQcdatabase qcdb         = NULL;
     EnsPQcdatabaseadaptor qcdba = NULL;
-    
+
+    if(ajDebugTest("qcdatabaseadaptorFetchAllBySQL"))
+        ajDebug("qcdatabaseadaptorFetchAllBySQL\n"
+                "  dba %p\n"
+                "  statement %p\n"
+                "  am %p\n"
+                "  slice %p\n"
+                "  qcdbs %p\n",
+                dba,
+                statement,
+                am,
+                slice,
+                qcdbs);
+
     if(!dba)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!statement)
-	return ajFalse;
-    
-    (void) am;
-    
-    (void) slice;
-    
+        return ajFalse;
+
     if(!qcdbs)
-	return ajFalse;
-    
+        return ajFalse;
+
     aa = ensRegistryGetAnalysisadaptor(dba);
-    
+
     qcdba = ensRegistryGetQcdatabaseadaptor(dba);
-    
+
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
-    
+
     sqli = ajSqlrowiterNew(sqls);
-    
+
     while(!ajSqlrowiterDone(sqli))
     {
-	identifier  = 0;
-	analysisid  = 0;
-	name        = ajStrNew();
-	release     = ajStrNew();
-	date        = ajStrNew();
-	format      = ajStrNew();
-	type        = ajStrNew();
-	class       = ajStrNew();
-	species     = ajStrNew();
-	group       = ajStrNew();
-	host        = ajStrNew();
-	directory   = ajStrNew();
-	file        = ajStrNew();
-	externalurl = ajStrNew();
-	
+        identifier  = 0;
+        analysisid  = 0;
+        name        = ajStrNew();
+        release     = ajStrNew();
+        date        = ajStrNew();
+        format      = ajStrNew();
+        type        = ajStrNew();
+        class       = ajStrNew();
+        species     = ajStrNew();
+        group       = ajStrNew();
+        host        = ajStrNew();
+        directory   = ajStrNew();
+        file        = ajStrNew();
+        externalurl = ajStrNew();
+
         sqlr = ajSqlrowiterGet(sqli);
-	
+
         ajSqlcolumnToUint(sqlr, &identifier);
         ajSqlcolumnToUint(sqlr, &analysisid);
         ajSqlcolumnToStr(sqlr, &name);
@@ -1780,60 +1811,60 @@ static AjBool qcDatabaseadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
         ajSqlcolumnToStr(sqlr, &directory);
         ajSqlcolumnToStr(sqlr, &file);
         ajSqlcolumnToStr(sqlr, &externalurl);
-	
-	ensAnalysisadaptorFetchByIdentifier(aa, analysisid, &analysis);
-	
-	etype = ensQcdatabaseTypeFromStr(type);
-	
-	eclass = ensQcdatabaseClassFromStr(class);
-	
-	egroup = ensDatabaseadaptorGroupFromStr(group);
-	
-	qcdb = ensQcdatabaseNew(qcdba,
-				identifier,
-				analysis,
-				name,
-				release,
-				date,
-				format,
-				etype,
-				eclass,
-				species,
-				egroup,
-				host,
-				directory,
-				file,
-				externalurl);
-	
-	ajListPushAppend(qcdbs, (void *) qcdb);
-	
-	ensAnalysisDel(&analysis);
-	
-	ajStrDel(&name);
-	ajStrDel(&release);
-	ajStrDel(&date);
-	ajStrDel(&format);
-	ajStrDel(&type);
-	ajStrDel(&class);
-	ajStrDel(&species);
-	ajStrDel(&group);
-	ajStrDel(&host);
-	ajStrDel(&directory);
-	ajStrDel(&file);
-	ajStrDel(&externalurl);
+
+        ensAnalysisadaptorFetchByIdentifier(aa, analysisid, &analysis);
+
+        etype = ensQcdatabaseTypeFromStr(type);
+
+        eclass = ensQcdatabaseClassFromStr(class);
+
+        egroup = ensDatabaseadaptorGroupFromStr(group);
+
+        qcdb = ensQcdatabaseNew(qcdba,
+                                identifier,
+                                analysis,
+                                name,
+                                release,
+                                date,
+                                format,
+                                eclass,
+                                etype,
+                                species,
+                                egroup,
+                                host,
+                                directory,
+                                file,
+                                externalurl);
+
+        ajListPushAppend(qcdbs, (void *) qcdb);
+
+        ensAnalysisDel(&analysis);
+
+        ajStrDel(&name);
+        ajStrDel(&release);
+        ajStrDel(&date);
+        ajStrDel(&format);
+        ajStrDel(&type);
+        ajStrDel(&class);
+        ajStrDel(&species);
+        ajStrDel(&group);
+        ajStrDel(&host);
+        ajStrDel(&directory);
+        ajStrDel(&file);
+        ajStrDel(&externalurl);
     }
-    
+
     ajSqlrowiterDel(&sqli);
-    
-    ajSqlstatementDel(&sqls);
-    
+
+    ensDatabaseadaptorSqlstatementDel(dba, &sqls);
+
     return ajTrue;
 }
 
 
 
 
-/* @funcstatic qcDatabaseadaptorCacheInsert ***********************************
+/* @funcstatic qcdatabaseadaptorCacheInsert ***********************************
 **
 ** Insert an Ensembl QC Database into the QC Database Adaptor-internal cache.
 ** If a QC Database with the same name element is already present in the
@@ -1847,101 +1878,102 @@ static AjBool qcDatabaseadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 ** @@
 ******************************************************************************/
 
-static AjBool qcDatabaseadaptorCacheInsert(EnsPQcdatabaseadaptor qcdba,
+static AjBool qcdatabaseadaptorCacheInsert(EnsPQcdatabaseadaptor qcdba,
                                            EnsPQcdatabase *Pqcdb)
 {
     ajuint *Pidentifier = NULL;
-    
+
     AjPStr key = NULL;
-    
+
     EnsPQcdatabase qcdb1 = NULL;
     EnsPQcdatabase qcdb2 = NULL;
-    
+
     if(!qcdba)
         return ajFalse;
-    
+
     if(!qcdba->CacheByIdentifier)
         return ajFalse;
-    
+
     if(!qcdba->CacheByName)
         return ajFalse;
-    
+
     if(!Pqcdb)
         return ajFalse;
-    
+
     if(!*Pqcdb)
         return ajFalse;
-    
+
     /* Search the identifer cache. */
-    
-    qcdb1 = (EnsPQcdatabase)
-	ajTableFetch(qcdba->CacheByIdentifier,
-		     (const void *) &((*Pqcdb)->Identifier));
-    
+
+    qcdb1 = (EnsPQcdatabase) ajTableFetch(
+        qcdba->CacheByIdentifier,
+        (const void *) &((*Pqcdb)->Identifier));
+
     /* Search the name cache. */
-    
+
     key = ajFmtStr("%S:%S", (*Pqcdb)->Name, (*Pqcdb)->Release);
-    
-    qcdb2 = (EnsPQcdatabase)
-	ajTableFetch(qcdba->CacheByName, (const void *) key);
-    
-    if((!qcdb1) && (! qcdb2))
+
+    qcdb2 = (EnsPQcdatabase) ajTableFetch(
+        qcdba->CacheByName,
+        (const void *) key);
+
+    if((!qcdb1) && (!qcdb2))
     {
-	/* Insert into the identifier cache. */
-	
-	AJNEW0(Pidentifier);
-	
-	*Pidentifier = (*Pqcdb)->Identifier;
-	
-	ajTablePut(qcdba->CacheByIdentifier,
-		   (void *) Pidentifier,
-		   (void *) ensQcdatabaseNewRef(*Pqcdb));
-	
-	/* Insert into the name cache. */
-	
+        /* Insert into the identifier cache. */
+
+        AJNEW0(Pidentifier);
+
+        *Pidentifier = (*Pqcdb)->Identifier;
+
+        ajTablePut(qcdba->CacheByIdentifier,
+                   (void *) Pidentifier,
+                   (void *) ensQcdatabaseNewRef(*Pqcdb));
+
+        /* Insert into the name cache. */
+
         ajTablePut(qcdba->CacheByName,
-		   (void *) ajStrNewS(key),
-		   (void *) ensQcdatabaseNewRef(*Pqcdb));
+                   (void *) ajStrNewS(key),
+                   (void *) ensQcdatabaseNewRef(*Pqcdb));
     }
-    
+
     if(qcdb1 && qcdb2 && (qcdb1 == qcdb2))
     {
-        ajDebug("qcDatabaseadaptorCacheInsert replaced "
-		"Ensembl QC Database %p with "
-		"one already cached %p.\n",
-		*Pqcdb, qcdb1);
-	
-	ensQcdatabaseDel(Pqcdb);
-	
-	Pqcdb = &qcdb1;
+        ajDebug("qcdatabaseadaptorCacheInsert replaced "
+                "Ensembl QC Database %p with "
+                "one already cached %p.\n",
+                *Pqcdb, qcdb1);
+
+        ensQcdatabaseDel(Pqcdb);
+
+        Pqcdb = &qcdb1;
     }
-    
+
     if(qcdb1 && qcdb2 && (qcdb1 != qcdb2))
-	ajDebug("qcDatabaseadaptorCacheInsert detected "
-		"Ensembl QC Databases in the "
-		"identifier and name cache with identical names "
-		"('%S' and '%S') but different addresses (%p and %p).\n",
-		qcdb1->Name, qcdb2->Name, qcdb1, qcdb2);
-    
+        ajDebug("qcdatabaseadaptorCacheInsert detected "
+                "Ensembl QC Databases in the "
+                "identifier and name cache with identical names "
+                "('%S' and '%S') but different addresses (%p and %p).\n",
+                qcdb1->Name, qcdb2->Name, qcdb1, qcdb2);
+
     if(qcdb1 && (!qcdb2))
-        ajDebug("qcDatabaseadaptorCacheInsert detected an "
-		"Ensembl QC Database "
-		"in the identifier, but not in the name cache.\n");
-    
+        ajDebug("qcdatabaseadaptorCacheInsert detected an "
+                "Ensembl QC Database "
+                "in the identifier, but not in the name cache.\n");
+
     if((!qcdb1) && qcdb2)
-        ajDebug("qcDatabaseadaptorCacheInsert detected an "
-		"Ensembl QC Database "
-		"in the name, but not in the identifier cache.\n");
-    
+        ajDebug("qcdatabaseadaptorCacheInsert detected an "
+                "Ensembl QC Database "
+                "in the name, but not in the identifier cache.\n");
+
     ajStrDel(&key);
-    
+
     return ajTrue;
 }
 
 
 
 
-/* @funcstatic qcDatabaseadaptorCacheInit *************************************
+/* @funcstatic qcdatabaseadaptorCacheInit *************************************
 **
 ** Initialise the internal QC Database cache of an Ensembl QC Database Adaptor.
 **
@@ -1951,43 +1983,43 @@ static AjBool qcDatabaseadaptorCacheInsert(EnsPQcdatabaseadaptor qcdba,
 ** @@
 ******************************************************************************/
 
-static AjBool qcDatabaseadaptorCacheInit(EnsPQcdatabaseadaptor qcdba)
+static AjBool qcdatabaseadaptorCacheInit(EnsPQcdatabaseadaptor qcdba)
 {
     AjPList qcdbs = NULL;
-    
+
     EnsPQcdatabase qcdb = NULL;
-    
+
     if(!qcdba)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(qcdba->CacheByIdentifier)
-	return ajFalse;
+        return ajFalse;
     else
-	qcdba->CacheByIdentifier =
-	    ajTableNewFunctionLen(0, ensTableCmpUint, ensTableHashUint);
-    
+        qcdba->CacheByIdentifier =
+            ajTableNewFunctionLen(0, ensTableCmpUint, ensTableHashUint);
+
     if(qcdba->CacheByName)
-	return ajFalse;
+        return ajFalse;
     else
-	qcdba->CacheByName = ajTablestrNewLen(0);
-    
+        qcdba->CacheByName = ajTablestrNewLen(0);
+
     qcdbs = ajListNew();
-    
+
     ensBaseadaptorGenericFetch(qcdba->Adaptor,
-			       (const AjPStr) NULL,
-			       (EnsPAssemblymapper) NULL,
-			       (EnsPSlice) NULL,
-			       qcdbs);
-    
+                               (const AjPStr) NULL,
+                               (EnsPAssemblymapper) NULL,
+                               (EnsPSlice) NULL,
+                               qcdbs);
+
     while(ajListPop(qcdbs, (void **) &qcdb))
     {
-	qcDatabaseadaptorCacheInsert(qcdba, &qcdb);
-	
-	ensQcdatabaseDel(&qcdb);
+        qcdatabaseadaptorCacheInsert(qcdba, &qcdb);
+
+        ensQcdatabaseDel(&qcdb);
     }
-    
+
     ajListFree(&qcdbs);
-    
+
     return ajTrue;
 }
 
@@ -2005,12 +2037,8 @@ static AjBool qcDatabaseadaptorCacheInit(EnsPQcdatabaseadaptor qcdba)
 ** @fnote None
 **
 ** @nam3rule New Constructor
-** @nam4rule NewObj Constructor with existing object
-** @nam4rule NewRef Constructor by incrementing the reference counter
 **
 ** @argrule New dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
-** @argrule Obj object [EnsPQcdatabaseadaptor] Ensembl QC Database Adaptor
-** @argrule Ref object [EnsPQcdatabaseadaptor] Ensembl QC Database Adaptor
 **
 ** @valrule * [EnsPQcdatabaseadaptor] Ensembl QC Database Adaptor
 **
@@ -2024,39 +2052,51 @@ static AjBool qcDatabaseadaptorCacheInit(EnsPQcdatabaseadaptor qcdba)
 **
 ** Default constructor for an Ensembl QC Database Adaptor.
 **
-** @param [r] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** Ensembl Object Adaptors are singleton objects in the sense that a single
+** instance of an Ensembl Object Adaptor connected to a particular database is
+** sufficient to instantiate any number of Ensembl Objects from the database.
+** Each Ensembl Object will have a weak reference to the Object Adaptor that
+** instantiated it. Therefore, Ensembl Object Adaptors should not be
+** instantiated directly, but rather obtained from the Ensembl Registry,
+** which will in turn call this function if neccessary.
+**
+** @see ensRegistryGetDatabaseadaptor
+** @see ensRegistryGetQcdatabaseadaptor
+**
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
 ** @return [EnsPQcdatabaseadaptor] Ensembl QC Database Adaptor or NULL
 ** @@
 ******************************************************************************/
 
-EnsPQcdatabaseadaptor ensQcdatabaseadaptorNew(EnsPDatabaseadaptor dba)
+EnsPQcdatabaseadaptor ensQcdatabaseadaptorNew(
+    EnsPDatabaseadaptor dba)
 {
     EnsPQcdatabaseadaptor qcdba = NULL;
-    
+
     if(!dba)
-	return NULL;
-    
+        return NULL;
+
     AJNEW0(qcdba);
-    
-    qcdba->Adaptor =
-	ensBaseadaptorNew(dba,
-			  qcDatabaseadaptorTables,
-			  qcDatabaseadaptorColumns,
-			  qcDatabaseadaptorLeftJoin,
-			  qcDatabaseadaptorDefaultCondition,
-			  qcDatabaseadaptorFinalCondition,
-			  qcDatabaseadaptorFetchAllBySQL);
-    
-    qcDatabaseadaptorCacheInit(qcdba);
-    
+
+    qcdba->Adaptor = ensBaseadaptorNew(
+        dba,
+        qcdatabaseadaptorTables,
+        qcdatabaseadaptorColumns,
+        qcdatabaseadaptorLeftJoin,
+        qcdatabaseadaptorDefaultCondition,
+        qcdatabaseadaptorFinalCondition,
+        qcdatabaseadaptorFetchAllBySQL);
+
+    qcdatabaseadaptorCacheInit(qcdba);
+
     return qcdba;
 }
 
 
 
 
-/* @funcstatic qcDatabaseadaptorCacheClearIdentifier **************************
+/* @funcstatic qcdatabaseadaptorCacheClearIdentifier **************************
 **
 ** An ajTableMapDel 'apply' function to clear the Ensembl QC Database
 ** Adaptor-internal QC Database cache. This function deletes the
@@ -2072,34 +2112,35 @@ EnsPQcdatabaseadaptor ensQcdatabaseadaptorNew(EnsPDatabaseadaptor dba)
 ** @@
 ******************************************************************************/
 
-static void qcDatabaseadaptorCacheClearIdentifier(void **key, void **value,
+static void qcdatabaseadaptorCacheClearIdentifier(void **key,
+                                                  void **value,
                                                   void *cl)
 {
     if(!key)
-	return;
-    
+        return;
+
     if(!*key)
-	return;
-    
+        return;
+
     if(!value)
-	return;
-    
+        return;
+
     if(!*value)
-	return;
-    
+        return;
+
     (void) cl;
-    
+
     AJFREE(*key);
-    
+
     ensQcdatabaseDel((EnsPQcdatabase *) value);
-    
+
     return;
 }
 
 
 
 
-/* @funcstatic qcDatabaseadaptorCacheClearName ********************************
+/* @funcstatic qcdatabaseadaptorCacheClearName ********************************
 **
 ** An ajTableMapDel 'apply' function to clear the Ensembl QC Database
 ** Adaptor-internal QC Database cache. This function deletes the name
@@ -2114,63 +2155,65 @@ static void qcDatabaseadaptorCacheClearIdentifier(void **key, void **value,
 ** @@
 ******************************************************************************/
 
-static void qcDatabaseadaptorCacheClearName(void **key, void **value, void *cl)
+static void qcdatabaseadaptorCacheClearName(void **key,
+                                            void **value,
+                                            void *cl)
 {
     if(!key)
-	return;
-    
+        return;
+
     if(!*key)
-	return;
-    
+        return;
+
     if(!value)
-	return;
-    
+        return;
+
     if(!*value)
-	return;
-    
+        return;
+
     (void) cl;
-    
+
     ajStrDel((AjPStr *) key);
-    
+
     ensQcdatabaseDel((EnsPQcdatabase *) value);
-    
+
     return;
 }
 
 
 
 
-/* @funcstatic qcDatabaseadaptorCacheExit *************************************
+/* @funcstatic qcdatabaseadaptorCacheExit *************************************
 **
 ** Clears the internal QC Database cache of an Ensembl QC Database Adaptor.
 **
-** @param [u] adaptor [EnsPQcdatabaseadaptor] Ensembl QC Database Adaptor
+** @param [u] qcdba [EnsPQcdatabaseadaptor] Ensembl QC Database Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-static AjBool qcDatabaseadaptorCacheExit(EnsPQcdatabaseadaptor adaptor)
+static AjBool qcdatabaseadaptorCacheExit(EnsPQcdatabaseadaptor qcdba)
 {
-    if(!adaptor)
+    if(!qcdba)
         return ajFalse;
-    
+
     /* Clear and delete the identifier cache. */
-    
-    ajTableMapDel(adaptor->CacheByIdentifier,
-		  qcDatabaseadaptorCacheClearIdentifier,
-		  NULL);
-    
-    ajTableFree(&(adaptor->CacheByIdentifier));
-    
+
+    ajTableMapDel(qcdba->CacheByIdentifier,
+                  qcdatabaseadaptorCacheClearIdentifier,
+                  NULL);
+
+    ajTableFree(&qcdba->CacheByIdentifier);
+
     /* Clear and delete the name cache. */
-    
-    ajTableMapDel(adaptor->CacheByName,
-		  qcDatabaseadaptorCacheClearName,
-		  NULL);
-    
-    ajTableFree(&(adaptor->CacheByName));
-    
+
+    ajTableMapDel(qcdba->CacheByName,
+                  qcdatabaseadaptorCacheClearName,
+                  NULL);
+
+    ajTableFree(&qcdba->CacheByName);
+
     return ajTrue;
 }
 
@@ -2188,7 +2231,7 @@ static AjBool qcDatabaseadaptorCacheExit(EnsPQcdatabaseadaptor adaptor)
 ** @nam3rule Del Destroy (free) a QC Database Adaptor object
 **
 ** @argrule * Pqcdba [EnsPQcdatabaseadaptor*] QC Database Adaptor
-**                                             object address
+**                                            object address
 **
 ** @valrule * [void]
 **
@@ -2202,8 +2245,14 @@ static AjBool qcDatabaseadaptorCacheExit(EnsPQcdatabaseadaptor adaptor)
 **
 ** Default destructor for an Ensembl QC Database Adaptor.
 **
+** Ensembl Object Adaptors are singleton objects that are registered in the
+** Ensembl Registry and weakly referenced by Ensembl Objects that have been
+** instantiated by it. Therefore, Ensembl Object Adaptors should never be
+** destroyed directly. Upon exit, the Ensembl Registry will call this function
+** if required.
+**
 ** @param [d] Pqcdba [EnsPQcdatabaseadaptor*] Ensembl QC Database Adaptor
-**                                             address
+**                                            address
 **
 ** @return [void]
 ** @@
@@ -2212,29 +2261,28 @@ static AjBool qcDatabaseadaptorCacheExit(EnsPQcdatabaseadaptor adaptor)
 void ensQcdatabaseadaptorDel(EnsPQcdatabaseadaptor *Pqcdba)
 {
     EnsPQcdatabaseadaptor pthis = NULL;
-    
-    /*
-     ajDebug("ensQcdatabaseadaptorDel\n"
-	     "  *Pqcdba %p\n",
-	     *Pqcdba);
-     */
-    
+
     if(!Pqcdba)
-	return;
-    
+        return;
+
     if(!*Pqcdba)
-	return;
+        return;
+
+    if(ajDebugTest("ensQcdatabaseadaptorDel"))
+        ajDebug("ensQcdatabaseadaptorDel\n"
+                "  *Pqcdba %p\n",
+                *Pqcdba);
 
     pthis = *Pqcdba;
-    
-    qcDatabaseadaptorCacheExit(pthis);
-    
+
+    qcdatabaseadaptorCacheExit(pthis);
+
     ensBaseadaptorDel(&pthis->Adaptor);
-    
+
     AJFREE(pthis);
 
     *Pqcdba = NULL;
-    
+
     return;
 }
 
@@ -2245,7 +2293,7 @@ void ensQcdatabaseadaptorDel(EnsPQcdatabaseadaptor *Pqcdba)
 **
 ** Fetch an Ensembl QC Database by its SQL database-internal identifier.
 **
-** @param [r] qcdba [EnsPQcdatabaseadaptor] Ensembl QC Database Adaptor
+** @param [u] qcdba [EnsPQcdatabaseadaptor] Ensembl QC Database Adaptor
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 ** @param [wP] Pqcdb [EnsPQcdatabase*] Ensembl QC Database address
 **
@@ -2258,36 +2306,36 @@ AjBool ensQcdatabaseadaptorFetchByIdentifier(EnsPQcdatabaseadaptor qcdba,
                                              EnsPQcdatabase *Pqcdb)
 {
     if(!qcdba)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!Pqcdb)
-	return ajFalse;
-    
+        return ajFalse;
+
     /*
     ** Initally, search the identifier cache.
     ** For any object returned by the AJAX Table the reference counter needs
     ** to be incremented manually.
     */
-    
+
     *Pqcdb = (EnsPQcdatabase)
-	ajTableFetch(qcdba->CacheByIdentifier, (const void *) &identifier);
-    
+        ajTableFetch(qcdba->CacheByIdentifier, (const void *) &identifier);
+
     if(*Pqcdb)
     {
-	ensQcdatabaseNewRef(*Pqcdb);
-	
-	return ajTrue;
+        ensQcdatabaseNewRef(*Pqcdb);
+
+        return ajTrue;
     }
-    
+
     /*
     ** TODO: Try to retrieve directly from the database?
-    ** 
+    **
     ** *Pqcdb = (EnsPQcdatabase)
     ** ensBaseadaptorFetchByIdentifier(adaptor->Adaptor, identifier);
-    ** 
-    ** qcDatabaseadaptorCacheInsert(adaptor, Pqcdb);
+    **
+    ** qcdatabaseadaptorCacheInsert(adaptor, Pqcdb);
     */
-    
+
     return ajTrue;
 }
 
@@ -2298,7 +2346,7 @@ AjBool ensQcdatabaseadaptorFetchByIdentifier(EnsPQcdatabaseadaptor qcdba,
 **
 ** Fetch an Ensembl QC Database by its name and release.
 **
-** @param [r] qcdba [EnsPQcdatabaseadaptor] Ensembl QC Database Adaptor
+** @param [u] qcdba [EnsPQcdatabaseadaptor] Ensembl QC Database Adaptor
 ** @param [r] name [const AjPStr] Ensembl QC Database name
 ** @param [r] release [const AjPStr] Ensembl QC Database release
 ** @param [wP] Pqcdb [EnsPQcdatabase*] Ensembl QC Database address
@@ -2314,90 +2362,90 @@ AjBool ensQcdatabaseadaptorFetchByName(EnsPQcdatabaseadaptor qcdba,
 {
     char *txtname    = NULL;
     char *txtrelease = NULL;
-    
+
     AjPList qcdbs = NULL;
-    
+
     AjPStr key        = NULL;
     AjPStr constraint = NULL;
-    
+
     EnsPQcdatabase qcdb = NULL;
-    
+
     if(!qcdba)
         return ajFalse;
-    
+
     if((!name) && (!ajStrGetLen(name)))
         return ajFalse;
-    
+
     if((!release) && (!ajStrGetLen(release)))
         return ajFalse;
-    
+
     if(!Pqcdb)
-	return ajFalse;
-    
+        return ajFalse;
+
     /*
     ** Initally, search the name cache.
     ** For any object returned by the AJAX Table the reference counter needs
     ** to be incremented manually.
     */
-    
+
     key = ajFmtStr("%S:%S", name, release);
-    
+
     *Pqcdb = (EnsPQcdatabase)
-	ajTableFetch(qcdba->CacheByName, (const void *) key);
-    
+        ajTableFetch(qcdba->CacheByName, (const void *) key);
+
     ajStrDel(&key);
-    
+
     if(*Pqcdb)
     {
-	ensQcdatabaseNewRef(*Pqcdb);
-	
-	return ajTrue;
+        ensQcdatabaseNewRef(*Pqcdb);
+
+        return ajTrue;
     }
-    
+
     /* In case of a cache miss, query the database. */
-    
+
     ensBaseadaptorEscapeC(qcdba->Adaptor, &txtname, name);
-    
+
     ensBaseadaptorEscapeC(qcdba->Adaptor, &txtrelease, release);
-    
+
     constraint = ajFmtStr("sequence_db.name = '%s' "
-			  "AND "
-			  "sequence_db.release = '%s'",
-			  txtname,
-			  txtrelease);
-    
+                          "AND "
+                          "sequence_db.release = '%s'",
+                          txtname,
+                          txtrelease);
+
     ajCharDel(&txtname);
-    
+
     ajCharDel(&txtrelease);
-    
+
     qcdbs = ajListNew();
-    
+
     ensBaseadaptorGenericFetch(qcdba->Adaptor,
-			       constraint,
-			       (EnsPAssemblymapper) NULL,
-			       (EnsPSlice) NULL,
-			       qcdbs);
-    
+                               constraint,
+                               (EnsPAssemblymapper) NULL,
+                               (EnsPSlice) NULL,
+                               qcdbs);
+
     if(ajListGetLength(qcdbs) > 1)
-	ajWarn("ensQcdatabaseadaptorFetchByName got more than "
-	       "one Ensembl QC Database for (UNIQUE) name '%S' "
-	       "and release '%S'.\n", name, release);
-    
+        ajWarn("ensQcdatabaseadaptorFetchByName got more than "
+               "one Ensembl QC Database for (UNIQUE) name '%S' "
+               "and release '%S'.\n", name, release);
+
     ajListPop(qcdbs, (void **) Pqcdb);
-    
-    qcDatabaseadaptorCacheInsert(qcdba, Pqcdb);
-    
+
+    qcdatabaseadaptorCacheInsert(qcdba, Pqcdb);
+
     while(ajListPop(qcdbs, (void **) &qcdb))
     {
-	qcDatabaseadaptorCacheInsert(qcdba, &qcdb);
-	
-	ensQcdatabaseDel(&qcdb);
+        qcdatabaseadaptorCacheInsert(qcdba, &qcdb);
+
+        ensQcdatabaseDel(&qcdb);
     }
-    
+
     ajListFree(&qcdbs);
-    
+
     ajStrDel(&constraint);
-    
+
     return ajTrue;
 }
 
@@ -2408,9 +2456,9 @@ AjBool ensQcdatabaseadaptorFetchByName(EnsPQcdatabaseadaptor qcdba,
 **
 ** Fetch an Ensembl QC Database by its class and type.
 **
-** @param [r] qcdba [EnsPQcdatabaseadaptor] Ensembl QC Database Adaptor
-** @param [r] class [AjEnum] Ensembl QC Database class
-** @param [r] type [AjEnum] Ensembl QC Database type
+** @param [u] qcdba [EnsPQcdatabaseadaptor] Ensembl QC Database Adaptor
+** @param [r] class [EnsEQcdatabaseClass] Ensembl QC Database class
+** @param [r] type [EnsEQcdatabaseType] Ensembl QC Database type
 ** @param [u] qcdbs [AjPList] AJAX List of Ensembl QC Databases
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
@@ -2418,60 +2466,60 @@ AjBool ensQcdatabaseadaptorFetchByName(EnsPQcdatabaseadaptor qcdba,
 ******************************************************************************/
 
 AjBool ensQcdatabaseadaptorFetchAllByClassType(EnsPQcdatabaseadaptor qcdba,
-                                               AjEnum class,
-                                               AjEnum type,
+                                               EnsEQcdatabaseClass class,
+                                               EnsEQcdatabaseType type,
                                                AjPList qcdbs)
 {
     void **keyarray = NULL;
     void **valarray = NULL;
-    
+
     register ajuint i = 0;
-    
+
     AjBool cmatch = AJFALSE;
     AjBool tmatch = AJFALSE;
-    
+
     if(!qcdba)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!qcdbs)
-	return ajFalse;
-    
+        return ajFalse;
+
     ajTableToarrayKeysValues(qcdba->CacheByIdentifier, &keyarray, &valarray);
-    
+
     for(i = 0; keyarray[i]; i++)
     {
-	/* Match the class element if one has been provided. */
-	
-	if(class)
-	{
-	    if(((EnsPQcdatabase) valarray[i])->Class == class)
-		cmatch = ajTrue;
-	    else
-		cmatch = ajFalse;
-	}
-	else
-	    cmatch = ajTrue;
-	
-	/* Match the type element if one has been provided. */
-	
-	if(type)
-	{
-	    if(((EnsPQcdatabase) valarray[i])->Type == type)
-		tmatch = ajTrue;
-	    else
-		tmatch = ajFalse;
-	}
-	else
-	    tmatch = ajTrue;
-	
-	if(cmatch && tmatch)
-	    ajListPushAppend(qcdbs, (void *)
-			     ensQcdatabaseNewRef(valarray[i]));
+        /* Match the class element if one has been provided. */
+
+        if(class)
+        {
+            if(((EnsPQcdatabase) valarray[i])->Class == class)
+                cmatch = ajTrue;
+            else
+                cmatch = ajFalse;
+        }
+        else
+            cmatch = ajTrue;
+
+        /* Match the type element if one has been provided. */
+
+        if(type)
+        {
+            if(((EnsPQcdatabase) valarray[i])->Type == type)
+                tmatch = ajTrue;
+            else
+                tmatch = ajFalse;
+        }
+        else
+            tmatch = ajTrue;
+
+        if(cmatch && tmatch)
+            ajListPushAppend(qcdbs, (void *)
+                             ensQcdatabaseNewRef(valarray[i]));
     }
-    
+
     AJFREE(keyarray);
     AJFREE(valarray);
-    
+
     return ajTrue;
 }
 
@@ -2482,7 +2530,7 @@ AjBool ensQcdatabaseadaptorFetchAllByClassType(EnsPQcdatabaseadaptor qcdba,
 **
 ** Store an Ensembl QC Database.
 **
-** @param [r] qcdba [EnsPQcdatabaseadaptor] Ensembl QC Database Adaptor
+** @param [u] qcdba [EnsPQcdatabaseadaptor] Ensembl QC Database Adaptor
 ** @param [u] qcdb [EnsPQcdatabase] Ensembl QC Database
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
@@ -2501,27 +2549,27 @@ AjBool ensQcdatabaseadaptorStore(EnsPQcdatabaseadaptor qcdba,
     char *txtdirectory   = NULL;
     char *txtfile        = NULL;
     char *txtexternalurl = NULL;
-    
-    AjBool value = ajFalse;
-    
+
+    AjBool value = AJFALSE;
+
     AjPSqlstatement sqls = NULL;
-    
+
     AjPStr statement = NULL;
-    
+
     EnsPDatabaseadaptor dba = NULL;
-    
+
     if(!qcdba)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!qcdb)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(ensQcdatabaseGetAdaptor(qcdb) &&
-	ensQcdatabaseGetIdentifier(qcdb))
-	return ajFalse;
-    
+       ensQcdatabaseGetIdentifier(qcdb))
+        return ajFalse;
+
     dba = ensBaseadaptorGetDatabaseadaptor(qcdba->Adaptor);
-    
+
     ensDatabaseadaptorEscapeC(dba, &txtname, qcdb->Name);
     ensDatabaseadaptorEscapeC(dba, &txtrelease, qcdb->Release);
     ensDatabaseadaptorEscapeC(dba, &txtdate, qcdb->Date);
@@ -2531,37 +2579,37 @@ AjBool ensQcdatabaseadaptorStore(EnsPQcdatabaseadaptor qcdba,
     ensDatabaseadaptorEscapeC(dba, &txtdirectory, qcdb->Directory);
     ensDatabaseadaptorEscapeC(dba, &txtfile, qcdb->File);
     ensDatabaseadaptorEscapeC(dba, &txtexternalurl, qcdb->ExternalURL);
-    
+
     statement = ajFmtStr("INSERT IGNORE INTO "
-			 "sequence_db "
-			 "SET "
-			 "sequence_db.analysis_id = %u, "
-			 "sequence_db.name = '%s', "
-			 "sequence_db.dbrelease = '%s', "
-			 "sequence_db.date = '%s', "
-			 "sequence_db.format = '%s' "
-			 "sequence_db.type = '%s', "
-			 "sequence_db.class = '%s', "
-			 "sequence_db.species = '%s', "
-			 "sequence_db.dbgroup = '%s', "
-			 "sequence_db.host = '%s', "
-			 "sequence_db.directory = '%s', "
-			 "sequence_db.file = '%s', "
-			 "sequence_db.external_url = '%s'",
-			 ensAnalysisGetIdentifier(qcdb->Analysis),
-			 txtname,
-			 txtrelease,
-			 txtdate,
-			 txtformat,
-			 ensQcdatabaseTypeToChar(qcdb->Type),
-			 ensQcdatabaseClassToChar(qcdb->Class),
-			 txtspecies,
-			 ensDatabaseadaptorGroupToChar(qcdb->Group),
-			 txthost,
-			 txtdirectory,
-			 txtfile,
-			 txtexternalurl);
-    
+                         "sequence_db "
+                         "SET "
+                         "sequence_db.analysis_id = %u, "
+                         "sequence_db.name = '%s', "
+                         "sequence_db.dbrelease = '%s', "
+                         "sequence_db.date = '%s', "
+                         "sequence_db.format = '%s' "
+                         "sequence_db.type = '%s', "
+                         "sequence_db.class = '%s', "
+                         "sequence_db.species = '%s', "
+                         "sequence_db.dbgroup = '%s', "
+                         "sequence_db.host = '%s', "
+                         "sequence_db.directory = '%s', "
+                         "sequence_db.file = '%s', "
+                         "sequence_db.external_url = '%s'",
+                         ensAnalysisGetIdentifier(qcdb->Analysis),
+                         txtname,
+                         txtrelease,
+                         txtdate,
+                         txtformat,
+                         ensQcdatabaseTypeToChar(qcdb->Type),
+                         ensQcdatabaseClassToChar(qcdb->Class),
+                         txtspecies,
+                         ensDatabaseadaptorGroupToChar(qcdb->Group),
+                         txthost,
+                         txtdirectory,
+                         txtfile,
+                         txtexternalurl);
+
     ajCharDel(&txtname);
     ajCharDel(&txtrelease);
     ajCharDel(&txtdate);
@@ -2571,22 +2619,22 @@ AjBool ensQcdatabaseadaptorStore(EnsPQcdatabaseadaptor qcdba,
     ajCharDel(&txtdirectory);
     ajCharDel(&txtfile);
     ajCharDel(&txtexternalurl);
-    
+
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
-    
+
     if(ajSqlstatementGetAffectedrows(sqls))
     {
-	ensQcdatabaseSetIdentifier(qcdb, ajSqlstatementGetIdentifier(sqls));
-	
-	ensQcdatabaseSetAdaptor(qcdb, qcdba);
-	
-	value = ajTrue;
+        ensQcdatabaseSetIdentifier(qcdb, ajSqlstatementGetIdentifier(sqls));
+
+        ensQcdatabaseSetAdaptor(qcdb, qcdba);
+
+        value = ajTrue;
     }
-    
-    ajSqlstatementDel(&sqls);
-    
+
+    ensDatabaseadaptorSqlstatementDel(dba, &sqls);
+
     ajStrDel(&statement);
-    
+
     return value;
 }
 
@@ -2597,7 +2645,7 @@ AjBool ensQcdatabaseadaptorStore(EnsPQcdatabaseadaptor qcdba,
 **
 ** Update an Ensembl QC Database.
 **
-** @param [r] qcdba [EnsPQcdatabaseadaptor] Ensembl QC Database Adaptor
+** @param [u] qcdba [EnsPQcdatabaseadaptor] Ensembl QC Database Adaptor
 ** @param [r] qcdb [const EnsPQcdatabase] Ensembl QC Database
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
@@ -2616,26 +2664,26 @@ AjBool ensQcdatabaseadaptorUpdate(EnsPQcdatabaseadaptor qcdba,
     char *txtdirectory   = NULL;
     char *txtfile        = NULL;
     char *txtexternalurl = NULL;
-    
-    AjBool value = ajFalse;
-    
+
+    AjBool value = AJFALSE;
+
     AjPSqlstatement sqls = NULL;
-    
+
     AjPStr statement = NULL;
-    
+
     EnsPDatabaseadaptor dba = NULL;
-    
+
     if(!qcdba)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!qcdb)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!ensQcdatabaseGetIdentifier(qcdb))
-	return ajFalse;
-    
+        return ajFalse;
+
     dba = ensBaseadaptorGetDatabaseadaptor(qcdba->Adaptor);
-    
+
     ensDatabaseadaptorEscapeC(dba, &txtname, qcdb->Name);
     ensDatabaseadaptorEscapeC(dba, &txtrelease, qcdb->Release);
     ensDatabaseadaptorEscapeC(dba, &txtdate, qcdb->Date);
@@ -2645,40 +2693,40 @@ AjBool ensQcdatabaseadaptorUpdate(EnsPQcdatabaseadaptor qcdba,
     ensDatabaseadaptorEscapeC(dba, &txtdirectory, qcdb->Directory);
     ensDatabaseadaptorEscapeC(dba, &txtfile, qcdb->File);
     ensDatabaseadaptorEscapeC(dba, &txtexternalurl, qcdb->ExternalURL);
-    
+
     statement = ajFmtStr("UPDATE IGNORE "
-			 "sequence_db "
-			 "SET "
-			 "sequence_db.analysis_id = %u, "
-			 "sequence_db.name = '%s', "
-			 "sequence_db.dbrelease = '%s', "
-			 "sequence_db.date = '%s', "
-			 "sequence_db.format = '%s' "
-			 "sequence_db.type = '%s', "
-			 "sequence_db.class = '%s', "
-			 "sequence_db.species = '%s', "
-			 "sequence_db.dbgroup = '%s', "
-			 "sequence_db.host = '%s', "
-			 "sequence_db.directory = '%s', "
-			 "sequence_db.file = '%s', "
-			 "sequence_db.external_url = '%s' "
-			 "WHERE "
-			 "sequence_db.sequence_db_id = %u",
-			 ensAnalysisGetIdentifier(qcdb->Analysis),
-			 txtname,
-			 txtrelease,
-			 txtdate,
-			 txtformat,
-			 ensQcdatabaseTypeToChar(qcdb->Type),
-			 ensQcdatabaseClassToChar(qcdb->Class),
-			 txtspecies,
-			 ensDatabaseadaptorGroupToChar(qcdb->Group),
-			 txthost,
-			 txtdirectory,
-			 txtfile,
-			 txtexternalurl,
-			 qcdb->Identifier);
-    
+                         "sequence_db "
+                         "SET "
+                         "sequence_db.analysis_id = %u, "
+                         "sequence_db.name = '%s', "
+                         "sequence_db.dbrelease = '%s', "
+                         "sequence_db.date = '%s', "
+                         "sequence_db.format = '%s' "
+                         "sequence_db.type = '%s', "
+                         "sequence_db.class = '%s', "
+                         "sequence_db.species = '%s', "
+                         "sequence_db.dbgroup = '%s', "
+                         "sequence_db.host = '%s', "
+                         "sequence_db.directory = '%s', "
+                         "sequence_db.file = '%s', "
+                         "sequence_db.external_url = '%s' "
+                         "WHERE "
+                         "sequence_db.sequence_db_id = %u",
+                         ensAnalysisGetIdentifier(qcdb->Analysis),
+                         txtname,
+                         txtrelease,
+                         txtdate,
+                         txtformat,
+                         ensQcdatabaseTypeToChar(qcdb->Type),
+                         ensQcdatabaseClassToChar(qcdb->Class),
+                         txtspecies,
+                         ensDatabaseadaptorGroupToChar(qcdb->Group),
+                         txthost,
+                         txtdirectory,
+                         txtfile,
+                         txtexternalurl,
+                         qcdb->Identifier);
+
     ajCharDel(&txtname);
     ajCharDel(&txtrelease);
     ajCharDel(&txtdate);
@@ -2688,16 +2736,16 @@ AjBool ensQcdatabaseadaptorUpdate(EnsPQcdatabaseadaptor qcdba,
     ajCharDel(&txtdirectory);
     ajCharDel(&txtfile);
     ajCharDel(&txtexternalurl);
-    
+
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
-    
+
     if(ajSqlstatementGetAffectedrows(sqls))
-	value = ajTrue;
-    
-    ajSqlstatementDel(&sqls);
-    
+        value = ajTrue;
+
+    ensDatabaseadaptorSqlstatementDel(dba, &sqls);
+
     ajStrDel(&statement);
-    
+
     return value;
 }
 
@@ -2708,49 +2756,54 @@ AjBool ensQcdatabaseadaptorUpdate(EnsPQcdatabaseadaptor qcdba,
 **
 ** Delete an Ensembl QC Database.
 **
-** @param [r] qcdba [EnsPQcdatabaseadaptor] Ensembl QC Database Adaptor
-** @param [r] qcdb [const EnsPQcdatabase] Ensembl QC Database
+** @param [u] qcdba [EnsPQcdatabaseadaptor] Ensembl QC Database Adaptor
+** @param [u] qcdb [EnsPQcdatabase] Ensembl QC Database
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
 AjBool ensQcdatabaseadaptorDelete(EnsPQcdatabaseadaptor qcdba,
-                                  const EnsPQcdatabase qcdb)
+                                  EnsPQcdatabase qcdb)
 {
-    AjBool value = ajFalse;
-    
+    AjBool value = AJFALSE;
+
     AjPSqlstatement sqls = NULL;
-    
+
     AjPStr statement = NULL;
-    
+
     EnsPDatabaseadaptor dba = NULL;
-    
+
     if(!qcdba)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!qcdb)
-	return ajFalse;
-    
+        return ajFalse;
+
     if(!ensQcdatabaseGetIdentifier(qcdb))
-	return ajFalse;
-    
+        return ajFalse;
+
     dba = ensBaseadaptorGetDatabaseadaptor(qcdba->Adaptor);
-    
+
     statement = ajFmtStr("DELETE FROM "
-			 "sequence_db "
-			 "WHERE "
-			 "sequence_db.sequence_db_id = %u",
-			 qcdb->Identifier);
-    
+                         "sequence_db "
+                         "WHERE "
+                         "sequence_db.sequence_db_id = %u",
+                         qcdb->Identifier);
+
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
-    
+
     if(ajSqlstatementGetAffectedrows(sqls))
-	value = ajTrue;
-    
-    ajSqlstatementDel(&sqls);
-    
+    {
+        qcdb->Adaptor    = (EnsPQcdatabaseadaptor) NULL;
+        qcdb->Identifier = 0;
+
+        value = ajTrue;
+    }
+
+    ensDatabaseadaptorSqlstatementDel(dba, &sqls);
+
     ajStrDel(&statement);
-    
+
     return value;
 }

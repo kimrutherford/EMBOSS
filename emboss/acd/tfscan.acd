@@ -1,7 +1,8 @@
 application: tfscan [
   documentation: "Identify transcription factor binding sites in DNA sequences"
   groups: "Nucleic:Transcription"
-  relations: "EDAM: Transcription factor binding site prediction"
+  relations: "/edam/topic/0000110 Transcription regulatory sequence analysis"
+  relations: "/edam/operation/0000445 Transcription factor binding site prediction"
 ]
 
 section: input [
@@ -12,7 +13,9 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "DNA"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0001215 Pure DNA sequence"
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more"
   ]
 
   list: menu [
@@ -26,7 +29,7 @@ section: input [
     header: "Transcription Factor Class"
     information: "Select class"
     button: "Y"
-    relations: "EDAM: Generic string array"                                
+    relations: "/edam/data/0001773 Tool-specific parameter"                                
   ]
 
   datafile: custom [
@@ -35,7 +38,7 @@ section: input [
     nullok: "@($(menu)!=C)"
     knowntype: "transfac data"
     default: ""
-    relations:  "EDAM: TRANSFAC database"                              
+    relations:  "/edam/data/0002147 Transcription factor binding sites"                              
   ]
 
 endsection: input
@@ -50,7 +53,7 @@ section: required [
     default: "0"
     minimum: "0"
     information: "Number of mismatches"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001773 Tool-specific parameter"
   ]
 
 endsection: required
@@ -66,7 +69,7 @@ section: additional [
     minimum: "1"
     information: "Display matches equal to or above this
                   length"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001249 Sequence length"
   ]
 
 endsection: additional
@@ -76,10 +79,11 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile [
+  report: outfile [
     parameter: "Y"
-    knowntype: "tfscan output"
-    relations:  "EDAM:Transcription factor binding site report"            
+    rformat: "seqtable"
+    taglist: "str:acc=Accession str:factor=Factor"
+    relations: "/edam/data/0001315 Transcription factor binding site report"                                       
   ]
 
 endsection: output

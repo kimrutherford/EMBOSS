@@ -68,6 +68,7 @@ public class InputSequenceAttributes
                          "gcg", "gcg8", "embl", "swiss", "ncbi",
                          "pearson", "genbank", "nbrf", "pir", 
                          "codata", "strider", "clustal", "aln",
+                         "bam", "sam",
                          "phylip", "acedb", "dbid", "hennig86", 
                          "jackknifer", "jackknifernon",
                          "nexus", "nexusnon", "paup", "paupnon", 

@@ -1,6 +1,8 @@
 #include "emboss.h"
 
 
+
+
 /* @prog seqretsingle *********************************************************
 **
 ** Reads and writes (returns) a single sequence

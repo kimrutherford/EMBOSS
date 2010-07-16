@@ -9,6 +9,9 @@ extern "C"
 
 #include <sys/types.h>
 
+
+
+
 /* @data AjPChar **************************************************************
 **
 ** Ajax character object.
@@ -46,6 +49,7 @@ typedef struct AjSChar {
 
 
 
+
 /* @data AjPInt ***************************************************************
 **
 ** Ajax integer object.
@@ -77,6 +81,7 @@ typedef struct AjSInt {
   ajint *Ptr;
 } AjOInt;
 #define AjPInt AjOInt*
+
 
 
 
@@ -114,6 +119,7 @@ typedef struct AjSInt2d {
 
 
 
+
 /* @data AjPInt3d *************************************************************
 **
 ** Ajax 3d integer object.
@@ -145,6 +151,7 @@ typedef struct AjSInt3d {
   AjPInt2d *Ptr;
 } AjOInt3d;
 #define AjPInt3d AjOInt3d*
+
 
 
 
@@ -182,6 +189,7 @@ typedef struct AjSFloat {
 
 
 
+
 /* @data AjPFloat2d ***********************************************************
 **
 ** Ajax 2d float object.
@@ -213,6 +221,7 @@ typedef struct AjSFloat2d {
   AjPFloat *Ptr;
 } AjOFloat2d;
 #define AjPFloat2d AjOFloat2d*
+
 
 
 
@@ -250,6 +259,7 @@ typedef struct AjSFloat3d {
 
 
 
+
 /* @data AjPDouble ************************************************************
 **
 ** Ajax double object.
@@ -281,6 +291,7 @@ typedef struct AjSDouble {
   double *Ptr;
 } AjODouble;
 #define AjPDouble AjODouble*
+
 
 
 
@@ -318,6 +329,7 @@ typedef struct AjSDouble2d {
 
 
 
+
 /* @data AjPDouble3d **********************************************************
 **
 ** Ajax 3d double object.
@@ -349,6 +361,7 @@ typedef struct AjSDouble3d {
   AjPDouble2d  *Ptr;
 } AjODouble3d;
 #define AjPDouble3d AjODouble3d*
+
 
 
 
@@ -386,6 +399,7 @@ typedef struct AjSShort {
 
 
 
+
 /* @data AjPShort2d ***********************************************************
 **
 ** Ajax 2d short object.
@@ -417,6 +431,7 @@ typedef struct AjSShort2d {
   AjPShort *Ptr;
 } AjOShort2d;
 #define AjPShort2d AjOShort2d*
+
 
 
 
@@ -454,6 +469,7 @@ typedef struct AjSShort3d {
 
 
 
+
 /* @data AjPLong **************************************************************
 **
 ** Ajax ajlong object.
@@ -485,6 +501,7 @@ typedef struct AjSLong {
   ajlong *Ptr;
 } AjOLong;
 #define AjPLong AjOLong*
+
 
 
 
@@ -522,6 +539,7 @@ typedef struct AjSLong2d {
 
 
 
+
 /* @data AjPLong3d ************************************************************
 **
 ** Ajax 3d ajlong object.
@@ -553,6 +571,7 @@ typedef struct AjSLong3d {
   AjPLong2d  *Ptr;
 } AjOLong3d;
 #define AjPLong3d AjOLong3d*
+
 
 
 
@@ -590,6 +609,7 @@ typedef struct AjSUint {
 
 
 
+
 /* @data AjPUint2d ************************************************************
 **
 ** Ajax 2d unsigned integer object.
@@ -621,6 +641,7 @@ typedef struct AjSUint2d {
   AjPUint *Ptr;
 } AjOUint2d;
 #define AjPUint2d AjOUint2d*
+
 
 
 

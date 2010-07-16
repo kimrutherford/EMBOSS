@@ -50,7 +50,7 @@ Output report [amic_pseae.garnier]:
 Command line arguments
 
 Predicts protein secondary structure using GOR method
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -137,7 +137,7 @@ ID   AMIC_PSEAE              Reviewed;         385 AA.
 AC   P27017;
 DT   01-AUG-1992, integrated into UniProtKB/Swiss-Prot.
 DT   23-JAN-2007, sequence version 5.
-DT   16-JUN-2009, entry version 68.
+DT   18-MAY-2010, entry version 73.
 DE   RecName: Full=Aliphatic amidase expression-regulating protein;
 GN   Name=amiC; OrderedLocusNames=PA3364;
 OS   Pseudomonas aeruginosa.
@@ -246,7 +246,7 @@ Output file format
    The results can be output in one of several styles by using the
    command-line qualifier -rformat xxx, where 'xxx' is replaced by the
    name of the required format. The available format names are: embl,
-   genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+   genbank, gff, pir, swiss, debug, listfile, dbmotif, diffseq, excel,
    feattable, motif, regions, seqtable, simple, srs, table, tagseq
 
    See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
@@ -439,9 +439,11 @@ Author(s)
    (wrp@virginia.edu) and released as part of his FASTA package.
 
    This application was modified for inclusion in EMBOSS by Rodrigo Lopez
-   (rls (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

@@ -1,7 +1,7 @@
 # some simple testing stuff
 
-SET emboss_qadata /homes/pmr/cvsemboss/test
-SET emboss_tempdata /homes/pmr/local/share/EMBOSS/test
+SET emboss_qadata $emboss_basedirectory/test
+SET emboss_tempdata  $emboss_installdirectory/share/EMBOSS/test
 
 # Standard date for test runs - set to the date of the release
 # Used to make the output consistent where an application reports

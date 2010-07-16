@@ -11,9 +11,11 @@ extern "C"
 
 
 
-/******************************************************************************
+/* EnsPPredictionexonadaptor **************************************************
 **
 ** Ensembl Prediction Exon Adaptor
+**
+** Bio::EnsEMBL::DBSQL::PredictionExonAdaptor
 **
 ******************************************************************************/
 
@@ -35,12 +37,13 @@ extern "C"
 ** @attr Adaptor [EnsPPredictionexonadaptor] Ensembl Prediction Exon Adaptor
 ** @cc Bio::EnsEMBL::Feature
 ** @attr Feature [EnsPFeature] Ensembl Feature
-** @cc Bio::EnsEMBL::Predictionexon
+** @cc Bio::EnsEMBL::PredictionExon
 ** @cc 'prediction_exon' SQL table
 ** @attr Score [double] Score
 ** @attr Pvalue [double] P-value
 ** @attr StartPhase [ajint] Start phase
 ** @attr Padding [char[4]] Padding to alignment boundary
+** @attr SequenceCache [AjPStr] Sequence cache
 ** @@
 ******************************************************************************/
 
@@ -54,6 +57,7 @@ typedef struct EnsSPredictionexon
     double Pvalue;
     ajint StartPhase;
     char Padding[4];
+    AjPStr SequenceCache;
 } EnsOPredictionexon;
 
 #define EnsPPredictionexon EnsOPredictionexon*
@@ -61,9 +65,11 @@ typedef struct EnsSPredictionexon
 
 
 
-/******************************************************************************
+/* EnsPPredictiontranscriptadaptor ********************************************
 **
 ** Ensembl Prediction Transcript Adaptor
+**
+** Bio::EnsEMBL::DBSQL::PredictionTranscriptAdaptor
 **
 ******************************************************************************/
 
@@ -86,7 +92,7 @@ typedef struct EnsSPredictionexon
 **                                                 Transcript Adaptor
 ** @cc Bio::EnsEMBL::Feature
 ** @attr Feature [EnsPFeature] Ensembl Feature
-** @cc Bio::EnsEMBL::Predictiontranscript
+** @cc Bio::EnsEMBL::PredictionTranscript
 ** @attr DisplayLabel [AjPStr] Display label
 ** @attr Predictionexons [AjPList] AJAX List of Ensembl Prediction Exons
 ** @@
@@ -113,7 +119,7 @@ typedef struct EnsSPredictiontranscript
 
 /* Ensembl Prediction Exon */
 
-EnsPPredictionexon ensPredictionexonNew(EnsPPredictionexonadaptor adaptor,
+EnsPPredictionexon ensPredictionexonNew(EnsPPredictionexonadaptor pea,
                                         ajuint identifier,
                                         EnsPFeature feature,
                                         ajint sphase,
@@ -140,23 +146,28 @@ double ensPredictionexonGetScore(const EnsPPredictionexon pe);
 double ensPredictionexonGetPvalue(const EnsPPredictionexon pe);
 
 AjBool ensPredictionexonSetAdaptor(EnsPPredictionexon pe,
-                                   EnsPPredictionexonadaptor adaptor);
+                                   EnsPPredictionexonadaptor pea);
 
-AjBool ensPredictionexonSetIdentifier(EnsPPredictionexon pe, ajuint identifier);
+AjBool ensPredictionexonSetIdentifier(EnsPPredictionexon pe,
+                                      ajuint identifier);
 
-AjBool ensPredictionexonSetFeature(EnsPPredictionexon pe, EnsPFeature feature);
+AjBool ensPredictionexonSetFeature(EnsPPredictionexon pe,
+                                   EnsPFeature feature);
 
-AjBool ensPredictionexonSetStartPhase(EnsPPredictionexon pe, ajint sphase);
+AjBool ensPredictionexonSetStartPhase(EnsPPredictionexon pe,
+                                      ajint sphase);
 
-AjBool ensPredictionexonSetScore(EnsPPredictionexon pe, double score);
+AjBool ensPredictionexonSetScore(EnsPPredictionexon pe,
+                                 double score);
 
-AjBool ensPredictionexonSetPvalue(EnsPPredictionexon pe, double pvalue);
+AjBool ensPredictionexonSetPvalue(EnsPPredictionexon pe,
+                                  double pvalue);
 
 AjBool ensPredictionexonTrace(const EnsPPredictionexon pe, ajuint level);
 
 ajint ensPredictionexonGetEndPhase(const EnsPPredictionexon pe);
 
-ajuint ensPredictionexonGetMemSize(const EnsPPredictionexon pe);
+ajulong ensPredictionexonGetMemsize(const EnsPPredictionexon pe);
 
 EnsPPredictionexon ensPredictionexonTransform(EnsPPredictionexon pe,
                                               const AjPStr csname,
@@ -165,11 +176,25 @@ EnsPPredictionexon ensPredictionexonTransform(EnsPPredictionexon pe,
 EnsPPredictionexon ensPredictionexonTransfer(EnsPPredictionexon pe,
                                              EnsPSlice slice);
 
+AjBool ensPredictionexonFetchSequenceStr(EnsPPredictionexon pe,
+                                         AjPStr *Psequence);
+
+AjBool ensPredictionexonFetchSequenceSeq(EnsPPredictionexon pe,
+                                         AjPSeq* Psequence);
+
+AjBool ensPredictionexonSortByStartAscending(AjPList pes);
+
+AjBool ensPredictionexonSortByStartDescending(AjPList pes);
+
 /* Ensembl Prediction Exon Adaptor */
 
-EnsPPredictionexonadaptor ensPredictionexonadaptorNew(EnsPDatabaseadaptor dba);
+EnsPPredictionexonadaptor ensRegistryGetPredictionexonadaptor(
+    EnsPDatabaseadaptor dba);
 
-void ensPredictionexonadaptorDel(EnsPPredictionexonadaptor *Padaptor);
+EnsPPredictionexonadaptor ensPredictionexonadaptorNew(
+    EnsPDatabaseadaptor dba);
+
+void ensPredictionexonadaptorDel(EnsPPredictionexonadaptor *Ppea);
 
 AjBool ensPredictionexonadaptorFetchAllByPredictiontranscript(
     EnsPPredictionexonadaptor pea,
@@ -179,7 +204,7 @@ AjBool ensPredictionexonadaptorFetchAllByPredictiontranscript(
 /* Ensembl Prediction Transcript */
 
 EnsPPredictiontranscript ensPredictiontranscriptNew(
-    EnsPPredictiontranscriptadaptor adaptor,
+    EnsPPredictiontranscriptadaptor pta,
     ajuint identifier,
     EnsPFeature feature,
     AjPStr label);
@@ -190,12 +215,14 @@ EnsPPredictiontranscript ensPredictiontranscriptNewObj(
 EnsPPredictiontranscript ensPredictiontranscriptNewRef(
     EnsPPredictiontranscript pt);
 
-void ensPredictiontranscriptDel(EnsPPredictiontranscript *Ppt);
+void ensPredictiontranscriptDel(
+    EnsPPredictiontranscript *Ppt);
 
 EnsPPredictiontranscriptadaptor ensPredictiontranscriptGetAdaptor(
     const EnsPPredictiontranscript pt);
 
-ajuint ensPredictiontranscriptGetIdentifier(const EnsPPredictiontranscript pt);
+ajuint ensPredictiontranscriptGetIdentifier(
+    const EnsPPredictiontranscript pt);
 
 EnsPFeature ensPredictiontranscriptGetFeature(
     const EnsPPredictiontranscript pt);
@@ -205,39 +232,80 @@ AjPStr ensPredictiontranscriptGetDisplayLabel(
 
 AjBool ensPredictiontranscriptSetAdaptor(
     EnsPPredictiontranscript pt,
-    EnsPPredictiontranscriptadaptor adaptor);
+    EnsPPredictiontranscriptadaptor pta);
 
-AjBool ensPredictiontranscriptSetIdentifier(EnsPPredictiontranscript pt,
-                                            ajuint identifier);
+AjBool ensPredictiontranscriptSetIdentifier(
+    EnsPPredictiontranscript pt,
+    ajuint identifier);
 
-AjBool ensPredictiontranscriptSetFeature(EnsPPredictiontranscript pt,
-                                         EnsPFeature feature);
+AjBool ensPredictiontranscriptSetFeature(
+    EnsPPredictiontranscript pt,
+    EnsPFeature feature);
 
-AjBool ensPredictiontranscriptSetDisplayLabel(EnsPPredictiontranscript pt,
-                                              AjPStr label);
+AjBool ensPredictiontranscriptSetDisplayLabel(
+    EnsPPredictiontranscript pt,
+    AjPStr label);
 
-AjBool ensPredictiontranscriptTrace(const EnsPPredictiontranscript pt,
-                                    ajuint level);
+AjBool ensPredictiontranscriptTrace(
+    const EnsPPredictiontranscript pt,
+    ajuint level);
 
-ajuint ensPredictiontranscriptGetMemSize(const EnsPPredictiontranscript pt);
+ajulong ensPredictiontranscriptGetMemsize(
+    const EnsPPredictiontranscript pt);
 
-const AjPList ensPredictiontranscriptGetExons(EnsPPredictiontranscript pt);
+const AjPList ensPredictiontranscriptGetExons(
+    EnsPPredictiontranscript pt);
+
+ajuint ensPredictiontranscriptGetTranscriptCodingStart(
+    const EnsPPredictiontranscript pt);
+
+ajuint ensPredictiontranscriptGetTranscriptCodingEnd(
+    EnsPPredictiontranscript pt);
+
+ajuint ensPredictiontranscriptGetSliceCodingStart(
+    const EnsPPredictiontranscript pt);
+
+ajuint ensPredictiontranscriptGetSliceCodingEnd(
+    const EnsPPredictiontranscript pt);
+
+AjBool ensPredictiontranscriptFetchSequenceStr(
+    EnsPPredictiontranscript pt,
+    AjPStr *Psequence);
+
+AjBool ensPredictiontranscriptFetchSequenceSeq(
+    EnsPPredictiontranscript pt,
+    AjPSeq *Psequence);
+
+AjBool ensPredictiontranscriptFetchTranslationSequenceStr(
+    EnsPPredictiontranscript pt,
+    AjPStr *Psequence);
+
+AjBool ensPredictiontranscriptFetchTranslationSequenceSeq(
+    EnsPPredictiontranscript pt,
+    AjPSeq *Psequence);
+
+AjBool ensPredictiontranscriptSortByStartAscending(AjPList pts);
+
+AjBool ensPredictiontranscriptSortByStartDescending(AjPList pts);
 
 /* Ensembl Prediction Transcript Adaptor */
+
+EnsPPredictiontranscriptadaptor ensRegistryGetPredictiontranscriptadaptor(
+    EnsPDatabaseadaptor dba);
 
 EnsPPredictiontranscriptadaptor ensPredictiontranscriptadaptorNew(
     EnsPDatabaseadaptor dba);
 
 void ensPredictiontranscriptadaptorDel(
-    EnsPPredictiontranscriptadaptor *Padaptor);
+    EnsPPredictiontranscriptadaptor *Ppta);
 
 AjBool ensPredictiontranscriptadaptorFetchByIdentifier(
-    EnsPPredictiontranscriptadaptor adaptor,
+    EnsPPredictiontranscriptadaptor pta,
     ajuint identifier,
     EnsPPredictiontranscript *Ppt);
 
 AjBool ensPredictiontranscriptadaptorFetchByStableIdentifier(
-    EnsPPredictiontranscriptadaptor adaptor,
+    EnsPPredictiontranscriptadaptor pta,
     const AjPStr stableid,
     EnsPPredictiontranscript *Ppt);
 
@@ -248,7 +316,7 @@ AjBool ensPredictiontranscriptadaptorFetchByStableIdentifier(
 
 
 
-#endif
+#endif /* ensprediction_h */
 
 #ifdef __cplusplus
 }

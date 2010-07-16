@@ -46,7 +46,7 @@ Pepstats program output file [laci_ecoli.pepstats]:
 Command line arguments
 
 Calculates statistics of protein properties
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -115,7 +115,7 @@ ID   LACI_ECOLI              Reviewed;         360 AA.
 AC   P03023; O09196; P71309; Q2MC79; Q47338;
 DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
 DT   19-JUL-2003, sequence version 3.
-DT   16-JUN-2009, entry version 105.
+DT   15-JUN-2010, entry version 117.
 DE   RecName: Full=Lactose operon repressor;
 GN   Name=lacI; OrderedLocusNames=b0345, JW0336;
 OS   Escherichia coli (strain K12).
@@ -228,8 +228,8 @@ PEPSTATS of LACI_ECOLI from 1 to 360
 Molecular weight = 38590.16             Residues = 360
 Average Residue Weight  = 107.195       Charge   = 1.5
 Isoelectric Point = 6.8820
-A280 Molar Extinction Coefficient  = 21620
-A280 Extinction Coefficient 1mg/ml = 0.56
+A280 Molar Extinction Coefficients  = 22920 (reduced)   23045 (cystine bridges)
+A280 Extinction Coefficients 1mg/ml = 0.594 (reduced)   0.597 (cystine bridges)
 Improbability of expression in inclusion bodies = 0.660
 
 Residue         Number          Mole%           DayhoffStat
@@ -277,6 +277,14 @@ Data files
    The Dayhoff statistic is read from the EMBOSS data file
    'Edayhoff.freq'. You can inspect and modify this file by copying it
    into your current directory with the command: 'embossdata -fetch'.
+
+   Absorption coefficients use values read from the EMBOSS data file
+   'Eamino.dat'. Values in this file assume cysteines are reduced. If
+   cysteines are in disulphide bridges the value should be adjusted as
+   documented at the top of the file, and a local copy used to override
+   the default values.
+
+   Molecular weights are read from a local data file Emolwt.dat.
 
    EMBOSS data files are distributed with the application and stored in
    the standard EMBOSS data directory, which is defined by the EMBOSS
@@ -370,9 +378,12 @@ See also
 
 Author(s)
 
-   Alan Bleasby (ajb (c) ebi.ac.uk)
+   Alan Bleasby
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

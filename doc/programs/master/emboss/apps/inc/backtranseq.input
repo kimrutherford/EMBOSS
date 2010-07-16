@@ -11,7 +11,7 @@ ID   OPSD_HUMAN              Reviewed;         348 AA.
 AC   P08100; Q16414; Q2M249;
 DT   01-AUG-1988, integrated into UniProtKB/Swiss-Prot.
 DT   01-AUG-1988, sequence version 1.
-DT   16-JUN-2009, entry version 116.
+DT   15-JUN-2010, entry version 128.
 DE   RecName: Full=Rhodopsin;
 DE   AltName: Full=Opsin-2;
 GN   Name=RHO; Synonyms=OPN2;
@@ -39,9 +39,9 @@ RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA].
 RC   TISSUE=Retina;
 RX   PubMed=17974005; DOI=10.1186/1471-2164-8-399;
 RA   Bechtel S., Rosenfelder H., Duda A., Schmidt C.P., Ernst U.,
-RA   Wellenreuther R., Mehrle A., Schuster C., Bahr A., Blocker H.,
-RA   Heubner D., Hoerlein A., Michel G., Wedler H., Kohrer K.,
-RA   Ottenwalder B., Poustka A., Wiemann S., Schupp I.;
+RA   Wellenreuther R., Mehrle A., Schuster C., Bahr A., Bloecker H.,
+RA   Heubner D., Hoerlein A., Michel G., Wedler H., Koehrer K.,
+RA   Ottenwaelder B., Poustka A., Wiemann S., Schupp I.;
 RT   "The full-ORF clone resource of the German cDNA consortium.";
 RL   BMC Genomics 8:399-399(2007).
 RN   [4]
@@ -64,7 +64,7 @@ RT   rhodopsin-encoding gene.";
 FT                                /FTId=VAR_004816.
 FT   VARIANT     209    209       V -&gt; M (effect not known).
 FT                                /FTId=VAR_004817.
-FT   VARIANT     211    211       H -&gt; P (in RP4).
+FT   VARIANT     211    211       H -&gt; P (in RP4; dbSNP:rs28933993).
 FT                                /FTId=VAR_004818.
 FT   VARIANT     211    211       H -&gt; R (in RP4).
 FT                                /FTId=VAR_004819.
@@ -84,7 +84,7 @@ FT   VARIANT     267    267       P -&gt; R (in RP4).
 FT                                /FTId=VAR_004826.
 FT   VARIANT     292    292       A -&gt; E (in CSNBAD1).
 FT                                /FTId=VAR_004827.
-FT   VARIANT     296    296       K -&gt; E (in RP4).
+FT   VARIANT     296    296       K -&gt; E (in RP4; dbSNP:rs29001653).
 FT                                /FTId=VAR_004828.
 FT   VARIANT     297    297       S -&gt; R (in RP4).
 FT                                /FTId=VAR_004829.
@@ -100,9 +100,9 @@ FT   VARIANT     347    347       P -&gt; L (in RP4; common variant).
 FT                                /FTId=VAR_004834.
 FT   VARIANT     347    347       P -&gt; Q (in RP4).
 FT                                /FTId=VAR_004835.
-FT   VARIANT     347    347       P -&gt; R (in RP4).
+FT   VARIANT     347    347       P -&gt; R (in RP4; dbSNP:rs29001566).
 FT                                /FTId=VAR_004836.
-FT   VARIANT     347    347       P -&gt; S (in RP4).
+FT   VARIANT     347    347       P -&gt; S (in RP4; dbSNP:rs29001637).
 FT                                /FTId=VAR_004837.
 SQ   SEQUENCE   348 AA;  38893 MW;  6F4F6FCBA34265B2 CRC64;
      MNGTEGPNFY VPFSNATGVV RSPFEYPQYY LAEPWQFSML AAYMFLLIVL GFPINFLTLY
@@ -124,7 +124,7 @@ ID   ACH2_DROME              Reviewed;         576 AA.
 AC   P17644; Q0KI18; Q9VC73;
 DT   01-AUG-1990, integrated into UniProtKB/Swiss-Prot.
 DT   01-AUG-1990, sequence version 1.
-DT   16-JUN-2009, entry version 98.
+DT   15-JUN-2010, entry version 110.
 DE   RecName: Full=Acetylcholine receptor subunit alpha-like 2;
 DE   Flags: Precursor;
 GN   Name=nAcRalpha-96Ab; Synonyms=Acr96Ab, AcrE, sad; ORFNames=CG6844;
@@ -174,14 +174,12 @@ RA   Abril J.F., Agbayani A., An H.-J., Andrews-Pfannkoch C., Baldwin D.,
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-DR   GO; GO:0045211; C:postsynaptic membrane; IEA:UniProtKB-SubCell.
-DR   GO; GO:0030594; F:neurotransmitter receptor activity; IEA:InterPro.
-DR   GO; GO:0004889; F:nicotinic acetylcholine-activated cation-se...; IEA:InterPro.
 DR   GO; GO:0005515; F:protein binding; IPI:IntAct.
+DR   GO; GO:0004872; F:receptor activity; IEA:UniProtKB-KW.
 DR   GO; GO:0006811; P:ion transport; IEA:UniProtKB-KW.
-DR   InterPro; IPR006029; Neu_channel_TM.
 DR   InterPro; IPR006202; Neur_chan_lig_bd.
 DR   InterPro; IPR006201; Neur_channel.
+DR   InterPro; IPR006029; Neurotrans-gated_channel_TM.
 DR   InterPro; IPR018000; Neurotransmitter_ion_chnl_CS.
 DR   InterPro; IPR002394; Nicotinic_acetylcholine_rcpt_N.
 DR   Gene3D; G3DSA:2.70.170.10; Neur_chan_lig_bd; 1.
@@ -190,6 +188,8 @@ DR   Pfam; PF02931; Neur_chan_LBD; 1.
 DR   Pfam; PF02932; Neur_chan_memb; 1.
 DR   PRINTS; PR00254; NICOTINICR.
 DR   PRINTS; PR00252; NRIONCHANNEL.
+DR   SUPFAM; SSF90112; Neu_channel_TM; 1.
+DR   SUPFAM; SSF63712; Neur_chan_LBD; 1.
 DR   TIGRFAMs; TIGR00860; LIC; 1.
 DR   PROSITE; PS00236; NEUROTR_ION_CHANNEL; 1.
 PE   1: Evidence at protein level;
@@ -202,11 +202,11 @@ FT   CHAIN        22    576       Acetylcholine receptor subunit alpha-like
 FT                                2.
 FT                                /FTId=PRO_0000000300.
 FT   TOPO_DOM     22    261       Extracellular (Potential).
-FT   TRANSMEM    262    285       Potential.
-FT   TRANSMEM    293    311       Potential.
-FT   TRANSMEM    327    346       Potential.
+FT   TRANSMEM    262    285       Helical; (Potential).
+FT   TRANSMEM    293    311       Helical; (Potential).
+FT   TRANSMEM    327    346       Helical; (Potential).
 FT   TOPO_DOM    347    526       Cytoplasmic (Potential).
-FT   TRANSMEM    527    545       Potential.
+FT   TRANSMEM    527    545       Helical; (Potential).
 FT   CARBOHYD     65     65       N-linked (GlcNAc...) (Potential).
 FT   CARBOHYD    254    254       N-linked (GlcNAc...) (Potential).
 FT   CARBOHYD    570    570       N-linked (GlcNAc...) (Potential).

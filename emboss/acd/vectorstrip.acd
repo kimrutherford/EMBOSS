@@ -1,7 +1,9 @@
 application: vectorstrip [
   documentation: "Removes vectors from the ends of nucleotide sequence(s)"
   groups: "Edit"
-  relations: "EDAM: Sequence cutting"
+  relations: "/edam/topic/0000156 Sequence editing"
+  relations: "/edam/operation/0000369 Sequence cutting"
+  relations: "/edam/operation/0000266 Vector sequence identification"
 ]
 
 section: input [
@@ -12,7 +14,9 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "dna"
-    relations: "EDAM: DNA sequence record"                                 
+    relations: "/edam/data/0001215 Pure DNA sequence"
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more" 
   ]
 
   section: vectorfilesection [
@@ -24,7 +28,7 @@ section: input [
       parameter: "Y"
       default: "Y"
       information: "Are your vector sequences in a file?"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
     ]
 
     infile: vectorsfile [
@@ -33,7 +37,7 @@ section: input [
       default: ""
       information: "Cloning vector definition file (optional)"
       knowntype: "vector"
-    relations:  "EDAM: vectorstrip cloning vector definition record"   
+    relations:  "/edam/data/0000850 Sequence set"  
     ]
 
   endsection: vectorfilesection
@@ -49,7 +53,7 @@ section: required [
     standard: "Y"
     default: "10"
     information: "Max allowed % mismatch"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0002146 Threshold"                                     
   ]
 
   boolean: besthits [
@@ -57,21 +61,21 @@ section: required [
     default: "Y"
     information: "Show only the best hits (minimise
                   mismatches)?"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   string: alinker [
     standard: "@(!$(readfile))"
     information: "The 5' sequence"
     knowntype: "nucleotide sequence"
-    relations:  "EDAM: Nucleotide sequence"                            
+    relations:  "/edam/data/0001210 Pure nucleotide sequence"
   ]
 
   string: blinker [
     standard: "@(!$(readfile))"
     information: "The 3' sequence"
     knowntype: "nucleotide sequence"
-    relations:  "EDAM: Nucleotide sequence"                            
+    relations:  "/edam/data/0001210 Pure nucleotide sequence"
   ]
 
 endsection: required
@@ -86,18 +90,20 @@ section: output [
     information: "Show all sequences in output"
     default: "N"
     outputmodifier: "Y"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   outfile: outfile [
     parameter: "Y"
     knowntype: "vectorstrip output"
-    relations:  "EDAM:EMBOSS vectorstrip log file"                         
+    relations:  "/edam/data/0001678 Tool log"
   ]
 
   seqoutall: outseq [
     parameter: "Y"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0001215 Pure DNA sequence"
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more"
   ]
 
 endsection: output

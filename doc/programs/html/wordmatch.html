@@ -79,7 +79,7 @@ Finds regions of identity (exact matches) of two sequences
 Finds regions of identity (exact matches) of two sequences
 Word size [4]: <b></b>
 Output alignment [hba_human.wordmatch]: <b></b>
-Features output [hba_human.gff]: <b></b>
+Features output [HBA_HUMAN.gff]: <b></b>
 Second features output [HBB_HUMAN.gff]: <b></b>
 
 </pre></td></tr></table><p>
@@ -101,25 +101,23 @@ IT IS DONE FOR YOU.
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Finds regions of identity (exact matches) of two sequences
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
-   Standard (Mandatory) qualifiers (* if not always prompted):
+   Standard (Mandatory) qualifiers:
   [-asequence]         seqset     Sequence set filename and optional format,
                                   or reference (input USA)
   [-bsequence]         seqall     Sequence(s) filename and optional format, or
                                   reference (input USA)
    -wordsize           integer    [4] Word size (Integer 2 or more)
-*  -outfile            align      [*.wordmatch] Output alignment file name
-*  -aoutfeat           featout    [unknown.gff] Output features UFO
-*  -boutfeat           featout    [unknown.gff] Output features UFO
+  [-outfile]           align      [*.wordmatch] Output alignment file name
+  [-aoutfeat]          featout    [unknown.gff] Output features UFO
+  [-boutfeat]          featout    [unknown.gff] Output features UFO
 
    Additional (Optional) qualifiers:
-   -[no]dumpalign      toggle     [Y] Dump all matches as alignments
-   -logfile            outfile    [wordmatch.log] Log file reports statistics
-                                  on kmer frequency distribution and number of
-                                  matches in the seqall sequences for each
-                                  sequence in the seqset
-   -[no]dumpfeat       toggle     [Y] Dump all matches as feature files
+   -[no]dumpalign      toggle     [Y] Dump matches as alignments
+   -logfile            outfile    [wordmatch.log] Statistics on distribution
+                                  of kmers and matches
+   -[no]dumpfeat       toggle     [Y] Dump matches as feature files
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
@@ -157,34 +155,34 @@ Version: EMBOSS:6.2.0
    -fopenfile2         string     Features file name
 
    "-outfile" associated qualifiers
-   -aformat            string     Alignment format
-   -aextension         string     File name extension
-   -adirectory         string     Output directory
-   -aname              string     Base file name
-   -awidth             integer    Alignment width
-   -aaccshow           boolean    Show accession number in the header
-   -adesshow           boolean    Show description in the header
-   -ausashow           boolean    Show the full USA in the alignment
-   -aglobal            boolean    Show the full sequence in alignment
+   -aformat3           string     Alignment format
+   -aextension3        string     File name extension
+   -adirectory3        string     Output directory
+   -aname3             string     Base file name
+   -awidth3            integer    Alignment width
+   -aaccshow3          boolean    Show accession number in the header
+   -adesshow3          boolean    Show description in the header
+   -ausashow3          boolean    Show the full USA in the alignment
+   -aglobal3           boolean    Show the full sequence in alignment
 
    "-logfile" associated qualifiers
    -odirectory         string     Output directory
 
    "-aoutfeat" associated qualifiers
-   -offormat           string     Output feature format
-   -ofopenfile         string     Features file name
-   -ofextension        string     File name extension
-   -ofdirectory        string     Output directory
-   -ofname             string     Base file name
-   -ofsingle           boolean    Separate file for each entry
+   -offormat4          string     Output feature format
+   -ofopenfile4        string     Features file name
+   -ofextension4       string     File name extension
+   -ofdirectory4       string     Output directory
+   -ofname4            string     Base file name
+   -ofsingle4          boolean    Separate file for each entry
 
    "-boutfeat" associated qualifiers
-   -offormat           string     Output feature format
-   -ofopenfile         string     Features file name
-   -ofextension        string     File name extension
-   -ofdirectory        string     Output directory
-   -ofname             string     Base file name
-   -ofsingle           boolean    Separate file for each entry
+   -offormat5          string     Output feature format
+   -ofopenfile5        string     Features file name
+   -ofextension5       string     File name extension
+   -ofdirectory5       string     Output directory
+   -ofname5            string     Base file name
+   -ofsingle5          boolean    Separate file for each entry
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -245,7 +243,7 @@ Version: EMBOSS:6.2.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td>-outfile</td>
+<td>[-outfile]<br>(Parameter 3)</td>
 <td>align</td>
 <td>Output alignment file name</td>
 <td>Alignment output file</td>
@@ -253,7 +251,7 @@ Version: EMBOSS:6.2.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td>-aoutfeat</td>
+<td>[-aoutfeat]<br>(Parameter 4)</td>
 <td>featout</td>
 <td>Output features UFO</td>
 <td>Writeable feature table</td>
@@ -261,7 +259,7 @@ Version: EMBOSS:6.2.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td>-boutfeat</td>
+<td>[-boutfeat]<br>(Parameter 5)</td>
 <td>featout</td>
 <td>Output features UFO</td>
 <td>Writeable feature table</td>
@@ -275,7 +273,7 @@ Version: EMBOSS:6.2.0
 <tr bgcolor="#FFFFCC">
 <td>-[no]dumpalign</td>
 <td>toggle</td>
-<td>Dump all matches as alignments</td>
+<td>Dump matches as alignments</td>
 <td>Toggle value Yes/No</td>
 <td>Yes</td>
 </tr>
@@ -283,7 +281,7 @@ Version: EMBOSS:6.2.0
 <tr bgcolor="#FFFFCC">
 <td>-logfile</td>
 <td>outfile</td>
-<td>Log file reports statistics on kmer frequency distribution and number of matches in the seqall sequences for each sequence in the seqset</td>
+<td>Statistics on distribution of kmers and matches</td>
 <td>Output file</td>
 <td>wordmatch.log</td>
 </tr>
@@ -291,7 +289,7 @@ Version: EMBOSS:6.2.0
 <tr bgcolor="#FFFFCC">
 <td>-[no]dumpfeat</td>
 <td>toggle</td>
-<td>Dump all matches as feature files</td>
+<td>Dump matches as feature files</td>
 <td>Toggle value Yes/No</td>
 <td>Yes</td>
 </tr>
@@ -548,7 +546,7 @@ Version: EMBOSS:6.2.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -aformat</td>
+<td> -aformat3<br>-aformat_outfile</td>
 <td>string</td>
 <td>Alignment format</td>
 <td>Any string</td>
@@ -556,7 +554,7 @@ Version: EMBOSS:6.2.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -aextension</td>
+<td> -aextension3<br>-aextension_outfile</td>
 <td>string</td>
 <td>File name extension</td>
 <td>Any string</td>
@@ -564,7 +562,7 @@ Version: EMBOSS:6.2.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -adirectory</td>
+<td> -adirectory3<br>-adirectory_outfile</td>
 <td>string</td>
 <td>Output directory</td>
 <td>Any string</td>
@@ -572,7 +570,7 @@ Version: EMBOSS:6.2.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -aname</td>
+<td> -aname3<br>-aname_outfile</td>
 <td>string</td>
 <td>Base file name</td>
 <td>Any string</td>
@@ -580,7 +578,7 @@ Version: EMBOSS:6.2.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -awidth</td>
+<td> -awidth3<br>-awidth_outfile</td>
 <td>integer</td>
 <td>Alignment width</td>
 <td>Any integer value</td>
@@ -588,7 +586,7 @@ Version: EMBOSS:6.2.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -aaccshow</td>
+<td> -aaccshow3<br>-aaccshow_outfile</td>
 <td>boolean</td>
 <td>Show accession number in the header</td>
 <td>Boolean value Yes/No</td>
@@ -596,7 +594,7 @@ Version: EMBOSS:6.2.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -adesshow</td>
+<td> -adesshow3<br>-adesshow_outfile</td>
 <td>boolean</td>
 <td>Show description in the header</td>
 <td>Boolean value Yes/No</td>
@@ -604,7 +602,7 @@ Version: EMBOSS:6.2.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -ausashow</td>
+<td> -ausashow3<br>-ausashow_outfile</td>
 <td>boolean</td>
 <td>Show the full USA in the alignment</td>
 <td>Boolean value Yes/No</td>
@@ -612,7 +610,7 @@ Version: EMBOSS:6.2.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -aglobal</td>
+<td> -aglobal3<br>-aglobal_outfile</td>
 <td>boolean</td>
 <td>Show the full sequence in alignment</td>
 <td>Boolean value Yes/No</td>
@@ -638,7 +636,7 @@ Version: EMBOSS:6.2.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -offormat</td>
+<td> -offormat4<br>-offormat_aoutfeat</td>
 <td>string</td>
 <td>Output feature format</td>
 <td>Any string</td>
@@ -646,7 +644,7 @@ Version: EMBOSS:6.2.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -ofopenfile</td>
+<td> -ofopenfile4<br>-ofopenfile_aoutfeat</td>
 <td>string</td>
 <td>Features file name</td>
 <td>Any string</td>
@@ -654,7 +652,7 @@ Version: EMBOSS:6.2.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -ofextension</td>
+<td> -ofextension4<br>-ofextension_aoutfeat</td>
 <td>string</td>
 <td>File name extension</td>
 <td>Any string</td>
@@ -662,7 +660,7 @@ Version: EMBOSS:6.2.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -ofdirectory</td>
+<td> -ofdirectory4<br>-ofdirectory_aoutfeat</td>
 <td>string</td>
 <td>Output directory</td>
 <td>Any string</td>
@@ -670,15 +668,15 @@ Version: EMBOSS:6.2.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -ofname</td>
+<td> -ofname4<br>-ofname_aoutfeat</td>
 <td>string</td>
 <td>Base file name</td>
 <td>Any string</td>
-<td>&nbsp;</td>
+<td>$(asequence.name)</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -ofsingle</td>
+<td> -ofsingle4<br>-ofsingle_aoutfeat</td>
 <td>boolean</td>
 <td>Separate file for each entry</td>
 <td>Boolean value Yes/No</td>
@@ -691,7 +689,7 @@ Version: EMBOSS:6.2.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -offormat</td>
+<td> -offormat5<br>-offormat_boutfeat</td>
 <td>string</td>
 <td>Output feature format</td>
 <td>Any string</td>
@@ -699,7 +697,7 @@ Version: EMBOSS:6.2.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -ofopenfile</td>
+<td> -ofopenfile5<br>-ofopenfile_boutfeat</td>
 <td>string</td>
 <td>Features file name</td>
 <td>Any string</td>
@@ -707,7 +705,7 @@ Version: EMBOSS:6.2.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -ofextension</td>
+<td> -ofextension5<br>-ofextension_boutfeat</td>
 <td>string</td>
 <td>File name extension</td>
 <td>Any string</td>
@@ -715,7 +713,7 @@ Version: EMBOSS:6.2.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -ofdirectory</td>
+<td> -ofdirectory5<br>-ofdirectory_boutfeat</td>
 <td>string</td>
 <td>Output directory</td>
 <td>Any string</td>
@@ -723,7 +721,7 @@ Version: EMBOSS:6.2.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -ofname</td>
+<td> -ofname5<br>-ofname_boutfeat</td>
 <td>string</td>
 <td>Base file name</td>
 <td>Any string</td>
@@ -731,7 +729,7 @@ Version: EMBOSS:6.2.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -ofsingle</td>
+<td> -ofsingle5<br>-ofsingle_boutfeat</td>
 <td>boolean</td>
 <td>Separate file for each entry</td>
 <td>Boolean value Yes/No</td>
@@ -863,7 +861,7 @@ ID   HBA_HUMAN               Reviewed;         142 AA.
 AC   P69905; P01922; Q1HDT5; Q3MIF5; Q53F97; Q96KF1; Q9NYR7; Q9UCM0;
 DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
 DT   23-JAN-2007, sequence version 2.
-DT   16-JUN-2009, entry version 73.
+DT   15-JUN-2010, entry version 86.
 DE   RecName: Full=Hemoglobin subunit alpha;
 DE   AltName: Full=Hemoglobin alpha chain;
 DE   AltName: Full=Alpha-globin;
@@ -974,7 +972,7 @@ AC   P68871; A4GX73; B2ZUE0; P02023; Q13852; Q14481; Q14510; Q45KT0;
 AC   Q549N7; Q6FI08; Q6R7N2; Q8IZI1; Q9BX96; Q9UCD6; Q9UCP8; Q9UCP9;
 DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
 DT   23-JAN-2007, sequence version 2.
-DT   16-JUN-2009, entry version 76.
+DT   15-JUN-2010, entry version 88.
 DE   RecName: Full=Hemoglobin subunit beta;
 DE   AltName: Full=Hemoglobin beta chain;
 DE   AltName: Full=Beta-globin;
@@ -1139,37 +1137,21 @@ for further information on alignment formats.
 #=======================================
 
      4 HBA_HUMAN       +       15..18       HBB_HUMAN       +       16..19
-
-#=======================================
-#
-# Aligned_sequences: 2
-# 1: HBA_HUMAN
-# 2: HBB_HUMAN
-#=======================================
-
      5 HBA_HUMAN       +       59..63       HBB_HUMAN       +       64..68
-
-#=======================================
-#
-# Aligned_sequences: 2
-# 1: HBA_HUMAN
-# 2: HBB_HUMAN
-#=======================================
-
      4 HBA_HUMAN       +      117..120      HBB_HUMAN       +      122..125
 
 #---------------------------------------
 #---------------------------------------
 </pre>
 </td></tr></table><p>
-<p><h3>File: hba_human.gff</h3>
+<p><h3>File: HBA_HUMAN.gff</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 3
 ##sequence-region HBA_HUMAN 1 142
 #!Date 2010-01-15
 #!Type Protein
-#!Source-version EMBOSS 6.2.0
+#!Source-version EMBOSS 6.3.0
 HBA_HUMAN	wordmatch	polypeptide_region	15	18	1.000	+	.	ID="HBA_HUMAN.1";note="HBB_HUMAN"
 HBA_HUMAN	wordmatch	polypeptide_region	59	63	1.000	+	.	ID="HBA_HUMAN.2";note="HBB_HUMAN"
 HBA_HUMAN	wordmatch	polypeptide_region	117	120	1.000	+	.	ID="HBA_HUMAN.3";note="HBB_HUMAN"
@@ -1182,7 +1164,7 @@ HBA_HUMAN	wordmatch	polypeptide_region	117	120	1.000	+	.	ID="HBA_HUMAN.3";note="
 ##sequence-region HBB_HUMAN 1 147
 #!Date 2010-01-15
 #!Type Protein
-#!Source-version EMBOSS 6.2.0
+#!Source-version EMBOSS 6.3.0
 HBB_HUMAN	wordmatch	polypeptide_region	16	19	1.000	+	.	ID="HBB_HUMAN.1";note="HBA_HUMAN"
 HBB_HUMAN	wordmatch	polypeptide_region	64	68	1.000	+	.	ID="HBB_HUMAN.2";note="HBA_HUMAN"
 HBB_HUMAN	wordmatch	polypeptide_region	122	125	1.000	+	.	ID="HBB_HUMAN.3";note="HBA_HUMAN"
@@ -1191,11 +1173,11 @@ HBB_HUMAN	wordmatch	polypeptide_region	122	125	1.000	+	.	ID="HBB_HUMAN.3";note="
 <p><h3>File: wordmatch.log</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Sequence file for patterns: &lt;null&gt;
-Sequence file to be scanned for patterns: &lt;null&gt;
+Small sequence/file for constructing target patterns: &lt;null&gt;
+Large sequence/file to be scanned for patterns: &lt;null&gt;
 Number of sequences in the patterns file: 1
 Pattern/word length: 4
-Number of patterns/words: 139
+Number of patterns/words found: 139
 Number of sequences in the file scanned for patterns: 1
 Number of all matches: 3 (wordmatch finds exact matches only)
 Sum of match lengths: 13
@@ -1207,10 +1189,10 @@ HBA_HUMAN                                 :        3
 
 Pattern statistics:
 -------------------
-Pattern   #all-matches  #seq-matches  avg-match-length  avg-longest-match-length
-EFTP   :            1             1              4.00                      4.00
-HGKK   :            1             1              5.00                      5.00
-WGKV   :            1             1              4.00                      4.00
+Pattern   #pat-sequences  #all-matches  avg-match-length
+EFTP   :            1             1              4.00
+HGKK   :            1             1              5.00
+WGKV   :            1             1              4.00
 </pre>
 </td></tr></table><p>
 
@@ -1322,10 +1304,13 @@ None.
 </H2>
 
 
-Ian Longden (il&nbsp;&copy;&nbsp;sanger.ac.uk)
+Ian Longden formerly at:
 <br>
 Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
 Cambridge, CB10 1SA, UK.                      
+
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
 
 
 <H2>

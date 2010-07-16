@@ -4,7 +4,8 @@ application: needle [
   gui: "yes"
   batch: "yes"
   cpu: "medium"
-  relations: "EDAM: Global sequence alignment"
+  relations: "/edam/topic/0000185 Pairwise sequence alignment"
+  relations: "/edam/operation/0000494 Global pairwise sequence alignment"
 ]
 
 section: input [
@@ -15,13 +16,16 @@ section: input [
   sequence: asequence [
     parameter: "Y"
     type: "any"
-    relations: "EDAM: Sequence"                                            
+    relations: "/edam/data/0000848 Sequence"             
+    relations: "/edam/data/0000849 Sequence record"                                
   ]
 
   seqall: bsequence [
     parameter: "Y"
     type: "@($(acdprotein) ? stopprotein : nucleotide)"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0000848 Sequence"             
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more" 
   ]
 
   matrixf: datafile [
@@ -32,7 +36,7 @@ section: input [
            sequences. By default it is the file 'EBLOSUM62' (for proteins) or
            the file 'EDNAFULL' (for nucleic sequences). These files are
            found in the 'data' directory of the EMBOSS installation."
-    relations: "EDAM: Float comparison matrix"                             
+    relations: "/edam/data/0001447 Comparison matrix (floats)"                             
   ]
 
 endsection: input
@@ -55,7 +59,7 @@ section: required [
            matrix. The default value assumes you are using the EBLOSUM62
            matrix for protein sequences, and the EDNAFULL matrix for
            nucleotide sequences."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001397 Gap opening penalty"
   ]
 
   float: gapextend [
@@ -75,14 +79,20 @@ section: required [
            you would expect many single base gaps. You can get this result by
            setting the gap open penalty to zero (or very low) and using the
            gap extension penalty to control gap scoring."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001398 Gap extension penalty"
   ]
+endsection: required
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
 
   boolean: endweight [
     additional: "Y"
     default: "N"
     information: "Apply end gap penalties."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   float: endopen [
@@ -98,7 +108,7 @@ section: required [
            matrix. The default value assumes you are using the EBLOSUM62
            matrix for protein sequences, and the EDNAFULL matrix for
            nucleotide sequences."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001410 Terminal gap opening penalty"                                       
   ]
 
   float: endextend [
@@ -112,10 +122,10 @@ section: required [
     help: "The end gap extension, penalty is added to the end gap
            penalty for each base or residue in the end gap. This is how long end gaps
            are penalized."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001411 Terminal gap extension penalty"                                       
   ]
+endsection: additional
 
-endsection: required
 
 section: output [
   information: "Output section"
@@ -126,7 +136,7 @@ section: output [
     default: "Y"
     information: "Brief identity and similarity"
     help: "Brief identity and similarity"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   align: outfile [
@@ -135,7 +145,7 @@ section: output [
     minseqs: "2"
     maxseqs: "2"
     aglobal: "Y"
-    relations: "EDAM: Pairwise sequence alignment data"                    
+    relations: "/edam/data/0001381 Pairwise sequence alignment"                    
   ]
 
 endsection: output

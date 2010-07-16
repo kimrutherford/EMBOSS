@@ -58,7 +58,7 @@ Created dottup.ps
 Command line arguments
 
 Displays a wordmatch dotplot of two sequences
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-asequence]         sequence   Sequence filename and optional format, or
@@ -68,10 +68,12 @@ Version: EMBOSS:6.2.0
    -wordsize           integer    [10] Word size (Integer 2 or more)
 *  -graph              graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tek, tekt, none, data, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif, pdf,
+                                  svg, pdf, svg)
 *  -xygraph            xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tek, tekt, none, data, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif, pdf,
+                                  svg, pdf, svg)
 
    Additional (Optional) qualifiers (* if not always prompted):
 *  -[no]boxit          boolean    [Y] Draw a box around dotplot
@@ -305,7 +307,32 @@ FT   CDS             31..1113
 FT                   /transl_table=11
 FT                   /note="reading frame"
 FT                   /db_xref="GOA:P03023"
+FT                   /db_xref="InterPro:IPR000843"
 FT                   /db_xref="InterPro:IPR001761"
+FT                   /db_xref="InterPro:IPR010982"
+FT                   /db_xref="PDB:1CJG"
+FT                   /db_xref="PDB:1EFA"
+FT                   /db_xref="PDB:1JWL"
+FT                   /db_xref="PDB:1JYE"
+FT                   /db_xref="PDB:1JYF"
+FT                   /db_xref="PDB:1L1M"
+FT                   /db_xref="PDB:1LBG"
+FT                   /db_xref="PDB:1LBH"
+FT                   /db_xref="PDB:1LBI"
+FT                   /db_xref="PDB:1LCC"
+FT                   /db_xref="PDB:1LCD"
+FT                   /db_xref="PDB:1LQC"
+FT                   /db_xref="PDB:1LTP"
+FT                   /db_xref="PDB:1OSL"
+FT                   /db_xref="PDB:1TLF"
+FT                   /db_xref="PDB:1Z04"
+FT                   /db_xref="PDB:2BJC"
+FT                   /db_xref="PDB:2KEI"
+FT                   /db_xref="PDB:2KEJ"
+FT                   /db_xref="PDB:2KEK"
+FT                   /db_xref="PDB:2P9H"
+FT                   /db_xref="PDB:2PAF"
+FT                   /db_xref="PDB:2PE5"
 FT                   /db_xref="PDB:3EDC"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P03023"
 FT                   /protein_id="CAA23569.1"
@@ -391,9 +418,12 @@ See also
 
 Author(s)
 
-   Ian              Longden (il (c) sanger.ac.uk)
+   Ian              Longden formerly at:
    Sanger           Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
                     CB10 1SA, UK.
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

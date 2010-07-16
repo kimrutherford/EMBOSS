@@ -17,7 +17,9 @@ extern "C"
 
 /* Ensembl Attribute */
 
-EnsPAttribute ensAttributeNew(AjPStr code, AjPStr name, AjPStr description,
+EnsPAttribute ensAttributeNew(AjPStr code,
+                              AjPStr name,
+                              AjPStr description,
                               AjPStr value);
 
 EnsPAttribute ensAttributeNewObj(const EnsPAttribute object);
@@ -34,34 +36,40 @@ AjPStr ensAttributeGetDescription(const EnsPAttribute attribute);
 
 AjPStr ensAttributeGetValue(const EnsPAttribute attribute);
 
-ajuint ensAttributeGetMemSize(const EnsPAttribute attribute);
+ajulong ensAttributeGetMemsize(const EnsPAttribute attribute);
 
 AjBool ensAttributeTrace(const EnsPAttribute attribute, ajuint level);
 
 /* Ensembl Attribute Adaptor */
 
-AjBool ensAttributeadaptorFetchAllByGene(EnsPDatabaseadaptor adaptor,
+EnsPAttributeadaptor ensRegistryGetAttributeadaptor(
+    EnsPDatabaseadaptor dba);
+
+EnsPDatabaseadaptor ensAttributeadaptorGetDatabaseadaptor(
+    EnsPAttributeadaptor ata);
+
+AjBool ensAttributeadaptorFetchAllByGene(EnsPAttributeadaptor ata,
                                          const EnsPGene gene,
                                          const AjPStr code,
                                          AjPList attributes);
 
-AjBool ensAttributeadaptorFetchAllBySeqregion(EnsPDatabaseadaptor adaptor,
+AjBool ensAttributeadaptorFetchAllBySeqregion(EnsPAttributeadaptor ata,
                                               const EnsPSeqregion sr,
                                               const AjPStr code,
                                               AjPList attributes);
 
-AjBool ensAttributeadaptorFetchAllBySlice(EnsPDatabaseadaptor adaptor,
+AjBool ensAttributeadaptorFetchAllBySlice(EnsPAttributeadaptor ata,
                                           const EnsPSlice slice,
                                           const AjPStr code,
                                           AjPList attributes);
 
-AjBool ensAttributeadaptorFetchAllByTranscript(EnsPDatabaseadaptor adaptor,
+AjBool ensAttributeadaptorFetchAllByTranscript(EnsPAttributeadaptor ata,
                                                const EnsPTranscript transcript,
                                                const AjPStr code,
                                                AjPList attributes);
 
 AjBool ensAttributeadaptorFetchAllByTranslation(
-    EnsPDatabaseadaptor adaptor,
+    EnsPAttributeadaptor ata,
     const EnsPTranslation translation,
     const AjPStr code,
     AjPList attributes);
@@ -73,7 +81,7 @@ AjBool ensAttributeadaptorFetchAllByTranslation(
 
 
 
-#endif
+#endif /* ensattribute_h */
 
 #ifdef __cplusplus
 }

@@ -84,6 +84,9 @@ static void dmxTraceScophit(const AjPScophit scophit, const char* title);
 /* =========================== constructors ============================== */
 /* ======================================================================= */
 
+
+
+
 /* @section Constructors ****************************************************
 **
 ** All constructors return a pointer to a new instance. It is the 
@@ -92,6 +95,9 @@ static void dmxTraceScophit(const AjPScophit scophit, const char* title);
 ** programming practice to do so anyway.
 **
 ****************************************************************************/
+
+
+
 
 /* @func ajDmxScophitNew ****************************************************
 **
@@ -544,12 +550,18 @@ AjBool ajDmxScopalgRead(AjPFile inf, AjPScopalg *thys)
 /* =========================== destructors =============================== */
 /* ======================================================================= */
 
+
+
+
 /* @section Structure Destructors *******************************************
 **
 ** All destructor functions receive the address of the instance to be
 ** deleted.  The original pointer is set to NULL so is ready for re-use.
 **
 ****************************************************************************/
+
+
+
 
 /* @func ajDmxScophitDel ****************************************************
 **
@@ -667,6 +679,9 @@ void ajDmxScopalgDel(AjPScopalg *pthis)
 /* ============================ Assignments ============================== */
 /* ======================================================================= */
 
+
+
+
 /* @section Assignments ****************************************************
 **
 ** These functions overwrite the instance provided as the first argument
@@ -674,6 +689,9 @@ void ajDmxScopalgDel(AjPScopalg *pthis)
 ** create a new instance by assignment.
 **
 ****************************************************************************/
+
+
+
 
 /* @func ajDmxScophitListCopy ***********************************************
 **
@@ -783,11 +801,17 @@ AjBool ajDmxScophitCopy(AjPScophit *to, const AjPScophit from)
 /* ============================= Modifiers =============================== */
 /* ======================================================================= */
 
+
+
+
 /* @section Modifiers *******************************************************
 **
 ** These functions use the contents of an instance and update them.
 **
 ****************************************************************************/
+
+
+
 
 /* @func ajDmxScophitTargetLowPriority **************************************
 **
@@ -874,12 +898,18 @@ AjBool ajDmxScophitTarget(AjPScophit *h)
 /* ========================== Operators ===================================*/
 /* ======================================================================= */
 
+
+
+
 /* @section Operators *******************************************************
 **
 ** These functions use the contents of an instance but do not make any 
 ** changes.
 **
 ****************************************************************************/
+
+
+
 
 /* @func ajDmxScophitCheckTarget ********************************************
 **
@@ -904,6 +934,9 @@ AjBool ajDmxScophitCheckTarget(const AjPScophit ptr)
 /* ============================== Casts ===================================*/
 /* ======================================================================= */
 
+
+
+
 /* @section Casts ***********************************************************
 **
 ** These functions examine the contents of an instance and return some
@@ -919,6 +952,9 @@ AjBool ajDmxScophitCheckTarget(const AjPScophit ptr)
 /* ======================================================================= */
 /* =========================== Reporters ==================================*/
 /* ======================================================================= */
+
+
+
 
 /* @section Reporters *******************************************************
 **
@@ -952,7 +988,7 @@ ajint ajDmxScophitCompScore(const void *hit1, const void *hit2)
     
     if(p->Score < q->Score)
         return -1;
-    else if (p->Score == q->Score)
+    else if(E_FPEQ(p->Score,q->Score,U_FEPS))
         return 0;
 
     return 1;
@@ -983,7 +1019,7 @@ ajint ajDmxScophitCompPval(const void *hit1, const void *hit2)
     
     if(p->Pval < q->Pval)
         return -1;
-    else if (p->Pval == q->Pval)
+    else if(E_FPEQ(p->Pval,q->Pval,U_FEPS))
         return 0;
 
     return 1;
@@ -1264,6 +1300,9 @@ ajint ajDmxScophitCompFold(const void *hit1, const void *hit2)
 /* ========================== Input & Output ============================= */
 /* ======================================================================= */
 
+
+
+
 /* @func ajDmxScopalgGetseqs ************************************************
 **
 ** Read a Scopalg object and writes an array of AjPStr containing the 
@@ -1309,7 +1348,7 @@ ajint ajDmxScopalgGetseqs(const AjPScopalg thys, AjPStr **arr)
 /* @func ajDmxScophitsWrite *************************************************
 **
 ** Write contents of a list of Scophits to an output file in embl-like format
-** Text for Class, Archhitecture, Topology, Fold, Superfamily and Family 
+** Text for Class, Architecture, Topology, Fold, Superfamily and Family
 ** is only written if the text is available.
 ** 
 ** @param [w] outf [AjPFile] Output file stream
@@ -1917,7 +1956,7 @@ AjBool ajDmxScopalgWriteClustal(const AjPScopalg align, AjPFile outf)
 	return ajFalse;
     }
     
-    /* remove i from the print statement before commiting */
+    /* remove i from the print statement before committing */
     ajFmtPrintF(outf,"CLUSTALW\n\n");
     ajFmtPrintF(outf, "\n"); 
 
@@ -1928,7 +1967,7 @@ AjBool ajDmxScopalgWriteClustal(const AjPScopalg align, AjPFile outf)
     ajFmtPrintF(outf,"\n"); 
     
     return ajTrue;
-}	
+}
 
 
 
@@ -1956,7 +1995,7 @@ AjBool ajDmxScopalgWriteClustal2(const AjPScopalg align, AjPFile outf)
 	return ajFalse;
     }
     
-    /* remove i from the print statement before commiting */
+    /* remove i from the print statement before committing */
     ajFmtPrintF(outf, "\n"); 
 
     for(i=0;i<align->N;++i)
@@ -1965,7 +2004,8 @@ AjBool ajDmxScopalgWriteClustal2(const AjPScopalg align, AjPFile outf)
     ajFmtPrintF(outf,"\n");
     
     return ajTrue;
-}	
+}
+
 
 
 
@@ -1975,7 +2015,7 @@ AjBool ajDmxScopalgWriteClustal2(const AjPScopalg align, AjPFile outf)
 ** Writes a Scopalg object to a specified file in FASTA format (just the 
 ** alignment without the domain classification information).
 **
-** @param [r] align      [const AjPScopalg]  A list Hitlist structures.
+** @param [r] align      [const AjPScopalg]  A list of hit list structures.
 ** @param [u] outf       [AjPFile]     Outfile file pointer
 ** 
 ** @return [AjBool] True on success (a file has been written)
@@ -1993,7 +2033,7 @@ AjBool ajDmxScopalgWriteFasta(const AjPScopalg align, AjPFile outf)
 	return ajFalse;
     }
     
-    /* remove i from the print statement before commiting
+    /* remove i from the print statement before committing
     ajFmtPrintF(*outf,"CLUSTALW\n\n");
     ajFmtPrintF(*outf, "\n");*/ 
 
@@ -2013,12 +2053,18 @@ AjBool ajDmxScopalgWriteFasta(const AjPScopalg align, AjPFile outf)
 /* ======================== Miscellaneous =================================*/
 /* ======================================================================= */
 
+
+
+
 /* @section Miscellaneous ***************************************************
 **
 ** These functions may have diverse functions that do not fit into the other
 ** categories. 
 **
 ****************************************************************************/
+
+
+
 
 /* @func ajDmxScopSeqFromSunid **********************************************
 **

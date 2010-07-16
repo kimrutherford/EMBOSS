@@ -17,12 +17,16 @@ CYGWIN_LIBS = -L../plplot -L../ajax/pcre -L../ajax/expat -L../ajax/zlib \
 -L../ajax/core -L../ajax/graphics -L../ajax/ensembl -L../ajax/ajaxdb \
 -L../ajax/acd -lacd -lajaxdb -lensembl -lajaxg -lajax -leexpat -lepcre \
 -lezlib -leplplot
+else
+if !ESYSTEMLIBS
+EXTRA_INCLUDES = -I$(top_srcdir)/ajax/expat -I$(top_srcdir)/ajax/zlib
+endif
 endif
 
 
 INCLUDES = -I$(top_srcdir)/plplot $(X_CFLAGS) -I$(srcdir)/ \
 	-I$(top_srcdir)/ajax -I$(top_srcdir)/ajax/pcre \
-	-I$(top_srcdir)/ajax/expat -I$(top_srcdir)/ajax/zlib \
+	$(EXTRA_INCLUDES) \
 	-I$(top_srcdir)/ajax/core -I$(top_srcdir)/ajax/graphics \
 	-I$(top_srcdir)/ajax/ensembl -I$(top_srcdir)/ajax/ajaxdb \
 	-I$(top_srcdir)/ajax/acd
@@ -42,7 +46,7 @@ include_HEADERS = emboss.h embaln.h embcom.h embcons.h \
 
 libnucleus_la_SOURCES = $(NUCLSRC)
 
-VERS_INF =  -version-info 6:2:0
+VERS_INF =  -version-info 6:3:0
 
 if ISCYGWIN
 LINKFLAGS =  $(VERS_INF) $(CYGWIN_LDFLAGS) $(CYGWIN_LIBS)

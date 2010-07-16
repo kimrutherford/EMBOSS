@@ -1,5 +1,5 @@
 Remove mark-up (e.g. HTML tags) from an ASCII text file
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     ASCII text file

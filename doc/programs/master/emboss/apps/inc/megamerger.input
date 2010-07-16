@@ -44,18 +44,23 @@ FT                   /codon_start=1
 FT                   /transl_table=11
 FT                   /note="reading frame (lacZ)"
 FT                   /db_xref="GOA:P00722"
+FT                   /db_xref="InterPro:IPR004199"
+FT                   /db_xref="InterPro:IPR006101"
+FT                   /db_xref="InterPro:IPR006102"
+FT                   /db_xref="InterPro:IPR006103"
+FT                   /db_xref="InterPro:IPR006104"
+FT                   /db_xref="InterPro:IPR008979"
+FT                   /db_xref="InterPro:IPR011013"
+FT                   /db_xref="InterPro:IPR013781"
+FT                   /db_xref="InterPro:IPR013812"
 FT                   /db_xref="InterPro:IPR014718"
-FT                   /db_xref="PDB:3DYP"
-FT                   /db_xref="UniProtKB/Swiss-Prot:P00722"
-FT                   /protein_id="CAA23570.1"
-FT                   /translation="FQLSAGRYHYQLVWCQK"
-FT   CDS             106..1359
-FT                   /transl_table=11
-FT                   /note="reading frame (lacY)"
-FT                   /db_xref="GOA:P02920"
-FT                   /db_xref="InterPro:IPR018457"
-FT                   /db_xref="PDB:2V8N"
-FT                   /db_xref="UniProtKB/Swiss-Prot:P02920"
+FT                   /db_xref="InterPro:IPR017853"
+FT                   /db_xref="PDB:1BGL"
+FT                   /db_xref="PDB:1BGM"
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
 FT                   /protein_id="CAA23571.1"
 FT                   /translation="MYYLKNTNFWMFGLFFFFYFFIMGAYFPFFPIWLHDINHISKSDT
 FT                   GIIFAAISLFSLLFQPLFGLLSDKLGLRKYLLWIITGMLVMFAPFFIFIFGPLLQYNIL
@@ -69,7 +74,12 @@ FT   CDS             1423..&gt;1500
 FT                   /transl_table=11
 FT                   /note="reading frame (lacA)"
 FT                   /db_xref="GOA:P07464"
+FT                   /db_xref="InterPro:IPR001451"
+FT                   /db_xref="InterPro:IPR011004"
 FT                   /db_xref="InterPro:IPR018357"
+FT                   /db_xref="PDB:1KQA"
+FT                   /db_xref="PDB:1KRR"
+FT                   /db_xref="PDB:1KRU"
 FT                   /db_xref="PDB:1KRV"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P07464"
 FT                   /protein_id="CAA23572.1"
@@ -148,15 +158,15 @@ FT   CDS             &lt;1..3072
 FT                   /transl_table=11
 FT                   /note="galactosidase"
 FT                   /db_xref="GOA:P00722"
-FT                   /db_xref="InterPro:IPR014718"
-FT                   /db_xref="PDB:3DYP"
-FT                   /db_xref="UniProtKB/Swiss-Prot:P00722"
-FT                   /protein_id="CAA23573.1"
-FT                   /translation="TMITDSLAVVLQRRDWENPGVTQLNRLAAHPPFASWRNSEEARTD
-FT                   RPSQQLRSLNGEWRFAWFPAPEAVPESWLECDLPEADTVVVPSNWQMHGYDAPIYTNVT
-FT                   YPITVNPPFVPTENPTGCYSLTFNVDESWLQEGQTRIIFDGVNSAFHLWCNGRWVGYGQ
-FT                   DSRLPSEFDLSAFLRAGENRLAVMVLRWSDGSYLEDQDMWRMSGIFRDVSLLHKPTTQI
-FT                   SDFHVATRFNDDFSRAVLEAEVQMCGELRDYLRVTVSLWQGETQVASGTAPFGGEIIDE
+FT                   /db_xref="InterPro:IPR004199"
+FT                   /db_xref="InterPro:IPR006101"
+FT                   /db_xref="InterPro:IPR006102"
+FT                   /db_xref="InterPro:IPR006103"
+FT                   /db_xref="InterPro:IPR006104"
+FT                   /db_xref="InterPro:IPR008979"
+FT                   /db_xref="InterPro:IPR011013"
+FT                   /db_xref="InterPro:IPR013781"
+FT                   /db_xref="InterPro:IPR013812"
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>

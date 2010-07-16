@@ -35,7 +35,7 @@ Please help by correcting and extending the Wiki pages.
 <H2>
     Function
 </H2>
-Remove all whitespace from an ASCII text file
+Remove whitespace from an ASCII text file
 <!--
 DON'T WRITE ANYTHING HERE.
 IT IS DONE FOR YOU.
@@ -69,7 +69,7 @@ replaces all white space with a single space.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>nospace </b>
-Remove all whitespace from an ASCII text file
+Remove whitespace from an ASCII text file
 ASCII text file: <b>seqspace.txt</b>
 ASCII text output file [seqspace.nospace]: <b></b>
 
@@ -85,14 +85,18 @@ ASCII text output file [seqspace.nospace]: <b></b>
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-Remove all whitespace from an ASCII text file
-Version: EMBOSS:6.2.0
+Remove whitespace from an ASCII text file
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     ASCII text file
   [-outfile]           outfile    [*.nospace] ASCII text output file
 
-   Additional (Optional) qualifiers: (none)
+   Additional (Optional) qualifiers:
+   -menu               menu       [all] Remove whitespace (Values: all (all
+                                  whitespace); end (trailing whitespace);
+                                  excess (multiple whitespace characters))
+
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
@@ -152,8 +156,12 @@ Version: EMBOSS:6.2.0
 <th align="left" colspan=5>Additional (Optional) qualifiers</th>
 </tr>
 
-<tr>
-<td colspan=5>(none)</td>
+<tr bgcolor="#FFFFCC">
+<td>-menu</td>
+<td>list</td>
+<td>Remove whitespace</td>
+<td><table><tr><td>all</td> <td><i>(all whitespace)</i></td></tr><tr><td>end</td> <td><i>(trailing whitespace)</i></td></tr><tr><td>excess</td> <td><i>(multiple whitespace characters)</i></td></tr></table></td>
+<td>all</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -811,9 +819,12 @@ None.
     Author(s)
 </H2>
 
-Jon Ison (jison&nbsp;&copy;&nbsp;ebi.ac.uk)
+Jon Ison
 <br>
 European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
 
 
 

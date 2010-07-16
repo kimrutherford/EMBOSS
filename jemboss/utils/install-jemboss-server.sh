@@ -63,7 +63,7 @@ getClustalWPath()
     fi
   else
     echo "Enter the path to clustalw or press return to set"
-    echo "this later in jemboss.properties"
+    echo "this later (in jemboss.properties)"
     read CLUSTALW
   fi
 }
@@ -90,7 +90,7 @@ getPrimerPath()
     fi
   else
     echo "Enter the path to primer3_core or press return to set"
-    echo "this later in jemboss.properties"
+    echo "this later in (jemboss.properties)"
     read PRIMER3
   fi
 }
@@ -143,8 +143,8 @@ embassy_install()
     echo
     echo "Install all packages that are downloaded in"
     echo "$EMBOSS_DOWNLOAD/embassy "
-    echo "(if no prompts will be given for each package to install)"
-    echo "(y,n) [y]?"
+    echo "(if 'no' then prompts will be given for each package to "
+    echo "install) (y,n) [y]?"
     
     read ALL
     if [ "$ALL" = "" ]; then
@@ -173,7 +173,7 @@ embassy_install()
           ./configure --with-thread=$PLATFORM \
               --prefix=$EMBOSS_INSTALL $USER_CONFIG
           make
-          make install
+          make -j install
         else
           echo
           echo "Did not install $dir cannot find"
@@ -393,7 +393,6 @@ make_jemboss_properties()
    echo "service.private=JembossServer" >> $JEMBOSS_PROPERTIES
   fi
 
-  echo "plplot=$EMBOSS_INSTALL/share/EMBOSS/" >> $JEMBOSS_PROPERTIES
   echo "embossData=$EMBOSS_INSTALL/share/EMBOSS/data/" >> $JEMBOSS_PROPERTIES
   echo "embossBin=$EMBOSS_INSTALL/bin/" >> $JEMBOSS_PROPERTIES
   echo "embossPath=$EMBOSSPATH" >> $JEMBOSS_PROPERTIES
@@ -404,6 +403,9 @@ make_jemboss_properties()
 #                                                    >> $JEMBOSS_PROPERTIES
   echo "acdDirToParse=$EMBOSS_INSTALL/share/EMBOSS/acd/" >> $JEMBOSS_PROPERTIES
   echo "embossURL=$EMBOSS_URL" >> $JEMBOSS_PROPERTIES
+  
+  grep embossHavePDF $JEMBOSS_PROPERTIES.orig >> $JEMBOSS_PROPERTIES
+
   cp $JEMBOSS_PROPERTIES $JEMBOSS_PROPERTIES.bak
 
   echo
@@ -630,13 +632,14 @@ $DIR/lib
 $DIR/lib32
 $DIR/lib64
 /usr/lib
-/usr/local/lib"
+/usr/local/lib
+/usr/lib64"
 
   WARN="true"
   for lib_dir in `echo  "$lib_dirs"` ;
   do
     echo "checking $lib_dir"
-    if (test -f $lib_dir/libz.a) || (test -f $lib_dir/libz.dylib); then
+    if (test -f $lib_dir/libz.a) || (test -f $lib_dir/libz.so) || (test -f $lib_dir/libz.dylib); then
        WARN="false"
        echo "...found zlib in $lib_dir"
        break
@@ -647,7 +650,7 @@ $DIR/lib64
     echo
     echo "------------------------- WARNING ----------------------------"
     echo
-    echo "The script has detected that zlib is not installed in /usr"
+    echo "The script cannot find zlib installed under /usr"
     if( (test $PLATFORM = "macos") || (test $PLATFORM = "linux") ); then
       echo "or /usr/local"
     fi
@@ -743,8 +746,8 @@ esac
 
 
 echo 
-echo "Select the platform that your Jemboss server will be"
-echo "run on from 1-8 [$PLATTMP]:"
+echo "Select the platform (1-8) that your Jemboss server will be"
+echo "run on [$PLATTMP]:"
 echo "(1)  linux"
 echo "(2)  aix"
 echo "(3)  irix"
@@ -806,11 +809,12 @@ if [ $INSTALL_TYPE = "1" ]; then
   echo
   echo "The IP address or fully qualified domain name (e.g. emboss.company.com)"
   echo "is needed by Jemboss to access the Tomcat web server."
-  echo "Enter IP address or fully qualified domain name of the server machine [localhost]:"
+  echo "Enter the IP address or the fully qualified domain name of the"
+  echo "server machine [`hostname`]:"
   read LOCALHOST
 
   if [ "$LOCALHOST" = "" ]; then
-    LOCALHOST=localhost
+    LOCALHOST=`hostname`
   fi
 
   echo "$LOCALHOST" >> $RECORD
@@ -1079,6 +1083,11 @@ if [ $INSTALL_TYPE = "1" ]; then
   read DATADIR
   echo "$DATADIR" >> $RECORD
 
+  if (test "$DATADIR" = ""); then
+    DATADIR="/tmp/SOAP/emboss"
+  fi
+
+
   echo
 
 #
@@ -1100,7 +1109,7 @@ if [ $INSTALL_TYPE = "1" ]; then
     echo "It looks like an installation has already been carried out in: "
     echo "$TOMCAT_ROOT/webapps/axis/WEB-INF/classes/ "
     echo "It is recommended that tomcat is removed and a fresh copy of tomcat used."
-    echo "This is likely to fail if you continue."
+    echo "This installation is likely to fail if you continue."
     read BLANK
   fi
 
@@ -1109,7 +1118,7 @@ if [ $INSTALL_TYPE = "1" ]; then
     echo "It looks like an installation has already been carried out in: "
     echo "$TOMCAT_ROOT/webapps/axis/WEB-INF/classes/ "
     echo "It is recommended that tomcat is removed and a fresh copy of tomcat used."
-    echo "This is likely to fail if you continue."
+    echo "This installation is likely to fail if you continue."
     read BLANK
   fi
 
@@ -1210,7 +1219,7 @@ echo "  ******* EMBOSS with Jemboss will be installed in $EMBOSS_INSTALL *******
 echo
 sleep 2
 
-make install
+make -j install
 
 #
 #
@@ -1236,19 +1245,12 @@ JEMBOSS=$EMBOSS_INSTALL/share/EMBOSS/jemboss
 
 
 
-#
-# create wossname.jar
-#
-PATH=$EMBOSS_INSTALL/bin:$PATH
-export PATH
-$EMBOSS_INSTALL/bin/wossname -colon -gui -outf wossname.out -auto
-$JAVA_HOME/bin/jar cvf $JEMBOSS/resources/wossname.jar wossname.out
 
 #
 # create resources.jar archive of the scoring matrix
 #
 cd $EMBOSS_INSTALL/share/EMBOSS/data
-$JAVA_HOME/bin/jar cvf $JEMBOSS/resources/resources.jar EPAM* EBLOSUM* ENUC*
+$JAVA_HOME/bin/jar cvf $JEMBOSS/resources/resources.jar EPAM* EBLOSUM* EDNA*
 
 
 if [ "$MACOSX" = "y" ]; then
@@ -1413,6 +1415,8 @@ if [ "$SSL" != "y" ]; then
   echo "Tomcat XML deployment descriptors have been created for"
   echo "the Jemboss Server. Would you like an automatic deployment"
   echo "of the Jemboss web services to be tried (y/n) [y]?"
+  echo "(Please make sure your Tomcat server not running currently,"
+  echo " install script will start it.)"
   read DEPLOYSERVICE
 
   if (test "$DEPLOYSERVICE" = "y") || (test "$DEPLOYSERVICE" = ""); then
@@ -1470,6 +1474,9 @@ else
   echo
   echo "Tomcat XML deployment descriptors have been created for the Jemboss Server."
   echo "Would you like an automatic deployment of these to be tried (y/n) [y]?"
+  echo "(Please make sure your Tomcat server is not currently running as"
+  echo "the install script will start it.)"
+  
   read DEPLOYSERVICE
 
   if (test "$DEPLOYSERVICE" = "y") || (test "$DEPLOYSERVICE" = ""); then

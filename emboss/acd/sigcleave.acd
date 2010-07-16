@@ -1,7 +1,8 @@
 application: sigcleave [
   documentation: "Reports on signal cleavage sites in a protein sequence"
   groups: "Protein:Motifs"
-  relations: "EDAM: Protein signal peptide identification"
+  relations: "/edam/topic/0000140 Protein targeting"
+  relations: "/edam/operation/0000418 Protein signal peptide identification"
 ]
 
 section: input [
@@ -12,7 +13,9 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "PureProtein"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0001218 Unambiguous pure protein sequence"                                     
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more"
   ]
 
 endsection: input
@@ -30,7 +33,7 @@ section: required [
     information: "Minimum weight"
     help: "Minimum scoring weight value for the predicted cleavage
            site"
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0002146 Threshold"
   ]
 
 endsection: required
@@ -45,7 +48,7 @@ section: additional [
     help: "Specifies the sequence is prokaryotic and changes the
            default scoring data file name"
     information: "Use prokaryotic cleavage data"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
 endsection: additional
@@ -61,7 +64,7 @@ section: output [
     rformat: "motif"
     multiple: "Y"
     taglist: "str:mature_peptide"
-    relations: "EDAM: EMBOSS report"                                       
+    relations: "/edam/data/0001322 Signal peptide sequence report"                                       
   ]
 
 endsection: output

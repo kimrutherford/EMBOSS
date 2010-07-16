@@ -124,7 +124,7 @@ Output file [h45989.est2genome]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Align EST sequences to genomic DNA sequence
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-estsequence]       seqall     Spliced EST nucleotide sequence(s)
@@ -152,11 +152,11 @@ Version: EMBOSS:6.2.0
    -[no]usesplice      boolean    [Y] Use donor and acceptor splice sites. If
                                   you want to ignore donor-acceptor sites then
                                   set this to be false.
-   -mode               menu       [both] This determines the comparion mode.
+   -mode               menu       [both] This determines the comparison mode.
                                   The default value is 'both', in which case
                                   both strands of the est are compared
                                   assuming a forward gene direction (ie GT/AG
-                                  splice sites), and the best comparsion
+                                  splice sites), and the best comparison
                                   redone assuming a reversed (CT/AC) gene
                                   splicing direction. The other allowed modes
                                   are 'forward', when just the forward strand
@@ -357,7 +357,7 @@ Version: EMBOSS:6.2.0
 <tr bgcolor="#FFFFCC">
 <td>-mode</td>
 <td>list</td>
-<td>This determines the comparion mode. The default value is 'both', in which case both strands of the est are compared assuming a forward gene direction (ie GT/AG splice sites), and the best comparsion redone assuming a reversed (CT/AC) gene splicing direction. The other allowed modes are 'forward', when just the forward strand is searched, and 'reverse', ditto for the reverse strand.</td>
+<td>This determines the comparison mode. The default value is 'both', in which case both strands of the est are compared assuming a forward gene direction (ie GT/AG splice sites), and the best comparison redone assuming a reversed (CT/AC) gene splicing direction. The other allowed modes are 'forward', when just the forward strand is searched, and 'reverse', ditto for the reverse strand.</td>
 <td><table><tr><td>both</td> <td><i>(Both strands)</i></td></tr><tr><td>forward</td> <td><i>(Forward strand only)</i></td></tr><tr><td>reverse</td> <td><i>(Reverse strand only)</i></td></tr></table></td>
 <td>both</td>
 </tr>
@@ -914,8 +914,8 @@ RL   (http://www.geneservice.co.uk/) and BACPAC Resources
 RL   (http://bacpac.chori.org/)
 XX
 DR   EMBL-CON; GL000124.
-DR   EMBL-JOIN; Z69720.
 DR   GDB; 11502921.
+DR   RFAM; RF00017; SRP_euk_arch.
 XX
 CC   -------------- Genome Center
 CC   Center: Wellcome Trust Sanger Institute
@@ -1214,10 +1214,12 @@ None.
 
 
 This application was modified for inclusion in EMBOSS by 
-Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
+Peter Rice
 <br>
 European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
 
 <p>
 The original program was est_genome, written by Richard Mott at the Sanger

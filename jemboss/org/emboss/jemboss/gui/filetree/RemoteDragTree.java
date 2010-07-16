@@ -743,6 +743,12 @@ public class RemoteDragTree extends JTree implements DragGestureListener,
  
       Hashtable hfile = new Hashtable();
       Object contents = gReq.getHash().get("contents");
+      if(contents==null)
+      {
+          JOptionPane.showMessageDialog(null, "file was empty", "error",
+                                JOptionPane.ERROR_MESSAGE);
+          return;
+      }
       if(contents instanceof String)
         hfile.put(filename, ((String)contents).getBytes() );
       else

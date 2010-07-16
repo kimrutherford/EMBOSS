@@ -1,7 +1,8 @@
 application: freak [
   documentation: "Generate residue/base frequency table or plot"
   groups: "Nucleic:Composition, Protein:Composition"
-  relations: "EDAM: Sequence character or word composition analysis"
+  relations: "/edam/topic/0000157 Sequence composition"
+  relations: "/edam/operation/0000236 Sequence composition analysis"
 ]
 
 section: input [
@@ -12,7 +13,9 @@ section: input [
   seqall: seqall [
     parameter: "Y"
     type: "any"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0000848 Sequence" 
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more" 
   ]
 
 endsection: input
@@ -27,7 +30,7 @@ section: required [
     default: "gc"
     information: "Residue letters"
     knowntype: "nucleotide sequence"
-    relations:  "EDAM: Nucleotide sequence"                            
+    relations:  "/edam/data/0001210 Pure nucleotide sequence"
   ]
 
 endsection: required
@@ -41,14 +44,14 @@ section: additional [
     additional: "Y"
     default: "1"
     information: "Stepping value"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0002141 Window step size"
   ]
 
   integer: window [
     additional: "Y"
     default: "30"
     information: "Averaging window"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001251 Window size"
   ]
 
 endsection: additional
@@ -61,12 +64,12 @@ section: output [
   toggle: plot [
     default: "N"
     information: "Produce graphic"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   xygraph: graph [
     standard: "$(plot)"
-    relations: "EDAM: EMBOSS graph file"                                   
+    relations: "/edam/data/0002166 Sequence composition plot"
   ]
 
   outfile: outfile [
@@ -74,7 +77,7 @@ section: output [
     knowntype: "freak output"
     nullok: "$(plot)"
     nulldefault: "$(plot)"
-    relations:  "EDAM:Sequence composition report"                         
+    relations:  "/edam/data/0001261 Sequence composition"                         
   ]
 
 endsection: output

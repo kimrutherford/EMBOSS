@@ -22,6 +22,9 @@ extern "C"
 
 #define AJREG_OVECSIZE 30
 
+
+
+
 /* @data AjPRegexp ************************************************************
 **
 ** PCRE expression internals, wrapped for AJAX calls
@@ -57,11 +60,11 @@ typedef struct AjSRegexp {
 
 /* constructors */
 
-AjPRegexp ajRegComp (const AjPStr exp);
-AjPRegexp ajRegCompC (const char* exp);
+AjPRegexp ajRegComp (const AjPStr rexp);
+AjPRegexp ajRegCompC (const char* rexp);
 
-AjPRegexp ajRegCompCase (const AjPStr exp);
-AjPRegexp ajRegCompCaseC (const char* exp);
+AjPRegexp ajRegCompCase (const AjPStr rexp);
+AjPRegexp ajRegCompCaseC (const char* rexp);
 
 /* execute expression match */
 
@@ -84,7 +87,7 @@ AjBool ajRegSubI (const AjPRegexp rp, ajint isub, AjPStr* dest);
 /* destructor */
 
 void   ajRegFree (AjPRegexp* pexp);
-void   ajRegTrace (const AjPRegexp exp);
+void   ajRegTrace (const AjPRegexp rexp);
 
 void   ajRegExit (void);
 

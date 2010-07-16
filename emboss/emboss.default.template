@@ -32,7 +32,7 @@ SET CACHESIZE 200
 
 ##################################################################
 # Test Databases
-# Used by the qatest.pl scriupt to test an EMBOSS installation.
+# Used by the qatest.pl script to test an EMBOSS installation.
 # Comment them out if you do not want your users to use them.
 # Examples in the EMBOSS documentation should all run by using
 # TEMBL: in place of EMBL:, TSW: in place of SW:, and so on.
@@ -516,6 +516,103 @@ DB tgenbank [ type: N dir: $emboss_tempdata/genbank
 #          format: swiss dir: /data/trembl/ exclude: *.dat
 #          file: */tr_vrt*.dat comment: "TREMBL other vertebrate sequences"
 # ]
+
+
+
+####################################################################
+# Biomart example
+####################################################################
+
+#DB martensembl [
+#    method: "biomart"
+#    type: "P"
+#    url: "http://www.biomart.org:80/biomart/martservice"
+# dbalias is the dataset
+#    dbalias: "hsapiens_gene_ensembl"
+#
+# The format must be 'biomart'
+#    format: "biomart"
+#
+# identifier is the biomart filter the query will be performed with
+# e.g. seqret martensembl:ENST00000380152
+#
+#    identifier: "ensembl_transcript_id"
+#
+# Additional filters may be added here e.g.
+#
+#    filter: "chromosome_name=13"
+#
+# This is the biomart attribute specifying the sequence
+# 
+#    sequence: "peptide"
+#
+# These are fields you want returned as part of the description
+#
+#    return: "ensembl_gene_id,description,external_gene_id,chromosome_name"
+#]
+
+
+
+####################################################################
+# SQL example (dummy)
+####################################################################
+
+#DB sqlexample [
+#    method: "sql"
+#    type: "N"
+#
+# method://username:password@host/databasename
+#    url: "mysql://dummy:pass@machine.somedomain.org:3306/dummyseqs"
+#
+# dbalias is the table name containing the sequence information
+#    dbalias: "sequences"
+#
+# The SQL data is processed using biomart format. That is not a typo.
+#    format: "biomart"
+#
+# Column name containing IDs|Accs i.e. the column the query will be
+# performed against
+#    identifier: "accession"
+#
+# Any additional SQL restrictions can be put here e.g. 
+#    filter: "AND version IS NOT NULL"
+#
+# Column containing sequence
+#    sequence: "sequence"
+#
+# Columns you want to add to the description
+#    return: "version,description"
+#]
+
+
+
+##################################################################
+# Ensembl datatabase access example via public MySQL instances.
+#
+# Please note that these public MySQL instances are only provided
+# for small-scale access. For extended analyses and if in doubt,
+# please copy the relevant databases to a private MySQL instance
+# and configure access accordingly. Please see the following
+# instructions on how to setup your own MySQL server.
+# http://www.ensembl.org/info/docs/webcode/install/build.html
+##################################################################
+
+# DB ensembl [
+#   type:        "Nucleotide"
+#   format:      "ensembl"
+#   method:      "ensembl"
+#   url:         "mysql://anonymous:@ensembldb.ensembl.org:5306/"
+#   comment:     "Ensembl test database"
+# ]
+#
+# DB ensemblgenomes [
+#   type:        "Nucleotide"
+#   format:      "ensembl"
+#   method:      "ensembl"
+#   url:         "mysql://anonymous:@mysql.ebi.ac.uk:4157/"
+#   comment:     "Ensembl test database"
+# ]
+
 
 
 ##################################################################

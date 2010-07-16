@@ -1,7 +1,8 @@
 application: splitter [
   documentation: "Split sequence(s) into smaller sequences"
   groups: "Edit"
-  relations: "EDAM: Sequence cutting"
+  relations: "/edam/topic/0000156 Sequence editing"
+  relations: "/edam/operation/0000369 Sequence cutting"
 ]
 
 section: input [
@@ -12,14 +13,16 @@ section: input [
   boolean: feature [
     default: "N"
     information: "Use feature information"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   seqall: sequence [
     parameter: "Y"
     type: "any"
     features: "$(feature)"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0000848 Sequence" 
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more" 
   ]
 
 endsection: input
@@ -34,7 +37,7 @@ section: additional [
     minimum: "1"
     default: "10000"
     information: "Size to split at"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001249 Sequence length"
   ]
 
   integer: overlap [
@@ -42,8 +45,10 @@ section: additional [
     minimum: "0"
     maximum: "@($(size)-1)"
     default: "0"
+    failrange: "N"
+    trueminimum: "Y"
     information: "Overlap between split sequences"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001249 Sequence length"
   ]
 
 endsection: additional
@@ -56,7 +61,7 @@ section: advanced [
   boolean: addoverlap [
     default: "N"
     information: "Include overlap in output sequence size"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
 endsection: advanced
@@ -69,7 +74,9 @@ section: output [
   seqoutall: outseq [
     parameter: "Y"
     features: "$(feature)"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0000848 Sequence" 
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more"
   ]
 
 endsection: output

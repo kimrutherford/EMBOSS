@@ -177,7 +177,7 @@ Created tcode.ps
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Identify protein-coding regions using Fickett TESTCODE statistic
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -191,7 +191,8 @@ Version: EMBOSS:6.2.0
 *  -outfile            report     [*.tcode] Output report file name
 *  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tek, tekt, none, data, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif, pdf,
+                                  svg, pdf, svg)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
@@ -315,7 +316,7 @@ Version: EMBOSS:6.2.0
 <td>-graph</td>
 <td>xygraph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif, pdf, svg, pdf, svg</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -884,7 +885,7 @@ The output is a standard EMBOSS report file.
 The results can be output in one of several styles by using the
 command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
 the name of the required format.  The available format names are: embl,
-genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+genbank, gff, pir, swiss, debug, listfile, dbmotif, diffseq, excel,
 feattable, motif, regions, seqtable, simple, srs, table, tagseq
 
 <p>
@@ -1301,10 +1302,12 @@ Free to academics, versions for both X and Windows platforms.
 <H2>
     Author(s)
 </H2>
-Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
+Alan Bleasby 
 <br>
 European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
 
 
 

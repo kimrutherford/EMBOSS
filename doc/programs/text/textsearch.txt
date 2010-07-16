@@ -70,7 +70,7 @@ Search the textual description of sequence(s)
 Command line arguments
 
 Search the textual description of sequence(s)
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     (Gapped) sequence(s) filename and optional
@@ -248,9 +248,12 @@ See also
 
 Author(s)
 
-   Gary             Williams (gwilliam (c) rfcgr.mrc.ac.uk)
+   Gary             Williams formerly at:
    MRC              Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome           Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

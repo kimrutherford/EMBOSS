@@ -293,6 +293,9 @@ int main(int argc, char **argv)
 
 static ajint nmax=0;
 
+
+
+
 /* @funcstatic stretcher_Ealign ***********************************************
 **
 ** Undocumented

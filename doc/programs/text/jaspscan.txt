@@ -42,8 +42,11 @@ Jaspar matrix set
          N : CNE
          O : POLII
          S : SPLICE
+         B : PBM
+         L : PBM_HLH
+         H : PBM_HOMEO
 Matrix set [C]:
-Comma separated matrix list [all]: ma0079
+Comma separated matrix list [all]: ma0079.1
 Threshold percentage [80.0]:
 Output report [m23100.jaspscan]:
 
@@ -54,21 +57,22 @@ Output report [m23100.jaspscan]:
 Command line arguments
 
 Scans DNA sequences for transcription factors
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
                                   format, or reference (input USA)
    -menu               menu       [C] Matrix set (Values: C (Core); F (Fam); P
                                   (Phylofacts); N (CNE); O (POLII); S
-                                  (SPLICE))
+                                  (SPLICE); B (PBM); L (PBM_HLH); H
+                                  (PBM_HOMEO))
    -matrices           string     [all] The name 'all' reads in all matrix
                                   files from the selected
                                   JASPAR matrix set. You can specify
                                   individual matrices by giving
                                   their names with commas between then, such
                                   as:
-                                  'ma0001,ma0015'.
+                                  'ma0001.1,ma0015*'.
                                   The case of the names is not important. You
                                   can specify a file of
                                   matrix names to read in by giving the name
@@ -84,11 +88,11 @@ Version: EMBOSS:6.2.0
                                   for.
                                   An example of a file of matrix names is:
                                   ! my matrices
-                                  ma0001, ma0002
+                                  ma0001.1, ma0002.1
                                   ! other matrices
-                                  ma0010
-                                  ma0032
-                                  ma0053 (Any string)
+                                  ma0010.1
+                                  ma0032*
+                                  ma0053.1 (Any string)
    -threshold          float      [80.0] If the matrix score is greater than
                                   or equal to this percentage
                                   then a hit will be reported (Any numeric
@@ -198,9 +202,6 @@ RT   "Human insulin-receptor gene. Partial sequence and amplification of exons
 RT   by polymerase chain reaction";
 RL   Diabetes 39(1):123-128(1990).
 XX
-DR   EMBL-JOIN; M32972.
-DR   TRANSFAC; R03068; HS$INSR_01.
-XX
 CC   Draft entry and computer-readable sequence for [1] kindly submitted
 CC   by G.Bell, 14-MAR-1990.
 XX
@@ -215,6 +216,9 @@ FT                   /tissue_type="liver"
 FT                   /db_xref="taxon:9606"
 FT   repeat_region   <1..76
 FT                   /rpt_family="Alu"
+FT   exon            1541..1923
+FT                   /gene="INSR"
+FT                   /number=1
 
 
   [Part of this file has been deleted for brevity]
@@ -285,7 +289,7 @@ Output file format
 # Commandline: jaspscan
 #    -both
 #    -sequence tembl:m23100
-#    -matrices ma0079
+#    -matrices ma0079.1
 # Report_format: seqtable
 # Report_file: m23100.jaspscan
 ########################################
@@ -299,63 +303,63 @@ Output file format
 #
 #=======================================
 
-  Start     End  Strand Score_Percent ID     Name   Species      Class
- Supergroup Protein_Seq Experiment Source_PMID Info_Content Closest_Jaspar Close
-st_Transfac MCS_Score Built_From Sequence
-    117     126       +        82.143 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
- vertebrate P08047      SELEX      2192357            9.719 .              .
-                    . .          gggggaggat
-   1191    1200       +        89.286 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
- vertebrate P08047      SELEX      2192357            9.719 .              .
-                    . .          gaggcgggga
-   1203    1212       +        83.929 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
- vertebrate P08047      SELEX      2192357            9.719 .              .
-                    . .          cgggcggggc
-   1208    1217       +        89.286 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
- vertebrate P08047      SELEX      2192357            9.719 .              .
-                    . .          ggggcggggc
-   1213    1222       +        80.357 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
- vertebrate P08047      SELEX      2192357            9.719 .              .
-                    . .          ggggcgggac
-   1704    1713       +        82.143 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
- vertebrate P08047      SELEX      2192357            9.719 .              .
-                    . .          cgggcgtgga
-   1838    1847       +        82.143 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
- vertebrate P08047      SELEX      2192357            9.719 .              .
-                    . .          ccggcgggga
-   1933    1942       +        82.143 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
- vertebrate P08047      SELEX      2192357            9.719 .              .
-                    . .          ggggcgcggg
-   1945    1954       +        89.286 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
- vertebrate P08047      SELEX      2192357            9.719 .              .
-                    . .          tgggcgggga
-   2027    2036       +        89.286 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
- vertebrate P08047      SELEX      2192357            9.719 .              .
-                    . .          ggggcggggg
-   2032    2041       +        87.500 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
- vertebrate P08047      SELEX      2192357            9.719 .              .
-                    . .          ggggggcggt
-   2034    2043       +        82.143 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
- vertebrate P08047      SELEX      2192357            9.719 .              .
-                    . .          ggggcggtgg
-   1252    1261       -        80.357 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
- vertebrate P08047      SELEX      2192357            9.719 .              .
-                    . .          gagggaggga
-   1304    1313       -        80.357 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
- vertebrate P08047      SELEX      2192357            9.719 .              .
-                    . .          gcggcgcgga
-   1805    1814       -        80.357 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
- vertebrate P08047      SELEX      2192357            9.719 .              .
-                    . .          agcgcggggt
-   1974    1983       -        89.286 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
- vertebrate P08047      SELEX      2192357            9.719 .              .
-                    . .          tgggtggggt
-   2016    2025       -        80.357 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
- vertebrate P08047      SELEX      2192357            9.719 .              .
-                    . .          ggggagggtt
-   2017    2026       -        87.500 MA0079 SP1    Homo sapiens ZN-FINGER, C2H2
- vertebrate P08047      SELEX      2192357            9.719 .              .
-                    . .          tggggagggt
+  Start     End  Strand Score_Percent ID       Name   Species Class
+Supergroup Family Pazar_TF_ID Protein_Seq Experiment Source_PMID Info_Content Cl
+osest_Jaspar Closest_Transfac MCS_Score Built_From Sequence
+    117     126       +        82.143 MA0079.1 SP1    9606    Zinc-coordinating
+.          .      .           P08047      SELEX      2192357            9.719 .
+             .                        . .          gggggaggat
+   1191    1200       +        89.286 MA0079.1 SP1    9606    Zinc-coordinating
+.          .      .           P08047      SELEX      2192357            9.719 .
+             .                        . .          gaggcgggga
+   1203    1212       +        83.929 MA0079.1 SP1    9606    Zinc-coordinating
+.          .      .           P08047      SELEX      2192357            9.719 .
+             .                        . .          cgggcggggc
+   1208    1217       +        89.286 MA0079.1 SP1    9606    Zinc-coordinating
+.          .      .           P08047      SELEX      2192357            9.719 .
+             .                        . .          ggggcggggc
+   1213    1222       +        80.357 MA0079.1 SP1    9606    Zinc-coordinating
+.          .      .           P08047      SELEX      2192357            9.719 .
+             .                        . .          ggggcgggac
+   1704    1713       +        82.143 MA0079.1 SP1    9606    Zinc-coordinating
+.          .      .           P08047      SELEX      2192357            9.719 .
+             .                        . .          cgggcgtgga
+   1838    1847       +        82.143 MA0079.1 SP1    9606    Zinc-coordinating
+.          .      .           P08047      SELEX      2192357            9.719 .
+             .                        . .          ccggcgggga
+   1933    1942       +        82.143 MA0079.1 SP1    9606    Zinc-coordinating
+.          .      .           P08047      SELEX      2192357            9.719 .
+             .                        . .          ggggcgcggg
+   1945    1954       +        89.286 MA0079.1 SP1    9606    Zinc-coordinating
+.          .      .           P08047      SELEX      2192357            9.719 .
+             .                        . .          tgggcgggga
+   2027    2036       +        89.286 MA0079.1 SP1    9606    Zinc-coordinating
+.          .      .           P08047      SELEX      2192357            9.719 .
+             .                        . .          ggggcggggg
+   2032    2041       +        87.500 MA0079.1 SP1    9606    Zinc-coordinating
+.          .      .           P08047      SELEX      2192357            9.719 .
+             .                        . .          ggggggcggt
+   2034    2043       +        82.143 MA0079.1 SP1    9606    Zinc-coordinating
+.          .      .           P08047      SELEX      2192357            9.719 .
+             .                        . .          ggggcggtgg
+   1252    1261       -        80.357 MA0079.1 SP1    9606    Zinc-coordinating
+.          .      .           P08047      SELEX      2192357            9.719 .
+             .                        . .          gagggaggga
+   1304    1313       -        80.357 MA0079.1 SP1    9606    Zinc-coordinating
+.          .      .           P08047      SELEX      2192357            9.719 .
+             .                        . .          gcggcgcgga
+   1805    1814       -        80.357 MA0079.1 SP1    9606    Zinc-coordinating
+.          .      .           P08047      SELEX      2192357            9.719 .
+             .                        . .          agcgcggggt
+   1974    1983       -        89.286 MA0079.1 SP1    9606    Zinc-coordinating
+.          .      .           P08047      SELEX      2192357            9.719 .
+             .                        . .          tgggtggggt
+   2016    2025       -        80.357 MA0079.1 SP1    9606    Zinc-coordinating
+.          .      .           P08047      SELEX      2192357            9.719 .
+             .                        . .          ggggagggtt
+   2017    2026       -        87.500 MA0079.1 SP1    9606    Zinc-coordinating
+.          .      .           P08047      SELEX      2192357            9.719 .
+             .                        . .          tggggagggt
 
 #---------------------------------------
 #---------------------------------------
@@ -437,9 +441,12 @@ See also
 
 Author(s)
 
-   Alan             Bleasby (ajb (c) ebi.ac.uk)
+   Alan             Bleasby
    European         Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton,         Cambridge CB10 1SD, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

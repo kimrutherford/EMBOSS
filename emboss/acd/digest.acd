@@ -2,7 +2,8 @@ application: digest [
   documentation: "Reports on protein proteolytic enzyme or
                   reagent cleavage sites"
   groups: "Protein:Motifs"
-  relations: "EDAM: Protein cleavage site prediction"
+  relations: "/edam/topic/0000141 Proteolysis and peptide mass"
+  relations: "/edam/operation/0000422 Protein cleavage site prediction"
 ]
 
 section: input [
@@ -13,7 +14,9 @@ section: input [
   seqall: seqall [
     parameter: "Y"
     type: "Protein"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0000848 Sequence" 
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more" 
   ]
 
   datafile: mwdata [
@@ -22,7 +25,7 @@ section: input [
            acids"
     default: "Emolwt.dat"
     knowntype: "molecular weights"
-    relations:  "EDAM: Amino acid molecular weight data"               
+    relations:  "/edam/data/0001505 Amino acid molecular weight data"               
   ]
 
 endsection: input
@@ -45,14 +48,14 @@ section: required [
     header: "Enzymes and Reagents"
     information: "Select number"
     button: "Y"
-    relations: "EDAM: Generic string array"                                
+    relations: "/edam/data/0001773 Tool-specific parameter"                                
   ]
 
   boolean: mono [
     standard: "Y"
     default: "N"
     information: "Use monoisotopic weights"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
 endsection: required
@@ -79,7 +82,7 @@ section: advanced [
            'P'. Specifying unfavoured shows
            these unfavoured cuts as well as the
            favoured ones."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: ragging [
@@ -90,7 +93,7 @@ section: advanced [
            lists of peptide sequences for
            protein identification using
            mass-spectrometry."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   list: termini [
@@ -104,7 +107,7 @@ section: advanced [
     header: "Ragging value"
     information: "Select number"
     button: "Y"
-    relations: "EDAM: Generic string array"                                
+    relations: "/edam/data/0001773 Tool-specific parameter"                                
   ]
 
 endsection: advanced
@@ -122,7 +125,7 @@ section: output [
            2..5. Overlaps are therefore
            fragments with exactly one potential
            cut site within it."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: allpartials [
@@ -130,7 +133,7 @@ section: output [
     help: "As for overlap but fragments
            containing more than one potential
            cut site are included."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   report: outfile [
@@ -139,7 +142,7 @@ section: output [
     multiple: "Y"
     taglist: "float:molwt=Mol_Weight
               str:cterm=Cterm str:nterm=Nterm"
-    relations: "EDAM: EMBOSS report"                                       
+    relations: "/edam/data/0001323 Protein cleavage site report"
   ]
 
 endsection: output

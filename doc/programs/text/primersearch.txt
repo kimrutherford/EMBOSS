@@ -67,7 +67,7 @@ Whitehead primer3_core program output file [z52466.primersearch]:
 Command line arguments
 
 Search DNA sequences for matches with primer pairs
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-seqall]            seqall     Nucleotide sequence(s) filename and optional
@@ -319,9 +319,12 @@ See also
 
 Author(s)
 
-   Val              Curwen (vac (c) sanger.ac.uk)
+   Val              Curwen formerly at:
    Sanger           Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
                     CB10 1SA, UK.
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

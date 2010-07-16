@@ -380,7 +380,7 @@ int main(int argc, char **argv)
 	ajFmtPrintF(outfile, "\n");
 
 	if(html)
-	    ajFmtPrintF(outfile, "<PRE>");
+	    ajFmtPrintF(outfile, "</PRE>\n");
     }
     
 

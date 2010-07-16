@@ -128,9 +128,9 @@ Protein sequence can be displayed in three-letter codes. (The codes are displaye
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>showpep tsw:rs24_fugru -three -format 2 </b>
+% <b>showpep tsw:rs24_takru -three -format 2 </b>
 Displays protein sequences with features in pretty format
-Output file [rs24_fugru.showpep]: <b></b>
+Output file [rs24_takru.showpep]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -206,7 +206,7 @@ Output file [laci_ecoli.showpep]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Displays protein sequences with features in pretty format
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     (Gapped) protein sequence(s) filename and
@@ -285,11 +285,11 @@ Version: EMBOSS:6.2.0
    -typematch          string     [*] By default any feature type in the
                                   feature table is shown. You can set this to
                                   match any feature type you wish to show.
-                                  See http://www3.ebi.ac.uk/Services/WebFeat/
-                                  for a list of the EMBL feature types and see
+                                  See http://www.ebi.ac.uk/embl/WebFeat/ for a
+                                  list of the EMBL feature types and see
                                   Appendix A of the Swissprot user manual in
-                                  http://www.expasy.ch/txt/userman.txt for a
-                                  list of the Swissprot feature types.
+                                  http://www.expasy.org/sprot/userman.html for
+                                  a list of the Swissprot feature types.
                                   The type may be wildcarded by using '*'.
                                   If you wish to show more than one type,
                                   separate their names with the character '|',
@@ -316,7 +316,7 @@ Version: EMBOSS:6.2.0
                                   extra values that a feature may have. By
                                   default any feature tag value in the feature
                                   table is shown. You can set this to match
-                                  any feature tag valueyou wish to show.
+                                  any feature tag value you wish to show.
                                   The tag value may be wildcarded by using
                                   '*'.
                                   If you wish to show more than one tag value,
@@ -504,7 +504,7 @@ gene* | embl</td>
 <td>-typematch</td>
 <td>string</td>
 <td>By default any feature type in the feature table is shown. You can set this to match any feature type you wish to show.
-See http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www.expasy.ch/txt/userman.txt for a list of the Swissprot feature types.
+See http://www.ebi.ac.uk/embl/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www.expasy.org/sprot/userman.html for a list of the Swissprot feature types.
 The type may be wildcarded by using '*'.
 If you wish to show more than one type, separate their names with the character '|', eg:
 *UTR | intron</td>
@@ -543,7 +543,7 @@ gene | label</td>
 <tr bgcolor="#FFFFCC">
 <td>-valuematch</td>
 <td>string</td>
-<td>Tag values are the values associated with a feature tag. Tags are the types of extra values that a feature may have. By default any feature tag value in the feature table is shown. You can set this to match any feature tag valueyou wish to show.
+<td>Tag values are the values associated with a feature tag. Tags are the types of extra values that a feature may have. By default any feature tag value in the feature table is shown. You can set this to match any feature tag value you wish to show.
 The tag value may be wildcarded by using '*'.
 If you wish to show more than one tag value, separate their names with the character '|', eg:
 pax* | 10</td>
@@ -893,7 +893,7 @@ ID   LACI_ECOLI              Reviewed;         360 AA.
 AC   P03023; O09196; P71309; Q2MC79; Q47338;
 DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
 DT   19-JUL-2003, sequence version 3.
-DT   16-JUN-2009, entry version 105.
+DT   15-JUN-2010, entry version 117.
 DE   RecName: Full=Lactose operon repressor;
 GN   Name=lacI; OrderedLocusNames=b0345, JW0336;
 OS   Escherichia coli (strain K12).
@@ -999,17 +999,17 @@ SQ   SEQUENCE   360 AA;  38590 MW;  347A8DEE92D736CB CRC64;
 
 <a name="input.4"></a>
 <h3>Input files for usage example 4</h3>
-<p><h3>Database entry: tsw:rs24_fugru</h3>
+<p><h3>Database entry: tsw:rs24_takru</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
-ID   RS24_FUGRU              Reviewed;         132 AA.
+ID   RS24_TAKRU              Reviewed;         132 AA.
 AC   O42387;
 DT   15-JUL-1998, integrated into UniProtKB/Swiss-Prot.
 DT   01-JAN-1998, sequence version 1.
-DT   16-JUN-2009, entry version 36.
+DT   02-MAR-2010, entry version 42.
 DE   RecName: Full=40S ribosomal protein S24;
 GN   Name=rps24;
-OS   Fugu rubripes (Japanese pufferfish) (Takifugu rubripes).
+OS   Takifugu rubripes (Japanese pufferfish) (Fugu rubripes).
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
 OC   Actinopterygii; Neopterygii; Teleostei; Euteleostei; Neoteleostei;
 OC   Acanthomorpha; Acanthopterygii; Percomorpha; Tetraodontiformes;
@@ -1025,8 +1025,12 @@ CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
 CC   Distributed under the Creative Commons Attribution-NoDerivs License
 CC   -----------------------------------------------------------------------
 DR   EMBL; AJ001398; CAA04728.1; -; Genomic_DNA.
+DR   SMR; O42387; 4-96.
+DR   STRING; O42387; -.
 DR   PRIDE; O42387; -.
-DR   HOVERGEN; O42387; -.
+DR   Ensembl; ENSTRUT00000016709; ENSTRUP00000016637; ENSTRUG00000006773; Takifugu rubripes.
+DR   eggNOG; fiNOG15754; -.
+DR   InParanoid; O42387; -.
 DR   GO; GO:0005840; C:ribosome; IEA:UniProtKB-KW.
 DR   GO; GO:0000166; F:nucleotide binding; IEA:InterPro.
 DR   GO; GO:0003735; F:structural constituent of ribosome; IEA:InterPro.
@@ -1037,7 +1041,7 @@ DR   InterPro; IPR018098; Ribosomal_S24e_CS.
 DR   Gene3D; G3DSA:3.30.70.330; a_b_plait_nuc_bd; 1.
 DR   PANTHER; PTHR10496; Ribosomal_S24E; 1.
 DR   Pfam; PF01282; Ribosomal_S24e; 1.
-DR   ProDom; PD006052; Ribosomal_S24E; 1.
+DR   ProDom; PD006052; Ribosomal_S24e; 1.
 DR   PROSITE; PS00529; RIBOSOMAL_S24E; 1.
 PE   3: Inferred from homology;
 KW   Ribonucleoprotein; Ribosomal protein.
@@ -1239,10 +1243,10 @@ Lactose operon repressor
 
 <a name="output.4"></a>
 <h3>Output files for usage example 4</h3>
-<p><h3>File: rs24_fugru.showpep</h3>
+<p><h3>File: rs24_takru.showpep</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-RS24_FUGRU
+RS24_TAKRU
 40S ribosomal protein S24
 
                    10        20        30        40        50        60        
@@ -1748,11 +1752,13 @@ None known.
 <H2>
     Author(s)
 </H2>
-Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+Gary Williams formerly at:
 <br>
 MRC Rosalind Franklin Centre for Genomics Research
 Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
 
 
 <H2>

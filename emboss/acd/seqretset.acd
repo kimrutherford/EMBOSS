@@ -2,8 +2,10 @@ application: seqretset [
   documentation: "Reads and writes (returns) a set of
                   sequences all at once"
   groups: "Edit"
-  relations: "EDAM: Sequence file handling"  
-  relations: "EDAM: Sequence extraction and generation"
+  relations: "/edam/topic/0000220 File handling"  
+  relations: "/edam/topic/0000155 Sequence retrieval"  
+  relations: "/edam/operation/0001813 Sequence retrieval"  
+  relations: "/edam/operation/0002121 Sequence file handling"  
 ]
 
 section: input [
@@ -13,7 +15,7 @@ section: input [
 
   boolean: feature [
     information: "Use feature information"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   seqset: sequence [
@@ -21,7 +23,9 @@ section: input [
     features: "$(feature)"
     type: "gapany"
     aligned: "N"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0000848 Sequence" 
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more"
   ]
 
 endsection: input
@@ -34,7 +38,9 @@ section: output [
   seqoutset: outseq [
     parameter: "Y"
     features: "$(feature)"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0000848 Sequence" 
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more"
   ]
 
 endsection: output

@@ -84,6 +84,19 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-directory" associated dirlist qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -extension1<br>-extension_directory</td>
+<td>string</td>
+<td>Default file extension</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=5>"-outfile" associated outfile qualifiers
 </td>
 </tr>

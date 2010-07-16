@@ -25,6 +25,9 @@
 #define CODONS 64
 #define TABLE_ESTIMATE 1000
 
+
+
+
 /* @datastatic CutgPValues ****************************************************
 **
 ** Codon usage table data values
@@ -304,6 +307,7 @@ int main(int argc, char **argv)
 
     return 0;
 }
+
 
 
 

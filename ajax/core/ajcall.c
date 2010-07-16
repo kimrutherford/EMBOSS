@@ -3,6 +3,9 @@
 #include <string.h>
 #include <stdarg.h>
 
+
+
+
 /* ajCall Routines are used to allow access to different library levels.
 ** Originally set up for plplot graphics to be optional.
 ** So in ajgraph.c you used to see the register calls which list all the calls
@@ -86,7 +89,6 @@ AjPTable ajCallTableNew(void)
 {
     return ajTableNewFunctionLen(50, callCmpStr,callStrHash);
 }
-
 
 
 
@@ -366,6 +368,9 @@ static void callCountDel(void** key, void** value, void* cl)
     return;
 }
 
+
+
+
 /* @func ajCallTableDel *******************************************************
 **
 ** Destructor for a function table
@@ -382,6 +387,8 @@ void ajCallTableDel(AjPTable* Ptable)
 
     return;
 }
+
+
 
 
 /* @func ajCallExit ***********************************************************

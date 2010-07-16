@@ -47,13 +47,17 @@ AjBool ensGvpopulationSetGvsample(EnsPGvpopulation gvp, EnsPGvsample gvs);
 AjBool ensGvpopulationAddSubPopulation(EnsPGvpopulation gvp,
                                        EnsPGvpopulation subgvp);
 
-ajuint ensGvpopulationGetMemSize(const EnsPGvpopulation gvp);
+ajulong ensGvpopulationGetMemsize(const EnsPGvpopulation gvp);
 
 AjBool ensGvpopulationTrace(const EnsPGvpopulation gvp, ajuint level);
 
 /* Ensembl Genetic Variation Population Adaptor */
 
-EnsPGvpopulationadaptor ensGvpopulationadaptorNew(EnsPDatabaseadaptor dba);
+EnsPGvpopulationadaptor ensRegistryGetGvpopulationadaptor(
+    EnsPDatabaseadaptor dba);
+
+EnsPGvpopulationadaptor ensGvpopulationadaptorNew(
+    EnsPDatabaseadaptor dba);
 
 void ensGvpopulationadaptorDel(EnsPGvpopulationadaptor *Pgvpa);
 
@@ -94,6 +98,10 @@ AjBool ensGvpopulationadaptorFetchDefaultLDPopulation(
     const EnsPGvpopulationadaptor gvpa,
     EnsPGvpopulation *Pgvp);
 
+AjBool ensGvpopulationadaptorFetchAllLDPopulations(
+    const EnsPGvpopulationadaptor gvpa,
+    AjPList gvps);
+
 /*
 ** End of prototype definitions
 */
@@ -101,7 +109,7 @@ AjBool ensGvpopulationadaptorFetchDefaultLDPopulation(
 
 
 
-#endif
+#endif /* ensgvpopulation_h */
 
 #ifdef __cplusplus
 }

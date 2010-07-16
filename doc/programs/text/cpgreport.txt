@@ -54,7 +54,7 @@ Features output [u68037.gff]:
 Command line arguments
 
 Identify and report CpG-rich regions in nucleotide sequence(s)
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -156,9 +156,12 @@ RL   Submitted (26-AUG-1996) to the EMBL/GenBank/DDBJ databases.
 RL   Biochemistry & Molecular Biology, Merck Frosst Center for Therapeutic
 RL   Research, P. O. Box 1005, Pointe Claire - Dorval, Quebec H9R 4P8, Canada
 XX
-DR   ASTD; TRAN00000010928.
+DR   Ensembl-GO; ENSRNOESTG00000830631; Rattus_norvegicus.
 DR   Ensembl-Gn; ENSRNOG00000004094; Rattus_norvegicus.
+DR   Ensembl-Gn; ENSRNOG00000017743; Rattus_norvegicus.
+DR   Ensembl-TO; ENSRNOESTT00000830623; Rattus_norvegicus.
 DR   Ensembl-Tr; ENSRNOT00000005470; Rattus_norvegicus.
+DR   Ensembl-Tr; ENSRNOT00000023860; Rattus_norvegicus.
 XX
 FH   Key             Location/Qualifiers
 FH
@@ -172,6 +175,10 @@ FT                   /codon_start=1
 FT                   /product="EP1 prostanoid receptor"
 FT                   /note="family 1 G-protein coupled receptor"
 FT                   /db_xref="GOA:P70597"
+FT                   /db_xref="InterPro:IPR000276"
+FT                   /db_xref="InterPro:IPR000708"
+FT                   /db_xref="InterPro:IPR001244"
+FT                   /db_xref="InterPro:IPR008365"
 FT                   /db_xref="InterPro:IPR017452"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P70597"
 FT                   /protein_id="AAB07735.1"
@@ -232,7 +239,7 @@ U68037                 1183   1193    26          2  72.7   2.00
 ##sequence-region U68037 1 1193
 #!Date 2010-01-15
 #!Type DNA
-#!Source-version EMBOSS 6.2.0
+#!Source-version EMBOSS 6.3.0
 U68037  cpgreport       sequence_feature        12      13      17.000  +
 .       ID="U68037.1"
 U68037  cpgreport       sequence_feature        47      48      17.000  +
@@ -377,19 +384,27 @@ See also
 
 Author(s)
 
-   This program was originally written by Gos Micklem (gos (c) ebi.ac.uk)
+   This program was originally written by Gos Micklem formerly at:
    Informatics Division, European Bioinformatics Institute, Wellcome Trust
    Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
    The algorithm was modified for inclusion in EGCG under the name
-   'CPGSPANS' by Rodrigo Lopez (rls (c) ebi.ac.uk)
+   'CPGSPANS' by Rodrigo Lopez
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
 
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
    This application was modified for inclusion in EMBOSS by Alan Bleasby
-   (ajb (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

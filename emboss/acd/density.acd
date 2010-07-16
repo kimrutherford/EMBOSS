@@ -1,7 +1,8 @@
 application: density [
   documentation: "Draw a nucleic acid density plot"
   groups: "Nucleic:Composition"
-  relations: "EDAM: Nucleic acid base composition analysis"
+  relations: "/edam/topic/0000157 Sequence composition"
+  relations: "/edam/operation/0000377 Nucleotide base composition analysis"
 ]
 
 section: input [
@@ -12,7 +13,9 @@ section: input [
   seqall: seqall [
     parameter: "Y"
     type: "dna"
-    relations: "EDAM: DNA sequence record"                                 
+    relations: "/edam/data/0001215 Pure DNA sequence"
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more"
   ]
 
 endsection: input
@@ -27,7 +30,7 @@ section: additional [
     minimum: "1"
     default: "100"
     information: "Window length"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001251 Window size"
   ]
 
   list: display [
@@ -41,7 +44,7 @@ section: additional [
     header: "Graph type"
     information: "Select graph type"
     button: "Y"
-    relations: "EDAM: Generic string array"                                
+    relations: "/edam/data/0002152 Rendering parameter"
   ]
 
 endsection: additional
@@ -60,7 +63,7 @@ variable: isdual "@($(display) == D)"
     information: "Density graph"
     nullok: "Y"
     nulldefault: "@($(display) == none)"
-    relations: "EDAM: EMBOSS graph file"                                   
+    relations: "/edam/data/0002167 Nucleic acid density plot"
   ]
 
   report: outfile [
@@ -70,7 +73,7 @@ variable: isdual "@($(display) == D)"
     knowntype: "density output"
     nullok: "Y"
     nulldefault: "@($(display) != none)"
-    relations: "EDAM: EMBOSS report"                                       
+    relations: "/edam/data/0002167 Nucleic acid density plot"
   ]
 
 endsection: output

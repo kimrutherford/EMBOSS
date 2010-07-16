@@ -50,7 +50,7 @@ General log output file [outfile.dbxgcg]:
 Command line arguments
 
 Index a GCG formatted database using b+tree indices
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     Basename for index files (Any string from 2
@@ -80,6 +80,12 @@ Version: EMBOSS:6.2.0
    -indexoutdir        outdir     [.] Index file output directory
 
    Associated qualifiers:
+
+   "-directory" associated qualifiers
+   -extension          string     Default file extension
+
+   "-indexoutdir" associated qualifiers
+   -extension          string     Default file extension
 
    "-outfile" associated qualifiers
    -odirectory         string     Output directory
@@ -280,9 +286,12 @@ See also
 
 Author(s)
 
-   Alan             Bleasby (ajb (c) ebi.ac.uk)
+   Alan             Bleasby
    European         Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton,         Cambridge CB10 1SD, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

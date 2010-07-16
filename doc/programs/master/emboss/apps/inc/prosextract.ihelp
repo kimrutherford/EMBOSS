@@ -1,12 +1,16 @@
 Processes the PROSITE motif database for use by patmatmotifs
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-prositedir]        directory  PROSITE database directory
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
-   Associated qualifiers: (none)
+   Associated qualifiers:
+
+   "-prositedir" associated qualifiers
+   -extension1         string     Default file extension
+
    General qualifiers:
    -auto               boolean    Turn off prompts
    -stdout             boolean    Write first file to standard output

@@ -3,6 +3,9 @@
 
 #define MAX_STRING 180
 
+
+
+
 /* @data AjPGraphobj *******************************************************
 **
 ** AJAX data structure for graph objects, contained as a substructure
@@ -34,6 +37,9 @@ typedef struct AjSGraphobj {
   char Padding[4];
 } AjOGraphobj;
 #define AjPGraphobj AjOGraphobj*
+
+
+
 
 /* @data AjPGraphdata ******************************************************
 **
@@ -90,6 +96,9 @@ typedef struct AjSGraphdata {
   AjPGraphobj Dataobj;
 } AjOGraphdata;
 #define AjPGraphdata AjOGraphdata*
+
+
+
 
 /* @data AjPGraph *************************************************************
 **

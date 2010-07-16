@@ -40,10 +40,11 @@ DIST_COMMON = $(include_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in COPYING
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/amd64.m4 \
-	$(top_srcdir)/m4/general.m4 $(top_srcdir)/m4/java.m4 \
-	$(top_srcdir)/m4/lf_x11.m4 $(top_srcdir)/m4/mysql.m4 \
-	$(top_srcdir)/m4/pngdriver.m4 $(top_srcdir)/m4/postgresql.m4 \
-	$(top_srcdir)/m4/sgi.m4 $(top_srcdir)/configure.in
+	$(top_srcdir)/m4/general.m4 $(top_srcdir)/m4/hpdf.m4 \
+	$(top_srcdir)/m4/java.m4 $(top_srcdir)/m4/lf_x11.m4 \
+	$(top_srcdir)/m4/mysql.m4 $(top_srcdir)/m4/pngdriver.m4 \
+	$(top_srcdir)/m4/postgresql.m4 $(top_srcdir)/m4/sgi.m4 \
+	$(top_srcdir)/configure.in
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -77,10 +78,11 @@ am__objects_1 = ajalign.lo ajarr.lo ajassert.lo ajbase.lo ajcall.lo \
 	ajcod.lo ajdan.lo ajdmx.lo ajdom.lo ajdomain.lo ajexcept.lo \
 	ajfeat.lo ajfile.lo ajfiledata.lo ajfileio.lo ajfmt.lo \
 	ajindex.lo ajjava.lo ajlist.lo ajmath.lo ajmatrices.lo \
-	ajmem.lo ajmess.lo ajnam.lo ajnexus.lo ajpat.lo ajpdb.lo \
-	ajpdbio.lo ajphylo.lo ajrange.lo ajreg.lo ajreport.lo ajseq.lo \
-	ajseqabi.lo ajseqread.lo ajseqtype.lo ajseqwrite.lo ajsort.lo \
-	ajsql.lo ajstr.lo ajsys.lo ajtable.lo ajtime.lo ajtranslate.lo \
+	ajmem.lo ajmess.lo ajnam.lo ajnexus.lo ajobo.lo ajpat.lo \
+	ajpdb.lo ajpdbio.lo ajphylo.lo ajrange.lo ajreg.lo ajreport.lo \
+	ajresource.lo ajseq.lo ajseqabi.lo ajseqbam.lo ajseqread.lo \
+	ajseqtype.lo ajseqwrite.lo ajsort.lo ajsql.lo ajstr.lo \
+	ajsys.lo ajtable.lo ajtax.lo ajtime.lo ajtranslate.lo \
 	ajtree.lo ajutil.lo ajvector.lo
 am_libajax_la_OBJECTS = $(am__objects_1)
 libajax_la_OBJECTS = $(am_libajax_la_OBJECTS)
@@ -133,6 +135,7 @@ ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EHAVEANT = @EHAVEANT@
 EMBOSS_TOP = @EMBOSS_TOP@
+ESYSTEMLIBS = @ESYSTEMLIBS@
 EXEEXT = @EXEEXT@
 FGREP = @FGREP@
 GREP = @GREP@
@@ -172,6 +175,7 @@ PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
 PACKAGE_NAME = @PACKAGE_NAME@
 PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
+PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PCRE_DATE = @PCRE_DATE@
@@ -262,10 +266,10 @@ AM_CFLAGS = $(WARN_CFLAGS) $(DEVWARN_CFLAGS)
 @ISCYGWIN_TRUE@CYGWIN_LDAJAX = -L../../plplot -L../expat -L../pcre -L../zlib \
 @ISCYGWIN_TRUE@-leplplot -leexpat -lepcre -lezlib
 
+@ESYSTEMLIBS_FALSE@EXTRA_INCLUDES = -I$(top_srcdir)/ajax/expat -I$(top_srcdir)/ajax/zlib
 INCLUDES = -DAJAX_FIXED_ROOT=$(AJAX_FIXED_ROOT) \
 -DAJAX_SYSTEM="$(AJAX_SYSTEM)" -DPREFIX=\"$(prefix)\" \
--I$(top_srcdir)/plplot -I$(top_srcdir)/ajax/pcre -I$(top_srcdir)/ajax/expat \
--I$(top_srcdir)/ajax/zlib
+-I$(top_srcdir)/plplot -I$(top_srcdir)/ajax/pcre $(EXTRA_INCLUDES)
 
 AJAXSRC = ajalign.c ajarr.c ajassert.c \
 ajbase.c ajcall.c ajcod.c \
@@ -273,36 +277,31 @@ ajdan.c ajdmx.c ajdom.c ajdomain.c \
 ajexcept.c \
 ajfeat.c ajfile.c ajfiledata.c ajfileio.c ajfmt.c \
 ajindex.c ajjava.c ajlist.c \
-ajmath.c ajmatrices.c ajmem.c ajmess.c ajnam.c \
-ajnexus.c \
+ajmath.c ajmatrices.c ajmem.c ajmess.c \
+ajnam.c ajnexus.c ajobo.c \
 ajpat.c ajpdb.c ajpdbio.c ajphylo.c \
-ajrange.c ajreg.c ajreport.c \
-ajseq.c ajseqabi.c ajseqread.c ajseqtype.c ajseqwrite.c \
+ajrange.c ajreg.c ajreport.c ajresource.c \
+ajseq.c ajseqabi.c ajseqbam.c ajseqread.c ajseqtype.c ajseqwrite.c \
 ajsort.c ajsql.c ajstr.c ajsys.c \
-ajtable.c ajtime.c ajtranslate.c ajtree.c \
+ajtable.c ajtax.c ajtime.c ajtranslate.c ajtree.c \
 ajutil.c ajvector.c
 
-
-# samtoolsbam.c samtoolsbam_aux.c samtoolsbam_import.c samtoolsbgzf.c \
-# samtoolskstring.c samtoolssam_header.c
 include_HEADERS = ajax.h ajarch.h ajdefine.h \
 ajalign.h ajarr.h ajassert.h \
 ajbase.h ajcall.h ajcod.h \
 ajdan.h ajdmx.h ajdom.h ajdomain.h ajexcept.h \
 ajfeat.h ajfeatdata.h ajfile.h ajfiledata.h ajfileio.h ajfmt.h \
 ajindex.h ajjava.h ajlist.h \
-ajmath.h ajmatrices.h ajmem.h ajmess.h ajnam.h ajnexus.h \
+ajmath.h ajmatrices.h ajmem.h ajmess.h \
+ajnam.h ajnexus.h ajobo.h \
 ajpat.h ajpdb.h ajpdbio.h ajphylo.h \
-ajrange.h ajreg.h ajreport.h \
-ajseq.h ajseqabi.h ajseqdata.h ajseqread.h ajseqtype.h ajseqwrite.h \
+ajrange.h ajreg.h ajreport.h ajresource.h \
+ajseq.h ajseqabi.h ajseqbam.h ajseqdata.h ajseqread.h ajseqtype.h ajseqwrite.h \
 ajsort.h ajsql.h ajstr.h ajsys.h \
-ajtable.h ajtime.h ajtranslate.h ajtree.h ajutil.h ajvector.h
+ajtable.h ajtax.h ajtime.h ajtranslate.h ajtree.h ajutil.h ajvector.h
 
-
-#samtoolsbam.h samtoolsbgzf.h samtoolskhash.h samtoolskseq.h \
-#samtoolskstring.h samtoolssam_header.h
 libajax_la_SOURCES = $(AJAXSRC)
-VERS_INF = -version-info 6:2:0
+VERS_INF = -version-info 6:3:0
 @ISCYGWIN_FALSE@LINKFLAGS = $(VERS_INF)
 @ISCYGWIN_TRUE@LINKFLAGS = $(VERS_INF) $(CYGWIN_LDFLAGS) $(CYGWIN_LDAJAX)
 libajax_la_LDFLAGS = $(LINKFLAGS)
@@ -405,6 +404,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajmess.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajnam.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajnexus.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajobo.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajpat.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajpdb.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajpdbio.Plo@am__quote@
@@ -412,8 +412,10 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajrange.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajreg.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajreport.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajresource.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajseq.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajseqabi.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajseqbam.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajseqread.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajseqtype.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajseqwrite.Plo@am__quote@
@@ -422,6 +424,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajstr.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajsys.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajtable.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajtax.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajtime.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajtranslate.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajtree.Plo@am__quote@

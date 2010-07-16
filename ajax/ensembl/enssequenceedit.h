@@ -68,15 +68,17 @@ ajuint ensSequenceEditGetStart(const EnsPSequenceEdit se);
 
 ajuint ensSequenceEditGetEnd(const EnsPSequenceEdit se);
 
-ajuint ensSequenceEditGetLengthDifference(EnsPSequenceEdit se);
+ajint ensSequenceEditGetLengthDifference(EnsPSequenceEdit se);
 
 AjBool ensSequenceEditTrace(const EnsPSequenceEdit se, ajuint level);
 
-AjBool ensSequenceEditApplyEdit(EnsPSequenceEdit se, AjPStr* Psequence);
+AjBool ensSequenceEditApplyEdit(EnsPSequenceEdit se,
+                                ajint offset,
+                                AjPStr* Psequence);
 
-int ensSequenceEditCompareStartAscending(const void* P1, const void* P2);
+AjBool ensSequenceEditSortByStartAscending(AjPList ses);
 
-int ensSequenceEditCompareStartDescending(const void* P1, const void* P2);
+AjBool ensSequenceEditSortByStartDescending(AjPList ses);
 
 /*
 ** End of prototype definitions
@@ -85,7 +87,7 @@ int ensSequenceEditCompareStartDescending(const void* P1, const void* P2);
 
 
 
-#endif
+#endif /* enssequenceedit_h */
 
 #ifdef __cplusplus
 }

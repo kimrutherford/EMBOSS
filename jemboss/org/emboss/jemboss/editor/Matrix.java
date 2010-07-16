@@ -83,7 +83,7 @@ public class Matrix
             public boolean accept(File dir, String name) {
                 if (name.startsWith("EPAM") ||
                         name.startsWith("EBLOSUM") ||
-                        name.startsWith("ENUC"))
+                        name.startsWith("EDNA"))
                     return true;
                 return false;
             }});
@@ -134,6 +134,9 @@ public class Matrix
             matrixReadString(matrixString);
         } catch (IOException e) {
         }
+        
+        this.matrixFileName = matrixFileName;
+        
         return;
       }
       String matrixJar = matrixFilesLocation;
@@ -157,7 +160,9 @@ public class Matrix
                    "\nfrom the matrix archive "+matrixJar,
                    "Missing matrix archive",
                     JOptionPane.ERROR_MESSAGE);
-      }    
+      }
+      
+      this.matrixFileName = matrixFileName;
   }
   
   

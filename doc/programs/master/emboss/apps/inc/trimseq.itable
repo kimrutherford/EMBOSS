@@ -35,7 +35,7 @@
 <td>-window</td>
 <td>integer</td>
 <td>This determines the size of the region that is considered when deciding whether the percentage of ambiguity is greater than the threshold. A value of 5 means that a region of 5 letters in the sequence is shifted along the sequence from the ends and trimming is done only if there is a greater or equal percentage of ambiguity than the threshold percentage.</td>
-<td>Any integer value</td>
+<td>Integer 1 or more</td>
 <td>1</td>
 </tr>
 

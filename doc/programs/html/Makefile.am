@@ -1,7 +1,9 @@
 pkgdata_DATA =  abiview.1.abiview.gif \
 	banana.1.banana.gif \
 	chaos.1.chaos.gif cirdna.1.cirdna.gif cpgplot.1.cpgplot.gif \
-	dan.2.dan.gif dotmatcher.1.dotmatcher.gif \
+	dan.2.dan.gif \
+	density.2.density.gif density.3.density.gif \
+	dotmatcher.1.dotmatcher.gif \
 	dotpath.1.dotpath.gif dottup.1.dottup.gif \
 	emboss_icon.gif epestfind.1.epestfind.gif \
 	findkm.1.findkm.gif \

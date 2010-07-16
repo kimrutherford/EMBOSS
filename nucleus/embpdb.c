@@ -51,6 +51,9 @@
 /* =========================== constructors ============================== */
 /* ======================================================================= */
 
+
+
+
 /* @section Constructors ****************************************************
 **
 ** All constructors return a pointer to a new instance. It is the 
@@ -67,6 +70,9 @@
 /* =========================== destructors =============================== */
 /* ======================================================================= */
 
+
+
+
 /* @section Structure Destructors *******************************************
 **
 ** All destructor functions receive the address of the instance to be
@@ -80,6 +86,9 @@
 /* ======================================================================= */
 /* ============================ Assignments ============================== */
 /* ======================================================================= */
+
+
+
 
 /* @section Assignments *****************************************************
 **
@@ -96,6 +105,9 @@
 /* ============================= Modifiers =============================== */
 /* ======================================================================= */
 
+
+
+
 /* @section Modifiers *******************************************************
 **
 ** These functions use the contents of an instance and update them.
@@ -109,12 +121,18 @@
 /* ========================== Operators ===================================*/
 /* ======================================================================= */
 
+
+
+
 /* @section Operators *******************************************************
 **
 ** These functions use the contents of an instance but do not make any 
 ** changes.
 **
 ****************************************************************************/
+
+
+
 
 /* @func embPdbidToSp *******************************************************
 **
@@ -337,7 +355,7 @@ AjBool embAtomInContact(const AjPAtom atm1, const AjPAtom atm2, float thresh,
 
 
     return ajFalse;
-} 
+}
 
 
 
@@ -383,6 +401,9 @@ float embAtomDistance(const AjPAtom atm1, const AjPAtom atm2,
 /* ============================== Casts ===================================*/
 /* ======================================================================= */
 
+
+
+
 /* @section Casts ***********************************************************
 **
 ** These functions examine the contents of an instance and return some
@@ -399,12 +420,18 @@ float embAtomDistance(const AjPAtom atm1, const AjPAtom atm2,
 /* =========================== Reporters ==================================*/
 /* ======================================================================= */
 
+
+
+
 /* @section Reporters *******************************************************
 **
 ** These functions return the contents of an instance but do not make any 
 ** changes.
 **
 ****************************************************************************/
+
+
+
 
 /* @func embVdwRad **********************************************************
 **
@@ -512,6 +539,9 @@ AjBool embPdbToIdx(ajint *idx, const AjPPdb pdb, const AjPStr res, ajint chn)
 /* ========================== Input & Output ============================= */
 /* ======================================================================= */
 
+
+
+
 /* @section Input & output **************************************************
 **
 ** These functions are used for formatted input and output to file.    
@@ -525,12 +555,18 @@ AjBool embPdbToIdx(ajint *idx, const AjPPdb pdb, const AjPStr res, ajint chn)
 /* ======================== Miscellaneous =================================*/
 /* ======================================================================= */
 
+
+
+
 /* @section Miscellaneous ***************************************************
 **
 ** These functions may have diverse functions that do not fit into the other
 ** categories. 
 **
 ****************************************************************************/
+
+
+
 
 /* @func embPdbListHeterogens ***********************************************
 ** 
@@ -616,7 +652,7 @@ AjBool embPdbListHeterogens(const AjPPdb pdb, AjPList *list_heterogens,
                         n=(ajListToarray(GrpAtmList, (void ***) &AtmArray));
                         ajListPushAppend(*list_heterogens, AtmArray);
                         /*
-                        ** So that ajListToArray doesn't try and free the
+                        ** So that ajListToarray doesn't try and free the
                         ** non-NULL pointer
                         */
                         AtmArray=NULL;
@@ -644,7 +680,7 @@ AjBool embPdbListHeterogens(const AjPPdb pdb, AjPList *list_heterogens,
             n=(ajListToarray(GrpAtmList, (void ***) &AtmArray));
             ajListPushAppend(*list_heterogens, AtmArray);
             /*
-            ** So that ajListToArray doesn't try and free the non-NULL
+            ** So that ajListToarray doesn't try and free the non-NULL
             ** pointer
             */
             AtmArray=NULL; 

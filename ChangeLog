@@ -1,4 +1,256 @@
+Version 6.3.0 15-Jul-2010
+	'ensembl' is a new access method for accessing Ensembl
+	from MySQL. Queries take the form:
+	   seqret ensembl:human:ENST00000262160
+	   seqret ensembl:human:ENST0000026216?
+	   seqret ensembl:human:ENSE00001533831
+	showing that transcripts, translations and exons are retrievable
+	and that partial queries are allowed. Example database
+	definitions are given in the emboss.default.template file. Please
+	read the note above those definitions regarding fair use of
+	the public Ensembl servers.
+
+	'sql' is a new access method for networked SQL servers
+	(mysql or postgresql). The server and database is described
+	using the 'url' field. As for biomart (described below) the
+	database definition must include definitions of new attributes
+	'sequence' (the sequence column) and 'identifier' (the
+	column used in the squery). Additional columns may be
+	returned as description text if they are listed in the 'returns'
+	attribute of the DB definition. An example definition is
+	given in emboss.default.template.
+
+	tfextract has been updated to deal with multiple pattern lines
+	and empty sequence lines.
+
+	Three automatic EMBOSS environment variables are
+	added. EMBOSS_INSTALLDIRECTORY is the installation directory
+	reported by embossversion -full, EMBOSS_BASEDIRECTORY is the base
+	directory reported by embossversion -full, and
+	EMBOSS_ROOTDIRECTORY is the root directory reported by
+	embossversion-full. These are needed to allow the QA test
+	database definitions to point to the test data for the current
+	installation, and appear in the test/.embossrc file.
+
+	Validation of EMBL/GenBank feature tables has been updated by
+	reading EMBL release 104 (June 2010) and allowing many feature
+	qualifier non-standard values that appear in that release.
+
+	Biomart is a new access method for sequence databases, The
+	database definition must include definitions of new attributes
+	'sequence' (the biomart sequence attribute) and 'identifier' (the
+	Biomart identifier attribute). Additional attributes may be
+	returned as description text if they are listed in the returns'
+	attribute of the DB definition. An example definition is
+	given in emboss.default.template.
+
+	Database definitions have a new attribute serverversion which is
+	used by SRSWWW access to choose the best way to retrieve data.
+
+	SRSWWW database access, for example from the EBI's srs.ebi.ac.uk
+	server, had a problem processing queries returning more than 30
+	entries. This is now corrected by first asking the server for the
+	number of entries and then accessing the data in chunks. This will
+	unfortunately slow down SRSWWW access for single entries but was
+	the only solution available after checking with EBI's SRS support
+	team.
+
+	Infoseq has a new column "organism" which shows the species line
+	from an EMBL or UniProt entry. In a future release this may be
+	changed to show the standard name for the NCBI taxon identifier
+	from an entry as the species definitions for these databases can
+	be long with alternative names and possibly additional species.
+
+	Amino acid 280nm extinction coefficients in file Eamino.dat have
+	been adjusted to match those of the Expasy 'protparam' tool.
+	Pepstats now reports values with cysteine residues reduced and as
+	cysteine bridges.
+
+	Database types, originally defined as simply "N" for nucleotide
+	and "P" for protein, should now be named in full. The names are
+	expanded automatically when reading the definitions in the
+	emboss.default and .embossrc files. Expanding the types allows for
+	new database types to be added in the near future.
+
+	EMBOSS can now read and write BAM (binary SAM) sequence files to
+	extract all sequences and quality scores, for example to write
+	them out in FASTQ format. Although BAM data can also be read
+	through a pipe as standard input, in this case the format must be
+	specified on the command line as it is not currently possible for
+	EMBOSS to read a buffered text file as binary data.
+
+	Needle dynamic programming algorithm updated to allow adjacent
+	gaps in opposite strands.
+
+	Rabin-Karp multi pattern search algorithm moved into the nucleus
+	library. supermatcher application seed finding step updated to use
+	Rabin-Karp multi-pattern search.
+
+	Banded Smith-Waterman algorithm used by supermatcher and
+	wordfinder applications has been revised, fixing a problem with
+	occasional inconsistent alignments. Basic SAM format support for
+	these two applications as well as for the wordmatch
+	application. supermatcher assumes the second sequence as the
+	reference sequence while wordfinder and wordmatch considers the
+	first sequence as the reference sequence.
+
+	The acdvalid application now reads the EDAM (EMBRACE Data and
+	Methods) ontology to validate EDAM references in relations
+	attributes. All applications are expected to have at least one
+	topic and at least one operation term. Other qualifiers can have
+	any number of data terms.
+
+	New source file ajtax.c provides parsing and validation for the
+	NCBI taxonomy in its .dmp file form. The parser reads all taxonomy
+	data into memory. This takes up too much space for practical use,
+	so is only intended for subsets. The parser will be reused to
+	develop indexing applications to provide fast lookup of taxon
+	identifiers.
+
+	New source file ajobo.c provides parsing and validation for OBO
+	format ontology files. The parser includes strict warnings
+	according to the OBO format documentation, but these can be turned
+	off as in many cases the OBO foundry ontologies do not follow the
+	exact standard. Examples include terms not in sorted order, and
+	Typedef stanzzas following Term stanzas, and dbxrefs to
+	non-existent terms (e.g. GO:ma in the gene ontology to cite a
+	curator).
+
+	Support for PDF and SVG graphic file output has been added. SVG
+	requires no additional libraries. PDF support requires the libhpdf
+	library (which, somewhat confusingly, is provided by the libharu
+	project). EMBOSS will attempt to find the library and development
+	files automatically and add PDF support (or not) appropriately.
+	However, if libhpdf is in a non-standard place, a --with-hpdf=DIR
+	configuration switch can be optionally used.
+
+	The output of showalign has changed. The reference sequence now
+	appears at the top, of selected. The ticks and sequence position
+	numbering is relative to a selected reference sequence. Gaps
+	within the reference appear as '.' and are not counted in
+	numbering. End gaps appear as '.' with 'V' and 'v' as the major
+	and minor tick marks, and numbering from -1 before the start and
+	from +1 after the end of the reference. The additional copy of the
+	consensus is no longer reported.
+
+	When reading ABI trace files the quality scores can now be
+	read. They are undefined in ABI files, but assumed to be phred
+	scores. ABI files can have two sequences and sets of quality
+	scores. The first is from the instrument basecalling. The second
+	is from a second basecaller. Where two sets are found, EMBOSS now
+	reads the second set.
+
+	Application nospace has a new  -menu option to trim all, trailing, or
+	excess whitespace.
+
+	Output type outfileall is obsolete (it is essentially an outfile)
+	and has been deleted. No application was using it.
+
+	Input type filelist (comma-delimited list of filenames) now trims
+	excess whitespace from the beginning and end of each filename.
+
+	Command line qualifiers with an '=' but no value now have a
+	value of an empty string. Previous releases set the value to "="
+
+	The file extension for directory, dirlist and outdir ACD datatypes
+	is now a qualifier. This allows it to be defined as a default in
+	the ACD file but also substituted by the user. An empty string
+	means 'ignore the extension'. To specify 'no extension' a single
+	space can be used as the value.
+
+	On the command line, for a parameter (with no qualifier name
+	given) a single dot was used as a missing value in previous
+	versions. This causes problems when specifying the current
+	directory as a dot. On the command line an empty (missing) value
+	must now be an empty quoted string '' or "".
+
+	Ampersands in application descriptions have been removed. They
+	confuse HTML versions of documentation.
+
+	The QA test script qatest.pl has new options -simple to turn off
+	messages when running with a local test file, and -with to cancel
+	-without options
+
+	Output redirected to a file can now use ajSysExecOutname functions
+	to pass the filename to be used for standard output and possibly
+	standard error. The filename is most usefully picked up from a new
+	function ajAcdGetOutfileName which closes an ACD outfile and
+	returns the name of the file. Te file will be empty if simply
+	opened, or will have existing contents if the append attribute is
+	true in the ACD file.
+
+	The output from tfscan is now in report format, replacing the
+	undefined text file produced in previous releases.
+
+	Where a new string is created by ajStrAssignS (the standard string
+	copy functions) the reserved space for the string is enough to
+	hold the current string value. In past releases the reserved
+	memory was the same size as the reserved memory of the string
+	being copied. This wasted memory where a large string had a short
+	value, especially when copying records read from a buffered input
+	file.
+
+	Sequence input formats now turn off buffering of input once they
+	can no longer fail (for example, FASTA format after the header
+	record will read everything until it finds another header).
+
+	Make ajaxdb code IPv6 compliant. Remove gethostbyname config
+	check.
+
+	pcre, expat & zlib include files now install to separate
+	subdirectories.
+
+	Showfeat failed to sort features with 'join' locations. The
+	sorting is corrected. A future internal change will improve
+	feature sorting in all cases.
+
+	Restriction mapping applications now process bad enzyme input
+	files without crashing.
+
+	PNG graphics output had an unwanted blank margin that did not
+	appear in other output formats. This is now turned off through
+	plplot.
+
+	Prettyplot formatting is corrected to improve the centring of
+	characters within boxes.
+
+	Restriction mapping applications no longer have an upper limit on
+	the number of cuts.
+
+	Warning messages for EMBL format sequences created vby ENSEMBL
+	have been turned off.
+
+	Corrected references to the EMBL/GenBank feature table
+	documentation in ACD files and web pages
+
+	embossversion now reports the setting of debug options, and
+	corrects variable name warnrange to acdwarnrange.
+
+	Any numeric ACD type (integer, float, range or array) with
+	calculated values for the minimum or maximum attributes can
+	potentially have an impossible range (maximum less than minimum)
+	at run time. ACD processing now discovers these calculated values,
+	and requires a definition for a new attribute 'failrange' If this
+	is defined true, a 'failmessage' attribute must also be defined to
+	explain why the values are invalid (e.g. input sequence too short
+	for the algorithm). If 'failrange' is false, a value for another
+	new attribute 'trueminimum' must be set to define which of the
+	minimum or maximum values if to be used as the only accepted
+	value.
+
+	PNG graphics output had a plplot-defined margin limiting the
+	available plot space. This is now removed, allowing applications
+	such as prettyplot more space to display results.
+
+	Resource attribute identifier: is obsoleted. No code used it. It
+	is no longer allowed in resource definitions.
+
+	Database attributes identifier: description: and command: are
+	obsoleted. No code used them. They are no longer allowed in
+	database definitions.
+
 Version 6.2.0 15-Jan-2010
+
 	Fixed GFF2 and GFF3 feature formats to always have the start
 	position less than the end position for features on the '-'
 	strand.
@@ -194,6 +446,11 @@ Version 6.2.0 15-Jan-2010
 	by SoapLab.
 
 Version 6.1.0 15-Jul-2009
+
+	New application showpep displays protein sequences. Showseq is now
+	limited to nucleotide sequences. Many of the showseq options are
+	not appropriate for proteins. Showpep makes the remaining showseq
+	options available.
 
 	A new data structure AjPSeqXref holds details of cross-references
 	between a sequence object and any other data resource. The
@@ -476,6 +733,7 @@ Version 6.1.0 15-Jul-2009
 
 	Command line qualifiers are renamed where the first 5 characters
 	are the same. These were:
+	    eprimer3 major revision of all optoins
 	    est2genome -splice to -usesplace
 	    prettyplot -boxcolval to -boxuse
             octanol -*plot to -plot*

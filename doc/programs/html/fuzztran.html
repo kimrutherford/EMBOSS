@@ -100,7 +100,7 @@ Output report [z46957.fuzztran]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Search for patterns in protein sequences (translated)
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -682,7 +682,11 @@ RL   Submitted (20-DEC-1994) to the EMBL/GenBank/DDBJ databases.
 RL   Huber A., Universitaet Karlsruhe, Zoologie I, Kornblumenstr. 13, 76128
 RL   Karlsruhe, Germany
 XX
-DR   ASTD; TRAN00000023010.
+DR   Ensembl-GO; ENSRNOESTG00000823692; Rattus_norvegicus.
+DR   Ensembl-Gn; ENSRNOG00000011144; Rattus_norvegicus.
+DR   Ensembl-TO; ENSRNOESTT00000823692; Rattus_norvegicus.
+DR   Ensembl-Tr; ENSRNOT00000015417; Rattus_norvegicus.
+DR   Ensembl-Tr; ENSRNOT00000064603; Rattus_norvegicus.
 XX
 FH   Key             Location/Qualifiers
 FH
@@ -701,8 +705,11 @@ FT   CDS             84..1130
 FT                   /product="rhodopsin"
 FT                   /function="phototransduction"
 FT                   /db_xref="GOA:P51489"
-FT                   /db_xref="HSSP:1EDS"
+FT                   /db_xref="InterPro:IPR000276"
+FT                   /db_xref="InterPro:IPR000732"
+FT                   /db_xref="InterPro:IPR001760"
 FT                   /db_xref="InterPro:IPR017452"
+FT                   /db_xref="InterPro:IPR019477"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P51489"
 FT                   /citation=[1]
 FT                   /protein_id="CAA87081.1"
@@ -828,7 +835,7 @@ The output is a standard EMBOSS report file.
 The results can be output in one of several styles by using the
 command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
 the name of the required format.  The available format names are: embl,
-genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+genbank, gff, pir, swiss, debug, listfile, dbmotif, diffseq, excel,
 feattable, motif, regions, seqtable, simple, srs, table, tagseq
 
 <p>
@@ -1192,10 +1199,12 @@ sequence
 <H2>
     Author(s)
 </H2>
-Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
+Alan Bleasby 
 <br>
 European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
 
 <H2>
     History

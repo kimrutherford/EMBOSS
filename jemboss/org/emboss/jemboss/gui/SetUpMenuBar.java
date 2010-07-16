@@ -191,7 +191,9 @@ public class SetUpMenuBar
     JMenu toolMenu = new JMenu("Tools");
     toolMenu.setMnemonic(KeyEvent.VK_T);
 
-    JMenuItem toolAlignJFrame = new JMenuItem("Multiple Sequence Editor - Jemboss");
+    JMenuItem toolAlignJFrame =
+        new JMenuItem("Multiple Sequence Alignment Editor - Jemboss");
+    
     toolAlignJFrame.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)
@@ -204,7 +206,9 @@ public class SetUpMenuBar
     });
     toolMenu.add(toolAlignJFrame);
 
-    JMenuItem toolJalview  = new JMenuItem("Multiple Sequence Editor - Jalview");
+    JMenuItem toolJalview  =
+        new JMenuItem("Multiple Sequence Alignment  Editor - Jalview");
+    
     toolJalview.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)

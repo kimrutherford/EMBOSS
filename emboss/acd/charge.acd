@@ -1,7 +1,8 @@
 application: charge [
   documentation: "Draw a protein charge plot"
   groups: "Protein:Composition"
-  relations: "EDAM: Protein sequence hydropathy calculation"
+  relations: "/edam/topic/0000137 Protein hydropathy"
+  relations: "/edam/operation/0000405 Protein sequence hydrophobic region identification"
 ]
 
 section: input [
@@ -12,7 +13,9 @@ section: input [
   seqall: seqall [
     parameter: "Y"
     type: "protein"
-    relations: "EDAM: Protein sequence record"                             
+    relations: "/edam/data/0001219 Pure protein sequence"                          
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more" 
   ]
 
   datafile: aadata [
@@ -20,7 +23,7 @@ section: input [
     information: "Amino acids properties and molecular weight
                   data file"
     knowntype: "amino acid properties"
-    relations:  "EDAM: Amino acid chemical classes data"               
+    relations:  "/edam/data/0001502 Amino acid chemical classes data"               
   ]
 
 endsection: input
@@ -35,7 +38,7 @@ section: additional [
     minimum: "1"
     default: "5"
     information: "Window length"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001251 Window size"
   ]
 
 endsection: additional
@@ -48,12 +51,12 @@ section: output [
   toggle: plot [
     default: "N"
     information: "Produce graphic"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   xygraph: graph [
     standard: "$(plot)"
-    relations: "EDAM: EMBOSS graph file"                                   
+    relations: "/edam/data/0001523 Protein charge plot"                                   
   ]
 
   outfile: outfile [
@@ -61,7 +64,7 @@ section: output [
     knowntype: "charge output"
     nullok: "Y"
     nulldefault: "$(plot)"
-    relations:  "EDAM:Protein charge plot"                                 
+    relations:  "/edam/data/0001523 Protein charge plot"                                 
   ]
 
 endsection: output

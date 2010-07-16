@@ -40,7 +40,7 @@ Output file [j01636.stssearch]:
 Command line arguments
 
 Search a DNA database for matches with a set of STS primers
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-seqall]            seqall     Nucleotide sequence(s) filename and optional
@@ -197,9 +197,12 @@ See also
 
 Author(s)
 
-   Peter            Rice (pmr (c) ebi.ac.uk)
+   Peter            Rice
    European         Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton,         Cambridge CB10 1SD, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

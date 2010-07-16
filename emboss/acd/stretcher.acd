@@ -1,7 +1,8 @@
 application: stretcher [
   documentation: "Needleman-Wunsch rapid global alignment of two sequences"
   groups: "Alignment:Global"
-  relations: "EDAM: Global sequence alignment"
+  relations: "/edam/topic/0000185 Pairwise sequence alignment"
+  relations: "/edam/operation/0000494 Global pairwise sequence alignment"
 ]
 
 section: input [
@@ -12,13 +13,15 @@ section: input [
   sequence: asequence [
     parameter: "Y"
     type: "any"
-    relations: "EDAM: Sequence"                                            
+    relations: "/edam/data/0000848 Sequence"        
+    relations: "/edam/data/0000849 Sequence record"                                     
   ]
 
   sequence: bsequence [
     parameter: "Y"
     type: "@($(acdprotein) ? stopprotein : nucleotide)"
-    relations: "EDAM: Sequence"                                            
+    relations: "/edam/data/0000848 Sequence"        
+    relations: "/edam/data/0000849 Sequence record"                                     
   ]
 
   matrix: datafile [
@@ -29,7 +32,7 @@ section: input [
            sequences. By default it is the file 'EBLOSUM62' (for proteins) or
            the file 'EDNAFULL' (for nucleic sequences). These files are
            found in the 'data' directory of the EMBOSS installation."
-    relations: "EDAM: Integer comparison matrix"                           
+    relations: "/edam/data/0001446 Comparison matrix (integers)"                           
   ]
 
 endsection: input
@@ -46,7 +49,7 @@ section: additional [
     minimum: "0"
     valid: "Positive integer"
     expected: "12 for protein, 16 for nucleic"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001397 Gap opening penalty"
   ]
 
   integer: gapextend [
@@ -56,7 +59,7 @@ section: additional [
     minimum: "0"
     valid: "Positive integer"
     expected: "2 for protein, 4 for nucleic"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001398 Gap extension penalty"
   ]
 
 endsection: additional
@@ -72,7 +75,7 @@ section: output [
     minseqs: "2"
     maxseqs: "2"
     aglobal: "Y"
-    relations: "EDAM: Pairwise sequence alignment data"                    
+    relations: "/edam/data/0001381 Pairwise sequence alignment"                    
   ]
 
 endsection: output

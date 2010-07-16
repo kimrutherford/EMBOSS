@@ -48,15 +48,15 @@ RT   "Human fos gene";
 RL   Cold Spring Harb. Symp. Quant. Biol. 51:0-0(0).
 XX
 DR   EPD; EP11145; HS_FOS.
-DR   TRANSFAC; R00458; HS$CFOS_01.
-DR   TRANSFAC; R00459; HS$CFOS_02.
-DR   TRANSFAC; R00460; HS$CFOS_03.
-DR   TRANSFAC; R00461; HS$CFOS_04.
-DR   TRANSFAC; R00463; HS$CFOS_06.
-DR   TRANSFAC; R00464; HS$CFOS_07.
-DR   TRANSFAC; R00465; HS$CFOS_08.
-DR   TRANSFAC; R00466; HS$CFOS_09.
-DR   TRANSFAC; R00467; HS$CFOS_10.
+XX
+CC   [2]  sites; promoter region.
+CC   C-fos is the human cellular homolog of the v-fos oncogene of
+CC   Finkel-Biskis-Jinkins murine osteosarcoma virus (FBJ-MuSV).  [2] It
+CC   was found that both human and murine c-fos genes contained an
+CC   enhancer-like element in their 5' noncoding regions that was
+CC   necessary for increased transcription following serum activation.
+CC   The FBJ-MuSV v-fos oncogene contains a deletion relative to murine
+CC   and human c-fos proto-oncogenes that causes complete divergence of
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>

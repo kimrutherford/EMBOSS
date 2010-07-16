@@ -1,7 +1,8 @@
 application: entret [
   documentation: "Retrieves sequence entries from flatfile databases and files"
   groups: "Edit"
-  relations: "EDAM: Sequence extraction and generation"
+  relations: "/edam/topic/0000155 Sequence retrieval"
+  relations: "/edam/operation/0001813 Sequence retrieval"
 ]
 
 section: input [
@@ -13,7 +14,9 @@ section: input [
     parameter: "Y"
     entry: "Y"
     type: "any"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0000848 Sequence" 
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more" 
   ]
 
 endsection: input
@@ -25,7 +28,7 @@ section: advanced [
 
   boolean: firstonly [
     information: "Read one sequence and stop"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
 endsection: advanced
@@ -40,7 +43,8 @@ section: output [
     knowntype: "entry full text"
     information: "Full text of a sequence database entry output
                   file"
-    relations:  "EDAM: Sequence record"                                
+    relations: "/edam/data/0000848 Sequence" 
+    relations: "/edam/data/0000849 Sequence record"
   ]
 
 endsection: output

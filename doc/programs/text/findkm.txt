@@ -40,7 +40,7 @@ Created findkm.ps
 Command line arguments
 
 Calculate and plot enzyme reaction data
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     Enzyme kinetics data (application-specific)
@@ -48,7 +48,8 @@ Version: EMBOSS:6.2.0
   [-outfile]           outfile    [*.findkm] Output file name
    -graphlb            xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tek, tekt, none, data, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif, pdf,
+                                  svg, pdf, svg)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
@@ -167,12 +168,16 @@ See also
 
 Author(s)
 
-   Sinead O'Leary (current e-mail address unknown)
-   while she was at:
+   Sinead O'Leary formerly at:
    HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
 
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
    This application was modified by David Martin
-   (dmartin (c) rfcgr.mrc.ac.uk)
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

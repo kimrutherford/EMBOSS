@@ -210,14 +210,15 @@ int main(int argc, char **argv)
 			      &release, &methods, &defined))
 	    {
 		if(protein &&
-		   (ajStrMatchC(type, "P") || ajStrMatchC(type, "Protein")))
-		   showdbDBOut(outfile, nextdbname, type, id, qry, all,
-				 methods, defined,
-				 comment, release, html, dotype, doid,
-				 doqry, doall, domethod, dofields, dodefined,
-				 docomment, 
-				 dorelease, maxname,maxtype,  maxmethod,
-				 maxfield, maxdefined, maxrelease);
+		   (ajStrMatchC(type, "P") ||
+                    ajStrMatchCaseC(type, "Protein")))
+                    showdbDBOut(outfile, nextdbname, type, id, qry, all,
+                                methods, defined,
+                                comment, release, html, dotype, doid,
+                                doqry, doall, domethod, dofields, dodefined,
+                                docomment, 
+                                dorelease, maxname,maxtype,  maxmethod,
+                                maxfield, maxdefined, maxrelease);
 	    }
 	    else
 		ajFatal("The database '%S' does not exist", nextdbname);
@@ -234,15 +235,16 @@ int main(int argc, char **argv)
 			      &release, &methods, &defined))
 	    {
 		if( nucleic &&
-		   (ajStrMatchC(type, "N") || ajStrMatchC(type, "Nucleotide")))
+		   (ajStrMatchC(type, "N") ||
+                    ajStrPrefixCaseC(type, "Nucleotide")))
 		    showdbDBOut(outfile, nextdbname, type, id, qry, all,
-				 methods, defined,
-				 comment, release, html,
-				 dotype, doid,
-				 doqry, doall, domethod, dofields, dodefined,
-				 docomment, dorelease,
-				 maxname, maxtype, maxmethod,
-				 maxfield, maxdefined, maxrelease);
+                                methods, defined,
+                                comment, release, html,
+                                dotype, doid,
+                                doqry, doall, domethod, dofields, dodefined,
+                                docomment, dorelease,
+                                maxname, maxtype, maxmethod,
+                                maxfield, maxdefined, maxrelease);
 	    }
 	    else
 		ajFatal("The database '%S' does not exist", nextdbname);
@@ -269,6 +271,8 @@ int main(int argc, char **argv)
 
     return 0;
 }
+
+
 
 
 /* @funcstatic showdbDBWidth **************************************************
@@ -321,6 +325,9 @@ static void showdbDBWidth (const AjPStr dbname,
 
     return;
 }
+
+
+
 
 /* @funcstatic showdbDBHead ***************************************************
 **
@@ -477,6 +484,9 @@ static void showdbDBHead (AjPFile outfile, AjBool html, AjBool dotype,
     }
     return;
 }
+
+
+
 
 /* @funcstatic showdbDBOut ****************************************************
 **
@@ -689,6 +699,8 @@ static void showdbGetFields(const AjPStr dbname, AjPStr* fields)
     ajSeqQueryDel(&query);
     return;
 }
+
+
 
 
 /* @funcstatic showdbDBSortDefined ********************************************

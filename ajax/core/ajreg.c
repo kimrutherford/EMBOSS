@@ -14,8 +14,8 @@
 ** string or the nth substring.
 **
 ** Possible extensions include a case-insensitive regcomp ... which
-** would be useful in many places. Also a regcomp for prefices,
-** suffices and exact matches which adds "^" and "$" to the pattern
+** would be useful in many places. Also a regcomp for prefixes,
+** suffixes and exact matches which adds "^" and "$" to the pattern
 ** string.
 **
 ** @author Copyright (C) 1998 Peter Rice
@@ -56,18 +56,21 @@ static ajlong regTotal     = 0;
 
 /* constructors */
 
+
+
+
 /* @func ajRegComp ************************************************************
 **
 ** Compiles a regular expression.
 **
-** @param [r] exp [const AjPStr] Regular expression string.
+** @param [r] rexp [const AjPStr] Regular expression string.
 ** @return [AjPRegexp] Compiled regular expression.
 ** @@
 ******************************************************************************/
 
-AjPRegexp ajRegComp(const AjPStr exp)
+AjPRegexp ajRegComp(const AjPStr rexp)
 {
-    return ajRegCompC(ajStrGetPtr(exp));
+    return ajRegCompC(ajStrGetPtr(rexp));
 }
 
 
@@ -77,12 +80,12 @@ AjPRegexp ajRegComp(const AjPStr exp)
 **
 ** Compiles a regular expression.
 **
-** @param [r] exp [const char*] Regular expression character string.
+** @param [r] rexp [const char*] Regular expression character string.
 ** @return [AjPRegexp] Compiled regular expression.
 ** @@
 ******************************************************************************/
 
-AjPRegexp ajRegCompC(const char* exp)
+AjPRegexp ajRegCompC(const char* rexp)
 {
     AjPRegexp ret;
     int options = 0;
@@ -93,12 +96,12 @@ AjPRegexp ajRegCompC(const char* exp)
     AJNEW0(ret);
     AJCNEW0(ret->ovector, AJREG_OVECSIZE);
     ret->ovecsize = AJREG_OVECSIZE/3;
-    ret->pcre = pcre_compile(exp, options, &errptr, &errpos, tableptr);
+    ret->pcre = pcre_compile(rexp, options, &errptr, &errpos, tableptr);
 
     if(!ret->pcre)
     {
 	ajErr("Failed to compile regular expression '%s' at position %d: %s",
-	      exp, errpos, errptr);
+	      rexp, errpos, errptr);
 	AJFREE(ret);
 	return NULL;
     }
@@ -107,10 +110,11 @@ AjPRegexp ajRegCompC(const char* exp)
     regCount ++;
     regTotal ++;
     /*ajDebug("ajRegCompC %x size %d regexp '%s'\n",
-      ret, (int) sizeof(ret), exp);*/
+      ret, (int) sizeof(ret), rexp);*/
 
     return ret;
 }
+
 
 
 
@@ -118,14 +122,14 @@ AjPRegexp ajRegCompC(const char* exp)
 **
 ** Compiles a case-insensitive regular expression.
 **
-** @param [r] exp [const AjPStr] Regular expression string.
+** @param [r] rexp [const AjPStr] Regular expression string.
 ** @return [AjPRegexp] Compiled regular expression.
 ** @@
 ******************************************************************************/
 
-AjPRegexp ajRegCompCase(const AjPStr exp)
+AjPRegexp ajRegCompCase(const AjPStr rexp)
 {
-    return ajRegCompCaseC(ajStrGetPtr(exp));
+    return ajRegCompCaseC(ajStrGetPtr(rexp));
 }
 
 
@@ -135,12 +139,12 @@ AjPRegexp ajRegCompCase(const AjPStr exp)
 **
 ** Compiles a case-insensitive regular expression.
 **
-** @param [r] exp [const char*] Regular expression character string.
+** @param [r] rexp [const char*] Regular expression character string.
 ** @return [AjPRegexp] Compiled regular expression.
 ** @@
 ******************************************************************************/
 
-AjPRegexp ajRegCompCaseC(const char* exp)
+AjPRegexp ajRegCompCaseC(const char* rexp)
 {
     AjPRegexp ret;
     int options = PCRE_CASELESS;
@@ -151,12 +155,12 @@ AjPRegexp ajRegCompCaseC(const char* exp)
     AJNEW0(ret);
     AJCNEW0(ret->ovector, AJREG_OVECSIZE);
     ret->ovecsize = AJREG_OVECSIZE/3;
-    ret->pcre = pcre_compile(exp, options, &errptr, &errpos, tableptr);
+    ret->pcre = pcre_compile(rexp, options, &errptr, &errpos, tableptr);
 
     if(!ret->pcre)
     {
 	ajErr("Failed to compile regular expression '%s' at position %d: %s",
-	      exp, errpos, errptr);
+	      rexp, errpos, errptr);
 	AJFREE(ret);
 
 	return NULL;
@@ -166,7 +170,7 @@ AjPRegexp ajRegCompCaseC(const char* exp)
     regCount ++;
     regTotal ++;
     /*ajDebug("ajRegCompCaseC %x size %d regexp '%s'\n",
-      ret, (int) sizeof(ret), exp);*/
+      ret, (int) sizeof(ret), rexp);*/
 
     return ret;
 }
@@ -175,6 +179,9 @@ AjPRegexp ajRegCompCaseC(const char* exp)
 
 
 /* execute expression match */
+
+
+
 
 /* @func ajRegExec ************************************************************
 **
@@ -507,6 +514,9 @@ AjBool ajRegSubI(const AjPRegexp rp, ajint isub, AjPStr* dest)
 
 /* destructor */
 
+
+
+
 /* @func ajRegFree ************************************************************
 **
 ** Clears and frees a compiled regular expression.
@@ -559,12 +569,12 @@ void ajRegFree(AjPRegexp* pexp)
 **
 ** Traces a compiled regular expression with debug calls.
 **
-** @param [r] exp [const AjPRegexp] Compiled regular expression.
+** @param [r] rexp [const AjPRegexp] Compiled regular expression.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajRegTrace(const AjPRegexp exp)
+void ajRegTrace(const AjPRegexp rexp)
 {
     ajint isub;
     ajint ilen;
@@ -575,42 +585,42 @@ void ajRegTrace(const AjPRegexp exp)
 
     ajDebug("  REGEXP trace\n");
 
-    if (!exp->orig)
+    if (!rexp->orig)
 	ajDebug("original string not saved - unable to trace string values\n");
 
-    for(isub=0; isub < exp->ovecsize; isub++)
+    for(isub=0; isub < rexp->ovecsize; isub++)
     {
 	istart = 2*isub;
 	iend   = istart+1;
 
-	if (!exp->orig)
+	if (!rexp->orig)
         {
 	    if(!isub)
 		ajDebug("original string from %d .. %d\n",
-			exp->ovector[istart], exp->ovector[iend]);
+			rexp->ovector[istart], rexp->ovector[iend]);
 	    else
 		ajDebug("substring %2d from %d .. %d\n",
-			isub, exp->ovector[istart], exp->ovector[iend]);
+			isub, rexp->ovector[istart], rexp->ovector[iend]);
 
 	    continue;
 	}
 
-	if(exp->ovector[iend] >= exp->ovector[istart])
+	if(rexp->ovector[iend] >= rexp->ovector[istart])
 	{
-	    ilen = exp->ovector[iend] - exp->ovector[istart];
+	    ilen = rexp->ovector[iend] - rexp->ovector[istart];
 	    ajStrSetRes(&str, ilen+1);
-	    memmove(str->Ptr, &exp->orig[exp->ovector[istart]], ilen);
+	    memmove(str->Ptr, &rexp->orig[rexp->ovector[istart]], ilen);
 	    str->Len = ilen;
 	    str->Ptr[ilen] = '\0';
 
 	    if(!isub)
 	    {
-		ajDebug(" original string '%s'\n", exp->orig);
+		ajDebug(" original string '%s'\n", rexp->orig);
 		ajDebug("    string match '%S'\n", str);
 	    }
 	    else
 	    {
-		ipos = exp->ovector[istart];
+		ipos = rexp->ovector[istart];
 		ajDebug("    substring %2d '%S' at %d\n", isub, str, ipos);
 	    }
 	}

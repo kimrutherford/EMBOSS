@@ -22,7 +22,7 @@ extern "C"
 ** @alias AjO3dVector
 **
 ** @new aj3dVectorNew default constructor
-** @new aj3dVectorCreate constructor initializing values of vector components
+** @new aj3dVectorCreate constructor initialising values of vector components
 **
 ** @delete aj3dVectorDel default destructor
 **

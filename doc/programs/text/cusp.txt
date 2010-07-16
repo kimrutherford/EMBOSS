@@ -45,7 +45,7 @@ Output file [x13776.cusp]:
 Command line arguments
 
 Create a codon usage table from nucleotide sequence(s)
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -370,9 +370,12 @@ See also
 
 Author(s)
 
-   Alan Bleasby (ajb (c) ebi.ac.uk)
+   Alan Bleasby
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

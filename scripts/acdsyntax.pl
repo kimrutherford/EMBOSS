@@ -1000,7 +1000,7 @@ sub dotableothervars($) {
 	    $defa = $valuedefa{$v};
 	}
 	if (!defined($type)) {
-	    print STDERR "Variable EMBOSS_$v undocumented in acdsyntax.getvalue\n";
+	    print STDERR "Variable EMBOSS_$v undocumented in variables.standard\n";
 	    $type = "unknown";
 	}
 	if (!defined($defa)) {$defa = "unknown"}

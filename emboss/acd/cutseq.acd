@@ -1,7 +1,8 @@
 application: cutseq [
   documentation: "Removes a section from a sequence"
   groups: "Edit"
-  relations: "EDAM: Sequence cutting"
+  relations: "/edam/topic/0000156 Sequence editing"
+  relations: "/edam/operation/0000369 Sequence cutting"
 ]
 
 section: input [
@@ -12,7 +13,8 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "gapany"
-    relations: "EDAM: Sequence"                                            
+    relations: "/edam/data/0000848 Sequence"                 
+    relations: "/edam/data/0000849 Sequence record"                            
   ]
 
 endsection: input
@@ -27,11 +29,13 @@ section: required [
     default: "$(sequence.begin)"
     minimum: "$(sequence.begin)"
     maximum: "$(sequence.end)"
+    failrange: "N"
+    trueminimum: "N"
     information: "Start of region to delete"
     help: "This is the start position (inclusive) of the section of
            the sequence that you wish to remove."
     expected: "Start of sequence (0)"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001016 Sequence position"                                     
   ]
 
   integer: to [
@@ -39,11 +43,13 @@ section: required [
     default: "$(sequence.end)"
     maximum: "$(sequence.end)"
     minimum: "$(from)"
+    failrange: "N"
+    trueminimum: "N"
     information: "End of region to delete"
     help: "This is the end position (inclusive) of the section of the
            sequence that you wish to remove."
     expected: "End of sequence (0)"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001016 Sequence position"                                     
   ]
 
 endsection: required
@@ -55,7 +61,8 @@ section: output [
 
   seqout: outseq [
     parameter: "Y"
-    relations: "EDAM: Sequence"                                            
+    relations: "/edam/data/0000848 Sequence"                                            
+    relations: "/edam/data/0000849 Sequence record" 
   ]
 
 endsection: output

@@ -21,22 +21,58 @@
 
 package org.emboss.jemboss.gui.filetree;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.datatransfer.*;
-import java.awt.dnd.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.tree.*;
-import java.io.*;
-import java.util.Vector;
+import java.awt.Cursor;
+import java.awt.Desktop;
+import java.awt.Dimension;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.datatransfer.Transferable;
+import java.awt.dnd.Autoscroll;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DragGestureEvent;
+import java.awt.dnd.DragGestureListener;
+import java.awt.dnd.DragSource;
+import java.awt.dnd.DragSourceDragEvent;
+import java.awt.dnd.DragSourceDropEvent;
+import java.awt.dnd.DragSourceEvent;
+import java.awt.dnd.DragSourceListener;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Vector;
 
-import org.emboss.jemboss.soap.PrivateRequest;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
+import javax.swing.JSeparator;
+import javax.swing.JTree;
+import javax.swing.SwingUtilities;
+import javax.swing.event.TreeExpansionEvent;
+import javax.swing.event.TreeExpansionListener;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
+
+import org.emboss.jemboss.JembossParams;
 import org.emboss.jemboss.gui.LaunchJalView;
 import org.emboss.jemboss.gui.ShowResultSet;
-import org.emboss.jemboss.JembossParams;
+import org.emboss.jemboss.soap.PrivateRequest;
 
 /**
 *
@@ -67,7 +103,7 @@ public class DragTree extends JTree implements DragGestureListener,
   private static final int AUTOSCROLL_MARGIN = 45;
   /** used by AutoScroll method */
   private Insets autoscrollInsets = new Insets( 0, 0, 0, 0 );
-
+  
   JMenuItem openMenu;
   JMenuItem renameMenuItem;
   JMenuItem deleteMenuItem;
@@ -107,7 +143,8 @@ public class DragTree extends JTree implements DragGestureListener,
     menuItem.addActionListener(this);
     popup.add(menuItem);
     popup.add(new JSeparator());
-//open menu
+
+    //Open-With sub menu
     openMenu = new JMenu("Open With");
     popup.add(openMenu);
     menuItem = new JMenuItem("Jemboss Alignment Editor");
@@ -120,6 +157,13 @@ public class DragTree extends JTree implements DragGestureListener,
     menuItem.addActionListener(this);
     openMenu.add(menuItem);
 
+    if(mysettings.getDesktopSupportsOPENAction())
+    {
+        menuItem = new JMenuItem("Desktop default viewer");
+        menuItem.addActionListener(this);
+        openMenu.add(menuItem);
+    }
+    
     renameMenuItem = new JMenuItem("Rename...");
     renameMenuItem.addActionListener(this);
     popup.add(renameMenuItem);
@@ -220,6 +264,14 @@ public class DragTree extends JTree implements DragGestureListener,
             LaunchJalView.callJalview(f.getAbsolutePath(), f.getName());
         } catch (IOException ex) {
             ex.printStackTrace();
+        }
+    }
+    else if(source.getText().startsWith("Desktop "))
+    {
+        try {
+            Desktop.getDesktop().open(f);
+        } catch (IOException e1) {
+            e1.printStackTrace();
         }
     }
     else if(source.getText().equals("Text Editor"))
@@ -688,7 +740,14 @@ public class DragTree extends JTree implements DragGestureListener,
   public static void showFilePane(String filename, JembossParams mysettings)
   {
     Hashtable contents = new Hashtable();
-    contents.put(filename,readByteFile(filename));
+    byte[] content = readByteFile(filename);
+    if(content==null)
+    {
+        JOptionPane.showMessageDialog(null, "file \""+filename+"\" was empty",
+                "error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    contents.put(filename, content);
     ShowResultSet srs = new ShowResultSet(contents,mysettings);
     srs.setTitle("Local File");
   }

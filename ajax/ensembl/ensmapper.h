@@ -42,18 +42,18 @@ typedef struct EnsSMapperunit
 
 
 
-/******************************************************************************
+/* EnsEMapperunitType *********************************************************
 **
 ** Ensembl Mapper Unit Type enumeration.
 **
 ******************************************************************************/
 
-enum EnsEMapperunitType
+typedef enum EnsOMapperunitType
 {
     ensEMapperunitTypeNULL,
     ensEMapperunitTypeSource,
     ensEMapperunitTypeTarget
-};
+} EnsEMapperunitType;
 
 
 
@@ -93,19 +93,19 @@ typedef struct EnsSMapperpair
 
 
 
-/******************************************************************************
+/* EnsEMapperresultType *******************************************************
 **
 ** Ensembl Mapper Result Type enumeration.
 **
 ******************************************************************************/
 
-enum EnsEMapperresultType
+typedef enum EnsOMapperresultType
 {
     ensEMapperresultNULL,
     ensEMapperresultCoordinate,
     ensEMapperresultGap,
     ensEMapperresultInDel
-};
+} EnsEMapperresultType;
 
 
 
@@ -122,7 +122,7 @@ enum EnsEMapperresultType
 ** @alias EnsOMapperresult
 **
 ** @attr Coordsystem [EnsPCoordsystem] Ensembl Coordinate System
-** @attr Type [AjEnum] Result type (ensEMapperresultCoordinate, ...)
+** @attr Type [EnsEMapperresultType] Result type
 ** @cc Bio::EnsEMBL::Mapper::Coordinate
 ** @cc Bio::EnsEMBL::Mapper::IndelCoordinate
 ** @attr ObjectIdentifier [ajuint] Ensembl Object identifier
@@ -133,11 +133,13 @@ enum EnsEMapperresultType
 ** @cc Bio::EnsEMBL::Mapper::IndelCoordinate
 ** @attr GapStart [ajint] Start coordinate of a gap
 ** @attr GapEnd [ajint] End coordinate of a gap
+** @attr Rank [ajuint] Rank
 ** @attr Use [ajuint] Use counter
+** @attr Padding [ajuint] Padding to alignment boundary
 ** @@
 **
-** This object subsumes the following Perl objects all returned by the
-** Bio::EnsEMBL::Mapper
+** NOTE: This object subsumes the following Perl objects returned by the
+** Bio::EnsEMBL::Mapper class.
 **
 ** Bio::EnsEMBL::Mapper::Coordinate
 ** Bio::EnsEMBL::Mapper::Gap
@@ -149,14 +151,16 @@ enum EnsEMapperresultType
 typedef struct EnsSMapperresult
 {
     EnsPCoordsystem Coordsystem;
-    AjEnum Type;
+    EnsEMapperresultType Type;
     ajuint ObjectIdentifier;
     ajint Start;
     ajint End;
     ajint Strand;
     ajint GapStart;
     ajint GapEnd;
+    ajuint Rank;
     ajuint Use;
+    ajuint Padding;
 } EnsOMapperresult;
 
 #define EnsPMapperresult EnsOMapperresult*
@@ -236,8 +240,8 @@ typedef struct EnsSMapperrangeregistry
 ** @alias EnsOMapper
 **
 ** @cc Bio::EnsEMBL::Mapper
-** @attr SourceType [AjPStr] Source mapping type
-** @attr TargetType [AjPStr] Target mapping type
+** @attr SourceType [AjPStr] Source type
+** @attr TargetType [AjPStr] Target type
 ** @attr SourceCoordsystem [EnsPCoordsystem] Source Ensembl Coordinate System
 ** @attr TargetCoordsystem [EnsPCoordsystem] Target Ensembl Coordinate System
 ** @attr Pairs [AjPTable] AJAX Table of AJAX Tables with Ensembl Mapper Pairs
@@ -247,10 +251,10 @@ typedef struct EnsSMapperrangeregistry
 ** @attr Padding [ajuint] Padding to alignment boundary
 ** @@
 ** The AJAX Table Pairs forms the top hierarchy of an Ensembl Mapper Pair
-** cache. The Table uses the contents of the SourceType and TargetType strings
-** as index and holds a second hierarchy of Tables, which use Ensembl Object
-** identifiers as index. Those second-level AJAX Tables then hold a
-** third-level of AJAX Lists of Ensembl Mapper Pairs.
+** cache. The AJAX Table uses the contents of the SourceType and TargetType
+** strings as index and holds a second hierarchy of AJAX Tables, which use
+** Ensembl Object identifiers as index. Those second-level AJAX Tables then
+** hold a third-level of AJAX Lists of Ensembl Mapper Pairs.
 ******************************************************************************/
 
 typedef struct EnsSMapper
@@ -297,7 +301,7 @@ AjBool ensMapperunitSetStart(EnsPMapperunit mu, ajint start);
 
 AjBool ensMapperunitSetEnd(EnsPMapperunit mu, ajint end);
 
-ajuint ensMapperunitGetMemSize(const EnsPMapperunit mu);
+ajulong ensMapperunitGetMemsize(const EnsPMapperunit mu);
 
 AjBool ensMapperunitTrace(const EnsPMapperunit mu, ajuint level);
 
@@ -331,22 +335,28 @@ ajint ensMapperpairGetOrientation(const EnsPMapperpair mp);
 
 AjBool ensMapperpairGetInsertionDeletion(const EnsPMapperpair mp);
 
-EnsPMapperunit ensMapperpairGetUnit(const EnsPMapperpair mp, AjEnum type);
+EnsPMapperunit ensMapperpairGetUnit(const EnsPMapperpair mp,
+                                    EnsEMapperunitType type);
 
-ajuint ensMapperpairGetMemSize(const EnsPMapperpair mp);
+ajulong ensMapperpairGetMemsize(const EnsPMapperpair mp);
 
 AjBool ensMapperpairTrace(const EnsPMapperpair mp, ajuint level);
 
+AjBool ensMapperpairSortBySourceStartAscending(AjPList mps);
+
+AjBool ensMapperpairSortByTargetStartAscending(AjPList mps);
+
 /* Ensembl Mapper Result */
 
-EnsPMapperresult ensMapperresultNew(AjEnum type,
+EnsPMapperresult ensMapperresultNew(EnsEMapperresultType type,
                                     ajuint oid,
                                     ajint start,
                                     ajint end,
                                     ajint strand,
                                     EnsPCoordsystem cs,
                                     ajint gapstart,
-                                    ajint gapend);
+                                    ajint gapend,
+                                    ajuint rank);
 
 EnsPMapperresult ensMapperresultNewObj(const EnsPMapperresult object);
 
@@ -354,7 +364,7 @@ EnsPMapperresult ensMapperresultNewRef(EnsPMapperresult mr);
 
 void ensMapperresultDel(EnsPMapperresult* Pmr);
 
-AjEnum ensMapperresultGetType(const EnsPMapperresult mr);
+EnsEMapperresultType ensMapperresultGetType(const EnsPMapperresult mr);
 
 ajuint ensMapperresultGetObjectIdentifier(const EnsPMapperresult mr);
 
@@ -369,6 +379,8 @@ EnsPCoordsystem ensMapperresultGetCoordsystem(const EnsPMapperresult mr);
 ajint ensMapperresultGetGapStart(const EnsPMapperresult mr);
 
 ajint ensMapperresultGetGapEnd(const EnsPMapperresult mr);
+
+ajint ensMapperresultGetRank(const EnsPMapperresult mr);
 
 ajuint ensMapperresultGetCoordinateLength(const EnsPMapperresult mr);
 
@@ -500,7 +512,7 @@ AjBool ensMapperMapInDel(EnsPMapper mapper,
 
 AjBool ensMapperAddMapper(EnsPMapper mapper1, EnsPMapper mapper2);
 
-ajuint ensMapperGetMemSize(const EnsPMapper mapper);
+ajulong ensMapperGetMemsize(const EnsPMapper mapper);
 
 AjBool ensMapperTrace(const EnsPMapper mapper, ajuint level);
 
@@ -508,27 +520,25 @@ AjBool ensMapperTrace(const EnsPMapper mapper, ajuint level);
 ** End of prototype definitions
 */
 
-
-#define MENSMAPPERINDELPAIRNEW(source, target, ori) \
+#define MENSMAPPERINDELPAIRNEW(source, target, ori)     \
 ensMapperpairNew(source, target, ori, AJTRUE);
 
-#define MENSMAPPERINDELPAIRDEL(Pmp) \
+#define MENSMAPPERINDELPAIRDEL(Pmp)             \
 ensMapperpairDel(Pmp);
 
-#define MENSMAPPERCOORDINATENEW(oid, start, end, strand, cs) \
+#define MENSMAPPERCOORDINATENEW(oid, start, end, strand, cs, rank)      \
 ensMapperresultNew(ensEMapperresultCoordinate, oid, start, end, strand, cs, \
-		   0, 0)
+                   0, 0, rank)
 
-#define MENSMAPPERGAPNEW(start, end) \
+#define MENSMAPPERGAPNEW(start, end, rank)                              \
 ensMapperresultNew(ensEMapperresultGap, 0, 0, 0, 0, (EnsPCoordsystem) NULL, \
-		   start, end)
+                   start, end, rank)
 
-#define MENSMAPPERINDELNEW(oid, start, end, strand, cs, gstart, gend) \
+#define MENSMAPPERINDELNEW(oid, start, end, strand, cs, gstart, gend)   \
 ensMapperresultNew(ensEMapperresultInDel, oid, start, end, strand, cs, \
-		   gstart, gend)
+                   gstart, gend, 0)
 
-
-#endif
+#endif /* ensmapper_h */
 
 #ifdef __cplusplus
 }

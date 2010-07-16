@@ -12,9 +12,12 @@ CYGWIN_LDACD = -L../../plplot -L../pcre -L../expat -L../zlib -L../core \
 -leplplot -leexpat -lepcre -lezlib
 endif
 
+if !ESYSTEMLIBS
+EXTRA_INCLUDES = -I$(top_srcdir)/ajax/expat -I$(top_srcdir)/ajax/zlib
+endif
+
 INCLUDES = -I$(top_srcdir)/plplot -I$(top_srcdir)/ajax/pcre \
--I$(top_srcdir)/ajax/expat \
--I$(top_srcdir)/ajax/zlib \
+$(EXTRA_INCLUDES) \
 -I$(top_srcdir)/ajax/core \
 -I$(top_srcdir)/ajax/graphics \
 -I$(top_srcdir)/ajax/ensembl \
@@ -26,7 +29,7 @@ include_HEADERS = ajacd.h
 
 libacd_la_SOURCES = $(ACDSRC)
 
-VERS_INF = -version-info 6:2:0
+VERS_INF = -version-info 6:3:0
 
 if ISCYGWIN
 LINKFLAGS = $(VERS_INF) $(CYGWIN_LDFLAGS) $(CYGWIN_LDACD)

@@ -31,7 +31,7 @@
 <td>-idformat</td>
 <td>list</td>
 <td>Entry format</td>
-<td><table><tr><td>EMBL</td> <td><i>(EMBL)</i></td></tr><tr><td>SWISS</td> <td><i>(Swiss-Prot, SpTrEMBL, TrEMBLnew)</i></td></tr><tr><td>GB</td> <td><i>(Genbank, DDBJ)</i></td></tr><tr><td>REFSEQ</td> <td><i>(Refseq)</i></td></tr></table></td>
+<td><table><tr><td>EMBL</td> <td><i>(EMBL)</i></td></tr><tr><td>SWISS</td> <td><i>(Swiss-Prot, SpTrEMBL, TrEMBLnew)</i></td></tr><tr><td>GB</td> <td><i>(Genbank, DDBJ)</i></td></tr><tr><td>REFSEQ</td> <td><i>(Refseq)</i></td></tr><tr><td>FASTQ</td> <td><i>(Fastq files)</i></td></tr></table></td>
 <td>SWISS</td>
 </tr>
 
@@ -113,6 +113,32 @@
 
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-directory" associated directory qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -extension</td>
+<td>string</td>
+<td>Default file extension</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-indexoutdir" associated outdir qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -extension</td>
+<td>string</td>
+<td>Default file extension</td>
+<td>Any string</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">

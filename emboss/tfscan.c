@@ -26,8 +26,8 @@
 
 
 
-static void tfscan_print_hits(const AjPStr name, AjPList *l, ajint hits,
-			      AjPFile outf, ajint begin, ajint end,
+static void tfscan_print_hits(AjPList *l, ajint hits,
+			      AjPReport outf,
 			      const AjPTable t, const AjPSeq seq,
 			      ajuint minlength,
 			      const AjPTable btable);
@@ -45,7 +45,7 @@ int main(int argc, char **argv)
 {
     AjPSeqall seqall;
     AjPSeq seq   = NULL;
-    AjPFile outf = NULL;
+    AjPReport outf = NULL;
     AjPFile inf  = NULL;
 
     ajint begin;
@@ -81,7 +81,7 @@ int main(int argc, char **argv)
     embInit("tfscan", argc, argv);
 
     seqall     = ajAcdGetSeqall("sequence");
-    outf       = ajAcdGetOutfile("outfile");
+    outf       = ajAcdGetReport("outfile");
     mismatch   = ajAcdGetInt("mismatch");
     minlength  = ajAcdGetInt("minlength");
     menu       = ajAcdGetListSingle("menu");
@@ -151,24 +151,24 @@ int main(int argc, char **argv)
 		++p;
 
 	    ajStrAssignS(&opattern,pattern);
-	    ajStrAssignC(&bf,p);
+	    ajStrAssignC(&bf,p); /* rest of line */
 	    
 	    v = embPatVariablePattern(pattern,substr,pname,l,0,
 				      mismatch,begin);
 	    if(v)
 	    {
-		key = ajStrNewC(ajStrGetPtr(pname));
-		value = ajStrNewC(ajStrGetPtr(acc));
+		key = ajStrNewS(pname);
+		value = ajStrNewS(acc);
 		ajTablePut(atable,(void *)key,(void *)value);
-		key = ajStrNewC(ajStrGetPtr(pname));
-		value = ajStrNewC(ajStrGetPtr(bf));
+		key = ajStrNewS(pname);
+		value = ajStrNewS(bf);
 		ajTablePut(btable,(void *)key,(void *)value);
 	    }
 	    sum += v;
 	}
 
 	if(sum)
-	    tfscan_print_hits(name,&l,sum,outf,begin,end,atable,seq,minlength,
+	    tfscan_print_hits(&l,sum,outf,atable,seq,minlength,
 			      btable);
 
 	ajFileSeek(inf,0L,0);
@@ -188,7 +188,8 @@ int main(int argc, char **argv)
     ajStrDel(&substr);
     ajSeqDel(&seq);
     ajFileClose(&inf);
-    ajFileClose(&outf);
+    ajReportClose(outf);
+    ajReportDel(&outf);
 
     ajSeqallDel(&seqall);
     ajSeqDel(&seq);
@@ -206,12 +207,9 @@ int main(int argc, char **argv)
 **
 ** Print matches to transcription factor sites
 **
-** @param [r] name [const AjPStr] name of test sequence
 ** @param [w] l [AjPList*] list of hits
 ** @param [r] hits [ajint] number of hits
-** @param [u] outf [AjPFile] output file
-** @param [r] begin [ajint] sequence start
-** @param [r] end [ajint] sequence end
+** @param [u] outf [AjPReport] output report
 ** @param [r] t [const AjPTable] table of accession numbers
 ** @param [r] seq [const AjPSeq] test sequence
 ** @param [r] minlength [ajuint] minimum length of pattern
@@ -219,54 +217,63 @@ int main(int argc, char **argv)
 ** @@
 ******************************************************************************/
 
-static void tfscan_print_hits(const AjPStr name, AjPList *l,
-			      ajint hits, AjPFile outf,
-			      ajint begin, ajint end, const AjPTable t,
+static void tfscan_print_hits(AjPList *l,
+			      ajint hits, AjPReport outf,
+			      const AjPTable t,
 			      const AjPSeq seq, ajuint minlength,
 			      const  AjPTable btable)
 {
     ajint i;
     EmbPMatMatch m;
     AjPStr acc = NULL;
-    AjPStr s   = NULL;
     AjPStr bf  = NULL;
-    AjPStr lastnam = NULL;
-    
-    s       = ajStrNew();
-    lastnam = ajStrNewC("");
+    AjPFeattable ftable = NULL;
+    AjPFeature gf  = NULL;
+    AjPStr type = ajStrNewC("SO:0000235");
+    AjPStr tmpstr = NULL;
 
-    ajFmtPrintF(outf,"TFSCAN of %s from %d to %d\n\n",ajStrGetPtr(name),
-		begin,end);
+    ftable = ajFeattableNewSeq(seq);
+
+    /*ajFmtPrintF(outf,"TFSCAN of %s from %d to %d\n\n",ajStrGetPtr(name),
+      begin,end);*/
 
     for(i=0;i<hits;++i)
     {
 	ajListPop(*l,(void **)&m);
 	acc = ajTableFetch(t,(const void *)m->seqname);
 
-
-
-	if((ajStrCmpS(m->seqname,lastnam)) && ajStrGetLen(lastnam)
-	   && ajStrGetLen(s) >= minlength)
-	{
-	    bf  = ajTableFetch(btable,(const void *)lastnam);
-	    if(ajStrGetLen(bf))
-		ajFmtPrintF(outf,"                     %S\n",bf);
-	}
-	
-	ajStrAssignS(&lastnam,m->seqname);
-
-	ajStrAssignSubC(&s,ajSeqGetSeqC(seq),m->start-1,m->start+m->len-2);
-
-	if(ajStrGetLen(s) >= minlength)
-	    ajFmtPrintF(outf,"%-20s %-8s %-5d %-5d %s\n",ajStrGetPtr(m->seqname),
+	if(m->len >= minlength)
+        {
+	    /*ajFmtPrintF(outf,"%-20s %-8s %-5d %-5d %s\n",
+                        ajStrGetPtr(m->seqname),
 			ajStrGetPtr(acc),m->start,
-			m->start+m->len-1,ajStrGetPtr(s));
+			m->start+m->len-1,ajStrGetPtr(s));*/
+            if(m->forward)
+                gf = ajFeatNew(ftable, ajUtilGetProgram(), type,
+                               m->start,
+                               m->start+m->len-1,
+                               (float) m->score,
+                               '+',0);
+            else
+                gf = ajFeatNew(ftable, ajUtilGetProgram(), type,
+                               m->start,
+                               m->start+m->len-1,
+                               (float) m->score,
+                               '-',0);
+            ajFmtPrintS(&tmpstr, "*acc %S", acc);
+            ajFeatTagAdd(gf, NULL, tmpstr);
+            bf  = ajTableFetch(btable,(const void *)m->seqname);
+            ajFmtPrintS(&tmpstr, "*factor %S", bf);
+            ajFeatTagAdd(gf, NULL, tmpstr);
+        }
 
 	embMatMatchDel(&m);
     }
 
-    ajStrDel(&s);
-    ajStrDel(&lastnam);
-    
+    ajReportWrite(outf, ftable, seq);
+    ajFeattableDel(&ftable);
+    ajStrDel(&tmpstr);
+    ajStrDel(&type);
+
     return;
 }

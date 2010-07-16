@@ -1,7 +1,8 @@
 application: newcoils [
   documentation: "Predicts coils protein secondary structure"
   groups: "Protein:2D Structure"
-  relations: "EDAM: Protein secondary structure prediction (coils)"
+  relations: "/edam/topic/0000178 Protein secondary structure prediction"
+  relations: "/edam/operation/0000470 Protein secondary structure prediction (coils)"
 ]
 
 section: input [
@@ -12,14 +13,16 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "PureProtein"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0001218 Unambiguous pure protein sequence"
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more" 
   ]
 
   datafile: datafile [
     information: "Program newcoils data file"
     default: "Enewcoils.mat"
     knowntype: "newcoils datafile"
-    relations:                                                 
+    relations: ""
   ]
 
 endsection: input
@@ -35,7 +38,7 @@ section: required [
     maximum: "$(sequence.end)"
     default: "21"
     information: "Window size"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001251 Window size"
   ]
 
   integer: weighted [
@@ -43,7 +46,7 @@ section: required [
     minimum: "0"
     default: "0"
     information: "Weighted value"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001773 Tool-specific parameter"
   ]
 
   integer: verb [
@@ -51,7 +54,7 @@ section: required [
     minimum: "0"
     default: "0"
     information: "Verb - matrix file"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001773 Tool-specific parameter"
   ]
 
   integer: mode [
@@ -60,7 +63,7 @@ section: required [
     maximum: "2"
     default: "0"
     information: "Display Mode"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0002152 Rendering parameter"
   ]
 
   integer: minseg [
@@ -69,7 +72,7 @@ section: required [
     maximum: "10"
     default: "1"
     information: "Minimum number of seqments"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001773 Tool-specific parameter"
   ]
 
   float: minp [
@@ -78,7 +81,7 @@ section: required [
     maximum: "100."
     default: "0.50"
     information: "Minimum p"
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001773 Tool-specific parameter"
   ]
 
 endsection: required
@@ -91,7 +94,7 @@ section: output [
   outfile: outfile [
     parameter: "Y"
     knowntype: "newcoils output"
-    relations:  "EDAM:Protein secondary structure record"                  
+    relations:  "/edam/data/0000876 Protein secondary structure"
   ]
 
 endsection: output

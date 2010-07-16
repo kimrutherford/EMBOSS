@@ -38,27 +38,27 @@ extern "C"
 
 typedef struct AjSVoid
 {
-  ajuint Res;
-  ajuint Len;
-  void **Ptr;
+    ajuint Res;
+    ajuint Len;
+    void **Ptr;
 } AjOVoid;
 #define AjPVoid AjOVoid*
 
 
 
 
-/******************************************************************************
+/* AjESqlconnectionClient *****************************************************
 **
-** AJAX SQL Client enumeration.
+** AJAX SQL Connection client library enumeration.
 **
 ******************************************************************************/
 
-enum AjESqlClient
+typedef enum AjOSqlconnectionClient
 {
-    ajESqlClientNULL,
-    ajESqlClientMySQL,
-    ajESqlClientPostgreSQL
-};
+    ajESqlconnectionClientNULL,
+    ajESqlconnectionClientMySQL,
+    ajESqlconnectionClientPostgreSQL
+} AjESqlconnectionClient;
 
 
 
@@ -76,7 +76,7 @@ enum AjESqlClient
 ** @attr Pconnection [void*]  SQL client library-specific connection object
 **                            (MYSQL*) for the MySQL client library
 **                            (PGconn*) for the PostgreSQL client library
-** @attr Client [AjEnum] SQL client type (ajESqlMySQL, ajESqlPostgreSQL, ...)
+** @attr Client [AjESqlconnectionClient] Client library
 ** @attr Use [ajuint] Use counter
 ** @@
 ******************************************************************************/
@@ -84,7 +84,7 @@ enum AjESqlClient
 typedef struct AjSSqlconnection
 {
     void *Pconnection;
-    AjEnum Client;
+    AjESqlconnectionClient Client;
     ajuint Use;
 } AjOSqlconnection;
 
@@ -145,7 +145,7 @@ typedef struct AjSSqlstatement
 ** @attr Values [AjPVoid] AJAX Character Array of SQL column values
 ** @attr Lengths [AjPLong] AJAX Long Integer Array of SQL column value lengths
 ** @attr Columns [ajuint] Number of columns per row
-** @attr Current [ajuint] Current column in column interations
+** @attr Current [ajuint] Current column in column interactions
 ** @@
 ******************************************************************************/
 
@@ -202,19 +202,21 @@ void ajSqlExit(void);
 
 /* AJAX SQL Connection */
 
-AjPSqlconnection ajSqlconnectionNewData(const AjEnum client,
+AjPSqlconnection ajSqlconnectionNewData(AjESqlconnectionClient client,
                                         const AjPStr user,
                                         const AjPStr password,
                                         const AjPStr host,
                                         const AjPStr port,
-                                        const AjPStr socket,
+                                        const AjPStr socketfile,
                                         const AjPStr database);
 
 AjPSqlconnection ajSqlconnectionNewRef(AjPSqlconnection sqlc);
 
 void ajSqlconnectionDel(AjPSqlconnection* Psqlc);
 
-AjEnum ajSqlconnectionGetClient(const AjPSqlconnection sqlc);
+AjESqlconnectionClient ajSqlconnectionGetClient(const AjPSqlconnection sqlc);
+
+ajuint ajSqlconnectionGetUse(const AjPSqlconnection sqlc);
 
 AjBool ajSqlconnectionTrace(const AjPSqlconnection sqlc, ajuint level);
 
@@ -225,6 +227,10 @@ AjBool ajSqlconnectionEscapeC(const AjPSqlconnection sqlc,
 AjBool ajSqlconnectionEscapeS(const AjPSqlconnection sqlc,
                               AjPStr *Pstr,
                               const AjPStr str);
+
+AjESqlconnectionClient ajSqlconnectionClientFromStr(const AjPStr client);
+
+const char* ajSqlconnectionClientToChar(AjESqlconnectionClient client);
 
 /* AJAX SQL Statement */
 
@@ -280,6 +286,8 @@ AjBool ajSqlcolumnToUint(AjPSqlrow sqlr, ajuint *Pvalue);
 
 AjBool ajSqlcolumnToLong(AjPSqlrow sqlr, ajlong *Pvalue);
 
+AjBool ajSqlcolumnToUlong(AjPSqlrow sqlr, ajulong *Pvalue);
+
 AjBool ajSqlcolumnToFloat(AjPSqlrow sqlr, float *Pvalue);
 
 AjBool ajSqlcolumnToDouble( AjPSqlrow sqlr, double *Pvalue);
@@ -318,6 +326,9 @@ AjBool ajSqlcolumnNumberToBool(const AjPSqlrow sqlr, ajuint column,
 
 AjBool ajSqlcolumnNumberToTime(const AjPSqlrow sqlr, ajuint column,
                                AjPTime *Pvalue);
+
+AjBool ajSqlcolumnNumberToUlong(const AjPSqlrow sqlr, ajuint column,
+                                ajulong *Pvalue);
 
 AjBool ajSqlcolumnNumberIsDefined(const AjPSqlrow sqlr, ajuint column);
 

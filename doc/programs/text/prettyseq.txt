@@ -40,7 +40,7 @@ Output file [x13776.prettyseq]:
 Command line arguments
 
 Write a nucleotide sequence and its translation to file
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Nucleotide sequence filename and optional
@@ -461,9 +461,12 @@ See also
 
 Author(s)
 
-   Alan Bleasby (ajb (c) ebi.ac.uk)
+   Alan Bleasby
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

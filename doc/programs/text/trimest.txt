@@ -55,7 +55,7 @@ Remove poly-A tails from nucleotide sequences
 Command line arguments
 
 Remove poly-A tails from nucleotide sequences
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -105,7 +105,7 @@ Version: EMBOSS:6.2.0
 
    Advanced (Unprompted) qualifiers:
    -[no]fiveprime      boolean    [Y] If this is set true, then the 5' end of
-                                  teh sequence is inspected for poly-T tails.
+                                  the sequence is inspected for poly-T tails.
                                   These will be removed if they are longer
                                   than any 3' poly-A tails. If this is false,
                                   then the 5' end is ignored.
@@ -219,11 +219,16 @@ FT                   /note="ubiquitin like part"
 FT   CDS             57..458
 FT                   /gene="fau"
 FT                   /db_xref="GDB:135476"
+FT                   /db_xref="GOA:P35544"
 FT                   /db_xref="GOA:P62861"
 FT                   /db_xref="HGNC:3597"
-FT                   /db_xref="HSSP:1GJZ"
+FT                   /db_xref="InterPro:IPR000626"
 FT                   /db_xref="InterPro:IPR006846"
+FT                   /db_xref="InterPro:IPR019954"
+FT                   /db_xref="InterPro:IPR019955"
+FT                   /db_xref="InterPro:IPR019956"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P62861"
 FT                   /protein_id="CAA46716.1"
 FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
 FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
@@ -339,7 +344,7 @@ See also
    newseq           Create a sequence file from a typed-in sequence
    nohtml           Remove mark-up (e.g. HTML tags) from an ASCII text file
    noreturn         Remove carriage return from ASCII files
-   nospace          Remove all whitespace from an ASCII text file
+   nospace          Remove whitespace from an ASCII text file
    notab            Replace tabs with spaces in an ASCII text file
    notseq           Write to file a subset of an input stream of sequences
    nthseq           Write to file a single sequence from an input stream of
@@ -363,9 +368,12 @@ See also
 
 Author(s)
 
-   Gary Williams (gwilliam (c) rfcgr.mrc.ac.uk)
+   Gary Williams formerly at:
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

@@ -29,7 +29,7 @@ Usage
 Finds regions of identity (exact matches) of two sequences
 Word size [4]:
 Output alignment [hba_human.wordmatch]:
-Features output [hba_human.gff]:
+Features output [HBA_HUMAN.gff]:
 Second features output [HBB_HUMAN.gff]:
 
 
@@ -39,25 +39,23 @@ Second features output [HBB_HUMAN.gff]:
 Command line arguments
 
 Finds regions of identity (exact matches) of two sequences
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
-   Standard (Mandatory) qualifiers (* if not always prompted):
+   Standard (Mandatory) qualifiers:
   [-asequence]         seqset     Sequence set filename and optional format,
                                   or reference (input USA)
   [-bsequence]         seqall     Sequence(s) filename and optional format, or
                                   reference (input USA)
    -wordsize           integer    [4] Word size (Integer 2 or more)
-*  -outfile            align      [*.wordmatch] Output alignment file name
-*  -aoutfeat           featout    [unknown.gff] Output features UFO
-*  -boutfeat           featout    [unknown.gff] Output features UFO
+  [-outfile]           align      [*.wordmatch] Output alignment file name
+  [-aoutfeat]          featout    [unknown.gff] Output features UFO
+  [-boutfeat]          featout    [unknown.gff] Output features UFO
 
    Additional (Optional) qualifiers:
-   -[no]dumpalign      toggle     [Y] Dump all matches as alignments
-   -logfile            outfile    [wordmatch.log] Log file reports statistics
-                                  on kmer frequency distribution and number of
-                                  matches in the seqall sequences for each
-                                  sequence in the seqset
-   -[no]dumpfeat       toggle     [Y] Dump all matches as feature files
+   -[no]dumpalign      toggle     [Y] Dump matches as alignments
+   -logfile            outfile    [wordmatch.log] Statistics on distribution
+                                  of kmers and matches
+   -[no]dumpfeat       toggle     [Y] Dump matches as feature files
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
@@ -95,34 +93,34 @@ Version: EMBOSS:6.2.0
    -fopenfile2         string     Features file name
 
    "-outfile" associated qualifiers
-   -aformat            string     Alignment format
-   -aextension         string     File name extension
-   -adirectory         string     Output directory
-   -aname              string     Base file name
-   -awidth             integer    Alignment width
-   -aaccshow           boolean    Show accession number in the header
-   -adesshow           boolean    Show description in the header
-   -ausashow           boolean    Show the full USA in the alignment
-   -aglobal            boolean    Show the full sequence in alignment
+   -aformat3           string     Alignment format
+   -aextension3        string     File name extension
+   -adirectory3        string     Output directory
+   -aname3             string     Base file name
+   -awidth3            integer    Alignment width
+   -aaccshow3          boolean    Show accession number in the header
+   -adesshow3          boolean    Show description in the header
+   -ausashow3          boolean    Show the full USA in the alignment
+   -aglobal3           boolean    Show the full sequence in alignment
 
    "-logfile" associated qualifiers
    -odirectory         string     Output directory
 
    "-aoutfeat" associated qualifiers
-   -offormat           string     Output feature format
-   -ofopenfile         string     Features file name
-   -ofextension        string     File name extension
-   -ofdirectory        string     Output directory
-   -ofname             string     Base file name
-   -ofsingle           boolean    Separate file for each entry
+   -offormat4          string     Output feature format
+   -ofopenfile4        string     Features file name
+   -ofextension4       string     File name extension
+   -ofdirectory4       string     Output directory
+   -ofname4            string     Base file name
+   -ofsingle4          boolean    Separate file for each entry
 
    "-boutfeat" associated qualifiers
-   -offormat           string     Output feature format
-   -ofopenfile         string     Features file name
-   -ofextension        string     File name extension
-   -ofdirectory        string     Output directory
-   -ofname             string     Base file name
-   -ofsingle           boolean    Separate file for each entry
+   -offormat5          string     Output feature format
+   -ofopenfile5        string     Features file name
+   -ofextension5       string     File name extension
+   -ofdirectory5       string     Output directory
+   -ofname5            string     Base file name
+   -ofsingle5          boolean    Separate file for each entry
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -158,7 +156,7 @@ ID   HBA_HUMAN               Reviewed;         142 AA.
 AC   P69905; P01922; Q1HDT5; Q3MIF5; Q53F97; Q96KF1; Q9NYR7; Q9UCM0;
 DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
 DT   23-JAN-2007, sequence version 2.
-DT   16-JUN-2009, entry version 73.
+DT   15-JUN-2010, entry version 86.
 DE   RecName: Full=Hemoglobin subunit alpha;
 DE   AltName: Full=Hemoglobin alpha chain;
 DE   AltName: Full=Alpha-globin;
@@ -267,7 +265,7 @@ AC   P68871; A4GX73; B2ZUE0; P02023; Q13852; Q14481; Q14510; Q45KT0;
 AC   Q549N7; Q6FI08; Q6R7N2; Q8IZI1; Q9BX96; Q9UCD6; Q9UCP8; Q9UCP9;
 DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
 DT   23-JAN-2007, sequence version 2.
-DT   16-JUN-2009, entry version 76.
+DT   15-JUN-2010, entry version 88.
 DE   RecName: Full=Hemoglobin subunit beta;
 DE   AltName: Full=Hemoglobin beta chain;
 DE   AltName: Full=Beta-globin;
@@ -409,35 +407,19 @@ Output file format
 #=======================================
 
      4 HBA_HUMAN       +       15..18       HBB_HUMAN       +       16..19
-
-#=======================================
-#
-# Aligned_sequences: 2
-# 1: HBA_HUMAN
-# 2: HBB_HUMAN
-#=======================================
-
      5 HBA_HUMAN       +       59..63       HBB_HUMAN       +       64..68
-
-#=======================================
-#
-# Aligned_sequences: 2
-# 1: HBA_HUMAN
-# 2: HBB_HUMAN
-#=======================================
-
      4 HBA_HUMAN       +      117..120      HBB_HUMAN       +      122..125
 
 #---------------------------------------
 #---------------------------------------
 
-  File: hba_human.gff
+  File: HBA_HUMAN.gff
 
 ##gff-version 3
 ##sequence-region HBA_HUMAN 1 142
 #!Date 2010-01-15
 #!Type Protein
-#!Source-version EMBOSS 6.2.0
+#!Source-version EMBOSS 6.3.0
 HBA_HUMAN       wordmatch       polypeptide_region      15      18      1.000
 +       .       ID="HBA_HUMAN.1";note="HBB_HUMAN"
 HBA_HUMAN       wordmatch       polypeptide_region      59      63      1.000
@@ -451,7 +433,7 @@ HBA_HUMAN       wordmatch       polypeptide_region      117     120     1.000
 ##sequence-region HBB_HUMAN 1 147
 #!Date 2010-01-15
 #!Type Protein
-#!Source-version EMBOSS 6.2.0
+#!Source-version EMBOSS 6.3.0
 HBB_HUMAN       wordmatch       polypeptide_region      16      19      1.000
 +       .       ID="HBB_HUMAN.1";note="HBA_HUMAN"
 HBB_HUMAN       wordmatch       polypeptide_region      64      68      1.000
@@ -461,11 +443,11 @@ HBB_HUMAN       wordmatch       polypeptide_region      122     125     1.000
 
   File: wordmatch.log
 
-Sequence file for patterns: <null>
-Sequence file to be scanned for patterns: <null>
+Small sequence/file for constructing target patterns: <null>
+Large sequence/file to be scanned for patterns: <null>
 Number of sequences in the patterns file: 1
 Pattern/word length: 4
-Number of patterns/words: 139
+Number of patterns/words found: 139
 Number of sequences in the file scanned for patterns: 1
 Number of all matches: 3 (wordmatch finds exact matches only)
 Sum of match lengths: 13
@@ -477,10 +459,10 @@ HBA_HUMAN                                 :        3
 
 Pattern statistics:
 -------------------
-Pattern   #all-matches  #seq-matches  avg-match-length  avg-longest-match-length
-EFTP   :            1             1              4.00                      4.00
-HGKK   :            1             1              5.00                      5.00
-WGKV   :            1             1              4.00                      4.00
+Pattern   #pat-sequences  #all-matches  avg-match-length
+EFTP   :            1             1              4.00
+HGKK   :            1             1              5.00
+WGKV   :            1             1              4.00
 
    The normal 'report' header is output. It contains the details of the
    program run and the input sequences.
@@ -533,9 +515,12 @@ See also
 
 Author(s)
 
-   Ian Longden (il (c) sanger.ac.uk)
+   Ian Longden formerly at:
    Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
    CB10 1SA, UK.
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

@@ -2,7 +2,8 @@ application: complex [
   documentation: "Find the linguistic complexity in
                   nucleotide sequences"
   groups: "Nucleic:Composition"
-  relations: "EDAM: Nucleotide sequence complexity calculation"
+  relations: "/edam/topic/0000157 Sequence composition"
+  relations: "/edam/operation/0000374 Nucleotide sequence complexity calculation"
 ]
 
 section: input [
@@ -13,24 +14,32 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "dna"
-    relations: "EDAM: DNA sequence record"                                 
+    relations: "/edam/data/0001215 Pure DNA sequence"
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more" 
   ]
 
   integer: lwin [
     standard: "Y"
     default: "100"
+    minimum: "1"
     maximum: "$(sequence.length)"
+    failrange: "N"
+    trueminimum: "Y"
     information: "Window length"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001251 Window size"
   ]
 
   integer: step [
     standard: "Y"
     default: "5"
+    minimum: "1"
     maximum: "$(lwin)"
+    failrange: "N"
+    trueminimum: "Y"
     information: "Step size"
     help: "Displacement of the window over the sequence"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0002141 Window step size"
   ]
 
   integer: jmin [
@@ -40,7 +49,7 @@ section: input [
     maximum: "20"
     information: "Minimum word length"
     help: ""
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001250 Word size"
   ]
 
   integer: jmax [
@@ -50,7 +59,7 @@ section: input [
     maximum: "50"
     information: "Maximum word length"
     help: ""
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001250 Word size"
   ]
 
 endsection: input
@@ -64,7 +73,7 @@ section: advanced [
     default: "N"
     information: "All sequences"
     help: "Calculate over a set of sequences"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   integer: sim [
@@ -72,7 +81,7 @@ section: advanced [
     information: "Simulations"
     help: "Calculate the linguistic complexity by comparison with a
            number of simulations having a uniform distribution of bases"
-    relations: "EDAM: Generic integer"                                     
+relations: "/edam/data/0001773 Tool-specific parameter"
   ]
 
   boolean: freq [
@@ -80,7 +89,7 @@ section: advanced [
     information: "Calculate frequency"
     help: "Execute the simulation of a sequence based on the base
            frequency of the original sequence"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
 endsection: advanced
@@ -96,13 +105,14 @@ section: output [
     help: "Generate a file named UjTable containing the values of Uj
            for each word j in the real sequence(s) and in any simulated
            sequences"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   outfile: outfile [
     parameter: "Y"
     knowntype: "complex output"
-    relations:  "EDAM: Sequence complexity report"                     
+    information: "Program complex output file"
+    relations:  "/edam/data/0001259 Sequence complexity"                     
   ]
 
   outfile: ujtablefile [
@@ -111,13 +121,14 @@ section: output [
     knowntype: "complex temporary output"
     help: ""
     nullok: "Y"
-    relations:                                                 
   ]
 
   seqoutall: outseq [
     standard: "$(omnia)"
     nullok: "Y"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0000848 Sequence" 
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more"
   ]
 
 endsection: output

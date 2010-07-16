@@ -39,6 +39,7 @@ extern "C"
 
 
 
+
 /* @data EmbPPropAmino ********************************************************
 **
 ** Amino acid properties
@@ -141,7 +142,7 @@ void 	embPropCalcFragments (const char *s, ajint n,
 			      AjBool dorag, EmbPPropMolwt const  *mwdata,
 			      AjBool mono);
 double  embPropCalcMolextcoeff(const char *s, ajint start, ajint end,
-			       EmbPPropAmino const *aadata);
+			       AjBool cystine, EmbPPropAmino const *aadata);
 double  embPropCalcMolwt (const char *s, ajint start, ajint end,
 			  EmbPPropMolwt const *mwdata, AjBool mono);
 /* new method for chemically modified ends */

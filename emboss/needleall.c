@@ -46,8 +46,8 @@ int main(int argc, char **argv)
     AjPStr ss;
     AjPFile errorf;
 
-    ajuint lena;
-    ajuint lenb;
+    ajint lena;
+    ajint lenb;
     ajuint k;
 
     const char *p;
@@ -56,7 +56,6 @@ int main(int argc, char **argv)
     ajint start1 = 0;
     ajint start2 = 0;
 
-    float *path;
     ajint *compass;
     float* ix;
     float* iy;
@@ -107,11 +106,10 @@ int main(int argc, char **argv)
     gapopen = ajRoundFloat(gapopen, 8);
     gapextend = ajRoundFloat(gapextend, 8);
 
-    AJCNEW(path, maxarr);
-    AJCNEW(compass, maxarr);
-    AJCNEW(m, maxarr);
-    AJCNEW(ix, maxarr);
-    AJCNEW(iy, maxarr);
+    AJCNEW0(compass, maxarr);
+    AJCNEW0(m, maxarr);
+    AJCNEW0(ix, maxarr);
+    AJCNEW0(iy, maxarr);
 
     alga  = ajStrNew();
     algb  = ajStrNew();
@@ -131,7 +129,7 @@ int main(int argc, char **argv)
             lena = ajSeqGetLen(seqa);
 
 
-            if(lenb > (ULONG_MAX/(ajulong)(lena+1)))
+            if(lenb > (LONG_MAX/(ajlong)(lena+1)))
                 ajFatal("Sequences too big.");
 
             len = lena*lenb;
@@ -139,13 +137,18 @@ int main(int argc, char **argv)
             if(len>maxarr)
             {
                 stlen = (size_t) len;
-                AJCRESIZETRY(path,stlen);
-                AJCRESIZETRY(compass,stlen);
-                AJCRESIZETRY(m,stlen);
-                AJCRESIZETRY(ix,stlen);
-                AJCRESIZETRY(iy,stlen);
-                if(!path || !compass || !m || !ix || !iy)
-                    ajDie("Sequences too big.");
+                AJCRESIZETRY0(compass,(size_t)maxarr,stlen);
+                if(!compass)
+                    ajDie("Sequences too big, memory allocation failed");
+                AJCRESIZETRY0(m,(size_t)maxarr,stlen);
+                if(!m)
+                    ajDie("Sequences too big, memory allocation failed");
+                AJCRESIZETRY0(ix,(size_t)maxarr,stlen);
+                if(!ix)
+                    ajDie("Sequences too big, memory allocation failed");
+                AJCRESIZETRY0(iy,(size_t)maxarr,stlen);
+                if(!iy)
+                    ajDie("Sequences too big, memory allocation failed");
                 maxarr=len;
             }
 
@@ -158,7 +161,7 @@ int main(int argc, char **argv)
 
             score = embAlignPathCalcWithEndGapPenalties(p, q, lena, lenb,
                     gapopen, gapextend, endgapopen, endgapextend,
-                    &start1, &start2, path, sub, cvt, m, ix, iy,
+                    &start1, &start2, sub, cvt, m, ix, iy,
                     compass, ajFalse, endweight);
 
             embAlignWalkNWMatrixUsingCompass(p, q, &alga, &algb,
@@ -223,7 +226,6 @@ int main(int argc, char **argv)
     ajSeqDel(&seqb);
 
     AJFREE(compass);
-    AJFREE(path);
     AJFREE(ix);
     AJFREE(iy);
     AJFREE(m);

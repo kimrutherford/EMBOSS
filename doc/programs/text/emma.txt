@@ -94,7 +94,7 @@ GCG-Alignment file created      [12345678A]
 Command line arguments
 
 Multiple sequence alignment (ClustalW wrapper)
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     (Gapped) sequence(s) filename and optional
@@ -1197,9 +1197,11 @@ See also
 
 Author(s)
 
-   Mark Faller (current e-mail address unknown)
-   while he was with:
+   Mark Faller formerly at:
    HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

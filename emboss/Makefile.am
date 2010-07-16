@@ -16,9 +16,12 @@ endif
 AM_CFLAGS =  $(AIX_CFLAGS) $(WARN_CFLAGS) $(DEVWARN_CFLAGS)
 
 check_PROGRAMS = acdlog acdrelations acdxsd ajtest \
-complex corbatest edamclean ensembltest \
+complex corbatest \
+domtesta domtestb domtestc domtestd \
+edamclean ensembltest \
 entrails entrailsbook entrailshtml entrailswiki histogramtest intconv \
 origsplitter origunion \
+martattributes martdatasets martfilters martquery martregistry martseqs \
 newcoils \
 patmattest \
 prima primers \
@@ -27,7 +30,7 @@ seqretset seqretsingle seqrettype sqltest \
 testplot treetypedisplay
 
 bin_PROGRAMS = aaindexextract abiview \
-acdc acdpretty acdtable acdtrace acdvalid \
+acdc acdgalaxy acdpretty acdtable acdtrace acdvalid \
 aligncopy aligncopypair antigenic \
 backtranambig backtranseq banana biosed btwisted \
 cai chaos charge checktrans chips \
@@ -75,9 +78,12 @@ water whichdb wobble \
 wordcount wordfinder wordmatch wossname \
 yank
 
+if !ESYSTEMLIBS
+EXTRA_INCLUDES = -I$(top_srcdir)/ajax/expat -I$(top_srcdir)/ajax/zlib
+endif
 
 INCLUDES = -I$(top_srcdir)/nucleus -I$(top_srcdir)/ajax/pcre \
-	-I$(top_srcdir)/ajax/expat -I$(top_srcdir)/ajax/zlib \
+	$(EXTRA_INCLUDES) \
 	-I$(top_srcdir)/ajax/core -I$(top_srcdir)/ajax/graphics \
 	-I$(top_srcdir)/ajax/ensembl -I$(top_srcdir)/ajax/ajaxdb \
 	-I$(top_srcdir)/ajax/acd -I$(top_srcdir)/plplot
@@ -86,6 +92,7 @@ INCLUDES = -I$(top_srcdir)/nucleus -I$(top_srcdir)/ajax/pcre \
 aaindexextract_SOURCES = aaindexextract.c
 abiview_SOURCES = abiview.c
 acdc_SOURCES = acdc.c
+acdgalaxy_SOURCES = acdgalaxy.c
 acdpretty_SOURCES = acdpretty.c
 acdtable_SOURCES = acdtable.c
 acdtrace_SOURCES = acdtrace.c
@@ -173,6 +180,12 @@ jembossctl_SOURCES = jembossctl.c
 lindna_SOURCES = lindna.c
 listor_SOURCES = listor.c
 marscan_SOURCES = marscan.c
+martattributes_SOURCES = martattributes.c
+martdatasets_SOURCES = martdatasets.c
+martfilters_SOURCES = martfilters.c
+martquery_SOURCES = martquery.c
+martregistry_SOURCES = martregistry.c
+martseqs_SOURCES = martseqs.c
 maskambignuc_SOURCES = maskambignuc.c
 maskambigprot_SOURCES = maskambigprot.c
 maskfeat_SOURCES = maskfeat.c
@@ -305,10 +318,15 @@ sqltest_SOURCES = sqltest.c
 testplot_SOURCES = testplot.c
 treetypedisplay_SOURCES = treetypedisplay.c
 
+if !ESYSTEMLIBS
+EXTRA_LDS = ../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la
+endif
+
+
 LDADD = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la \
+	$(EXTRA_LDS) \
 	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(XLIB)
 

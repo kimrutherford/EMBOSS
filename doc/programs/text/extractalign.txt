@@ -43,7 +43,7 @@ Extract regions from a sequence alignment
 Command line arguments
 
 Extract regions from a sequence alignment
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqset     (Aligned) sequence set filename and optional
@@ -250,7 +250,7 @@ See also
    newseq           Create a sequence file from a typed-in sequence
    nohtml           Remove mark-up (e.g. HTML tags) from an ASCII text file
    noreturn         Remove carriage return from ASCII files
-   nospace          Remove all whitespace from an ASCII text file
+   nospace          Remove whitespace from an ASCII text file
    notab            Replace tabs with spaces in an ASCII text file
    notseq           Write to file a subset of an input stream of sequences
    nthseq           Write to file a single sequence from an input stream of
@@ -275,9 +275,12 @@ See also
 
 Author(s)
 
-   Peter Rice (pmr (c) ebi.ac.uk)
+   Peter Rice
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

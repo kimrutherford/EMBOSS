@@ -28,12 +28,12 @@
 
 
 
-/* @datastatic AjPTestcode ****************************************************
+/* @datastatic PTestcode ****************************************************
 **
 ** tcode internals
 **
-** @alias AjStestcode
-** @alias AjOTestcode
+** @alias Stestcode
+** @alias OTestcode
 **
 ** @attr positions [AjPFloat] Undocumented
 ** @attr content [AjPFloat] Undocumented
@@ -67,17 +67,17 @@ typedef struct AjSTestcode
     AjPFloat cprobT;
     AjPFloat pweights;
     AjPFloat cweights;
-} AjOTestcode;
-#define AjPTestcode AjOTestcode*
+} OTestcode;
+#define PTestcode OTestcode*
 
 
 
 
-static AjBool tcode_readdata(AjPTestcode *table1, AjPFile datafile);
-static AjPTestcode tcode_new(void);
-static void tcode_del(AjPTestcode *thys);
+static AjBool tcode_readdata(PTestcode *table1, AjPFile datafile);
+static PTestcode tcode_new(void);
+static void tcode_del(PTestcode *thys);
 static float tcode_slide(const AjPStr substr, ajint window,
-			 const AjPTestcode tables,
+			 const PTestcode tables,
 			 ajint pos);
 static ajint tcode_index(const AjPFloat array, float value);
 static void tcode_report(AjPReport report, const AjPInt from, const AjPInt to,
@@ -101,7 +101,7 @@ int main(int argc, char **argv)
     AjPReport report    = NULL;
     AjPFeattable ftable = NULL;
     AjPFile datafile    = NULL;
-    AjPTestcode table1  = NULL;
+    PTestcode table1  = NULL;
     const AjPStr seqstr       = NULL;
     AjPStr substr	= NULL;
     AjBool plot         = ajFalse;
@@ -254,15 +254,15 @@ int main(int argc, char **argv)
 **
 ** Read Etcode.dat data file
 **
-** @param [w] table1 [AjPTestcode*] data object
+** @param [w] table1 [PTestcode*] data object
 ** @param [u] datafile [AjPFile] data file object 
 ** @return [AjBool] true if successful read
 ** @@
 ******************************************************************************/
 
-static AjBool tcode_readdata(AjPTestcode *table1, AjPFile datafile)
+static AjBool tcode_readdata(PTestcode *table1, AjPFile datafile)
 {
-    AjPTestcode table = NULL;
+    PTestcode table = NULL;
     AjPStr line  = NULL;
     AjBool ok    = ajTrue;
     float  val   = 0.;
@@ -393,13 +393,13 @@ static AjBool tcode_readdata(AjPTestcode *table1, AjPFile datafile)
 **
 ** Testcode data object constructor
 **
-** @return [AjPTestcode] allocated object
+** @return [PTestcode] allocated object
 ** @@
 ******************************************************************************/
 
-static AjPTestcode tcode_new(void)
+static PTestcode tcode_new(void)
 {
-    AjPTestcode ret = NULL;
+    PTestcode ret = NULL;
 
     AJNEW0(ret);
     
@@ -429,15 +429,15 @@ static AjPTestcode tcode_new(void)
 **
 ** Testcode data object destructor
 **
-** @param [w] thys [AjPTestcode*] testcodedata object
+** @param [w] thys [PTestcode*] testcodedata object
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 
-static void tcode_del(AjPTestcode *thys)
+static void tcode_del(PTestcode *thys)
 {
-    AjPTestcode pthis = NULL;
+    PTestcode pthis = NULL;
 
     pthis = *thys;
 
@@ -475,7 +475,7 @@ static void tcode_del(AjPTestcode *thys)
 **
 ** @param [r] substr [const AjPStr] sequence
 ** @param [r] window [ajint] size of sliding window
-** @param [r] table [const AjPTestcode] testcode data object
+** @param [r] table [const PTestcode] testcode data object
 ** @param [r] pos [ajint] start position within sequence
 **
 ** @return [float] Testcode value
@@ -483,7 +483,7 @@ static void tcode_del(AjPTestcode *thys)
 ******************************************************************************/
 
 static float tcode_slide(const AjPStr substr, ajint window,
-			 const AjPTestcode table,
+			 const PTestcode table,
 			 ajint pos)
 {
     ajint asum = 0;

@@ -4,18 +4,39 @@
 <p><h3>File: k00650.tfscan</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-TFSCAN of K00650 from 1 to 6210
+########################################
+# Program: tfscan
+# Rundate: Fri 15 Jan 2010 12:00:00
+# Commandline: tfscan
+#    -sequence tembl:k00650
+#    -menu v
+# Report_format: seqtable
+# Report_file: k00650.tfscan
+########################################
 
-MOUSE$FCGR3A_02      R04413   3287  3292  ttcctc
-                     T00702; PU.1;Quality: 3; Species: mouse, Mus musculus.
-HS$ALBU_03           R00079   5940  5944  tggca
-HS$ALBU_03           R00079   3757  3761  tggca
-HS$ALBU_03           R00079   2776  2780  tggca
-HS$ALBU_03           R00079   2418  2422  tggca
-HS$ALBU_03           R00079   2010  2014  tggca
-HS$ALBU_03           R00079   1676  1680  tggca
-HS$ALBU_03           R00079   1356  1360  tggca
-                     T00599; NF-1/L;Quality: 6; Species: rat, Rattus norvegicus.
-HS$ALBU_02           R00078   2009  2014  ttggca
+#=======================================
+#
+# Sequence: K00650     from: 1   to: 6210
+# HitCount: 9
+#=======================================
+
+  Start     End  Strand Accession Factor                                                      Sequence
+   3287    3292       + R04413    T00702; PU.1;Quality: 3; Species: mouse, Mus musculus.      ttcctc
+   5940    5944       + R00079    T00599; NF-1/L;Quality: 6; Species: rat, Rattus norvegicus. tggca
+   3757    3761       + R00079    T00599; NF-1/L;Quality: 6; Species: rat, Rattus norvegicus. tggca
+   2776    2780       + R00079    T00599; NF-1/L;Quality: 6; Species: rat, Rattus norvegicus. tggca
+   2418    2422       + R00079    T00599; NF-1/L;Quality: 6; Species: rat, Rattus norvegicus. tggca
+   2010    2014       + R00079    T00599; NF-1/L;Quality: 6; Species: rat, Rattus norvegicus. tggca
+   1676    1680       + R00079    T00599; NF-1/L;Quality: 6; Species: rat, Rattus norvegicus. tggca
+   1356    1360       + R00079    T00599; NF-1/L;Quality: 6; Species: rat, Rattus norvegicus. tggca
+   2009    2014       + R00078    T00599; NF-1/L;Quality: 6; Species: rat, Rattus norvegicus. ttggca
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Reported_sequences: 1
+# Reported_hitcount: 9
+#---------------------------------------
 </pre>
 </td></tr></table><p>

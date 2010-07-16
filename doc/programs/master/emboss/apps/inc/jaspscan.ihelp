@@ -1,19 +1,20 @@
 Scans DNA sequences for transcription factors
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
                                   format, or reference (input USA)
    -menu               menu       [C] Matrix set (Values: C (Core); F (Fam); P
                                   (Phylofacts); N (CNE); O (POLII); S
-                                  (SPLICE))
+                                  (SPLICE); B (PBM); L (PBM_HLH); H
+                                  (PBM_HOMEO))
    -matrices           string     [all] The name 'all' reads in all matrix
                                   files from the selected
                                   JASPAR matrix set. You can specify
                                   individual matrices by giving
                                   their names with commas between then, such
                                   as:
-                                  'ma0001,ma0015'.
+                                  'ma0001.1,ma0015*'.
                                   The case of the names is not important. You
                                   can specify a file of
                                   matrix names to read in by giving the name
@@ -29,11 +30,11 @@ Version: EMBOSS:6.2.0
                                   for.
                                   An example of a file of matrix names is:
                                   ! my matrices
-                                  ma0001, ma0002
+                                  ma0001.1, ma0002.1
                                   ! other matrices
-                                  ma0010
-                                  ma0032
-                                  ma0053 (Any string)
+                                  ma0010.1
+                                  ma0032*
+                                  ma0053.1 (Any string)
    -threshold          float      [80.0] If the matrix score is greater than
                                   or equal to this percentage
                                   then a hit will be reported (Any numeric

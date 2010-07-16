@@ -115,7 +115,7 @@ Output file [vtest.edialign]:
 Command line arguments
 
 Local multiple alignment of sequences
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequences]         seqset     Sequence set filename and optional format,
@@ -425,11 +425,14 @@ See also
 
 Author(s)
 
-   The EMBOSS direct port was done by Alan Bleasby (ajb (c) ebi.ac.uk)
+   The EMBOSS direct port was done by Alan Bleasby
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
-   Hinxton, Cambridge CB10 1SD, UK based on ACD written by Guy Bottu
-   (gbottu@ben.vub.ac.be) for a wrapper written at BEN, ULB, Brussels,
-   Belgium
+   Hinxton, Cambridge CB10 1SD, UK
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author. based
+   on ACD written by Guy Bottu (gbottu@ben.vub.ac.be) for a wrapper
+   written at BEN, ULB, Brussels, Belgium
 
    The program DIALIGN itself was written by Burkhard Morgenstern, Said
    Abdeddaim, Klaus Hahn, Thomas Werner, Kornelie Frech and Andreas Dress.

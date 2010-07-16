@@ -583,6 +583,7 @@ double embPropCalcMolwtMod(const char *s, ajint start, ajint end,
 ** @param [r] s [const char *] sequence
 ** @param [r] start [ajint] start position
 ** @param [r] end [ajint] end position
+** @param [r] cystine [AjBool] Treat C residues as cystine pairs
 ** @param [r] aadata [EmbPPropAmino const *] amino acid data
 **
 ** @return [double] molar extinction coefficient
@@ -590,21 +591,33 @@ double embPropCalcMolwtMod(const char *s, ajint start, ajint end,
 ******************************************************************************/
 
 double embPropCalcMolextcoeff(const char *s, ajint start, ajint end,
-			      EmbPPropAmino const *aadata)
+			      AjBool cystine, EmbPPropAmino const *aadata)
 {
 
     const char *p;
+    char aa;
     double sum;
     ajint i;
     ajint len;
-    
+    ajuint havecystine = 0;
+
     len = end-start+1;
     
     p   = s+start;
     sum = 0.0;
 
     for(i=0;i<len;++i)
-	sum += (double) aadata[ajBasecodeToInt(toupper((ajint)p[i]))]->extcoeff;
+    {
+        aa = toupper((ajint)p[i]);
+        if(aa == 'C')
+        {
+            if(!cystine) continue;
+            havecystine++;
+            if(havecystine % 2)
+                continue;
+        }
+        sum += (double) aadata[ajBasecodeToInt(aa)]->extcoeff;
+    }
 
     return sum;
 }
@@ -1421,6 +1434,8 @@ void embPropNormalF(float matrix[], float missing)
 
     return;
 }
+
+
 
 
 /* @func embPropAminoDel ******************************************************

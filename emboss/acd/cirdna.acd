@@ -1,7 +1,9 @@
 application: cirdna [
   documentation: "Draws circular maps of DNA constructs"
   groups: "Display"
-  relations: "EDAM: DNA map drawing"
+  relations: "/edam/topic/0000092 Visualisation and rendering"
+  relations: "/edam/topic/0000096 Nucleic acid sequence analysis"
+  relations: "/edam/operation/0000578 DNA circular map drawing"
 ]
 
 section: input [
@@ -13,8 +15,8 @@ section: input [
     parameter: "Y"
     default: "inputfile"
     information: "Commands to the cirdna drawing program file"
-    knowntype: "lindna mapping commands"
-    relations: ""
+    knowntype: "cirdna mapping commands"
+    relations: "/edam/data/0002152 Rendering parameter"
   ]
 
 endsection: input
@@ -29,7 +31,7 @@ section: additional [
     default: "20"
     minimum: "1"
     information: "Maximum number of groups"
-    relations: "EDAM: Generic integer"                                     
+relations: "/edam/data/0002152 Rendering parameter"
   ]
 
   integer: maxlabels [
@@ -37,7 +39,7 @@ section: additional [
     default: "10000"
     minimum: "1"
     information: "Maximum number of labels"
-    relations: "EDAM: Generic integer"                                     
+relations: "/edam/data/0002152 Rendering parameter"
   ]
 
 endsection: additional
@@ -51,7 +53,7 @@ section: output [
     standard: "Y"
     default: "Y"
     information: "Draw a ruler"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   list: blocktype [
@@ -60,7 +62,7 @@ section: output [
     values: "Open:Open blocks;Filled:Filled blocks;Outline:Black
              border"
     information: "Type of blocks"
-    relations: "EDAM: Generic string array"                                
+relations: "/edam/data/0002152 Rendering parameter"
   ]
 
   float: originangle [
@@ -70,7 +72,7 @@ section: output [
     maximum: "360"
     information: "Position in degrees of the molecule's origin
                   on the circle"
-    relations: "EDAM: Generic float"                                       
+relations: "/edam/data/0002152 Rendering parameter"
   ]
 
   selection: posticks [
@@ -78,7 +80,7 @@ section: output [
     default: "Out"
     values: "In;Out"
     information: "Ticks inside or outside the circle"
-    relations: "EDAM: Generic string array"                                
+relations: "/edam/data/0002152 Rendering parameter"
   ]
 
   selection: posblocks [
@@ -86,14 +88,14 @@ section: output [
     default: "In"
     values: "In;Out"
     information: "Text inside or outside the blocks"
-    relations: "EDAM: Generic string array"                                
+relations: "/edam/data/0002152 Rendering parameter"
   ]
 
   boolean: intersymbol [
     additional: "Y"
     default: "Y"
     information: "Horizontal junctions between blocks"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   integer: intercolour [
@@ -103,14 +105,14 @@ section: output [
     maximum: "15"
     information: "Colour of junctions between blocks (enter a
                   colour number)"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0002151 Colour"
   ]
 
   boolean: interticks [
     additional: "Y"
     default: "N"
     information: "Horizontal junctions between ticks"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   integer: gapsize [
@@ -118,14 +120,14 @@ section: output [
     default: "500"
     minimum: "0"
     information: "Interval between ticks in the ruler"
-    relations: "EDAM: Generic integer"                                     
+relations: "/edam/data/0002152 Rendering parameter"
   ]
 
   boolean: ticklines [
     additional: "Y"
     default: "N"
     information: "Vertical lines at the ruler's ticks"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   float: textheight [
@@ -135,7 +137,7 @@ section: output [
     information: "Text scale factor"
     help: "Height of text. Enter a number <1.0 or >1.0 to decrease or
            increase the size, respectively"
-    relations: "EDAM: Generic float"                                       
+relations: "/edam/data/0002152 Rendering parameter"
   ]
 
   float: textlength [
@@ -145,7 +147,7 @@ section: output [
     information: "Length of text multiplier"
     help: "Length of text. Enter a number <1.0 or >1.0 to decrease or
            increase the size, respectively"
-    relations: "EDAM: Generic float"                                       
+relations: "/edam/data/0002152 Rendering parameter"
   ]
 
   float: tickheight [
@@ -155,7 +157,7 @@ section: output [
     information: "Height of ticks multiplier"
     help: "Height of ticks. Enter a number <1.0 or >1.0 to decrease or
            increase the size, respectively"
-    relations: "EDAM: Generic float"                                       
+relations: "/edam/data/0002152 Rendering parameter"
   ]
 
   float: blockheight [
@@ -165,7 +167,7 @@ section: output [
     information: "Height of blocks multiplier"
     help: "Height of blocks. Enter a number <1.0 or >1.0 to decrease
            or increase the size, respectively"
-    relations: "EDAM: Generic float"                                       
+relations: "/edam/data/0002152 Rendering parameter"
   ]
 
   float: rangeheight [
@@ -175,7 +177,7 @@ section: output [
     information: "Height of range ends multiplier"
     help: "Height of range ends. Enter a number <1.0 or >1.0 to
            decrease or increase the size, respectively"
-    relations: "EDAM: Generic float"                                       
+relations: "/edam/data/0002152 Rendering parameter"
   ]
 
   float: gapgroup [
@@ -185,7 +187,7 @@ section: output [
     information: "Space between groups multiplier"
     help: "Space between groups. Enter a number <1.0 or >1.0 to
            decrease or increase the size, respectively"
-    relations: "EDAM: Generic float"                                       
+relations: "/edam/data/0002152 Rendering parameter"
   ]
 
   float: postext [
@@ -197,13 +199,13 @@ section: output [
     help: "Space between text and ticks, blocks, and ranges. Enter a
            number <1.0 or >1.0 to decrease or increase the size,
            respectively"
-    relations: "EDAM: Generic float"                                       
+relations: "/edam/data/0002152 Rendering parameter"
   ]
 
   graph: graphout [
     standard: "Y"
     gdesc: "Circular DNA map"
-    relations: "EDAM: EMBOSS graph file"                                   
+    relations: "/edam/data/0001278 Genetic map"                                   
   ]
 
 endsection: output

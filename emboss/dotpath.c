@@ -158,19 +158,19 @@ int main(int argc, char **argv)
 	    /* a lot smaller then just label start and end */
 	    ajGraphicsDrawposLine((float)0.0,(float)0.0,
                                   (float)0.0,(float)0.0-ticklen);
-	    sprintf(ptr,"%d",ajSeqGetOffset(seq1));
+	    sprintf(ptr,"%u",ajSeqGetOffset(seq1));
 	    ajGraphicsDrawposTextAtmid((float)0.0,(float)0.0-(onefifth),ptr);
 
 	    ajGraphicsDrawposLine(flen1,(float)0.0,
 			flen1,(float)0.0-ticklen);
-	    sprintf(ptr,"%d",len1+ajSeqGetOffset(seq1));
+	    sprintf(ptr,"%u",len1+ajSeqGetOffset(seq1));
 	    ajGraphicsDrawposTextAtmid(flen1,(float)0.0-(onefifth),ptr);
 	}
 	else
 	    for(k=0.0;k<len1;k+=tickgap)
 	    {
 		ajGraphicsDrawposLine(k,(float)0.0,k,(float)0.0-ticklen);
-		sprintf(ptr,"%d",(ajint)k+ajSeqGetOffset(seq1));
+		sprintf(ptr,"%u",(ajint)k+ajSeqGetOffset(seq1));
 		ajGraphicsDrawposTextAtmid( k,(float)0.0-(onefifth),ptr);
 	    }
 
@@ -193,19 +193,19 @@ int main(int argc, char **argv)
 	    /* a lot smaller then just label start and end */
 	    ajGraphicsDrawposLine((float)0.0,(float)0.0,
                                   (float)0.0-ticklen,(float)0.0);
-	    sprintf(ptr,"%d",ajSeqGetOffset(seq2));
+	    sprintf(ptr,"%u",ajSeqGetOffset(seq2));
 	    ajGraphicsDrawposTextAtend( (float)0.0-(onefifth),(float)0.0,ptr);
 
 	    ajGraphicsDrawposLine((float)0.0,flen2,
 			(float)0.0-ticklen,flen2);
-	    sprintf(ptr,"%d",len2+ajSeqGetOffset(seq2));
+	    sprintf(ptr,"%u",len2+ajSeqGetOffset(seq2));
 	    ajGraphicsDrawposTextAtend((float)0.0-(onefifth),flen2,ptr);
 	}
 	else
 	    for(k=0.0;k<len2;k+=tickgap)
 	    {
 		ajGraphicsDrawposLine((float)0.0,k,(float)0.0-ticklen,k);
-		sprintf(ptr,"%d",(ajint)k+ajSeqGetOffset(seq2));
+		sprintf(ptr,"%u",(ajint)k+ajSeqGetOffset(seq2));
 		ajGraphicsDrawposTextAtend( (float)0.0-(onefifth),k,ptr);
 	    }
     }
@@ -230,7 +230,6 @@ int main(int argc, char **argv)
 
 
 #ifndef NO_PLOT
-
 /* @funcstatic dotpath_drawPlotlines ******************************************
 **
 ** Undocumented.

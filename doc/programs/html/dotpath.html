@@ -76,7 +76,7 @@ Created dotpath.ps
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Draw a non-overlapping wordmatch dotplot of two sequences
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         sequence   Sequence filename and optional format, or
@@ -86,7 +86,8 @@ Version: EMBOSS:6.2.0
    -wordsize           integer    [4] Word size (Integer 2 or more)
    -graph              graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tek, tekt, none, data, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif, pdf,
+                                  svg, pdf, svg)
 
    Additional (Optional) qualifiers:
    -overlaps           boolean    [N] Displays the overlapping matches (in
@@ -200,7 +201,7 @@ Version: EMBOSS:6.2.0
 <td>-graph</td>
 <td>graph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif, pdf, svg, pdf, svg</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -807,12 +808,12 @@ DR   EPD; EP74485; HS_IER3.
 DR   GDB; 11515913.
 DR   GOA; P59942.
 DR   HGNC; 20668; MCCD1.
-DR   IMGT/HLA; HLA02802; V*01010102.
-DR   RFAM; RF00994; mir-1255.
-DR   UniProtKB/Swiss-Prot; P59942; MCCD1_HUMAN.
-XX
-CC   This sequence is conducted by Tokai University as a JST sequencing
-CC   Team.
+DR   IMGT/HLA; HLA02629; J*01:01:01:02.
+DR   IMGT/HLA; HLA02802; V*01:01:01:02.
+DR   RFAM; RF00017; SRP_euk_arch.
+DR   RFAM; RF00019; Y_RNA.
+DR   RFAM; RF00026; U6.
+DR   RFAM; RF00100; 7SK.
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -966,11 +967,13 @@ nearly identical sequences.
 <H2>
     Author(s)
 </H2>
-Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+Gary Williams formerly at:
 <br>
 MRC Rosalind Franklin Centre for Genomics Research
 Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
 
 <H2>
     History

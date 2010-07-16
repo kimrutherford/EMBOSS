@@ -51,14 +51,15 @@ Output file [ifna2_human.iep]:
 Command line arguments
 
 Calculate the isoelectric point of proteins
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Protein sequence(s) filename and optional
                                   format, or reference (input USA)
 *  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tek, tekt, none, data, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif, pdf,
+                                  svg, pdf, svg)
 *  -outfile            outfile    [*.iep] Output file name
 
    Additional (Optional) qualifiers:
@@ -141,7 +142,7 @@ ID   LACI_ECOLI              Reviewed;         360 AA.
 AC   P03023; O09196; P71309; Q2MC79; Q47338;
 DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
 DT   19-JUL-2003, sequence version 3.
-DT   16-JUN-2009, entry version 105.
+DT   15-JUN-2010, entry version 117.
 DE   RecName: Full=Lactose operon repressor;
 GN   Name=lacI; OrderedLocusNames=b0345, JW0336;
 OS   Escherichia coli (strain K12).
@@ -251,8 +252,9 @@ ID   IFNA2_HUMAN             Reviewed;         188 AA.
 AC   P01563; P01564; Q14606; Q96KI6;
 DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
 DT   21-JUL-1986, sequence version 1.
-DT   16-JUN-2009, entry version 100.
+DT   23-MAR-2010, entry version 109.
 DE   RecName: Full=Interferon alpha-2;
+DE            Short=IFN-alpha-2;
 DE   AltName: Full=Interferon alpha-A;
 DE            Short=LeIF A;
 DE   Flags: Precursor;
@@ -296,7 +298,6 @@ RT   production in E. coli.";
 RL   Rev. Latinoam. Microbiol. 27:141-150(1985).
 RN   [5]
 RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
-RC   TISSUE=Placenta;
 
 
   [Part of this file has been deleted for brevity]
@@ -304,21 +305,20 @@ RC   TISSUE=Placenta;
 DR   GO; GO:0006917; P:induction of apoptosis; TAS:ProtInc.
 DR   GO; GO:0006954; P:inflammatory response; TAS:ProtInc.
 DR   GO; GO:0009615; P:response to virus; IEA:UniProtKB-KW.
-DR   InterPro; IPR012351; 4_helix_cytokine_core.
+DR   InterPro; IPR009079; 4_helix_cytokine-like_core.
 DR   InterPro; IPR000471; IInterferon_alpha/beta/delta.
 DR   InterPro; IPR015589; Interferon_alpha.
-DR   Gene3D; G3DSA:1.20.1250.10; 4_helix_cytokine_core; 1.
 DR   PANTHER; PTHR11691:SF9; IFNa; 1.
 DR   PANTHER; PTHR11691; Interferon_abd; 1.
 DR   Pfam; PF00143; Interferon; 1.
 DR   PRINTS; PR00266; INTERFERONAB.
-DR   ProDom; PD000550; Interferon_abd; 1.
 DR   SMART; SM00076; IFabd; 1.
+DR   SUPFAM; SSF47266; 4_helix_cytokine; 1.
 DR   PROSITE; PS00252; INTERFERON_A_B_D; 1.
 PE   1: Evidence at protein level;
-KW   3D-structure; Antiviral defense; Cytokine; Direct protein sequencing;
-KW   Disulfide bond; Glycoprotein; Pharmaceutical; Polymorphism; Secreted;
-KW   Signal.
+KW   3D-structure; Antiviral defense; Complete proteome; Cytokine;
+KW   Direct protein sequencing; Disulfide bond; Glycoprotein;
+KW   Pharmaceutical; Polymorphism; Secreted; Signal.
 FT   SIGNAL        1     23
 FT   CHAIN        24    188       Interferon alpha-2.
 FT                                /FTId=PRO_0000016360.
@@ -328,7 +328,8 @@ FT   DISULFID     24    121
 FT   DISULFID     52    161
 FT   VARIANT       6      6       A -> D (in dbSNP:rs35971916).
 FT                                /FTId=VAR_055972.
-FT   VARIANT      46     46       K -> R (in alpha-2B and alpha-2C).
+FT   VARIANT      46     46       K -> R (in alpha-2B and alpha-2C;
+FT                                dbSNP:rs1061959).
 FT                                /FTId=VAR_004012.
 FT   VARIANT      57     57       H -> R (in alpha-2C).
 FT                                /FTId=VAR_013001.
@@ -533,9 +534,12 @@ See also
 
 Author(s)
 
-   Alan Bleasby (ajb (c) ebi.ac.uk)
+   Alan Bleasby
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

@@ -31,8 +31,12 @@
 <th align="left" colspan=5>Additional (Optional) qualifiers</th>
 </tr>
 
-<tr>
-<td colspan=5>(none)</td>
+<tr bgcolor="#FFFFCC">
+<td>-menu</td>
+<td>list</td>
+<td>Remove whitespace</td>
+<td><table><tr><td>all</td> <td><i>(all whitespace)</i></td></tr><tr><td>end</td> <td><i>(trailing whitespace)</i></td></tr><tr><td>excess</td> <td><i>(multiple whitespace characters)</i></td></tr></table></td>
+<td>all</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">

@@ -60,6 +60,8 @@ public class BuildProgramMenu
   private int currentApp = -1;
   /** favorite menu */
   private Favorites favorites;
+  /** indicates whether connected jemboss server (if any) have PDF support */
+  static public boolean serverSupportsPDF;
 
   /**
   *
@@ -226,6 +228,7 @@ public class BuildProgramMenu
 
         				  matrices = showdb.getMatrices();
         				  codons = showdb.getCodonUsage();
+        				  serverSupportsPDF = showdb.serverSupportsPDF();
         			  } catch (JembossSoapException ex) {
         				  updateConnectionSettings(ex);
         				  continue;
@@ -401,7 +404,8 @@ public class BuildProgramMenu
         alphaTextPane.add(Box.createRigidArea(new Dimension(5,0)));
 
         final JTextField alphaTextPaneEntry = new JTextField(12);
-        alphaTextPaneEntry.setMaximumSize(new Dimension(100,20));
+        alphaTextPaneEntry.setMaximumSize(new Dimension(100,30));
+        
         //scroll program list on typing 
         alphaTextPaneEntry.getDocument().addDocumentListener(new DocumentListener()
         {
@@ -469,7 +473,11 @@ public class BuildProgramMenu
           }
         };
         progList.addMouseListener(mouseListener);
-        progList.addKeyListener(new ProgListSelectionListener());        
+        progList.addKeyListener(new ProgListSelectionListener());
+        
+        if (!withSoap || !mysettings.getUseAuth())
+            alphaTextPaneEntry.requestFocus();
+
         return progList;
       }
 
@@ -639,10 +647,18 @@ public class BuildProgramMenu
 	  return s;
   }
 
+  
+  
+  
   public static void setMatrices(JembossParams mysettings){
 	  final Set s = matrixIndicies(mysettings.getEmbossData()+File.separator+"Matrices.protein");
 	  s.addAll(matrixIndicies(mysettings.getEmbossData()+File.separator+"Matrices.nucleotide"));
 	  s.addAll(matrixIndicies(mysettings.getEmbossData()+File.separator+"Matrices.proteinstructure"));
+	  
+	  if (s.size()==0)
+	      System.err.println("No matrix file found, in EMBOSS data directory "+
+	              mysettings.getEmbossData());
+
 	  String[] dataFile = (new File(mysettings.getEmbossData())).list(new FilenameFilter()
 	  {
 		  public boolean accept(File dir, String name)
@@ -654,13 +670,16 @@ public class BuildProgramMenu
 			  return false;
 		  };
 	  });
-	  if (s.size()>0)
-		  System.err.println("matrices not resolved to any file: "+s.size());
+
 	  matrices = new Vector();
 	  Arrays.sort(dataFile);
 	  for(int i=0;i<dataFile.length;i++)
 		  matrices.add(dataFile[i]);
   }
+  
+  
+  
+  
   /**
   *
   * Contains all codon usage tables

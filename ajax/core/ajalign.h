@@ -6,6 +6,9 @@ extern "C"
 #ifndef ajseqalign_h
 #define ajseqalign_h
 
+
+
+
 /* @data AjPAlign *************************************************************
 **
 ** Ajax Align Output object.
@@ -37,7 +40,7 @@ extern "C"
 ** @attr SubTail [AjPStr] Text to add to subtail with newlines
 ** @attr Showacc [AjBool] Report accession number if ajTrue
 ** @attr Showdes [AjBool] Report sequence description if ajTrue
-** @attr Showusa [AjBool] Report full USA (-ausaqualifier) if ajTrue
+** @attr Showusa [AjBool] Report full USA (-ausa qualifier) if ajTrue
 **                        or only seqname if ajFalse
 ** @attr Multi [AjBool] if true, assume >1 alignment
 ** @attr Global [AjBool] if true, show full sequence beyond match
@@ -48,14 +51,15 @@ extern "C"
 ** @attr Nmax [ajint] Maximum number of sequences e.g. 2
 ** @attr Width [ajint] Output width (minimum 10)
 ** @attr IMatrix [AjPMatrix] Integer matrix (see also FMatrix)
-** @attr FMatrix [AjPMatrixf] Floating Pt matrix (see also IMatrix)
+** @attr FMatrix [AjPMatrixf] Floating point matrix (see also IMatrix)
 ** @attr Matrix [AjPStr] Matrix name
 ** @attr GapPen [AjPStr] Gap penalty (converted to string)
 ** @attr ExtPen [AjPStr] Gap extend penalty (converted to string)
 ** @attr SeqOnly [AjBool] Sequence output only, no head or tail
 ** @attr SeqExternal [AjBool] Sequence is non-local, do not delete
 ** @attr Count [ajint] Use count
-** @attr Padding [char[4]] Padding to alignment boundary
+** @attr RefSeq [ajint] Index of the reference sequences in AlignOData objects
+**                      of the Data list
 ** @@
 ******************************************************************************/
 
@@ -86,7 +90,7 @@ typedef struct AjSAlign {
   AjBool SeqOnly;
   AjBool SeqExternal;
   ajint Count;
-  char Padding[4];
+  ajint RefSeq;
 } AjOAlign;
 
 #define AjPAlign AjOAlign*
@@ -141,6 +145,7 @@ AjBool       ajAlignSetRange (AjPAlign thys,
 			      ajint len1, ajint off1,
 			      ajint start2, ajint end2,
 			      ajint len2, ajint off2);
+void         ajAlignSetRefSeqIndx(AjPAlign thys, ajint refseq);
 void         ajAlignSetScoreI (AjPAlign thys, ajint score);
 void         ajAlignSetScoreL (AjPAlign thys, ajlong score);
 void         ajAlignSetScoreR (AjPAlign thys, float score);

@@ -149,7 +149,7 @@ output sequence [12s1_arath.fasta]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Extract features from sequence(s)
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -205,9 +205,9 @@ Version: EMBOSS:6.2.0
    -type               string     [*] By default every feature in the feature
                                   table is extracted. You can set this to be
                                   any feature type you wish to extract.
-                                  See http://www.ebi.ac.uk/Services/WebFeat/
-                                  for a list of the EMBL feature types and see
-                                  the Uniprot user manual in
+                                  See http://www.ebi.ac.uk/embl/WebFeat/ for a
+                                  list of the EMBL feature types and see the
+                                  Uniprot user manual in
                                   http://www.uniprot.org/manual/sequence_annotation
                                   for a list of the Uniprot feature types.
                                   The type may be wildcarded by using '*'.
@@ -264,7 +264,8 @@ Version: EMBOSS:6.2.0
                                   '/gene' can have the value of the gene name.
                                   By default any feature tag value in the
                                   feature table is shown. You can set this to
-                                  match any feature tag valueyou wish to show.
+                                  match any feature tag value you wish to
+                                  show.
                                   The tag value may be wildcarded by using
                                   '*'.
                                   If you wish to show more than one tag value,
@@ -439,7 +440,7 @@ gene* | embl</td>
 <td>-type</td>
 <td>string</td>
 <td>By default every feature in the feature table is extracted. You can set this to be any feature type you wish to extract.
-See http://www.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature types and see the Uniprot user manual in http://www.uniprot.org/manual/sequence_annotation for a list of the Uniprot feature types.
+See http://www.ebi.ac.uk/embl/WebFeat/ for a list of the EMBL feature types and see the Uniprot user manual in http://www.uniprot.org/manual/sequence_annotation for a list of the Uniprot feature types.
 The type may be wildcarded by using '*'.
 If you wish to extract more than one type, separate their names with the character '|', eg:
 *UTR | intron</td>
@@ -487,7 +488,7 @@ gene | label</td>
 <tr bgcolor="#FFFFCC">
 <td>-value</td>
 <td>string</td>
-<td>Tag values are the values associated with a feature tag. Tags are the types of extra values that a feature may have. For example in the EMBL feature table, a 'CDS' type of feature may have the tags '/codon', '/codon_start', '/db_xref', '/EC_number', '/evidence', '/exception', '/function', '/gene', '/label', '/map', '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo', '/standard_name', '/translation', '/transl_except', '/transl_table', or '/usedin'. Only some of these tags can have values, for example '/gene' can have the value of the gene name. By default any feature tag value in the feature table is shown. You can set this to match any feature tag valueyou wish to show.
+<td>Tag values are the values associated with a feature tag. Tags are the types of extra values that a feature may have. For example in the EMBL feature table, a 'CDS' type of feature may have the tags '/codon', '/codon_start', '/db_xref', '/EC_number', '/evidence', '/exception', '/function', '/gene', '/label', '/map', '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo', '/standard_name', '/translation', '/transl_except', '/transl_table', or '/usedin'. Only some of these tags can have values, for example '/gene' can have the value of the gene name. By default any feature tag value in the feature table is shown. You can set this to match any feature tag value you wish to show.
 The tag value may be wildcarded by using '*'.
 If you wish to show more than one tag value, separate their names with a space or the character '|', eg:
 pax* | 10</td>
@@ -1463,7 +1464,7 @@ None.
 
 <tr>
 <td><a href="nospace.html">nospace</a></td>
-<td>Remove all whitespace from an ASCII text file</td>
+<td>Remove whitespace from an ASCII text file</td>
 </tr>
 
 <tr>
@@ -1582,11 +1583,13 @@ None.
     Author(s)
 </H2>
 
-Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+Gary Williams formerly at:
 <br>
 MRC Rosalind Franklin Centre for Genomics Research
 Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
 
 <H2>
     History

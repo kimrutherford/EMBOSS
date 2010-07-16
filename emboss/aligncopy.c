@@ -21,6 +21,9 @@
 
 #include "emboss.h"
 
+
+
+
 /* @prog aligncopy ************************************************************
 **
 ** Reads and writes (returns) alignments

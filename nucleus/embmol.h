@@ -9,6 +9,9 @@ extern "C"
 
 #define EMBMOLPARDISP (double)1000000.0
 
+
+
+
 /* @data EmbPMolFrag **********************************************************
 **
 ** Nucleus sequence molecular fragment object.

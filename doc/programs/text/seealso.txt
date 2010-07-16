@@ -42,7 +42,7 @@ wordmatch    Finds regions of identity (exact matches) of two sequences
 Command line arguments
 
 Finds programs with similar function to a specified program
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-search]            string     Enter the name of an EMBOSS program (Any
@@ -230,9 +230,12 @@ See also
 
 Author(s)
 
-   Gary             Williams (gwilliam (c) rfcgr.mrc.ac.uk)
+   Gary             Williams formerly at:
    MRC              Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome           Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

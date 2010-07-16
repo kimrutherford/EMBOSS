@@ -21,6 +21,9 @@
 
 #include "emboss.h"
 
+
+
+
 /* @prog infobase *************************************************************
 **
 ** Return information on nucleotide bases

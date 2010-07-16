@@ -1,5 +1,5 @@
 Scan a protein sequence with motifs from the PROSITE database
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Protein sequence filename and optional

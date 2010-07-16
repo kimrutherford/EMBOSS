@@ -149,12 +149,12 @@ typedef struct AjSAtom
 **  
 ** @attr  all_abs   [float]  Absolute accessibility, all atoms. 
 ** @attr  all_rel   [float]  Relative accessibility, all atoms. 
-** @attr  side_abs  [float]  Absolute accessibility, atoms in sidechain. 
-** @attr  side_rel  [float]  Relative accessibility, atoms in sidechain. 
-** @attr  main_abs  [float]  Absolute accessibility, atoms in mainchain. 
-** @attr  main_rel  [float]  Relative accessibility, atoms in mainchain. 
-** @attr  npol_abs  [float]  Absolute accessibility, nonpolar atoms. 
-** @attr  npol_rel  [float]  Relative accessibility, nonpolar atoms. 
+** @attr  side_abs  [float]  Absolute accessibility, atoms in side chain.
+** @attr  side_rel  [float]  Relative accessibility, atoms in side chain.
+** @attr  main_abs  [float]  Absolute accessibility, atoms in main chain.
+** @attr  main_rel  [float]  Relative accessibility, atoms in main chain.
+** @attr  npol_abs  [float]  Absolute accessibility, non-polar atoms.
+** @attr  npol_rel  [float]  Relative accessibility, non-polar atoms.
 ** @attr  pol_abs   [float]  Absolute accessibility, polar atoms. 
 ** @attr  pol_rel   [float]  Relative accessibility, polar atoms. 
 ** @attr Id1 [char] 	Standard 1-letter residue identifier or 'X' for
@@ -346,7 +346,7 @@ typedef struct AjSChain
 ** @new     ajPdbReadRawNew Pdb constructor from reading pdb format file.
 ** @new     ajPdbReadNew Pdb constructor from reading CCF format file.
 ** @new     ajPdbReadFirstModelNew Pdb constructor from reading CCF format 
-**          file (retrive data for 1st model only).
+**          file (retrieve data for 1st model only).
 ** @new     ajPdbReadoldNew Pdb constructor from reading CCF format file
 **          lacking residue-level description in RE records.
 ** @new     ajPdbReadoldFirstModelNew Pdb constructor from reading CCF format 
@@ -437,7 +437,7 @@ typedef struct AjSPdb
 ** @attr  abv     [AjPStr]  3-letter abbreviation of heterogen.
 ** @attr  syn     [AjPStr]  Synonym.
 ** @attr  ful     [AjPStr]  Full name. 
-** @attr  cnt     [ajint]   No. of occurences (files) of this heterogen in a 
+** @attr  cnt     [ajint]   No. of occurrences (files) of this heterogen in a
 **                          directory.
 ** @attr  Padding [char[4]] Padding to alignment boundary
 ** 
@@ -526,7 +526,7 @@ typedef struct AjSHet
 ** @attr  Id3  [AjPStr]   3 character residue identifier.
 ** @attr  Atm  [AjPStr*]  Array of atom identifiers.
 ** @attr  Rad  [float*]   Array of van der Waals radii.
-** @attr  N    [ajint]    Nummber of atoms in residue. 
+** @attr  N    [ajint]    Number of atoms in residue.
 ** @attr  Id1  [char]     Standard residue identifier or 'X' for unknown.
 ** @attr  Padding [char[3]] Padding to alignment boundary
 ** 
@@ -807,39 +807,39 @@ ajint       ajResidueCopy(AjPResidue *to, const AjPResidue from);
 AjBool      ajResidueListCopy(AjPList *to, const AjPList from);
 
 ajint       ajResidueEnv1(const AjPResidue res, char SEnv,
-		       AjPStr *OEnv, AjPFile logf);
+		       AjPStr *OEnv, AjPFile flog);
 ajint       ajResidueEnv2(const AjPResidue res, char SEnv,
-		       AjPStr *OEnv, AjPFile logf);
+		       AjPStr *OEnv, AjPFile flog);
 ajint       ajResidueEnv3(const AjPResidue res, char SEnv,
-		       AjPStr *OEnv, AjPFile logf);
+		       AjPStr *OEnv, AjPFile flog);
 ajint       ajResidueEnv4(const AjPResidue res, char SEnv,
-		       AjPStr *OEnv, AjPFile logf);
+		       AjPStr *OEnv, AjPFile flog);
 ajint       ajResidueEnv5(const AjPResidue res, char SEnv,
-		       AjPStr *OEnv, AjPFile logf);
+		       AjPStr *OEnv, AjPFile flog);
 ajint       ajResidueEnv6(const AjPResidue res, char SEnv,
-		       AjPStr *OEnv, AjPFile logf);
+		       AjPStr *OEnv, AjPFile flog);
 ajint       ajResidueEnv7(const AjPResidue res, char SEnv,
-		       AjPStr *OEnv, AjPFile logf);
+		       AjPStr *OEnv, AjPFile flog);
 ajint       ajResidueEnv8(const AjPResidue res, char SEnv,
-		       AjPStr *OEnv, AjPFile logf);
+		       AjPStr *OEnv, AjPFile flog);
 ajint       ajResidueEnv9(const AjPResidue res, char SEnv,
-		       AjPStr *OEnv, AjPFile logf);
+		       AjPStr *OEnv, AjPFile flog);
 ajint       ajResidueEnv10(const AjPResidue res, char SEnv,
-			AjPStr *OEnv, AjPFile logf);
+			AjPStr *OEnv, AjPFile flog);
 ajint       ajResidueEnv11(const AjPResidue res, char SEnv,
-			AjPStr *OEnv, AjPFile logf);
+			AjPStr *OEnv, AjPFile flog);
 ajint       ajResidueEnv12(const AjPResidue res, char SEnv,
-			AjPStr *OEnv, AjPFile logf);
+			AjPStr *OEnv, AjPFile flog);
 ajint       ajResidueEnv13(const AjPResidue res, char SEnv,
-			AjPStr *OEnv, AjPFile logf);
+			AjPStr *OEnv, AjPFile flog);
 ajint       ajResidueEnv14(const AjPResidue res, char SEnv,
-			AjPStr *OEnv, AjPFile logf);
+			AjPStr *OEnv, AjPFile flog);
 ajint       ajResidueEnv15(const AjPResidue res, char SEnv,
-			AjPStr *OEnv, AjPFile logf);
+			AjPStr *OEnv, AjPFile flog);
 ajint       ajResidueEnv16(const AjPResidue res, char SEnv,
-			AjPStr *OEnv, AjPFile logf);
+			AjPStr *OEnv, AjPFile flog);
 
-ajint       ajResidueSSEnv(const AjPResidue res, char *SEnv,AjPFile logf);
+ajint       ajResidueSSEnv(const AjPResidue res, char *SEnv,AjPFile flog);
 
 
 

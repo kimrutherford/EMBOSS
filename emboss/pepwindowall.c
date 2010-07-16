@@ -72,7 +72,6 @@ int main(int argc, char **argv)
     ajint end;
     float fstart;
     float fend;
-    ajuint ilen;
     ajuint istart;
     ajuint iend;
     
@@ -97,13 +96,8 @@ int main(int argc, char **argv)
     istart = ajSeqsetGetBegin(seqset) - 1;
 
     iend = ajSeqsetGetEnd(seqset);
-    if((iend-istart) > llen)
-        ilen = iend-istart+1-llen;
-    else
-    {
-        ilen = 1;
+    if((iend-istart) <= llen)
         llen = iend-istart;
-    }
 
     fstart = (float) istart;
     fend = (float) iend;
@@ -216,6 +210,8 @@ int main(int argc, char **argv)
 
     return 0;
 }
+
+
 
 
 /* @funcstatic pepwindowall_getnakaidata **************************************

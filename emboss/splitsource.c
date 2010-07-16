@@ -134,6 +134,9 @@ static void splitsource_write(AjPSeqout default_seqout,
   return;
 }
 
+
+
+
 /* @funcstatic splitsource_MakeSubSeqName *************************************
 **
 ** Undocumented
@@ -170,6 +173,9 @@ static void splitsource_MakeSubSeqName (AjPStr * name_ptr,
 
   ajStrDel(&value);
 }
+
+
+
 
 /* @funcstatic splitsource_ProcessChunk ***************************************
 **
@@ -232,6 +238,7 @@ static void splitsource_ProcessChunk (AjPSeqout seqout, const AjPSeq seq,
 
   return;
 }
+
 
 
 

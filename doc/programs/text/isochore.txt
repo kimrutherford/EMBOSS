@@ -40,7 +40,7 @@ Created isochore.ps
 Command line arguments
 
 Plots isochores in DNA sequences
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Nucleotide sequence filename and optional
@@ -48,7 +48,8 @@ Version: EMBOSS:6.2.0
   [-outfile]           outfile    [*.isochore] Output file name
    -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tek, tekt, none, data, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif, pdf,
+                                  svg, pdf, svg)
 
    Additional (Optional) qualifiers:
    -window             integer    [1000] Window size (Integer 1 or more)
@@ -392,9 +393,12 @@ See also
 
 Author(s)
 
-   Peter            Rice (pmr (c) ebi.ac.uk)
+   Peter            Rice
    European         Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton,         Cambridge CB10 1SD, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

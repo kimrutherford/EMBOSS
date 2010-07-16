@@ -434,24 +434,28 @@ int main(int argc, char **argv)
 
     ajGraphicsGetCharsize(&defheight,&currentscale);
 
-    ajGraphicsSetCharscale(((float)ixlen/((float)(numres+charlen)*
-                                          (currentscale+(float)1.0)))/
+    ajGraphicsSetCharscale(((float)ixlen/((float)(numres+charlen+1)*
+                                          (currentscale * (float) 1.5)))/
                                            currentscale);
+
+/*    ajGraphicsSetCharscale(((float)ixlen/((float)(numres+charlen)*
+                                          (currentscale+(float)1.0)))/
+                                          currentscale); */
 
     ajGraphicsGetCharsize(&defheight,&currentscale);
 
     yincr = (currentscale + (float)3.0)*(float)0.3;
 
 /*
-** If we have titles (now the standard graph title and subtitle)
-** leave 5 rows of space for them
+** If we have titles (now the standard graph title and subtitle and footer)
+** leave 7 rows of space for them
 */
-    y=ystart-(float)6.0;
+    y=ystart-(float)7.0;
 
     if(ajStrGetLen(options))
     {
 	fold = ajGraphicsSetCharscale(1.0);
-	ajGraphicsDrawposTextAtmid(xmid,1.0,
+	ajGraphicsDrawposTextAtmid(xmid,2.0,
                                    ajStrGetPtr(options));
 	ajGraphicsSetCharscale(fold);
     }
@@ -1267,8 +1271,10 @@ static void prettyplot_fillinboxes(ajint numseq, ajint length,
 	if(consensus && (numseq==seqend))
 	{
 	    res[0] = constr[k];
-	    ajGraphicsDrawposTextAtstart((float)(count+gapcount),
-                                         y-(yincr*((seqend-seqstart)+1)),res);
+
+	    /* start -> mid */
+            ajGraphicsDrawposTextAtmid((float) 0.5 + (float)(count+gapcount),
+                                       y-(yincr*((seqend-seqstart)+1)),res);
 	}
     }
 
@@ -1339,8 +1345,10 @@ static void prettyplot_fillinboxes(ajint numseq, ajint length,
 			    res[0] = seqcharptr[j][k];
 			else
 			    res[0] = '-';
-			ajGraphicsDrawposTextAtstart((float)(count+gapcount),
-                                                     y-(yincr*l),res);
+	    /* start -> mid */
+			ajGraphicsDrawposTextAtmid((float) 0.5 +
+                                                   (float) (count+gapcount),
+                                                   y-(yincr*l),res);
 		    }
 		}
 	    }

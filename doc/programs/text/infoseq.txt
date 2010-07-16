@@ -33,10 +33,10 @@ Usage
 Display basic information about sequences
 
 USA                      Database  Name           Accession      Type Length %GC
-    Description
+    Organism            Description
 tembl-id:X13776          tembl          X13776         X13776         N    2167
-  66.54  Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulat
-ion
+  66.54  Pseudomonas aeruginosa Pseudomonas aeruginosa amiC and amiR gene for al
+iphatic amidase regulation
 
 
    Go to the input files for this example
@@ -49,9 +49,11 @@ ion
 % infoseq tembl:x13776 -nousa
 Display basic information about sequences
 
-Database  Name           Accession      Type Length %GC    Description
+Database  Name           Accession      Type Length %GC    Organism            D
+escription
 tembl          X13776         X13776         N    2167   66.54  Pseudomonas aeru
-ginosa amiC and amiR gene for aliphatic amidase regulation
+ginosa Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulatio
+n
 
 
    Example 3
@@ -99,10 +101,10 @@ N
 Display basic information about sequences
 
 
- USA Database Name Accession Type Length %GC Description
+ USA Database Name Accession Type Length %GC Organism Description
 
- tembl-id:X13776 tembl X13776 X13776 N 2167 66.54 Pseudomonas aeruginosa amiC an
-d amiR gene for aliphatic amidase regulation
+ tembl-id:X13776 tembl X13776 X13776 N 2167 66.54 Pseudomonas aeruginosa Pseudom
+onas aeruginosa amiC and amiR gene for aliphatic amidase regulation
 
 
 
@@ -110,7 +112,7 @@ d amiR gene for aliphatic amidase regulation
 Command line arguments
 
 Display basic information about sequences
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     (Gapped) sequence(s) filename and optional
@@ -158,6 +160,7 @@ Version: EMBOSS:6.2.0
    -length             boolean    [@(!$(only))] Display 'length' column
    -pgc                boolean    [@(!$(only))] Display 'percent GC content'
                                   column
+   -organism           boolean    [@(!$(only))] Display 'organism' column
    -description        boolean    [@(!$(only))] Display 'description' column
 
    Associated qualifiers:
@@ -402,9 +405,12 @@ See also
 
 Author(s)
 
-   Gary             Williams (gwilliam (c) rfcgr.mrc.ac.uk)
+   Gary             Williams formerly at:
    MRC              Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome           Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

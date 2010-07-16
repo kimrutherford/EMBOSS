@@ -2,8 +2,9 @@ application: tranalign [
   documentation: "Generate an alignment of nucleic coding regions
                   from aligned proteins"
   groups: "Alignment:Multiple"
-  relations: "EDAM: Sequence alignment conversion"
-  relations: "EDAM: DNA back-translation"
+  relations: "/edam/topic/0000182 Sequence alignment"
+  relations: "/edam/operation/0000260 Sequence alignment conversion"
+  relations: "/edam/operation/0000371 DNA translation"
 ]
 
 section: input [
@@ -14,14 +15,16 @@ section: input [
   seqall: asequence [
     parameter: "Y"
     type: "nucleotide"
-    relations: "EDAM: Nucleotide sequence record"                          
+    relations:  "/edam/data/0001210 Pure nucleotide sequence"
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more" 
   ]
 
   seqset: bsequence [
     parameter: "Y"
     type: "gapprotein"
     aligned: "Y"
-    relations: "EDAM: Protein sequence alignment data"                     
+    relations: "/edam/data/0001384 Protein sequence alignment"                     
   ]
 
 endsection: input
@@ -50,7 +53,7 @@ section: additional [
     delimiter: ";"
     codedelimiter: ":"
     information: "Code to use"
-    relations: "EDAM: Generic string array"                                
+    relations: "/edam/data/0002128 Genetic code name"                                
   ]
 
 endsection: additional
@@ -64,7 +67,9 @@ section: output [
     parameter: "Y"
     type: "gapnucleotide"
     aligned: "Y"
-    relations: "EDAM: Nucleotide sequence record"                          
+    relations: "/edam/data/0001207 Nucleotide sequence"                          
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more"                          
   ]
 
 endsection: output

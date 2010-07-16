@@ -84,6 +84,7 @@ Resource name: <b>emblresource</b>
      SWISS : Swiss-Prot, SpTrEMBL, TrEMBLnew
         GB : Genbank, DDBJ
     REFSEQ : Refseq
+     FASTQ : Fastq files
 Entry format [SWISS]: <b>embl</b>
 Wildcard database filename [*.dat]: <b>rod.dat</b>
 Database directory [.]: <b>embl</b>
@@ -109,7 +110,7 @@ General log output file [outfile.dbxflat]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Index a flat file database using b+tree indices
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     Basename for index files (Any string from 2
@@ -120,7 +121,8 @@ Version: EMBOSS:6.2.0
                                   /[A-z][A-z0-9_]+/)
    -idformat           menu       [SWISS] Entry format (Values: EMBL (EMBL);
                                   SWISS (Swiss-Prot, SpTrEMBL, TrEMBLnew); GB
-                                  (Genbank, DDBJ); REFSEQ (Refseq))
+                                  (Genbank, DDBJ); REFSEQ (Refseq); FASTQ
+                                  (Fastq files))
    -filenames          string     [*.dat] Wildcard database filename (Any
                                   string)
    -directory          directory  [.] Database directory
@@ -139,6 +141,12 @@ Version: EMBOSS:6.2.0
    -indexoutdir        outdir     [.] Index file output directory
 
    Associated qualifiers:
+
+   "-directory" associated qualifiers
+   -extension          string     Default file extension
+
+   "-indexoutdir" associated qualifiers
+   -extension          string     Default file extension
 
    "-outfile" associated qualifiers
    -odirectory         string     Output directory
@@ -196,7 +204,7 @@ Version: EMBOSS:6.2.0
 <td>-idformat</td>
 <td>list</td>
 <td>Entry format</td>
-<td><table><tr><td>EMBL</td> <td><i>(EMBL)</i></td></tr><tr><td>SWISS</td> <td><i>(Swiss-Prot, SpTrEMBL, TrEMBLnew)</i></td></tr><tr><td>GB</td> <td><i>(Genbank, DDBJ)</i></td></tr><tr><td>REFSEQ</td> <td><i>(Refseq)</i></td></tr></table></td>
+<td><table><tr><td>EMBL</td> <td><i>(EMBL)</i></td></tr><tr><td>SWISS</td> <td><i>(Swiss-Prot, SpTrEMBL, TrEMBLnew)</i></td></tr><tr><td>GB</td> <td><i>(Genbank, DDBJ)</i></td></tr><tr><td>REFSEQ</td> <td><i>(Refseq)</i></td></tr><tr><td>FASTQ</td> <td><i>(Fastq files)</i></td></tr></table></td>
 <td>SWISS</td>
 </tr>
 
@@ -278,6 +286,32 @@ Version: EMBOSS:6.2.0
 
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-directory" associated directory qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -extension</td>
+<td>string</td>
+<td>Default file extension</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-indexoutdir" associated outdir qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -extension</td>
+<td>string</td>
+<td>Default file extension</td>
+<td>Any string</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -780,10 +814,12 @@ None.
     Author(s)
 </H2>
 
-Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
+Alan Bleasby 
 <br>
 European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
 
 
 

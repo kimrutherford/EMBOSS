@@ -26,6 +26,8 @@ static AjBool skipredundant_ClearList (AjPList list);
 static AjBool skipredundant_SeqsetToList (AjPList list, AjPSeqset seqset);
 
 
+
+
 /* @prog skipredundant *********************************************************
 **
 ** Remove redundant sequences from an input set
@@ -128,8 +130,6 @@ int main(int argc, char **argv)
 
     return 0;
 }
-
-
 
 
 

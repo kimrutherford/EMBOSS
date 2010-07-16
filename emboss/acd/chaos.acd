@@ -2,7 +2,8 @@ application: chaos [
   documentation: "Draw a chaos game representation plot for a
                   nucleotide sequence"
   groups: "Nucleic:Composition"
-  relations: "EDAM: Nucleic acid base composition analysis"
+  relations: "/edam/topic/0000157 Sequence composition"
+  relations: "/edam/operation/0000377 Nucleotide base composition analysis"
 ]
 
 section: input [
@@ -13,7 +14,8 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "dna"
-    relations: "EDAM: Pure DNA sequence"                                   
+    relations: "/edam/data/0001215 Pure DNA sequence"        
+    relations: "/edam/data/0000849 Sequence record"                            
   ]
 
 endsection: input
@@ -26,7 +28,7 @@ section: output [
   graph: graph [
     standard: "Y"
     gdesc: "Chaos game representation"
-    relations: "EDAM: EMBOSS graph file"                                   
+    relations: "/edam/data/0002166 Sequence composition plot"                                   
   ]
 
 endsection: output

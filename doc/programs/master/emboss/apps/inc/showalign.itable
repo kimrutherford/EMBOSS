@@ -42,7 +42,7 @@
 <tr bgcolor="#FFFFCC">
 <td>-refseq</td>
 <td>string</td>
-<td>If you give the number in the alignment or the name of a sequence, it will be taken to be the reference sequence. The reference sequence is always show in full and is the one against which all the other sequences are compared. If this is set to 0 then the consensus sequence will be used as the reference sequence. By default the consensus sequence is used as the reference sequence.</td>
+<td>If you give the number in the alignment or the name of a sequence, it will be taken to be the reference sequence. The reference sequence is always shown in full and is the one against which all the other sequences are compared. If this is set to 0 then the consensus sequence will be used as the reference sequence. By default the consensus sequence is used as the reference sequence.</td>
 <td>Any string</td>
 <td>0</td>
 </tr>
@@ -50,7 +50,7 @@
 <tr bgcolor="#FFFFCC">
 <td>-[no]bottom</td>
 <td>boolean</td>
-<td>If this is true then the reference sequence is displayed at the bottom of the alignment as well as at the top.</td>
+<td>If this is true then the reference sequence is displayed at the bottom of the alignment instead of the top.</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>

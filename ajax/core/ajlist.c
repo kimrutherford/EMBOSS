@@ -71,8 +71,8 @@ static void* listNodeItem(const AjPListNode node);
 static void listArrayTrace(void** array);
 static void listFreeSetExpand (void);
 
-   
-  
+
+
 
 /* @filesection ajlist *********************************************************
 **
@@ -91,6 +91,7 @@ static void listFreeSetExpand (void);
 **
 ** @nam2rule List
 */
+
 
 
 
@@ -173,6 +174,9 @@ __deprecated AjPList ajListCopy(const AjPList list)
 {
     return ajListNewListref(list);
 }
+
+
+
 
 /* @obsolete ajListNewArgs
 ** @remove Use explicit ajListPush calls instead
@@ -498,7 +502,7 @@ __deprecated void ajListPushList(AjPList list, AjPList* pmore)
 ** @nam3rule Sort Apply function to each node
 ** @nam4rule Two Apply second function to each equal node
 ** @nam5rule Three Apply third function to each equal node
-** @suffix Unique Remove non-unique valukes from the list
+** @suffix Unique Remove non-unique values from the list
 **
 ** @argrule * list [AjPList] List
 ** @argrule Map apply [void function] Function to apply
@@ -515,6 +519,9 @@ __deprecated void ajListPushList(AjPList list, AjPList* pmore)
 ** @fcategory modify
 **
 ******************************************************************************/
+
+
+
 
 /* @func ajListMap ************************************************************
 **
@@ -882,7 +889,7 @@ void ajListSortTwoUnique(AjPList list,
 	return;
 
     ajListSortTwo(list, sort1, sort2);
-    ajListTrace(list);
+    /*ajListTrace(list);*/
 
     iter = ajListIterNew(list);
 
@@ -903,7 +910,7 @@ void ajListSortTwoUnique(AjPList list,
     ajListIterDel(&iter);
 
     ajDebug("ajListUnique result %d items\n", list->Count);
-    ajListTrace(list);
+    /*ajListTrace(list);*/
 
     return;
 }
@@ -973,7 +980,7 @@ void ajListSortUnique(AjPList list,
     ajListIterDel(&iter);
 
     ajDebug("ajListSortUnique result %d items\n", list->Count);
-    ajListTrace(list);
+    /*ajListTrace(list);*/
 
     return;
 }
@@ -1014,6 +1021,9 @@ __deprecated void ajListUnique(AjPList list,
 **
 ******************************************************************************/
 
+
+
+
 /* @funcstatic listFreeSetExpand ***********************************************
 **
 ** Expand the list of free nodes
@@ -1045,7 +1055,7 @@ static void listFreeSetExpand (void)
 
 
 
-    
+
 /* @func ajListPop ************************************************************
 **
 ** remove the first node but set pointer to data first.
@@ -1175,11 +1185,12 @@ __deprecated AjBool ajListPopEnd(AjPList list, void** x)
 ** @nam3rule Mapread Apply function to each node without modifying list or data
 ** @nam3rule Mapfind Apply function to each node without modifying list
 **                   or data
-** @nam3rule Peek Pointer to nextvalue
+** @nam3rule Peek Pointer to next value
 ** @nam4rule PeekFirst Pointer to first value
 ** @nam4rule PeekLast Pointer to last value
 ** @nam4rule PeekNumber Pointer to numbered value
 ** @nam3rule Toarray Build array of values
+** @nam3rule Toindex Sort index array by list node values
 **
 ** @argrule * list [const AjPList] List
 ** @argrule Mapfind apply [AjBool function] Function to apply
@@ -1189,16 +1200,22 @@ __deprecated AjBool ajListPopEnd(AjPList list, void** x)
 ** @argrule PeekNumber ipos [ajuint] Position in list
 ** @argrule Peek x [void**] Value
 ** @argrule Toarray array [void***] Array of values, ending with NULL
+** @argrule Toindex lind [ajuint*] Populated ndex array to be sorted
+** @argrule Toindex sort1 [int* function] Function to compare two list items.
 **
 ** @valrule * [AjBool] True on success
 ** @valrule *Length [ajuint] List length
 ** @valrule *Mapfind [AjBool] True if function returns true
 ** @valrule *Mapread [void]
 ** @valrule *Toarray [ajuint] Array size, excluding final NULL
+** @valrule *Toindex [ajuint] Array size, excluding final NULL
 **
 ** @fcategory cast
 **
 ******************************************************************************/
+
+
+
 
 /* @func ajListGetLength ******************************************************
 **
@@ -1404,9 +1421,10 @@ AjBool ajListPeekLast(const AjPList list, void** x)
     if(!list->Count)
 	return ajFalse;
 
-    for(rest = list->First; rest->Next; rest = rest->Next)
-	if(!rest->Next->Next)
-	    break;
+    if(list->Last)
+	rest = list->Last->Prev;
+    else
+	rest = list->First;
 
     if(x)
 	*x = listNodeItem(rest);
@@ -1554,6 +1572,65 @@ static void listArrayTrace(void** array)
 
 
 
+/* @func ajListToindex ********************************************************
+**
+** Create an array of the pointers to the data.
+**
+** @param [r] list [const AjPList] List
+** @param [w] lind [ajuint*] Populated ndex array to be sorted
+** @param [f] sort1 [int* function] Function to compare two list items.
+** @return [ajuint] Size of index array.
+** @@
+******************************************************************************/
+
+ajuint ajListToindex(const AjPList list, ajuint* lind,
+                     int (*sort1) (const void*, const void*))
+{
+    ajuint n;
+    ajuint s;
+    ajuint i;
+    ajint j;
+    ajuint t;
+
+    AjPListNode *nodes = NULL;
+    ajuint* idx = NULL;
+
+    n = list->Count;
+
+    if(!n)
+        return 0;
+
+    ajListToarray(list, (void***) &nodes);
+    AJCNEW0(idx, n);
+
+    for(i = 0; i < n; i++)
+        idx[i] = i;
+
+    for(s=n/2; s>0; s /= 2)
+	for(i=s; i<n; ++i)
+        {
+	    for(j=i-s;
+                j>=0 && (sort1(&nodes[idx[j]],&nodes[idx[j+s]]) > 0);
+                j-=s)
+	    {
+		t = lind[j];
+		lind[j] = lind[j+s];
+		lind[j+s] = t;
+		t = idx[j];
+		idx[j] = idx[j+s];
+		idx[j+s] = t;
+	    }
+        }
+            
+    AJFREE(nodes);
+    AJFREE(idx);
+
+    return n;
+}
+
+
+
+
 /* @section Trace functions ***************************************************
 **
 ** @fdata [AjPList]
@@ -1571,6 +1648,7 @@ static void listArrayTrace(void** array)
 ** @fcategory misc
 **
 ******************************************************************************/
+
 
 
 
@@ -1833,7 +1911,6 @@ static void* listNodeItem(const AjPListNode node)
 
 
 
-
 /* @section Destructors *******************************************************
 **
 ** @fdata [AjPList]
@@ -1851,6 +1928,8 @@ static void* listNodeItem(const AjPListNode node)
 ** @fcategory delete
 **
 ******************************************************************************/
+
+
 
 
 /* @func ajListFree ***********************************************************
@@ -2107,7 +2186,6 @@ static AjBool listNodeDel(AjPListNode * pnode)
 ** @fcategory misc
 **
 ******************************************************************************/
- 
 
 
 
@@ -2147,6 +2225,9 @@ void ajListUnused(void** array)
 ** @fcategory misc
 */
 
+
+
+
 /* @func ajListExit ***********************************************************
 **
 ** Prints a summary of list usage with debug calls
@@ -2178,6 +2259,8 @@ void ajListExit(void)
     
     return;
 }
+
+
 
 
 /* @datasection [AjIList] List iterators **************************************
@@ -2428,6 +2511,9 @@ __deprecated AjIList ajListIterBackRead(const AjPList list)
 ** @fcategory use
 */
 
+
+
+
 /* @func ajListIterDone *******************************************************
 **
 ** Tests whether an iterator has completed yet.
@@ -2538,6 +2624,7 @@ __deprecated AjBool ajListIterBackDone(const AjIList iter)
 
 
 
+
 /* @func ajListIterDel *******************************************************
 **
 ** Destructor for a list iterator.
@@ -2599,6 +2686,8 @@ __deprecated AjBool ajListIterBackMore(const AjIList iter)
 **
 ** @fcategory modify
 */
+
+
 
 
 /* @func ajListIterGet ********************************************************
@@ -2723,6 +2812,8 @@ __deprecated void* ajListIterBackNext(AjIList iter)
 **
 ** @fcategory modify
 */
+
+
 
 
 /* @func ajListIterInsert ******************************************************
@@ -2919,6 +3010,7 @@ void ajListIterRewind(AjIList iter)
 
 
 
+
 /* @func ajListIterTrace ******************************************************
 **
 ** Traces a list iterator and validates it.
@@ -2952,6 +3044,7 @@ void ajListIterTrace(const AjIList iter)
 
 
 
+
 /* @datasection [AjPList] String lists *****************************************
 **
 ** Functions working on lists of string values
@@ -2959,6 +3052,8 @@ void ajListIterTrace(const AjIList iter)
 ** @nam2rule Liststr
 **
 ******************************************************************************/
+
+
 
 
 /* @section Constructors ******************************************************
@@ -2979,6 +3074,9 @@ void ajListIterTrace(const AjIList iter)
 ** @valrule * [AjPList] New list
 **
 ******************************************************************************/
+
+
+
 
 /* @func ajListstrNew *********************************************************
 **
@@ -3061,7 +3159,7 @@ __deprecated ajuint ajListstrClone(const AjPList list, AjPList newlist)
 }
 
 
-    
+
 
 /* @func ajListstrNewListref **************************************************
 **
@@ -3111,6 +3209,9 @@ __deprecated AjPList ajListstrCopy(const AjPList list)
 **
 ** @fcategory modify
 ******************************************************************************/
+
+
+
 
 /* @func ajListstrPush ********************************************************
 **
@@ -3221,6 +3322,9 @@ __deprecated void ajListstrPushList(AjPList list, AjPList* Plist)
 **
 ******************************************************************************/
 
+
+
+
 /* @func ajListstrMap *********************************************************
 **
 ** For each node in the list call function apply,
@@ -3283,6 +3387,8 @@ void ajListstrReverse(AjPList list)
 ** @fcategory cast
 **
 ******************************************************************************/
+
+
 
 
 /* @func ajListstrPop *********************************************************
@@ -3402,7 +3508,7 @@ __deprecated AjBool ajListstrPopEnd(AjPList list, AjPStr *x)
 ** @nam3rule Mapfind Apply function to each node without modifying list
 **                       or data
 ** @nam3rule Mapread Apply function to each node without modifying list or data
-** @nam3rule Peek Pointer to nextvalue
+** @nam3rule Peek Pointer to next value
 ** @nam4rule PeekFirst Pointer to first value
 ** @nam4rule PeekLast Pointer to last value
 ** @nam4rule PeekNumber Pointer to numbered value
@@ -3427,6 +3533,9 @@ __deprecated AjBool ajListstrPopEnd(AjPList list, AjPStr *x)
 ** @fcategory cast
 **
 ******************************************************************************/
+
+
+
 
 /* @func ajListstrGetLength ***************************************************
 **
@@ -3714,6 +3823,7 @@ __deprecated ajuint ajListstrToArrayApp(const AjPList list, AjPStr** array)
 
 
 
+
 /* @func ajListstrTrace *******************************************************
 **
 ** Traces through a string list and validates it
@@ -3811,6 +3921,8 @@ __deprecated AjPList ajListstrNewArgs(AjPStr x, ...)
 ** @fcategory delete
 **
 ******************************************************************************/
+
+
 
 
 /* @func ajListstrFree *********************************************************
@@ -3935,6 +4047,7 @@ void ajListstrFreeData(AjPList* Plist)
 
 
 
+
 /* @section stepping **********************************************************
 **
 ** @fdata [AjIList]
@@ -3948,6 +4061,8 @@ void ajListstrFreeData(AjPList* Plist)
 **
 ** @fcategory modify
 */
+
+
 
 
 /* @func ajListstrIterGet *****************************************************
@@ -4047,8 +4162,6 @@ AjPStr ajListstrIterGetBack(AjIList iter)
 **
 ** @fcategory modify
 */
-
-
 
 
 
@@ -4213,6 +4326,7 @@ __deprecated void ajListstrRemove(AjIList iter)
 ** @fcategory misc
 **
 ******************************************************************************/
+
 
 
 

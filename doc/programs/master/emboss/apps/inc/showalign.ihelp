@@ -1,5 +1,5 @@
 Display a multiple sequence alignment in pretty format
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqset     The sequence alignment to be displayed.
@@ -16,7 +16,7 @@ Version: EMBOSS:6.2.0
    -refseq             string     [0] If you give the number in the alignment
                                   or the name of a sequence, it will be taken
                                   to be the reference sequence. The reference
-                                  sequence is always show in full and is the
+                                  sequence is always shown in full and is the
                                   one against which all the other sequences
                                   are compared. If this is set to 0 then the
                                   consensus sequence will be used as the
@@ -25,7 +25,7 @@ Version: EMBOSS:6.2.0
                                   (Any string)
    -[no]bottom         boolean    [Y] If this is true then the reference
                                   sequence is displayed at the bottom of the
-                                  alignment as well as at the top.
+                                  alignment instead of the top.
    -show               menu       [N] What to show (Values: A (All of the
                                   sequences); I (Identities between the
                                   sequences); N (Non-identities between the

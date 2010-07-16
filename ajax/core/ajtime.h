@@ -7,6 +7,9 @@ extern "C"
 #define ajtime_h
 #include <time.h>
 
+
+
+
 /* @data AjPTime **************************************************************
 **
 ** AJAX time and data data structure. The same structure is used for both.

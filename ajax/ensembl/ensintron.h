@@ -20,7 +20,7 @@ extern "C"
 EnsPIntron ensIntronNewExons(EnsPExon exon1, EnsPExon exon2);
 
 EnsPIntron ensIntronNewObj(const EnsPIntron object);
-    
+
 EnsPIntron ensIntronNewRef(EnsPIntron intron);
 
 void ensIntronDel(EnsPIntron* Pintron);
@@ -40,7 +40,7 @@ AjBool ensIntronTrace(const EnsPIntron intron, ajuint level);
 
 
 
-#endif
+#endif /* ensintron_h */
 
 #ifdef __cplusplus
 }

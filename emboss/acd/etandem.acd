@@ -1,7 +1,8 @@
 application: etandem [
   documentation: "Finds tandem repeats in a nucleotide sequence"
   groups: "Nucleic:Repeats"
-  relations: "EDAM: Repeat sequence finding"
+  relations: "/edam/topic/0000157 Sequence composition"
+  relations: "/edam/operation/0000379 Repeat sequence identification"
 ]
 
 section: input [
@@ -12,7 +13,8 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "dna"
-    relations: "EDAM: Pure DNA sequence"                                   
+    relations: "/edam/data/0001215 Pure DNA sequence"        
+    relations: "/edam/data/0000849 Sequence record"                            
   ]
 
 endsection: input
@@ -28,7 +30,7 @@ section: required [
     minimum: "2"
     information: "Minimum repeat size"
     valid: "Integer, 2 or higher"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001249 Sequence length"
   ]
 
   integer: maxrepeat [
@@ -38,7 +40,7 @@ section: required [
     information: "Maximum repeat size"
     valid: "Integer, same as -minrepeat or higher"
     expected: "Same as -minrepeat"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001249 Sequence length"
   ]
 
 endsection: required
@@ -51,17 +53,17 @@ section: advanced [
   integer: threshold [
     default: "20"
     information: "Threshold score"
-    relations: "EDAM: Generic integer"                                     
+relations: "/edam/data/0002146 Threshold"
   ]
 
   boolean: mismatch [
     information: "Allow N as a mismatch"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: uniform [
     information: "Allow uniform consensus"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
 endsection: advanced
@@ -78,7 +80,7 @@ section: output [
               float:identity=Identity str:consensus=Consensus"
     rextension: "tan"
     precision: "0"
-    relations: "EDAM: EMBOSS report"                                       
+    relations:  "/edam/data/0001282 Repeat sequence map"
   ]
 
   outfile: origfile [
@@ -89,7 +91,7 @@ section: output [
     knowntype: "tandem output"
     information: "Sanger Centre program tandem output file
                   (optional)"
-    relations:  "EDAM: quicktandem repeat sequence map report"         
+    relations:  "/edam/data/0001282 Repeat sequence map"         
   ]
 
 endsection: output

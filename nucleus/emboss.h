@@ -7,6 +7,7 @@
 #include "ajhist.h"
 #include "ensembl.h"
 #include "ajseqdb.h"
+#include "ajmart.h"
 #include "ajacd.h"
 #include "embaln.h"
 #include "embcom.h"

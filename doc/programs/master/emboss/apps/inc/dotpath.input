@@ -161,12 +161,12 @@ DR   EPD; EP74485; HS_IER3.
 DR   GDB; 11515913.
 DR   GOA; P59942.
 DR   HGNC; 20668; MCCD1.
-DR   IMGT/HLA; HLA02802; V*01010102.
-DR   RFAM; RF00994; mir-1255.
-DR   UniProtKB/Swiss-Prot; P59942; MCCD1_HUMAN.
-XX
-CC   This sequence is conducted by Tokai University as a JST sequencing
-CC   Team.
+DR   IMGT/HLA; HLA02629; J*01:01:01:02.
+DR   IMGT/HLA; HLA02802; V*01:01:01:02.
+DR   RFAM; RF00017; SRP_euk_arch.
+DR   RFAM; RF00019; Y_RNA.
+DR   RFAM; RF00026; U6.
+DR   RFAM; RF00100; 7SK.
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>

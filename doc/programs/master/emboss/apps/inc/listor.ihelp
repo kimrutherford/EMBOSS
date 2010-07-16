@@ -1,5 +1,5 @@
 Write a list file of the logical OR of two sets of sequences
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-firstsequences]    seqset     Sequence set filename and optional format,

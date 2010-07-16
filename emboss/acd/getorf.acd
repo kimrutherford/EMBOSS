@@ -2,8 +2,9 @@ application: getorf [
   documentation: "Finds and extracts open reading frames
                   (ORFs)"
   groups: "Nucleic:Gene finding"
-  relations: "EDAM: Coding region prediction"
-  relations: "EDAM: DNA translation"
+  relations: "/edam/topic/0000109 Gene finding"
+  relations: "/edam/operation/0000436 Coding region prediction"
+  relations: "/edam/operation/0000371 DNA translation"
 ]
 
 section: input [
@@ -14,7 +15,9 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "DNA"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0001215 Pure DNA sequence"
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more"
   ]
 
 endsection: input
@@ -43,21 +46,21 @@ section: additional [
     delimiter: ";"
     codedelimiter: ":"
     information: "Code to use"
-    relations: "EDAM: Generic string array"                                
+    relations: "/edam/data/0002128 Genetic code name"
   ]
 
   integer: minsize [
     additional: "Y"
     default: "30"
     information: "Minimum nucleotide size of ORF to report"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001249 Sequence length"
   ]
 
   integer: maxsize [
     additional: "Y"
     default: "1000000"
     information: "Maximum nucleotide size of ORF to report"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001249 Sequence length"
   ]
 
   list: find [
@@ -85,7 +88,7 @@ section: additional [
            investigate the statistical properties of the regions around
            potential START or STOP codons. The last option assumes that ORF
            lengths are calculated between two STOP codons."
-    relations: "EDAM: Generic string array"                                
+    relations: "/edam/data/0002152 Rendering parameter"
   ]
 
 endsection: additional
@@ -102,13 +105,13 @@ section: advanced [
            usually code for Methionine, despite what the codon will code for
            when it is internal to a protein. This qualifier sets all such
            START codons to code for Methionine by default."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: circular [
     default: "N"
     information: "Is the sequence circular"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: reverse [
@@ -116,7 +119,7 @@ section: advanced [
     information: "Find ORFs in the reverse sequence"
     help: "Set this to be false if you do not wish to find ORFs in the
            reverse complement of the sequence."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   integer: flanking [
@@ -128,7 +131,7 @@ section: advanced [
            either side of that codon to output. If the region of flanking
            nucleotides crosses the start or end of the sequence, no output is
            given for this codon."
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001249 Sequence length"
   ]
 
 endsection: advanced
@@ -142,7 +145,9 @@ section: output [
     parameter: "Y"
     extension: "orf"
     type: "stopprotein"
-    relations: "EDAM: Protein sequence record"                             
+    relations: "/edam/data/0001208 Protein sequence"
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more"                             
   ]
 
 endsection: output

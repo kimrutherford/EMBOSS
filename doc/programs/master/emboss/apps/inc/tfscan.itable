@@ -45,9 +45,9 @@
 
 <tr bgcolor="#FFFFCC">
 <td>[-outfile]<br>(Parameter 2)</td>
-<td>outfile</td>
-<td>Output file name</td>
-<td>Output file</td>
+<td>report</td>
+<td>Output report file name</td>
+<td>Report output file</td>
 <td><i>&lt;*&gt;</i>.tfscan</td>
 </tr>
 
@@ -193,16 +193,96 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+<th align="left" colspan=5>"-outfile" associated report qualifiers
 </td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td> -odirectory2<br>-odirectory_outfile</td>
+<td> -rformat2<br>-rformat_outfile</td>
+<td>string</td>
+<td>Report format</td>
+<td>Any string</td>
+<td>seqtable</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -rname2<br>-rname_outfile</td>
+<td>string</td>
+<td>Base file name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -rextension2<br>-rextension_outfile</td>
+<td>string</td>
+<td>File name extension</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -rdirectory2<br>-rdirectory_outfile</td>
 <td>string</td>
 <td>Output directory</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -raccshow2<br>-raccshow_outfile</td>
+<td>boolean</td>
+<td>Show accession number in the report</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -rdesshow2<br>-rdesshow_outfile</td>
+<td>boolean</td>
+<td>Show description in the report</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -rscoreshow2<br>-rscoreshow_outfile</td>
+<td>boolean</td>
+<td>Show the score in the report</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -rstrandshow2<br>-rstrandshow_outfile</td>
+<td>boolean</td>
+<td>Show the nucleotide strand in the report</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -rusashow2<br>-rusashow_outfile</td>
+<td>boolean</td>
+<td>Show the full USA in the report</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -rmaxall2<br>-rmaxall_outfile</td>
+<td>integer</td>
+<td>Maximum total hits to report</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -rmaxseq2<br>-rmaxseq_outfile</td>
+<td>integer</td>
+<td>Maximum hits to report for one sequence</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">

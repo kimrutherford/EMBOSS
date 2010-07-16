@@ -1,5 +1,5 @@
 Extract regions from a sequence
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Sequence filename and optional format, or

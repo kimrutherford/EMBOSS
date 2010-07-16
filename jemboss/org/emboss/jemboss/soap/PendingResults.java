@@ -380,7 +380,7 @@ public class PendingResults
     ClassLoader cl = this.getClass().getClassLoader();
     ImageIcon jobIcon = new ImageIcon(cl.getResource("images/Job_manager_button.gif"));
 
-    jobButton = new JButton("(No Current Jobs)", jobIcon);
+    jobButton = new JButton("(No background jobs)", jobIcon);
     jobButton.setIconTextGap(50);
     jobButton.setHorizontalTextPosition(SwingConstants.RIGHT);
     jobButton.setToolTipText("Batch Job Manager");
@@ -433,9 +433,9 @@ public class PendingResults
   {
     if ((completed_jobs == 0) && (running_jobs == 0)) 
     {
-      JOptionPane.showMessageDialog(f,"You can only view pending results\n"
-				    + "if batch/background jobs have been\n"
-				    + "submitted in the current session.");
+      JOptionPane.showMessageDialog(f,
+				      "No batch/background jobs have been\n"
+				    + "submitted in current session.");
     } 
     else 
     {

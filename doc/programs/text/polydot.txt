@@ -53,7 +53,7 @@ Created polydot.ps
 Command line arguments
 
 Draw dotplots for all-against-all comparison of a sequence set
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequences]         seqset     File containing a sequence alignment
@@ -61,7 +61,8 @@ Version: EMBOSS:6.2.0
 *  -outfeat            featout    [unknown.gff] Output features UFO
    -graph              graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tek, tekt, none, data, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif, pdf,
+                                  svg, pdf, svg)
 
    Additional (Optional) qualifiers:
    -[no]boxit          boolean    [Y] Draw a box around each dotplot
@@ -218,9 +219,12 @@ See also
 
 Author(s)
 
-   Ian              Longden (il (c) sanger.ac.uk)
+   Ian              Longden formerly at:
    Sanger           Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
                     CB10 1SA, UK.
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

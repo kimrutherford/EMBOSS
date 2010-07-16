@@ -69,7 +69,7 @@ Output alignment [j01636.supermatcher]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Calculate approximate local pair-wise alignments of larger sequences
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         seqall     Sequence(s) filename and optional format, or
@@ -90,6 +90,8 @@ Version: EMBOSS:6.2.0
                                   'EDNAFULL' (for nucleic sequences). These
                                   files are found in the 'data' directory of
                                   the EMBOSS installation.
+   -minscore           float      [0] Minimum alignment score to report an
+                                  alignment. (Number 0.000 or more)
    -width              integer    [16] Alignment width (Integer 1 or more)
    -wordlen            integer    [6] Word length for initial matching
                                   (Integer 3 or more)
@@ -229,6 +231,14 @@ Version: EMBOSS:6.2.0
 <td>This is the scoring matrix file used when comparing sequences. By default it is the file 'EBLOSUM62' (for proteins) or the file 'EDNAFULL' (for nucleic sequences). These files are found in the 'data' directory of the EMBOSS installation.</td>
 <td>Comparison matrix file in EMBOSS data path</td>
 <td>EBLOSUM62 for protein<br>EDNAFULL for DNA</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-minscore</td>
+<td>float</td>
+<td>Minimum alignment score to report an alignment.</td>
+<td>Number 0.000 or more</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -1137,10 +1147,13 @@ None.
 </H2>
 
 
-Ian Longden (il&nbsp;&copy;&nbsp;sanger.ac.uk)
+Ian Longden formerly at:
 <br>
 Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
 Cambridge, CB10 1SA, UK.                      
+
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
 
 
 <H2>

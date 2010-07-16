@@ -1,8 +1,9 @@
 application: merger [
   documentation: "Merge two overlapping sequences"
   groups: "Alignment:Consensus"
-  relations: "EDAM: Global sequence alignment"
-  relations: "EDAM: Sequence merging"
+  relations: "/edam/topic/0000185 Pairwise sequence alignment"
+  relations: "/edam/operation/0000494 Global pairwise sequence alignment"
+  relations: "/edam/operation/0000232 Sequence merging"
 ]
 
 section: input [
@@ -13,13 +14,15 @@ section: input [
   sequence: asequence [
     parameter: "Y"
     type: "any"
-    relations: "EDAM: Sequence"                                            
+    relations: "/edam/data/0000848 Sequence"                                            
+    relations: "/edam/data/0000849 Sequence record" 
   ]
 
   sequence: bsequence [
     parameter: "Y"
     type: "@($(acdprotein) ? stopprotein : nucleotide)"
-    relations: "EDAM: Sequence"                                            
+    relations: "/edam/data/0000848 Sequence"        
+    relations: "/edam/data/0000849 Sequence record"                                     
   ]
 
   matrixf: datafile [
@@ -30,7 +33,7 @@ section: input [
            sequences. By default it is the file 'EBLOSUM62' (for proteins) or
            the file 'EDNAFULL' (for nucleic sequences). These files are
            found in the 'data' directory of the EMBOSS installation."
-    relations: "EDAM: Float comparison matrix"                             
+    relations: "/edam/data/0001447 Comparison matrix (floats)"                             
   ]
 
 endsection: input
@@ -46,7 +49,7 @@ section: additional [
     minimum: "0.0"
     maximum: "100.0"
     default: "@($(acdprotein)? 50.0 : 50.0 )"
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001397 Gap opening penalty"
   ]
 
   float: gapextend [
@@ -55,7 +58,7 @@ section: additional [
     minimum: "0.0"
     maximum: "10.0"
     default: "@($(acdprotein)? 5.0 : 5.0)"
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001398 Gap extension penalty"
   ]
 
 endsection: additional
@@ -71,12 +74,13 @@ section: output [
     minseqs: "2"
     maxseqs: "2"
     aglobal: "Y"
-    relations: "EDAM: Pairwise sequence alignment data"                    
+    relations: "/edam/data/0001381 Pairwise sequence alignment"                    
   ]
 
   seqout: outseq [
     parameter: "Y"
-    relations: "EDAM: Sequence"                                            
+    relations: "/edam/data/0000848 Sequence"                                            
+    relations: "/edam/data/0000849 Sequence record" 
   ]
 
 endsection: output

@@ -2,8 +2,10 @@ application: seqretsingle [
   documentation: "Reads and writes (returns) a single
                   sequence"
   groups: "Test"
-  relations: "EDAM: Sequence extraction and generation"
-  relations: "EDAM: Sequence file handling"  
+  relations: "/edam/topic/0000220 File handling"  
+  relations: "/edam/topic/0000155 Sequence retrieval"  
+  relations: "/edam/operation/0001813 Sequence retrieval"  
+  relations: "/edam/operation/0002121 Sequence file handling"  
 ]
 
 section: input [
@@ -13,14 +15,15 @@ section: input [
 
   boolean: feature [
     information: "Use feature information"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   sequence: sequence [
     parameter: "Y"
     features: "$(feature)"
     type: "gapany"
-    relations: "EDAM: Sequence"                                            
+    relations: "/edam/data/0000848 Sequence"
+    relations: "/edam/data/0000849 Sequence record" 
   ]
 
 endsection: input
@@ -33,7 +36,8 @@ section: output [
   seqout: outseq [
     parameter: "Y"
     features: "$(feature)"
-    relations: "EDAM: Sequence"                                            
+    relations: "/edam/data/0000848 Sequence"        
+    relations: "/edam/data/0000849 Sequence record"                                     
   ]
 
 endsection: output

@@ -86,7 +86,7 @@ Created cpgplot.ps
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Identify and plot CpG islands in nucleotide sequence(s)
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -96,7 +96,7 @@ Version: EMBOSS:6.2.0
                                   within a window whose size is set by this
                                   parameter. The window is moved down the
                                   sequence and these statistics are calculated
-                                  at each postition that the window is moved
+                                  at each position that the window is moved
                                   to. (Integer 1 or more)
    -minlen             integer    [200] This sets the minimum length that a
                                   CpG island has to be before it is reported.
@@ -116,7 +116,8 @@ Version: EMBOSS:6.2.0
                                   details of any CpG islands that are found.
 *  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tek, tekt, none, data, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif, pdf,
+                                  svg, pdf, svg)
   [-outfeat]           featout    [unknown.gff] File for output features
 
    Additional (Optional) qualifiers: (none)
@@ -215,7 +216,7 @@ Version: EMBOSS:6.2.0
 <tr bgcolor="#FFFFCC">
 <td>-window</td>
 <td>integer</td>
-<td>The percentage CG content and the Observed frequency of CG is calculated within a window whose size is set by this parameter. The window is moved down the sequence and these statistics are calculated at each postition that the window is moved to.</td>
+<td>The percentage CG content and the Observed frequency of CG is calculated within a window whose size is set by this parameter. The window is moved down the sequence and these statistics are calculated at each position that the window is moved to.</td>
 <td>Integer 1 or more</td>
 <td>100</td>
 </tr>
@@ -256,7 +257,7 @@ Version: EMBOSS:6.2.0
 <td>-graph</td>
 <td>xygraph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif, pdf, svg, pdf, svg</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -716,9 +717,12 @@ RL   Submitted (26-AUG-1996) to the EMBL/GenBank/DDBJ databases.
 RL   Biochemistry &amp; Molecular Biology, Merck Frosst Center for Therapeutic
 RL   Research, P. O. Box 1005, Pointe Claire - Dorval, Quebec H9R 4P8, Canada
 XX
-DR   ASTD; TRAN00000010928.
+DR   Ensembl-GO; ENSRNOESTG00000830631; Rattus_norvegicus.
 DR   Ensembl-Gn; ENSRNOG00000004094; Rattus_norvegicus.
+DR   Ensembl-Gn; ENSRNOG00000017743; Rattus_norvegicus.
+DR   Ensembl-TO; ENSRNOESTT00000830623; Rattus_norvegicus.
 DR   Ensembl-Tr; ENSRNOT00000005470; Rattus_norvegicus.
+DR   Ensembl-Tr; ENSRNOT00000023860; Rattus_norvegicus.
 XX
 FH   Key             Location/Qualifiers
 FH
@@ -732,6 +736,10 @@ FT                   /codon_start=1
 FT                   /product="EP1 prostanoid receptor"
 FT                   /note="family 1 G-protein coupled receptor"
 FT                   /db_xref="GOA:P70597"
+FT                   /db_xref="InterPro:IPR000276"
+FT                   /db_xref="InterPro:IPR000708"
+FT                   /db_xref="InterPro:IPR001244"
+FT                   /db_xref="InterPro:IPR008365"
 FT                   /db_xref="InterPro:IPR017452"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P70597"
 FT                   /protein_id="AAB07735.1"
@@ -800,7 +808,7 @@ U68037 from 1 to 1218
 ##sequence-region U68037 1 924
 #!Date 2010-01-15
 #!Type DNA
-#!Source-version EMBOSS 6.2.0
+#!Source-version EMBOSS 6.3.0
 U68037	cpgplot	sequence_feature	104	509	0.000	+	.	ID="U68037.1"
 U68037	cpgplot	sequence_feature	596	924	0.000	+	.	ID="U68037.2"
 </pre>
@@ -946,10 +954,12 @@ sequences that MIGHT contain an island.
 <H2>
     Author(s)
 </H2>
-Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
+Alan Bleasby 
 <br>
 European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
 
 <H2>
     History

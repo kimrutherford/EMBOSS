@@ -1,7 +1,8 @@
 application: octanol [
   documentation: "Draw a White-Wimley protein hydropathy plot"
   groups: "Protein:Composition"
-  relations: "EDAM: Protein sequence hydropathy calculation"
+  relations: "/edam/topic/0000137 Protein hydropathy"
+  relations: "/edam/operation/0000401 Protein sequence hydropathy calculation"
 ]
 
 section: input [
@@ -12,7 +13,8 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "protein"
-    relations: "EDAM: Pure protein sequence"                               
+    relations: "/edam/data/0001219 Pure protein sequence"              
+    relations: "/edam/data/0000849 Sequence record"                  
   ]
 
   datafile: datafile [
@@ -20,7 +22,7 @@ section: input [
     default: "Ewhite-wimley.dat"
     information: "White-Wimley data file"
     knowntype: "white wimley datafile"
-    relations:  "EDAM: Amino acid White-Wimley data"                   
+    relations:  "/edam/data/0001507 Amino acid White-Wimley data"                   
   ]
 
 endsection: input
@@ -36,7 +38,7 @@ section: additional [
     default: "19"
     minimum: "1"
     maximum: "200"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001251 Window size"
   ]
 
 endsection: additional
@@ -52,28 +54,28 @@ section: output [
     gxtitle: "$(sequence.name)"
     gytitle: "Total Free Energy (Kcal/mol)"
     gtitle: "White-Wimley Plot"
-    relations: "EDAM: EMBOSS graph file"                                   
+    relations: "/edam/data/0001522 Protein sequence hydropathy plot"                                   
   ]
 
   boolean: plotoctanol [
     additional: "Y"
     default: "N"
     information: "Display the octanol plot"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: plotinterface [
     additional: "Y"
     default: "N"
     information: "Display the interface plot"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: plotdifference [
     additional: "Y"
     default: "Y"
     information: "Display the difference plot"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
 endsection: output

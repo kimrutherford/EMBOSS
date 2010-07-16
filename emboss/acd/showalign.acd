@@ -1,7 +1,9 @@
 application: showalign [
   documentation: "Display a multiple sequence alignment in pretty format"
   groups: "Alignment:Multiple, Display"
-  relations: "EDAM: Sequence alignment reformatting"
+  relations: "/edam/topic/0000182 Sequence alignment"
+  relations: "/edam/topic/0000091 Database and file management"
+  relations: "/edam/operation/0000562 Sequence alignment reformatting"
 ]
 
 section: input [
@@ -14,7 +16,7 @@ section: input [
     type: "gapany"
     aligned: "Y"
     help: "The sequence alignment to be displayed."
-    relations: "EDAM: Sequence alignment data"                             
+    relations: "/edam/data/0000863 Sequence alignment"                             
   ]
 
   matrix: matrix [
@@ -25,7 +27,7 @@ section: input [
            sequences. By default it is the file 'EBLOSUM62' (for proteins) or
            the file 'EDNAFULL' (for nucleic sequences). These files are
            found in the 'data' directory of the EMBOSS installation."
-    relations: "EDAM: Integer comparison matrix"                           
+    relations: "/edam/data/0001446 Comparison matrix (integers)"                           
   ]
 
 endsection: input
@@ -42,13 +44,13 @@ section: additional [
                   sequence"
     help: "If you give the number in the alignment or the name of a
            sequence, it will be taken to be the reference sequence. The
-           reference sequence is always show in full and is the one against
+           reference sequence is always shown in full and is the one against
            which all the other sequences are compared. If this is set to 0
            then the consensus sequence will be used as the reference
            sequence. By default the consensus sequence is used as the
            reference sequence."
     knowntype: "sequence id input"
-    relations:  "EDAM: Sequence unique identifier"                     
+    relations:  "/edam/data/0001063 Sequence identifier"                     
   ]
 
   boolean: bottom [
@@ -56,8 +58,8 @@ section: additional [
     default: "Y"
     information: "Display the reference sequence at the bottom"
     help: "If this is true then the reference sequence is displayed at
-           the bottom of the alignment as well as at the top."
-    relations: "EDAM: Generic boolean"                                     
+           the bottom of the alignment instead of the top."
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   list: show [
@@ -73,7 +75,7 @@ section: additional [
     delimiter: ","
     codedelimiter: ":"
     information: "What to show"
-    relations: "EDAM: Generic string array"                                
+    relations: "/edam/data/0001396 Aligned sequence order"
   ]
 
   list: order [
@@ -87,7 +89,7 @@ section: additional [
     delimiter: ","
     codedelimiter: ":"
     information: "Output order of the sequences"
-    relations: "EDAM: Generic string array"                                
+    relations: "/edam/data/0001396 Aligned sequence order"
   ]
 
   boolean: similarcase [
@@ -101,7 +103,7 @@ section: additional [
            non-identical, non-similar residues will be changed to lower-case.
            If this is False then no change to the case of the residues is
            made on the basis of their similarity to the reference sequence."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: consensus [
@@ -109,7 +111,7 @@ section: additional [
     default: "Y"
     information: "Display the consensus line"
     help: "If this is true then the consensus line is displayed."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
 endsection: additional
@@ -133,7 +135,7 @@ section: advanced [
            1,5,8,10,23,45,57,99"
     expected: "If this is left blank, then the sequence case is
                left alone."
-    relations: "EDAM: Generic integer range"                               
+    relations: "/edam/data/0001017 Sequence range"
   ]
 
   boolean: number [
@@ -142,7 +144,7 @@ section: advanced [
     help: "If this option is true then a line giving the positions in
            the alignment is displayed every 10 characters above the
            alignment."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: ruler [
@@ -150,14 +152,14 @@ section: advanced [
     information: "Display ruler"
     help: "If this option is true then a ruler line marking every 5th
            and 10th character in the alignment is displayed."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   integer: width [
     default: "60"
     minimum: "1"
     information: "Width of sequence to display"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0002136 Sequence width"
   ]
 
   integer: margin [
@@ -172,14 +174,14 @@ section: advanced [
            then the minimum margin width that will allow all the sequence
            names to be displayed in full plus a space at the end of the name
            will automatically be selected."
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0002152 Rendering parameter"
   ]
 
   boolean: html [
     default: "N"
     information: "Use HTML formatting"
     outputmodifier: "Y"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   range: highlight [
@@ -196,7 +198,7 @@ section: advanced [
            1-100 green 120-156 red \
            A file of ranges to colour (one range per line) can be specified
            as '@filename'."
-    relations: "EDAM: Generic integer range"                               
+    relations: "/edam/data/0001017 Sequence range"
   ]
 
   float: plurality [
@@ -207,7 +209,7 @@ section: advanced [
     help: "Set a cut-off for the % of positive scoring matches below
            which there is no consensus. The default plurality is taken as 50%
            of the total weight of all the sequences in the alignment."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0002146 Threshold"                                       
   ]
 
   float: setcase [
@@ -218,7 +220,7 @@ section: advanced [
            above which the consensus is in upper-case and below which the
            consensus is in lower-case. By default this is set to be half of
            the (weight-adjusted) number of sequences in the alignment."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0002146 Threshold"
   ]
 
   float: identity [
@@ -231,7 +233,7 @@ section: advanced [
            identities at a position for it to give a consensus. Therefore, if
            this is set to 100% only columns of identities contribute to the
            consensus."
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0002146 Threshold"                                       
   ]
 
   boolean: gaps [
@@ -240,7 +242,7 @@ section: advanced [
     help: "If this option is true then gap characters can appear in
            the consensus. The alternative is 'N' for nucleotide, or 'X' for
            protein"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
 endsection: advanced
@@ -253,7 +255,7 @@ section: output [
   outfile: outfile [
     parameter: "Y"
     knowntype: "showalign output"
-    relations:  "EDAM:Multiple sequence alignment record"                  
+    relations:  "/edam/data/0001382 Multiple sequence alignment"                  
   ]
 
 endsection: output

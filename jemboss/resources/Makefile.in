@@ -37,10 +37,11 @@ subdir = jemboss/resources
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/amd64.m4 \
-	$(top_srcdir)/m4/general.m4 $(top_srcdir)/m4/java.m4 \
-	$(top_srcdir)/m4/lf_x11.m4 $(top_srcdir)/m4/mysql.m4 \
-	$(top_srcdir)/m4/pngdriver.m4 $(top_srcdir)/m4/postgresql.m4 \
-	$(top_srcdir)/m4/sgi.m4 $(top_srcdir)/configure.in
+	$(top_srcdir)/m4/general.m4 $(top_srcdir)/m4/hpdf.m4 \
+	$(top_srcdir)/m4/java.m4 $(top_srcdir)/m4/lf_x11.m4 \
+	$(top_srcdir)/m4/mysql.m4 $(top_srcdir)/m4/pngdriver.m4 \
+	$(top_srcdir)/m4/postgresql.m4 $(top_srcdir)/m4/sgi.m4 \
+	$(top_srcdir)/configure.in
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -100,6 +101,7 @@ ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EHAVEANT = @EHAVEANT@
 EMBOSS_TOP = @EMBOSS_TOP@
+ESYSTEMLIBS = @ESYSTEMLIBS@
 EXEEXT = @EXEEXT@
 FGREP = @FGREP@
 GREP = @GREP@
@@ -139,6 +141,7 @@ PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
 PACKAGE_NAME = @PACKAGE_NAME@
 PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
+PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PCRE_DATE = @PCRE_DATE@
@@ -228,7 +231,7 @@ top_srcdir = @top_srcdir@
 # an 'ant' build of a standalone setup) and, if so, copy it.
 #
 EMLOCDATA = $(CURDIR)/../../emboss/data
-pkgdata_DATA = jemboss.properties readme.html readmeAlign.html readmeDNADraw.html results.html version filemgr.html seqList.html
+pkgdata_DATA = readme.html readmeAlign.html readmeDNADraw.html results.html version filemgr.html seqList.html
 all: all-am
 
 .SUFFIXES:
@@ -439,25 +442,24 @@ uninstall-am: uninstall-pkgdataDATA
 	ps ps-am uninstall uninstall-am uninstall-pkgdataDATA
 
 install-exec-hook:
-	  @if test "${JAVA_OK}" = "yes" ; then \
-	          (if test -d $(DESTDIR)$(prefix)/share/$(PACKAGE)/jemboss/resources; then \
-			echo "resources exists"; \
-		   else \
-			mkdir $(DESTDIR)$(prefix)/share/$(PACKAGE)/jemboss/resources; \
-		   fi); \
-	          rm -f   $(DESTDIR)$(prefix)/share/$(PACKAGE)/jemboss/resources/acdstore.jar; \
-		  cd $(EMBOSS_TOP)/emboss/acd; \
-		  jar cvf $(DESTDIR)$(prefix)/share/$(PACKAGE)/jemboss/resources/acdstore.jar *.acd; \
-                  rm -f   $(DESTDIR)$(prefix)/share/$(PACKAGE)/jemboss/resources/resources.jar; \
-		  [ -d $(DESTDIR)$(prefix)/share/$(PACKAGE)/data ] || mkdir -p $(DESTDIR)$(prefix)/share/$(PACKAGE)/data; \
-                  jar cvf $(DESTDIR)$(prefix)/share/$(PACKAGE)/jemboss/resources/resources.jar $(EMLOCDATA)/EPAM* $(EMLOCDATA)/EBLOSUM* $(EMLOCDATA)/ENUC*; \
-	  else \
+	(if test -d $(DESTDIR)$(prefix)/share/$(PACKAGE)/jemboss/resources ; then \
+		echo "resources folder exists"; \
+	else \
+		mkdir -p $(DESTDIR)$(prefix)/share/$(PACKAGE)/jemboss/resources; \
+	fi);
+	echo "Preparing $(DESTDIR)$(prefix)/share/$(PACKAGE)/jemboss/resources/jemboss.properties"; \
+	sed "s|user.auth=true|user.auth=false|" jemboss.properties | sed "s|jemboss.server=true|jemboss.server=false|" | sed "s|/packages/emboss/STABLE|$(prefix)|" > jemboss.properties.new;
+@AMPDF_FALSE@	echo "embossHavePDF=false" >> jemboss.properties.new;
+	mv -f -v jemboss.properties.new $(DESTDIR)$(prefix)/share/$(PACKAGE)/jemboss/resources/jemboss.properties;
+	@if test "${JAVA_OK}" = "yes" ; then \
+		rm -f   $(DESTDIR)$(prefix)/share/$(PACKAGE)/jemboss/resources/acdstore.jar; \
+		cd $(EMBOSS_TOP)/emboss/acd; \
+		jar cvf $(DESTDIR)$(prefix)/share/$(PACKAGE)/jemboss/resources/acdstore.jar *.acd; \
+		rm -f   $(DESTDIR)$(prefix)/share/$(PACKAGE)/jemboss/resources/resources.jar; \
+		[ -d $(DESTDIR)$(prefix)/share/$(PACKAGE)/data ] || mkdir -p $(DESTDIR)$(prefix)/share/$(PACKAGE)/data; \
+		jar cvf $(DESTDIR)$(prefix)/share/$(PACKAGE)/jemboss/resources/resources.jar $(EMLOCDATA)/EPAM* $(EMLOCDATA)/EBLOSUM* $(EMLOCDATA)/EDNA*; \
+	else \
 		(if test -f resources.jar ; then \
-	            (if test -d $(DESTDIR)$(prefix)/share/$(PACKAGE)/jemboss/resources ; then \
-			  echo "resources exists"; \
-		     else \
-			  mkdir $(DESTDIR)$(prefix)/share/$(PACKAGE)/jemboss/resources; \
-		     fi); \
 		  cp resources.jar $(DESTDIR)$(prefix)/share/$(PACKAGE)/jemboss/resources; \
 		fi); \
 	fi

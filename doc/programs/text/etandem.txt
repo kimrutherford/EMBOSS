@@ -75,7 +75,7 @@ Output report [l46634.tan]:
 Command line arguments
 
 Finds tandem repeats in a nucleotide sequence
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Nucleotide sequence filename and optional
@@ -230,7 +230,7 @@ Output file format
    The results can be output in one of several styles by using the
    command-line qualifier -rformat xxx, where 'xxx' is replaced by the
    name of the required format. The available format names are: embl,
-   genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+   genbank, gff, pir, swiss, debug, listfile, dbmotif, diffseq, excel,
    feattable, motif, regions, seqtable, simple, srs, table, tagseq
 
    See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
@@ -320,14 +320,18 @@ See also
 Authors
 
    This program was originally written by Richard Durbin
-   (rd (c) sanger.ac.uk)
    Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
    CB10 1SA, UK.
 
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
    This application was modified for inclusion in EMBOSS by Peter Rice
-   (pmr (c) ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

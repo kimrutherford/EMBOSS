@@ -1,8 +1,10 @@
 application: seqrettype [
   documentation: "Reads and writes (returns) sequences"
   groups: "Edit"
-  relations: "EDAM: Sequence extraction and generation"
-  relations: "EDAM: Sequence file handling"
+  relations: "/edam/topic/0000220 File handling"  
+  relations: "/edam/topic/0000155 Sequence retrieval"
+  relations: "/edam/operation/0001813 Sequence retrieval"
+  relations: "/edam/operation/0002121 Sequence file handling"
 ]
 
 section: input [
@@ -12,7 +14,7 @@ section: input [
 
   boolean: feature [
     information: "Use feature information"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   list: type [
@@ -31,14 +33,16 @@ section: input [
              stopproteinstandard:protein sequence with a possible stop but no
              selenocysteine; gapany:any valid sequence with gaps"
     information: "Sequence type"
-    relations: "EDAM: Generic string array"                                
+    relations: "/edam/data/0001110 EMBOSS sequence type"                                
   ]
 
   seqall: sequence [
     parameter: "Y"
     features: "$(feature)"
     type: "$(type)"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0000848 Sequence" 
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more" 
   ]
 
 endsection: input
@@ -50,7 +54,7 @@ section: advanced [
 
   boolean: firstonly [
     information: "Read one sequence and stop"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
 endsection: advanced
@@ -63,7 +67,9 @@ section: output [
   seqoutall: outseq [
     parameter: "Y"
     features: "$(feature)"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0000848 Sequence"
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more"
   ]
 
 endsection: output

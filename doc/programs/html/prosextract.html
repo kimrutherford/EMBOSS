@@ -74,14 +74,18 @@ created after prosextract is run.
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Processes the PROSITE motif database for use by patmatmotifs
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-prositedir]        directory  PROSITE database directory
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
-   Associated qualifiers: (none)
+   Associated qualifiers:
+
+   "-prositedir" associated qualifiers
+   -extension1         string     Default file extension
+
    General qualifiers:
    -auto               boolean    Turn off prompts
    -stdout             boolean    Write first file to standard output
@@ -144,8 +148,17 @@ Version: EMBOSS:6.2.0
 <th align="left" colspan=5>Associated qualifiers</th>
 </tr>
 
-<tr>
-<td colspan=5>(none)</td>
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-prositedir" associated directory qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -extension1<br>-extension_prositedir</td>
+<td>string</td>
+<td>Default file extension</td>
+<td>Any string</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -379,12 +392,13 @@ Always exits with status 0
 </H2>
 
 
-Sinead O'Leary (current e-mail address unknown)
-<br>
-while she was at:
+Sinead O'Leary formerly at:
 <br>
 HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
 
+
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
 
 
 <H2>

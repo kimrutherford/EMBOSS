@@ -186,19 +186,21 @@ NamOAttr namDbAttrs[] =
     {"method", "", "access method (required, at some level)"},
     {"type", "", "database type 'Nucleotide', 'Protein', etc (required)"},
 
+    {"accession", "", "secondary identifier field"},
     {"app", "", "external application commandline (APP, EXTERNAL)"},
     {"appall", "", "external commandline for 'methodall' (APP, EXTERNAL)"},
     {"appentry", "", "external commandline for 'methodentry' (APP, EXTERNAL)"},
     {"appquery", "", "external commandline for 'methodquery' (APP, EXTERNAL)"},
 
     {"caseidmatch", "N", "match exact case of entry identifier"},
-    {"command", "", "command line to return entry/ies"},
+/*    {"command", "", "command line to return entry/ies"},*/
     {"comment", "", "text comment for the DB definition"},
     {"dbalias", "", "database name to be used by access method if different"},
-    {"description", "", "short database description"},
+/*    {"description", "", "short database description"},*/
     {"directory", "", "data directory"},
     {"exclude", "", "wildcard filenames to exclude from 'filename'"},
-    {"fields", "", "extra database fields available, ID and ACC are standard"},
+    {"fields", "", "extra database query fields, ID and ACC are standard"},
+    {"filters", "", "database query filters to apply to all retrievals"},
     {"filename", "", "(wildcard) database filename"},
 
     {"formatall", "", "database entry format for 'methodall' access"},
@@ -207,7 +209,7 @@ NamOAttr namDbAttrs[] =
 
     {"hasaccession", "Y", "database has an acc field as an alternate id"},
     {"httpversion", "", "HTTP version for GET requests (URL, SRSWWW)"},
-    {"identifier", "", "standard identifier (defaults to name)"},
+    {"identifier", "", "standard identifier field"},
     {"indexdirectory", "", "Index directory, defaults to data 'directory'"},
 
     {"methodall", "", "access method for all entries"},
@@ -217,7 +219,10 @@ NamOAttr namDbAttrs[] =
     {"proxy", "", "http proxy server, or ':' to cancel a global proxy "
 	          "(URL, SRSWWW)"},
     {"release", "", "release of the database, comment only"},
+    {"return", "", "names fields to be returned"},
+    {"sequence", "", "sequence field to be returned"},
     {"url", "", "URL skeleton for entry level access (URL, SRSWWW)"},
+    {"serverversion", "", "Version of database server"},
     {NULL, NULL, NULL}
 };
 
@@ -225,7 +230,7 @@ NamOAttr namRsAttrs[] =
 {
     {"type", "", "resource type (required)"},
 
-    {"identifier", "", "standard identifier (defaults to name)"},
+/*    {"identifier", "", "standard identifier (defaults to name)"},*/
     {"release", "", "release of the resource"},
 
     {"idlen", "",  "maximum ID length"},
@@ -338,20 +343,20 @@ static AjBool namVarResolve(AjPStr* var);
 **
 ** Deletes a variable, database, or resource entry from the internal table.
 **
-** @param [d] pentry [NamPEntry*] The entry to be deleted.
+** @param [d] Pentry [NamPEntry*] The entry to be deleted.
 ** @param [r] which [ajint] Internal table entry type
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void namEntryDelete(NamPEntry* pentry, ajint which)	
+static void namEntryDelete(NamPEntry* Pentry, ajint which)
 {
 
     ajint j;
     AjPStr* attrs;
     NamPEntry entry;
 
-    entry = *pentry;
+    entry = *Pentry;
 
     ajStrDel(&entry->name);
     ajStrDel(&entry->value);
@@ -771,7 +776,12 @@ AjBool ajNamDbDetails(const AjPStr name, AjPStr* type, AjBool* id,
 	    if(ajStrGetLen(dbattr[i]))
 	    {
 		if(!strcmp("type", namDbAttrs[i].Name))
-		    ajStrAssignS(type, dbattr[i]);
+                {
+                    if(ajStrPrefixCaseC(dbattr[i], "N"))
+                        ajStrAssignC(type, "Nucleotide");
+                    else
+                        ajStrAssignC(type, "Protein");
+                }
 
 		if(!strcmp("method", namDbAttrs[i].Name))
 		{
@@ -876,50 +886,17 @@ AjBool ajNamDbDetails(const AjPStr name, AjPStr* type, AjBool* id,
 
 static ajint namMethod2Scope(const AjPStr method)
 {
-
+    AjPSeqAccess methoddata;
     ajint result = 0;
 
-    if(!ajStrCmpC(method, "dbfetch"))
-	result = METHOD_ENTRY;
-    else if(!ajStrCmpC(method, "emboss"))
-	result = (METHOD_ENTRY | METHOD_QUERY | METHOD_ALL);
-    else if(!ajStrCmpC(method, "emblcd"))
-	result = (METHOD_ENTRY | METHOD_QUERY | METHOD_ALL);
-    else if(!ajStrCmpC(method, "srs"))
-	result = (METHOD_ENTRY | METHOD_QUERY);
-    else if(!ajStrCmpC(method, "mrs"))
-	result = (METHOD_ENTRY | METHOD_QUERY);
-    else if(!ajStrCmpC(method, "mrs3"))
-	result = (METHOD_ENTRY | METHOD_QUERY);
-    else if(!ajStrCmpC(method, "srsfasta"))
-	result = (METHOD_ENTRY | METHOD_QUERY);
-    else if(!ajStrCmpC(method, "srswww"))
-	result = METHOD_ENTRY;
-    else if(!ajStrCmpC(method, "mrs"))
-	result = (METHOD_ENTRY | METHOD_QUERY | METHOD_ALL);
-    else if(!ajStrCmpC(method, "entrez"))
-	result = (METHOD_ENTRY | METHOD_QUERY);
-    else if(!ajStrCmpC(method, "seqhound"))
-	result = (METHOD_ENTRY | METHOD_QUERY);
-    else if(!ajStrCmpC(method, "url"))
-	result = METHOD_ENTRY;
-    else if(!ajStrCmpC(method, "app"))
-	result = (METHOD_ENTRY | METHOD_QUERY | METHOD_ALL);
-    else if(!ajStrCmpC(method, "external"))
-	result = (METHOD_ENTRY | METHOD_QUERY | METHOD_ALL);
-    else if(!ajStrCmpC(method, "direct"))
-	result = (METHOD_ALL | SLOW_QUERY | SLOW_ENTRY );
-    else if(!ajStrCmpC(method, "gcg"))
-	result = (METHOD_ENTRY | METHOD_QUERY | METHOD_ALL);
-    else if(!ajStrCmpC(method, "embossgcg"))
-	result = (METHOD_ENTRY | METHOD_QUERY | METHOD_ALL);
-    else if(!ajStrCmpC(method, "blast"))
-	result = (METHOD_ENTRY | METHOD_QUERY | METHOD_ALL);
-    /* not in ajseqdb seqAccess list */
-    /*
-       else if(!ajStrCmpC(method, "corba"))
-       result = (METHOD_ENTRY | METHOD_QUERY | METHOD_ALL);
-       */
+    methoddata = ajCallTableGetS(seqDbMethods, method);
+
+    if(methoddata->Entry)
+	result |= METHOD_ENTRY;
+    if(methoddata->Query)
+	result |= METHOD_QUERY;
+    if(methoddata->All)
+	result |= METHOD_ALL;
 
     return result;
 }
@@ -1031,7 +1008,7 @@ void ajNamDebugResources(void)
 
 /* @func ajNamDebugVariables *********************************************
 **
-** Writes a simple debug report of all envornment variables
+** Writes a simple debug report of all environment variables
 ** in the internal table.
 **
 ** @return [void]
@@ -1769,7 +1746,7 @@ AjBool ajNamGetValueC(const char* name, AjPStr* value)
     AjBool hadPrefix     = ajFalse;
     AjBool ret           = ajFalse;
     
-    if(ajCharPrefixS(name, namPrefixStr)) /* may already have the prefix */
+    if(ajCharPrefixCaseS(name, namPrefixStr)) /* may already have the prefix */
     {
 	ajStrAssignC(&namValNameTmp, name);
 	hadPrefix = ajTrue;
@@ -1814,7 +1791,25 @@ AjBool ajNamGetValueC(const char* name, AjPStr* value)
 	    return ajTrue;
 	}
     }
+
+    if(ajStrMatchC(namValNameTmp, "EMBOSS_INSTALLDIRECTORY"))
+    {
+        ajStrAssignS(value, ajNamValueInstalldir());
+        return ajTrue;
+    }
     
+    if(ajStrMatchC(namValNameTmp, "EMBOSS_ROOTDIRECTORY"))
+    {
+        ajStrAssignS(value, ajNamValueRootdir());
+        return ajTrue;
+    }
+    
+    if(ajStrMatchC(namValNameTmp, "EMBOSS_BASEDIRECTORY"))
+    {
+        ajStrAssignS(value, ajNamValueBasedir());
+        return ajTrue;
+    }
+
     return ajFalse;
 }
 
@@ -2607,6 +2602,7 @@ AjBool ajNamDbData(AjPSeqQuery qry)
     NamPEntry data;
 
     const AjPStr* dbattr;
+    AjPStr dbtype = NULL;
 
     data = ajTableFetch(namDbMasterTable, ajStrGetPtr(qry->DbName));
 
@@ -2617,7 +2613,11 @@ AjBool ajNamDbData(AjPSeqQuery qry)
 
     /* general defaults */
 
-    namDbSetAttrStr(dbattr, "type", &qry->DbType);
+    namDbSetAttrStr(dbattr, "type", &dbtype);
+    if(ajStrPrefixCaseC(dbtype, "n"))
+        ajStrAssignC(&qry->DbType, "Nucleotide");
+    else
+        ajStrAssignC(&qry->DbType, "Protein");
     namDbSetAttrStr(dbattr, "method", &qry->Method);
     namDbSetAttrStr(dbattr, "format", &qry->Formatstr);
     namDbSetAttrStr(dbattr, "app", &qry->Application);
@@ -2630,8 +2630,14 @@ AjBool ajNamDbData(AjPSeqQuery qry)
     namDbSetAttrStr(dbattr, "fields", &qry->DbFields);
     namDbSetAttrStr(dbattr, "proxy", &qry->DbProxy);
     namDbSetAttrStr(dbattr, "httpversion", &qry->DbHttpVer);
+    namDbSetAttrStr(dbattr, "identifier", &qry->DbIdentifier);
+    namDbSetAttrStr(dbattr, "accession", &qry->DbAccession);
+    namDbSetAttrStr(dbattr, "sequence", &qry->DbSequence);
+    namDbSetAttrStr(dbattr, "return", &qry->DbReturn);
+    namDbSetAttrStr(dbattr, "filter", &qry->DbFilter);
     namDbSetAttrBool(dbattr, "caseidmatch", &qry->CaseId);
     namDbSetAttrBool(dbattr, "hasaccession", &qry->HasAcc);
+    namDbSetAttrStr(dbattr, "serverversion", &qry->ServerVer);
     /*
        ajDebug("ajNamDbQuery DbName '%S'\n", qry->DbName);
        ajDebug("    Id '%S' Acc '%S' Des '%S'\n",
@@ -2643,6 +2649,8 @@ AjBool ajNamDbData(AjPSeqQuery qry)
        ajDebug("    Directory   '%S'\n", qry->Directory);
        ajDebug("    Filename    '%S'\n", qry->Filename);
        */
+
+    ajStrDel(&dbtype);
 
     return ajTrue;
 }
@@ -2906,6 +2914,7 @@ static void namError(const char* fmt, ...)
 
 
 
+
 /* @func ajNamValueInstalldir *************************************************
 **
 ** Returns the install directory root for all file searches
@@ -2948,6 +2957,8 @@ const AjPStr ajNamValuePackage(void)
 {
     return namFixedPackageStr;
 }
+
+
 
 
 /* @obsolete ajNamRootPack

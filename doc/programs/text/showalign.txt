@@ -189,7 +189,7 @@ Output file [globins.showalign]:
 Command line arguments
 
 Display a multiple sequence alignment in pretty format
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqset     The sequence alignment to be displayed.
@@ -206,7 +206,7 @@ Version: EMBOSS:6.2.0
    -refseq             string     [0] If you give the number in the alignment
                                   or the name of a sequence, it will be taken
                                   to be the reference sequence. The reference
-                                  sequence is always show in full and is the
+                                  sequence is always shown in full and is the
                                   one against which all the other sequences
                                   are compared. If this is set to 0 then the
                                   consensus sequence will be used as the
@@ -215,7 +215,7 @@ Version: EMBOSS:6.2.0
                                   (Any string)
    -[no]bottom         boolean    [Y] If this is true then the reference
                                   sequence is displayed at the bottom of the
-                                  alignment as well as at the top.
+                                  alignment instead of the top.
    -show               menu       [N] What to show (Values: A (All of the
                                   sequences); I (Identities between the
                                   sequences); N (Non-identities between the
@@ -473,7 +473,6 @@ Output file format
 
                    10        20        30        40        50        60
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xxxxxxxxxxLSxxExSxVxSxWxKxNxxxEVGGxALxxxLxxIxPxxQxFFxTFxxLSx
 HBB_HUMAN  --------VH.tPE.K.A.TaL.G.V.-VD....E..GR-.LVvY.WT.R..Es.GD..T
 HBB_HORSE  --------VQ..GE.KaA.LaL.D.V.-EE....E..GR-.LVvY.WT.R..Ds.GD..N
 HBA_HUMAN  --------------VL.PADKTNV.AA-WGk..AH.GEYGAEAlERMFLS.PT.KTYFPH
@@ -485,7 +484,6 @@ Consensus  xxxxxxxxxxLSxxExSxVxSxWxKxNxxxEVGGxALxxxLxxIxPxxQxFFxTFxxLSx
 
                    70        80        90       100       110       120
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
 HBB_HUMAN  P.AvM.nPk..A......G.FS.GlA...n.kGTF.T..e..CD..H--...E..r..Gn
 HBB_HORSE  PGAvM.nPk..A......HsFGeG.H...n.kGTF.A..e..CD..H--...E..r..Gn
 HBA_HUMAN  F.LSH..A...G.....AD..TnA.A.v..mPNALsA......H...--...V.....S.
@@ -495,9 +493,8 @@ GLB5_PETMA A.QlKK.AD.rW.AeriiN.vN.A.ASm..T.KMSMK.R..SGKHAk--SFQVdPqYFKV
 LGB2_LUPLU VPQNNPEL.AHAGKVFK.VYEAAIQLQvTGvVVTD.T.Kn.GsVHvSKG.ADAh.PvvKE
 Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
 
-                  130       140       150       160       170       180
-           ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
+                  130       140       150       160
+           ----:----|----:----|----:----|----:----|----
 HBB_HUMAN  V.vC...H.FGKe...P.Q.aYQ.Vv.G..NA.AH..H------
 HBB_HORSE  V.vV...R.FGK.....lQ..YQ.Vv.G..NA.AH..H------
 HBA_HUMAN  C..VT..A.LPAe...A.H..lD.F..S.sTV.TS..R------
@@ -514,7 +511,6 @@ Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
 
                    10        20        30        40        50        60
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xxxxxxxxxxLSxxExSxVxSxWxKxNxxxEVGGxALxxxLxxIxPxxQxFFxTFxxLSx
 HBB_HUMAN  --------VH.tPE.K.A.TaL.G.V.-VD....E..GR-.LVvY.WT.R..Es.GD..T
 HBB_HORSE  --------VQ..GE.KaA.LaL.D.V.-EE....E..GR-.LVvY.WT.R..Ds.GD..N
 HBA_HORSE  --------------VL.AADKTNV.AA-WSk...H.GEYGAEAlERMFLG.PT.KTYFPH
@@ -526,7 +522,6 @@ Consensus  xxxxxxxxxxLSxxExSxVxSxWxKxNxxxEVGGxALxxxLxxIxPxxQxFFxTFxxLSx
 
                    70        80        90       100       110       120
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
 HBB_HUMAN  P.AvM.nPk..A......G.FS.GlA...n.kGTF.T..e..CD..H--...E..r..Gn
 HBB_HORSE  PGAvM.nPk..A......HsFGeG.H...n.kGTF.A..e..CD..H--...E..r..Gn
 HBA_HORSE  F.LSH..A...A.....GD..TLA.G.....PGALsN......H...--...V.....S.
@@ -536,9 +531,8 @@ MYG_PHYCA  EAE.KA.EDl.K..VT..T..GAIlKKKGHH.AELKP.aQS..T.Hk--iPIKYLeFiSE
 LGB2_LUPLU VPQNNPEL.AHAGKVFK.VYEAAIQLQvTGvVVTD.T.Kn.GsVHvSKG.ADAh.PvvKE
 Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
 
-                  130       140       150       160       170       180
-           ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
+                  130       140       150       160
+           ----:----|----:----|----:----|----:----|----
 HBB_HUMAN  V.vC...H.FGKe...P.Q.aYQ.Vv.G..NA.AH..H------
 HBB_HORSE  V.vV...R.FGK.....lQ..YQ.Vv.G..NA.AH..H------
 HBA_HORSE  C..ST..V.LPN....A.H..lD.F.sS.sTV.TS..R------
@@ -556,8 +550,6 @@ Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
 <pre>
                    10        20        30        40        50        60
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xxx<font color=green>xxxxxxxLSx</font>xExSxVxSxWxKxNxxxEVGGxALxxxLx<f
-ont color=red>x</font>IxPxxQx<font color=blue>FFxTFx</font>xLSx
 HBB_HUMAN  ---<font color=green>-----VH.tP</font>E.K.A.TaL.G.V.-VD....E..GR-.L<f
 ont color=red>V</font>vY.WT.R<font color=blue>..Es.G</font>D..T
 HBB_HORSE  ---<font color=green>-----VQ..G</font>E.KaA.LaL.D.V.-EE....E..GR-.L<f
@@ -577,7 +569,6 @@ ont color=red>x</font>IxPxxQx<font color=blue>FFxTFx</font>xLSx
 
                    70        80        90       100       110       120
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
 HBB_HUMAN  P.AvM.nPk..A......G.FS.GlA...n.kGTF.T..e..CD..H--...E..r..Gn
 HBB_HORSE  PGAvM.nPk..A......HsFGeG.H...n.kGTF.A..e..CD..H--...E..r..Gn
 HBA_HUMAN  F.LSH..A...G.....AD..TnA.A.v..mPNALsA......H...--...V.....S.
@@ -587,9 +578,8 @@ GLB5_PETMA A.QlKK.AD.rW.AeriiN.vN.A.ASm..T.KMSMK.R..SGKHAk--SFQVdPqYFKV
 LGB2_LUPLU VPQNNPEL.AHAGKVFK.VYEAAIQLQvTGvVVTD.T.Kn.GsVHvSKG.ADAh.PvvKE
 Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
 
-                  130       140       150       160       170       180
-           ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
+                  130       140       150       160
+           ----:----|----:----|----:----|----:----|----
 HBB_HUMAN  V.vC...H.FGKe...P.Q.aYQ.Vv.G..NA.AH..H------
 HBB_HORSE  V.vV...R.FGK.....lQ..YQ.Vv.G..NA.AH..H------
 HBA_HUMAN  C..VT..A.LPAe...A.H..lD.F..S.sTV.TS..R------
@@ -620,7 +610,6 @@ LGB2_LUPLU A..ESqAaL.KsS.EeF.ANI
 
                    10        20        30        40        50        60
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xxxxxxxxxxLSxxExSxVxSxWxKxNxxxEVGGxALxxxLxxIxPxxQxFFxTFxxLSx
 HBB_HUMAN  --------vhLTpeEkSaVtAlWgKvN-vdEVGGeALgr-LlvVyPwtQrFFeSFgdLSt
 HBB_HORSE  --------vqLSgeEkAaVlAlWdKvN-eeEVGGeALgr-LlvVyPwtQrFFdSFgdLSn
 HBA_HUMAN  --------------vlSpadktnvKaa-wgKVGahAgeygaeaLermflsFptTktyfph
@@ -632,7 +621,6 @@ Consensus  xxxxxxxxxxLSxxExSxVxSxWxKxNxxxEVGGxALxxxLxxIxPxxQxFFxTFxxLSx
 
                    70        80        90       100       110       120
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
 HBB_HUMAN  pDaVmGNpKVKaHGKKVLgAfsDgLaHLDNLKgtfAtLSELHcdKLh--VDPeNFRLLgN
 HBB_HORSE  pgaVmGNpKVKaHGKKVLhSfgEgVhHLDNLKgtfAaLSELHcdKLh--VDPeNFRLLgN
 HBA_HUMAN  fDlshGSaQVKgHGKKVadALtNaVaHVDDMpnalSaLSDLHAhKLR--VDPvNFKLLsH
@@ -642,9 +630,8 @@ GLB5_PETMA aDqLkkSadVRwHaERIInAVnDaVasMDDtEkmsmkLrDLsgkhaK--sfqvDpQyfkv
 LGB2_LUPLU vpqnnpelQahagkvfkLvyeaaiqlqVtgVvvtdAtLkNLgSvhVskgVadaHFpVVke
 Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
 
-                  130       140       150       160       170       180
-           ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
+                  130       140       150       160
+           ----:----|----:----|----:----|----:----|----
 HBB_HUMAN  vLVcVLAhHfgkEFTPpVqAAyqKvVAgVAnaLahKYh------
 HBB_HORSE  vLVvVLArHfgkDFTPELqASyqKvVAgVAnaLahKYh------
 HBA_HUMAN  cLLvtLAaHlpaEFTPaVhASLdKfLAsVStvLtsKYr------
@@ -661,7 +648,6 @@ Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
 
                    10        20        30        40        50        60
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xxxxxxxxxxLSxxExSxVxSxWxKxNxxxEVGGxALxxxLxxIxPxxQxFFxTFxxLSx
 HBB_HUMAN  --------..L...E.S.V...W.K.N-..EVGG.AL..-L....P..Q.FF..F..LS.
 HBB_HORSE  --------..LS..E...V...W.K.N-..EVGG.AL..-L....P..Q.FF..F..LS.
 HBA_HUMAN  --------------..S.......K..-...VG..A..............F..T......
@@ -673,7 +659,6 @@ Consensus  xxxxxxxxxxLSxxExSxVxSxWxKxNxxxEVGGxALxxxLxxIxPxxQxFFxTFxxLSx
 
                    70        80        90       100       110       120
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
 HBB_HUMAN  .D...G...VK.HGKKVL.A..D...HLD.L....A.LS.LH..KL.--VDP.NF.LL..
 HBB_HORSE  .....G...VK.HGKKVL......V.HLD.L....A.LS.LH..KL.--VDP.NF.LL..
 HBA_HUMAN  .D...GS.QVK.HGKKV..AL...V.H.DD.......LSDLHA.KLR--VDP.NFKLL.H
@@ -683,9 +668,8 @@ GLB5_PETMA .D....S..V..H......A..D.V...DD.E.....L.DL......--...........
 LGB2_LUPLU ........Q........L.................A.L..L........V....F.....
 Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
 
-                  130       140       150       160       170       180
-           ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
+                  130       140       150       160
+           ----:----|----:----|----:----|----:----|----
 HBB_HUMAN  .L..VLA.H....FTP.V.A...K..A.VA..L..KY.------
 HBB_HORSE  .L..VLA.H...DFTPE..AS..K..A.VA..L..KY.------
 HBA_HUMAN  .LL..LA.H....FTP.V.AS..K.LA.V...L..KY.------
@@ -702,7 +686,6 @@ Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
 
                    10        20        30        40        50        60
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xxxxxxxxxxLSxxExSxVxSxWxKxNxxxEVGGxALxxxLxxIxPxxQxFFxTFxxLSx
 HBB_HUMAN  --------..Lt..E.S.V.a.W.K.N-..EVGG.AL..-L..v.P..Q.FF.sF..LS.
 HBB_HORSE  --------..LS..E.a.V.a.W.K.N-..EVGG.AL..-L..v.P..Q.FF.sF..LS.
 HBA_HUMAN  --------------..S.......K..-..kVG..A.......l......F..T......
@@ -714,7 +697,6 @@ Consensus  xxxxxxxxxxLSxxExSxVxSxWxKxNxxxEVGGxALxxxLxxIxPxxQxFFxTFxxLSx
 
                    70        80        90       100       110       120
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
 HBB_HUMAN  .D.v.Gn.kVK.HGKKVL.A..D.l.HLDnLk...A.LSeLH..KL.--VDP.NFrLL.n
 HBB_HORSE  ...v.Gn.kVK.HGKKVL.s..e.V.HLDnLk...A.LSeLH..KL.--VDP.NFrLL.n
 HBA_HUMAN  .D...GS.QVK.HGKKV..AL.n.V.HvDDm....s.LSDLHA.KLR--VDP.NFKLL.H
@@ -724,9 +706,8 @@ GLB5_PETMA .D.l..S..Vr.H.erii.Av.D.V..mDD.E.....L.DL.....k--....d.q....
 LGB2_LUPLU ........Q........L.........v..v....A.L.nL.s..v...V...hF.vv..
 Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
 
-                  130       140       150       160       170       180
-           ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
+                  130       140       150       160
+           ----:----|----:----|----:----|----:----|----
 HBB_HUMAN  .Lv.VLA.H...eFTP.V.Aa..K.vA.VA..L..KY.------
 HBB_HORSE  .Lv.VLA.H...DFTPEl.AS..K.vA.VA..L..KY.------
 HBA_HUMAN  .LL..LA.H...eFTP.V.ASl.K.LA.Vs..L..KY.------
@@ -743,7 +724,6 @@ Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
 
                    10        20        30        40        50        60
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xxxxxxxxxxLSxxExSxVxSxWxKxNxxxEVGGxALxxxLxxIxPxxQxFFxTFxxLSx
 HBB_HUMAN  --------VH..PE.K.A.T.L.G.V.-VD....E..GR-.LV.Y.WT.R..E..GD..T
 HBB_HORSE  --------VQ..GE.K.A.L.L.D.V.-EE....E..GR-.LV.Y.WT.R..D..GD..N
 HBA_HUMAN  --------------VL.PADKTNV.AA-WG...AH.GEYGAEA.ERMFLS.PT.KTYFPH
@@ -755,7 +735,6 @@ Consensus  xxxxxxxxxxLSxxExSxVxSxWxKxNxxxEVGGxALxxxLxxIxPxxQxFFxTFxxLSx
 
                    70        80        90       100       110       120
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
 HBB_HUMAN  P.A.M..P...A......G.FS.G.A......GTF.T.....CD..H--...E.....G.
 HBB_HORSE  PGA.M..P...A......H.FG.G.H......GTF.A.....CD..H--...E.....G.
 HBA_HUMAN  F.LSH..A...G.....AD..T.A.A.....PNAL.A......H...--...V.....S.
@@ -765,9 +744,8 @@ GLB5_PETMA A.Q.KK.AD..W.A....N..N.A.AS...T.KMSMK.R..SGKHA.--SFQV.P.YFKV
 LGB2_LUPLU VPQNNPEL.AHAGKVFK.VYEAAIQLQ.TG.VVTD.T.K..G.VH.SKG.ADA..P..KE
 Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
 
-                  130       140       150       160       170       180
-           ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
+                  130       140       150       160
+           ----:----|----:----|----:----|----:----|----
 HBB_HUMAN  V..C...H.FGK....P.Q..YQ.V..G..NA.AH..H------
 HBB_HORSE  V..V...R.FGK......Q..YQ.V..G..NA.AH..H------
 HBA_HUMAN  C..VT..A.LPA....A.H...D.F..S..TV.TS..R------
@@ -782,8 +760,8 @@ Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
 
   File: globins.showalign
 
-                   10        20        30        40        50        60
-           ----:----|----:----|----:----|----:----|----:----|----:----|
+                           10         20        30         40        50
+           ...v....----:----|----:----.|----:----|.----:----|----:----|
 HBB_HUMAN  --------VHLTPEEKSAVTALWGKVN-VDEVGGEALGR-LLVVYPWTQRFFESFGDLST
 HBB_HORSE  --------.Q.sG...a..L...D...-Ee.........-............d......N
 HBA_HUMAN  --------------VL.PADKTNV.AA-WGk..AH.GEYGAEAlERMFLS.PTtKTYFPH
@@ -791,11 +769,10 @@ HBA_HORSE  --------------VL..ADKTNV.AA-WSk...H.GEYGAEAlERMFLG.PTtKTYFPH
 MYG_PHYCA  -------VlSEGEWqLVLHVWAKVeAd-.AGH.QdI.I.-.FKSh.E.LEK.dR.KH.K.
 GLB5_PETMA PIVDTGSVAP.sAA..tKiRsA.AP.YSTY.TS.VDiLVKFFTST.AA.E..PK.KG.t.
 LGB2_LUPLU --------GA..ESqAaL.KsS.EeF.ANIPKHTHRFFILv.EiA.AAkDL.SFLKGT.E
-HBB_HUMAN  --------VHLTPEEKSAVTALWGKVN-VDEVGGEALGR-LLVVYPWTQRFFESFGDLST
 Consensus  xxxxxxxxxxLSxxExSxVxSxWxKxNxxxEVGGxALxxxLxxIxPxxQxFFxTFxxLSx
 
-                   70        80        90       100       110       120
-           ----:----|----:----|----:----|----:----|----:----|----:----|
+                   60        70        80        90         100       110
+           ----:----|----:----|----:----|----:----|----:--..--|----:---
 HBB_HUMAN  PDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLH--VDPENFRLLGN
 HBB_HORSE  .G................Hs.Ge.vH..........A..........--...........
 HBA_HUMAN  F.LSH.sAq..G.....AD.LtnAv..v.dmPNALsA..d..AH..R--...V..k..Sh
@@ -803,11 +780,10 @@ HBA_HORSE  F.LSH.sAq........GD.LtLAvG...d.P.ALsN..d..AH..R--...V..k..Sh
 MYG_PHYCA  EAEmKAsEDl.K..VT..T.LGAI.KKKGhHeAELKP.aqS.AT.HK--iPIkYLEFiSE
 GLB5_PETMA A.QlKKsAD.rW.AeriiN.Vn.Av.Sm.dTeKMSMK.Rd.SGKHAK--SFQVdPqYFKV
 LGB2_LUPLU VPQNNPELqAH.GKVFK.VYEaAIQLQvTGvVV.D...KN.GSVHvSKG.ADAh.PvvKE
-HBB_HUMAN  PDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLH--VDPENFRLLGN
 Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
 
-                  130       140       150       160       170       180
-           ----:----|----:----|----:----|----:----|----:----|----:----|
+           10       120       130       140
+           -|----:----|----:----|----:----|----:-....v.
 HBB_HUMAN  VLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKYH------
 HBB_HORSE  ...V...R....d...El..s.................------
 HBA_HUMAN  C.lVT..A.LPA....A.H.sLD.Fl.S.sTV.TS..R------
@@ -815,7 +791,6 @@ HBA_HORSE  C.lST..V.LPNd...A.H.sLD.FlsS.sTV.TS..R------
 MYG_PHYCA  AiiH..HSRHPGd.GADA.G.MN.AlELFRKDi.A..KELGYQG
 GLB5_PETMA lAAViADTVAAGdAGFEKLMsMICilLRS.Y-------------
 LGB2_LUPLU AilKTiKEVV.AkwsEElNs.wTIAYDEl.IViKKeMnDAA---
-HBB_HUMAN  VLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKYH------
 Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
 
 
@@ -823,8 +798,8 @@ Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
 
   File: globins.showalign
 
-                   10        20        30        40        50        60
-           ----:----|----:----|----:----|----:----|----:----|----:----|
+                           10         20        30         40        50
+           ...v....----:----|----:----.|----:----|.----:----|----:----|
 HBB_HUMAN  --------VHLTPEEksavtalwgkvn-vdevggealgr-llvvypwtqrffesfgdlst
 HBB_HORSE  --------.Q.SG...a..l...d...-ee.........-............d......n
 HBA_HUMAN  --------------Vl.padktnv.aa-wgk..ah.geygaealermfls.pttktyfph
@@ -832,10 +807,9 @@ HBA_HORSE  --------------Vl..adktnv.aa-wsk...h.geygaealermflg.pttktyfph
 MYG_PHYCA  -------vLSEGEWQlvlhvwakvead-.agh.qdi.i.-.fksh.e.lek.dr.kh.k.
 GLB5_PETMA pivdtgsvAP.SAA..tkirsa.ap.ysty.ts.vdilvkfftst.aa.e..pk.kg.t.
 LGB2_LUPLU --------GA..ESQaal.kss.eef.anipkhthrffilv.eia.aakdl.sflkgt.e
-HBB_HUMAN  --------VHLTPEEksavtalwgkvn-vdevggealgr-llvvypwtqrffesfgdlst
 
-                   70        80        90       100       110       120
-           ----:----|----:----|----:----|----:----|----:----|----:----|
+                   60        70        80        90         100       110
+           ----:----|----:----|----:----|----:----|----:--..--|----:---
 HBB_HUMAN  pdavmgnpkvkahgkkvlgafsdglahldnlkgtfatlselhcdklh--vdpenfrllgn
 HBB_HORSE  .g................hs.ge.vh..........a..........--...........
 HBA_HUMAN  f.lsh.saq..g.....ad.ltnav..v.dmpnalsa..d..ah..r--...v..k..sh
@@ -843,10 +817,9 @@ HBA_HORSE  f.lsh.saq........gd.ltlavg...d.p.alsn..d..ah..r--...v..k..sh
 MYG_PHYCA  eaemkasedl.k..vt..t.lgai.kkkghheaelkp.aqs.at.hk--ipikylefise
 GLB5_PETMA a.qlkksad.rw.aeriin.vn.av.sm.dtekmsmk.rd.sgkhak--sfqvdpqyfkv
 LGB2_LUPLU vpqnnpelqah.gkvfk.vyeaaiqlqvtgvvv.d...kn.gsvhvskg.adah.pvvke
-HBB_HUMAN  pdavmgnpkvkahgkkvlgafsdglahldnlkgtfatlselhcdklh--vdpenfrllgn
 
-                  130       140       150       160       170       180
-           ----:----|----:----|----:----|----:----|----:----|----:----|
+           10       120       130       140
+           -|----:----|----:----|----:----|----:-....v.
 HBB_HUMAN  vlvcvlahhfgkeftppvqaayqkvvagvanalahkyh------
 HBB_HORSE  ...v...r....d...el..s.................------
 HBA_HUMAN  c.lvt..a.lpa....a.h.sld.fl.s.stv.ts..r------
@@ -854,7 +827,6 @@ HBA_HORSE  c.lst..v.lpnd...a.h.sld.flss.stv.ts..r------
 MYG_PHYCA  aiih..hsrhpgd.gada.g.mn.alelfrkdi.a..kelgyqg
 GLB5_PETMA laaviadtvaagdagfeklmsmicillrs.y-------------
 LGB2_LUPLU ailktikevv.akwseelns.wtiaydel.ivikkemndaa---
-HBB_HUMAN  vlvcvlahhfgkeftppvqaayqkvvagvanalahkyh------
 
 
   Output files for usage example 12
@@ -863,7 +835,6 @@ HBB_HUMAN  vlvcvlahhfgkeftppvqaayqkvvagvanalahkyh------
 
                    10        20        30        40        50        60
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xxxxxxxxxxLSxxExSxVxSxWxKxNxxxEVGGxALxxxLxxIxPxxQxFFxTFxxLSx
 GLB5_PETMA PIVDTGSVAP..AA.KtKiR.A.APVYSTY.TS.VDiLVKFFTST.AA.E..PK.KG.tT
 HBA_HORSE  --------------VL.AADKTNV.AA-WSk...H.GEYGAEAlERMFLG.PT.KTYFPH
 HBA_HUMAN  --------------VL.PADKTNV.AA-WGk..AH.GEYGAEAlERMFLS.PT.KTYFPH
@@ -875,7 +846,6 @@ Consensus  xxxxxxxxxxLSxxExSxVxSxWxKxNxxxEVGGxALxxxLxxIxPxxQxFFxTFxxLSx
 
                    70        80        90       100       110       120
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
 GLB5_PETMA A.QlKK.AD.rW.AeriiN.vN.A.ASm..T.KMSMK.R..SGKHAk--SFQVdPqYFKV
 HBA_HORSE  F.LSH..A...A.....GD..TLA.G.....PGALsN......H...--...V.....S.
 HBA_HUMAN  F.LSH..A...G.....AD..TnA.A.v..mPNALsA......H...--...V.....S.
@@ -885,9 +855,8 @@ LGB2_LUPLU VPQNNPEL.AHAGKVFK.VYEAAIQLQvTGvVVTD.T.Kn.GsVHvSKG.ADAh.PvvKE
 MYG_PHYCA  EAE.KA.EDl.K..VT..T..GAIlKKKGHH.AELKP.aQS..T.Hk--iPIKYLeFiSE
 Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
 
-                  130       140       150       160       170       180
-           ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
+                  130       140       150       160
+           ----:----|----:----|----:----|----:----|----
 GLB5_PETMA LAAViADTVAAG.AGF.KLM..ICI.LRS.Y-------------
 HBA_HORSE  C..ST..V.LPN....A.H..lD.F.sS.sTV.TS..R------
 HBA_HUMAN  C..VT..A.LPAe...A.H..lD.F..S.sTV.TS..R------

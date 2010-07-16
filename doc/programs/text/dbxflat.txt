@@ -32,6 +32,7 @@ Resource name: emblresource
      SWISS : Swiss-Prot, SpTrEMBL, TrEMBLnew
         GB : Genbank, DDBJ
     REFSEQ : Refseq
+     FASTQ : Fastq files
 Entry format [SWISS]: embl
 Wildcard database filename [*.dat]: rod.dat
 Database directory [.]: embl
@@ -50,7 +51,7 @@ General log output file [outfile.dbxflat]:
 Command line arguments
 
 Index a flat file database using b+tree indices
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     Basename for index files (Any string from 2
@@ -61,7 +62,8 @@ Version: EMBOSS:6.2.0
                                   /[A-z][A-z0-9_]+/)
    -idformat           menu       [SWISS] Entry format (Values: EMBL (EMBL);
                                   SWISS (Swiss-Prot, SpTrEMBL, TrEMBLnew); GB
-                                  (Genbank, DDBJ); REFSEQ (Refseq))
+                                  (Genbank, DDBJ); REFSEQ (Refseq); FASTQ
+                                  (Fastq files))
    -filenames          string     [*.dat] Wildcard database filename (Any
                                   string)
    -directory          directory  [.] Database directory
@@ -80,6 +82,12 @@ Version: EMBOSS:6.2.0
    -indexoutdir        outdir     [.] Index file output directory
 
    Associated qualifiers:
+
+   "-directory" associated qualifiers
+   -extension          string     Default file extension
+
+   "-indexoutdir" associated qualifiers
+   -extension          string     Default file extension
 
    "-outfile" associated qualifiers
    -odirectory         string     Output directory
@@ -264,9 +272,12 @@ See also
 
 Author(s)
 
-   Alan             Bleasby (ajb (c) ebi.ac.uk)
+   Alan             Bleasby
    European         Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton,         Cambridge CB10 1SD, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

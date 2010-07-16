@@ -181,7 +181,7 @@ Created epestfind.ps
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Finds PEST motifs as potential proteolytic cleavage sites
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Protein sequence USA to be analysed.
@@ -194,7 +194,8 @@ Version: EMBOSS:6.2.0
                                   will be written.
    -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tek, tekt, none, data, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif, pdf,
+                                  svg, pdf, svg)
 
    Additional (Optional) qualifiers:
    -mwdata             datafile   [Emolwt.dat] Molecular weights data file
@@ -319,7 +320,7 @@ Version: EMBOSS:6.2.0
 <td>-graph</td>
 <td>xygraph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif, pdf, svg, pdf, svg</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -1102,11 +1103,12 @@ None.
     Author(s)
 </H2>
 
-Michael K. Schuster and Martin Grabner (martin.grabner&nbsp;&copy;&nbsp;univie.ac.at)
+Michael K. Schuster and Martin Grabner formerly at:
 <br>
-from the Austrian National EMBnet node.
+Austrian National EMBnet node.
 
 <p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.<p>
 
 Original program 'epestfind' by Scott Rogers and Martin Rechsteiner
 (C)1986. 

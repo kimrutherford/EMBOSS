@@ -1,0 +1,61 @@
+application: martfilters [
+  documentation: "Return filters from a mart dataset from a mart host"
+  groups: "Edit"
+  relations: "/edam/topic/0000088 Literature and documentation"
+  relations: "/edam/operation/0000516 Database information retrieval"  
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  string: dataset [
+    standard: "Y"
+    default: "oanatinus_gene_ensembl"
+    information: "Dataset name"
+relations: "/edam/data/0001773 Tool-specific parameter"
+  ]
+
+
+endsection: input
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+# Note that it is coincidental that the mart host is also the
+# registry host. The following must refer to the mart host
+
+  string: host [
+    default: "www.biomart.org"
+    information: "Mart host location"
+    relations: "/edam/data/0001047 URI"
+  ]
+
+  string: path [
+    default: "/biomart/martservice"
+    information: "Mart path on mart host"
+    relations: "/edam/data/0001049 Directory name"
+  ]
+
+  integer: port [
+    default: "80"
+    information: "Mart port on mart host"
+relations: "/edam/data/0001773 Tool-specific parameter"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    relations: "/edam/data/0000957 Database metadata"
+  ]
+
+endsection: output

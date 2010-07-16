@@ -11,7 +11,7 @@ ID   AMIC_PSEAE              Reviewed;         385 AA.
 AC   P27017;
 DT   01-AUG-1992, integrated into UniProtKB/Swiss-Prot.
 DT   23-JAN-2007, sequence version 5.
-DT   16-JUN-2009, entry version 68.
+DT   18-MAY-2010, entry version 73.
 DE   RecName: Full=Aliphatic amidase expression-regulating protein;
 GN   Name=amiC; OrderedLocusNames=PA3364;
 OS   Pseudomonas aeruginosa.

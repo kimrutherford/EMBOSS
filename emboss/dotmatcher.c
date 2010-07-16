@@ -358,7 +358,7 @@ int main(int argc, char **argv)
 
 	    ajGraphicsDrawposLine(flen1,(float)0.0,
 			flen1,(float)0.0-ticklen);
-	    sprintf(ptr,"%d",len1+b1-1);
+	    sprintf(ptr,"%u",len1+b1-1);
 	    ajGraphicsDrawposTextAtmid(flen1,(float)0.0-(onefifth),ptr);
 
 	}
@@ -387,7 +387,7 @@ int main(int argc, char **argv)
 
 	    ajGraphicsDrawposLine((float)0.0,flen2,(float)0.0-ticklen,
 			flen2);
-	    sprintf(ptr,"%d",len2+b2-1);
+	    sprintf(ptr,"%u",len2+b2-1);
 	    ajGraphicsDrawposTextAtend((float)0.0-(onefifth),flen2,ptr);
 	}
 	else

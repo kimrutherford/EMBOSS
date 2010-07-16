@@ -29,6 +29,8 @@
 static AjPStr matrixStrQuery = NULL;
 
 
+
+
 /* @func ajMatrixNew **********************************************************
 **
 ** Creates a new, zero matrix from an array of strings and a matrix name. If 
@@ -80,6 +82,7 @@ AjPMatrix ajMatrixNew(const AjPPStr codes, ajint n, const AjPStr filename)
 
     return ret;
 }
+
 
 
 
@@ -292,22 +295,22 @@ AjPMatrixf ajMatrixfNewAsym(const AjPPStr codes, ajint n,
 
 void ajMatrixfDel(AjPMatrixf *thys)
 {
-    ajint isize = 0;
-    ajint jsize = 0;
-    ajint rsize = 0;
-    ajint ssize = 0;
-    ajint i     = 0;
+    ajint isize  = 0;
+    ajint iisize = 0;
+    ajint rsize  = 0;
+    ajint ssize  = 0;
+    ajint i      = 0;
 
 
     if(!*thys || !thys)
 	return;
     
     isize = (*thys)->Size;
-    jsize = isize - 1;
+    iisize = isize - 1;
     rsize = (*thys)->SizeRow;
     ssize = rsize - 1;
 
-    for(i=0; i<jsize; ++i)
+    for(i=0; i<iisize; ++i)
 	ajStrDel(&(*thys)->Codes[i]);
 
     AJFREE((*thys)->Codes);
@@ -344,23 +347,23 @@ void ajMatrixfDel(AjPMatrixf *thys)
 
 void ajMatrixDel(AjPMatrix *thys)
 {
-    ajint isize = 0;
-    ajint jsize = 0;
-    ajint rsize = 0;
-    ajint ssize = 0;
-    ajint i     = 0;
+    ajint isize  = 0;
+    ajint iisize = 0;
+    ajint rsize  = 0;
+    ajint ssize  = 0;
+    ajint i      = 0;
 
 
     if(!*thys || !thys)
 	return;
 
     isize = (*thys)->Size;
-    jsize = isize - 1;
+    iisize = isize - 1;
     rsize = (*thys)->SizeRow;
     ssize = rsize - 1;
     
 
-    for(i=0; i<jsize; ++i)
+    for(i=0; i<iisize; ++i)
 	ajStrDel(&(*thys)->Codes[i]);
 
     AJFREE((*thys)->Codes);
@@ -555,6 +558,8 @@ AjPMatrix ajMatrixNewFile(const AjPStr filename)
 }
 
 
+
+
 /* @obsolete ajMatrixRead
 ** @remove Use ajMatrixNewFile
 */
@@ -566,6 +571,8 @@ __deprecated AjBool ajMatrixRead(AjPMatrix* pthis, const AjPStr filename)
         return ajFalse;
     return ajTrue;
 }
+
+
 
 
 /* @func ajMatrixfNewFile *****************************************************
@@ -753,6 +760,7 @@ AjPMatrixf ajMatrixfNewFile(const AjPStr filename)
 
 
 
+
 /* @obsolete ajMatrixfRead
 ** @remove Use ajMatrixfNewFile
 */
@@ -764,6 +772,8 @@ __deprecated AjBool ajMatrixfRead(AjPMatrixf* pthis, const AjPStr filename)
         return ajFalse;
     return ajTrue;
 }
+
+
 
 
 /* @func ajMatrixSeqIndex *****************************************************
@@ -786,6 +796,7 @@ AjBool ajMatrixSeqIndex(const AjPMatrix thys, const AjPSeq seq, AjPStr* numseq)
 
 
 
+
 /* @obsolete ajMatrixSeqNum
 ** @rename ajMatrixSeqIndex
 */
@@ -795,6 +806,7 @@ __deprecated AjBool ajMatrixSeqNum(const AjPMatrix thys, const AjPSeq seq,
 {
     return ajSeqConvertNum(seq, thys->Cvt, numseq);
 }
+
 
 
 
@@ -816,6 +828,9 @@ AjBool ajMatrixfSeqIndex(const AjPMatrixf thys, const AjPSeq seq,
 {
     return ajSeqConvertNum(seq, thys->Cvt, numseq);
 }
+
+
+
 
 /* @obsolete ajMatrixfSeqNum
 ** @rename ajMatrixfSeqIndex
@@ -900,6 +915,7 @@ AjIntArray* ajMatrixGetMatrix(const AjPMatrix thys)
 
 
 
+
 /* @obsolete ajMatrixArray
 ** @rename ajMatrixGetMatrix
 */
@@ -949,22 +965,45 @@ __deprecated AjFloatArray* ajMatrixfArray(const AjPMatrixf thys)
 
 
 
+/* @func ajMatrixGetRows ******************************************************
+**
+** Returns the comparison matrix row size.
+**
+** @param [r] thys [const AjPMatrix] Matrix object
+** @return [ajuint] .
+** @@
+******************************************************************************/
+
+ajuint ajMatrixGetRows(const AjPMatrix thys)
+{
+    if(thys)
+	return thys->SizeRow;
+
+    return 0;
+}
+
+
+
+
 /* @func ajMatrixGetSize ******************************************************
 **
 ** Returns the comparison matrix size.
 **
 ** @param [r] thys [const AjPMatrix] Matrix object
-** @return [ajint] .
+** @return [ajuint] .
 ** @@
 ******************************************************************************/
 
-ajint ajMatrixGetSize(const AjPMatrix thys)
+ajuint ajMatrixGetSize(const AjPMatrix thys)
 {
     if(thys)
 	return thys->Size;
 
     return 0;
 }
+
+
+
 
 /* @obsolete ajMatrixSize
 ** @rename ajMatrixGetSize
@@ -981,22 +1020,44 @@ __deprecated ajint ajMatrixSize(const AjPMatrix thys)
 
 
 
+/* @func ajMatrixfGetRows *****************************************************
+**
+** Returns the comparison matrix row size.
+**
+** @param [r] thys [const AjPMatrixf] Matrix object
+** @return [ajuint] .
+** @@
+******************************************************************************/
+
+ajuint ajMatrixfGetRows(const AjPMatrixf thys)
+{
+    if(thys)
+	return thys->SizeRow;
+
+    return 0;
+}
+
+
+
+
 /* @func ajMatrixfGetSize *****************************************************
 **
 ** Returns the comparison matrix size.
 **
 ** @param [r] thys [const AjPMatrixf] Matrix object
-** @return [ajint] .
+** @return [ajuint] .
 ** @@
 ******************************************************************************/
 
-ajint ajMatrixfGetSize(const AjPMatrixf thys)
+ajuint ajMatrixfGetSize(const AjPMatrixf thys)
 {
     if(thys)
 	return thys->Size;
 
     return 0;
 }
+
+
 
 
 /* @obsolete ajMatrixfSize
@@ -1010,6 +1071,8 @@ __deprecated ajint ajMatrixfSize(const AjPMatrixf thys)
 
     return 0;
 }
+
+
 
 
 /* @func ajMatrixGetCvt *******************************************************
@@ -1032,6 +1095,8 @@ AjPSeqCvt ajMatrixGetCvt(const AjPMatrix thys)
 }
 
 
+
+
 /* @obsolete ajMatrixCvt
 ** @rename ajMatrixGetCvt
 */
@@ -1043,6 +1108,7 @@ __deprecated AjPSeqCvt ajMatrixCvt(const AjPMatrix thys)
 
     return NULL;
 }
+
 
 
 
@@ -1065,6 +1131,9 @@ AjPSeqCvt ajMatrixfGetCvt(const AjPMatrixf thys)
     return NULL;
 }
 
+
+
+
 /* @obsolete ajMatrixfCvt
 ** @rename ajMatrixfGetCvt
 */
@@ -1083,13 +1152,13 @@ __deprecated AjPSeqCvt ajMatrixfCvt(const AjPMatrixf thys)
 
 /* @func ajMatrixGetLabelNum **************************************************
 **
-** Returns the sequence character conversion table for a matrix.
-** This table converts any string defined in the matrix to a
-** positive integer, and any other string is converted to zero.
+** Returns the sequence character (or asymmetric matrix label)
+** for a matrix column.
 **
 ** @param [r] thys [const AjPMatrix] Matrix object
 ** @param [r] i [ajint] Character index
 ** @return [const AjPStr] Matrix label, e.g. sequence character code
+**                        or '?' if not found
 ** @@
 ******************************************************************************/
 
@@ -1123,17 +1192,19 @@ __deprecated void ajMatrixChar(const AjPMatrix thys, ajint i, AjPStr *label)
     ajStrAssignS(label, ajMatrixGetLabelNum(thys, i));
     return;
 }
-                 
+
+
+
 
 /* @func ajMatrixfGetLabelNum *************************************************
 **
-** Returns the sequence character conversion table for a floating point matrix.
-** This table converts any character defined in the matrix to a
-** floating point number, and any other character is converted to zero.
+** Returns the sequence character (or asymmetric matrix label)
+** for a matrix column.
 **
 ** @param [r] thys [const AjPMatrixf] Matrix object
 ** @param [r] i [ajint] Character index
 ** @return [const AjPStr] Matrix label, e.g. sequence character code
+**                        or '?' if not found
 ** @@
 ******************************************************************************/
 
@@ -1155,6 +1226,8 @@ const AjPStr ajMatrixfGetLabelNum(const AjPMatrixf thys, ajint i)
 }
 
 
+
+
 /* @obsolete ajMatrixfChar
 ** @remove Use ajMatrixfGetLabelNum
 */
@@ -1165,7 +1238,9 @@ __deprecated void ajMatrixfChar(const AjPMatrixf thys, ajint i, AjPStr *label)
     ajStrAssignS(label, ajMatrixfGetLabelNum(thys, i));
     return;
 }
-                 
+
+
+
 
 /* @func ajMatrixGetName ******************************************************
 **
@@ -1193,6 +1268,8 @@ const AjPStr ajMatrixGetName(const AjPMatrix thys)
 }
 
 
+
+
 /* @obsolete ajMatrixName
 ** @rename ajMatrixGetName
 */
@@ -1201,6 +1278,8 @@ __deprecated const AjPStr ajMatrixName(const AjPMatrix thys)
 {
     return ajMatrixGetName(thys);
 }
+
+
 
 
 /* @func ajMatrixfGetName *****************************************************
@@ -1229,6 +1308,7 @@ const AjPStr ajMatrixfGetName(const AjPMatrixf thys)
 
 
 
+
 /* @obsolete ajMatrixfName
 ** @rename ajMatrixfGetName
 */
@@ -1237,6 +1317,8 @@ __deprecated  const AjPStr ajMatrixfName(const AjPMatrixf thys)
 {
     return ajMatrixfGetName(thys);
 }
+
+
 
 
 /* @func ajMatrixExit *********************************************************

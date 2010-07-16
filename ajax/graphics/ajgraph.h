@@ -3,6 +3,9 @@ extern "C"
 {
 #endif
 
+
+
+
 /* @source ajgraph.h
 **
 ** General Plot/Printing routines.
@@ -44,7 +47,7 @@ extern "C"
 #define AJGRAPH_X_TOP      0x0004  /* print xaxis top line */
 #define AJGRAPH_Y_RIGHT    0x0008  /* printf y axis on the right*/
 #define AJGRAPH_X_TICK     0x0010  /* add tick marks for x axis (bottom) */
-#define AJGRAPH_Y_TICK     0x0020  /* add tick marks dor y axis (left) */
+#define AJGRAPH_Y_TICK     0x0020  /* add tick marks for y axis (left) */
 #define AJGRAPH_X_LABEL    0x0040  /* add x axis label */
 #define AJGRAPH_Y_LABEL    0x0080  /* add y axis label */
 #define AJGRAPH_TITLE      0x0100  /* add title */

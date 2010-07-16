@@ -124,6 +124,8 @@ float ajRoundFloat(float a, ajint nbits)
 }
 
 
+
+
 /* @obsolete ajRoundF
 ** @rename ajRoundFloat
 */
@@ -135,12 +137,13 @@ __deprecated float ajRoundF(float a, ajint nbits)
 
 
 
+
 /* @func ajCvtRecToPol ********************************************************
 **
-** Converts cartesian co-ordinates to polar
+** Converts Cartesian coordinates to polar
 **
-** @param [r] x [float] X co-ordinate
-** @param [r] y [float] Y co-ordinate
+** @param [r] x [float] X coordinate
+** @param [r] y [float] Y coordinate
 ** @param [w] radius [float*] Radius
 ** @param [w] angle [float*] Angle
 ** @return [void]
@@ -154,6 +157,9 @@ void ajCvtRecToPol(float x, float y, float *radius, float *angle)
     return;
 }
 
+
+
+
 /* @obsolete ajRecToPol
 ** @rename ajCvtRecToPol
 */
@@ -166,14 +172,15 @@ __deprecated void ajRecToPol(float x, float y, float *radius, float *angle)
 
 
 
+
 /* @func ajCvtPolToRec  *******************************************************
 **
-** Converts polar co-ordinates to cartesian
+** Converts polar coordinates to Cartesian
 **
 ** @param [r] radius [float] Radius
 ** @param [r] angle [float] Angle
-** @param [w] x [float*] X co-ordinate
-** @param [w] y [float*] Y co-ordinate
+** @param [w] x [float*] X coordinate
+** @param [w] y [float*] Y coordinate
 ** @return [void]
 ******************************************************************************/
 
@@ -184,6 +191,9 @@ void ajCvtPolToRec(float radius, float angle, float *x, float *y)
 
     return;
 }
+
+
+
 
 /* @obsolete ajPolToRec
 ** @rename ajCvtPolToRec
@@ -213,6 +223,8 @@ float ajCvtDegToRad(float degrees)
 }
 
 
+
+
 /* @obsolete ajDegToRad
 ** @rename ajCvtDegToRad
 */
@@ -237,6 +249,8 @@ float ajCvtRadToDeg(float radians)
 {
     return radians*(float)(180.0/AJM_PI);
 }
+
+
 
 
 /* @obsolete ajRadToDeg
@@ -268,6 +282,8 @@ double ajCvtGaussToProb(float mean, float sd, float score)
 }
 
 
+
+
 /* @obsolete ajGaussProb
 ** @rename ajCvtGaussToProb
 */
@@ -277,6 +293,7 @@ __deprecated double ajGaussProb(float mean, float sd, float score)
     return pow(AJM_E,(double)(-0.5*((score-mean)/sd)*((score-mean)/sd)))
 	/ (sd * (float)2.0 * AJM_PI);
 }
+
 
 
 
@@ -300,6 +317,8 @@ float ajMathGmean(const float *s, ajint n)
 }
 
 
+
+
 /* @obsolete ajGeoMean
 ** @rename ajMathGmean
 */
@@ -308,6 +327,8 @@ __deprecated float ajGeoMean(const float *s, ajint n)
 {
     return ajMathGmean(s, n);
 }
+
+
 
 
 /* @func ajMathModulo *********************************************************
@@ -332,6 +353,8 @@ ajint ajMathModulo(ajint a, ajint b)
 }
 
 
+
+
 /* @obsolete ajPosMod
 ** @rename ajMathModulo
 */
@@ -340,6 +363,8 @@ __deprecated ajint ajPosMod(ajint a, ajint b)
 {
     return ajMathModulo(a, b);
 }
+
+
 
 
 /* @func ajRandomSeed *********************************************************
@@ -396,7 +421,7 @@ void ajRandomSeed(void)
 	gettimeofday(&tv,NULL);
 	seed = (tv.tv_usec % 9999)+1;
 #else
-	/* Needs looking at to try to get usec resolution */
+	/* Needs looking at to try to get micro second resolution */
 	seed = (ajint) ((time(0) % 9999) + 1);
 #endif
     }
@@ -542,7 +567,7 @@ double ajRandomDouble(void)
         y = 37.0*aj_rand_other+offset;
         aj_rand_other = y-floor(y);
     }
-    while(!aj_rand_other);
+    while(E_FPZERO(aj_rand_other,U_DEPS));
 
     if((x = x/AjRandomXmod+aj_rand_other) >= 1.0)
 	x -= 1.0;
@@ -562,6 +587,8 @@ __deprecated double ajRandomNumberD(void)
 {
     return ajRandomDouble();
 }
+
+
 
 
 /* @funcstatic spcrc64calctab *************************************************
@@ -595,6 +622,9 @@ static void spcrc64calctab(unsigned long long *crctab)
 	crctab[i] = v;
     }
 }
+
+
+
 
 /* @func ajMathCrc32 **********************************************************
 **
@@ -640,6 +670,8 @@ ajuint ajSp32Crc(const AjPStr seq)
 {
     return ajMathCrc32(seq);
 }
+
+
 
 
 /* @funcstatic spcrc32gen *****************************************************
@@ -724,6 +756,7 @@ unsigned long long ajSp64Crc(const AjPStr thys)
 
 
 
+
 /* @func ajCvtSposToPos *******************************************************
 **
 ** Converts a string position into a true position. If ipos is negative,
@@ -740,6 +773,9 @@ ajuint ajCvtSposToPos(ajuint len, ajint ipos)
     return ajCvtSposToPosStart(len, 0, ipos);
 }
 
+
+
+
 /* @obsolete ajMathPos
 ** @rename ajCvtSposToPos
 */
@@ -748,6 +784,8 @@ __deprecated ajuint ajMathPos(ajuint len, ajint ipos)
 {
     return ajCvtSposToPosStart(len, 0, ipos);
 }
+
+
 
 
 /* @func ajCvtSposToPosStart **************************************************
@@ -787,6 +825,8 @@ ajuint ajCvtSposToPosStart(ajuint len, ajuint imin, ajint ipos)
 }
 
 
+
+
 /* @obsolete ajMathPosI
 ** @rename ajCvtSposToPosStart
 */
@@ -795,6 +835,8 @@ __deprecated ajuint ajMathPosI(ajuint len, ajuint imin, ajint ipos)
 {
     return ajCvtSposToPosStart(len, imin, ipos);
 }
+
+
 
 
 /* @func ajNumLengthDouble ****************************************************

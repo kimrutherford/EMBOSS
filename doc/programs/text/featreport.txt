@@ -36,7 +36,7 @@ Output report [x13776.featreport]: test.out
 Command line arguments
 
 Reads and writes a feature table
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Sequence filename and optional format, or
@@ -202,7 +202,7 @@ Output file format
 ##sequence-region PAAMIR 1 2167
 #!Date 2010-01-15
 #!Type DNA
-#!Source-version EMBOSS 6.2.0
+#!Source-version EMBOSS 6.3.0
 PAAMIR  EMBL    databank_entry  1       2167    0.000   +       .       ID="PAAM
 IR.1";db_xref="taxon:287";organism="Pseudomonas aeruginosa";strain="PAC";isolate
 ="PAC 1";map="38 min"
@@ -226,7 +226,7 @@ PAAMIR  EMBL    promoter        65      81      0.000   +       .       ID="PAAM
 IR.5";note="proposed rpoN-dependent promoter"
 PAAMIR  EMBL    ribosome_entry_site     121     126     0.000   +       .
 ID="PAAMIR.6";note="proposed Shine-Dalgarno sequence"
-PAAMIR  EMBL    sequence_variant        912     1167    0.000   +       .
+PAAMIR  EMBL    sequence_feature        912     1167    0.000   +       .
 ID="PAAMIR.7";note="ClaI fragment deleted in pSW36, constitutive phenotype";repl
 ace="";gene="amiC"
 PAAMIR  EMBL    sequence_feature        1       1       0.000   +       .
@@ -292,7 +292,7 @@ See also
    newseq           Create a sequence file from a typed-in sequence
    nohtml           Remove mark-up (e.g. HTML tags) from an ASCII text file
    noreturn         Remove carriage return from ASCII files
-   nospace          Remove all whitespace from an ASCII text file
+   nospace          Remove whitespace from an ASCII text file
    notab            Replace tabs with spaces in an ASCII text file
    notseq           Write to file a subset of an input stream of sequences
    nthseq           Write to file a single sequence from an input stream of
@@ -317,9 +317,12 @@ See also
 
 Author(s)
 
-   Peter Rice (pmr (c) ebi.ac.uk)
+   Peter Rice
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

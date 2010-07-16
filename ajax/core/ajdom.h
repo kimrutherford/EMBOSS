@@ -200,6 +200,33 @@ typedef struct AjSDomNodeList
 
 
 
+/* @data AjSDomUserdata ******************************************************
+**
+** DOM Userdata used when reading XML
+**
+** @alias AjODomUserdata
+** @alias AjPDomUserdata
+**
+** @attr Buffer [AjPStr] Utility string
+** @attr Stack [AjPList] Stack
+** @attr Cdata [AjBool] Cdata
+** @attr Padding [AjBool] Pad to alignment boundary
+**
+******************************************************************************/
+
+typedef struct AjSDomUserdata 
+{
+    AjPStr  Buffer;
+    AjPList Stack;
+    AjBool  Cdata;
+    AjBool  Padding;
+} AjODomUserdata;
+
+#define AjPDomUserdata AjODomUserdata*
+
+
+
+
 #define AjPDomDocument AjPDomNode
 #define AjPDomNodeMap AjPDomNodeList
 #define AjPDomDocumentType AjPDomNode
@@ -211,7 +238,9 @@ typedef struct AjSDomNodeList
 #define AjPDomComment AjPDomNode
 #define AjPDomAttr AjPDomNode
 #define AjPDomEntityReference AjPDomNode
+#define AjPDomEntity AjPDomNode
 #define AjPDomPi AjPDomNode
+#define AjPDomNotation AjPDomNode
 
 
 
@@ -236,6 +265,8 @@ AjPDomDocument  ajDomImplementationCreateDocument(const AjPStr uri,
 AjPDomDocument ajDomImplementationCreateDocumentC(const char *uri,
 						  const char *qualname,
 						  AjPDomDocumentType doctype);
+
+ajint ajDomNodeListGetLen(const AjPDomNodeList list);
 
 AjPDomNodeEntry ajDomNodeListAppend(AjPDomNodeList list,
 				    AjPDomNode child);
@@ -353,7 +384,7 @@ void               ajDomDocumentDestroyNodeList(AjPDomDocument doc,
 AjPDomNode         ajDomNodeReplaceChild(AjPDomNode node, AjPDomNode newchild,
 					 AjPDomNode oldchild);
 AjPDomNode         ajDomNodeCloneNode(AjPDomNode node, AjBool deep);
-AjPDomNode         ajDomNodeListItem(const AjPDomNodeList list, ajint index);
+AjPDomNode         ajDomNodeListItem(const AjPDomNodeList list, ajint indexnum);
 AjBool             ajDomNodeListExists(AjPDomNodeList list,
 				       const AjPDomNode child);
 AjPDomNodeEntry    ajDomNodeListRemove(AjPDomNodeList list, AjPDomNode child);
@@ -369,7 +400,7 @@ AjPDomNode         ajDomNodeMapRemoveItem(AjPDomNodeMap map,
 			 		  const AjPStr name);
 AjPDomNode         ajDomNodeMapRemoveItemC(AjPDomNodeMap map,
 			 		   const char *name);
-AjPDomNode         ajDomNodeMapItem(const AjPDomNodeMap map, ajint index);
+AjPDomNode         ajDomNodeMapItem(const AjPDomNodeMap map, ajint indexnum);
 
 AjPDomNodeEntry  ajDomNodeListInsert(AjPDomNodeList list, AjPDomNode newchild,
 				     AjPDomNode refchild);
@@ -387,6 +418,13 @@ ajint ajDomWriteIndent(const AjPDomDocument node, AjPFile outf, ajint indent);
 void ajDomPrintNode(const AjPDomNode node, ajint indent);
 void ajDomPrintNode2(const AjPDomNode node);
 void ajDomNodePrintNode(const AjPDomNode node);
+
+
+ajint ajDomReadFp(AjPDomDocument node, FILE *stream);
+ajint ajDomReadFilebuff(AjPDomDocument node, AjPFilebuff buff);
+ajint ajDomReadString(AjPDomDocument node, AjPStr str);
+    
+
 
 
 /*

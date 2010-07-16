@@ -1,5 +1,5 @@
 Create random protein sequences
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
    -pepstatsfile       infile     This file should be a pepstats output file.

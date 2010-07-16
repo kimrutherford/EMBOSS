@@ -47,8 +47,6 @@ static ajint *sapp;				/* Current script append ptr */
 static ajint  last;				/* Last script op appended */
 
 static ajint I, J;				/* current positions of A ,B */
-static ajint no_mat; 				/* number of matches */
-static ajint no_mis; 				/* number of mismatches */
 static ajint al_len; 				/* length of alignment */
 
 
@@ -256,7 +254,7 @@ AjPSeqCvt cvt = NULL;
 
 static void  matcher_Sim(AjPAlign align,
 			const char A[], const char B[],
-			 const AjPSeq seq1, const AjPSeq seq2, ajuint K,
+			 const AjPSeq seq0, const AjPSeq seq1, ajuint K,
 			ajint Q, ajint R, ajint beg, ajint beg2, ajint nseq);
 static ajint matcher_BigPass(const char A[], const char B[],
 			     ajint M, ajint N, ajint K,
@@ -413,10 +411,9 @@ static void matcher_Sim(AjPAlign align,
     seq1len = ajSeqGetLen(seq1);
 
     /* allocate space for consensus */
-    i =(AJMIN(ajSeqGetLen(seq0),ajSeqGetLen(seq1)))*2;
+    i = (seq0len+seq1len+1);
     AJCNEW(seqc0,i);
     AJCNEW(seqc1,i);
-
     /* allocate space for all vectors */
 
     j = (seq1len + 1)				/* * sizeof(ajint)*/;
@@ -434,7 +431,7 @@ static void matcher_Sim(AjPAlign align,
     AJCNEW(JJ, i);
     AJCNEW(XX, i);
     AJCNEW(YY, i);
-    AJCNEW(S,  AJMIN(i,j)*5/4);
+    AJCNEW(S,  (i+j));
     AJCNEW0(row,(seq0len + 1));
 
     /* set up list for each row (already zeroed by AJCNEW0 macro) */
@@ -452,7 +449,6 @@ static void matcher_Sim(AjPAlign align,
     numnode = lmin = 0;
     matcher_BigPass(A,B,seq0len,seq1len,K,nseq, &numnode);
 
-    ajDebug("Matcher numnode: %d\n", numnode);
     /* Report the K best alignments one by one. After each alignment is
        output, recompute part of the matrix. First determine the size
        of the area to be recomputed, then do the recomputation         */
@@ -478,8 +474,6 @@ static void matcher_Sim(AjPAlign align,
 	sapp  = S;
 	last  = 0;
 	al_len = 0;
-	no_mat = 0;
-	no_mis = 0;
 	matcher_Diff(&A[stari]-1, &B[starj]-1,rl,cl,q,q);
 
 	min0 = stari-1;
@@ -1359,10 +1353,6 @@ static ajint matcher_Diff(const char *A,const char *B,
         {
 	    if(midj > 1) MATCHERINS(midj-1)
 		MATCHERREP
-		if(A[1] == B[midj])
-		  no_mat += 1;
-		else
-		  no_mis += 1;
 
 	    /* mark(A[I],B[J]) as used: put J into list row[I] */
 	    I++; J++;
@@ -1579,7 +1569,6 @@ static ajint matcher_Calcons(char *seqc0,char *seqc1,
 	    }
 	}
     }
-
     *sp0 = '\0';
     *sp1 = '\0';
     *nident = nid;

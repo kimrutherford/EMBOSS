@@ -124,7 +124,9 @@ int main(int argc, char **argv)
     
     while(ajSeqallNext(seqall, &seq))
     {
-	orf_no = 1;		   /* number of the next ORF */
+        ajSeqTrim(seq);
+
+        orf_no = 1;		   /* number of the next ORF */
 	sense = ajTrue;		   /* forward sense initially */
 
 	/* get the length of the sequence */
@@ -641,13 +643,13 @@ static void getorf_WriteORF(const AjPSeq seq,
     }
 
     /* the base before the stop codon (numbering bases from 1) */
-    ajStrFromInt(&value, s);	
+    ajStrFromInt(&value, s + ajSeqGetOffset(seq));	
 					   
     ajStrAppendS(&name, value);
     ajStrAppendC(&name, " - ");
 
     /* the base before the stop codon (numbering bases from 1) */
-    ajStrFromInt(&value, e);
+    ajStrFromInt(&value, e + ajSeqGetOffset(seq));
 					   
 
     ajStrAppendS(&name, value);

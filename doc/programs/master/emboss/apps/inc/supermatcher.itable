@@ -64,6 +64,14 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td>-minscore</td>
+<td>float</td>
+<td>Minimum alignment score to report an alignment.</td>
+<td>Number 0.000 or more</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td>-width</td>
 <td>integer</td>
 <td>Alignment width</td>

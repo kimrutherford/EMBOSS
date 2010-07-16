@@ -1,8 +1,8 @@
 application: makeprotseq [
   documentation: "Create random protein sequences"
   groups: "Edit"
-  relations: "EDAM: Sequence mutation and randomisation"
-  relations: "EDAM: Sequence extraction and generation"
+  relations: "/edam/topic/0000156 Sequence editing"
+  relations: "/edam/operation/0000364 Random sequence generation"
 ]
 
 section: input [
@@ -18,7 +18,7 @@ section: input [
            output file."
     nullok: "Y"
     knowntype: "pepstats output"
-    relations:  "EDAM: Protein physicochemical profile"                
+    relations:  "/edam/data/0000897 Protein physicochemical property"                
   ]
 
 endsection: input
@@ -33,7 +33,7 @@ section: required [
     default: "100"
     minimum: "1"
     information: "Number of sequences created"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001694 Number of output entities"                                     
   ]
 
   integer: length [
@@ -41,14 +41,14 @@ section: required [
     default: "100"
     minimum: "1"
     information: "Length of each sequence"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001249 Sequence length"                                     
   ]
 
   toggle: useinsert [
     additional: "Y"
     information: "Do you want to make an insert"
     default: "N"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   string: insert [
@@ -56,7 +56,7 @@ section: required [
     information: "Inserted string"
     help: "String that is inserted into sequence"
     knowntype: "sequence"
-    relations:  "EDAM: Sequence"                                       
+    relations:  "/edam/data/0000848 Sequence"                                       
   ]
 
   integer: start [
@@ -64,7 +64,7 @@ section: required [
     information: "Start point of inserted sequence"
     minimum: "1"
     default: "1"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001016 Sequence position"                                     
   ]
 
 endsection: required
@@ -78,7 +78,9 @@ section: output [
     parameter: "Y"
     type: "protein"
     name: "makeseq"
-    relations: "EDAM: Protein sequence record"                             
+    relations: "/edam/data/0001219 Pure protein sequence"
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more"                             
   ]
 
 endsection: output

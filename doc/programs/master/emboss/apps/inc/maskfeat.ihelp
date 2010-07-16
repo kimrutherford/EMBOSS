@@ -1,5 +1,5 @@
 Write a sequence with masked features
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -12,11 +12,11 @@ Version: EMBOSS:6.2.0
                                   feature table with a type starting 'repeat'
                                   is masked. You can set this to be any
                                   feature type you wish to mask.
-                                  See http://www3.ebi.ac.uk/Services/WebFeat/
-                                  for a list of the EMBL feature types and see
+                                  See http://www.ebi.ac.uk/embl/WebFeat/ for a
+                                  list of the EMBL feature types and see
                                   Appendix A of the Swissprot user manual in
-                                  http://www.expasy.ch/txt/userman.txt for a
-                                  list of the Swissprot feature types.
+                                  http://www.expasy.org/sprot/userman.html for
+                                  a list of the Swissprot feature types.
                                   The type may be wildcarded by using '*'.
                                   If you wish to mask more than one type,
                                   separate their names with spaces or commas,

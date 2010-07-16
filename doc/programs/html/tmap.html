@@ -70,13 +70,14 @@ Created tmap.ps
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Predict and plot transmembrane segments in protein sequences
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequences]         seqset     File containing a sequence alignment
    -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tek, tekt, none, data, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif, pdf,
+                                  svg, pdf, svg)
   [-outfile]           report     [*.tmap] Output report file name
 
    Additional (Optional) qualifiers: (none)
@@ -167,7 +168,7 @@ Version: EMBOSS:6.2.0
 <td>-graph</td>
 <td>xygraph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif, pdf, svg, pdf, svg</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -669,12 +670,12 @@ OPSD_XENLA VSPA
 #=======================================
 
   Start     End TransMem Sequence
-     43      70        1 YMFLLIvLGxPINFlTLyVTvQHKKLRT
-     71      98        2 PLNYILLNLxxAdxFMVLxGFTxTlYTS
+     43      70        1 YMFLLIvLG-PINFlTLyVTvQHKKLRT
+     71      98        2 PLNYILLNL--Ad-FMVL-GFT-TlYTS
     112     140        3 lEGFFATLGGEiALWSLVVLAiERYvVVC
-    148     176        4 FGENHAIMGVAFTWvMALaCAAPPLxGWS
-    201     229        5 ESFVIYMFvVHFTIPmIiIFFCYGqLvxT
-    256     276        6 IMVixFLICWVPYAxVAFYIF
+    148     176        4 FGENHAIMGVAFTWvMALaCAAPPL-GWS
+    201     229        5 ESFVIYMFvVHFTIPmIiIFFCYGqLv-T
+    256     276        6 IMVi-FLICWVPYA-VAFYIF
     285     305        7 PiFMTiPAFFAKSaAIYNPVI
 
 #---------------------------------------
@@ -852,10 +853,13 @@ Original program by Bengt Persson and Patrick Argos.
 
 This application was modified for inclusion in EMBOSS by 
 
-Ian Longden (il&nbsp;&copy;&nbsp;sanger.ac.uk)
+Ian Longden formerly at:
 <br>
 Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
 Cambridge, CB10 1SA, UK.                      
+
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
 
 <H2>
     History

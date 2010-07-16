@@ -66,7 +66,7 @@ int main(int argc, char **argv)
     float *bend;
     const char *ptr;
     ajint i;
-    ajuint ii;
+    ajint ii;
     ajint k;
     ajint j;
     char residue[2];
@@ -104,7 +104,7 @@ int main(int argc, char **argv)
     float yp1;
     float yp2;
     double td;
-
+    
     embInit("banana", argc, argv);
     seq    = ajAcdGetSeq("sequence");
     file   = ajAcdGetDatafile("anglesfile");
@@ -128,7 +128,7 @@ int main(int argc, char **argv)
 
     ptr= ajStrGetPtr(sstr);
 
-    for(ii=0;ii<ajStrGetLen(sstr);ii++)
+    for(ii=0;ii<ilen;ii++)
     {
 	if(*ptr=='A' || *ptr=='a')
 	    iseq[ii+1] = 0;
@@ -199,7 +199,7 @@ int main(int argc, char **argv)
     ajStrDel(&buffer);
 
 
-    for(ii=1;ii<ajStrGetLen(sstr)-1;ii++)
+    for(ii=1;ii<ilen-1;ii++)
     {
 	twistsum += twist[iseq[ii]][iseq[ii+1]][iseq[ii+2]];
 	dx = (roll[iseq[ii]][iseq[ii+1]][iseq[ii+2]]*sinfban(twistsum)) +
@@ -212,7 +212,7 @@ int main(int argc, char **argv)
 
     }
 
-    for(ii=6;ii<ajStrGetLen(sstr)-6;ii++)
+    for(ii=6;ii<ilen-6;ii++)
     {
 	rxsum = 0.0;
 	rysum = 0.0;
@@ -255,7 +255,7 @@ int main(int argc, char **argv)
     {
 	ajFmtPrintF(outf,"Base   Bend      Curve\n");
 	ptr = ajStrGetPtr(sstr);
-	for(ii=1;ii<=ajStrGetLen(sstr);ii++)
+	for(ii=1;ii<=ilen;ii++)
 	{
 	    ajFmtPrintF(outf,"%c    %6.1f   %6.1f\n",
 			*ptr, bend[ii], curve[ii]);
@@ -268,7 +268,7 @@ int main(int argc, char **argv)
     {
 	maxbend  = minbend  = 0.0;
 	maxcurve = mincurve = 0.0;
-	for(ii=1;ii<=ajStrGetLen(sstr);ii++)
+	for(ii=1;ii<=ilen;ii++)
 	{
 	    if(bend[ii] > maxbend)
 		maxbend = bend[ii];
@@ -332,7 +332,7 @@ int main(int argc, char **argv)
 	ptr = ajStrGetPtr(sstr);
 
 	yy1 = yy1-(yincr*((float)5.0));
-	for(ii=1;ii<=ajStrGetLen(sstr);ii++)
+	for(ii=1;ii<=ilen;ii++)
 	{
 	    if(count > numres)
 	    {
@@ -353,7 +353,7 @@ int main(int argc, char **argv)
 
 	    ajGraphicsDrawposTextAtend((float)(count)+(float)2.0,yy1,residue);
 
-	    if(ii>1 && ii < ajStrGetLen(sstr))
+	    if(ii>1 && ii < ilen)
 	    {
 		yp1 = yy1+yincr + (bend[ii]*bendfactor);
 		yp2 = yy1+yincr + (bend[ii+1]*bendfactor);
@@ -361,11 +361,11 @@ int main(int argc, char **argv)
 			    (float)(count)+(float)2.5,yp2);
 	    }
 
-	    ipos = ajStrGetLen(sstr)-(ajint)rcurve-7;
+	    ipos = ilen-(ajint)rcurve-7;
 	    if(ipos < 0)
 		ipos = 0;
 
-	    if(ii>(ajuint)rcurve+5 && ii< (ajuint) ipos)
+	    if(ii>rcurve+5 && ii<ipos)
 	    {
 		yp1 = yy1+yincr + (curve[ii]*curvefactor);
 		yp2 = yy1+yincr + (curve[ii+1]*curvefactor);

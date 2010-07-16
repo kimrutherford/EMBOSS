@@ -9,6 +9,9 @@ extern "C"
 #include "ajseqdata.h"
 #include "ajax.h"
 
+
+
+
 /* @data AjPSeqCvt ************************************************************
 **
 ** Sequence conversion data. Used to convert a sequence to binary.
@@ -98,8 +101,9 @@ void         ajSeqAssignGiS(AjPSeq
                            seq, const AjPStr str);
 void         ajSeqAssignNameC(AjPSeq seq, const char* txt);
 void         ajSeqAssignNameS(AjPSeq seq, const AjPStr str);
+void         ajSeqAssignQualLen(AjPSeq seq, const float* qual, ajuint len);
 void         ajSeqAssignSeqC(AjPSeq seq, const char* text);
-void         ajSeqAssignSeqLenC(AjPSeq seq, const char* txt, ajint len);
+void         ajSeqAssignSeqLenC(AjPSeq seq, const char* txt, ajuint len);
 void         ajSeqAssignSeqS(AjPSeq seq, const AjPStr str);
 void         ajSeqAssignSvC(AjPSeq seq, const char* text);
 void         ajSeqAssignSvS(AjPSeq seq, const AjPStr str);
@@ -108,6 +112,7 @@ void         ajSeqAssignUfoS(AjPSeq seq, const AjPStr str);
 void         ajSeqAssignUsaC(AjPSeq seq, const char* text);
 void         ajSeqAssignUsaS(AjPSeq seq, const AjPStr str);
 ajuint       ajSeqGetBegin (const AjPSeq seq);
+const float* ajSeqGetQual(const AjPSeq seq);
 const char*  ajSeqGetSeqC (const AjPSeq thys);
 const AjPStr ajSeqGetSeqS(const AjPSeq seq);
 char*        ajSeqGetSeqCopyC (const AjPSeq seq);
@@ -125,6 +130,7 @@ void         ajSeqcvtDel (AjPSeqCvt* thys);
 ajint        ajSeqcvtGetCodeK (const AjPSeqCvt thys, char ch);
 ajint        ajSeqcvtGetCodeS (const AjPSeqCvt thys, const AjPStr ch);
 ajint        ajSeqcvtGetCodeAsymS (const AjPSeqCvt cvt, const AjPStr str);
+ajint        ajSeqcvtGetCodeAsymrowS (const AjPSeqCvt cvt, const AjPStr str);
 ajuint       ajSeqcvtGetLen (const AjPSeqCvt thys);
 AjPSeqCvt    ajSeqcvtNewC (const char* bases);
 AjPSeqCvt    ajSeqcvtNewNumberC (const char* bases);
@@ -241,10 +247,10 @@ ajuint       ajSeqGetLenUngapped (const AjPSeq seq);
 const char*  ajSeqclsGetEmbl(const AjPStr cls);
 AjBool       ajSeqclsSetEmbl(AjPStr *cls, const AjPStr clsembl);
 AjBool       ajSeqclsSetGb(AjPStr *cls, const AjPStr clsembl);
-const char*  ajSeqdivGetEmbl(const AjPStr div);
-const char*  ajSeqdivGetGb(const AjPStr div);
-AjBool       ajSeqdivSetEmbl(AjPStr *div, const AjPStr divembl);
-AjBool       ajSeqdivSetGb(AjPStr *div, const AjPStr divembl);
+const char*  ajSeqdivGetEmbl(const AjPStr divi);
+const char*  ajSeqdivGetGb(const AjPStr divi);
+AjBool       ajSeqdivSetEmbl(AjPStr *Pdivi, const AjPStr divembl);
+AjBool       ajSeqdivSetGb(AjPStr *Pdivi, const AjPStr divembl);
 const char*  ajSeqmolGetEmbl(const AjPStr mol);
 const char*  ajSeqmolGetGb(const AjPStr mol);
 AjBool       ajSeqmolSetEmbl(AjPStr *mol, const AjPStr molembl);
@@ -336,8 +342,8 @@ ajint        ajSeqCalcTrueposMin (const AjPSeq thys, ajint imin, ajint ipos);
 **  go into the block above, otherwise the VC compilation will fail 
 */
 
-const char*  ajSeqdivGetDdbj(const AjPStr div);
-AjBool       ajSeqdivSetDdbj(AjPStr *div, const AjPStr divembl);
+const char*  ajSeqdivGetDdbj(const AjPStr divi);
+AjBool       ajSeqdivSetDdbj(AjPStr *Pdivi, const AjPStr divembl);
 const char*  ajSeqmolGetDdbj(const AjPStr mol);
 AjBool       ajSeqmolSetDdbj(AjPStr *mol, const AjPStr molddbj);
 

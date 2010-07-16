@@ -1,7 +1,8 @@
 application: compseq [
   documentation: "Calculate the composition of unique words in sequences"
   groups: "Nucleic:Composition, Protein:Composition"
-  relations: "EDAM: Sequence character or word composition analysis"
+  relations: "/edam/topic/0000157 Sequence composition"
+  relations: "/edam/operation/0000236 Sequence composition analysis"
 ]
 
 section: input [
@@ -12,7 +13,9 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "any"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0000848 Sequence" 
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more" 
   ]
 
   infile: infile [
@@ -27,7 +30,7 @@ section: input [
            frequencies, and you must use one made from nucleotide frequencies
            if you are analysing a nucleotide sequence."
     knowntype: "compseq output"
-    relations:  "EDAM: Sequence composition report"                    
+    relations:  "/edam/data/0001261 Sequence composition"                    
   ]
 
 endsection: input
@@ -42,11 +45,13 @@ section: required [
     minimum: "1"
     default: "2"
     maximum: "@($(acdprotein)? 4 : 6)"
+    failrange: "N"
+    trueminimum: "N"
     information: "Word size to consider (e.g. 2=dimer)"
     help: "This is the size of word (n-mer) to count. \
            Thus if you want to count codon frequencies for a nucleotide
            sequence, you should enter 3 here."
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001250 Word size"
   ]
 
 endsection: required
@@ -61,6 +66,8 @@ section: additional [
     default: "0"
     minimum: "0"
     maximum: "$(word)"
+    failrange: "N"
+    trueminimum: "Y"
     information: "Frame of word to look at (0=all frames)"
     help: "The normal behaviour of 'compseq' is to count the
            frequencies of all words that occur by moving a window of length
@@ -71,7 +78,7 @@ section: additional [
            word by setting this value to a number other than zero. \
            If you set it to 1 it will only count the words in frame 1, 2 will
            only count the words in frame 2 and so on."
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0002126 Translation frame specification"                                     
   ]
 
   boolean: ignorebz [
@@ -84,7 +91,7 @@ section: additional [
            These are not commonly used codes and you may wish not to count
            words containing them, just noting them in the count of 'Other'
            words."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: reverse [
@@ -93,7 +100,7 @@ section: additional [
     information: "Count words in the forward and reverse sense"
     help: "Set this to be true if you also wish to also count words in
            the reverse complement of a nucleic sequence."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: calcfreq [
@@ -113,7 +120,7 @@ section: additional [
            been specified then the values from that file will be used instead
            of this calculation of expected frequency from the sequence, even
            if 'calcfreq' is set to be true."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
 endsection: additional
@@ -129,7 +136,7 @@ section: output [
     help: "This is the results file."
     information: "Program compseq output file"
     knowntype: "compseq output"
-    relations:  "EDAM: Sequence composition report"                    
+    relations:  "/edam/data/0001261 Sequence composition"                    
   ]
 
   boolean: zerocount [
@@ -139,7 +146,7 @@ section: output [
                   zero"
     help: "You can make the output results file much smaller if you do
            not display the words with a zero count."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
 endsection: output

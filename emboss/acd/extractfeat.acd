@@ -1,8 +1,9 @@
 application: extractfeat [
   documentation: "Extract features from sequence(s)"
   groups: "Edit, Feature tables"
-  relations: "EDAM: Sequence feature extraction and generation"
-  relations: "EDAM: Sequence file handling"
+  relations: "/edam/topic/0000160 Sequence features"
+  relations: "/edam/topic/0000220 File handling"
+  relations: "/edam/operation/0000254 Sequence feature table extraction"
 ]
 
 section: input [
@@ -14,7 +15,9 @@ section: input [
     parameter: "Y"
     type: "any"
     features: "Y"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0000848 Sequence" 
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more"
   ]
 
 endsection: input
@@ -39,7 +42,7 @@ section: additional [
            of the feature. The output sequence will be padded with 'N' or 'X'
            characters if the sequence starts after the required start of the
            extraction."
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001249 Sequence length"                                     
   ]
 
   integer: after [
@@ -56,7 +59,7 @@ section: additional [
            extraction 10 bases/residues after the start of the feature. The
            output sequence will be padded with 'N' or 'X' characters if the
            sequence ends before the required end of the extraction."
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001249 Sequence length"                                     
   ]
 
   string: source [
@@ -74,7 +77,7 @@ section: additional [
            with the character '|', eg: \
            gene* | embl"
     knowntype: "feature source list"
-    relations:  "EDAM: List of sequence feature sources"               
+    relations:  "/edam/data/0000856 Sequence feature source"               
   ]
 
   string: type [
@@ -83,7 +86,7 @@ section: additional [
     information: "Type of feature to extract"
     help: "By default every feature in the feature table is extracted.
            You can set this to be any feature type you wish to extract. \
-           See http://www.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL
+           See http://www.ebi.ac.uk/embl/WebFeat/ for a list of the EMBL
            feature types and see the Uniprot user manual in
            http://www.uniprot.org/manual/sequence_annotation
            for a list of the Uniprot feature types. \
@@ -92,7 +95,7 @@ section: additional [
            with the character '|', eg: \
            *UTR | intron"
     knowntype: "feature key list"
-    relations:  "EDAM: List of sequence feature types"                 
+    relations:  "/edam/data/0001020 Sequence feature key"                 
   ]
 
   integer: sense [
@@ -104,7 +107,7 @@ section: additional [
     help: "By default any feature type in the feature table is
            extracted. You can set this to match any feature sense you wish. 0
            - any sense, 1 - forward sense, -1 - reverse sense"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0000853 DNA sense specification"
   ]
 
   float: minscore [
@@ -112,7 +115,7 @@ section: additional [
     default: "0.0"
     information: "Minimum score of feature to extract"
     help: "Minimum score of feature to extract (see also maxscore)"
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001772 Score"
   ]
 
   float: maxscore [
@@ -122,7 +125,7 @@ section: additional [
     help: "Maximum score of feature to extract. \
            If both minscore and maxscore are zero (the default),
            then any score is ignored"
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001772 Score"
   ]
 
   string: tag [
@@ -145,7 +148,7 @@ section: additional [
            with the character '|', eg: \
            gene | label"
     knowntype: "feature tag list"
-    relations:  "EDAM: List of sequence feature tags"                  
+    relations:  "/edam/data/0001021 Sequence feature qualifier"                  
   ]
 
   string: value [
@@ -168,7 +171,7 @@ section: additional [
            with a space or the character '|', eg: \
            pax* | 10"
     knowntype: "feature tagvalue list"
-    relations:  "EDAM: Generic string"                                 
+    relations:  "/edam/data/0001021 Sequence feature qualifier"                                 
   ]
 
 endsection: additional
@@ -189,7 +192,7 @@ section: output [
            output as a single sequence. If the 'before' and 'after'
            qualifiers have been set, then only the sequence before the first
            feature and after the last feature are added."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: featinname [
@@ -204,7 +207,7 @@ section: output [
            so it is useful for the type to be a part of the sequence ID name.
            If you set this to be TRUE then the name is added to the ID name
            of the output sequence."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   string: describe [
@@ -233,12 +236,13 @@ section: output [
            with the character '|', eg: \
            gene | label"
     knowntype: "feature tag list"
-    relations:  "EDAM: List of sequence feature tags"                  
+    relations:  "/edam/data/0001021 Sequence feature qualifier"                  
   ]
 
   seqout: outseq [
     parameter: "Y"
-    relations: "EDAM: Sequence"                                            
+    relations: "/edam/data/0000848 Sequence"                                            
+    relations: "/edam/data/0000849 Sequence record" 
   ]
 
 endsection: output

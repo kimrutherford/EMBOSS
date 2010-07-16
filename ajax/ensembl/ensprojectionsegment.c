@@ -4,7 +4,7 @@
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @version $Revision: 1.2 $
+** @version $Revision: 1.3 $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -59,6 +59,8 @@
 **
 ** Functions for manipulating Ensembl Projection Segment objects
 **
+** @cc Bio::EnsEMBL::ProjectionSegment CVS Revision: 1.5
+**
 ** @nam2rule Projectionsegment
 **
 ******************************************************************************/
@@ -95,44 +97,43 @@
 **
 ** Default constructor for an Ensembl Projection Segment.
 **
-** @param [r] srcstart [ajuint] Source start coordinate.
-** @param [r] srcend [ajuint] Source end coordinate.
-** @param [r] trgslice [EnsPSlice] Target Ensembl Slice.
+** @param [r] srcstart [ajuint] Source start coordinate
+** @param [r] srcend [ajuint] Source end coordinate
+** @param [r] trgslice [EnsPSlice] Target Ensembl Slice
 **
-** @return [EnsPProjectionsegment] Ensembl Projection Segment or NULL.
+** @return [EnsPProjectionsegment] Ensembl Projection Segment or NULL
 ** @@
 ******************************************************************************/
 
-EnsPProjectionsegment ensProjectionsegmentNew(ajuint srcstart, ajuint srcend,
+EnsPProjectionsegment ensProjectionsegmentNew(ajuint srcstart,
+                                              ajuint srcend,
                                               EnsPSlice trgslice)
 {
     EnsPProjectionsegment ps = NULL;
-    
-    /*
-     ajDebug("ensProjectionsegmentNew\n"
-	     "  srcstart %u\n"
-	     "  srcend %u\n"
-	     "  trgslice %p\n",
-	     srcstart,
-	     srcend,
-	     trgslice);
-     
-     ensSliceTrace(trgslice, 1);
-     */
-    
+
+    if(ajDebugTest("ensProjectionsegmentNew"))
+    {
+        ajDebug("ensProjectionsegmentNew\n"
+                "  srcstart %u\n"
+                "  srcend %u\n"
+                "  trgslice %p\n",
+                srcstart,
+                srcend,
+                trgslice);
+
+        ensSliceTrace(trgslice, 1);
+    }
+
     if(!trgslice)
         return NULL;
-    
+
     AJNEW0(ps);
-    
+
     ps->SrcStart = srcstart;
-    
-    ps->SrcEnd = srcend;
-    
+    ps->SrcEnd   = srcend;
     ps->TrgSlice = ensSliceNewRef(trgslice);
-    
-    ps->Use = 1;
-    
+    ps->Use      = 1;
+
     return ps;
 }
 
@@ -144,19 +145,19 @@ EnsPProjectionsegment ensProjectionsegmentNew(ajuint srcstart, ajuint srcend,
 ** Ensembl Object referencing function, which returns a pointer to the
 ** Ensembl Object passed in and increases its reference count.
 **
-** @param [u] ps [EnsPProjectionsegment] Ensembl Projection Segment.
+** @param [u] ps [EnsPProjectionsegment] Ensembl Projection Segment
 **
-** @return [EnsPProjectionsegment] Ensembl Projection Segment.
+** @return [EnsPProjectionsegment] Ensembl Projection Segment
 ** @@
 ******************************************************************************/
 
 EnsPProjectionsegment ensProjectionsegmentNewRef(EnsPProjectionsegment ps)
 {
     if(!ps)
-	return NULL;
-    
+        return NULL;
+
     ps->Use++;
-    
+
     return ps;
 }
 
@@ -187,7 +188,7 @@ EnsPProjectionsegment ensProjectionsegmentNewRef(EnsPProjectionsegment ps)
 **
 ** Default Ensembl Projection Segment destructor.
 **
-** @param [d] Pps [EnsPProjectionsegment*] Ensembl Projection Segment address.
+** @param [d] Pps [EnsPProjectionsegment*] Ensembl Projection Segment address
 **
 ** @return [void]
 ** @@
@@ -196,30 +197,30 @@ EnsPProjectionsegment ensProjectionsegmentNewRef(EnsPProjectionsegment ps)
 void ensProjectionsegmentDel(EnsPProjectionsegment *Pps)
 {
     EnsPProjectionsegment pthis = NULL;
-    
+
     if(!Pps)
         return;
-    
+
     if(!*Pps)
         return;
 
     pthis = *Pps;
-    
+
     pthis->Use--;
-    
+
     if(pthis->Use)
     {
-	*Pps = NULL;
-	
-	return;
+        *Pps = NULL;
+
+        return;
     }
-    
+
     ensSliceDel(&pthis->TrgSlice);
-    
+
     AJFREE(pthis);
 
     *Pps = NULL;
-    
+
     return;
 }
 
@@ -230,9 +231,9 @@ void ensProjectionsegmentDel(EnsPProjectionsegment *Pps)
 **
 ** Get the source start element of an Ensembl Projection Segment.
 **
-** @param [r] ps [const EnsPProjectionsegment] Ensembl Projection Segment.
+** @param [r] ps [const EnsPProjectionsegment] Ensembl Projection Segment
 **
-** @return [ajuint] Source start coordinate.
+** @return [ajuint] Source start coordinate
 ** @@
 ******************************************************************************/
 
@@ -240,7 +241,7 @@ ajuint ensProjectionsegmentGetSrcStart(const EnsPProjectionsegment ps)
 {
     if(!ps)
         return 0;
-    
+
     return ps->SrcStart;
 }
 
@@ -251,9 +252,9 @@ ajuint ensProjectionsegmentGetSrcStart(const EnsPProjectionsegment ps)
 **
 ** Get the source end element of an Ensembl Projection Segment.
 **
-** @param [r] ps [const EnsPProjectionsegment] Ensembl Projection Segment.
+** @param [r] ps [const EnsPProjectionsegment] Ensembl Projection Segment
 **
-** @return [ajuint] Source end coordinate.
+** @return [ajuint] Source end coordinate
 ** @@
 ******************************************************************************/
 
@@ -261,7 +262,7 @@ ajuint ensProjectionsegmentGetSrcEnd(const EnsPProjectionsegment ps)
 {
     if(!ps)
         return 0;
-    
+
     return ps->SrcEnd;
 }
 
@@ -272,9 +273,9 @@ ajuint ensProjectionsegmentGetSrcEnd(const EnsPProjectionsegment ps)
 **
 ** Get the target Ensembl Slice element of an Ensembl Projection Segment.
 **
-** @param [r] ps [const EnsPProjectionsegment] Ensembl Projection Segment.
+** @param [r] ps [const EnsPProjectionsegment] Ensembl Projection Segment
 **
-** @return [EnsPSlice] Target Ensembl Slice.
+** @return [EnsPSlice] Target Ensembl Slice
 ** @@
 ******************************************************************************/
 
@@ -282,7 +283,7 @@ EnsPSlice ensProjectionsegmentGetTrgSlice(const EnsPProjectionsegment ps)
 {
     if(!ps)
         return NULL;
-    
+
     return ps->TrgSlice;
 }
 
@@ -311,38 +312,38 @@ EnsPSlice ensProjectionsegmentGetTrgSlice(const EnsPProjectionsegment ps)
 **
 ** Trace an Ensembl Projection Segment.
 **
-** @param [r] ps [const EnsPProjectionsegment] Ensembl Projection Segment.
-** @param [r] level [ajuint] Indentation level.
+** @param [r] ps [const EnsPProjectionsegment] Ensembl Projection Segment
+** @param [r] level [ajuint] Indentation level
 **
-** @return [AjBool] ajTrue upon success, ajFalse otherwise.
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
 AjBool ensProjectionsegmentTrace(const EnsPProjectionsegment ps, ajuint level)
 {
     AjPStr indent = NULL;
-    
+
     if(!ps)
-	return ajFalse;
-    
+        return ajFalse;
+
     indent = ajStrNew();
-    
+
     ajStrAppendCountK(&indent, ' ', level * 2);
-    
+
     ajDebug("%SensProjectionsegmentTrace %p\n"
-	    "%S  SrcStart %d\n"
-	    "%S  SrcEnd %d\n"
-	    "%S  TrgSlice %p\n"
-	    "%S  Use %u\n",
-	    indent, ps,
-	    indent, ps->SrcStart,
-	    indent, ps->SrcEnd,
-	    indent, ps->TrgSlice,
-	    indent, ps->Use);
-    
+            "%S  SrcStart %d\n"
+            "%S  SrcEnd %d\n"
+            "%S  TrgSlice %p\n"
+            "%S  Use %u\n",
+            indent, ps,
+            indent, ps->SrcStart,
+            indent, ps->SrcEnd,
+            indent, ps->TrgSlice,
+            indent, ps->Use);
+
     ensSliceTrace(ps->TrgSlice, level + 1);
-    
+
     ajStrDel(&indent);
-    
+
     return ajTrue;
 }

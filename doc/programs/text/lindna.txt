@@ -46,7 +46,7 @@ Created lindna.ps
 Command line arguments
 
 Draws linear maps of DNA constructs
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     [inputfile] Commands to the lindna drawing
@@ -57,7 +57,8 @@ Version: EMBOSS:6.2.0
                                   (Black border))
    -graphout           graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tek, tekt, none, data, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif, pdf,
+                                  svg, pdf, svg)
 
    Additional (Optional) qualifiers:
    -maxgroups          integer    [20] Maximum number of groups (Integer 1 or
@@ -304,8 +305,11 @@ See also
 
 Author(s)
 
-   Nicolas          Tourasse (nicolas.tourasse (c) biotek.uio.no)
+   Nicolas          Tourasse formerly at:
    Biotechnology    Center of Oslo
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

@@ -57,7 +57,7 @@ AjPStr        ajAcdGetOutdirName (const char *token);
 AjPOutfile    ajAcdGetOutdiscrete(const char *token);
 AjPOutfile    ajAcdGetOutdistance(const char *token);
 AjPFile       ajAcdGetOutfile (const char *token);
-AjPFile       ajAcdGetOutfileall (const char *token);
+AjPStr        ajAcdGetOutfileName (const char *token);
 AjPOutfile    ajAcdGetOutfreq(const char *token);
 AjPOutfile    ajAcdGetOutmatrix(const char *token);
 AjPOutfile    ajAcdGetOutmatrixf(const char *token);

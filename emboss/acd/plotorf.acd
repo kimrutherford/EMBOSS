@@ -1,7 +1,8 @@
 application: plotorf [
   documentation: "Plot potential open reading frames in a nucleotide sequence"
   groups: "Nucleic:Gene finding, Nucleic:Translation"
-  relations: "EDAM: Coding region prediction"
+  relations: "/edam/topic/0000109 Gene finding"
+  relations: "/edam/operation/0000436 Coding region prediction"
 ]
 
 section: input [
@@ -12,7 +13,8 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "dna"
-    relations: "EDAM: Pure DNA sequence"                                   
+    relations: "/edam/data/0001215 Pure DNA sequence"                                   
+    relations: "/edam/data/0000849 Sequence record" 
   ]
 
 endsection: input
@@ -26,14 +28,14 @@ section: advanced [
     default: "ATG"
     information: "Start codons"
     knowntype: "codon list"
-    relations:  "EDAM: Codon string"                                   
+    relations:  "/edam/data/0002116 Codon"                                   
   ]
 
   string: stop [
     default: "TAA,TAG,TGA"
     information: "Stop codons"
     knowntype: "codon list"
-    relations:  "EDAM: Codon string"                                   
+    relations:  "/edam/data/0002116 Codon"                                   
   ]
 
 endsection: advanced
@@ -46,7 +48,7 @@ section: output [
   xygraph: graph [
     standard: "Y"
     multiple: "6"
-    relations: "EDAM: EMBOSS graph file"                                   
+    relations: "/edam/data/0001313 Coding region report"                                   
   ]
 
 endsection: output

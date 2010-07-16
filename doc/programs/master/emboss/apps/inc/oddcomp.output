@@ -10,10 +10,10 @@
 # The Expected frequencies are taken from the file: ../../data/oddcomp.comp
 #
 #	Word size: 2
-	CNR1B_FUGRU
-	CO9_FUGRU
-	FOS_FUGRU
-	RS7_FUGRU
+	CNR1B_TAKRU
+	CO9_TAKRU
+	FOS_TAKRU
+	RS7_TAKRU
 
 #	END	#
 </pre>

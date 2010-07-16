@@ -5,7 +5,8 @@ application: trimspace
   gui: "yes"
   batch: "yes"
   cpu: "low"
-  relations: "EDAM: Text file handling"
+  relations: "/edam/topic/0000220 File handling"
+  relations: "/edam/operation/0000335 File reformatting"
 ]
 
 
@@ -23,7 +24,7 @@ infile: infile
     parameter: "Y"
     knowntype: "ascii text"
     information: "ASCII text file"
-    relations:  "EDAM: Free text file"                                 
+    relations:  "/edam/data/0000969 Free text"                                 
 ]
 
 endsection: input
@@ -76,7 +77,7 @@ outfile: outfile
     parameter: "Y"
     knowntype: "ascii text"
     information: "ASCII text output file"
-    relations:  "EDAM: Free text file"                                 
+    relations:  "/edam/data/0000969 Free text"                                 
 ]
 
 endsection: output

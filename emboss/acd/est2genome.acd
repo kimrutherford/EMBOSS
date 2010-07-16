@@ -4,7 +4,8 @@ application: est2genome [
   gui: "yes"
   batch: "yes"
   cpu: "medium"
-  relations: "EDAM: Hybrid sequence alignment"
+  relations: "/edam/topic/0000182 Sequence alignment"
+  relations: "/edam/operation/0000293 Hybrid sequence alignment"
 ]
 
 section: input [
@@ -17,7 +18,9 @@ section: input [
     type: "dna"
     information: "Spliced EST nucleotide sequence(s)"
     knowntype: "est sequence"
-    relations:  "EDAM: Nucleotide sequence"                            
+    relations:  "/edam/data/0001215 Pure DNA sequence"                
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more"             
   ]
 
   sequence: genomesequence [
@@ -25,8 +28,8 @@ section: input [
     type: "dna"
     information: "Unspliced genomic nucleotide sequence"
     knowntype: "genomic sequence"
-    relations:  "EDAM: Nucleotide sequence"                            
-  ]
+    relations:  "/edam/data/0001215 Pure DNA sequence"                   
+    relations: "/edam/data/0000849 Sequence record"           ]
 
 endsection: input
 
@@ -39,14 +42,14 @@ section: additional [
     additional: "Y"
     default: "1"
     information: "Score for matching two bases"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001401 Match reward score"                                     
   ]
 
   integer: mismatch [
     additional: "Y"
     default: "1"
     information: "Cost for mismatching two bases"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001402 Mismatch penalty score"                                     
   ]
 
   integer: gappenalty [
@@ -55,7 +58,7 @@ section: additional [
     information: "Gap penalty"
     help: "Cost for deleting a single base in either sequence,
            excluding introns"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0002137 Gap penalty"
   ]
 
   integer: intronpenalty [
@@ -63,7 +66,7 @@ section: additional [
     default: "40"
     information: "Intron penalty"
     help: "Cost for an intron, independent of length."
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0002138 Penalty"
   ]
 
   integer: splicepenalty [
@@ -72,7 +75,7 @@ section: additional [
     information: "Splice site penalty"
     help: "Cost for an intron, independent of length and
            starting/ending on donor-acceptor sites"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0002138 Penalty"                                     
   ]
 
   integer: minscore [
@@ -80,7 +83,7 @@ section: additional [
     default: "30"
     information: "Minimum accepted score"
     help: "Exclude alignments with scores below this threshold score."
-    relations: "EDAM: Generic integer"                                     
+relations: "/edam/data/0002146 Threshold"
   ]
 
 endsection: additional
@@ -93,7 +96,7 @@ section: advanced [
   boolean: reverse [
     information: "Reverse orientation"
     help: "Reverse the orientation of the EST sequence"
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   boolean: usesplice [
@@ -101,7 +104,7 @@ section: advanced [
     information: "Use donor and acceptor splice sites"
     help: "Use donor and acceptor splice sites. If you want to ignore
            donor-acceptor sites then set this to be false."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   list: mode [
@@ -116,7 +119,7 @@ section: advanced [
            strand."
     values: "both:Both strands; forward:Forward strand only;
              reverse:Reverse strand only"
-    relations: "EDAM: Generic string array"                                
+    relations: "/edam/data/0001773 Tool-specific parameter"                                
   ]
 
   boolean: best [
@@ -124,7 +127,7 @@ section: advanced [
     information: "Print out only best alignment"
     help: "You can print out all comparisons instead of just the best
            one by setting this to be false."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   float: space [
@@ -136,18 +139,18 @@ section: advanced [
            sequences can be aligned. \
            If you have a machine with plenty of memory you can raise this
            parameter (but do not exceed the machine's physical RAM)"
-    relations: "EDAM: Generic float"                                       
+    relations: "/edam/data/0001773 Tool-specific parameter"
   ]
 
   integer: shuffle [
     information: "Shuffle"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001773 Tool-specific parameter"
   ]
 
   integer: seed [
     default: "20825"
     information: "Random number seed"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0001773 Tool-specific parameter"
   ]
 
 endsection: advanced
@@ -160,7 +163,7 @@ section: output [
   outfile: outfile [
     parameter: "y"
     knowntype: "est2genome output"
-    relations:  "EDAM:Coding region report"                                
+    relations:  "/edam/data/0001313 Coding region report"                                
   ]
 
   boolean: align [
@@ -169,13 +172,13 @@ section: output [
            last 5 bases of each intron, together with the intron width. The
            direction of splicing is indicated by angle brackets (forward or
            reverse) or ???? (unknown)."
-    relations: "EDAM: Generic boolean"                                     
+    relations: "/edam/data/0002135 Toggle"                                     
   ]
 
   integer: width [
     default: "50"
     information: "Alignment width"
-    relations: "EDAM: Generic integer"                                     
+    relations: "/edam/data/0002136 Sequence width"
   ]
 
 endsection: output

@@ -30,12 +30,15 @@ static float* entropy = NULL;
 static float* enthalpy = NULL;
 static float* energy = NULL;
 
-/* @datastatic AjPPrimer ******************************************************
+
+
+
+/* @datastatic PPrimer ******************************************************
 **
 ** Definition of the primer object
 **
-** @alias AjSPrimer
-** @alias AjOPrimer
+** @alias SPrimer
+** @alias OPrimer
 **
 ** @attr substr [AjPStr] Undocumented
 ** @attr start [ajint]  Undocumented
@@ -48,7 +51,7 @@ static float* energy = NULL;
 ** @attr Padding [ajint]  Padding to alignment boundary
 ******************************************************************************/
 
-typedef struct AjSPrimer
+typedef struct SPrimer
 {
     AjPStr substr;
     ajint start;
@@ -59,29 +62,29 @@ typedef struct AjSPrimer
     float prodGC;
     ajint score;
     ajint Padding;
-} AjOPrimer;
-#define AjPPrimer AjOPrimer*
+} OPrimer;
+#define PPrimer OPrimer*
 
 
 
 
-/* @datastatic AjPPair ********************************************************
+/* @datastatic PPair ********************************************************
 **
 ** Object to hold awesome primer pairs
 **
-** @alias AjSPair
-** @alias AjOPair
+** @alias SPair
+** @alias OPair
 **
-** @attr f [AjPPrimer] Forward primer
-** @attr r [AjPPrimer] Reverse primer
+** @attr f [PPrimer] Forward primer
+** @attr r [PPrimer] Reverse primer
 ******************************************************************************/
 
-typedef struct AjSPair
+typedef struct SPair
 {
-    AjPPrimer f;
-    AjPPrimer r;
-} AjOPair;
-#define AjPPair AjOPair*
+    PPrimer f;
+    PPrimer r;
+} OPair;
+#define PPair OPair*
 
 
 
@@ -95,7 +98,7 @@ static void prima_test_multi(AjPList forlist, AjPList revlist,
 			     ajint *neric, ajint *nfred,
 			     const AjPStr seq, const AjPStr rseq, ajint len);
 static ajint prima_seq_align(const char *a, const char *b, ajint len);
-static void  prima_PrimerDel(AjPPrimer *p);
+static void  prima_PrimerDel(PPrimer *p);
 static ajint prima_Compare(const void *a, const void *b);
 static ajint prima_PosCompare(const void *a, const void *b);
 static ajint prima_PosEndCompare(const void *a, const void *b);
@@ -114,8 +117,8 @@ static void prima_testproduct(const AjPStr seqstr,
 			      float maxpmGCcont, ajint minprimerTm,
 			      ajint maxprimerTm, ajint minprodlen,
 			      ajint maxprodlen, float prodTm,
-			      float prodGC, ajint seqlen, AjPPrimer *eric,
-			      AjPPrimer *fred, AjPList forlist,
+			      float prodGC, ajint seqlen, PPrimer *eric,
+			      PPrimer *fred, AjPList forlist,
 			      AjPList revlist, ajint *neric, ajint *nfred,
 			      ajint stepping_value, float saltconc,
 			      float dnaconc, AjBool isDNA, ajint begin);
@@ -151,13 +154,13 @@ int main(int argc, char **argv)
     AjPStr p1;
     AjPStr p2;
 
-    AjPPrimer eric = NULL;
-    AjPPrimer fred = NULL;
+    PPrimer eric = NULL;
+    PPrimer fred = NULL;
 
-    AjPPrimer f;
-    AjPPrimer r;
+    PPrimer f;
+    PPrimer r;
 
-    AjPPair pair;
+    PPair pair;
 
     AjPList forlist  = NULL;
     AjPList revlist  = NULL;
@@ -643,8 +646,8 @@ static ajint prima_primalign(const AjPStr a, const AjPStr b)
 ** @param [r] prodTm [float] Undocumented
 ** @param [r] prodGC [float] Undocumented
 ** @param [r] seqlen [ajint] Undocumented
-** @param [w] eric [AjPPrimer*] Undocumented
-** @param [w] fred [AjPPrimer*] Undocumented
+** @param [w] eric [PPrimer*] Undocumented
+** @param [w] fred [PPrimer*] Undocumented
 ** @param [u] forlist [AjPList] Undocumented
 ** @param [u] revlist [AjPList] Undocumented
 ** @param [w] neric [ajint*] Undocumented
@@ -664,15 +667,15 @@ static void prima_testproduct(const AjPStr seqstr,
 			      float maxpmGCcont, ajint minprimerTm,
 			      ajint maxprimerTm, ajint minprodlen,
 			      ajint maxprodlen, float prodTm, float prodGC,
-			      ajint seqlen, AjPPrimer *eric,
-			      AjPPrimer *fred, AjPList forlist,
+			      ajint seqlen, PPrimer *eric,
+			      PPrimer *fred, AjPList forlist,
 			      AjPList revlist, ajint *neric,
 			      ajint *nfred, ajint stepping_value,
 			      float saltconc, float dnaconc,
 			      AjBool isDNA, ajint begin)
 {
     AjPStr substr = NULL;
-    AjPPrimer rubbish = NULL;
+    PPrimer rubbish = NULL;
     ajint forpstart;
     ajint forpend;
     ajint revpstart;
@@ -817,7 +820,7 @@ static void prima_reject_self(AjPList forlist,AjPList revlist, ajint *neric,
     ajint count;
     ajint j;
     ajint i;
-    AjPPrimer tmp;
+    PPrimer tmp;
 
     ajint len;
     ajint cut;
@@ -920,11 +923,11 @@ static void prima_best_primer(AjPList forlist, AjPList revlist,
     ajint j;
     ajint x;
 
-    AjPPrimer temp;
-    AjPPrimer temp2;
+    PPrimer temp;
+    PPrimer temp2;
 
-    AjPPrimer hitf;
-    AjPPrimer hitr;
+    PPrimer hitf;
+    PPrimer hitr;
 
     AjBool good;
 
@@ -1027,11 +1030,11 @@ static void prima_best_primer(AjPList forlist, AjPList revlist,
 **
 ** Free memory from primers
 **
-** @param [w] p [AjPPrimer*] Undocumented
+** @param [w] p [PPrimer*] Undocumented
 ** @@
 ******************************************************************************/
 
-static void prima_PrimerDel(AjPPrimer *p)
+static void prima_PrimerDel(PPrimer *p)
 {
     ajStrDel(&((*p)->substr));
     AJFREE(*p);
@@ -1054,8 +1057,8 @@ static void prima_PrimerDel(AjPPrimer *p)
 
 static ajint prima_Compare(const void *a, const void *b)
 {
-    return (*(AjPPair const *)a)->f->score -
-		   (*(AjPPair const *)b)->f->score;
+    return (*(PPair const *)a)->f->score -
+		   (*(PPair const *)b)->f->score;
 }
 
 
@@ -1074,8 +1077,8 @@ static ajint prima_Compare(const void *a, const void *b)
 static ajint prima_PosCompare(const void *a, const void *b)
 {
 
-    return ((*(AjPPair const *)a)->f->start + (*(AjPPair const *)a)->f->primerlen - 1)  -
-	   ((*(AjPPair const *)b)->f->start + (*(AjPPair const *)b)->f->primerlen - 1);
+    return ((*(PPair const *)a)->f->start + (*(PPair const *)a)->f->primerlen - 1)  -
+	   ((*(PPair const *)b)->f->start + (*(PPair const *)b)->f->primerlen - 1);
 }
 
 
@@ -1094,8 +1097,8 @@ static ajint prima_PosCompare(const void *a, const void *b)
 static ajint prima_PosEndCompare(const void *a, const void *b)
 {
 
-    return ((*(AjPPair const *)a)->r->start)  -
-	   ((*(AjPPair const *)b)->r->start);
+    return ((*(PPair const *)a)->r->start)  -
+	   ((*(PPair const *)b)->r->start);
 }
 
 
@@ -1142,10 +1145,10 @@ static void prima_testtarget(const AjPStr seqstr, const AjPStr revstr,
 
     AjPStr str1;
     AjPStr str2;
-    AjPPrimer f;
-    AjPPrimer r;
+    PPrimer f;
+    PPrimer r;
 
-    AjPPair ppair;
+    PPair ppair;
 
     ajint i;
     ajint j;
@@ -1408,7 +1411,7 @@ static void prima_test_multi(AjPList forlist, AjPList revlist, ajint *neric,
 			     ajint *nfred, const AjPStr seq,
 			     const  AjPStr rseq, ajint len)
 {
-    AjPPrimer tmp;
+    PPrimer tmp;
     AjPStr st;
 
     ajint i;
@@ -1550,7 +1553,7 @@ static ajint prima_seq_align(const char *a, const char *b, ajint len)
 
 static void prima_prune_nearby(AjPList pairlist, ajint *npair, ajint range)
 {
-    AjPPair pair;
+    PPair pair;
 
     ajint count;
     ajint fst;
@@ -1620,7 +1623,7 @@ static void prima_prune_nearby(AjPList pairlist, ajint *npair, ajint range)
 
 static void prima_check_overlap(AjPList pairlist, ajint *npair, ajint overlap)
 {
-    AjPPair pair;
+    PPair pair;
 
     ajint i;
     ajint j;
@@ -1680,10 +1683,10 @@ static void prima_check_overlap(AjPList pairlist, ajint *npair, ajint overlap)
 
 static void prima_TwoSortscorepos(AjPList *pairlist)
 {
-    AjPPair tmp = NULL;
+    PPair tmp = NULL;
     AjPList intlist = NULL;
     AjPList filist  = NULL;
-    AjPPair save  = NULL;
+    PPair save  = NULL;
     float   score = 0.0;
 
 
@@ -1737,10 +1740,10 @@ static void prima_TwoSortscorepos(AjPList *pairlist)
 
 static void prima_RevSort(AjPList *alist)
 {
-    AjPPair tmp = NULL;
+    PPair tmp = NULL;
     AjPList intlist = NULL;
     AjPList filist  = NULL;
-    AjPPair save = NULL;
+    PPair save = NULL;
     ajint pos = -1;
 
 

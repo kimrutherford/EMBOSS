@@ -57,7 +57,7 @@ AjBool ensGenericassemblymapperSetMaxPairCount(EnsPGenericassemblymapper gam,
 
 AjBool ensGenericassemblymapperRegisterAssembled(EnsPGenericassemblymapper gam,
                                                  ajuint asmsrid,
-                                                 ajuint chunkid);
+                                                 ajint chunkid);
 
 AjBool ensGenericassemblymapperRegisterComponent(EnsPGenericassemblymapper gam,
                                                  ajuint cmpsrid);
@@ -65,7 +65,7 @@ AjBool ensGenericassemblymapperRegisterComponent(EnsPGenericassemblymapper gam,
 AjBool ensGenericassemblymapperHaveRegisteredAssembled(
     const EnsPGenericassemblymapper gam,
     ajuint asmsrid,
-    ajuint chunkid);
+    ajint chunkid);
 
 AjBool ensGenericassemblymapperHaveRegisteredComponent(
     const EnsPGenericassemblymapper gam,
@@ -217,10 +217,14 @@ AjBool ensAssemblymapperMapToSeqregion(EnsPAssemblymapper am,
                                        ajint srstrand,
                                        const EnsPSeqregion optsr,
                                        AjPList mrs);
-		     
+
 /* Ensembl Assembly Mapper Adaptor */
 
-EnsPAssemblymapperadaptor ensAssemblymapperadaptorNew(EnsPDatabaseadaptor dba);
+EnsPAssemblymapperadaptor ensRegistryGetAssemblymapperadaptor(
+    EnsPDatabaseadaptor dba);
+
+EnsPAssemblymapperadaptor ensAssemblymapperadaptorNew(
+    EnsPDatabaseadaptor dba);
 
 AjBool ensAssemblymapperadaptorCacheClear(EnsPAssemblymapperadaptor ama);
 
@@ -289,16 +293,16 @@ AjBool ensAssemblymapperadaptorRegisterAllChained(
 ** End of prototype definitions
 */
 
-#define MENSCHAINEDASSEMBLYMAPPERADAPTORGETASSEMBLEDCOORDSYSTEM(cam) \
+#define MENSCHAINEDASSEMBLYMAPPERADAPTORGETASSEMBLEDCOORDSYSTEM(cam)    \
 ensChainedassemblymapperGetSourceCoordsystem(cam)
 
-#define MENSCHAINEDASSEMBLYMAPPERADAPTORGETCOMPONENTCOORDSYSTEM(cam) \
+#define MENSCHAINEDASSEMBLYMAPPERADAPTORGETCOMPONENTCOORDSYSTEM(cam)    \
 ensChainedassemblymapperGetTargetCoordsystem(cam)
 
-#define MENSCHAINEDASSEMBLYMAPPERGETMAPPER(cam) \
+#define MENSCHAINEDASSEMBLYMAPPERGETMAPPER(cam)         \
 ensChainedassemblymapperGetSourceTargetMapper(cam)
 
-#endif
+#endif /* ensassemblymapper_h */
 
 #ifdef __cplusplus
 }

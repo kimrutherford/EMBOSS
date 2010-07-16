@@ -1,5 +1,5 @@
 Identify transcription factor binding sites in DNA sequences
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -9,7 +9,7 @@ Version: EMBOSS:6.2.0
                                   (other); C (Custom))
 *  -custom             datafile   Transfac database data file (optional)
    -mismatch           integer    [0] Number of mismatches (Integer 0 or more)
-  [-outfile]           outfile    [*.tfscan] Output file name
+  [-outfile]           report     [*.tfscan] Output report file name
 
    Additional (Optional) qualifiers:
    -minlength          integer    [1] Display matches equal to or above this
@@ -35,7 +35,17 @@ Version: EMBOSS:6.2.0
    -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -odirectory2        string     Output directory
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rstrandshow2       boolean    Show the nucleotide strand in the report
+   -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts

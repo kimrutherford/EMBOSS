@@ -32,8 +32,9 @@
 #include <string.h>
 
 
-#ifndef HAVE_MEMMOVE
 
+
+#ifndef HAVE_MEMMOVE
 /* @header memmove ***********************************************************
 **
 ******************************************************************************/
@@ -147,6 +148,8 @@ AjPChar ajChararrNewRes(ajuint size)
 }
 
 
+
+
 /* @obsolete ajChararrNewL
 ** @rename ajChararrNewRes
 */
@@ -154,6 +157,7 @@ __deprecated AjPChar ajChararrNewL(ajuint size)
 {
     return ajChararrNewRes(size);
 }
+
 
 
 
@@ -294,6 +298,9 @@ ajuint ajChararrLen(const AjPChar thys)
     return thys->Len;
 }
 
+
+
+
 /* @func ajIntNew *************************************************************
 **
 ** Default constructor for empty AJAX integer arrays.
@@ -350,6 +357,8 @@ AjPInt ajIntNewRes(ajuint size)
 
     return thys;
 }
+
+
 
 
 /* @obsolete ajIntNewL
@@ -493,7 +502,7 @@ void ajIntInc(AjPInt *thys, ajuint elem)
 
 /* @func ajIntDec *************************************************************
 **
-** Deccrement an integer array element.
+** Decrement an integer array element.
 **
 ** If the given array is a NULL pointer an error is generated.
 ** Negative indices generate an error.
@@ -577,6 +586,8 @@ AjPUint ajUintNewRes(ajuint size)
 }
 
 
+
+
 /* @obsolete ajUintNewL
 ** @rename ajUintNewRes
 */
@@ -584,6 +595,8 @@ __deprecated AjPUint ajUintNewL(ajuint size)
 {
     return ajUintNewRes(size);
 }
+
+
 
 
 /* @func ajUintDel ************************************************************
@@ -715,7 +728,7 @@ void ajUintInc(AjPUint *thys, ajuint elem)
 
 /* @func ajUintDec ************************************************************
 **
-** Decrement an usigned integer array element.
+** Decrement an unsigned integer array element.
 **
 ** If the given array is a NULL pointer an error is generated.
 ** Negative indices generate an error.
@@ -977,7 +990,7 @@ ajuint* ajUintUint(const AjPUint thys)
 
 /* @func ajUintLen ************************************************************
 **
-** Get length of dynamic 1d ajunt array
+** Get length of dynamic 1d ajuint array
 **
 ** @param [r] thys [const AjPUint] Source array
 ** @return [ajuint] length
@@ -1047,6 +1060,8 @@ AjPFloat ajFloatNewRes(ajuint size)
 }
 
 
+
+
 /* @obsolete ajFloatNewL
 ** @rename ajFloatNewRes
 */
@@ -1054,6 +1069,8 @@ __deprecated AjPFloat ajFloatNewL(ajuint size)
 {
     return ajFloatNewRes(size);
 }
+
+
 
 
 /* @func ajFloatDel ***********************************************************
@@ -1309,6 +1326,9 @@ AjPDouble ajDoubleNewRes(ajuint size)
     return thys;
 }
 
+
+
+
 /* @obsolete ajDoubleNewL
 ** @rename ajDoubleNewRes
 */
@@ -1316,6 +1336,8 @@ __deprecated AjPDouble ajDoubleNewL(ajuint size)
 {
     return ajDoubleNewRes(size);
 }
+
+
 
 
 /* @func ajDoubleDel **********************************************************
@@ -1571,6 +1593,7 @@ AjPShort ajShortNewRes(ajuint size)
 
 
 
+
 /* @obsolete ajShortNewL
 ** @rename ajShortNewRes
 */
@@ -1578,6 +1601,8 @@ __deprecated AjPShort ajShortNewL(ajuint size)
 {
     return ajShortNewRes(size);
 }
+
+
 
 
 /* @func ajShortDel ***********************************************************
@@ -1832,6 +1857,8 @@ AjPLong ajLongNewRes(ajuint size)
 }
 
 
+
+
 /* @obsolete ajLongNewL
 ** @rename ajLongNewRes
 */
@@ -1839,6 +1866,8 @@ __deprecated AjPLong ajLongNewL(ajuint size)
 {
     return ajLongNewRes(size);
 }
+
+
 
 
 /* @func ajLongDel ************************************************************
@@ -2176,6 +2205,7 @@ ajuint ajArrCommaList(const AjPStr s, AjPStr **a)
     for(i=0;i<n;++i)
     {
 	ajStrTokenNextParseC(&t,",\n", &x);
+        ajStrTrimWhite(&x);
 	(*a)[i] = ajStrNewS(x);
     }
 
@@ -2416,6 +2446,8 @@ AjPInt2d ajInt2dNewRes(ajuint size)
 }
 
 
+
+
 /* @obsolete ajInt2dNewL
 ** @rename ajInt2dNewRes
 */
@@ -2423,6 +2455,8 @@ __deprecated AjPInt2d ajInt2dNewL(ajuint size)
 {
     return ajInt2dNewRes(size);
 }
+
+
 
 
 /* @func ajInt2dNewResRes2 *****************************************************
@@ -2462,6 +2496,8 @@ AjPInt2d ajInt2dNewResRes2(ajuint size, ajuint size2)
 }
 
 
+
+
 /* @obsolete ajInt2dNewLL
 ** @rename ajInt2dNewRes2
 */
@@ -2469,6 +2505,8 @@ __deprecated AjPInt2d ajInt2dNewLL(ajuint size, ajuint size2)
 {
     return ajInt2dNewResRes2(size, size2);
 }
+
+
 
 
 /* @func ajInt2dDel ***********************************************************
@@ -2701,7 +2739,7 @@ void ajInt2dLen(const AjPInt2d thys, ajuint* len1, ajuint* len2)
 **
 ** @param  [r] thys [const AjPInt2d] Pointer to the ajint array.
 **
-** @return [ajint**] coverted value.
+** @return [ajint**] converted value.
 ** @category cast [AjPInt2d] Retrieve internal pointer
 ** @@
 ******************************************************************************/
@@ -2791,6 +2829,8 @@ AjPInt3d ajInt3dNewRes(ajuint size)
 }
 
 
+
+
 /* @obsolete ajInt3dNewL
 ** @rename ajInt3dNewRes
 */
@@ -2798,6 +2838,8 @@ __deprecated AjPInt3d ajInt3dNewL(ajuint size)
 {
     return ajInt3dNewRes(size);
 }
+
+
 
 
 /* @func ajInt3dDel ***********************************************************
@@ -3153,6 +3195,8 @@ AjPUint2d ajUint2dNewRes(ajuint size)
 }
 
 
+
+
 /* @obsolete ajUint2dNewL
 ** @rename ajUint2dNewRes
 */
@@ -3160,6 +3204,8 @@ __deprecated AjPUint2d ajUint2dNewL(ajuint size)
 {
     return ajUint2dNewRes(size);
 }
+
+
 
 
 /* @func ajUint2dNewResRes2 ***************************************************
@@ -3207,6 +3253,9 @@ __deprecated AjPUint2d ajUint2dNewLL(ajuint size, ajuint size2)
 {
     return ajUint2dNewResRes2(size, size2);
 }
+
+
+
 
 /* @func ajUint2dDel **********************************************************
 **
@@ -3433,7 +3482,7 @@ void ajUint2dLen(const AjPUint2d thys, ajuint* len1, ajuint* len2)
 **
 ** @param  [r] thys [const AjPUint2d] Pointer to the ajuint array.
 **
-** @return [ajuint**] coverted value.
+** @return [ajuint**] converted value.
 ** @category cast [AjPUint2d] Retrieve internal pointer
 ** @@
 ******************************************************************************/
@@ -3523,6 +3572,8 @@ AjPUint3d ajUint3dNewRes(ajuint size)
 }
 
 
+
+
 /* @obsolete ajUint3dNewL
 ** @rename ajUint3dNewRes
 */
@@ -3530,6 +3581,8 @@ __deprecated AjPUint3d ajUint3dNewL(ajuint size)
 {
     return ajUint3dNewRes(size);
 }
+
+
 
 
 /* @func ajUint3dDel **********************************************************
@@ -3882,6 +3935,7 @@ AjPFloat2d ajFloat2dNewRes(ajuint size)
 
 
 
+
 /* @obsolete ajFloat2dNewL
 ** @rename ajFloat2dNewRes
 */
@@ -3889,6 +3943,9 @@ __deprecated AjPFloat2d ajFloat2dNewL(ajuint size)
 {
     return ajFloat2dNewRes(size);
 }
+
+
+
 
 /* @func ajFloat2dDel *********************************************************
 **
@@ -4202,6 +4259,8 @@ AjPFloat3d ajFloat3dNewRes(ajuint size)
 }
 
 
+
+
 /* @obsolete ajFloat3dNewL
 ** @rename ajFloat3dNewRes
 */
@@ -4209,6 +4268,8 @@ __deprecated AjPFloat3d ajFloat3dNewL(ajuint size)
 {
     return ajFloat3dNewRes(size);
 }
+
+
 
 
 /* @func ajFloat3dDel *********************************************************
@@ -4558,6 +4619,8 @@ AjPDouble2d ajDouble2dNewRes(ajuint size)
 }
 
 
+
+
 /* @obsolete ajDouble2dNewL
 ** @rename ajDouble2dNewRes
 */
@@ -4565,6 +4628,8 @@ __deprecated AjPDouble2d ajDouble2dNewL(ajuint size)
 {
     return ajDouble2dNewRes(size);
 }
+
+
 
 
 /* @func ajDouble2dDel ********************************************************
@@ -4880,6 +4945,8 @@ AjPDouble3d ajDouble3dNewRes(ajuint size)
 }
 
 
+
+
 /* @obsolete ajDouble3dNewL
 ** @rename ajDouble3dNewRes
 */
@@ -4887,6 +4954,8 @@ __deprecated AjPDouble3d ajDouble3dNewL(ajuint size)
 {
     return ajDouble3dNewRes(size);
 }
+
+
 
 
 /* @func ajDouble3dDel ********************************************************
@@ -5239,6 +5308,8 @@ AjPShort2d ajShort2dNewRes(ajuint size)
 }
 
 
+
+
 /* @obsolete ajShort2dNewL
 ** @rename ajShort2dNewRes
 */
@@ -5246,6 +5317,8 @@ __deprecated AjPShort2d ajShort2dNewL(ajuint size)
 {
     return ajShort2dNewRes(size);
 }
+
+
 
 
 /* @func ajShort2dDel *********************************************************
@@ -5563,6 +5636,7 @@ AjPShort3d ajShort3dNewRes(ajuint size)
 
 
 
+
 /* @obsolete ajShort3dNewL
 ** @rename ajShort3dNewRes
 */
@@ -5570,6 +5644,9 @@ __deprecated AjPShort3d ajShort3dNewL(ajuint size)
 {
     return ajShort3dNewRes(size);
 }
+
+
+
 
 /* @func ajShort3dDel *********************************************************
 **
@@ -5923,6 +6000,7 @@ AjPLong2d ajLong2dNewRes(ajuint size)
 
 
 
+
 /* @obsolete ajLong2dNewL
 ** @rename ajLong2dNewRes
 */
@@ -5930,6 +6008,9 @@ __deprecated AjPLong2d ajLong2dNewL(ajuint size)
 {
     return ajLong2dNewRes(size);
 }
+
+
+
 
 /* @func ajLong2dDel **********************************************************
 **
@@ -6244,6 +6325,9 @@ AjPLong3d ajLong3dNewRes(ajuint size)
     return thys;
 }
 
+
+
+
 /* @obsolete ajLong3dNewL
 ** @rename ajLong3dNewRes
 */
@@ -6251,6 +6335,7 @@ __deprecated AjPLong3d ajLong3dNewL(ajuint size)
 {
     return ajLong3dNewRes(size);
 }
+
 
 
 
@@ -6488,6 +6573,7 @@ void ajLong3dLen(const AjPLong3d thys,
 
     return;
 }
+
 
 
 

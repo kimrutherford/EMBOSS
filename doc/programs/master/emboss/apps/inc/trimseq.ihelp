@@ -1,5 +1,5 @@
 Remove unwanted characters from start and end of sequence(s)
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     (Gapped) sequence(s) filename and optional
@@ -16,7 +16,7 @@ Version: EMBOSS:6.2.0
                                   along the sequence from the ends and
                                   trimming is done only if there is a greater
                                   or equal percentage of ambiguity than the
-                                  threshold percentage. (Any integer value)
+                                  threshold percentage. (Integer 1 or more)
    -percent            float      [100.0] This is the threshold of the
                                   percentage ambiguity in the window required
                                   in order to trim a sequence. (Any numeric

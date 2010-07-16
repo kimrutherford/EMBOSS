@@ -20,27 +20,54 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 **
 **
-** This is a UNIX application, only tested under Linux. Its purpose
+** This is a UNIX or Borland (bcc32) application, only rigorously tested under
+** Linux (purely as it's more convenient for the core developers).
+** Its purpose
 ** is to take a CVS checkout of EMBOSS from the developers' site
-** and construct a zipped bundle suitable for compiling under
-** Microsoft Visual C++ Express 2005.
+** and construct a directory structure suitable for compiling under
+** Microsoft Visual C++ Express.
 **
-** Compile using: cc -o bundlewin -O2 bundlewin.c
+** Compile using: cc -o bundlewin -O2 bundlewin.c   (UNIX) or
+**                bcc32 bundlewin.c (WINDOWS)
 **
 ** Usage: If you have checked-out EMBOSS from CVS in /fu/bar then:
 **
-**        ./bundlewin /fu/bar/emboss
+**        ./bundlewin /fu/bar/emboss      or
+**        bundlewin C:\fu\bar\emboss
 **
-** This will create a file called   '/fu/bar/emboss/emboss.zip'
+** Under UNIX this will create a file called   '/fu/bar/emboss/emboss.zip'
 ** The zip file can then be transferred to Windows. When extracted
 ** it will create a folder called 'win32'.
+**
+** Under windows it will create a Windows folder c:\fu\bar\emboss\win32
 ******************************************************************************/
 
 #include <stdio.h>
+#if !defined(WIN32) || defined(__BORLANDC__)
 #include <dirent.h>
+#endif
 #include <sys/types.h>
 #include <sys/stat.h>
+
+#ifndef WIN32
 #include <unistd.h>
+#else
+#include <io.h>
+#if defined(__BORLANDC__)
+#include <dir.h>
+#else
+#include "win32.h"
+#include "dirent_w32.h"
+#include <direct.h>
+#define chmod _chmod
+#define mkdir _mkdir
+#endif
+#endif
+
+#ifndef MAXNAMLEN
+#define MAXNAMLEN 512
+#endif
+
 #include <string.h>
 #include <stdlib.h>
 
@@ -54,8 +81,22 @@
 #define ACDDEF "acddll.def"
 #define NUCLEUSDEF "nucleusdll.def"
 
+#ifndef WIN32
 #define TMPFILE  "/tmp/hfuncts_1"
 #define TMPFILE2 "/tmp/hfuncts_2"
+#define CP "cp -f"
+#define CPR "cp -fR"
+#define CPDFPR "cp -dfpR"
+#define CPFP "cp -fp"
+#else
+#define TMPFILE  "hfuncts_1.txt"
+#define TMPFILE2 "hfuncts_2.txt"
+#define CP "xcopy /Y /Q"
+#define CPR "xcopy /Y /Q /E"
+#define CPDFPR "xcopy /Y /Q /E"
+#define CPFP "xcopy /Y /Q"
+#endif
+
 #define BUILDDIR "winbuild"
 
 #define PROJECT "Project(\"{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}\")"
@@ -109,7 +150,7 @@ static int file_exists(char *path);
 
 static void copy_ajax(char *path);
 static void copy_nucleus(char *path);
-static void copy_plplot_inc(char *basedir);
+static void copy_plplot(char *basedir);
 static void copy_DLLs(char *basedir);
 static int  copy_apps(char *basedir, listnode *head);
 static void copy_data(char *basedir);
@@ -143,6 +184,7 @@ static void extract_expat_funcnames(char *filename, FILE *fout);
 static void make_expat_header_exports(char *basedir);
 static void make_zlib_header_exports(char *basedir);
 static void extract_zlib_funcnames(char *filename, FILE *fout);
+static void fix_dir(char *str);
 
 
 
@@ -150,16 +192,14 @@ static void extract_zlib_funcnames(char *filename, FILE *fout);
 int main(int argc, char **argv)
 {
     char basedir[MAXNAMLEN];
-    char ajaxdir[MAXNAMLEN];
     char nucleusdir[MAXNAMLEN];
     listnode *head = NULL;
     listnode *ptr;
     listnode *tptr;
     char **uids = NULL;
     char **prognames = NULL;
-    char *vcfiles = NULL;
 
-    FILE *fp = NULL;
+    FILE *fp;
     
     int len;
     int napps;
@@ -185,7 +225,7 @@ int main(int argc, char **argv)
 
     copy_ajax(basedir);
     copy_nucleus(basedir);
-    copy_plplot_inc(basedir);
+    copy_plplot(basedir);
     copy_DLLs(basedir);
 
     /* Copy data files */
@@ -238,7 +278,9 @@ int main(int argc, char **argv)
 
     sprintf(nucleusdir,"%s/emboss/nucleus",basedir);
     
-    if(!(fp=fopen(TMPFILE,"w")))
+    fp=fopen(TMPFILE,"w");
+
+    if(!fp)
     {
 	fprintf(stderr,"Cannot open temporary file %s\n",TMPFILE);
 	exit(-1);
@@ -285,17 +327,28 @@ int main(int argc, char **argv)
 static void copy_nucleus(char *basedir)
 {
     char command[MAXNAMLEN];
+    char src[MAXNAMLEN];
+    char dest [MAXNAMLEN];
+
+    sprintf(src,"%s/emboss/nucleus/*.h",basedir);
+    fix_dir(src);
+
+    sprintf(dest,"%s/win32/nucleus",basedir);
+    fix_dir(dest);
     
-    sprintf(command,"cp -f %s/emboss/nucleus/*.h %s/win32/nucleus",basedir,
-	    basedir);
+    sprintf(command,"%s %s %s",CP,src,dest);
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
 	exit(-1);
     }
 
-    sprintf(command,"cp -f %s/emboss/nucleus/*.c %s/win32/nucleus",basedir,
-	    basedir);
+
+    sprintf(src,"%s/emboss/nucleus/*.c",basedir);
+    fix_dir(src);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
@@ -311,67 +364,31 @@ static void copy_nucleus(char *basedir)
 static void copy_ajax(char *basedir)
 {
     char command[MAXNAMLEN];
-
+    char src[MAXNAMLEN];
+    char dest[MAXNAMLEN];
+    
     /* First copy ajax .h & .c files */
 
-    sprintf(command,"cp -f %s/emboss/ajax/pcre/*.h %s/win32/ajax/pcre",basedir,
-	    basedir);
+    sprintf(src,"%s/emboss/ajax/pcre/*.h",basedir);
+    fix_dir(src);
+
+    sprintf(dest,"%s/win32/ajax/pcre",basedir);
+    fix_dir(dest);
+    
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
 	exit(-1);
     }
 
-    sprintf(command,"cp -f %s/emboss/ajax/pcre/*.c %s/win32/ajax/pcre",basedir,
-	    basedir);
-    if(system(command))
-    {
-	fprintf(stderr,"Can't execute %s\n",command);
-	exit(-1);
-    }
+    sprintf(src,"%s/emboss/ajax/pcre/*.c",basedir);
+    fix_dir(src);
 
-    sprintf(command,"cp -f %s/emboss/ajax/expat/*.h %s/win32/ajax/expat",
-            basedir, basedir);
-    if(system(command))
-    {
-	fprintf(stderr,"Can't execute %s\n",command);
-	exit(-1);
-    }
-
-    sprintf(command,"cp -f %s/emboss/ajax/expat/*.c %s/win32/ajax/expat",
-            basedir, basedir);
-    if(system(command))
-    {
-	fprintf(stderr,"Can't execute %s\n",command);
-	exit(-1);
-    }
-
-    sprintf(command,"cp -f %s/emboss/ajax/zlib/*.h %s/win32/ajax/zlib",
-            basedir, basedir);
-    if(system(command))
-    {
-	fprintf(stderr,"Can't execute %s\n",command);
-	exit(-1);
-    }
-
-    sprintf(command,"cp -f %s/emboss/ajax/zlib/*.c %s/win32/ajax/zlib",
-            basedir, basedir);
-    if(system(command))
-    {
-	fprintf(stderr,"Can't execute %s\n",command);
-	exit(-1);
-    }
-
-    sprintf(command,"cp -f %s/emboss/ajax/core/*.h %s/win32/ajax/core",basedir,
-	    basedir);
-    if(system(command))
-    {
-	fprintf(stderr,"Can't execute %s\n",command);
-	exit(-1);
-    }
-
-    sprintf(command,"cp -f %s/emboss/ajax/core/*.c %s/win32/ajax/core",basedir,
-	    basedir);
+    sprintf(command,"%s %s %s",CP,src,dest);
+    
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
@@ -379,78 +396,214 @@ static void copy_ajax(char *basedir)
     }
 
 
-    sprintf(command,"cp -f %s/emboss/ajax/graphics/*.h %s/win32/ajax/graphics",
-            basedir, basedir);
-    if(system(command))
-    {
-	fprintf(stderr,"Can't execute %s\n",command);
-	exit(-1);
-    }
-
-    sprintf(command,"cp -f %s/emboss/ajax/graphics/*.c %s/win32/ajax/graphics",
-            basedir, basedir);
-    if(system(command))
-    {
-	fprintf(stderr,"Can't execute %s\n",command);
-	exit(-1);
-    }
-
-
-    sprintf(command,"cp -f %s/emboss/ajax/ensembl/*.h %s/win32/ajax/ensembl",
-            basedir, basedir);
-    if(system(command))
-    {
-	fprintf(stderr,"Can't execute %s\n",command);
-	exit(-1);
-    }
-
-    sprintf(command,"cp -f %s/emboss/ajax/ensembl/*.c %s/win32/ajax/ensembl",
-            basedir,basedir);
-    if(system(command))
-    {
-	fprintf(stderr,"Can't execute %s\n",command);
-	exit(-1);
-    }
-
-
-    sprintf(command,"cp -f %s/emboss/ajax/ajaxdb/*.h %s/win32/ajax/ajaxdb",
-            basedir, basedir);
-    if(system(command))
-    {
-	fprintf(stderr,"Can't execute %s\n",command);
-	exit(-1);
-    }
-
-    sprintf(command,"cp -f %s/emboss/ajax/ajaxdb/*.c %s/win32/ajax/ajaxdb",
-            basedir, basedir);
-    if(system(command))
-    {
-	fprintf(stderr,"Can't execute %s\n",command);
-	exit(-1);
-    }
-
-
-    sprintf(command,"cp -f %s/emboss/ajax/acd/*.h %s/win32/ajax/acd",basedir,
-	    basedir);
-    if(system(command))
-    {
-	fprintf(stderr,"Can't execute %s\n",command);
-	exit(-1);
-    }
-
-    sprintf(command,"cp -f %s/emboss/ajax/acd/*.c %s/win32/ajax/acd",basedir,
-	    basedir);
-    if(system(command))
-    {
-	fprintf(stderr,"Can't execute %s\n",command);
-	exit(-1);
-    }
 
     
+    sprintf(src,"%s/emboss/ajax/expat/*.h",basedir);
+    fix_dir(src);
+
+    sprintf(dest,"%s/win32/ajax/expat",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+    sprintf(src,"%s/emboss/ajax/expat/*.c",basedir);
+    fix_dir(src);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
     
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+
+
+
+    sprintf(src,"%s/emboss/ajax/zlib/*.h",basedir);
+    fix_dir(src);
+
+    sprintf(dest,"%s/win32/ajax/zlib",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+    sprintf(src,"%s/emboss/ajax/zlib/*.c",basedir);
+    fix_dir(src);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+
+
+    
+    sprintf(src,"%s/emboss/ajax/core/*.h",basedir);
+    fix_dir(src);
+
+    sprintf(dest,"%s/win32/ajax/core",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+    sprintf(src,"%s/emboss/ajax/core/*.c",basedir);
+    fix_dir(src);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+
+
+    
+    sprintf(src,"%s/emboss/ajax/graphics/*.h",basedir);
+    fix_dir(src);
+
+    sprintf(dest,"%s/win32/ajax/graphics",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+    sprintf(src,"%s/emboss/ajax/graphics/*.c",basedir);
+    fix_dir(src);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+
+
+    
+    sprintf(src,"%s/emboss/ajax/ensembl/*.h",basedir);
+    fix_dir(src);
+
+    sprintf(dest,"%s/win32/ajax/ensembl",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+    sprintf(src,"%s/emboss/ajax/ensembl/*.c",basedir);
+    fix_dir(src);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+
+
+    
+    sprintf(src,"%s/emboss/ajax/ajaxdb/*.h",basedir);
+    fix_dir(src);
+
+    sprintf(dest,"%s/win32/ajax/ajaxdb",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+    sprintf(src,"%s/emboss/ajax/ajaxdb/*.c",basedir);
+    fix_dir(src);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+
+
+    
+    sprintf(src,"%s/emboss/ajax/acd/*.h",basedir);
+    fix_dir(src);
+
+    sprintf(dest,"%s/win32/ajax/acd",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+    sprintf(src,"%s/emboss/ajax/acd/*.c",basedir);
+    fix_dir(src);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+
+
+
     /* Copy extra files required by win32 */
-    sprintf(command,"cp -fR %s/emboss/win32/ajax/* %s/win32/ajax/core",basedir,
-	    basedir);
+
+    sprintf(src,"%s/emboss/win32/ajax/*",basedir);
+    fix_dir(src);
+
+    sprintf(dest,"%s/win32/ajax/core",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CPR,src,dest);
+
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
@@ -464,64 +617,55 @@ static void copy_ajax(char *basedir)
 
 
 
-static void copy_plplot_inc(char *basedir)
+static void copy_plplot(char *basedir)
 {
     char command[MAXNAMLEN];
+    char src[MAXNAMLEN];
+    char dest[MAXNAMLEN];
+    
 
+    sprintf(src,"%s/emboss/plplot/*.h",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/plplot",basedir);
+    fix_dir(dest);
 
-    sprintf(command,"cp -f %s/emboss//plplot/*.h "
-	    "%s/win32/plplot-inc/include/plplot",basedir,basedir);
+    sprintf(command,"%s %s %s",CP,src,dest);
+
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
 	exit(-1);
     }
 
-    sprintf(command,"cp -f %s/emboss/plplotwin/*.h "
-	    "%s/win32/plplot-inc/include/plplot",basedir,basedir);
+    sprintf(src,"%s/emboss/plplot/*.c",basedir);
+    fix_dir(src);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
 	exit(-1);
     }
 
-    sprintf(command,"cp -f %s/emboss/plplotwin/gd/include/*.h "
-	    "%s/win32/plplot-inc/include/plplot",basedir,basedir);
+    
+    sprintf(src,"%s/emboss/plplotwin/*.h",basedir);
+    fix_dir(src);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
 	exit(-1);
     }
 
+    sprintf(src,"%s/emboss/plplotwin/*.cpp",basedir);
+    fix_dir(src);
 
+    sprintf(command,"%s %s %s",CP,src,dest);
 
-    sprintf(command,"cp -f %s/emboss/win32/plplot-inc/lib/Debug/plplot.lib "
-	    "%s/win32/plplot-inc/lib/Debug",basedir,basedir);
-    if(system(command))
-    {
-	fprintf(stderr,"Can't execute %s\n",command);
-	exit(-1);
-    }
-
-    sprintf(command,"cp -f %s/emboss/win32/plplot-inc/lib/Release/plplot.lib "
-	    "%s/win32/plplot-inc/lib/Release",basedir,basedir);
-    if(system(command))
-    {
-	fprintf(stderr,"Can't execute %s\n",command);
-	exit(-1);
-    }
-
-
-    sprintf(command,"cp -f %s/emboss/plplotwin/gd/lib/bgd.lib "
-	    "%s/win32/plplot-inc/lib/Debug",basedir,basedir);
-    if(system(command))
-    {
-	fprintf(stderr,"Can't execute %s\n",command);
-	exit(-1);
-    }
-
-    sprintf(command,"cp -f %s/emboss/plplotwin/gd/lib/bgd.lib "
-	    "%s/win32/plplot-inc/lib/Release",basedir,basedir);
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
@@ -529,22 +673,150 @@ static void copy_plplot_inc(char *basedir)
     }
 
 
-    sprintf(command,"cp -f %s/emboss/plplotwin/gd/lib/bgd.dll "
-	    "%s/win32/DLLs/Debug",basedir,basedir);
+    sprintf(src,"%s/emboss/plplotwin/gd/include/*.h",basedir);
+    fix_dir(src);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
 	exit(-1);
     }
 
-    sprintf(command,"cp -f %s/emboss/plplotwin/gd/lib/bgd.dll "
-	    "%s/win32/DLLs/Release",basedir,basedir);
+
+    sprintf(src,"%s/emboss/plplotwin/haru/include/*.h",basedir);
+    fix_dir(src);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
 	exit(-1);
     }
 
+
+    sprintf(src,"%s/emboss/win32/DLLs/plplot/eplplot*",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/DLLs/plplot",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+
+    sprintf(src,"%s/emboss/plplotwin/gd/lib/bgd.lib",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/plplot/lib/Debug",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+
+    sprintf(dest,"%s/win32/plplot/lib/Release",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+    
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+
+    sprintf(src,"%s/emboss/plplotwin/gd/lib/bgd.dll",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/DLLs/Debug",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+    sprintf(dest,"%s/win32/DLLs/Release",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+    
+    sprintf(src,"%s/emboss/plplotwin/haru/lib/libharu.lib",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/plplot/lib/Debug",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+    sprintf(dest,"%s/win32/plplot/lib/Release",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+
+
+    sprintf(src,"%s/emboss/plplotwin/haru/lib/libharu.dll",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/DLLs/Debug",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+    sprintf(dest,"%s/win32/DLLs/Release",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+    
     return;
 }
 
@@ -554,11 +826,19 @@ static void copy_plplot_inc(char *basedir)
 static void copy_DLLs(char *basedir)
 {
     char command[MAXNAMLEN];
-
+    char src[MAXNAMLEN];
+    char dest[MAXNAMLEN];
+    
     /* First copy top level files */
 
-    sprintf(command,"cp -f %s/emboss/win32/DLLs/DLLs.* %s/win32/DLLs",basedir,
-	    basedir);
+    sprintf(src,"%s/emboss/win32/DLLs/DLLs.*",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/DLLs",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
@@ -567,72 +847,112 @@ static void copy_DLLs(char *basedir)
 
     /* Copy ajax project files */
 
-    sprintf(command,"cp -fR %s/emboss/win32/DLLs/ajax/acd.vcproj "
-            "%s/win32/DLLs/ajax/acd",
-	    basedir,basedir);
+    sprintf(src,"%s/emboss/win32/DLLs/ajax/acd.vcxproj",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/DLLs/ajax/acd",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
 	exit(-1);
     }
 
-    sprintf(command,"cp -fR %s/emboss/win32/DLLs/ajax/ajaxdb.vcproj "
-            "%s/win32/DLLs/ajax/ajaxdb",
-	    basedir,basedir);
+    sprintf(src,"%s/emboss/win32/DLLs/ajax/ajaxdb.vcxproj",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/DLLs/ajax/ajaxdb",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
 	exit(-1);
     }
 
-    sprintf(command,"cp -fR %s/emboss/win32/DLLs/ajax/ajaxg.vcproj "
-            "%s/win32/DLLs/ajax/graphics",
-	    basedir,basedir);
+    sprintf(src,"%s/emboss/win32/DLLs/ajax/ajaxg.vcxproj",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/DLLs/ajax/graphics",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
 	exit(-1);
     }
 
-    sprintf(command,"cp -fR %s/emboss/win32/DLLs/ajax/core.vcproj "
-            "%s/win32/DLLs/ajax/core",
-	    basedir,basedir);
+    sprintf(src,"%s/emboss/win32/DLLs/ajax/core.vcxproj",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/DLLs/ajax/core",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
 	exit(-1);
     }
 
-    sprintf(command,"cp -fR %s/emboss/win32/DLLs/ajax/ensembl.vcproj "
-            "%s/win32/DLLs/ajax/ensembl",
-	    basedir,basedir);
+    sprintf(src,"%s/emboss/win32/DLLs/ajax/ensembl.vcxproj",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/DLLs/ajax/ensembl",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
 	exit(-1);
     }
 
-    sprintf(command,"cp -fR %s/emboss/win32/DLLs/ajax/expat.vcproj "
-            "%s/win32/DLLs/ajax/expat",
-	    basedir,basedir);
+    sprintf(src,"%s/emboss/win32/DLLs/ajax/expat.vcxproj",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/DLLs/ajax/expat",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
 	exit(-1);
     }
 
-    sprintf(command,"cp -fR %s/emboss/win32/DLLs/ajax/zlib.vcproj "
-            "%s/win32/DLLs/ajax/zlib",
-	    basedir,basedir);
+    sprintf(src,"%s/emboss/win32/DLLs/ajax/zlib.vcxproj",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/DLLs/ajax/zlib",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
 	exit(-1);
     }
 
-    sprintf(command,"cp -fR %s/emboss/win32/DLLs/ajax/pcre.vcproj "
-            "%s/win32/DLLs/ajax/pcre",
-	    basedir,basedir);
+    sprintf(src,"%s/emboss/win32/DLLs/ajax/pcre.vcxproj",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/DLLs/ajax/pcre",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
@@ -641,8 +961,14 @@ static void copy_DLLs(char *basedir)
 
     /* Copy nucleus project files */
 
-    sprintf(command,"cp -fR %s/emboss/win32/DLLs/nucleus/* "
-	    "%s/win32/DLLs/nucleus",basedir,basedir);
+    sprintf(src,"%s/emboss/win32/DLLs/nucleus/*",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/DLLs/nucleus",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CPR,src,dest);
+
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
@@ -658,35 +984,57 @@ static void copy_DLLs(char *basedir)
 static void copy_data(char *basedir)
 {
     char command[MAXNAMLEN];
+    char src[MAXNAMLEN];
+    char dest[MAXNAMLEN];
 
+    
+    sprintf(src,"%s/emboss/emboss/data/*",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/data",basedir);
+    fix_dir(dest);
 
+    sprintf(command,"%s %s %s",CPR,src,dest);
 
-    sprintf(command,"cp -dfpR %s/emboss/emboss/data %s/win32",basedir,
-	    basedir);
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
 	exit(-1);
     }
 
-    sprintf(command,"cp -fp %s/emboss/plplot/lib/pl*.fnt %s/win32/data",
-	    basedir,basedir);
+    sprintf(src,"%s/emboss/plplot/lib/pl*",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/data",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CPFP,src,dest);
+
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
 	exit(-1);
     }
 
-    sprintf(command,"cp -fp %s/emboss/win32/misc/*.txt %s/win32/data",
-	    basedir,basedir);
+    sprintf(src,"%s/emboss/win32/misc/*.txt",basedir);
+    fix_dir(src);
+    
+    sprintf(command,"%s %s %s",CPFP,src,dest);
+
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
 	exit(-1);
     }
 
-    sprintf(command,"cp -fp %s/emboss/win32/misc/emboss.default "
-	    "%s/win32/apps/release",basedir,basedir);
+    sprintf(src,"%s/emboss/win32/misc/emboss.default",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/apps/release",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CPFP,src,dest);
+
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
@@ -701,9 +1049,18 @@ static void copy_data(char *basedir)
 static void copy_doc(char *basedir)
 {
     char command[MAXNAMLEN];
+    char src[MAXNAMLEN];
+    char dest[MAXNAMLEN];
 
-    sprintf(command,"cp -dfpR %s/emboss/doc %s/win32",basedir,
-	    basedir);
+    
+    sprintf(src,"%s/emboss/doc/*",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/doc",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CPDFPR,src,dest);
+
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
@@ -719,9 +1076,18 @@ static void copy_doc(char *basedir)
 static void copy_jemboss(char *basedir)
 {
     char command[MAXNAMLEN];
+    char src[MAXNAMLEN];
+    char dest[MAXNAMLEN];
 
-    sprintf(command,"cp -dfpR %s/emboss/jemboss %s/win32",basedir,
-	    basedir);
+    
+    sprintf(src,"%s/emboss/jemboss/*",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/jemboss",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CPDFPR,src,dest);
+
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
@@ -737,9 +1103,18 @@ static void copy_jemboss(char *basedir)
 static void copy_test(char *basedir)
 {
     char command[MAXNAMLEN];
+    char src[MAXNAMLEN];
+    char dest[MAXNAMLEN];
 
-    sprintf(command,"cp -dfpR %s/emboss/test %s/win32",basedir,
-	    basedir);
+    
+    sprintf(src,"%s/emboss/test/*",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/test",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CPDFPR,src,dest);
+
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
@@ -755,57 +1130,44 @@ static void copy_test(char *basedir)
 static void copy_mysql(char *basedir)
 {
     char command[MAXNAMLEN];
+    char src[MAXNAMLEN];
+    char dest[MAXNAMLEN];
 
-    sprintf(command,"cp %s/emboss/win32/mysql/Debug/*.dll "
-            "%s/win32/mysql/Debug",basedir,
-	    basedir);
+    
+    sprintf(src,"%s/emboss/win32/mysql/Debug/*.lib",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/mysql/Debug",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
 	exit(-1);
     }
 
-    sprintf(command,"cp %s/emboss/win32/mysql/Debug/*.lib "
-            "%s/win32/mysql/Debug",basedir,
-	    basedir);
+    sprintf(src,"%s/emboss/win32/mysql/Debug/*.pdb",basedir);
+    fix_dir(src);
+    
+    sprintf(command,"%s %s %s",CP,src,dest);
+
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
 	exit(-1);
     }
 
-    sprintf(command,"cp %s/emboss/win32/mysql/Debug/*.pdb "
-            "%s/win32/mysql/Debug",basedir,
-	    basedir);
-    if(system(command))
-    {
-	fprintf(stderr,"Can't execute %s\n",command);
-	exit(-1);
-    }
+    
+    sprintf(src,"%s/emboss/win32/mysql/Release/*.lib",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/mysql/Release",basedir);
+    fix_dir(dest);
 
-    sprintf(command,"cp %s/emboss/win32/mysql/Release/*.dll "
-            "%s/win32/mysql/Release",basedir,
-	    basedir);
-    if(system(command))
-    {
-	fprintf(stderr,"Can't execute %s\n",command);
-	exit(-1);
-    }
+    sprintf(command,"%s %s %s",CP,src,dest);
 
-
-    sprintf(command,"cp %s/emboss/win32/mysql/Release/*.lib "
-            "%s/win32/mysql/Release",basedir,
-	    basedir);
-    if(system(command))
-    {
-	fprintf(stderr,"Can't execute %s\n",command);
-	exit(-1);
-    }
-
-
-    sprintf(command,"cp %s/emboss/win32/mysql/Release/*.pdb "
-            "%s/win32/mysql/Release",basedir,
-	    basedir);
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
@@ -813,27 +1175,82 @@ static void copy_mysql(char *basedir)
     }
 
 
-    sprintf(command,"cp %s/emboss/win32/mysql/include/*.h "
-            "%s/win32/mysql/include",basedir,
-	    basedir);
+    sprintf(src,"%s/emboss/win32/mysql/Release/*.pdb",basedir);
+    fix_dir(src);
+    
+    sprintf(command,"%s %s %s",CP,src,dest);
+
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
 	exit(-1);
     }
 
-    sprintf(command,"cp %s/emboss/win32/mysql/include/*.def "
-            "%s/win32/mysql/include",basedir,
-	    basedir);
+
+    sprintf(src,"%s/emboss/win32/mysql/include/*.h",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/mysql/include",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
 	exit(-1);
     }
 
-    sprintf(command,"cp %s/emboss/win32/mysql/include/mysql/*.h "
-            "%s/win32/mysql/include/mysql",basedir,
-	    basedir);
+    sprintf(src,"%s/emboss/win32/mysql/include/*.def",basedir);
+    fix_dir(src);
+    
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+    sprintf(src,"%s/emboss/win32/mysql/include/mysql/*.h",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/mysql/include/mysql",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+
+    /* Copy dlls to top Release/Debug dirs for in-situ testing */
+    
+    sprintf(src,"%s/emboss/win32/mysql/Release/libmysql.dll",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/DLLs/Release",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+    sprintf(src,"%s/emboss/win32/mysql/Debug/libmysql.dll",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/DLLs/Debug",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
@@ -850,22 +1267,68 @@ static void copy_redist(char *basedir)
 {
     char command[MAXNAMLEN];
     char prompt[MAXNAMLEN];
-    
-    static char *def="/dos8/vc2008/vc/redist/x86/Microsoft.VC90.CRT";
+#ifndef WIN32    
+    static char *def="/root/vc90";
     static char *def2="/root/vc80";
+    static char *def3="/root/vc100";
+#else
+    static char *def="C:\\vc90";
+    static char *def2="C:\\vc80";
+    static char *def3="C:\\vc100";
+#endif
+    
     int len;
     
     char vc80[MAXNAMLEN];
     char vc90[MAXNAMLEN];
-    char *ev = NULL;
+    char vc100[MAXNAMLEN];
+    char src[MAXNAMLEN];
+    char dest[MAXNAMLEN];
+    
+    char *ev;
 
+    ev = getenv("vc100files");
 
-    if((ev = getenv("vc90files")))
+    if(ev)
+        strcpy(vc100,ev);
+    else
+        strcpy(vc100,def3);
+
+    fix_dir(vc100);
+
+    fprintf(stdout,"Redist 100 file directory [%s]: ",vc100);
+    fgets(prompt,MAXNAMLEN,stdin);
+    if(*prompt == '\n')
+        sprintf(prompt,"%s",vc100);
+
+    len = strlen(prompt);
+    if(prompt[len-1] == '\n')
+        prompt[len-1] = '\0';
+
+    
+    sprintf(src,"%s/*",prompt);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/redist",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+    ev = getenv("vc90files");
+    
+    if(ev)
         strcpy(vc90,ev);
     else
         strcpy(vc90,def);
     
-
+    fix_dir(vc90);
+    
     fprintf(stdout,"Redist 90 file directory [%s]: ",vc90);
     fgets(prompt,MAXNAMLEN,stdin);
     if(*prompt == '\n')
@@ -875,8 +1338,10 @@ static void copy_redist(char *basedir)
     if(prompt[len-1] == '\n')
         prompt[len-1] = '\0';
 
+    sprintf(src,"%s/*",prompt);
+    fix_dir(src);
     
-    sprintf(command,"cp %s/* %s/win32/redist",prompt,basedir);
+    sprintf(command,"%s %s %s",CP,src,dest);
 
     if(system(command))
     {
@@ -884,11 +1349,14 @@ static void copy_redist(char *basedir)
 	exit(-1);
     }
 
-    if((ev = getenv("vc80files")))
+    ev = getenv("vc80files");    
+
+    if(ev)
         strcpy(vc80,ev);
     else
         strcpy(vc80,def2);
 
+    fix_dir(vc80);
     
     fprintf(stdout,"Redist 80 file directory [%s]: ",vc80);
     fgets(prompt,MAXNAMLEN,stdin);
@@ -899,9 +1367,11 @@ static void copy_redist(char *basedir)
     if(prompt[len-1] == '\n')
         prompt[len-1] = '\0';
 
+    sprintf(src,"%s/*",prompt);
+    fix_dir(src);
     
-    sprintf(command,"cp %s/* %s/win32/redist",prompt,basedir);
-
+    sprintf(command,"%s %s %s",CP,src,dest);
+    
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
@@ -916,6 +1386,7 @@ static void copy_redist(char *basedir)
 
 static void zip_up(char *basedir)
 {
+#ifndef WIN32
     char command[MAXNAMLEN];
 
     fprintf(stdout,"Creating %s/emboss.zip\n",basedir);
@@ -937,6 +1408,9 @@ static void zip_up(char *basedir)
 	fprintf(stderr,"Can't execute %s\n",command);
 	exit(-1);
     }
+#else
+    (void) basedir;
+#endif
 
     return;
 }
@@ -961,16 +1435,18 @@ static void create_directories(char *basedir)
         "win32/ajax/acd",
 	"win32/nucleus",
 	"win32/emboss",
+	"win32/data",
+	"win32/doc",
+	"win32/jemboss",
+	"win32/test",
 	"win32/apps",
 	"win32/acd",
 	"win32/DLLs",
         "win32/redist",
-	"win32/plplot-inc",
-	"win32/plplot-inc/include",
-	"win32/plplot-inc/include/plplot",
-	"win32/plplot-inc/lib",
-	"win32/plplot-inc/lib/Debug",
-	"win32/plplot-inc/lib/Release",
+	"win32/plplot",
+	"win32/plplot/lib",
+	"win32/plplot/lib/Debug",
+	"win32/plplot/lib/Release",
 	"win32/DLLs/ajax",
 	"win32/DLLs/ajax/pcre",
 	"win32/DLLs/ajax/expat",
@@ -999,6 +1475,9 @@ static void create_directories(char *basedir)
 	"win32/DLLs/nucleus",
 	"win32/DLLs/nucleus/Debug",
 	"win32/DLLs/nucleus/Release",
+	"win32/DLLs/plplot",
+	"win32/DLLs/plplot/Debug",
+	"win32/DLLs/plplot/Release",
 	"win32/DLLs/Debug",
 	"win32/DLLs/Release",
 	"win32/DLLs/_UpgradeReport_Files",
@@ -1014,19 +1493,29 @@ static void create_directories(char *basedir)
 	NULL
     };
     int i;
-
+    int ret;
 
     i = 0;
     while(dirs[i])
     {
 	sprintf(newdir,"%s/%s",basedir,dirs[i]);
-
+        fix_dir(newdir);
+        
 	if(!dir_exists(newdir))
-	    if(mkdir(newdir,0755) == -1)
+	{
+#ifndef WIN32
+	  ret = mkdir(newdir,0755);
+#else
+	  ret = mkdir(newdir);
+#endif
+
+	    if(ret == -1)
 	    {
 		fprintf(stderr,"Cannot create directory %s\n",newdir);
 		exit(-1);
 	    }
+	}
+
 	++i;
     }
 
@@ -1043,15 +1532,16 @@ static int header_exports(char *dir, FILE *fp)
     DIR *indir;
     int len;
     char filename[MAXNAMLEN];
-    
 
-    if(!(indir = opendir(dir)))
+    indir = opendir(dir);    
+
+    if(!indir)
 	return -1;
 
 
-    while((dp=readdir(indir)))
+    while((dp=readdir(indir)) != NULL)
     {
-#ifndef CYGWIN
+#if !defined(CYGWIN) & !defined(WIN32)
 	if(!dp->d_ino || !strcmp(dp->d_name,".")  || !strcmp(dp->d_name,".."))
 	    continue;
 #else
@@ -1062,6 +1552,7 @@ static int header_exports(char *dir, FILE *fp)
 	if(len > 2 && !strcmp(dp->d_name + len - 2, ".h"))
 	{
 	    sprintf(filename,"%s/%s",dir,dp->d_name);
+            fix_dir(filename);
 #ifdef DEBUG
 	    fprintf(stdout,"Processing %s\n",filename);
 #endif
@@ -1083,16 +1574,16 @@ static void extract_funcnames(char *filename, FILE *fout)
     FILE *inf;
     char line[MAXNAMLEN];
     char tline[MAXNAMLEN];
-    char command[MAXNAMLEN];
     
-    int found = 0;
+    int found;
     char c;
     char *p;
     char *q;
     int len;
     
+    inf = fopen(filename,"r");
 
-    if(!(inf=fopen(filename,"r")))
+    if(!inf)
     {
 	fprintf(stderr,"Cannot open header file %s\n",filename);
 	exit(-1);
@@ -1181,7 +1672,11 @@ static void write_coreexports(char *fn,char *basedir)
     unlink(fn);
 
     sprintf(filename,"%s/win32/DLLs/ajax/core/%s",basedir,COREDEF);
-    if(!(outf=fopen(filename,"w")))
+    fix_dir(filename);
+    
+    outf = fopen(filename,"w");
+
+    if(!outf)
     {
 	fprintf(stderr,"Cannot open AJAX definitions file %s\n",filename);
 	exit(-1);
@@ -1194,7 +1689,9 @@ static void write_coreexports(char *fn,char *basedir)
     fprintf(outf,";dirent_w32\n");
     fprintf(outf,"\tclosedir\n\topendir\n\treaddir\n;others\n");
 
-    if(!(inf=fopen(TMPFILE2,"r")))
+    inf = fopen(TMPFILE2,"r");
+
+    if(!inf)
     {
 	fprintf(stderr,"Cannot open sorted function file %s\n",TMPFILE2);
 	exit(-1);
@@ -1229,7 +1726,11 @@ static void write_genajaxexport(char *fn,char *basedir,char *exportdef,
     unlink(fn);
 
     sprintf(filename,"%s/win32/DLLs/ajax/%s/%s",basedir,subdir,exportdef);
-    if(!(outf=fopen(filename,"w")))
+    fix_dir(filename);
+    
+    outf = fopen(filename,"w");
+
+    if(!outf)
     {
 	fprintf(stderr,"Cannot open %s definitions file %s\n",subdir,filename);
 	exit(-1);
@@ -1238,7 +1739,9 @@ static void write_genajaxexport(char *fn,char *basedir,char *exportdef,
     fprintf(outf,"LIBRARY \t""%s.dll""\n\n",dllname);
     fprintf(outf,"EXPORTS\n");
 
-    if(!(inf=fopen(TMPFILE2,"r")))
+    inf=fopen(TMPFILE2,"r");
+
+    if(!inf)
     {
 	fprintf(stderr,"Cannot open sorted function file %s\n",TMPFILE2);
 	exit(-1);
@@ -1272,7 +1775,11 @@ static void write_nucleusexports(char *fn,char *basedir)
     unlink(fn);
 
     sprintf(filename,"%s/win32/DLLs/nucleus/%s",basedir,NUCLEUSDEF);
-    if(!(outf=fopen(filename,"w")))
+    fix_dir(filename);
+    
+    outf = fopen(filename,"w");
+
+    if(!outf)
     {
 	fprintf(stderr,"Cannot open NUCLEUS definitions file %s\n",filename);
 	exit(-1);
@@ -1287,7 +1794,9 @@ static void write_nucleusexports(char *fn,char *basedir)
     **    fprintf(outf,"\tEmbPropTable DATA\n;others\n");
     */
 
-    if(!(inf=fopen(TMPFILE2,"r")))
+    inf = fopen(TMPFILE2,"r");
+
+    if(!inf)
     {
 	fprintf(stderr,"Cannot open sorted function file %s\n",TMPFILE2);
 	exit(-1);
@@ -1360,17 +1869,22 @@ static int copy_apps(char *basedir, listnode *head)
     char command[MAXNAMLEN];
     char acdname[MAXNAMLEN];
     char filename[MAXNAMLEN];
+    char src[MAXNAMLEN];
+    char dest[MAXNAMLEN];
+    
     struct stat buf;
     int count;
     int i;
-    int excluded = 0;
+    int excluded;
     
     fprintf(stdout,"Copying applications\n");
     
     sprintf(dir,"%s/emboss/emboss",basedir);
+    fix_dir(dir);
     
+    indir = opendir(dir);
 
-    if(!(indir = opendir(dir)))
+    if(!indir)
     {
 	fprintf(stderr,"Can't locate directory %s\n",dir);
 	exit(-1);
@@ -1378,9 +1892,9 @@ static int copy_apps(char *basedir, listnode *head)
     
     count = 0;
 
-    while((dp=readdir(indir)))
+    while((dp=readdir(indir)) != NULL)
     {
-#ifndef CYGWIN
+#if !defined(CYGWIN) & !defined(WIN32)
 	if(!dp->d_ino || !strcmp(dp->d_name,".")  || !strcmp(dp->d_name,".."))
 	    continue;
 #else
@@ -1391,6 +1905,8 @@ static int copy_apps(char *basedir, listnode *head)
 	if(len > 2)
 	{
 	    sprintf(filename,"%s/%s",dir,dp->d_name);
+            fix_dir(filename);
+        
 	    stat(filename,&buf);
 	    if((int)buf.st_mode & S_IFDIR)
 		continue;
@@ -1433,8 +1949,14 @@ static int copy_apps(char *basedir, listnode *head)
 
 	    ++count;	    
 	    
-	    sprintf(command,"cp %s/%s %s/win32/emboss",dir,dp->d_name,
-		    basedir);
+            sprintf(src,"%s/%s",dir,dp->d_name);
+            fix_dir(src);
+            
+            sprintf(dest,"%s/win32/emboss",basedir);
+            fix_dir(dest);
+
+            sprintf(command,"%s %s %s",CP,src,dest);
+
 	    if(system(command))
 	    {
 		fprintf(stderr,"Can't execute %s\n",command);
@@ -1447,11 +1969,18 @@ static int copy_apps(char *basedir, listnode *head)
 	    strcat(acdname,".acd");
 
 	    sprintf(filename,"%s/acd/%s",dir,acdname);
+            fix_dir(filename);
+            
 	    if(stat(filename,&buf) == -1)
 		continue;
 
-	    sprintf(command,"cp %s/acd/%s %s/win32/acd",dir,acdname,
-		    basedir);
+            sprintf(src,"%s/acd/%s",dir,acdname);
+            fix_dir(src);
+            
+            sprintf(dest,"%s/win32/acd",basedir);
+            fix_dir(dest);
+
+            sprintf(command,"%s %s %s",CP,src,dest);
 
 	    if(system(command))
 	    {
@@ -1465,8 +1994,24 @@ static int copy_apps(char *basedir, listnode *head)
     closedir(indir);
 
 
+    sprintf(src,"%s/acd/codes.english",dir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/acd",basedir);
+    fix_dir(dest);
+    
+    sprintf(command,"%s %s %s",CP,src,dest);
 
-    sprintf(command,"cp %s/acd/codes.english %s/win32/acd",dir,basedir);
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+    sprintf(src,"%s/acd/*.standard",dir);
+    fix_dir(src);
+    
+    sprintf(command,"%s %s %s",CP,src,dest);
     
     if(system(command))
     {
@@ -1474,16 +2019,13 @@ static int copy_apps(char *basedir, listnode *head)
 	exit(-1);
     }
 
-    sprintf(command,"cp %s/acd/*.standard %s/win32/acd",dir,basedir);
+    sprintf(src,"%s/emboss/win32/exes/*.exe",basedir);
+    fix_dir(src);
     
-    if(system(command))
-    {
-	fprintf(stderr,"Can't execute %s\n",command);
-	exit(-1);
-    }
-
-    sprintf(command,"cp %s/emboss/win32/exes/*.exe %s/win32/apps/release",
-	    basedir,basedir);
+    sprintf(dest,"%s/win32/apps/release",basedir);
+    fix_dir(dest);
+    
+    sprintf(command,"%s %s %s",CP,src,dest);
     
     if(system(command))
     {
@@ -1512,8 +2054,11 @@ static void read_make_check(char *basedir, listnode **head)
     char *p;
     
     sprintf(filename,"%s/emboss/emboss/Makefile.am",basedir);
+    fix_dir(filename);
     
-    if(!(fp=fopen(filename,"r")))
+    fp=fopen(filename,"r");
+    
+    if(!fp)
     {
 	fprintf(stderr,"Cannot open %s\n",filename);
 	exit(-1);
@@ -1535,7 +2080,7 @@ static void read_make_check(char *basedir, listnode **head)
     }
     
     len = strlen(line);
-    if(line[len-1] = '\n')
+    if(line[len-1] == '\n')
 	line[len-1] = '\0';
 
     while(*line)
@@ -1563,7 +2108,7 @@ static void read_make_check(char *basedir, listnode **head)
 	    add_node(head,progname);
 	}
 	
-	while((p=strtok(NULL," \\\t\n")))
+	while((p = strtok(NULL," \\\t\n")) != NULL)
 	{
 	    sprintf(progname,"%s.c",p);
 	    add_node(head,progname);
@@ -1597,7 +2142,9 @@ static void add_node(listnode **head, char *progname)
 {
     listnode *tmp;
 
-    if(!(tmp = malloc(sizeof(*tmp))))
+    tmp = malloc(sizeof(*tmp));
+
+    if(!tmp)
     {
 	fprintf(stderr,"Malloc failure creating list node\n");
 	exit(-1);
@@ -1657,10 +2204,10 @@ static void read_prognames(char *basedir, int napps, char ***names)
     int len;
     char filename[MAXNAMLEN];
     char dir[MAXNAMLEN];
-    char **pnames = NULL;
+    char **pnames;
     int i;
     int j;
-    int excluded = 0;
+    int excluded;
     
     fprintf(stdout,"Reading program names\n");
 
@@ -1685,8 +2232,11 @@ static void read_prognames(char *basedir, int napps, char ***names)
 
 
     sprintf(dir,"%s/win32/emboss",basedir);
+    fix_dir(dir);
+    
+    indir = opendir(dir);
 
-    if(!(indir = opendir(dir)))
+    if(!indir)
     {
 	fprintf(stderr,"Error opening directory %s\n",dir);
 	exit(-1);
@@ -1694,9 +2244,9 @@ static void read_prognames(char *basedir, int napps, char ***names)
 
     i = 0;
     
-    while((dp=readdir(indir)))
+    while((dp = readdir(indir)) != NULL)
     {
-#ifndef CYGWIN
+#if !defined(CYGWIN) & !defined(WIN32)
 	if(!dp->d_ino || !strcmp(dp->d_name,".")  || !strcmp(dp->d_name,".."))
 	    continue;
 #else
@@ -1725,6 +2275,7 @@ static void read_prognames(char *basedir, int napps, char ***names)
 	{
 	    sprintf(filename,"%s",dp->d_name);
 	    filename[len-2] = '\0';
+            fix_dir(filename);
 	    strcpy(pnames[i],filename);
 	    ++i;
 	}
@@ -1746,7 +2297,6 @@ static void write_solution(char *basedir, char **prognames, char **uids,
     char filename[MAXNAMLEN];
     FILE *fp;
     int i;
-    int j;
     char *p;
     
 
@@ -1762,21 +2312,23 @@ static void write_solution(char *basedir, char **prognames, char **uids,
     
 
     sprintf(filename,"%s/win32/apps/apps.sln",basedir);
+    fix_dir(filename);
     
-    if(!(fp=fopen(filename,"w")))
+    fp=fopen(filename,"w");    
+    if(!fp)
     {
 	fprintf(stderr,"Cannot open %s\n",filename);
 	exit(-1);
     }
 
 
-    fprintf(fp,"Microsoft Visual Studio Solution File, Format Version 10.00\n");
-    fprintf(fp,"# Visual C++ Express 2008\n");
+    fprintf(fp,"Microsoft Visual Studio Solution File, Format Version 11.00\n");
+    fprintf(fp,"# Visual C++ Express 2010\n");
 
 
     for(i=0;i<napps;++i)
     {
-	fprintf(fp,"%s = \"%s\", \"emboss\\%s\\%s.vcproj\", \"{%s}\"\n",
+	fprintf(fp,"%s = \"%s\", \"emboss\\%s\\%s.vcxproj\", \"{%s}\"\n",
 		PROJECT,prognames[i],prognames[i],prognames[i],uids[i]);
 	fprintf(fp,"EndProject\n");
     }
@@ -1837,13 +2389,22 @@ static void write_projects(char *basedir, char **prognames, char **uids,
     FILE *outf;
     char line[MAXNAMLEN];
     char tline[MAXNAMLEN];
-    char *p;
     int found;
-    
+    int ret;
+
+
     for(i=0;i<napps;++i)
     {
 	sprintf(filename,"%s/win32/apps/emboss/%s",basedir,prognames[i]);
-	if(mkdir(filename,0755) == -1)
+        fix_dir(filename);
+        
+#ifndef WIN32
+	ret = mkdir(filename,0755);
+#else
+	ret = mkdir(filename);
+#endif
+
+	if(ret == -1)
 	{
 	    fprintf(stderr,"Cannot create project directory %s\n",filename);
 	    exit(-1);
@@ -1852,16 +2413,23 @@ static void write_projects(char *basedir, char **prognames, char **uids,
 
     for(i=0;i<napps;++i)
     {
-	sprintf(filename,"%s/win32/apps/emboss/%s/%s.vcproj",basedir,
+	sprintf(filename,"%s/win32/apps/emboss/%s/%s.vcxproj",basedir,
 		prognames[i],prognames[i]);
-	if(!(outf=fopen(filename,"w")))
+        fix_dir(filename);
+        
+	outf = fopen(filename,"w");
+	if(!outf)
 	{
 	    fprintf(stderr,"Cannot open %s\n",filename);
 	    exit(-1);
 	}
 
-	sprintf(filename,"%s/emboss/win32/apps/template.vcproj",basedir);
-	if(!(inf=fopen(filename,"r")))
+	sprintf(filename,"%s/emboss/win32/apps/template.vcxproj",basedir);
+        fix_dir(filename);
+        
+	inf = fopen(filename,"r");
+
+	if(!inf)
 	{
 	    fprintf(stderr,"Cannot open %s\n",filename);
 	    exit(-1);
@@ -1869,14 +2437,14 @@ static void write_projects(char *basedir, char **prognames, char **uids,
 
 	while(fgets(line,MAXNAMLEN,inf))
 	{
-	    if((p=strstr(line,"<PROGNAME>")))
+	    if(strstr(line,"<PROGNAME>"))
 	    {
 		sub_text(line,tline,"<PROGNAME>",prognames[i]);
 		fprintf(outf,"%s",tline);
 		continue;
 	    }
 
-	    if((p=strstr(line,"<UID>")))
+	    if(strstr(line,"<UID>"))
 	    {
 		sub_text(line,tline,"<UID>",uids[i]);
 		fprintf(outf,"%s",tline);
@@ -1884,7 +2452,7 @@ static void write_projects(char *basedir, char **prognames, char **uids,
 	    }
 
 
-	    if((p=strstr(line,"<STACKSIZE>")))
+	    if(strstr(line,"<STACKSIZE>"))
 	    {
 		j = 0;
 		found = 0;
@@ -1901,13 +2469,14 @@ static void write_projects(char *basedir, char **prognames, char **uids,
 		
 
 		if(found)
-		    fprintf(outf,"\t\t\t\tStackReserveSize=\"%s\"\n",
+		    fprintf(outf,"      <StackReserveSize>%s"
+                            "</StackReserveSize>\n",
 			    memory[j].stacksize);
 
 		continue;
 	    }
 
-	    if((p=strstr(line,"<HEAPSIZE>")))
+	    if(strstr(line,"<HEAPSIZE>"))
 	    {
 		j = 0;
 		found = 0;
@@ -1924,7 +2493,8 @@ static void write_projects(char *basedir, char **prognames, char **uids,
 		
 
 		if(found)
-		    fprintf(outf,"\t\t\t\tHeapReserveSize=\"%s\"\n",
+		    fprintf(outf,"      <HeapReserveSize>%s"
+                            "</HeapReserveSize>\n",
 			    memory[j].heapsize);
 
 		continue;
@@ -1936,12 +2506,13 @@ static void write_projects(char *basedir, char **prognames, char **uids,
 	fclose(inf);
 	fclose(outf);
 
-	sprintf(filename,"%s/win32/apps/emboss/%s/%s.vcproj",basedir,
+	sprintf(filename,"%s/win32/apps/emboss/%s/%s.vcxproj",basedir,
 		prognames[i],prognames[i]);
+        fix_dir(filename);
+        
 	chmod(filename,0755);
     }
     
-
     return;
 }
 
@@ -1968,12 +2539,15 @@ static void sub_text(char *line, char *tline, char *given, char *rep)
 static void make_ajax_header_exports(char *basedir,char *subdir)
 {
     char defsdir[MAXNAMLEN];
-    FILE *fp = NULL;
+    FILE *fp;
     
 
     sprintf(defsdir,"%s/emboss/ajax/%s",basedir,subdir);
+    fix_dir(defsdir);
     
-    if(!(fp=fopen(TMPFILE,"w")))
+    fp = fopen(TMPFILE,"w");
+    
+    if(!fp)
     {
 	fprintf(stderr,"Cannot open temporary file %s\n",TMPFILE);
 	exit(-1);
@@ -1998,13 +2572,15 @@ static void make_ajax_header_exports(char *basedir,char *subdir)
 static void make_expat_header_exports(char *basedir)
 {
     char hfname[MAXNAMLEN];
-    FILE *fp = NULL;
+    FILE *fp;
     
 
     sprintf(hfname,"%s/emboss/ajax/expat/expat.h",basedir);
+    fix_dir(hfname);
+    
+    fp = fopen(TMPFILE,"w");
 
-
-    if(!(fp=fopen(TMPFILE,"w")))
+    if(!fp)
     {
 	fprintf(stderr,"Cannot open temporary file %s\n",TMPFILE);
 	exit(-1);
@@ -2025,15 +2601,14 @@ static void extract_expat_funcnames(char *filename, FILE *fout)
     FILE *inf;
     char line[MAXNAMLEN];
     char tline[MAXNAMLEN];
-    char command[MAXNAMLEN];
     
-    int found = 0;
     char *p;
     char *q;
     int len;
     
+    inf = fopen(filename,"r");
 
-    if(!(inf=fopen(filename,"r")))
+    if(!inf)
     {
 	fprintf(stderr,"Cannot open header file %s\n",filename);
 	exit(-1);
@@ -2101,13 +2676,15 @@ static void extract_expat_funcnames(char *filename, FILE *fout)
 static void make_zlib_header_exports(char *basedir)
 {
     char hfname[MAXNAMLEN];
-    FILE *fp = NULL;
+    FILE *fp;
     
 
     sprintf(hfname,"%s/emboss/ajax/zlib/zlib.h",basedir);
+    fix_dir(hfname);
+    
+    fp = fopen(TMPFILE,"w");
 
-
-    if(!(fp=fopen(TMPFILE,"w")))
+    if(!fp)
     {
 	fprintf(stderr,"Cannot open temporary file %s\n",TMPFILE);
 	exit(-1);
@@ -2128,15 +2705,14 @@ static void extract_zlib_funcnames(char *filename, FILE *fout)
     FILE *inf;
     char line[MAXNAMLEN];
     char tline[MAXNAMLEN];
-    char command[MAXNAMLEN];
     
-    int found = 0;
     char *p;
     char *q;
     int len;
-    
 
-    if(!(inf=fopen(filename,"r")))
+    inf = fopen(filename,"r");    
+
+    if(!inf)
     {
 	fprintf(stderr,"Cannot open header file %s\n",filename);
 	exit(-1);
@@ -2197,5 +2773,29 @@ static void extract_zlib_funcnames(char *filename, FILE *fout)
 
     fclose(inf);
 
+    return;
+}
+
+
+
+
+static void fix_dir(char *str)
+{
+#ifdef WIN32
+    char *p;
+
+    p = str;
+
+    while(*p)
+    {
+        if(*p == '/')
+            *p = '\\';
+
+        ++p;
+    }
+#else
+    (void) str;
+#endif
+    
     return;
 }

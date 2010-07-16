@@ -94,7 +94,7 @@ AjBool       embPdbToIdx(ajint *idx, const AjPPdb pdb, const AjPStr res,
 			 ajint chn);
 AjBool       embPdbListHeterogens(const AjPPdb pdb, AjPList *list_heterogens, 
 				  AjPInt *siz_heterogens, ajint *nhet, 
-				  AjPFile logf );
+				  AjPFile logfile);
 AjBool       embPdbidToSp(const AjPStr pdb, AjPStr *spr, const AjPList list);
 AjBool       embPdbidToAcc(const AjPStr pdb, AjPStr *acc, const AjPList list);
 AjBool       embPdbidToScop(const AjPPdb pdb, const AjPList list_allscop, 

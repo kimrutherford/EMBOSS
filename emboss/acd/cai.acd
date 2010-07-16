@@ -1,7 +1,8 @@
 application: cai [
   documentation: "Calculate codon adaptation index"
   groups: "Nucleic:Codon usage"
-  relations: "EDAM: Codon usage analysis"
+  relations: "/edam/topic/0000107 Codon usage"
+  relations: "/edam/operation/0000286 Codon usage analysis"
 ]
 
 section: input [
@@ -12,13 +13,15 @@ section: input [
   seqall: seqall [
     parameter: "Y"
     type: "DNA"
-    relations: "EDAM: Sequence record"                                     
+    relations: "/edam/data/0001215 Pure DNA sequence"
+    relations: "/edam/data/0000849 Sequence record" 
+    relations: "/edam/data/0002178 1 or more" 
   ]
 
   codon: cfile [
     standard: "Y"
     default: "Eyeast_cai.cut"
-    relations: "EDAM: Codon usage table"                                   
+    relations: "/edam/data/0001597 Codon usage table"                                   
   ]
 
 endsection: input
@@ -31,7 +34,7 @@ section: output [
   outfile: outfile [
     parameter: "Y"
     knowntype: "cai output"
-    relations:  "EDAM:Codon adaptation index "                             
+    relations:  "/edam/data/0001599 Codon adaptation index "                             
   ]
 
 endsection: output

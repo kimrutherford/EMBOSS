@@ -75,7 +75,7 @@
 <td>-max</td>
 <td>integer</td>
 <td>Maximum cuts per RE</td>
-<td>Integer up to 2000000000</td>
+<td>Any integer value</td>
 <td>2000000000</td>
 </tr>
 

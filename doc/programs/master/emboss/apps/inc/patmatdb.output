@@ -37,7 +37,7 @@ SNLEVSTTSFLPTP
 #---------------------------------------
 #=======================================
 #
-# Sequence: HD_FUGRU     from: 1   to: 3148
+# Sequence: HD_TAKRU     from: 1   to: 3148
 # HitCount: 1
 #
 # Motif: ST[TY]S
@@ -80,7 +80,7 @@ LADLESTTSHISKR
 
 #---------------------------------------
 # Total_sequences: 100
-# Total_length: 35263
+# Total_length: 35357
 # Reported_sequences: 3
 # Reported_hitcount: 3
 #---------------------------------------

@@ -84,7 +84,7 @@ Created cirdna.ps
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Draws circular maps of DNA constructs
-Version: EMBOSS:6.2.0
+Version: EMBOSS:6.3.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     [inputfile] Commands to the cirdna drawing
@@ -97,7 +97,8 @@ Version: EMBOSS:6.2.0
    -posblocks          selection  [In] Text inside or outside the blocks
    -graphout           graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tek, tekt, none, data, xterm, png, gif)
+                                  tek, tekt, none, data, xterm, png, gif, pdf,
+                                  svg, pdf, svg)
 
    Additional (Optional) qualifiers:
    -maxgroups          integer    [20] Maximum number of groups (Integer 1 or
@@ -228,7 +229,7 @@ Version: EMBOSS:6.2.0
 <td>-graphout</td>
 <td>graph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif, pdf, svg, pdf, svg</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -829,10 +830,12 @@ None.
 <H2>
     Author(s)
 </H2>
-Nicolas Tourasse (nicolas.tourasse&nbsp;&copy;&nbsp;biotek.uio.no)
+Nicolas Tourasse formerly at:
 <br>
 Biotechnology Center of Oslo
 
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
 
 <H2>
     History

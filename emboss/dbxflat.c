@@ -23,17 +23,22 @@
 #include "emboss.h"
 
 
+static AjPRegexp dbxflat_wrdexp = NULL;
 
 
 static ajuint maxidlen = 0;
 static ajuint idtrunc  = 0;
 
+static AjBool dbxflat_ParseFastq(EmbPBtreeEntry entry, AjPFile inf);
 static AjBool dbxflat_ParseEmbl(EmbPBtreeEntry entry, AjPFile inf);
 static AjBool dbxflat_ParseGenbank(EmbPBtreeEntry entry, AjPFile inf);
 
 static AjBool dbxflat_NextEntry(EmbPBtreeEntry entry, AjPFile inf);
 
 int global = 0;
+
+
+
 
 /* @datastatic DbxflatPParser *************************************************
 **
@@ -63,6 +68,7 @@ static DbxflatOParser parser[] =
     {"SWISS",  dbxflat_ParseEmbl},
     {"GB",     dbxflat_ParseGenbank},
     {"REFSEQ", dbxflat_ParseGenbank},
+    {"FASTQ",  dbxflat_ParseFastq},
     {NULL,     NULL}
 };
 
@@ -320,6 +326,7 @@ int main(int argc, char **argv)
     ajBtreePriDel(&priobj);
     ajBtreeHybDel(&hyb);
 
+    ajRegFree(&dbxflat_wrdexp);
     embExit();
 
     return 0;
@@ -500,6 +507,97 @@ static AjBool dbxflat_ParseGenbank(EmbPBtreeEntry entry, AjPFile inf)
     
     return ret;
 }
+
+
+
+
+/* @funcstatic dbxflat_ParseFastq *********************************************
+**
+** Parse the ID, accession from a FASTQ format sequence entry.
+**
+** Reads to the end of the entry and then returns.
+**
+** @param [w] entry [EmbPBtreeEntry] entry
+** @param [u] inf [AjPFile] Input file
+**
+** @return [AjBool] ajTrue on success.
+** @@
+******************************************************************************/
+
+static AjBool dbxflat_ParseFastq(EmbPBtreeEntry entry, AjPFile inf)
+{
+    AjPStr line = NULL;
+    ajlong pos  = 0L;
+    ajuint seqlen = 0;
+    ajuint qlen = 0;
+    AjPStr tmpfd  = NULL;
+    AjPStr str = NULL;
+    AjPStr de = NULL;
+    AjBool ok;
+
+    if(!dbxflat_wrdexp)
+	dbxflat_wrdexp = ajRegCompC("([A-Za-z0-9.:=]+)");
+
+    line = ajStrNewC("");
+    
+    pos = ajFileResetPos(inf);
+
+    if(!ajReadlineTrim(inf,&line))
+    {
+        ajStrDel(&line);
+        return ajFalse;
+    }
+
+    /* first line of entry */
+
+    if(!ajStrPrefixC(line,"@"))
+        return ajFalse;
+
+    entry->fpos = pos;
+    ajStrCutStart(&line, 1);
+    ajStrExtractFirst(line, &de, &entry->id);
+
+    if(entry->do_description && ajStrGetLen(de))
+    {
+	while(ajRegExec(dbxflat_wrdexp,de))
+	{
+	    ajRegSubI(dbxflat_wrdexp, 1, &tmpfd);
+	    str = ajStrNew();
+	    ajStrAssignS(&str,tmpfd);
+	    ajListPush(entry->de,(void *)str);
+	    ajRegPost(dbxflat_wrdexp, &de);
+	}
+    }
+
+/* now read sequence */
+    ok = ajReadlineTrim(inf,&line);
+    while(ok && !ajStrPrefixC(line, "+"))
+    {
+        ajStrRemoveWhite(&line);
+        seqlen += MAJSTRGETLEN(line);
+        ok = ajReadlineTrim(inf,&line);
+    }
+
+    if(!ok)
+        return ajFalse;
+
+    ok = ajReadlineTrim(inf,&line);
+    while(ok)
+    {
+        qlen += MAJSTRGETLEN(line);
+        if(qlen < seqlen)
+            ok = ajReadlineTrim(inf,&line);
+        else
+            ok = ajFalse;
+    }
+
+    ajStrDel(&de);
+    ajStrDel(&tmpfd);
+    ajStrDel(&line);
+    
+    return ajTrue;
+}
+
 
 
 

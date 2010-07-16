@@ -73,10 +73,12 @@ public class JembossServer
   /** user name */
   private String username = System.getProperty("user.name") + fs;
   /** results directory */
-  private String tmproot  = jp.getResultsHome()+username;
+  private String tmproot  = jp.getResultsHome();
   /** results directory */
   private File tmprootDir = new File(tmproot);
 
+  String projectName = null;
+  
   /** emboss run environment */
   private String[] envp_emboss = 
   {
@@ -227,7 +229,7 @@ public class JembossServer
   public Vector getWossname()
   {
     Vector wossOut = new Vector();
-    String embossCommand = new String(embossBin + "wossname -colon -auto");
+    String embossCommand = new String(embossBin + "wossname -colon -gui -auto");
     RunEmbossApplication2 rea = new RunEmbossApplication2(embossCommand,
                                                            envp,null);
     wossOut.add("status");
@@ -320,98 +322,6 @@ public class JembossServer
         return vans;
   }
 
-  /**
-  * @deprecated
-  * Uses JNI to calculate sequence attributes using EMBOSS library call.
-  * @param fileContent  sequence filename or database entry
-  * @param seqtype      sequence type (seqset/sequence)
-  * @return     	sequence length, weight & type (protein/nucleotide)
-  *
-  */
-
-  /*
-  private Vector call_ajax_(String fileContent, String seqtype)
-  {
-    boolean afile = false;
-    String fn = null;
-    File tf = null;
-
-    Vector vans = new Vector();
-
-    // create temporary file
-    if( ((fileContent.indexOf(":") < 0) || 
-         (fileContent.indexOf("\n") > 0) ) &&
-       !((new File(fileContent)).exists()) ) 
-    {
-      afile = true;
-      try
-      {
-        tf = File.createTempFile("tmp",".jembosstmp", tmprootDir);
-        PrintWriter out = new PrintWriter(new FileWriter(tf));
-        out.println(fileContent);
-        out.close();
-    
-        fn = new String(tf.getCanonicalPath());
-      }
-      catch (IOException ioe) 
-      {
-        System.out.println("IOException : STATUS NOT OK");
-        vans.add("status");
-        vans.add("1");
-        return vans;
-      }
-    }
-    else
-    {
-      fn = fileContent;     //looks like db entry or local file name
-    }
-
-    boolean ok = false;
-    Ajax aj = null;
-
-    if( ((new File(fn)).exists()) ||    //call ajax if sequence file
-         (fn.indexOf(":") > 0) )        //or db
-    {
-      try
-      {
-        aj = new Ajax();
-        if(seqtype.startsWith("seqset"))
-          ok = aj.seqsetType(fn);
-        else
-          ok = aj.seqType(fn);
-      }
-      catch (Exception e)
-      {
-        System.out.println("AjaxException : STATUS NOT OK");
-        vans.add("status");
-        vans.add("1");
-        return vans;
-      }
-    }
-
-    if(ok)
-    {
-      vans.add("length");
-      vans.add(new Integer(Ajax.length));
-      vans.add("protein");
-      vans.add(new Boolean(Ajax.protein));
-      vans.add("weight");
-      vans.add(new Float(Ajax.weight));
-      vans.add("status");
-      vans.add("0");
-    }
-    else
-    {
-      vans.add("status");
-      vans.add("1");
-    }
-
-    if(afile)
-      tf.delete();
-
-    return vans;
-  }
-  */
 
 
   /**
@@ -444,10 +354,14 @@ public class JembossServer
     {
       public boolean accept(File dir, String name)
       {
-        File fileName = new File(dir, name);
-        return !fileName.isDirectory();
+          if (name.startsWith("EPAM") || name.startsWith("EBLOSUM") ||
+                  name.startsWith("EDNA"))
+              return true;
+          
+          return false;
       };
     });
+    
     String matrices ="";
     for(int i=0;i<dataFile.length;i++)
       matrices=matrices.concat(dataFile[i]+"\n");
@@ -469,33 +383,14 @@ public class JembossServer
       matrices=matrices.concat(dataFile[i]+"\n");
     showdbOut.add("codons");
     showdbOut.add(matrices);
+    showdbOut.add("doesJembossServerSupportPDFoutput");
+    showdbOut.add(Boolean.toString(jp.getEmbossHavePDF()));
 
     return showdbOut;
   }
 
 
-  /**
-  *
-  * Run an EMBOSS application
-  * @param embossCommand	command line to run
-  * @param options		unused
-  * @param inFiles		input files and names
-  * @return 			output files from application run
-  *
-  */
-  public Vector run_prog(String embossCommand, String options, 
-                                             String[] inFiles)
-  {
-    Vector result = new Vector();
 
-    Hashtable inF = new Hashtable();
-    for(int i=0; i<inFiles.length;i+=2)
-      inF.put(inFiles[i],inFiles[i+1]);
-
-    result = run_prog(embossCommand,options,inF);
-
-    return result;
-  }
 
   /**
   *
@@ -503,7 +398,7 @@ public class JembossServer
   * @param embossCommand        command line to run
   * @param options              unused
   * @param inFiles              input files and names
-  * @param userName		username
+  * @param userName             user name
   * @return                     output files from application run
   *
   */
@@ -513,7 +408,55 @@ public class JembossServer
     Hashtable hashInFiles = getHashtable(inFiles);
     tmproot = tmproot.concat(userName+fs);
     return run_prog(embossCommand,options,hashInFiles);
-/*   return run_prog(embossCommand,options,hashInFiles,userName); */
+  }
+
+
+  
+  /**
+  *
+  * Run an EMBOSS application.
+  * Construction of the command line string here is for information only,
+  * jobs are actually executed using the string array representation
+  * of the command line.
+  * 
+  * @param embossCommand        command line represented as a String array
+  * @param options              "interactive" or "batch", i.e sync or async job
+  * @param inFiles              input files with names
+  * @param userName             user name
+  * @return                     output files from application run
+  *
+  */
+
+  public Vector run_prog_array(Vector cmdA, String options,
+          Vector inFiles, String userName)
+  {
+      Hashtable hashInFiles = getHashtable(inFiles);
+      String cmd ="";
+      int i = 0;
+      tmproot = tmproot.concat(userName+fs);
+      embossCommandA = new String[cmdA.size()+hashInFiles.size()];
+      
+      if(cmdA.size()==0)
+          throw new RuntimeException("empty command line array");
+      
+      embossCommandA[0] = embossBin + cmdA.get(0);
+      cmd = (String)cmdA.get(0);
+
+      for (i=1; i<cmdA.size(); i++)
+      {
+          String s = (String)cmdA.get(i);
+          cmd += " "+(s.indexOf(' ')==-1 ? s : "\""+s+"\"");
+          embossCommandA[i] = s;
+      }
+      Object[] filenames = hashInFiles.keySet().toArray();
+      for (i=0; i<filenames.length; i++)
+      {
+          String s = (String)filenames[i];
+          cmd += " "+s;
+          embossCommandA[cmdA.size()+i] = s;
+      }
+
+      return run_prog(cmd,options, hashInFiles);
   }
 
   /**
@@ -525,7 +468,7 @@ public class JembossServer
   * @return 			output files from application run
   *
   */
-  public Vector run_prog(String embossCommand, String options, 
+  private Vector run_prog(String embossCommand, String options, 
                                             Hashtable inFiles)
   {
 
@@ -538,18 +481,7 @@ public class JembossServer
        result.add("ERROR: Disallowed command syntax "+embossCommand);
        result.add("status");
        result.add("1");
-
        return result;
-    }
-
-    //trap anything that is trying to write to stdout
-    int stdIndex = embossCommand.indexOf(" stdout ");
-    if(stdIndex > -1)
-    {
-      String startCmd = embossCommand.substring(0,stdIndex+7);
-      String endCmd = embossCommand.substring(stdIndex+8);
-      embossCommand = startCmd.concat("file ");
-      embossCommand = embossCommand.concat(endCmd);
     }
 
     Enumeration enumFiles = inFiles.keys();
@@ -569,13 +501,13 @@ public class JembossServer
         System.out.println("Failed to create directory "+tmproot);
     }
 
-    Random rnd = new Random();
     String dat = new Date().toString();
     dat = dat.replace(':','_');
 
+    assignProjectName(appl);
+    
 //get a unique project name 
-    String project = new String(tmproot + appl + "_" +
-         dat.replace(' ','_') + "_" + rnd.nextInt(99999));
+    String project = new String(tmproot + projectName);
 
     File projectDir = new File(project);
     ok = projectDir.mkdirs();
@@ -637,7 +569,7 @@ public class JembossServer
     result.add("0");
 
     if(options.toLowerCase().indexOf("interactive") > -1)
-    { 
+    {
     	String stdout = "";
         String stderr = "";
         try
@@ -659,8 +591,9 @@ public class JembossServer
         
         if(!stderr.equals(""))
         {
-          result.add("stderr");
-          result.add(stderr);  
+          result.add("msg");
+          result.add(stderr);
+          createStderrFile(project, stderr);
         }
         createFinishedFile(project);
     }
@@ -668,9 +601,6 @@ public class JembossServer
     {
       JembossThread jt = new JembossThread(rea,project);
       jt.start();
-
-//    if(jt.isAlive())
-//      System.out.println("THREAD IS ALIVE!");
 
       result.add("job_submitted");
       result.add("Job " + projectDir.getName() + "submitted.");
@@ -681,12 +611,41 @@ public class JembossServer
     }
 
 //get the output files
-    result = loadFilesContent(projectDir,project,result,inFiles);
-    result = loadPNGContent(projectDir,project,result);
+    loadFilesContent(projectDir,project,result,inFiles);
+    loadPNGContent(projectDir,project,result);
 
     return result;
   }
 
+
+  
+  
+  public String assignProjectName(String appl)
+  {
+      if (projectName==null)
+      {
+          Random rnd = new Random();
+          String dat = new Date().toString();
+          dat = dat.replace(':','_');
+
+          //get a unique project name 
+          projectName = new String(appl + "_" +
+                  dat.replace(' ','_') + "_" + rnd.nextInt(99999));
+      }
+      return projectName;
+  }
+  
+  
+  
+  
+  public String getProjectName()
+  {
+      return projectName;
+  }  
+  
+  
+  
+  
   /**
   *
   * Creates a file named "finished" in the project directory,
@@ -705,6 +664,31 @@ public class JembossServer
     }
     catch (IOException ioe) {}
   }
+
+
+
+
+  /**
+  *
+  * Creates a file named "stderrfile" in the project directory
+  *
+  */
+  
+  private void createStderrFile(String project, String stderr)
+  {
+    File finished = new File(project + fs + "stderrfile");
+
+    try
+    {
+      PrintWriter fout = new PrintWriter(new FileWriter(finished));
+      fout.println(stderr);
+      fout.close();
+    }
+    catch (IOException ioe) {}
+  }
+
+
+
 
 
   /**
@@ -744,8 +728,8 @@ public class JembossServer
 
     if(cl.equals(""))
     {
-      ssr = loadFilesContent(projectDir,project,ssr,null);
-      ssr = loadPNGContent(projectDir,project,ssr);
+      loadFilesContent(projectDir,project,ssr,null);
+      loadPNGContent(projectDir,project,ssr);
     }
     else
     {
@@ -970,7 +954,7 @@ public class JembossServer
   * @return             result
   *
   */
-  private Vector loadFilesContent(File projectDir, String project, 
+  private void loadFilesContent(File projectDir, String project, 
                                   Vector result, Hashtable inFiles)
   {
 
@@ -981,6 +965,9 @@ public class JembossServer
         return (!name.startsWith(".") && !name.endsWith(".png"));
       };
     });
+    
+    if (outFiles == null)
+        return;
 
     for(int i=0;i<outFiles.length;i++)
     {
@@ -1028,8 +1015,7 @@ public class JembossServer
         result.add(fc);
       }
     }
-    return result;
-
+    return;
   }
 
   /**
@@ -1041,7 +1027,7 @@ public class JembossServer
   * @return             result
   *
   */
-  private Vector loadPNGContent(File projectDir, String project, Vector result)
+  private void loadPNGContent(File projectDir, String project, Vector result)
   {
 
     String pngFiles[] = projectDir.list(new FilenameFilter()
@@ -1065,7 +1051,7 @@ public class JembossServer
         result.add(data);
       }
     }
-    return result;
+    return;
   }
 
   /**
@@ -1106,7 +1092,7 @@ public class JembossServer
   * @param prog         program
   * @param opt          options
   * @param resToQuery   results to query
-  * @param userName     username
+  * @param userName     user name
   *
   */
   public Vector update_result_status(String prog, String opt,
@@ -1204,10 +1190,6 @@ public class JembossServer
   {
     throw new java.lang.CloneNotSupportedException();
   }
-
-public void setEmbossCommandA(String[] embossCommandA) {
-	this.embossCommandA = embossCommandA;
-}
 
 }
 

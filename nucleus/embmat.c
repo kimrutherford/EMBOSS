@@ -212,7 +212,7 @@ EmbPMatPrints embMatProtReadInt(AjPFile fp)
 		else
 		    p = ajSysFuncStrtok(NULL," ");
 
-		sscanf(p,"%d",&ret->matrix[m][i][j]);
+		sscanf(p,"%u",&ret->matrix[m][i][j]);
 	    }
 	}
     }
