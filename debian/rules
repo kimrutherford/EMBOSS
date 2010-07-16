@@ -51,19 +51,11 @@ debian/copyright:
 clean: unpatch
 	dh_testdir
 	dh_testroot
+	[ ! -d debian/testbackup ] || ( $(RM) --recursive test ; mv debian/testbackup test )
 	[ ! -f Makefile ] || $(MAKE) distclean
-
 	find jemboss/ -type f -name "*.class" | xargs -r rm -f
-
 	rm --force --recursive debian/emboss_tmp
-
 	$(RM) config.status install-stamp
-	
-	# Temporary fix that may become unecessary in the future.
-	rm -f test/gb/Makefile test/wormpep/Makefile
-
-	-cp debian/testembossrcbackup test/.embossrc
-
 	dh_clean debian/copyright config.sub config.guess test-stamp
 
 install: build install-stamp
@@ -129,13 +121,13 @@ test: build test-stamp
 test-stamp:
 ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
 	$(RM) test-stamp
-	[ debian/testembossrcbackup ] || cp test/.embossrc debian/testembossrcbackup
+	[ -d debian/testbackup ] || cp -a test debian/testbackup
 	sed -i "/SET emboss_tempdata/cSET emboss_tempdata $(CURDIR)/test" test/.embossrc
 	sed -i "/SET emboss_qadata/cSET emboss_qadata $(CURDIR)/test" test/.embossrc
 	echo "SET emboss_acdroot $(CURDIR)/emboss/acd" >> test/.embossrc
 	echo "SET emboss_data $(CURDIR)/emboss/data" >> test/.embossrc
 	echo "SET emboss_docroot $(CURDIR)/doc" >> test/.embossrc
-	cd test/qa && EMBOSSRC=$(CURDIR)/test PATH=$(CURDIR)/emboss:$$PATH ./qatest.csh
+	cd test/qa && EMBOSSRC=$(CURDIR)/test PATH=$(CURDIR)/emboss:$$PATH EMBOSS_ROOT=../../../ ./qatest.csh
 	touch test-stamp
 endif
 
