@@ -1,3 +1,19 @@
+emboss (6.3.1-1) unstable; urgency=low
+
+  * New upstream release.
+    - Dropped debian/patches/official-upstream-patch.patch.
+    - Refreshed the manual pages (debian/*manpages*).
+  * Incremented Standards-Version in debian/control to reflect conformance
+    with Debian Policy 3.9.0 (no changes needed).
+  * Keep and restore a clean copy of the test directory, closes: #587170.
+  * Build against Debian's zlib and expat libraries (debian/rules,
+    debian/control, deleted debian/libajax6.lintian-overrides).
+  * Added support for MySQL and PostgreSQL (debian/control, debian/rules).
+  * Added symbols files for emboss-libs, libajax6 and libnucleus6. This
+    will prevent mixing incompatible binary packages (LP: 526356).
+
+ -- Charles Plessy <plessy@debian.org>  Wed, 21 Jul 2010 15:24:07 +0900
+
 emboss (6.2.0-2) unstable; urgency=low
 
   * Updated debian/patches/official-upstream-patch.patch to version 1-19.
