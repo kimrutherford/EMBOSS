@@ -23,6 +23,11 @@ ifneq ($(wildcard /usr/lib/jvm/java-6-openjdk/include/classfile_constants.h),)
     CONFFLAGS += --with-javaos=/usr/lib/jvm/java-6-openjdk/include/linux
 endif
 
+DEB_LDFLAGS += -lexpat
+DEB_LDFLAGS += $(shell mysql_config --libs)
+DEB_LDFLAGS += -lpq
+#DEB_LDFLAGS += $(shell pg_config  | grep LIBS | cut -f2 -d=)
+
 config.status:
 	dh_testdir
 	ln -sf /usr/share/misc/config.sub .
@@ -34,7 +39,7 @@ include /usr/share/quilt/quilt.make
 build: config.status patch debian/copyright build-stamp
 build-stamp:
 	dh_testdir
-	$(MAKE) AJAX_FIXED_ROOT=\\\"/usr/share/EMBOSS\\\" LDFLAGS="-lexpat"
+	$(MAKE) AJAX_FIXED_ROOT=\\\"/usr/share/EMBOSS\\\" LDFLAGS="$(DEB_LDFLAGS)"
 	touch build-stamp
 
 # In order to use this rule you must install libemboss-acd-perl, xsltproc, docbook-xml and docbook-xsl
