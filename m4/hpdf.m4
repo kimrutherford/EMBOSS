@@ -14,7 +14,7 @@ AC_DEFUN([CHECK_HPDF],
 # Handle user hints
 #
 [AC_MSG_CHECKING(whether to look for pdf support)
-AC_ARG_WITH([libhpdf],
+AC_ARG_WITH([hpdf],
     [AS_HELP_STRING([--with-hpdf=DIR],
         [root directory path of hpdf installation @<:@defaults to /usr@:>@])]
     [AS_HELP_STRING([--without-hpdf],

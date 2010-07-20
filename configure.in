@@ -6,7 +6,7 @@
 #CC=cc
 
 AC_INIT(ajax/core/ajmath.c)
-AM_INIT_AUTOMAKE([EMBOSS],[6.3.0])
+AM_INIT_AUTOMAKE([EMBOSS],[6.3.1])
 
 # Make sure CFLAGS is defined to stop LT_INIT adding -g
 CFLAGS="$CFLAGS "
