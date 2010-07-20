@@ -856,7 +856,7 @@ AjBool ajSysCommandCopyC(const char* name, const char* name2)
         return ajFalse;
     }
     
-    to = open(name2, O_WRONLY|O_CREAT);
+    to = open(name2, O_WRONLY|O_CREAT, 0644);
     if(to < 0)
     {
         ajErr("Unable to copy to '%s' error %d: %s",

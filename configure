@@ -929,7 +929,7 @@ with_docroot
 with_gccprofile
 with_java
 with_javaos
-with_libhpdf
+with_hpdf
 with_pngdriver
 with_auth
 with_mysql
@@ -2926,7 +2926,7 @@ fi
 
 # Define the identity of the package.
  PACKAGE=EMBOSS
- VERSION=6.3.0
+ VERSION=6.3.1
 
 
 cat >>confdefs.h <<_ACEOF
@@ -13800,9 +13800,9 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to look for pdf support" >&5
 $as_echo_n "checking whether to look for pdf support... " >&6; }
 
-# Check whether --with-libhpdf was given.
-if test "${with_libhpdf+set}" = set; then :
-  withval=$with_libhpdf; if test "$withval" != no ; then
+# Check whether --with-hpdf was given.
+if test "${with_hpdf+set}" = set; then :
+  withval=$with_hpdf; if test "$withval" != no ; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
   ALT_HOME="$withval"
