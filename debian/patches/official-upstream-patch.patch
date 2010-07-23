@@ -1,4 +1,52 @@
 Description: Official upstream patch.
- (none for the moment).
-Origin: ftp://emboss.open-bio.org/pub/EMBOSS/fixes/patches/
+ Fix 1. EMBOSS-6.3.1/configure
+        EMBOSS-6.3.1/m4/mysql.m4
+ .
+ 21 Jul 2010: Addresses a problem whereby, in some circumstances, inclusion of
+              hpdf support prevented inclusion of MySQL support.
+Origin: ftp://emboss.open-bio.org/pub/EMBOSS/fixes/patches/patch-1-1.gz
 Forwarded: not-needed
+diff -c -N --recursive -a EMBOSS-6.3.1old/configure EMBOSS-6.3.1/configure
+*** EMBOSS-6.3.1old/configure	2010-07-19 12:55:36.000000000 +0100
+--- EMBOSS-6.3.1/configure	2010-07-21 09:46:12.000000000 +0100
+***************
+*** 14481,14488 ****
+  
+      	    EMBCFLAGS=$CFLAGS
+  	    EMBLDFLAGS=$LDFLAGS
+! 	    CFLAGS=$MYSQL_CFLAGS
+! 	    LDFLAGS=$MYSQL_LDFLAGS
+  
+              cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+  /* end confdefs.h.  */
+--- 14481,14488 ----
+  
+      	    EMBCFLAGS=$CFLAGS
+  	    EMBLDFLAGS=$LDFLAGS
+! 	    CFLAGS="$MYSQL_CFLAGS $EMBCFLAGS"
+! 	    LDFLAGS="$MYSQL_LDFLAGS $EMBLDFLAGS"
+  
+              cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+  /* end confdefs.h.  */
+diff -c -N --recursive -a EMBOSS-6.3.1old/m4/mysql.m4 EMBOSS-6.3.1/m4/mysql.m4
+*** EMBOSS-6.3.1old/m4/mysql.m4	2010-05-18 23:12:06.000000000 +0100
+--- EMBOSS-6.3.1/m4/mysql.m4	2010-07-21 09:45:46.000000000 +0100
+***************
+*** 96,103 ****
+  
+      	    EMBCFLAGS=$CFLAGS
+  	    EMBLDFLAGS=$LDFLAGS
+! 	    CFLAGS=$MYSQL_CFLAGS
+! 	    LDFLAGS=$MYSQL_LDFLAGS
+  
+              AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <stdio.h>
+                                                #include "mysql.h"]],
+--- 96,103 ----
+  
+      	    EMBCFLAGS=$CFLAGS
+  	    EMBLDFLAGS=$LDFLAGS
+! 	    CFLAGS="$MYSQL_CFLAGS $EMBCFLAGS"
+! 	    LDFLAGS="$MYSQL_LDFLAGS $EMBLDFLAGS"
+  
+              AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <stdio.h>
+                                                #include "mysql.h"]],
