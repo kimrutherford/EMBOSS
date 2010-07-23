@@ -1,3 +1,11 @@
+emboss (6.3.1-2) unstable; urgency=low
+
+  * First upstream patch for version 6.3.1 (debian/series,
+    debian/patches/official-upstream-patch.patch).
+  * Moved openjdk-6-jdk to Build-Depends (debian/control, closes: #589897).
+
+ -- Charles Plessy <plessy@debian.org>  Fri, 23 Jul 2010 10:51:50 +0900
+
 emboss (6.3.1-1) unstable; urgency=low
 
   * New upstream release.
