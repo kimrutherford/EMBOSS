@@ -14,14 +14,9 @@ NUCLEUS     = $(CURDIR)/debian/libnucleus6
 CONFFLAGS   = --prefix=/usr
 CONFFLAGS   += --bindir=/usr/lib/emboss
 CONFFLAGS   += --enable-systemlibs
+CONFFLAGS   += --with-java=/usr/lib/jvm/default-java/include
+CONFFLAGS   += --with-javaos=/usr/lib/jvm/default-java/include/linux
 
-# If openjdk-6-jdk is not installed don't tell configure to use it.
-# This allows binary-arch builds to be performed without openjdk
-# installed.
-ifneq ($(wildcard /usr/lib/jvm/java-6-openjdk/include/classfile_constants.h),)
-    CONFFLAGS += --with-java=/usr/lib/jvm/java-6-openjdk/include
-    CONFFLAGS += --with-javaos=/usr/lib/jvm/java-6-openjdk/include/linux
-endif
 
 DEB_LDFLAGS += -lexpat
 DEB_LDFLAGS += $(shell mysql_config --libs)

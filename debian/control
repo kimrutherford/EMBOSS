@@ -6,11 +6,11 @@ DM-Upload-Allowed: yes
 Uploaders: Charles Plessy <plessy@debian.org>, Nelson A. de Oliveira <naoliv@debian.org>
 Build-Depends: debhelper (>= 7), quilt, libx11-dev, x11proto-core-dev, libgdchart-gd2-xpm-dev, zlib1g-dev, libpng12-dev, libpcre3-dev, libexpat1-dev, libmysqlclient-dev, libpq-dev, antiword, sharutils, autotools-dev, tcsh | csh | c-shell,
 # Needed until the following is solved: https://sourceforge.net/tracker/?func=detail&aid=3033326&group_id=93650&atid=605031 
- openjdk-6-jdk
-#Build-Depends-Indep: openjdk-6-jdk
+ default-jdk
+#Build-Depends-Indep: default-jdk
 Vcs-Browser: http://git.debian.org/?p=debian-med/emboss.git
 Vcs-Git: git://git.debian.org/git/debian-med/emboss.git
-Standards-Version: 3.9.0
+Standards-Version: 3.9.1
 Homepage: http://emboss.sourceforge.net
 
 Package: emboss
@@ -68,7 +68,7 @@ Description: EMBOSS Libraries
 
 Package: jemboss
 Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}, openjdk-6-jre, tcsh | csh | c-shell
+Depends: ${shlibs:Depends}, ${misc:Depends}, default-jre, tcsh | csh | c-shell
 Description: graphical user interface to EMBOSS
  Jemboss is a Graphical User Interface (GUI) to EMBOSS, the European Molecular
  Biology Open Software Suite. It is part of the EMBOSS distribution.

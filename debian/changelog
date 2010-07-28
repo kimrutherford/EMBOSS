@@ -1,3 +1,12 @@
+emboss (6.3.1-3) unstable; urgency=low
+
+  * Use default Java instead of OpenJDK (debian/control, debian/rules,
+    closes: #590553, thanks to Petr Salinger).
+  * Incremented Standards-Version in debian/control to reflect conformance
+    with Debian Policy 3.9.1 (no changes needed).
+
+ -- Charles Plessy <plessy@debian.org>  Wed, 28 Jul 2010 23:42:31 +0900
+
 emboss (6.3.1-2) unstable; urgency=low
 
   * First upstream patch for version 6.3.1 (debian/series,
