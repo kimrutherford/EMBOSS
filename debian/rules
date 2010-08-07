@@ -127,7 +127,7 @@ ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
 	echo "SET emboss_acdroot $(CURDIR)/emboss/acd" >> test/.embossrc
 	echo "SET emboss_data $(CURDIR)/emboss/data" >> test/.embossrc
 	echo "SET emboss_docroot $(CURDIR)/doc" >> test/.embossrc
-	cd test/qa && EMBOSSRC=$(CURDIR)/test PATH=$(CURDIR)/emboss:$$PATH EMBOSS_ROOT=../../../ ./qatest.csh
+	cd test/qa && LS_COLORS='' EMBOSSRC=$(CURDIR)/test PATH=$(CURDIR)/emboss:$$PATH EMBOSS_ROOT=../../../ ./qatest.csh
 	touch test-stamp
 endif
 
