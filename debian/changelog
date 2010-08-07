@@ -1,3 +1,9 @@
+emboss (6.3.1-4) unstable; urgency=low
+
+  * New upstream patch, version 1-2.
+
+ -- Charles Plessy <plessy@debian.org>  Sat, 07 Aug 2010 21:18:18 +0900
+
 emboss (6.3.1-3) unstable; urgency=low
 
   * Use default Java instead of OpenJDK (debian/control, debian/rules,
