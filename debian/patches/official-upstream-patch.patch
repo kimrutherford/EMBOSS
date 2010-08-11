@@ -18,11 +18,847 @@ Description: Official upstream patch.
              mysql.m4 file - it is unnecessary for the operation of the
              EMBOSS distribution. Using this patch will not cause the
              libtool problem described above.
-Origin: ftp://emboss.open-bio.org/pub/EMBOSS/fixes/patches/patch-1-2.gz
+ .
+ .
+ Fix 3. EMBOSS-6.3.1/ajax/graphics/ajgraph.c
+ .
+ 9 Aug 2010: Fix potential crash using -debug
+ .
+ .
+ Fix 4. EMBOSS-6.3.1/ajax/ensembl/ensregistry.c
+        EMBOSS-6.3.1/ajax/ajaxdb/ajseqdb.c.c
+ .
+ 9 Aug 2010: Allow two Ensembl sequences to be loaded without re-registering.
+             Fix Ensembl Genomes registration.
+             Fix Ensembl Genomes identifiers for species without stable
+             identifiers. If the identifier does not obey a stable identifier
+             pattern, it is matched against Exons, Transcripts and
+             Translations in exactly that order.
+Origin: ftp://emboss.open-bio.org/pub/EMBOSS/fixes/patches/patch-1-4.gz
 Forwarded: not-needed
+diff -c -N --recursive -a EMBOSS-6.3.1old/ajax/ajaxdb/ajseqdb.c EMBOSS-6.3.1/ajax/ajaxdb/ajseqdb.c
+*** EMBOSS-6.3.1old/ajax/ajaxdb/ajseqdb.c	2010-07-06 15:15:52.000000000 +0100
+--- EMBOSS-6.3.1/ajax/ajaxdb/ajseqdb.c	2010-08-09 17:17:27.000000000 +0100
+***************
+*** 8265,8271 ****
+  
+                      /* "^%S([EGTP])[0-9]{11,11}" */
+  
+!                     expression = ajFmtStr("^%S([EGTP])", prefix);
+  
+                      break;
+  
+--- 8265,8272 ----
+  
+                      /* "^%S([EGTP])[0-9]{11,11}" */
+  
+!                     if(prefix)
+!                         expression = ajFmtStr("^%S([EGTP])", prefix);
+  
+                      break;
+  
+***************
+*** 8275,8281 ****
+  
+                      /* "^OTT...([EGTP])[0-9]{11,11}" */
+  
+!                     expression = ajStrNewC("^OTT...([EGTP])");
+  
+                      break;
+  
+--- 8276,8283 ----
+  
+                      /* "^OTT...([EGTP])[0-9]{11,11}" */
+  
+!                     if(prefix)
+!                         expression = ajStrNewC("^OTT...([EGTP])");
+  
+                      break;
+  
+***************
+*** 8285,8291 ****
+  
+                      /* "^%SEST([EGTP])[0-9]{11,11}" */
+  
+!                     expression = ajFmtStr("^%SEST([EGTP])", prefix);
+  
+                      break;
+  
+--- 8287,8294 ----
+  
+                      /* "^%SEST([EGTP])[0-9]{11,11}" */
+  
+!                     if(prefix)
+!                         expression = ajFmtStr("^%SEST([EGTP])", prefix);
+  
+                      break;
+  
+***************
+*** 8339,8345 ****
+                              "'entry'.\n");
+  
+                      ajListPushAppend(se->StableIdentifiers,
+!                                      ajStrNewS(se->Identifier));
+  
+                      break;
+  
+--- 8342,8348 ----
+                              "'entry'.\n");
+  
+                      ajListPushAppend(se->StableIdentifiers,
+!                                      (void *) ajStrNewS(se->Identifier));
+  
+                      break;
+  
+***************
+*** 8405,8411 ****
+                              "'entry'.\n");
+  
+                      ajListPushAppend(se->StableIdentifiers,
+!                                      ajStrNewS(se->Identifier));
+  
+                      break;
+  
+--- 8408,8414 ----
+                              "'entry'.\n");
+  
+                      ajListPushAppend(se->StableIdentifiers,
+!                                      (void *) ajStrNewS(se->Identifier));
+  
+                      break;
+  
+***************
+*** 8465,8471 ****
+                              "'entry'.\n");
+  
+                      ajListPushAppend(se->StableIdentifiers,
+!                                      ajStrNewS(se->Identifier));
+  
+                      break;
+  
+--- 8468,8474 ----
+                              "'entry'.\n");
+  
+                      ajListPushAppend(se->StableIdentifiers,
+!                                      (void *) ajStrNewS(se->Identifier));
+  
+                      break;
+  
+***************
+*** 8511,8516 ****
+--- 8514,8596 ----
+              }
+          }
+  
++         if(!ajStrGetLen(se->ObjectType))
++         {
++             /*
++              ** An Ensembl Object type could not be established.
++              ** For AJAX Sequence Queries of type ENTRY it is possible to
++              ** test whether this is a stable identifier of any Ensembl
++              ** *Core* Object type.
++              */
++             
++             if(qry->Type == QRY_ENTRY)
++             {
++                 /* Only use the Ensembl Database Adaptor of type Core. */
++                 
++                 se->DatabaseAdaptor = ensRegistryGetDatabaseadaptor(
++                     ensEDatabaseadaptorGroupCore,
++                     se->Species);
++                 
++                 /* Check if this is an Ensembl Exon. */
++                 
++                 ea = ensRegistryGetExonadaptor(se->DatabaseAdaptor);
++                 
++                 ensExonadaptorFetchByStableIdentifier(ea,
++                                                       se->Identifier,
++                                                       0,
++                                                       &exon);
++                 
++                 if(exon)
++                 {
++                     ajListPushAppend(se->StableIdentifiers,
++                                      (void *) ajStrNewS(se->Identifier));
++                     
++                     ajStrAssignC(&se->ObjectType, "E");
++                 }
++                 
++                 /* Check if this is an Ensembl Transcript. */
++                 
++                 tca = ensRegistryGetTranscriptadaptor(se->DatabaseAdaptor);
++                 
++                 ensTranscriptadaptorFetchByStableIdentifier(tca,
++                                                             se->Identifier,
++                                                             0,
++                                                             &transcript);
++                 
++                 if(transcript && (!ajStrGetLen(se->ObjectType)))
++                 {
++                     ajListPushAppend(se->StableIdentifiers,
++                                      (void *) ajStrNewS(se->Identifier));
++                     
++                     ajStrAssignC(&se->ObjectType, "T");
++                 }
++                 
++                 /* Check if this is an Ensembl Translation. */
++                 
++                 tla = ensRegistryGetTranslationadaptor(se->DatabaseAdaptor);
++                 
++                 ensTranslationadaptorFetchByStableIdentifier(tla,
++                                                              se->Identifier,
++                                                              0,
++                                                              &translation);
++ 
++                 if(translation && (!ajStrGetLen(se->ObjectType)))
++                 {
++                     ajListPushAppend(se->StableIdentifiers,
++                                      (void *) ajStrNewS(se->Identifier));
++ 
++                     ajStrAssignC(&se->ObjectType, "P");
++                 }
++             }
++             else
++                 ajWarn("Since this species does not seem to have a "
++                        "stable identifier schema defined in the 'meta' "
++                        "table or the identifier type could not be "
++                        "established, only queries for single entries can "
++                        "be matched against Exons, Transcripts or "
++                        "Transaltions.");
++         }
++ 
+          /* The query has finished at this stage. */
+  
+          qry->TotalEntries = ajListGetLength(se->StableIdentifiers);
+diff -c -N --recursive -a EMBOSS-6.3.1old/ajax/ensembl/ensregistry.c EMBOSS-6.3.1/ajax/ensembl/ensregistry.c
+*** EMBOSS-6.3.1old/ajax/ensembl/ensregistry.c	2010-07-06 15:11:39.000000000 +0100
+--- EMBOSS-6.3.1/ajax/ensembl/ensregistry.c	2010-08-09 17:17:40.000000000 +0100
+***************
+*** 398,403 ****
+--- 398,405 ----
+  
+  static AjPList registryIdentifiers = NULL;
+  
++ static AjPList registrySources = NULL;
++ 
+  static RegistryPIdentifier registryIdentifierNew(
+      AjPStr expression,
+      AjPStr species,
+***************
+*** 424,429 ****
+--- 426,434 ----
+  
+  static void registryEntryDel(RegistryPEntry *Pentry);
+  
++ static AjBool registrySourceCheckAndRegister(const AjPStr source,
++                                              AjBool *Pregistered);
++ 
+  static AjPStr registryCheckAlias(const AjPStr alias);
+  
+  static AjBool registryLoadAliasesFromDatabaseconnection(
+***************
+*** 1057,1062 ****
+--- 1062,1122 ----
+  
+  
+  
++ /* @funcstatic registrySourceCheckAndRegister *********************************
++ **
++ ** Check if a source has been registered in the AJAX List of Registry source
++ ** before. If this was not the case automatically register it.
++ **
++ ** @param [r] source [const AjPStr] Ensembl Registry source
++ ** @param [w] Pregistered [AjBool*] Registered boolean
++ **                                  ajTrue if registered before, ajFalse if not
++ **
++ ** @return [AjBool] ajTrue opon success, ajFalse otherwise
++ ** @@
++ ******************************************************************************/
++ 
++ static AjBool registrySourceCheckAndRegister(const AjPStr source,
++                                              AjBool *Pregistered)
++ {
++     AjIList iterator = NULL;
++ 
++     AjPStr entry = NULL;
++ 
++     if(!Pregistered)
++         return ajFalse;
++ 
++     *Pregistered = ajFalse;
++ 
++     if(!(source && ajStrGetLen(source)))
++         return ajFalse;
++ 
++     iterator = ajListIterNew(registrySources);
++ 
++     while(!ajListIterDone(iterator))
++     {
++         entry = (AjPStr) ajListIterGet(iterator);
++ 
++         if(ajStrMatchCaseS(entry, source))
++         {
++             *Pregistered = ajTrue;
++ 
++             break;
++         }
++     }
++ 
++     ajListIterDel(&iterator);
++ 
++     /* If this source has not been seen before, add it to the AJAX List. */
++ 
++     if(!*Pregistered)
++         ajListPushAppend(registrySources, (void *) ajStrNewS(source));
++ 
++     return ajTrue;
++ }
++ 
++ 
++ 
++ 
+  /* @filesection ensregistry ***************************************************
+  **
+  ** @nam1rule ens Function belongs to the AJAX Ensembl library
+***************
+*** 1103,1108 ****
+--- 1163,1170 ----
+  
+      registryIdentifiers = ajListNew();
+  
++     registrySources = ajListstrNew();
++ 
+      return;
+  }
+  
+***************
+*** 1123,1129 ****
+      void **valarray = NULL;
+  
+      register ajuint i = 0;
+!     
+      if(!registryEntries)
+          return;
+  
+--- 1185,1191 ----
+      void **valarray = NULL;
+  
+      register ajuint i = 0;
+! 
+      if(!registryEntries)
+          return;
+  
+***************
+*** 1162,1168 ****
+      /* Free the AJAX Table of aliases. */
+  
+      if(registryAliases)
+!     ajTablestrFree(&registryAliases);
+  
+      /* Clear and free the AJAX Table of Registry Entries. */
+  
+--- 1224,1230 ----
+      /* Free the AJAX Table of aliases. */
+  
+      if(registryAliases)
+!         ajTablestrFree(&registryAliases);
+  
+      /* Clear and free the AJAX Table of Registry Entries. */
+  
+***************
+*** 1183,1188 ****
+--- 1245,1255 ----
+          ajListFree(&registryIdentifiers);
+      }
+  
++     /* Clear and free the AJAX List of Registry Sources. */
++ 
++     if(registrySources)
++         ajListstrFree(&registrySources);
++ 
+      return;
+  }
+  
+***************
+*** 1768,1774 ****
+          case ensEDatabaseadaptorGroupWebsite:
+  
+          case ensEDatabaseadaptorGroupProduction:
+!             
+              break;
+  
+          default:
+--- 1835,1841 ----
+          case ensEDatabaseadaptorGroupWebsite:
+  
+          case ensEDatabaseadaptorGroupProduction:
+! 
+              break;
+  
+          default:
+***************
+*** 1871,1877 ****
+          case ensEDatabaseadaptorGroupWebsite:
+  
+          case ensEDatabaseadaptorGroupProduction:
+!             
+              break;
+  
+          default:
+--- 1938,1944 ----
+          case ensEDatabaseadaptorGroupWebsite:
+  
+          case ensEDatabaseadaptorGroupProduction:
+! 
+              break;
+  
+          default:
+***************
+*** 1975,1981 ****
+          case ensEDatabaseadaptorGroupWebsite:
+  
+          case ensEDatabaseadaptorGroupProduction:
+!             
+              break;
+  
+          default:
+--- 2042,2048 ----
+          case ensEDatabaseadaptorGroupWebsite:
+  
+          case ensEDatabaseadaptorGroupProduction:
+! 
+              break;
+  
+          default:
+***************
+*** 2339,2345 ****
+          case ensEDatabaseadaptorGroupWebsite:
+  
+          case ensEDatabaseadaptorGroupProduction:
+!             
+              break;
+  
+          default:
+--- 2406,2412 ----
+          case ensEDatabaseadaptorGroupWebsite:
+  
+          case ensEDatabaseadaptorGroupProduction:
+! 
+              break;
+  
+          default:
+***************
+*** 2572,2578 ****
+                  case ensEDatabaseadaptorGroupWebsite:
+  
+                  case ensEDatabaseadaptorGroupProduction:
+!                     
+                      break;
+  
+                  default:
+--- 2639,2645 ----
+                  case ensEDatabaseadaptorGroupWebsite:
+  
+                  case ensEDatabaseadaptorGroupProduction:
+! 
+                      break;
+  
+                  default:
+***************
+*** 2978,2984 ****
+          case ensEDatabaseadaptorGroupWebsite:
+  
+          case ensEDatabaseadaptorGroupProduction:
+!             
+              break;
+  
+          default:
+--- 3045,3051 ----
+          case ensEDatabaseadaptorGroupWebsite:
+  
+          case ensEDatabaseadaptorGroupProduction:
+! 
+              break;
+  
+          default:
+***************
+*** 6281,6287 ****
+          case ensEDatabaseadaptorGroupWebsite:
+  
+          case ensEDatabaseadaptorGroupProduction:
+!             
+              /* Ensembl Database Adaptor groups without a 'meta' table. */
+  
+              break;
+--- 6348,6354 ----
+          case ensEDatabaseadaptorGroupWebsite:
+  
+          case ensEDatabaseadaptorGroupProduction:
+! 
+              /* Ensembl Database Adaptor groups without a 'meta' table. */
+  
+              break;
+***************
+*** 6410,6416 ****
+  
+  AjBool ensRegistryLoadFromServer(EnsPDatabaseconnection dbc)
+  {
+!     AjBool debug = AJFALSE;
+  
+      AjPRegexp multire      = NULL;
+      AjPRegexp speciesre    = NULL;
+--- 6477,6484 ----
+  
+  AjBool ensRegistryLoadFromServer(EnsPDatabaseconnection dbc)
+  {
+!     AjBool debug      = AJFALSE;
+!     AjBool registered = AJFALSE;
+  
+      AjPRegexp multire      = NULL;
+      AjPRegexp speciesre    = NULL;
+***************
+*** 6426,6431 ****
+--- 6494,6500 ----
+      AjPStr prefix    = NULL;
+      AjPStr swversion = NULL;
+      AjPStr multi     = NULL;
++     AjPStr source    = NULL;
+  
+      EnsEDatabaseadaptorGroup egroup = ensEDatabaseadaptorGroupNULL;
+  
+***************
+*** 6440,6460 ****
+                  dbc);
+  
+          ensDatabaseconnectionTrace(dbc, 1);
+      }
+  
+      if(!dbc)
+          return ajFalse;
+  
+!     multi = ajStrNewC("DEFAULT");
+  
+      collectionre =
+!         ajRegCompC("^\\w+_collection_([a-z]+)(?:_\\d+)??_(\\d+)_\\w+");
+  
+      multire =
+!         ajRegCompC("^ensembl_([a-z]+)(?:_\\w+?)*?_(\\d+)");
+  
+      speciesre =
+!         ajRegCompC("^([a-z]+_[a-z0-9]+)_([a-z]+)(?:_\\d+)??_(\\d+)_\\w+");
+  
+      statement = ajStrNewC("SHOW DATABASES");
+  
+--- 6509,6554 ----
+                  dbc);
+  
+          ensDatabaseconnectionTrace(dbc, 1);
++ 
++         ajDebug("ensRegistryLoadFromServer software version '%s'.\n",
++                 registrySoftwareVersion);
+      }
+  
+      if(!dbc)
+          return ajFalse;
+  
+!     /* Check if this Ensembl Database Connection has been used before. */
+! 
+!     /* NOTE: The following function is in the CVS repository post
+!     ** EMBOSS release 6.3.1, but not in the patch.
+!     **
+!     ** ensDatabaseconnectionFetchUrl(dbc, &source);
+!     */
+! 
+!     source = ajFmtStr("%s://%S@%S:%S/%S",
+!                          ajSqlconnectionClientToChar(dbc->SqlconnectionClient),
+!                          dbc->UserName,
+!                          dbc->HostName,
+!                          dbc->HostPort,
+!                          dbc->DatabaseName);
+! 
+!     registrySourceCheckAndRegister(source, &registered);
+! 
+!     ajStrDel(&source);
+! 
+!     if(registered)
+!         return ajTrue;
+! 
+!     multi = ajStrNewC("default");
+  
+      collectionre =
+!         ajRegCompC("^\\w+_collection_([a-z]+)(?:_\\d+)?_(\\d+)_\\w+");
+  
+      multire =
+!         ajRegCompC("^ensembl_([a-z]+)(_\\w+?)*?(?:_\\d+)?_(\\d+)$");
+  
+      speciesre =
+!         ajRegCompC("^([a-z]+_[a-z0-9]+)_([a-z]+)(?:_\\d+)?_(\\d+)_\\w+");
+  
+      statement = ajStrNewC("SHOW DATABASES");
+  
+***************
+*** 6491,6498 ****
+              if(ajStrMatchCaseC(swversion, registrySoftwareVersion))
+              {
+                  if(debug)
+!                     ajDebug("ensRegistryLoadFromServer matched "
+!                             "collection database '%S'.\n",
+                              dbname);
+  
+                  egroup = ensDatabaseadaptorGroupFromStr(group);
+--- 6585,6592 ----
+              if(ajStrMatchCaseC(swversion, registrySoftwareVersion))
+              {
+                  if(debug)
+!                     ajDebug("ensRegistryLoadFromServer '%S' "
+!                             "collection matched\n",
+                              dbname);
+  
+                  egroup = ensDatabaseadaptorGroupFromStr(group);
+***************
+*** 6504,6593 ****
+                              "string '%S' for database name '%S'.\n",
+                              group, dbname);
+              }
+  
+              ajStrDel(&group);
+              ajStrDel(&swversion);
+          }
+!         else if(ajRegExec(speciesre, dbname))
+          {
+!             /* Species-specific databases */
+  
+-             prefix    = ajStrNew();
+              group     = ajStrNew();
+              swversion = ajStrNew();
+  
+!             ajRegSubI(speciesre, 1, &prefix);
+!             ajRegSubI(speciesre, 2, &group);
+!             ajRegSubI(speciesre, 3, &swversion);
+  
+              if(ajStrMatchCaseC(swversion, registrySoftwareVersion))
+              {
+                  if(debug)
+!                     ajDebug("ensRegistryLoadFromServer matched "
+!                             "species-specific database '%S'.\n",
+                              dbname);
+  
+                  egroup = ensDatabaseadaptorGroupFromStr(group);
+  
+                  if(egroup)
+!                 {
+!                     dba = ensRegistryNewDatabaseadaptor(dbc,
+!                                                         dbname,
+!                                                         prefix,
+!                                                         egroup,
+!                                                         ajFalse,
+!                                                         0);
+! 
+!                     registryLoadAliasesFromDatabaseconnection(dbc, dba);
+!                 }
+                  else
+                      ajDebug("ensRegistryLoadFromServer got unexpected group "
+                              "string '%S' for database name '%S'.\n",
+                              group, dbname);
+              }
+  
+-             ajStrDel(&prefix);
+              ajStrDel(&group);
+              ajStrDel(&swversion);
+          }
+!         else if(ajRegExec(multire, dbname))
+          {
+!             /* Multi-species databases */
+  
+              group     = ajStrNew();
+              swversion = ajStrNew();
+  
+!             ajRegSubI(multire, 1, &group);
+!             ajRegSubI(multire, 2, &swversion);
+  
+              if(ajStrMatchCaseC(swversion, registrySoftwareVersion))
+              {
+                  if(debug)
+!                     ajDebug("ensRegistryLoadFromServer matched "
+!                             "multi-species database '%S'.\n",
+                              dbname);
+  
+                  egroup = ensDatabaseadaptorGroupFromStr(group);
+  
+                  if(egroup)
+!                     ensRegistryNewDatabaseadaptor(dbc,
+!                                                   dbname,
+!                                                   multi,
+!                                                   egroup,
+!                                                   ajFalse,
+!                                                   0);
+                  else
+                      ajDebug("ensRegistryLoadFromServer got unexpected group "
+                              "string '%S' for database name '%S'.\n",
+                              group, dbname);
+              }
+  
+              ajStrDel(&group);
+              ajStrDel(&swversion);
+          }
+          else
+!             ajDebug("ensRegistryLoadFromServer could not match "
+!                     "database name '%S'.\n", dbname);
+  
+          ajStrDel(&dbname);
+      }
+--- 6598,6725 ----
+                              "string '%S' for database name '%S'.\n",
+                              group, dbname);
+              }
++             else
++             {
++                 if(debug)
++                     ajDebug("ensRegistryLoadFromServer '%S' "
++                             "collection\n",
++                             dbname);
++ 
++             }
+  
+              ajStrDel(&group);
+              ajStrDel(&swversion);
+          }
+!         else if(ajRegExec(multire, dbname))
+          {
+!             /* Multi-species databases */
+  
+              group     = ajStrNew();
++             prefix    = ajStrNew();
+              swversion = ajStrNew();
+  
+!             ajRegSubI(multire, 1, &group);
+! 
+!             if(ajRegLenI(multire, 3))
+!             {
+!                 ajRegSubI(multire, 2, &prefix);
+!                 ajRegSubI(multire, 3, &swversion);
+!             }
+!             else
+!                 ajRegSubI(multire, 2, &swversion);
+  
+              if(ajStrMatchCaseC(swversion, registrySoftwareVersion))
+              {
+                  if(debug)
+!                     ajDebug("ensRegistryLoadFromServer '%S' "
+!                             "multi-species matched\n",
+                              dbname);
+  
+                  egroup = ensDatabaseadaptorGroupFromStr(group);
+  
+                  if(egroup)
+!                     ensRegistryNewDatabaseadaptor(dbc,
+!                                                   dbname,
+!                                                   (ajStrGetLen(prefix))
+!                                                   ? prefix : multi,
+!                                                   egroup,
+!                                                   ajFalse,
+!                                                   0);
+                  else
+                      ajDebug("ensRegistryLoadFromServer got unexpected group "
+                              "string '%S' for database name '%S'.\n",
+                              group, dbname);
+              }
++             else
++             {
++                 if(debug)
++                     ajDebug("ensRegistryLoadFromServer '%S' "
++                             "multi-species\n",
++                             dbname);
++             }
+  
+              ajStrDel(&group);
++             ajStrDel(&prefix);
+              ajStrDel(&swversion);
+          }
+!         else if(ajRegExec(speciesre, dbname))
+          {
+!             /* Species-specific databases */
+  
++             prefix    = ajStrNew();
+              group     = ajStrNew();
+              swversion = ajStrNew();
+  
+!             ajRegSubI(speciesre, 1, &prefix);
+!             ajRegSubI(speciesre, 2, &group);
+!             ajRegSubI(speciesre, 3, &swversion);
+! 
+!             /*
+!               if(debug)
+!               ajDebug("ensRegistryLoadFromServer parsed database '%S' into "
+!               "prefix '%S', group '%S' and swversion '%S.\n",
+!               dbname, prefix, group, swversion);
+!             */
+  
+              if(ajStrMatchCaseC(swversion, registrySoftwareVersion))
+              {
+                  if(debug)
+!                     ajDebug("ensRegistryLoadFromServer '%S' "
+!                             "species-specific matched\n",
+                              dbname);
+  
+                  egroup = ensDatabaseadaptorGroupFromStr(group);
+  
+                  if(egroup)
+!                 {
+!                     dba = ensRegistryNewDatabaseadaptor(dbc,
+!                                                         dbname,
+!                                                         prefix,
+!                                                         egroup,
+!                                                         ajFalse,
+!                                                         0);
+! 
+!                     registryLoadAliasesFromDatabaseconnection(dbc, dba);
+!                 }
+                  else
+                      ajDebug("ensRegistryLoadFromServer got unexpected group "
+                              "string '%S' for database name '%S'.\n",
+                              group, dbname);
+              }
++             else
++             {
++                 if(debug)
++                     ajDebug("ensRegistryLoadFromServer '%S' "
++                             "species-specific\n",
++                             dbname);
++             }
+  
++             ajStrDel(&prefix);
+              ajStrDel(&group);
+              ajStrDel(&swversion);
+          }
+          else
+!             ajDebug("ensRegistryLoadFromServer '%S' no match\n", dbname);
+  
+          ajStrDel(&dbname);
+      }
+diff -c -N --recursive -a EMBOSS-6.3.1old/ajax/graphics/ajgraph.c EMBOSS-6.3.1/ajax/graphics/ajgraph.c
+*** EMBOSS-6.3.1old/ajax/graphics/ajgraph.c	2010-07-19 12:40:00.000000000 +0100
+--- EMBOSS-6.3.1/ajax/graphics/ajgraph.c	2010-08-09 17:17:15.000000000 +0100
+***************
+*** 9843,9849 ****
+  
+      plargv[0] = argname;
+      plargv[1] = MAJSTRGETPTR(ajUtilGetProgram());
+!     ajDebug("=g= plparseopts('%S', '%s') ajUtilGetProgram\n",
+              plargv[0], plargv[1]);
+  
+      plparseopts(&plargc, plargv,
+--- 9843,9849 ----
+  
+      plargv[0] = argname;
+      plargv[1] = MAJSTRGETPTR(ajUtilGetProgram());
+!     ajDebug("=g= plparseopts('%s', '%s') ajUtilGetProgram\n",
+              plargv[0], plargv[1]);
+  
+      plparseopts(&plargc, plargv,
 diff -c -N --recursive -a EMBOSS-6.3.1old/configure EMBOSS-6.3.1/configure
 *** EMBOSS-6.3.1old/configure	2010-07-19 12:55:36.000000000 +0100
---- EMBOSS-6.3.1/configure	2010-08-06 09:06:53.000000000 +0100
+--- EMBOSS-6.3.1/configure	2010-08-09 17:15:35.000000000 +0100
 ***************
 *** 14481,14488 ****
   
