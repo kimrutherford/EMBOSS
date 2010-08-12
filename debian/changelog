@@ -1,3 +1,11 @@
+emboss (6.3.1-5) unstable; urgency=low
+
+  * New upstream patch, version 1-4.
+  * Restore original config.* files in the clean target if the unpacked
+    source package is a git repository (debian/rules).
+
+ -- Charles Plessy <plessy@debian.org>  Thu, 12 Aug 2010 08:00:58 +0900
+
 emboss (6.3.1-4) unstable; urgency=low
 
   * New upstream patch, version 1-2.
