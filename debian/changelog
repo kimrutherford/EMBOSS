@@ -1,3 +1,16 @@
+emboss (6.3.1-6) unstable; urgency=low
+
+  * All EMBOSS libraries are to be considered private. The libajax* and
+    libnucleus* are merged in the emboss-lib package, which is moved
+    from the ‘libs’ to the ‘science’ section. Closes: #595613.
+  * Added a Lintian override for the convenience copy of the PCRE
+    library (debian/emboss-lib.lintian-overrides).
+  * Build-depend on libhpdf-dev for PDF support, removed erroneous build
+    dependance on libpcre3-dev (debian/control).
+  * Added dependance on emboss to jemboss (debian/control).
+
+ -- Charles Plessy <plessy@debian.org>  Thu, 16 Sep 2010 21:06:14 +0900
+
 emboss (6.3.1-5) unstable; urgency=low
 
   * New upstream patch, version 1-4.

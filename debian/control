@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Debian Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 DM-Upload-Allowed: yes
 Uploaders: Charles Plessy <plessy@debian.org>, Nelson A. de Oliveira <naoliv@debian.org>
-Build-Depends: debhelper (>= 7), quilt, libx11-dev, x11proto-core-dev, libgdchart-gd2-xpm-dev, zlib1g-dev, libpng12-dev, libpcre3-dev, libexpat1-dev, libmysqlclient-dev, libpq-dev, antiword, sharutils, autotools-dev, tcsh | csh | c-shell,
+Build-Depends: debhelper (>= 7), quilt, libx11-dev, x11proto-core-dev, libgdchart-gd2-xpm-dev, zlib1g-dev, libpng12-dev, libexpat1-dev, libhpdf-dev, libmysqlclient-dev, libpq-dev, antiword, sharutils, autotools-dev, tcsh | csh | c-shell,
 # Needed until the following is solved: https://sourceforge.net/tracker/?func=detail&aid=3033326&group_id=93650&atid=605031 
  default-jdk
 #Build-Depends-Indep: default-jdk
@@ -15,7 +15,7 @@ Homepage: http://emboss.sourceforge.net
 
 Package: emboss
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, emboss-data (= ${source:Version})
+Depends: ${shlibs:Depends}, ${misc:Depends}, emboss-lib (= ${binary:Version}), emboss-data (= ${source:Version})
 Recommends: primer3, dialign
 Suggests: emboss-doc, emboss-test, embassy, clustalw
 Description: the european molecular biology open software suite
@@ -59,27 +59,13 @@ Description: test files for the EMBOSS package
  possible.
 
 Package: emboss-lib
-Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Conflicts: libajax5, libajax6, libajax5-dev, libajax6-dev, libnucleus5, libnucleus6, libnucleus5-dev, libnucleus6-dev
+Replaces: libajax5, libajax6, libajax5-dev, libajax6-dev, libnucleus5, libnucleus6, libnucleus5-dev, libnucleus6-dev
 Description: EMBOSS Libraries
- This package is being emptied. For the moment it contains a eplplot, an EMBOSS
- fork of the plplot library.
-
-Package: jemboss
-Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}, default-jre, tcsh | csh | c-shell
-Description: graphical user interface to EMBOSS
- Jemboss is a Graphical User Interface (GUI) to EMBOSS, the European Molecular
- Biology Open Software Suite. It is part of the EMBOSS distribution.
-
-Package: libajax6
-Section: libs
-Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: EMBOSS library for commands
- This package contains a core library of the European Molecular Biology Open
- Software Suite, EMBOSS.
+ This package contains the core libraries of the European Molecular Biology
+ Open Software Suite, EMBOSS.
  .
  AJAX covers standard data structures, including strings, sequences, file
  handles, queues, hashes, heaps, lists, dictionaries, trees and dynamic
@@ -87,40 +73,17 @@ Description: EMBOSS library for commands
  matching, sorting, and iterators. AJAX will also provide a set of high level
  graphics functions suited to the needs of sequence analysis applications.
  .
- This package contains the runtime library files needed to run software
- using libajax.
-
-Package: libajax6-dev
-Section: libdevel
-Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libajax6 (= ${binary:Version})
-Conflicts: libajax5-dev
-Replaces: libajax5-dev
-Description: development files for libajax
- This package contains the header and development files needed to build
- programs and packages using libajax.
-
-Package: libnucleus6
-Section: libs
-Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: EMBOSS library for molecular sequence analysis
- This package contains a core library of the European Molecular Biology Open
- Software Suite, EMBOSS.
- .
  The NUCLEUS library provides higher-level functions specific to molecular
  sequence analysis, including sequence comparisons, translation, codon usage
  and annotation.
  .
- This package contains the runtime library files needed to run software
- using libnucleus.
+ It also contains a eplplot, an EMBOSS, a fork of the plplot library.
+ .
+ In Debian, these libraries are to be considered private.
 
-Package: libnucleus6-dev
-Section: libdevel
-Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libnucleus6 (= ${binary:Version})
-Conflicts: libnucleus5-dev
-Replaces: libnucleus5-dev
-Description: development files for libnucleus
- This package contains the header and development files needed to build
- programs and packages using libnucleus.
+Package: jemboss
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}, emboss, default-jre, tcsh | csh | c-shell
+Description: graphical user interface to EMBOSS
+ Jemboss is a Graphical User Interface (GUI) to EMBOSS, the European Molecular
+ Biology Open Software Suite. It is part of the EMBOSS distribution.

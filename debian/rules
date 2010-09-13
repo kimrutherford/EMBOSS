@@ -8,11 +8,12 @@ RENAMED := cons pscan
 EMBOSS-TMP  = $(CURDIR)/debian/emboss_tmp
 EMBOSS      = $(CURDIR)/debian/emboss
 EMBOSS-TEST = $(CURDIR)/debian/emboss-test
-AJAX        = $(CURDIR)/debian/libajax6
-NUCLEUS     = $(CURDIR)/debian/libnucleus6
+EMBOSS-LIB  = $(CURDIR)/debian/emboss-lib
 
 CONFFLAGS   = --prefix=/usr
 CONFFLAGS   += --bindir=/usr/lib/emboss
+CONFFLAGS   += --libdir=/usr/lib/emboss/lib
+CONFFLAGS   += --includedir=/usr/lib/emboss/include
 CONFFLAGS   += --enable-systemlibs
 CONFFLAGS   += --with-java=/usr/lib/jvm/default-java/include
 CONFFLAGS   += --with-javaos=/usr/lib/jvm/default-java/include/linux
@@ -80,23 +81,11 @@ install-stamp:
 		do mv $(EMBOSS)/usr/bin/$$i $(EMBOSS)/usr/bin/em_$$i ; \
 		done
 
-	### Ajax library: lib and libdevel packages. ###
-	$(MAKE) -C ajax install DESTDIR=$(AJAX)
-#	rm $(AJAX)/usr/include/pcre*	# Not very elegant way to solve the conflict with libpcre-dev
-	mv $(AJAX)/usr/include 		$(AJAX)-dev/usr/include/ajax
-	mv $(AJAX)/usr/lib/*a $(AJAX)/usr/lib/*so 	$(AJAX)-dev/usr/lib
-	# Libtool .la libraries are not wanted anymore in Debian, see http://lists.debian.org/debian-devel/2009/08/msg00783.html
-	find $(AJAX)-dev/usr/lib -name '*.la' -exec rm {} \;
-
-	### Nuleus library: lib and libdevel packages. ###
-	$(MAKE) -C nucleus install DESTDIR=$(NUCLEUS)
-	mv $(NUCLEUS)/usr/include 	$(NUCLEUS)-dev/usr/include/nucleus
-	mv $(NUCLEUS)/usr/lib/*a $(NUCLEUS)/usr/lib/*so	$(NUCLEUS)-dev/usr/lib
-	# Libtool .la libraries are not wanted anymore in Debian, see http://lists.debian.org/debian-devel/2009/08/msg00783.html
-	find $(NUCLEUS)-dev/usr/lib -name '*.la' -exec rm {} \;
-
-	### eplplot goes in emboss-lib, but lets'hope building on plplot some day. ###
-	$(MAKE) -C plplot install DESTDIR=$(CURDIR)/debian/emboss-lib
+	### EMBOSS libraries go in the emboss-lib package. ###
+	$(MAKE) -C ajax install DESTDIR=$(EMBOSS-LIB)
+	$(MAKE) -C nucleus install DESTDIR=$(EMBOSS-LIB)
+	$(MAKE) -C plplot install DESTDIR=$(EMBOSS-LIB)
+	find $(EMBOSS-LIB)/usr/lib -name '*.la' -exec rm {} \;
 
 	### Documentation goes in emboss-doc. ###
 	$(MAKE) -C doc install DESTDIR=$(CURDIR)/debian/emboss-doc
