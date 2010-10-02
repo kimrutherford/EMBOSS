@@ -1,3 +1,9 @@
+emboss (6.3.1-7) UNRELEASED; urgency=low
+
+  * Removed calls to dh_makeshlibs in debian/rules (closes: #595613).
+
+ -- Charles Plessy <plessy@debian.org>  Sat, 02 Oct 2010 18:48:38 +0900
+
 emboss (6.3.1-6) unstable; urgency=low
 
   * All EMBOSS libraries are to be considered private. The libajax* and

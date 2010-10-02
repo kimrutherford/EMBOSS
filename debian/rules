@@ -103,8 +103,6 @@ install-stamp:
 	sed -i "/SET emboss_qadata/cSET emboss_qadata /usr/share/EMBOSS/test" $(CURDIR)/debian/emboss-test/usr/share/EMBOSS/test/.embossrc
 	mv $(CURDIR)/debian/emboss-test/usr/share/EMBOSS/test/.embossrc $(CURDIR)/debian/emboss-test/etc/emboss/embossrc.d/emboss-test
 
-	dh_makeshlibs	# Should it be invoked now ?
-
 	touch install-stamp
 
 test: build test-stamp
@@ -144,7 +142,6 @@ binary-arch: build install test
 	dh_strip -a
 	dh_compress -a
 	dh_fixperms -a
-	dh_makeshlibs -a
 	dh_installdeb -a
 	dh_shlibdeps -a
 	dh_gencontrol -a
